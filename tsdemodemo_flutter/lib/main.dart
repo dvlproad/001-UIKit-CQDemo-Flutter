@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/modules/demo/TSSectionTableViewPage.dart';
+import 'package:tsdemodemo_flutter/modules/report/report_list_page/report_list_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -104,6 +106,8 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+            forgetPassword(),
+            reportButton(),
           ],
         ),
       ),
@@ -112,6 +116,46 @@ class _MyHomePageState extends State<MyHomePage> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  // 忘记密码按钮
+  FlatButton forgetPassword() {
+    return FlatButton(
+      child: Text("忘记密码?"),
+      textColor: Color(0xfff5b63c),
+      onPressed: () {
+        _goForgetPasswordViewController();
+      },
+    );
+  }
+
+  // 忘记密码按钮
+  FlatButton reportButton() {
+    return FlatButton(
+      child: Text("举报"),
+      textColor: Color(0xfff5b63c),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ReportSectionTableViewPage(),
+//          settings: RouteSettings(arguments: userName),
+          ),
+        );
+      },
+    );
+  }
+
+
+  /// 进入忘记密码（登录页将用户名传递给忘记密码页）
+  _goForgetPasswordViewController() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => TSSectionTableViewPage(),
+//          settings: RouteSettings(arguments: userName),
+      ),
     );
   }
 }
