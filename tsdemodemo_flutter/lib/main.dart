@@ -139,7 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ReportSectionTableViewPage(),
+            builder: (context) => ReportListPage(
+              reportTypeId: '1341353r33',
+              reportTypeValue: 1,
+              reportTypeDescription: '举报合集',
+            ),
 //          settings: RouteSettings(arguments: userName),
           ),
         );

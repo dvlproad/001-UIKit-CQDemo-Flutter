@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
+import 'package:tsdemodemo_flutter/modules/report/report_upload_page/report_upload_model.dart';
 import 'report_upload_description_tableviewcell.dart';
 
 class ReportDetailUploadPage extends StatefulWidget {
-  ReportDetailUploadPage({Key key, this.reportTypeSting, this.reportReasonString}) : super(key: key);
+  ReportDetailUploadPage({
+    Key key,
+    this.reportTypeId,
+    this.reportTypeValue,
+    this.reportTypeDescription,
+    this.reportDetailTypeId,
+    this.reportDetailTypeDescription,
+  }) : super(key: key);
 
-  final String reportTypeSting;
-  final String reportReasonString;
+  final String reportTypeId;
+  final int reportTypeValue;
+  final String reportTypeDescription;
+
+  final String reportDetailTypeId;
+  final String reportDetailTypeDescription;
 
 
   @override
@@ -17,13 +29,14 @@ class ReportDetailUploadPage extends StatefulWidget {
 }
 
 class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
-  String reportText;
+  ReportUploadModel _reportUploadtModel = ReportUploadModel();
+  String reportDetailTypeReasonDescription;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.reportTypeSting),
+        title: Text(widget.reportTypeDescription),
       ),
       body: SafeArea(
         child: Stack(
@@ -31,7 +44,7 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
           children: <Widget>[
             Container(
               color: Colors.black,
-              child: reportList(),
+              child: reportListWidget(),
             ),
             Positioned(
               left: 20,
@@ -51,7 +64,7 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
     );
   }
 
-  Widget reportList() {
+  Widget reportListWidget() {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -60,10 +73,10 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
       child: ListView(
         children: <Widget>[
           ReportDescriptionTableViewCell(
-            reportReasonString: widget.reportReasonString,
-            textChangeCallback: (text)=>{
-//            print("listen text:" + reportText)
-              reportText = text
+            reportReasonString: widget.reportDetailTypeDescription,
+            textChangeCallback: (text){
+              print("listen reportDetailTypeReasonDescription:" + text);
+              reportDetailTypeReasonDescription = text;
             },
           ),
         ],
@@ -72,9 +85,12 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
   }
 
   _uploadReport() {
-    print("最后提交的内容为:" + reportText);
-//    Navigator.push(context, MaterialPageRoute(builder: (context) {
-//      return MyMainPage();
-//    }));
+    print("最后提交的内容为:" + reportDetailTypeReasonDescription);
+    _reportUploadtModel.requestSubmitReport(widget.reportTypeId, widget.reportTypeValue, widget.reportDetailTypeId, reportDetailTypeReasonDescription).then((value) {
+      //print('举报成功，返回');
+//      Routes.popUntil(context, [widget.fromPage]);
+    }).catchError((onError){
+      print("err:${onError.toString()}");
+    });
   }
 }

@@ -4,7 +4,7 @@ import 'package:flutter_section_table_view/flutter_section_table_view.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-list/sectiontableviewheader.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-list/main_sub_arrow_tableviewcell.dart';
 
-typedef ClickReportReasonItemCallback = void Function(String reportReasonString);
+typedef ClickReportReasonItemCallback = void Function(String reportDetailTypeId, String reportDetailReasonDescription);
 
 class ReportSectionTableView extends StatefulWidget {
   final List sectionModels;
@@ -12,7 +12,8 @@ class ReportSectionTableView extends StatefulWidget {
 
   ReportSectionTableView({
     Key key,
-    this.sectionModels,
+
+    @required this.sectionModels,
     this.clickReportReasonItemCallback,
   })  :  super(key: key);
 
@@ -27,7 +28,7 @@ class _ReportSectionTableViewState extends State<ReportSectionTableView> {
   }
 
   Widget sectionTableView() {
-    int sectionCount = widget.sectionModels.isNotEmpty ? widget.sectionModels.length : 0;
+    int sectionCount = null != widget.sectionModels ? widget.sectionModels.length : 0;
 
     return SectionTableView(
       sectionCount: sectionCount,
@@ -48,15 +49,15 @@ class _ReportSectionTableViewState extends State<ReportSectionTableView> {
         var sectionModel = widget.sectionModels[section];
         var values = sectionModel['rows'];
         var dataModel = values[row];
-        var title = dataModel['message'];
+        var reportDetailTypeId = dataModel['id'];
+        var reportDetailTypeDescription = dataModel['message'];
         return MainSubArrowTableViewCell(
-          text: title,
+          text: reportDetailTypeDescription,
           arrowImageType: TableViewCellArrowImageType.arrowRight,
           section: section,
           row: row,
-          clickCellCallback: (section, row) =>
-          {
-            widget.clickReportReasonItemCallback(title)
+          clickCellCallback: (section, row) {
+            return widget.clickReportReasonItemCallback(reportDetailTypeId, reportDetailTypeDescription);
           },
         );
       },

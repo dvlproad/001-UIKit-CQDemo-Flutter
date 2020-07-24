@@ -1,42 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class ReportTextView extends StatefulWidget {
+typedef TextChangeCallback = void Function(String text);
+
+class InputTextView extends StatefulWidget {
   final String placeholder;
   final int maxLength;
   final int maxLines;
+  final TextChangeCallback textChangeCallback;
 
-  final TextEditingController controller;
-
-  ReportTextView({Key key, this.controller, this.placeholder, this.maxLength, this.maxLines}) : super(key: key);
+  InputTextView({Key key, this.placeholder, this.maxLength, this.maxLines, this.textChangeCallback}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _ReportTextViewState();
+    return _InputTextViewState();
   }
 }
 
-class _ReportTextViewState extends State<ReportTextView> {
+class _InputTextViewState extends State<InputTextView> {
+  TextEditingController _inputTextViewController = new TextEditingController();
+
+  String countText = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _inputTextViewController.addListener(() {
+      var currentTextLength = _inputTextViewController.text.length;
+      setState(() {
+        countText = currentTextLength.toString() + '/' + widget.maxLength.toString();
+      });
+      if(null != widget.textChangeCallback) {
+        widget.textChangeCallback(_inputTextViewController.text);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red,
-      padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-      child: textField1(),
-//      child: textField2(),
+      color: Colors.transparent,
+      margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
+//      child: textField1(),
+      child: textField2(),
     );
   }
 
   Widget textField1(){
     return TextField(
-      controller: widget.controller,
+      controller: _inputTextViewController,
       maxLength: widget.maxLength,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
       maxLines: widget.maxLines,
       textAlign: TextAlign.left,
       style: TextStyle(fontSize: 14.0, color: Colors.white),//输入文本的样式
       decoration: InputDecoration(
         hintText: widget.placeholder,
+        hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
         enabledBorder: __reportTextFieldDecorationBorder(),
+        focusedBorder: __reportTextFieldDecorationBorder(),
       ),
     );
   }
@@ -55,20 +77,22 @@ class _ReportTextViewState extends State<ReportTextView> {
       // Overflow.visible 子Widget超出Stack部分还会显示的
       children: <Widget>[
         TextField(
-          controller: widget.controller,
-          maxLength: widget.maxLength,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
+          controller: _inputTextViewController,
+//          maxLength: widget.maxLength,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
           maxLines: widget.maxLines,
           textAlign: TextAlign.left,
           style: TextStyle(fontSize: 14.0, color: Colors.white),//输入文本的样式
           decoration: InputDecoration(
             hintText: widget.placeholder,
+            hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
             enabledBorder: __reportTextFieldDecorationBorder(),
+            focusedBorder: __reportTextFieldDecorationBorder(),
           ),
         ),
         Positioned(
-          bottom: 20,
-          right: 20,
-          child: Text('1/200'),
+          bottom: 0,
+          right: 0,
+          child: Text(countText??'', style: TextStyle(color: Color(0xFF7E7E7E))),
         )
       ],
     );
