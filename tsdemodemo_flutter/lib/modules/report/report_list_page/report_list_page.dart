@@ -9,13 +9,22 @@ class ReportListPage extends StatefulWidget {
   final int reportTypeValue;
   final String reportTypeDescription;
 
-  ReportListPage({Key key, this.reportTypeId, this.reportTypeValue, this.reportTypeDescription}) : super(key: key);
+  ReportListPage(
+      {Key key,
+      this.reportTypeId,
+      this.reportTypeValue,
+      this.reportTypeDescription})
+      : super(key: key);
 
   @override
   _ReportListPageState createState() => _ReportListPageState();
 }
 
 class _ReportListPageState extends State<ReportListPage> {
+  String _reportTypeId;
+  int _reportTypeValue;
+  String _reportTypeDescription;
+
   ReportListModel _reportListModel = ReportListModel();
   var sectionModels = [];
 
@@ -27,8 +36,11 @@ class _ReportListPageState extends State<ReportListPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    _reportTypeId = widget.reportTypeId ?? '';
+    _reportTypeValue = widget.reportTypeValue;
+    _reportTypeDescription = widget.reportTypeDescription ?? '';
 
     _reportListModel.requestReportList().then((value) {
 //    mockRequest_reportList().then((value) => {
@@ -45,7 +57,7 @@ class _ReportListPageState extends State<ReportListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.reportTypeDescription),
+        title: Text(_reportTypeDescription),
       ),
       body: SafeArea(
         child: Container(
@@ -57,9 +69,9 @@ class _ReportListPageState extends State<ReportListPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ReportDetailUploadPage(
-                    reportTypeId: widget.reportTypeId,
-                    reportTypeValue: widget.reportTypeValue,
-                    reportTypeDescription: widget.reportTypeDescription,
+                    reportTypeId: _reportTypeId,
+                    reportTypeValue: _reportTypeValue,
+                    reportTypeDescription: _reportTypeDescription,
                     reportDetailTypeId: reportDetailTypeId,
                     reportDetailTypeDescription: reportDetailTypeDescription,
                   ),
