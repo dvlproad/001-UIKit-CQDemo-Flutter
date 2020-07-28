@@ -10,7 +10,7 @@ enum TableViewCellArrowImageType{
   arrowTopBottom, // 上下箭头
 }
 
-class MainSubArrowTableViewCell extends StatefulWidget {
+class MainSubArrowTableViewCell extends StatelessWidget {
   final String text;                          // 主文本
   final String detailText;                    // 副文本（此值为空时候，视图会自动隐藏）
   final TableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
@@ -31,13 +31,13 @@ class MainSubArrowTableViewCell extends StatefulWidget {
   }) : super(key: key);
 
 
-  @override
-  State<StatefulWidget> createState() {
-    return _MainSubArrowTableViewCellState();
-  }
-}
+//   @override
+//   State<StatefulWidget> createState() {
+//     return _MainSubArrowTableViewCellState();
+//   }
+// }
 
-class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
+// class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
   @override
   Widget build(BuildContext context) {
     return cellWidget();
@@ -51,8 +51,8 @@ class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
   }
 
   void _onTapCell() {
-    if(null != widget.clickCellCallback) {
-      widget.clickCellCallback(widget.section, widget.row);
+    if(null != this.clickCellCallback) {
+      this.clickCellCallback(this.section, this.row);
     }
   }
 
@@ -64,12 +64,12 @@ class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
     rowWidgets.add(_mainText());
 
     // 判断是否添加副文本
-    if (null != widget.detailText && widget.detailText.length > 0) {
+    if (null != this.detailText && this.detailText.length > 0) {
       rowWidgets.add(_subText());
     }
 
     // 判断是否添加箭头
-    if (widget.arrowImageType != TableViewCellArrowImageType.none) {
+    if (this.arrowImageType != TableViewCellArrowImageType.none) {
       rowWidgets.add(_arrowImage());
     }
 
@@ -91,7 +91,7 @@ class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
       padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        widget.text,
+        this.text??'',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -108,7 +108,7 @@ class _MainSubArrowTableViewCellState extends State<MainSubArrowTableViewCell> {
       padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
       color: Colors.transparent,
       child: Text(
-        widget.detailText,
+        this.detailText??'',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

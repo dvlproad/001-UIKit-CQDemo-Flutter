@@ -7,9 +7,9 @@ import 'report_upload_description_tableviewcell.dart';
 class ReportDetailUploadPage extends StatefulWidget {
   ReportDetailUploadPage({
     Key key,
-    this.reportTypeId,
-    this.reportTypeValue,
-    this.reportTypeDescription,
+    @required this.reportTypeId,
+    @required this.reportTypeValue,
+    @required this.reportTypeDescription,
     this.reportDetailTypeId,
     this.reportDetailTypeDescription,
   }) : super(key: key);

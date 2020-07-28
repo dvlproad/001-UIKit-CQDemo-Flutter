@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/router/router.dart';
 import 'report_list.dart';
-import 'package:tsdemodemo_flutter/modules/report/report_upload_page/report_upload_page.dart';
 import 'package:tsdemodemo_flutter/modules/report/report_list_page/report_list_model.dart';
 
 class ReportListPage extends StatefulWidget {
@@ -48,9 +48,7 @@ class _ReportListPageState extends State<ReportListPage> {
       setState(() {
         sectionModels = value;
       });
-    }).catchError((onError) {
-
-    });
+    }).catchError((onError) {});
   }
 
   @override
@@ -62,26 +60,40 @@ class _ReportListPageState extends State<ReportListPage> {
       body: SafeArea(
         child: Container(
           color: Colors.black,
-          child: ReportSectionTableView(
-            sectionModels: sectionModels,
-            clickReportReasonItemCallback: (reportDetailTypeId, reportDetailTypeDescription)=>{
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReportDetailUploadPage(
-                    reportTypeId: _reportTypeId,
-                    reportTypeValue: _reportTypeValue,
-                    reportTypeDescription: _reportTypeDescription,
-                    reportDetailTypeId: reportDetailTypeId,
-                    reportDetailTypeDescription: reportDetailTypeDescription,
-                  ),
-//                  settings: RouteSettings(arguments: userName),
-                ),
-              )
-            },
-          ),
+          child: _reportListWidget(),
         ),
       ),
+    );
+  }
+
+  Widget _reportListWidget() {
+    return ReportSectionTableView(
+      sectionModels: sectionModels,
+      clickReportReasonItemCallback:
+          (reportDetailTypeId, reportDetailTypeDescription) {
+        var params = {
+          'reportTypeId': _reportTypeId,
+          'reportTypeValue': _reportTypeValue,
+          'reportTypeDescription': _reportTypeDescription,
+          'reportDetailTypeId': reportDetailTypeId,
+          'reportDetailTypeDescription': reportDetailTypeDescription,
+        };
+        return Navigator.pushNamed(context, Routers.reportUploadPage,
+            arguments: params);
+//               return Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => ReportDetailUploadPage(
+//                     reportTypeId: _reportTypeId,
+//                     reportTypeValue: _reportTypeValue,
+//                     reportTypeDescription: _reportTypeDescription,
+//                     reportDetailTypeId: reportDetailTypeId,
+//                     reportDetailTypeDescription: reportDetailTypeDescription,
+//                   ),
+// //                  settings: RouteSettings(arguments: userName),
+//                 ),
+//               );
+      },
     );
   }
 }

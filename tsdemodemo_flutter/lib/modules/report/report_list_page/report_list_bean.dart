@@ -20,6 +20,9 @@ class ReportBean {
     }
   }
 
+  //ReportBean()
+
+
   @override
   String toString() {
     return '{"id": ${id != null?'${json.encode(id)}':'null'},"message": ${message != null?'${json.encode(message)}':'null'},"rows": $rows}';

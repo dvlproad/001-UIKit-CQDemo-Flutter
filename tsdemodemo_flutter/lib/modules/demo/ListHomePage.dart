@@ -150,13 +150,11 @@ class FullList extends StatefulWidget {
 class _FullListState extends State<FullList> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

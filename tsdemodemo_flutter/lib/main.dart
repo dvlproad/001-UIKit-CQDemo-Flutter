@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 import 'package:tsdemodemo_flutter/modules/home/home_page.dart';
-import 'package:tsdemodemo_flutter/modules/report/report_list_page/report_list_page.dart';
-import 'package:tsdemodemo_flutter/modules/report/report_upload_page/report_upload_page.dart';
 
 void main() {
   runApp(MyApp());
