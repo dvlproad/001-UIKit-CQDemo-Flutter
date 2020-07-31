@@ -30,6 +30,7 @@ dependencies:
 
   flutter_section_table_view: ^1.0.5
   dio: ^3.0.9
+  cached_network_image: ^2.2.0+1
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - lib/Resources/report/
+    - lib/Resources/ranking/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
+
 import 'package:tsdemodemo_flutter/router/router.dart';
 import 'package:tsdemodemo_flutter/modules/home/home_page.dart';
+
+// 测试分组列表的实现方式
+import 'package:tsdemodemo_flutter/modules/demo/CreateSectionList1.dart';
+import 'package:tsdemodemo_flutter/modules/demo/CreateSectionList2.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,11 +39,11 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return Routers().generator(settings);
       },
-      // routes: <String, WidgetBuilder>{
-      //   '/': (BuildContext context) => MyHomePage(),
-      //   '/report_list_page': (BuildContext context) => ReportListPage(),
-      //   '/repo_upload_page': (BuildContext context) => ReportDetailUploadPage(),
-      // },
+       routes: <String, WidgetBuilder>{
+         Routers.sectionTableViewMethod1Page: (BuildContext context) => CreateSectionList1(),
+         Routers.sectionTableViewMethod2Page: (BuildContext context) => CreateSectionList2(),
+         Routers.searchPage: (BuildContext context) => SearchPage(),
+       },
     );
   }
 }

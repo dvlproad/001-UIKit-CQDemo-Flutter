@@ -12,15 +12,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list.dart';
-import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_bean.dart';
-import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_bottom.dart';
-import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_cell.dart';
-import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_top.dart';
+import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_me.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_model.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_model_mock.dart';
+import 'package:tsdemodemo_flutter/modules/user_bean.dart';
+
+import 'rankling_bean.dart';
 
 class RankingListPage extends StatefulWidget {
-  String blockId; // 区块id
+  final String blockId; // 区块id
 
   RankingListPage({Key key, this.blockId}) : super(key: key);
 
@@ -34,9 +34,8 @@ class _RankingListPageState extends State<RankingListPage> {
   String _blockId;
 
   RankingListModel _rankingListModel = RankingListModel();
-  //List<Map<String, dynamic>> _rankingDataModels = [];
-  List<RankingBean> _rankingDataModels = [];
-  Map<String, dynamic> _mineRankingDataMap = {};
+  RankingFullBean _rankingBean;
+  bool _isLoadingSuccess = false;
 
   @override
   void dispose() {
@@ -50,56 +49,78 @@ class _RankingListPageState extends State<RankingListPage> {
 
     _blockId = widget.blockId ?? '';
 
-//    _rankingListModel.requestRankingList().then((value) {
-    mockRequest_rankingListData().then((value) {
+    // _rankingListModel.requestRankingList(_blockId).then((value) {
+    mockRequest_rankingListData(_blockId).then((value) {
       print(value);
-      RankingListBean rankingListBean = RankingListBean.fromJson(value['rows']);
-      _rankingDataModels = rankingListBean.beans;
-      _mineRankingDataMap = value['me'];
+      _rankingBean = RankingFullBean(value);
 
-      setState(() {
+      _isLoadingSuccess = true;
 
-      });
-    }).catchError((onError) {});
+      setState(() {});
+    }).catchError((onError) {
+      print(onError.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('影响力排行榜'),
-      ),
+      appBar: appBar(),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
           color: Colors.black,
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              RankingListTop(),
-              Expanded(
-                child: _reportListWidget(),
-              ),
-              _mineWidget(),
-            ],
-          ),
+          child: _lastPageWidget(),
         ),
       ),
     );
   }
 
-
-
-  Widget _reportListWidget() {
-    return RankingList(
-      rankingDataModels: _rankingDataModels,
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      title: Text('影响力排行榜'),
     );
   }
 
-  Widget _mineWidget() {
-    return RankingListBottom(
-      showIndex: false,
-      dataMap: _mineRankingDataMap,
+  Widget _lastPageWidget() {
+    if (_isLoadingSuccess) {
+      return _pageWidget();
+    } else {
+      return Container();
+    }
+  }
+
+  Widget _pageWidget() {
+    return Container(
+      padding: EdgeInsets.only(left: 20, right: 20),
+      color: Colors.black,
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 20),
+          Expanded(
+            child: RankingList(
+              rankingDataModels:
+                  _rankingBean.rows == null ? [] : _rankingBean.rows,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+            height: 1,
+            color: Color(0x80343434),
+          ),
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: Text(
+              '更新于' + _rankingBean.updateDate.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Color(0xFF7E7E7E)),
+            ),
+          ),
+          RankingListBottom(
+            showIndex: false,
+            dataBean: _rankingBean.me,
+          ),
+        ],
+      ),
     );
   }
 }

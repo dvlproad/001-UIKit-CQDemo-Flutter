@@ -12,25 +12,23 @@
 
 import 'dart:convert' show json;
 
-import 'package:tsdemodemo_flutter/modules/report/report_list_page/report_list_bean.dart';
-
 /// 排名列表的单元数据模型
 class RankingBean {
   String id;
-  String nickName;    // 用户名
-  String avatar;      // 头像
-  int fansCount;      // 粉丝数
-  int followerCount;  // 关注数
-  int influence;      // 影响力
+  String nickName; // 用户名
+  String avatar; // 头像
+  int fansCount; // 粉丝数
+  int followerCount; // 关注数
+  int influence; // 影响力
 
-  RankingBean({
-    this.id = '',
-    this.nickName = '',
-    this.avatar = '',
-    this.fansCount = 0,
-    this.followerCount = 0,
-    this.influence = 0
-  }) : super();
+  RankingBean(
+      {this.id = '',
+      this.nickName = '',
+      this.avatar = '',
+      this.fansCount = 0,
+      this.followerCount = 0,
+      this.influence = 0})
+      : super();
 
   //factory RankingBean(jsonStr) => jsonStr == null ? null : jsonStr is String ? RankingBean._fromJson(json.decode(jsonStr)) : RankingBean._fromJson(jsonStr);
   factory RankingBean.fromJson(jsonStr) {
@@ -39,10 +37,10 @@ class RankingBean {
     }
 
     Map<String, dynamic> beanMap = Map();
-    if(jsonStr is String) {
+    if (jsonStr is String) {
       beanMap = json.decode(jsonStr);
     }
-    if(jsonStr is Map) {
+    if (jsonStr is Map) {
       beanMap = jsonStr;
     }
 
@@ -54,8 +52,8 @@ class RankingBean {
     id = beanMap['id'] ?? '';
 
     //nickName2 = beanMap['user']['nickName'] ?? '';   //用户名
-    nickName = '';  //用户名
-    avatar = '';    // 头像
+    nickName = ''; //用户名
+    avatar = ''; // 头像
     if (null != beanMap['user']) {
       Map<String, dynamic> userMap = beanMap['user'];
       nickName = userMap['nickName'] ?? '';
@@ -99,7 +97,7 @@ class RankingBean {
 
   @override
   String toString() {
-    return '{"id": $id,"nickName": ${nickName != null?'$nickName':'null'},"fansCount": $fansCount,"followerCount": $followerCount,"influence": $influence}';
+    return '{"id": $id,"nickName": ${nickName != null ? '$nickName' : 'null'},"fansCount": $fansCount,"followerCount": $followerCount,"influence": $influence}';
   }
 }
 
@@ -122,7 +120,7 @@ class RankingListBean {
     List<RankingBean> _beans = [];
     for (var beanMap in beanMaps ?? []) {
       RankingBean rankingBean = RankingBean.fromJson(beanMap);
-      if(rankingBean == null) {
+      if (rankingBean == null) {
         print('rankingBean == null');
       }
       _beans.add(rankingBean);
@@ -135,7 +133,3 @@ class RankingListBean {
     return '{"beans": $beans}';
   }
 }
-
-
-
-

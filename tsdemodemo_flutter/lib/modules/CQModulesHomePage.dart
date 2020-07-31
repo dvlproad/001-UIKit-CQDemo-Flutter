@@ -69,6 +69,15 @@ class _CQModulesHomePageState
               Navigator.pushNamed(context, Routers.rankingListPage, arguments: params);
             }
           },
+          {
+            'title': "Search(搜索模块)",
+            'actionBlock': (){
+              var params = {
+                'blockId': 'dfjdl895',
+              };
+              Navigator.pushNamed(context, Routers.searchPage, arguments: params);
+            }
+          },
         ]
       },
     ];

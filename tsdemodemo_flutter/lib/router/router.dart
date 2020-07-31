@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/modules/demo/CQModulesHomePage.dart';
+import 'package:tsdemodemo_flutter/modules/CQModulesHomePage.dart';
 // import 'package:tsdemodemo_flutter/modules/home/home_page.dart';
 // 举报模块
 import 'package:tsdemodemo_flutter/modules/report/report_list_page/report_list_page.dart';
@@ -10,6 +10,12 @@ import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_page.dart';
 class Routers {
   // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
+
+  // 组件模块
+  static const sectionTableViewMethod1Page = '/section_table_view_method1_page';
+  static const sectionTableViewMethod2Page = '/section_table_view_method2_page';
+
+  static const searchPage = '/search_page';
 
   // 举报模块
   // static const reportListPage = ReportListPage.routeName;

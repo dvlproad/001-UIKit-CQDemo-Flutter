@@ -1,4 +1,3 @@
-// 包含主文本main，且可选定制副文本、箭头 的视图
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/rankling_bean.dart';
@@ -6,29 +5,19 @@ import 'package:tsdemodemo_flutter/modules/user_avatar_widget.dart';
 
 typedef ClickCellCallback = void Function(int section, int row);
 
-enum RankingListCellArrowImageType{
-  none,           // 无箭头
-  arrowRight,     // 右箭头
-  arrowTopBottom, // 上下箭头
-}
-
-/// 排行榜Cell
-class RankingListCell extends StatelessWidget {
+/// 排行榜底部我的排名视图
+class RankingListBottom extends StatelessWidget {
   final bool showIndex;                       // 是否显示编号
-  //final Map<String, dynamic> dataMap;       // 数据
-  final RanklingRowBean dataModel;                // 数据
-  final RankingListCellArrowImageType arrowImageType; // 箭头类型(默认none)
+  final RanklingMeBean dataBean;                      // 数据
 
   final int section;
   final int row;
   final ClickCellCallback clickCellCallback;  // cell 的点击
 
-  RankingListCell({
+  RankingListBottom({
     Key key,
     this.showIndex = true,
-    //this.dataMap,
-    @required this.dataModel,
-    this.arrowImageType=RankingListCellArrowImageType.none,
+    @required this.dataBean,
 
     this.section,
     this.row,
@@ -38,11 +27,11 @@ class RankingListCell extends StatelessWidget {
 
 //   @override
 //   State<StatefulWidget> createState() {
-//     return _RankingListCellState();
+//     return _RankingListBottomState();
 //   }
 // }
 //
-// class _RankingListCellState extends State<RankingListCell> {
+// class _RankingListBottomState extends State<RankingListBottom> {
   @override
   Widget build(BuildContext context) {
     return cellWidget();
@@ -85,7 +74,7 @@ class RankingListCell extends StatelessWidget {
       children: <Widget>[
         showIndex ? _indexText() : Container(),
         SizedBox(width: 16),
-        AvatarWidget(userBean: dataModel.user, radius: 30),
+        AvatarWidget(userBean: dataBean.user, radius: 30),
         SizedBox(width: 8),
         _fansWidget(),
       ],
@@ -123,9 +112,14 @@ class RankingListCell extends StatelessWidget {
 
   // 粉丝数
   Widget _fansWidget() {
-    String _userName = dataModel.user.nickName;          //用户名
-    int _fansCount = dataModel.fansCount;           //粉丝数
-    int _followerCount = dataModel.followerCount;   //关注数
+//    if(dataModel == null) {
+//      dataModel = RankingBean();
+//    }
+
+    String _userName = dataBean.user.nickName ?? '';  //用户名
+    String _avatar = dataBean.user.avatar ?? '';    // 头像
+    int _rankNumber = dataBean.number; // 排名
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,10 +130,8 @@ class RankingListCell extends StatelessWidget {
           children: <Widget>[
             Container(
               width: 70,
-              child: Text('粉丝数 ' + _fansCount.toString(), style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
+              child: Text('排名 ' + _rankNumber.toString(), style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
             ),
-            SizedBox(width: 4),
-            Text('关注 ' + _followerCount.toString(), style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
           ],
         )
       ],
@@ -148,7 +140,8 @@ class RankingListCell extends StatelessWidget {
 
   // 影响力
   Widget _influenceWidget() {
-    String _influenceString = dataModel.influenceString;  //影响力
+    String _influenceString = dataBean.influenceString;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,

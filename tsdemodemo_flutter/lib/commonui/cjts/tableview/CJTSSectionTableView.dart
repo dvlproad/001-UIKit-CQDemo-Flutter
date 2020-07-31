@@ -77,7 +77,9 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
     } else {
       var title = moduleModel['title'];
       String nextPageName = moduleModel['nextPageName'];
-      nextPageName = '/report_list_page';
+      if (nextPageName.startsWith('/', 0) == false) {
+        nextPageName = '/report_list_page';
+      }
 
       var params = {'title': title};
 

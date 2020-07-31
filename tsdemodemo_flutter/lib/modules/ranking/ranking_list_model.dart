@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:tsdemodemo_flutter/modules/ranking/rankling_bean.dart';
 import 'package:tsdemodemo_flutter/service/service_method.dart';
 
 class RankingListModel {
@@ -9,11 +10,16 @@ class RankingListModel {
   }
 
   // 获取举报列表
-  Future<dynamic> requestRankingList() async {
+  Future<RankingFullBean> requestRankingList(String blockId) async {
+    Map<String, dynamic> params = {
+      'blockId': blockId,
+    };
+
     return await postUrl(
       'http://www.1nian.xyz:3000/mock/11/aroundUsers_1595817233708',
+      params: params,
       cancelToken: cancelToken,
-//      jsonParse: (data) => ReportListBean(data),
+      jsonParse: (data) => RankingFullBean(data),
     );
   }
 }
