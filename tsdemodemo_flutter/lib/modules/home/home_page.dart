@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             uikitHomeButton(),
             moduleHomeButton(),
+            architectureHomeButton(),
           ],
         ),
       ),
@@ -68,6 +69,17 @@ class _MyHomePageState extends State<MyHomePage> {
       textColor: Color(0xfff5b63c),
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);
+      },
+    );
+  }
+
+  // 进入架构测试主页的按钮
+  FlatButton architectureHomeButton() {
+    return FlatButton(
+      child: Text("架构、设计模式"),
+      textColor: Color(0xfff5b63c),
+      onPressed: () {
+        Navigator.pushNamed(context, Routers.architectureHomePage);
       },
     );
   }

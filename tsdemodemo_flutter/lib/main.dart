@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
 
 import 'package:tsdemodemo_flutter/router/router.dart';
@@ -39,11 +40,14 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: (settings) {
         return Routers().generator(settings);
       },
-       routes: <String, WidgetBuilder>{
-         Routers.sectionTableViewMethod1Page: (BuildContext context) => CreateSectionList1(),
-         Routers.sectionTableViewMethod2Page: (BuildContext context) => CreateSectionList2(),
-         Routers.searchPage: (BuildContext context) => SearchPage(),
-       },
+      routes: <String, WidgetBuilder>{
+        Routers.architectureHomePage: (BuildContext context) => TSArcHomePage(),
+        Routers.sectionTableViewMethod1Page: (BuildContext context) =>
+            CreateSectionList1(),
+        Routers.sectionTableViewMethod2Page: (BuildContext context) =>
+            CreateSectionList2(),
+        Routers.searchPage: (BuildContext context) => SearchPage(),
+      },
     );
   }
 }

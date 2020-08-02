@@ -11,6 +11,9 @@ class Routers {
   // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
 
+  // 设计模式的测试首页
+  static const architectureHomePage = '/architecture_home_page';
+
   // 组件模块
   static const sectionTableViewMethod1Page = '/section_table_view_method1_page';
   static const sectionTableViewMethod2Page = '/section_table_view_method2_page';
@@ -32,9 +35,10 @@ class Routers {
 
     switch (settings.name) {
       // 模块的测试首页
-      case moduleHomePage: {
-        return _modulesHomePageRoute(arguments);
-      }
+      case moduleHomePage:
+        {
+          return _modulesHomePageRoute(arguments);
+        }
 
       // 举报模块
       case reportListPage:
@@ -46,7 +50,7 @@ class Routers {
           return _reportUploadPageRoute(arguments);
         }
 
-        // 排行榜模块
+      // 排行榜模块
       case rankingListPage:
         {
           return _rankingListPageRoute(arguments);
@@ -108,7 +112,6 @@ class Routers {
       );
     });
   }
-
 
   /// 排行榜-影响力排行榜
   MaterialPageRoute _rankingListPageRoute(arguments) {

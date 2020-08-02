@@ -15,7 +15,6 @@ import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list.dart'
 import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_me.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_model.dart';
 import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_model_mock.dart';
-import 'package:tsdemodemo_flutter/modules/user_bean.dart';
 
 import 'rankling_bean.dart';
 
