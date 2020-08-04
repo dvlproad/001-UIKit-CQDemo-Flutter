@@ -2,14 +2,20 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
 
-typedef ClickOverlayPageCallback = void Function();
+typedef ClickOverlayPageBGCallback = void Function();
+typedef ClickOverlayPageIKnowCallback = void Function();
 
-class OverlayPage extends StatelessWidget {
-  final ClickOverlayPageCallback clickOverlayPageCallback;
+class GuideOverlayBasePage extends StatelessWidget {
+  final ClickOverlayPageBGCallback clickOverlayPageBGCallback;
+  final ClickOverlayPageIKnowCallback clickOverlayPageIKnowCallback;
   final Widget overlayChild;
 
-  OverlayPage({Key key, this.overlayChild, this.clickOverlayPageCallback})
-      : super(key: key);
+  GuideOverlayBasePage({
+    Key key,
+    this.overlayChild,
+    this.clickOverlayPageBGCallback,
+    this.clickOverlayPageIKnowCallback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class OverlayPage extends StatelessWidget {
       // color: Colors.red,
       color: Colors.black.withOpacity(0.4),
       child: GestureDetector(
-        onTap: this.clickOverlayPageCallback,
+        onTap: this.clickOverlayPageBGCallback,
         child: Stack(
           children: <Widget>[
             this.overlayChild,
@@ -29,7 +35,7 @@ class OverlayPage extends StatelessWidget {
                 height: 42,
                 child: WhiteThemeBGButton(
                   text: "我知道了",
-                  onPressed: this.clickOverlayPageCallback,
+                  onPressed: this.clickOverlayPageIKnowCallback,
                 ),
               ),
             ),

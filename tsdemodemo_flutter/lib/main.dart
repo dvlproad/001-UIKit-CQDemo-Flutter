@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
 import 'package:tsdemodemo_flutter/modules/util/device_info_page.dart';
 

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/bloc_provider/theme_bloc.dart';
 
 class ThemeBlocProvider extends InheritedWidget {
-  ThemeBloc bLoC = ThemeBloc();
+  final ThemeBloc bLoC = ThemeBloc();
 
   ThemeBlocProvider({Key key, Widget child}) : super(key: key, child: child);
 

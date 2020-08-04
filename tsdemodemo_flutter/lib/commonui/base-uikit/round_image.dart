@@ -2,9 +2,9 @@
 import 'package:flutter/cupertino.dart';
 
 class RoundImage extends StatelessWidget {
-  double size;
+  final double size;
 
-  String networkSrc;
+  final String networkSrc;
 
 
   RoundImage({Key key,

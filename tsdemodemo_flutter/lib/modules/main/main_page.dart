@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/modules/demo/TSSectionTableViewPage.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_page2.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page2.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
 class MyHomePage extends StatefulWidget {

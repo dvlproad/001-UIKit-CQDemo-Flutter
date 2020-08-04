@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/emptyview.dart';
@@ -15,6 +14,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.yellow,
       appBar: _appBar(),
       body: _pageWidget(),
     );
@@ -28,8 +28,11 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _pageWidget() {
     return Container(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: double.infinity,
+      ),
       color: Colors.black,
-      height: 400,
       child: Column(
         children: <Widget>[
           SearchBar(
@@ -37,8 +40,7 @@ class _SearchPageState extends State<SearchPage> {
               searchPlaceholder: '请输入',
               onSubmitted: (String text) {
                 print('最后搜索的内容为:' + text);
-              }
-          ),
+              }),
           _searchResultWidget(),
         ],
       ),
@@ -46,11 +48,11 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _searchResultWidget() {
-    if (true) {
+    bool showResult = true;
+    if (showResult) {
       return EmptyView(text: '没有匹配的搜索结果');
     } else {
       return EmptyView(text: '没有匹配的搜索结果');
     }
   }
 }
-
