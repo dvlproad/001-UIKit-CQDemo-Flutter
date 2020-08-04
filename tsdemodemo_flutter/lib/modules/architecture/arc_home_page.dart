@@ -3,6 +3,7 @@ import 'package:tsdemodemo_flutter/modules/architecture/bloc_provider/theme_resu
 import 'package:tsdemodemo_flutter/modules/architecture/normal/theme_result_page1.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_result_page2.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/bloc/theme_result_page3.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/redux/theme_result_page5.dart';
 
 class TSArcHomePage extends StatefulWidget {
   TSArcHomePage({Key key, this.title}) : super(key: key);
@@ -28,10 +29,11 @@ class _TSArcHomePageState extends State<TSArcHomePage> {
               'You have pushed the button this many times:',
             ),
             tsButton('正常设计模式', ThemeResultPage1()),
-            tsButton('Provider设计模式', ThemeResultPage2()),
-            tsButton('Provider设计模式2', ThemeResultPage2PP().myAppWidget()),
-            tsButton('BloC设计模式', ThemeResultPage3()),
-            tsButton('BloC_Provider设计模式', ThemeResultPage4()),
+            tsButton('Provider 设计模式（不跨页面，待验证）', ThemeResultPage2()),
+            // tsButton('Provider 设计模式2', ThemeResultPage2PP().myAppWidget()),
+            tsButton('BloC 设计模式', ThemeResultPage3()),
+            tsButton('BloC_Provider 设计模式', ThemeResultPage4()),
+            tsButton('Redux 设计模式', ThemeResultPage5()),
             // moduleHomeButton(),
           ],
         ),

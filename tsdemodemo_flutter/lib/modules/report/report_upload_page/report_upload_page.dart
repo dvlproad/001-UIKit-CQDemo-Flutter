@@ -21,7 +21,6 @@ class ReportDetailUploadPage extends StatefulWidget {
   final String reportDetailTypeId;
   final String reportDetailTypeDescription;
 
-
   @override
   State<StatefulWidget> createState() {
     return _ReportDetailUploadPageState();
@@ -39,28 +38,22 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
         title: Text(widget.reportTypeDescription),
       ),
       body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: <Widget>[
-            Container(
-              color: Colors.black,
-              child: reportListWidget(),
-            ),
-            Positioned(
-              left: 20,
-              right: 20,
-              bottom: 20,
-              child: ThemeBGButton(
-                  text: "提交",
-                  enable: true,
-                  enableOnPressed: _uploadReport
-              ),
-            )
-          ],
-        )
-
-
-      ),
+          child: Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: <Widget>[
+          Container(
+            color: Colors.black,
+            child: reportListWidget(),
+          ),
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 20,
+            child: ThemeBGButton(
+                text: "提交", enable: true, onPressed: _uploadReport),
+          )
+        ],
+      )),
     );
   }
 
@@ -74,7 +67,7 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
         children: <Widget>[
           ReportDescriptionTableViewCell(
             reportReasonString: widget.reportDetailTypeDescription,
-            textChangeCallback: (text){
+            textChangeCallback: (text) {
               print("listen reportDetailTypeReasonDescription:" + text);
               reportDetailTypeReasonDescription = text;
             },
@@ -86,10 +79,13 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
 
   _uploadReport() {
     print("最后提交的内容为:" + reportDetailTypeReasonDescription);
-    _reportUploadtModel.requestSubmitReport(widget.reportTypeId, widget.reportTypeValue, widget.reportDetailTypeId, reportDetailTypeReasonDescription).then((value) {
+    _reportUploadtModel
+        .requestSubmitReport(widget.reportTypeId, widget.reportTypeValue,
+            widget.reportDetailTypeId, reportDetailTypeReasonDescription)
+        .then((value) {
       //print('举报成功，返回');
 //      Routes.popUntil(context, [widget.fromPage]);
-    }).catchError((onError){
+    }).catchError((onError) {
       print("err:${onError.toString()}");
     });
   }

@@ -11,12 +11,17 @@ class Routers {
   // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
 
+  // 工具的测试首页
+  static const utilHomePage = '/util_home_page';
+
   // 设计模式的测试首页
   static const architectureHomePage = '/architecture_home_page';
 
   // 组件模块
   static const sectionTableViewMethod1Page = '/section_table_view_method1_page';
   static const sectionTableViewMethod2Page = '/section_table_view_method2_page';
+
+  static const guidePage = '/guide_page';
 
   static const searchPage = '/search_page';
 

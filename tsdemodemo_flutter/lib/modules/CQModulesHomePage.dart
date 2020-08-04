@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
 class CQModulesHomePage extends CJTSBasePage {
@@ -27,8 +28,7 @@ class CQModulesHomePage extends CJTSBasePage {
   }
 }
 
-class _CQModulesHomePageState
-    extends CJTSBasePageState<CQModulesHomePage> {
+class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
   var sectionModels = [];
 
   @override
@@ -45,7 +45,8 @@ class _CQModulesHomePageState
                 'reportTypeValue': 1,
                 'reportTypeDescription': '举报合集',
               };
-              Navigator.pushNamed(context, Routers.reportListPage, arguments: params);
+              Navigator.pushNamed(context, Routers.reportListPage,
+                  arguments: params);
               // Navigator.of(context).pushNamed(Routers.reportListPage, arguments: params);
 //             Navigator.push(
 //               context,
@@ -62,29 +63,45 @@ class _CQModulesHomePageState
           },
           {
             'title': "Ranking(排行榜模块)",
-            'actionBlock': (){
+            'actionBlock': () {
               var params = {
                 'blockId': 'dfjdl895',
               };
-              Navigator.pushNamed(context, Routers.rankingListPage, arguments: params);
+              Navigator.pushNamed(context, Routers.rankingListPage,
+                  arguments: params);
             }
           },
           {
             'title': "Search(搜索模块)",
-            'actionBlock': (){
+            'actionBlock': () {
               var params = {
                 'blockId': 'dfjdl895',
               };
-              Navigator.pushNamed(context, Routers.searchPage, arguments: params);
+              Navigator.pushNamed(context, Routers.searchPage,
+                  arguments: params);
+            }
+          },
+          {
+            'title': "Guide(引导模块)",
+            'actionBlock': () {
+              var params = {};
+              Navigator.pushNamed(context, Routers.guidePage,
+                  arguments: params);
             }
           },
         ]
       },
     ];
 
-    return CJTSSectionTableView(
-      context: context,
-      sectionModels: sectionModels,
+    return Column(
+      children: <Widget>[
+        Expanded(
+            child: CJTSSectionTableView(
+          context: context,
+          sectionModels: sectionModels,
+        )),
+        WhiteThemeBGButton(text: "提交", onPressed: () {}),
+      ],
     );
   }
 }

@@ -65,10 +65,10 @@ class _ThemeSettingPage2State extends State<ThemeSettingPage2> {
       textColor: Color(0xfff5b63c),
       onPressed: () {
         // 将传递方式由【原本的从导航栏返回的】改成【Provider】
-        Navigator.pop(context, _currentThemeString); //返回上一页并携带参数
-        // Provider.of<ThemeChangeNotifier>(context, listen: false)
-        //     .changeTheme(_currentThemeString);
-        // Navigator.pop(context);
+        // Navigator.pop(context, _currentThemeString); //返回上一页并携带参数
+        Provider.of<ThemeChangeNotifier>(context, listen: false)
+            .changeTheme(_currentThemeString);
+        Navigator.pop(context);
       },
     );
   }

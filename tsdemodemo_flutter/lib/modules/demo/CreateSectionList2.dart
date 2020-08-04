@@ -39,7 +39,7 @@ class CreateSectionList2 extends StatelessWidget {
       },
       cellAtIndexPath: (section, row) {
         return CJTSTableViewCell(
-          title: 'Cell $section $row',
+          text: 'Cell $section $row',
           section: section,
           row: row,
           clickCellCallback: (section, row) {

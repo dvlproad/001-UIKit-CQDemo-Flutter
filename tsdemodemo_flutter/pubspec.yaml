@@ -28,6 +28,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
 
+  device_info: ^0.4.2+4
+  package_info: ^0.4.1
+  
   flutter_section_table_view: ^1.0.5
   dio: ^3.0.9
   cached_network_image: ^2.2.0+1
@@ -55,6 +58,7 @@ flutter:
   assets:
     - lib/Resources/report/
     - lib/Resources/ranking/
+    - lib/modules/guide/Resources/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

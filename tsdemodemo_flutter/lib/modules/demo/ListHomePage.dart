@@ -40,12 +40,11 @@ class MinList extends StatelessWidget {
 
   Widget cellWidget(context, title, section, row) {
     return CJTSTableViewCell(
-      title: title,
+      text: title,
       section: section,
       row: row,
-      clickCellCallback: (section, row)=>{
-        this.__goNextPage(context, section, row)
-      },
+      clickCellCallback: (section, row) =>
+          {this.__goNextPage(context, section, row)},
     );
   }
 
@@ -60,9 +59,9 @@ class MinList extends StatelessWidget {
   }
 }
 
-
 class SectionList extends StatelessWidget {
-  final controller = SectionTableController(sectionTableViewScrollTo: (section, row, isScrollDown) {
+  final controller = SectionTableController(
+      sectionTableViewScrollTo: (section, row, isScrollDown) {
     print('received scroll to $section $row scrollDown:$isScrollDown');
   });
 
@@ -107,7 +106,6 @@ class SectionList extends StatelessWidget {
     );
   }
 
-
   Widget header(title) {
     return CJTSTableViewHeader(
       title: title,
@@ -116,12 +114,11 @@ class SectionList extends StatelessWidget {
 
   Widget cellWidget(context, title, section, row) {
     return CJTSTableViewCell(
-      title: title,
+      text: title,
       section: section,
       row: row,
-      clickCellCallback: (section, row)=>{
-        this.__goNextPage(context, section, row)
-      },
+      clickCellCallback: (section, row) =>
+          {this.__goNextPage(context, section, row)},
     );
   }
 
@@ -135,8 +132,6 @@ class SectionList extends StatelessWidget {
     );
   }
 }
-
-
 
 class FullList extends StatefulWidget {
   final String title;
@@ -159,7 +154,8 @@ class _FullListState extends State<FullList> {
   }
 
   int sectionCount = 9;
-  final controller = SectionTableController(sectionTableViewScrollTo: (section, row, isScrollDown) {
+  final controller = SectionTableController(
+      sectionTableViewScrollTo: (section, row, isScrollDown) {
     print('received scroll to $section $row scrollDown:$isScrollDown');
   });
   final refreshController = RefreshController();
@@ -258,12 +254,10 @@ class _FullListState extends State<FullList> {
 
   Widget cellWidget(title, section, row) {
     return CJTSTableViewCell(
-      title: title,
+      text: title,
       section: section,
       row: row,
-      clickCellCallback: (section, row)=>{
-        this.__goNextPage(section, row)
-      },
+      clickCellCallback: (section, row) => {this.__goNextPage(section, row)},
     );
   }
 

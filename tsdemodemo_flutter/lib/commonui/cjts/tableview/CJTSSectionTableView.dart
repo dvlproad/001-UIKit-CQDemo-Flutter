@@ -49,9 +49,11 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
         var values = sectionModel['values'];
         var moduleModel = values[row];
         var title = moduleModel['title'];
+        var subTitle = moduleModel['detailText'];
 
         return CJTSTableViewCell(
-          title: title,
+          text: title,
+          detailText: subTitle,
           section: section,
           row: row,
           clickCellCallback: (section, row) =>
@@ -71,9 +73,8 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
 
   void __dealDataModel(moduleModel) {
     ClickTSItemCallback clickTSItemCallback = moduleModel['actionBlock'];
-    if(null != clickTSItemCallback) {
+    if (null != clickTSItemCallback) {
       clickTSItemCallback();
-
     } else {
       var title = moduleModel['title'];
       String nextPageName = moduleModel['nextPageName'];

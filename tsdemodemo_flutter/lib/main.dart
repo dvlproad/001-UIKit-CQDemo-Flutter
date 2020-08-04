@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
+import 'package:tsdemodemo_flutter/modules/util/device_info_page.dart';
 
 import 'package:tsdemodemo_flutter/router/router.dart';
-import 'package:tsdemodemo_flutter/modules/home/home_page.dart';
+import 'package:tsdemodemo_flutter/modules/main/main_page.dart';
 
 // 测试分组列表的实现方式
 import 'package:tsdemodemo_flutter/modules/demo/CreateSectionList1.dart';
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
         return Routers().generator(settings);
       },
       routes: <String, WidgetBuilder>{
+        Routers.guidePage: (BuildContext context) => GuidePage(),
+        Routers.utilHomePage: (BuildContext context) => TSDeviceInfoPage(),
         Routers.architectureHomePage: (BuildContext context) => TSArcHomePage(),
         Routers.sectionTableViewMethod1Page: (BuildContext context) =>
             CreateSectionList1(),

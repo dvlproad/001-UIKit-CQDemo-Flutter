@@ -14,8 +14,7 @@ abstract class CJTSBasePage extends StatefulWidget {
 }
 
 //class _CJTSTableHomeBasePageState extends State<CJTSBasePage> {
-abstract class CJTSBasePageState<V extends CJTSBasePage>
-    extends State<V> {
+abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
   var sectionModels = [];
 
   @override

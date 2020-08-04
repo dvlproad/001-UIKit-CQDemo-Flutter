@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/demo/TSSectionTableViewPage.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_page2.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -38,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             uikitHomeButton(),
             moduleHomeButton(),
+            utilHomeButton(),
             architectureHomeButton(),
           ],
         ),
@@ -48,13 +50,13 @@ class _MyHomePageState extends State<MyHomePage> {
   // 进入UIKit主页的按钮
   FlatButton uikitHomeButton() {
     return FlatButton(
-      child: Text("忘记密码?"),
+      child: Text("Components"),
       textColor: Color(0xfff5b63c),
       onPressed: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TSSectionTableViewPage(),
+            builder: (context) => GuideOverlayPage2(),
 //          settings: RouteSettings(arguments: userName),
           ),
         );
@@ -69,6 +71,17 @@ class _MyHomePageState extends State<MyHomePage> {
       textColor: Color(0xfff5b63c),
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);
+      },
+    );
+  }
+
+  // 进入工具测试主页的按钮
+  FlatButton utilHomeButton() {
+    return FlatButton(
+      child: Text("Util"),
+      textColor: Color(0xfff5b63c),
+      onPressed: () {
+        Navigator.pushNamed(context, Routers.utilHomePage);
       },
     );
   }
