@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page2.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page3.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
 import 'package:tsdemodemo_flutter/modules/util/device_info_page.dart';
 
@@ -38,14 +41,25 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: GuideOverlayTestHomePage(), // 首页
       onGenerateRoute: (settings) {
         return Routers().generator(settings);
       },
       routes: <String, WidgetBuilder>{
-        Routers.guidePage: (BuildContext context) => GuidePage(),
+        // 引导蒙层 guide
+        Routers.guidePage: (BuildContext context) => GuideOverlayTestHomePage(),
+        Routers.guideOverlayTestPage1: (BuildContext context) =>
+            GuideOverlayTestPage1(),
+        Routers.guideOverlayTestPage2: (BuildContext context) =>
+            GuideOverlayTestPage2(),
+        Routers.guideOverlayTestPage3: (BuildContext context) =>
+            GuideOverlayTestPage3(),
+        // 工具 util
         Routers.utilHomePage: (BuildContext context) => TSDeviceInfoPage(),
+        // 设计模式 architecture
         Routers.architectureHomePage: (BuildContext context) => TSArcHomePage(),
+        // 组件 components
         Routers.sectionTableViewMethod1Page: (BuildContext context) =>
             CreateSectionList1(),
         Routers.sectionTableViewMethod2Page: (BuildContext context) =>

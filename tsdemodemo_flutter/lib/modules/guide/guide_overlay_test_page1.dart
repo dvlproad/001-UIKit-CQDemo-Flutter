@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_page.dart';
 
-class GuidePage extends StatefulWidget {
-  GuidePage({Key key}) : super(key: key);
+class GuideOverlayTestPage1 extends StatefulWidget {
+  GuideOverlayTestPage1({Key key}) : super(key: key);
 
   @override
-  _GuidePageState createState() => _GuidePageState();
+  _GuideOverlayTestPage1State createState() => _GuideOverlayTestPage1State();
 }
 
-class _GuidePageState extends State<GuidePage> {
+class _GuideOverlayTestPage1State extends State<GuideOverlayTestPage1> {
   var width, height;
 
   GlobalKey buttonAnchorKey1 = GlobalKey();
@@ -21,7 +21,7 @@ class _GuidePageState extends State<GuidePage> {
       GuideOverlayAllPage(
         context: context,
         finishGuideOverlayCallback: () {
-          print('到此引导蒙层结束了');
+          print('到此引导蒙层结束了...1');
         },
         getOverlayPage6RenderBoxCallback1: () {
           RenderBox renderBox =
@@ -35,6 +35,35 @@ class _GuidePageState extends State<GuidePage> {
         },
       ).addGuideOverlayEntrys();
     });
+  }
+
+  // 获取'喜欢'按钮的 RenderBox
+  RenderBox getLikeButtonRenderBox() {
+    if (buttonAnchorKey1 != null) {
+      RenderBox renderBox = buttonAnchorKey1.currentContext.findRenderObject();
+
+      Offset offset = renderBox.localToGlobal(Offset.zero);
+      print('当前控件1的横坐标:' + offset.dx.toString());
+      print('当前控件1的纵坐标:' + offset.dy.toString());
+
+      return renderBox;
+    } else {
+      return null;
+    }
+  }
+
+  // 获取'跟拍'按钮的 RenderBox
+  RenderBox getPhotoButtonRenderBox() {
+    if (buttonAnchorKey2 != null) {
+      RenderBox renderBox = buttonAnchorKey2.currentContext.findRenderObject();
+
+      Offset offset = renderBox.localToGlobal(Offset.zero);
+      print('当前控件2的横坐标:' + offset.dx.toString());
+      print('当前控件2的纵坐标:' + offset.dy.toString());
+      return renderBox;
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -51,7 +80,7 @@ class _GuidePageState extends State<GuidePage> {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('引导模块'),
+      title: Text('需要获取坐标的组件位于*当前组件*中'),
     );
   }
 
@@ -84,13 +113,9 @@ class _GuidePageState extends State<GuidePage> {
                 color: Colors.green,
                 textColor: Colors.yellow,
                 onPressed: () {
-                  RenderBox renderBox =
-                      buttonAnchorKey1.currentContext.findRenderObject();
-                  Offset offset = renderBox.localToGlobal(Offset.zero);
-                  print('当前控件的横坐标:' + offset.dx.toString());
-                  print('当前控件的纵坐标:' + offset.dy.toString());
+                  this.getLikeButtonRenderBox();
                 },
-                child: Text('获取当前坐标'),
+                child: Text('获取当前坐标1'),
               ),
             ),
           ),
@@ -104,13 +129,9 @@ class _GuidePageState extends State<GuidePage> {
                 color: Colors.green,
                 textColor: Colors.yellow,
                 onPressed: () {
-                  RenderBox renderBox =
-                      buttonAnchorKey2.currentContext.findRenderObject();
-                  Offset offset = renderBox.localToGlobal(Offset.zero);
-                  print('当前控件的横坐标:' + offset.dx.toString());
-                  print('当前控件的纵坐标:' + offset.dy.toString());
+                  this.getPhotoButtonRenderBox();
                 },
-                child: Text('获取当前坐标'),
+                child: Text('获取当前坐标2'),
               ),
             ),
           ),

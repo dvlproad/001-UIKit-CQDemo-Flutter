@@ -32,19 +32,40 @@ class _CJTSTableHomeBasePageState
       {
         'theme': "组件",
         'values': [
-          {'title': "Button(按钮)", 'nextPageName': "TSButtonHomePage"},
-          {'title': "Image(图片)", 'nextPageName': "TSImageHomePage"},
-          {'title': "测试分组列表的实现方式1", 'nextPageName': Routers.sectionTableViewMethod1Page},
-          {'title': "测试分组列表的实现方式2", 'nextPageName': Routers.sectionTableViewMethod2Page},
+          {
+            'title': "Button(按钮)",
+            'nextPageName': "TSButtonHomePage",
+          },
+          {
+            'title': "Image(图片)",
+            'nextPageName': "TSImageHomePage",
+          },
+          {
+            'title': "测试分组列表的实现方式1",
+            'nextPageName': Routers.sectionTableViewMethod1Page
+          },
+          {
+            'title': "测试分组列表的实现方式2",
+            'nextPageName': Routers.sectionTableViewMethod2Page
+          },
           // { 'title': "ToolBar(工具器)", 'nextPageName': "ToolBarHomePage" },
         ]
       },
       {
         'theme': "弹窗/蒙层",
         'values': [
-          {'title': "Toast", 'nextPageName': "TSToastPage"},
-          {'title': "Alert", 'nextPageName': "TSAlertPage"},
-          {'title': "ActionSheet", 'nextPageName': "TSActionSheetPage"},
+          {
+            'title': "Toast",
+            'nextPageName': "TSToastPage",
+          },
+          {
+            'title': "Alert",
+            'nextPageName': "TSAlertPage",
+          },
+          {
+            'title': "ActionSheet",
+            'nextPageName': "TSActionSheetPage",
+          },
         ]
       }
     ];

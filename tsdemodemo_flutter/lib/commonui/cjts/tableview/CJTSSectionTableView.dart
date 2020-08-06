@@ -39,7 +39,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
       },
       headerInSection: (section) {
         var sectionModel = widget.sectionModels[section];
-        var theme = sectionModel['theme'];
+        String theme = sectionModel['theme'] ?? '';
         return CJTSTableViewHeader(
           title: theme,
         );
@@ -48,8 +48,8 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
         var sectionModel = widget.sectionModels[section];
         var values = sectionModel['values'];
         var moduleModel = values[row];
-        var title = moduleModel['title'];
-        var subTitle = moduleModel['detailText'];
+        var title = moduleModel['title'] ?? '';
+        var subTitle = moduleModel['detailText'] ?? '';
 
         return CJTSTableViewCell(
           text: title,

@@ -111,30 +111,47 @@ class GuideOverlayAllPage {
   OverlayEntry getOverlayEntry6() {
     double width = MediaQuery.of(context).size.width;
 
-    RenderBox renderBox1 = this.getOverlayPage6RenderBoxCallback1();
-    // 获得控件左上角方的坐标
-    Offset offset1 = renderBox1.localToGlobal(Offset.zero);
-    // // 获得控件右上角的坐标
-    // var offset1 = renderBox1.localToGlobal(Offset(0.0, renderBox1.size.width));
-    print('当前控件的横坐标2:' + offset1.dx.toString());
-    print('当前控件的纵坐标:' + offset1.dy.toString());
+    double right1 = 0;
+    double top1 = 0;
+    double height1 = 56;
+    if (this.getOverlayPage6RenderBoxCallback1 != null) {
+      RenderBox renderBox1 = this.getOverlayPage6RenderBoxCallback1();
+      if (renderBox1 != null) {
+        // 获得控件左上角方的坐标
+        Offset offset1 = renderBox1.localToGlobal(Offset.zero);
+        // // 获得控件右上角的坐标
+        // var offset1 = renderBox1.localToGlobal(Offset(0.0, renderBox1.size.width));
+        print('当前控件1的横坐标:' + offset1.dx.toString());
+        print('当前控件1的纵坐标:' + offset1.dy.toString());
+        right1 = width - offset1.dx - renderBox1.size.width;
+        top1 = offset1.dy;
 
-    RenderBox renderBox2 = this.getOverlayPage6RenderBoxCallback2();
-    Offset offset2 = renderBox2.localToGlobal(Offset.zero);
+        height1 = renderBox1.size.height;
+      }
+    }
 
-    double right1 = width - offset1.dx - renderBox1.size.width;
-    double top1 = offset1.dy;
-    double right2 = width - offset2.dx - renderBox2.size.width;
-    double top2 = offset2.dy;
+    double right2 = 0;
+    double top2 = 0;
+    double height2 = 56;
+    if (this.getOverlayPage6RenderBoxCallback2 != null) {
+      RenderBox renderBox2 = this.getOverlayPage6RenderBoxCallback2();
+      if (renderBox2 != null) {
+        Offset offset2 = renderBox2.localToGlobal(Offset.zero);
+        right2 = width - offset2.dx - renderBox2.size.width;
+        top2 = offset2.dy;
+
+        height2 = renderBox2.size.height;
+      }
+    }
 
     return OverlayEntry(builder: (context) {
       return GuideOverlayPage6(
         right1: right1,
         top1: top1,
-        height1: renderBox1.size.height,
+        height1: height1,
         right2: right2,
         top2: top2,
-        height2: renderBox2.size.height,
+        height2: height2,
         iKnowOnPressed: this.clickOverlayPageIndex,
         backgroundOnPressed: this.clickOverlayPageIndex,
       );

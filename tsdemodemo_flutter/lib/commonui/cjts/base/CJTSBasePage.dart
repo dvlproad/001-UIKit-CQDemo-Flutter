@@ -49,15 +49,18 @@ abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title ?? 'CJTSBasePage'),
+      appBar: appBar(),
+      body: Container(
+        color: Colors.black,
+        child: contentWidget(),
       ),
-      body: SafeArea(
-        child: Container(
-          color: Colors.black,
-          child: contentWidget(),
-        ),
-      ),
+    );
+  }
+
+  // appBar
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      title: Text(widget.title ?? 'CJTSBasePage'),
     );
   }
 

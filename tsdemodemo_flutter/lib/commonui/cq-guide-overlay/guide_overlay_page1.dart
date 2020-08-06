@@ -34,8 +34,8 @@ class GuideOverlayPage1 extends StatelessWidget {
                   image: Image(
                     image: AssetImage(
                         'lib/commonui/cq-guide-overlay/Resources/pic_用户引导_点击.png'),
-                    // width: 40,
-                    // height: 40,
+                    width: 80,
+                    height: 80,
                   ),
                   string: '点击',
                   effect: '上一个合集',

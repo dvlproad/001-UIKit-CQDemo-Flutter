@@ -21,7 +21,11 @@ class Routers {
   static const sectionTableViewMethod1Page = '/section_table_view_method1_page';
   static const sectionTableViewMethod2Page = '/section_table_view_method2_page';
 
+  // 引导蒙层模块
   static const guidePage = '/guide_page';
+  static const guideOverlayTestPage1 = '/guide_overlay_test_page1';
+  static const guideOverlayTestPage2 = '/guide_overlay_test_page2';
+  static const guideOverlayTestPage3 = '/guide_overlay_test_page3';
 
   static const searchPage = '/search_page';
 
