@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_page.dart';
+import 'package:tsdemodemo_flutter/modules/guide/child_widget_notifier.dart';
 
 class GuideOverlayTestPage3 extends StatefulWidget {
   GuideOverlayTestPage3({Key key}) : super(key: key);
@@ -10,6 +12,8 @@ class GuideOverlayTestPage3 extends StatefulWidget {
 
 class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
   var width, height;
+  ChildWidgetChangeNotifier _childWidgetChangeNotifier =
+      ChildWidgetChangeNotifier();
 
   @override
   void initState() {
@@ -21,14 +25,12 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
           print('到此引导蒙层结束了...3');
         },
         getOverlayPage6RenderBoxCallback1: () {
-          // RenderBox renderBox = getLikeButtonRenderBox();
-          // return renderBox;
-          return null;
+          RenderBox renderBox = _childWidgetChangeNotifier.likeButtonRenderBox;
+          return renderBox;
         },
         getOverlayPage6RenderBoxCallback2: () {
-          // RenderBox renderBox = getPhotoButtonRenderBox();
-          // return renderBox;
-          return null;
+          RenderBox renderBox = _childWidgetChangeNotifier.photoButtonRenderBox;
+          return renderBox;
         },
       ).addGuideOverlayEntrys();
     });
@@ -57,21 +59,29 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
 
   Widget _pageWidget() {
     return Container(
-      constraints: BoxConstraints(
-        minWidth: double.infinity,
-        minHeight: double.infinity,
-      ),
-      color: Colors.red,
-      child: GuideOverlayTestPageChildWidget(
-        key: Key('guideOverlayTestPageChildWidgetKey'),
-      ),
-    );
+        constraints: BoxConstraints(
+          minWidth: double.infinity,
+          minHeight: double.infinity,
+        ),
+        color: Colors.red,
+        child: ChangeNotifierProvider<ChildWidgetChangeNotifier>.value(
+          value: _childWidgetChangeNotifier,
+          child: GuideOverlayTestPageChildWidget(
+            key: Key('guideOverlayTestPageChildWidgetKey'),
+            childWidgetChangeNotifier: _childWidgetChangeNotifier,
+          ),
+        ));
   }
 }
 
 // 子组件
 class GuideOverlayTestPageChildWidget extends StatefulWidget {
-  GuideOverlayTestPageChildWidget({Key key}) : super(key: key);
+  final ChildWidgetChangeNotifier childWidgetChangeNotifier;
+
+  GuideOverlayTestPageChildWidget({
+    Key key,
+    this.childWidgetChangeNotifier,
+  }) : super(key: key);
 
   @override
   _GuideOverlayTestPageChildWidgetState createState() =>
@@ -82,6 +92,21 @@ class _GuideOverlayTestPageChildWidgetState
     extends State<GuideOverlayTestPageChildWidget> {
   GlobalKey buttonAnchorKey1 = GlobalKey();
   GlobalKey buttonAnchorKey2 = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    print('渲染完成，准备获取元素的大小');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      RenderBox likeButtonRenderBox = this.getLikeButtonRenderBox();
+      RenderBox photoButtonRenderBox = this.getPhotoButtonRenderBox();
+      print('获取元素大小完成，准备更新ChangeNotifier');
+      if (widget.childWidgetChangeNotifier != null) {
+        widget.childWidgetChangeNotifier
+            .changeRendexBoxs(likeButtonRenderBox, photoButtonRenderBox);
+      }
+    });
+  }
 
   // 获取'喜欢'按钮的 RenderBox
   RenderBox getLikeButtonRenderBox() {

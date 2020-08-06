@@ -1,8 +1,8 @@
 /// 正常以 setState 来更新主题的方式
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_notificater.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_setting_page2.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider_share/theme_share_notificater.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider_share/theme_setting_page2.dart';
 
 class ThemeResultPage2 extends StatefulWidget {
   ThemeResultPage2({Key key}) : super(key: key);
@@ -25,13 +25,13 @@ class _ThemeResultPage2State extends State<ThemeResultPage2> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ThemeChangeNotifier>.value(
-            value: ThemeChangeNotifier('Default'))
+        ChangeNotifierProvider<ThemeShareChangeNotifier>.value(
+            value: ThemeShareChangeNotifier('Default'))
       ],
       builder: (context, child) {
         // 将获取方式由【原本的从导航栏返回的】改成【Provider】
-        ThemeChangeNotifier _themeChangeNotifier =
-            Provider.of<ThemeChangeNotifier>(context);
+        ThemeShareChangeNotifier _themeChangeNotifier =
+            Provider.of<ThemeShareChangeNotifier>(context);
         _currentThemeString = _themeChangeNotifier.themeString;
 
         return Scaffold(
@@ -61,14 +61,17 @@ class _ThemeResultPage2State extends State<ThemeResultPage2> {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ThemeSettingPage2(themeString: _currentThemeString)),
+            builder: (context) =>
+                ThemeSettingPage2(themeString: _currentThemeString),
+          ),
         ).then((value) {
           // // 接收下一个页面返回回来的数据
           // String themeString = value as String;
           // print('修改后的主题为' + themeString);
           // _currentThemeString = themeString;
-          // setState(() {});
+          // // setState(() {});
+
+          // _lastUsedNotifier.changeTheme(_currentThemeString);
         });
       },
     );

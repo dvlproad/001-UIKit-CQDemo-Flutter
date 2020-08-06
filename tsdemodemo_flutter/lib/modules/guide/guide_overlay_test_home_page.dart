@@ -1,7 +1,7 @@
 /*
- * CQModulesHomePage.dart
+ * GuideOverlayTestHomePage.dart
  *
- * @Description: 模块的测试首页
+ * @Description: 引导蒙层的测试首页
  *
  * @author      ciyouzen
  * @email       dvlproad@163.com

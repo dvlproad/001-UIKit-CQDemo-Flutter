@@ -1,7 +1,7 @@
 /// 主页
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_notificater.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider_share/theme_share_notificater.dart';
 
 class ThemeSettingPage2 extends StatefulWidget {
   final String themeString;
@@ -66,7 +66,8 @@ class _ThemeSettingPage2State extends State<ThemeSettingPage2> {
       onPressed: () {
         // 将传递方式由【原本的从导航栏返回的】改成【Provider】
         // Navigator.pop(context, _currentThemeString); //返回上一页并携带参数
-        Provider.of<ThemeChangeNotifier>(context, listen: false)
+
+        Provider.of<ThemeShareChangeNotifier>(context, listen: false)
             .changeTheme(_currentThemeString);
         Navigator.pop(context);
       },

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class ThemeChangeNotifier extends ChangeNotifier {
+class ThemeShareChangeNotifier extends ChangeNotifier {
   String _themeString;
-  ThemeChangeNotifier(this._themeString);
+  ThemeShareChangeNotifier(this._themeString);
 
   void changeTheme(tempThemeString) {
     _themeString = tempThemeString;

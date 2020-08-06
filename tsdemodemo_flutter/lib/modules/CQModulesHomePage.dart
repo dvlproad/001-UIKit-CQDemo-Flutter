@@ -90,7 +90,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
           },
           {
             'title': "Guide(引导模块)",
-            'nextPageName': Routers.guidePage,
+            'nextPageName': Routers.guideHomePage,
           },
         ]
       },

@@ -1,7 +1,5 @@
 /// 主页
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_notificater.dart';
 
 class ThemeSettingPage2 extends StatefulWidget {
   final String themeString;
@@ -64,11 +62,7 @@ class _ThemeSettingPage2State extends State<ThemeSettingPage2> {
       child: Text("确认修改成" + _currentThemeString),
       textColor: Color(0xfff5b63c),
       onPressed: () {
-        // 将传递方式由【原本的从导航栏返回的】改成【Provider】
-        Navigator.pop(context, _currentThemeString); //返回上一页并携带参数
-        // Provider.of<ThemeChangeNotifier>(context, listen: false)
-        //     .changeTheme(_currentThemeString);
-        // Navigator.pop(context);
+        Navigator.pop(context, _currentThemeString); //返回上一页并携带参数;
       },
     );
   }

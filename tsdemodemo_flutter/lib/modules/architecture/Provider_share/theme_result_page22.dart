@@ -1,8 +1,8 @@
 /// 正常以 setState 来更新主题的方式
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_notificater.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_setting_page2.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider_share/theme_share_notificater.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider_share/theme_setting_page2.dart';
 
 class ThemeResultPage2P extends StatelessWidget {
   ThemeResultPage2P({Key key}) : super(key: key);
@@ -11,8 +11,8 @@ class ThemeResultPage2P extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ThemeChangeNotifier>.value(
-            value: ThemeChangeNotifier('Default'))
+        ChangeNotifierProvider<ThemeShareChangeNotifier>.value(
+            value: ThemeShareChangeNotifier('Default'))
       ],
       builder: (context, child) {
         return ThemeResultPage2();
@@ -25,8 +25,8 @@ class ThemeResultPage2PP {
   Widget myAppWidget() {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ThemeChangeNotifier>.value(
-            value: ThemeChangeNotifier('Default'))
+        ChangeNotifierProvider<ThemeShareChangeNotifier>.value(
+            value: ThemeShareChangeNotifier('Default'))
       ],
       builder: (context, child) {
         return ThemeResultPage2();
@@ -56,13 +56,13 @@ class _ThemeResultPage2State extends State<ThemeResultPage2> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ThemeChangeNotifier>.value(
-            value: ThemeChangeNotifier('Default'))
+        ChangeNotifierProvider<ThemeShareChangeNotifier>.value(
+            value: ThemeShareChangeNotifier('Default'))
       ],
       builder: (context, child) {
         // 将获取方式由【原本的从导航栏返回的】改成【Provider】
-        ThemeChangeNotifier _themeChangeNotifier =
-            Provider.of<ThemeChangeNotifier>(context);
+        ThemeShareChangeNotifier _themeChangeNotifier =
+            Provider.of<ThemeShareChangeNotifier>(context);
         _currentThemeString = _themeChangeNotifier.themeString;
 
         return Scaffold(

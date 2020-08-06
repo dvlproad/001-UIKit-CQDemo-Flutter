@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/0setState/theme_result_page1.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page0.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page1.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page2.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page3.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_result_page2.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/bloc/theme_result_page3.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/bloc_provider/theme_result_page4.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/redux/theme_result_page5.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page2.dart';
@@ -42,13 +51,15 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      home: GuideOverlayTestHomePage(), // 首页
+      // home: GuideOverlayTestHomePage(), // 首页
+      initialRoute: Routers.guideHomePage, // 设置首页
       onGenerateRoute: (settings) {
         return Routers().generator(settings);
       },
       routes: <String, WidgetBuilder>{
         // 引导蒙层 guide
-        Routers.guidePage: (BuildContext context) => GuideOverlayTestHomePage(),
+        Routers.guideHomePage: (BuildContext context) =>
+            GuideOverlayTestHomePage(),
         Routers.guideOverlayTestPage1: (BuildContext context) =>
             GuideOverlayTestPage1(),
         Routers.guideOverlayTestPage2: (BuildContext context) =>
@@ -59,6 +70,21 @@ class MyApp extends StatelessWidget {
         Routers.utilHomePage: (BuildContext context) => TSDeviceInfoPage(),
         // 设计模式 architecture
         Routers.architectureHomePage: (BuildContext context) => TSArcHomePage(),
+        Routers.arcProviderUsePage0: (BuildContext context) =>
+            ProviderUsePage0(),
+        Routers.arcProviderUsePage1: (BuildContext context) =>
+            ProviderUsePage1(),
+        Routers.arcProviderUsePage2: (BuildContext context) =>
+            ProviderUsePage2(),
+        Routers.arcProviderUsePage3: (BuildContext context) =>
+            ProviderUsePage3(),
+        Routers.arc0SetStatePage: (BuildContext context) => ThemeResultPage1(),
+        Routers.arc1ProviderPage: (BuildContext context) => ThemeResultPage2(),
+        // Routers.arc1ProviderSharePage: (BuildContext context) => ThemeResultPage2(),
+        Routers.arc2BlockPage: (BuildContext context) => ThemeResultPage3(),
+        Routers.arc2BlockProviderPage: (BuildContext context) =>
+            ThemeResultPage4(),
+        Routers.arc3ReduxPage: (BuildContext context) => ThemeResultPage5(),
         // 组件 components
         Routers.sectionTableViewMethod1Page: (BuildContext context) =>
             CreateSectionList1(),
