@@ -28,9 +28,9 @@ class _ProviderUsePage3State extends State<ProviderUsePage3> {
       ),
       body: Center(
         // Provider 使用 Consumer 的写法
-        child: // ChangeNotifierProvider<ThemeChangeNotifier>.value(
-            //   value: ThemeChangeNotifier('Default3'),
-            ChangeNotifierProvider<ThemeIndependentChangeNotifier>(
+        // child: ChangeNotifierProvider<ThemeIndependentChangeNotifier>.value(
+        //   value: ThemeIndependentChangeNotifier('Default3'),
+        child: ChangeNotifierProvider<ThemeIndependentChangeNotifier>(
           create: (context) => ThemeIndependentChangeNotifier('Default3'),
           // child: Builder(
           //   builder: (context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_base_page.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-line/cq-dotted-line.dart';
 
 class GuideOverlayPage1 extends StatelessWidget {
   @required
@@ -41,10 +42,12 @@ class GuideOverlayPage1 extends StatelessWidget {
                   effect: '上一个合集',
                 ),
               ),
+              _dottedLine(),
               Expanded(
                 flex: 2,
                 child: Container(),
               ),
+              _dottedLine(),
               Expanded(
                 flex: 1,
                 child: GuideOverlayFlag(
@@ -69,6 +72,16 @@ class GuideOverlayPage1 extends StatelessWidget {
           // ),
         ],
       ),
+    );
+  }
+
+  DottedLineWidget _dottedLine() {
+    return DottedLineWidget(
+      axis: Axis.vertical,
+      color: Colors.white,
+      lineHeight: 5,
+      lineWidth: 0.5,
+      count: 80,
     );
   }
 }

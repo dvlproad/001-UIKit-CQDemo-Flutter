@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_page.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay2/guide_overlay_all_page.dart';
 
-class GuideOverlayTestPage2 extends StatefulWidget {
-  GuideOverlayTestPage2({Key key}) : super(key: key);
+class GuideOverlayTestPage5 extends StatefulWidget {
+  GuideOverlayTestPage5({Key key}) : super(key: key);
 
   @override
-  _GuideOverlayTestPage2State createState() => _GuideOverlayTestPage2State();
+  _GuideOverlayTestPage5State createState() => _GuideOverlayTestPage5State();
 }
 
-class _GuideOverlayTestPage2State extends State<GuideOverlayTestPage2> {
+class _GuideOverlayTestPage5State extends State<GuideOverlayTestPage5> {
   var width, height;
+
+  GlobalKey buttonAnchorKey1 = GlobalKey();
+  GlobalKey buttonAnchorKey2 = GlobalKey();
 
   @override
   void initState() {
@@ -24,85 +27,20 @@ class _GuideOverlayTestPage2State extends State<GuideOverlayTestPage2> {
     GuideOverlayAllPage(
       context: context,
       finishGuideOverlayCallback: () {
-        print('到此引导蒙层结束了...2');
+        print('到此引导蒙层结束了...1');
       },
       getOverlayPage6RenderBoxCallback1: () {
-        if (guideOverlayTestPageChildWidgetKey != null) {
-          RenderBox renderBox = guideOverlayTestPageChildWidgetKey.currentState
-              .getLikeButtonRenderBox();
-          return renderBox;
-        } else {
-          return null;
-        }
+        RenderBox renderBox =
+            buttonAnchorKey1.currentContext.findRenderObject();
+        return renderBox;
       },
       getOverlayPage6RenderBoxCallback2: () {
-        if (guideOverlayTestPageChildWidgetKey != null) {
-          RenderBox renderBox = guideOverlayTestPageChildWidgetKey.currentState
-              .getPhotoButtonRenderBox();
-          return renderBox;
-        } else {
-          return null;
-        }
+        RenderBox renderBox =
+            buttonAnchorKey2.currentContext.findRenderObject();
+        return renderBox;
       },
     ).addGuideOverlayEntrys();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      appBar: _appBar(),
-      body: _pageWidget(),
-    );
-  }
-
-  Widget _appBar() {
-    return AppBar(
-      title: Text(
-        '需要获取坐标的组件位于*子组件*中(GlobalKey)',
-        style: TextStyle(fontSize: 14),
-      ),
-    );
-  }
-
-  Widget _pageWidget() {
-    return Container(
-      constraints: BoxConstraints(
-        minWidth: double.infinity,
-        minHeight: double.infinity,
-      ),
-      color: Colors.red,
-      child: _childPageWidget(),
-    );
-  }
-
-  // 子组件
-  Widget _childPageWidget() {
-    return GuideOverlayTestPageChildWidget(
-      key: guideOverlayTestPageChildWidgetKey, // 设置子组件的key
-    );
-  }
-}
-
-// 子组件,使用 GlobalKey
-GlobalKey<_GuideOverlayTestPageChildWidgetState>
-    guideOverlayTestPageChildWidgetKey = GlobalKey();
-
-class GuideOverlayTestPageChildWidget extends StatefulWidget {
-  GuideOverlayTestPageChildWidget({Key key}) : super(key: key);
-
-  @override
-  _GuideOverlayTestPageChildWidgetState createState() =>
-      _GuideOverlayTestPageChildWidgetState();
-}
-
-class _GuideOverlayTestPageChildWidgetState
-    extends State<GuideOverlayTestPageChildWidget> {
-  GlobalKey buttonAnchorKey1 = GlobalKey();
-  GlobalKey buttonAnchorKey2 = GlobalKey();
 
   // 获取'喜欢'按钮的 RenderBox
   RenderBox getLikeButtonRenderBox() {
@@ -135,7 +73,29 @@ class _GuideOverlayTestPageChildWidgetState
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      backgroundColor: Colors.yellow,
+      appBar: _appBar(),
+      body: _pageWidget(),
+    );
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      title: Text('需要获取坐标的组件位于*当前组件*中'),
+    );
+  }
+
+  Widget _pageWidget() {
     return Container(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: double.infinity,
+      ),
+      color: Colors.red,
       child: Stack(
         children: <Widget>[
           Container(

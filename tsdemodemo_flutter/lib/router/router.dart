@@ -44,6 +44,8 @@ class Routers {
   static const guideOverlayTestPage1 = '/guide_overlay_test_page1';
   static const guideOverlayTestPage2 = '/guide_overlay_test_page2';
   static const guideOverlayTestPage3 = '/guide_overlay_test_page3';
+  static const guideOverlayTestPage4 = '/guide_overlay_test_page4';
+  static const guideOverlayTestPage5 = '/guide_overlay_test_page5';
 
   // 搜索模块
   static const searchPage = '/search_page';

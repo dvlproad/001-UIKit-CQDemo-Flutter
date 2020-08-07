@@ -4,14 +4,14 @@ import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_p
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_util.dart';
 import 'package:tsdemodemo_flutter/modules/guide/child_widget_notifier.dart';
 
-class GuideOverlayTestPage3 extends StatefulWidget {
-  GuideOverlayTestPage3({Key key}) : super(key: key);
+class GuideOverlayTestPage4 extends StatefulWidget {
+  GuideOverlayTestPage4({Key key}) : super(key: key);
 
   @override
-  _GuideOverlayTestPage3State createState() => _GuideOverlayTestPage3State();
+  _GuideOverlayTestPage4State createState() => _GuideOverlayTestPage4State();
 }
 
-class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
+class _GuideOverlayTestPage4State extends State<GuideOverlayTestPage4> {
   var width, height;
   ChildWidgetChangeNotifier _childWidgetChangeNotifier =
       ChildWidgetChangeNotifier();
@@ -19,9 +19,8 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      this.startAddGuideOverlay();
-    });
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {}); // 子组件改为未来渲染完成
   }
 
   /// 开始加载引导蒙层
@@ -32,7 +31,7 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
         GuideOverlayAllPage guideOverlayAllPage = GuideOverlayAllPage(
           context: context,
           finishGuideOverlayCallback: () {
-            print('到此引导蒙层结束了...3');
+            print('到此引导蒙层结束了...4');
           },
           getOverlayPage6RenderBoxCallback1: () {
             RenderBox renderBox =
@@ -45,6 +44,7 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
             return renderBox;
           },
         );
+
         guideOverlayAllPage.addGuideOverlayEntrys();
       }
     });
@@ -87,9 +87,17 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
 
   // 子组件
   Widget _childPageWidget() {
-    return GuideOverlayTestPageChildWidget(
-      key: Key('guideOverlayTestPageChildWidgetKey'),
-      childWidgetChangeNotifier: _childWidgetChangeNotifier,
+    return Consumer<ChildWidgetChangeNotifier>(
+      builder: (context, childWidgetChangeNotifier, child) {
+        if (_childWidgetChangeNotifier.canStartShow == true) {
+          this.startAddGuideOverlay();
+        }
+
+        return GuideOverlayTestPageChildWidget(
+          key: Key('guideOverlayTestPageChildWidgetKey'),
+          childWidgetChangeNotifier: _childWidgetChangeNotifier,
+        );
+      },
     );
   }
 }
@@ -110,15 +118,26 @@ class GuideOverlayTestPageChildWidget extends StatefulWidget {
 
 class _GuideOverlayTestPageChildWidgetState
     extends State<GuideOverlayTestPageChildWidget> {
+  bool loadSuccess = false; // 本子组件的界面是否加载成功
   GlobalKey buttonAnchorKey1 = GlobalKey();
   GlobalKey buttonAnchorKey2 = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    print('渲染完成，准备获取元素的大小');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    // 模拟本子组件的实际界面需要在各种条件下延迟加载
+    Future.delayed(Duration(seconds: 2), () {
+      loadSuccess = true;
       this.startGetGuideOverlayPageRenderBox();
+      widget.childWidgetChangeNotifier.showStart(true); // 告诉 notifier 可以加载引导视图了
+
+      setState(() {});
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print('渲染完成，但界面可能不是我们想要的结果叶，即真正要获取元素的界面不一定渲染完成，所以不在这里进行元素的坐标获取');
+      // this.startGetGuideOverlayPageRenderBox();
     });
   }
 
@@ -164,6 +183,14 @@ class _GuideOverlayTestPageChildWidgetState
 
   @override
   Widget build(BuildContext context) {
+    if (loadSuccess) {
+      return _childPageWidget();
+    } else {
+      return Container(color: Colors.green);
+    }
+  }
+
+  Widget _childPageWidget() {
     return Container(
       child: Stack(
         children: <Widget>[

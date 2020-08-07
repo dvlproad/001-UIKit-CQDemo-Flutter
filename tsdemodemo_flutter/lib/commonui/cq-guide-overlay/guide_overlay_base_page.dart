@@ -30,7 +30,7 @@ class GuideOverlayBasePage extends StatelessWidget {
             Positioned(
               left: 40,
               right: 40,
-              bottom: 20,
+              bottom: 30,
               child: Container(
                 height: 42,
                 child: WhiteThemeBGButton(

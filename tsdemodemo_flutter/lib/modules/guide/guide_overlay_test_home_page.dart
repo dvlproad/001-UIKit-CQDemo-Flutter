@@ -13,6 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_util.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
 class GuideOverlayTestHomePage extends CJTSBasePage {
@@ -46,7 +47,17 @@ class _CQModulesHomePageState
         'values': [
           {
             'title': "Guide1(需要获取坐标的组件位于*当前组件*中)",
-            'nextPageName': Routers.guideOverlayTestPage1,
+            'actionBlock': () {
+              GuideOverlayUtil().hasFinishShowGuideOverlay().then((value) {
+                bool hasFinishShowGuideOverlay = value;
+                if (hasFinishShowGuideOverlay == true) {
+                  Navigator.pushNamed(context, Routers.reportUploadPage);
+                } else {
+                  Navigator.pushNamed(context, Routers.guideOverlayTestPage1);
+                }
+              });
+            },
+            // 'nextPageName': Routers.guideOverlayTestPage1,
           },
           {
             'title': "Guide2(需要获取坐标的组件位于*子组件*中(GlobalKey))",
@@ -55,6 +66,20 @@ class _CQModulesHomePageState
           {
             'title': "Guide3(需要获取坐标的组件位于*子组件*中(Key))",
             'nextPageName': Routers.guideOverlayTestPage3,
+          },
+          {
+            'title': "Guide4(需要获取坐标的组件位于*子组件*中(Key))",
+            'content': '要等待子视图加载完成',
+            'nextPageName': Routers.guideOverlayTestPage4,
+          },
+        ]
+      },
+      {
+        'theme': "导航蒙层模块2",
+        'values': [
+          {
+            'title': "Guide5(不用获取坐标)",
+            'nextPageName': Routers.guideOverlayTestPage5,
           },
         ]
       },

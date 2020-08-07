@@ -12,7 +12,7 @@ class GuideOverlayUtil {
   /*
    * 获取存在SharedPreferences中的数据
    */
-  Future shouldShowGuideOverlay() async {
+  Future hasFinishShowGuideOverlay() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     return sharedPreferences.get('GuideOverlayFinishKey');
   }

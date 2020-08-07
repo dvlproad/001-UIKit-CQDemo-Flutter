@@ -35,7 +35,7 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.reportTypeDescription),
+        title: Text(widget.reportTypeDescription ?? ''),
       ),
       body: SafeArea(
           child: Stack(

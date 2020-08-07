@@ -13,6 +13,8 @@ import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.da
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page2.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page3.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page4.dart';
+import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page5.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_page.dart';
 import 'package:tsdemodemo_flutter/modules/util/device_info_page.dart';
 
@@ -66,6 +68,10 @@ class MyApp extends StatelessWidget {
             GuideOverlayTestPage2(),
         Routers.guideOverlayTestPage3: (BuildContext context) =>
             GuideOverlayTestPage3(),
+        Routers.guideOverlayTestPage4: (BuildContext context) =>
+            GuideOverlayTestPage4(),
+        Routers.guideOverlayTestPage5: (BuildContext context) =>
+            GuideOverlayTestPage5(),
         // 工具 util
         Routers.utilHomePage: (BuildContext context) => TSDeviceInfoPage(),
         // 设计模式 architecture
