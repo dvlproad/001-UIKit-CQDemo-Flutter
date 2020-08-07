@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // 进入举报模块测试主页的按钮
   FlatButton moduleHomeButton() {
     return FlatButton(
-      child: Text("举报+排行榜"),
+      child: Text("功能模块(举报+排行榜+搜索+引导蒙层)"),
       textColor: Color(0xfff5b63c),
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);

@@ -5,6 +5,7 @@ import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page3
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page4.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page5.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page6.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_util.dart';
 
 typedef GetRenderBoxCallback = RenderBox Function();
 typedef FinishGuideOverlayCallback = void Function();
@@ -58,6 +59,7 @@ class GuideOverlayAllPage {
     } else if (overlayPageIndex == 5) {
       overlayEntry6.remove();
 
+      GuideOverlayUtil().finishGuideOverlay();
       this.finishGuideOverlayCallback();
     }
     overlayPageIndex++;

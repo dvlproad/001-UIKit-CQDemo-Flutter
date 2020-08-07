@@ -51,17 +51,20 @@ class MainSubArrowTableViewCell extends StatelessWidget {
   }
 
   void _onTapCell() {
-    if(null != this.clickCellCallback) {
+    if (null != this.clickCellCallback) {
       this.clickCellCallback(this.section, this.row);
     }
   }
-
 
   Widget _cellContainer() {
     List<Widget> rowWidgets = [];
 
     // 添加主文本
-    rowWidgets.add(_mainText());
+    rowWidgets.add(
+      Expanded(
+        child: _mainText(),
+      ),
+    );
 
     // 判断是否添加副文本
     if (null != this.detailText && this.detailText.length > 0) {
@@ -72,7 +75,6 @@ class MainSubArrowTableViewCell extends StatelessWidget {
     if (this.arrowImageType != TableViewCellArrowImageType.none) {
       rowWidgets.add(_arrowImage());
     }
-
 
     return Container(
       height: 44,
@@ -91,7 +93,7 @@ class MainSubArrowTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.text??'',
+        this.text ?? '',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -108,7 +110,7 @@ class MainSubArrowTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
       color: Colors.transparent,
       child: Text(
-        this.detailText??'',
+        this.detailText ?? '',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

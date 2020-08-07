@@ -103,7 +103,6 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
           context: context,
           sectionModels: sectionModels,
         )),
-        WhiteThemeBGButton(text: "提交", onPressed: () {}),
       ],
     );
   }

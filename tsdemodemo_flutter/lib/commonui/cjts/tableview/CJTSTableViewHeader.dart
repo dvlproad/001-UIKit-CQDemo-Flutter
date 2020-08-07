@@ -28,15 +28,18 @@ class _CJTSTableViewHeaderState extends State<CJTSTableViewHeader> {
 
   Widget _headerContainer() {
     return Container(
-      height: 44,
-      color: Colors.black,
+      height: 30,
+//      padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
+      margin: EdgeInsets.fromLTRB(30, 20, 0, 0),
+      color: Colors.transparent,
+      alignment: Alignment.centerLeft,
       child: Text(
         widget.title,
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 17.0,
+          color: Color(0xFF898989),
+          fontSize: 14.0,
         ),
       ),
     );

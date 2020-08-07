@@ -51,7 +51,11 @@ class CJTSTableViewCell extends StatelessWidget {
     List<Widget> rowWidgets = [];
 
     // 添加主文本
-    rowWidgets.add(_mainText());
+    rowWidgets.add(
+      Expanded(
+        child: _mainText(),
+      ),
+    );
 
     // 判断是否添加副文本
     if (null != this.detailText && this.detailText.length > 0) {

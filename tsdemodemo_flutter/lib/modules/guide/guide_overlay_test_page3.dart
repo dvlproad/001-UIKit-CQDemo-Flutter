@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_page.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_util.dart';
 import 'package:tsdemodemo_flutter/modules/guide/child_widget_notifier.dart';
 
 class GuideOverlayTestPage3 extends StatefulWidget {
@@ -19,20 +20,28 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      GuideOverlayAllPage(
-        context: context,
-        finishGuideOverlayCallback: () {
-          print('到此引导蒙层结束了...3');
-        },
-        getOverlayPage6RenderBoxCallback1: () {
-          RenderBox renderBox = _childWidgetChangeNotifier.likeButtonRenderBox;
-          return renderBox;
-        },
-        getOverlayPage6RenderBoxCallback2: () {
-          RenderBox renderBox = _childWidgetChangeNotifier.photoButtonRenderBox;
-          return renderBox;
-        },
-      ).addGuideOverlayEntrys();
+      GuideOverlayUtil().shouldShowGuideOverlay().then((value) {
+        bool shouldShowGuideOverlay = value;
+        if (shouldShowGuideOverlay) {
+          GuideOverlayAllPage guideOverlayAllPage = GuideOverlayAllPage(
+            context: context,
+            finishGuideOverlayCallback: () {
+              print('到此引导蒙层结束了...3');
+            },
+            getOverlayPage6RenderBoxCallback1: () {
+              RenderBox renderBox =
+                  _childWidgetChangeNotifier.likeButtonRenderBox;
+              return renderBox;
+            },
+            getOverlayPage6RenderBoxCallback2: () {
+              RenderBox renderBox =
+                  _childWidgetChangeNotifier.photoButtonRenderBox;
+              return renderBox;
+            },
+          );
+          guideOverlayAllPage.addGuideOverlayEntrys();
+        }
+      });
     });
   }
 

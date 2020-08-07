@@ -50,9 +50,9 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
       // home: GuideOverlayTestHomePage(), // 首页
-      initialRoute: Routers.guideHomePage, // 设置首页
+      // initialRoute: Routers.guideHomePage, // 设置首页
       onGenerateRoute: (settings) {
         return Routers().generator(settings);
       },
