@@ -29,7 +29,7 @@ class _ProviderUsePage1State extends State<ProviderUsePage1> {
   Widget _pageWidget() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider的使用方式1(正确)'),
+        title: Text('Provider为局部变量：取值与设置均使用Provider.of<T>(context)'),
       ),
       body: Center(
         // Provider 使用局部变量的写法
@@ -48,8 +48,9 @@ class _ProviderUsePage1State extends State<ProviderUsePage1> {
                     _localChangeNotifier.themeString),
                 textColor: Color(0xfff5b63c),
                 onPressed: () {
-                  // 注意点2：因为树不一样，所以无法在按钮的 onPressed 中进行 Provider.of(context) 的获取。所以相当于我们肯定得去创建一个局部 Provider 变量。
-                  // 在综合的考虑下，为了不在每个 Builder 中都重新获取一次，所以，一般我们会考虑弄成本 page 的全局变量。
+                  // 注意点2：因为树不一样，所以无法在按钮的 onPressed 中进行 Provider.of<T>(context) 的获取。所以相当于我们肯定得去创建一个局部 Provider 变量。
+                  // 在综合的考虑下，为了不在每个 Builder 中都重新获取一次，所以，一般我们会考虑弄成本 page 的全局变量。但如果弄成全局的，则因为你没 Provider.of<T>(context)方法了，所以界面不会更新。
+                  // 所以对于要更新的地方，你应该要么仍用 Provider.of<T>(context)，要么用 Consumer<T>();
                   _localChangeNotifier.changeTheme('xxx');
                 },
               );

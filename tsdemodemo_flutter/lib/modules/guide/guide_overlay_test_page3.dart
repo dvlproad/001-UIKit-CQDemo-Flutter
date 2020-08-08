@@ -26,9 +26,9 @@ class _GuideOverlayTestPage3State extends State<GuideOverlayTestPage3> {
 
   /// 开始加载引导蒙层
   void startAddGuideOverlay() {
-    GuideOverlayUtil().hasFinishShowGuideOverlay().then((value) {
-      bool hasFinishShowGuideOverlay = value;
-      if (hasFinishShowGuideOverlay) {
+    GuideOverlayUtil().shouldShowGuideOverlay().then((value) {
+      bool shouldShowGuide = value;
+      if (shouldShowGuide == true) {
         GuideOverlayAllPage guideOverlayAllPage = GuideOverlayAllPage(
           context: context,
           finishGuideOverlayCallback: () {

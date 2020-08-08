@@ -16,6 +16,9 @@ import 'package:tsdemodemo_flutter/modules/architecture/redux/theme_result_page5
 
 class Routers {
   // 模块的测试首页
+  static const uikitHomePage = '/uikit_home_page';
+
+  // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
 
   // 工具的测试首页
@@ -28,6 +31,7 @@ class Routers {
   static const arcProviderUsePage1 = '/architecture_ProviderUse_page1';
   static const arcProviderUsePage2 = '/architecture_ProviderUse_page2';
   static const arcProviderUsePage3 = '/architecture_ProviderUse_page3';
+  static const arcProviderUsePage4 = '/architecture_ProviderUse_page4';
 
   static const arc1ProviderPage = '/architecture_1Provider_page';
   static const arc1ProviderSharePage = '/architecture_1ProviderShare_page';

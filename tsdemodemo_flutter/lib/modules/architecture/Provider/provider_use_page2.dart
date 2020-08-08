@@ -31,7 +31,8 @@ class _ProviderUsePage2State extends State<ProviderUsePage2> {
   Widget _pageWidget() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider的使用方式2(错误)'),
+        title: Text(
+            'Provider为全局变量：取值可直接使用全局变量，但设置需使用Provider.of<T>(context)或Consumer'),
       ),
       body: Center(
         // Provider 使用全局变量的写法
@@ -39,6 +40,10 @@ class _ProviderUsePage2State extends State<ProviderUsePage2> {
           value: _globalChangeNotifier,
           child: Builder(
             builder: (context) {
+              ThemeIndependentChangeNotifier _xlocalChangeNotifier =
+                  Provider.of<ThemeIndependentChangeNotifier>(context);
+              // 为了能够在 Notifier 变化的时候去更新，你应该要么仍用 Provider.of<T>(context)，要么用 Consumer<T>();
+
               print('[全局方式]获取到的主题为:' + _globalChangeNotifier.themeString);
               return FlatButton(
                 child: Text("[全局方式]修改主题(Provider 使用方式2):" +

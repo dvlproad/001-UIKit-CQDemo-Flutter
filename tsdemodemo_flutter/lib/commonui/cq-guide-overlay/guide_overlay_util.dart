@@ -6,14 +6,19 @@ class GuideOverlayUtil {
    */
   Future finishGuideOverlay() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setBool('GuideOverlayFinishKey', true);
+    sharedPreferences.setBool('ShouldShowGuideOverlayKey', false);
   }
 
   /*
    * 获取存在SharedPreferences中的数据
    */
-  Future hasFinishShowGuideOverlay() async {
+  Future shouldShowGuideOverlay() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.get('GuideOverlayFinishKey');
+    bool shouldShowGuide = sharedPreferences.get('ShouldShowGuideOverlayKey');
+    if (shouldShowGuide == null) {
+      shouldShowGuide = false;
+    }
+
+    return shouldShowGuide;
   }
 }

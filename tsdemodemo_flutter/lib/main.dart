@@ -4,11 +4,13 @@ import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_pa
 import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page1.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page2.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page3.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/Provider/provider_use_page4.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_result_page2.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/bloc/theme_result_page3.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/bloc_provider/theme_result_page4.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/redux/theme_result_page5.dart';
+import 'package:tsdemodemo_flutter/modules/demo/TSSectionTableViewPage.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page2.dart';
@@ -72,6 +74,15 @@ class MyApp extends StatelessWidget {
             GuideOverlayTestPage4(),
         Routers.guideOverlayTestPage5: (BuildContext context) =>
             GuideOverlayTestPage5(),
+        // UIKit
+        Routers.uikitHomePage: (BuildContext context) =>
+            TSSectionTableViewPage(),
+        // 组件 components
+        Routers.sectionTableViewMethod1Page: (BuildContext context) =>
+            CreateSectionList1(),
+        Routers.sectionTableViewMethod2Page: (BuildContext context) =>
+            CreateSectionList2(),
+        Routers.searchPage: (BuildContext context) => SearchPage(),
         // 工具 util
         Routers.utilHomePage: (BuildContext context) => TSDeviceInfoPage(),
         // 设计模式 architecture
@@ -84,6 +95,8 @@ class MyApp extends StatelessWidget {
             ProviderUsePage2(),
         Routers.arcProviderUsePage3: (BuildContext context) =>
             ProviderUsePage3(),
+        Routers.arcProviderUsePage4: (BuildContext context) =>
+            ProviderUsePage4(),
         Routers.arc0SetStatePage: (BuildContext context) => ThemeResultPage1(),
         Routers.arc1ProviderPage: (BuildContext context) => ThemeResultPage2(),
         // Routers.arc1ProviderSharePage: (BuildContext context) => ThemeResultPage2(),
@@ -91,12 +104,6 @@ class MyApp extends StatelessWidget {
         Routers.arc2BlockProviderPage: (BuildContext context) =>
             ThemeResultPage4(),
         Routers.arc3ReduxPage: (BuildContext context) => ThemeResultPage5(),
-        // 组件 components
-        Routers.sectionTableViewMethod1Page: (BuildContext context) =>
-            CreateSectionList1(),
-        Routers.sectionTableViewMethod2Page: (BuildContext context) =>
-            CreateSectionList2(),
-        Routers.searchPage: (BuildContext context) => SearchPage(),
       },
     );
   }

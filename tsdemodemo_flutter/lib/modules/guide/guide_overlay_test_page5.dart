@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay2/guide_overlay_all_page.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_all_page.dart';
 
 class GuideOverlayTestPage5 extends StatefulWidget {
   GuideOverlayTestPage5({Key key}) : super(key: key);

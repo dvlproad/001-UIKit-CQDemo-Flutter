@@ -24,7 +24,8 @@ class _ProviderUsePage3State extends State<ProviderUsePage3> {
   Widget _pageWidget() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider的使用方式3(正确)'),
+        title: Text(
+            'Provider为全局变量：取值可直接使用全局变量，但设置需使用Provider.of<T>(context)或Consumer'),
       ),
       body: Center(
         // Provider 使用 Consumer 的写法

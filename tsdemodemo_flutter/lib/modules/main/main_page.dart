@@ -52,13 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Text("Components"),
       textColor: Color(0xfff5b63c),
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GuideOverlayPage2(),
-//          settings: RouteSettings(arguments: userName),
-          ),
-        );
+        Navigator.pushNamed(context, Routers.uikitHomePage);
       },
     );
   }

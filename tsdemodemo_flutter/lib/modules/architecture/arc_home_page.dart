@@ -36,16 +36,20 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSArcHomePage> {
             'nextPageName': Routers.arcProviderUsePage1,
           },
           {
-            'title': "Provider 的使用方式1(正确)",
+            'title': "Provider为局部变量：取值与设置均使用Provider.of<T>(context)",
             'nextPageName': Routers.arcProviderUsePage1,
           },
           {
-            'title': "Provider 的使用方式2(错误)",
+            'title': "Provider为全局变量：取值可直接使用全局变量，但设置使用Provider.of<T>(context)",
             'nextPageName': Routers.arcProviderUsePage2,
           },
           {
-            'title': "Provider 的使用方式3(正确)",
+            'title': "Provider为全局变量：取值可直接使用全局变量，但设置使用Consumer",
             'nextPageName': Routers.arcProviderUsePage3,
+          },
+          {
+            'title': "Provider 测试 Consumer2 中 互相更新会不会导致死循环",
+            'nextPageName': Routers.arcProviderUsePage4,
           },
         ]
       },

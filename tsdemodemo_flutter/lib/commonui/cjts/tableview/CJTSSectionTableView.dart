@@ -57,7 +57,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
           section: section,
           row: row,
           clickCellCallback: (section, row) =>
-              {this.__dealDataModel(moduleModel)},
+              {this.__dealDataModel(moduleModel, section, row)},
         );
       },
       divider: Container(
@@ -71,13 +71,16 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
     );
   }
 
-  void __dealDataModel(moduleModel) {
+  void __dealDataModel(moduleModel, int section, int row) {
     ClickTSItemCallback clickTSItemCallback = moduleModel['actionBlock'];
     if (null != clickTSItemCallback) {
       clickTSItemCallback();
-    } else {
+      return;
+    }
+
+    String nextPageName = moduleModel['nextPageName'];
+    if (null != nextPageName) {
       var title = moduleModel['title'];
-      String nextPageName = moduleModel['nextPageName'];
       if (nextPageName.startsWith('/', 0) == false) {
         nextPageName = '/report_list_page';
       }
@@ -85,6 +88,9 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
       var params = {'title': title};
 
       Navigator.pushNamed(widget.context, nextPageName, arguments: params);
+      return;
     }
+
+    print('你点击了CJTSTableViewCell:' + section.toString() + '_' + row.toString());
   }
 }
