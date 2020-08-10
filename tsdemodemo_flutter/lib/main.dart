@@ -31,8 +31,54 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+// class MyApp extends StatelessWidget {
+//   // This widget is the root of your application.
+
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this); //销毁监听
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this); // 添加监听
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    print("lifeChanged:$state");
+    switch (state) {
+      case AppLifecycleState
+          .inactive: // inactive界面退到后台或弹出对话框情况下， 即失去了焦点但仍可以执行drawframe回调；同安卓的onPause；
+        {
+          break;
+        }
+      case AppLifecycleState.resumed: // 应用程序可见，前台
+        {
+          break;
+        }
+      case AppLifecycleState.paused: // 应用程序不可见，后台
+        {
+          break;
+        }
+      case AppLifecycleState.detached: // detached
+        {
+          break;
+        }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

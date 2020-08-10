@@ -20,7 +20,7 @@ class GuideOverlayBasePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.red,
+      // color: Colors.transparent,
       color: Colors.black.withOpacity(0.4),
       child: GestureDetector(
         onTap: this.clickOverlayPageBGCallback,
@@ -28,8 +28,8 @@ class GuideOverlayBasePage extends StatelessWidget {
           children: <Widget>[
             this.overlayChild,
             Positioned(
-              left: 40,
-              right: 40,
+              left: 80,
+              right: 80,
               bottom: 30,
               child: Container(
                 height: 42,
@@ -67,7 +67,7 @@ class GuideOverlayFlag extends StatelessWidget {
           this.string,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.black12,
+            color: Color(0xFFC4C4C4),
             decoration: TextDecoration.none,
           ),
         ),

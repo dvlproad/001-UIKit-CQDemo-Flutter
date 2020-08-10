@@ -19,6 +19,7 @@ class GuideOverlayUtil {
       shouldShowGuide = false;
     }
 
+    shouldShowGuide = true;
     return shouldShowGuide;
   }
 }

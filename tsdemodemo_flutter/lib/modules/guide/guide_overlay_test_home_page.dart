@@ -48,12 +48,12 @@ class _CQModulesHomePageState
           {
             'title': "Guide1(需要获取坐标的组件位于*当前组件*中)",
             'actionBlock': () {
-              GuideOverlayUtil().hasFinishShowGuideOverlay().then((value) {
-                bool hasFinishShowGuideOverlay = value;
-                if (hasFinishShowGuideOverlay == true) {
-                  Navigator.pushNamed(context, Routers.reportUploadPage);
-                } else {
+              GuideOverlayUtil().shouldShowGuideOverlay().then((value) {
+                bool shouldShowGuide = value;
+                if (shouldShowGuide == true) {
                   Navigator.pushNamed(context, Routers.guideOverlayTestPage1);
+                } else {
+                  Navigator.pushNamed(context, Routers.reportUploadPage);
                 }
               });
             },

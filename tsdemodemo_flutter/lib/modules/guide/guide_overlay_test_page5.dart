@@ -31,12 +31,12 @@ class _GuideOverlayTestPage5State extends State<GuideOverlayTestPage5> {
       },
       getOverlayPage6RenderBoxCallback1: () {
         RenderBox renderBox =
-            buttonAnchorKey1.currentContext.findRenderObject();
+            buttonAnchorKey1.currentContext?.findRenderObject();
         return renderBox;
       },
       getOverlayPage6RenderBoxCallback2: () {
         RenderBox renderBox =
-            buttonAnchorKey2.currentContext.findRenderObject();
+            buttonAnchorKey2.currentContext?.findRenderObject();
         return renderBox;
       },
     ).addGuideOverlayEntrys();
@@ -45,7 +45,7 @@ class _GuideOverlayTestPage5State extends State<GuideOverlayTestPage5> {
   // 获取'喜欢'按钮的 RenderBox
   RenderBox getLikeButtonRenderBox() {
     if (buttonAnchorKey1 != null) {
-      RenderBox renderBox = buttonAnchorKey1.currentContext.findRenderObject();
+      RenderBox renderBox = buttonAnchorKey1.currentContext?.findRenderObject();
 
       Offset offset = renderBox.localToGlobal(Offset.zero);
       print('当前控件1的横坐标:' + offset.dx.toString());
@@ -60,7 +60,7 @@ class _GuideOverlayTestPage5State extends State<GuideOverlayTestPage5> {
   // 获取'跟拍'按钮的 RenderBox
   RenderBox getPhotoButtonRenderBox() {
     if (buttonAnchorKey2 != null) {
-      RenderBox renderBox = buttonAnchorKey2.currentContext.findRenderObject();
+      RenderBox renderBox = buttonAnchorKey2.currentContext?.findRenderObject();
 
       Offset offset = renderBox.localToGlobal(Offset.zero);
       print('当前控件2的横坐标:' + offset.dx.toString());

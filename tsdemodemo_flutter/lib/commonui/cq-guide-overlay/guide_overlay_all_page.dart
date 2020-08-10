@@ -113,12 +113,14 @@ class GuideOverlayAllPage {
   OverlayEntry getOverlayEntry6() {
     double width = MediaQuery.of(context).size.width;
 
+    bool shouldShow1 = false;
     double right1 = 0;
     double top1 = 0;
     double height1 = 56;
     if (this.getOverlayPage6RenderBoxCallback1 != null) {
       RenderBox renderBox1 = this.getOverlayPage6RenderBoxCallback1();
       if (renderBox1 != null) {
+        shouldShow1 = true;
         // 获得控件左上角方的坐标
         Offset offset1 = renderBox1.localToGlobal(Offset.zero);
         // // 获得控件右上角的坐标
@@ -132,12 +134,14 @@ class GuideOverlayAllPage {
       }
     }
 
+    bool shouldShow2 = false;
     double right2 = 0;
     double top2 = 0;
     double height2 = 56;
     if (this.getOverlayPage6RenderBoxCallback2 != null) {
       RenderBox renderBox2 = this.getOverlayPage6RenderBoxCallback2();
       if (renderBox2 != null) {
+        shouldShow2 = true;
         Offset offset2 = renderBox2.localToGlobal(Offset.zero);
         right2 = width - offset2.dx - renderBox2.size.width;
         top2 = offset2.dy;
@@ -148,9 +152,11 @@ class GuideOverlayAllPage {
 
     return OverlayEntry(builder: (context) {
       return GuideOverlayPage6(
+        show1: shouldShow1,
         right1: right1,
         top1: top1,
         height1: height1,
+        show2: shouldShow2,
         right2: right2,
         top2: top2,
         height2: height2,
