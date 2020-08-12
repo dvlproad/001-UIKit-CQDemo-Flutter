@@ -20,10 +20,16 @@ class CreateSectionList2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('测试分组列表的实现方式2'),
+        title: Text('测试分组列表的实现方式2:以只一个 list 来实现'),
       ),
       body: SafeArea(
-        child: _pageWidget(),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: _pageWidget(),
+            ),
+          ],
+        ),
       ),
     );
   }

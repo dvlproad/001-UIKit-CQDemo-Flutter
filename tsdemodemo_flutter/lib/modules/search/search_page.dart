@@ -1,7 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lpinyin/lpinyin.dart';
+import 'package:provider/provider.dart';
+import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewCell.dart';
+import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewHeader.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/emptyview.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/searchbar.dart';
+import 'package:tsdemodemo_flutter/modules/search/data_search_util.dart';
+import 'package:tsdemodemo_flutter/modules/search/seach_datas_util.dart';
+import 'package:tsdemodemo_flutter/modules/search/search_change_notifiter.dart';
+import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';
+import 'package:tsdemodemo_flutter/modules/search/serchbar_delegate.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -11,12 +21,17 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  SearchChangeNotifier _searchChangeNotifier = SearchChangeNotifier();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow,
       appBar: _appBar(),
-      body: _pageWidget(),
+      body: ChangeNotifierProvider<SearchChangeNotifier>.value(
+        value: _searchChangeNotifier,
+        child: _pageWidget(),
+      ),
     );
   }
 
@@ -36,23 +51,99 @@ class _SearchPageState extends State<SearchPage> {
       child: Column(
         children: <Widget>[
           SearchBar(
-              searchText: '1',
-              searchPlaceholder: '请输入',
-              onSubmitted: (String text) {
-                print('最后搜索的内容为:' + text);
-              }),
-          _searchResultWidget(),
+            searchText: '',
+            searchPlaceholder: '请输入',
+            onSearchTextChanged: (String text) {
+              print('搜索内容更新为:' + text);
+              _searchChangeNotifier.searchTextChange(text);
+            },
+            onSubmitted: (String text) {
+              print('搜索内容最后为:' + text);
+              // showSearch(context: this.context, delegate: SearchBarDelegate());
+            },
+          ),
+          Consumer<SearchChangeNotifier>(
+              builder: (context, _searchChangeNotifier, child) {
+            String searchText = _searchChangeNotifier.searchText ?? '';
+            return _searchResultWidget(searchText);
+          }),
+
+          // GestureDetector(
+          //   behavior: HitTestBehavior.translucent,
+          //   onTap: () {
+          //     FocusScope.of(context).requestFocus(new FocusNode());
+          //   },
+          //   child: _searchResultWidget(),
+          // ),
         ],
       ),
     );
   }
 
-  Widget _searchResultWidget() {
-    bool showResult = true;
-    if (showResult) {
-      return EmptyView(text: '没有匹配的搜索结果');
-    } else {
+  Widget _searchResultWidget(String searchText) {
+    bool isSearching = true;
+
+    List<CJSectionDataModel> originSectionDataModels =
+        TSSearchDataUtil.getSearchSectionDataModels();
+
+    List<CJSectionDataModel> searchInSectionDataModels =
+        originSectionDataModels;
+    String dataModelSearchSelector = 'name';
+    // List<CJSectionDataModel> resultSectionDataModels =
+    List resultSectionDataModels =
+        CJDataSearchUtil.searchTextInSectionDataModels(
+      searchText,
+      searchInSectionDataModels,
+      dataModelSearchSelector,
+      searchType: CJSearchType.CJSearchTypeFull,
+      supportPinyin: true,
+      pinyinFromStringBlock: (String string) {
+        return PinyinHelper.getPinyin(string,
+            separator: "", format: PinyinFormat.WITHOUT_TONE);
+      },
+    );
+
+    if (isSearching && resultSectionDataModels.length == 0) {
       return EmptyView(text: '没有匹配的搜索结果');
     }
+
+    // List<CJSectionDataModel> lastSectionModels =
+    List lastSectionModels =
+        isSearching ? resultSectionDataModels : originSectionDataModels;
+
+    return Expanded(child: _searchResultListWidget(lastSectionModels));
+  }
+
+  Widget _searchResultListWidget(List lastSectionModels) {
+    int sectionCount = lastSectionModels.length;
+    int numOfRowInSection(section) {
+      CJSectionDataModel sectionModel = lastSectionModels[section];
+      List<dynamic> dataModels = sectionModel.values;
+      return dataModels.length;
+    }
+
+    return CreateSectionTableView2(
+      sectionCount: sectionCount,
+      numOfRowInSection: (section) {
+        return numOfRowInSection(section);
+      },
+      headerInSection: (section) {
+        return CJTSTableViewHeader(title: 'Header $section');
+      },
+      cellAtIndexPath: (section, row) {
+        CJSectionDataModel sectionModel = lastSectionModels[section];
+        List<dynamic> dataModels = sectionModel.values;
+        TSSearchDataModel dataModel = dataModels[row] as TSSearchDataModel;
+        return CJTSTableViewCell(
+          text: dataModel.name,
+          section: section,
+          row: row,
+          clickCellCallback: (section, row) {
+            print('点击界面');
+          },
+        );
+      },
+      divider: Container(color: Colors.green, height: 1.0),
+    );
   }
 }
