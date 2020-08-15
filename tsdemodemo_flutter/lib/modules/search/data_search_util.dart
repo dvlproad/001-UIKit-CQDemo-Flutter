@@ -1,8 +1,7 @@
 import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';
 
 enum CJSearchType {
-  CJSearchTypeFull,
-  /**< 检查整个字符串 */
+  CJSearchTypeFull, /// 检查整个字符串
   CJSearchTypeFirstLetterIsFirstCharacter, /**< 检查整个字符串,但必须保证字符串的首字符为搜索的搜字符 */
 }
 

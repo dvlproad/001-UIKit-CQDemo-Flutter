@@ -35,7 +35,7 @@ class SearchBar extends StatelessWidget {
       height: 40,
       decoration: BoxDecoration(
           color: Color(0xff323334), borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.only(left: 20, right: 20, top: 6, bottom: 6),
+      margin: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 0),
       child: SearchBarTextField(
         placeholder: this.searchPlaceholder,
         text: this.searchText,

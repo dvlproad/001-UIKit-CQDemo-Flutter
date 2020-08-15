@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
-import 'package:tsdemodemo_flutter/router/router.dart';
+import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 
 class TSSectionTableViewPage extends CJTSBasePage {
   final String title;
@@ -42,11 +42,11 @@ class _CJTSTableHomeBasePageState
           },
           {
             'title': "测试分组列表的实现方式1",
-            'nextPageName': Routers.sectionTableViewMethod1Page
+            'nextPageName': DemoRouters.sectionTableViewMethod1Page
           },
           {
             'title': "测试分组列表的实现方式2",
-            'nextPageName': Routers.sectionTableViewMethod2Page
+            'nextPageName': DemoRouters.sectionTableViewMethod2Page
           },
           // { 'title': "ToolBar(工具器)", 'nextPageName': "ToolBarHomePage" },
         ]

@@ -27,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.yellow,
+      resizeToAvoidBottomInset: false,
       appBar: _appBar(),
       body: ChangeNotifierProvider<SearchChangeNotifier>.value(
         value: _searchChangeNotifier,
@@ -50,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
       color: Colors.black,
       child: Column(
         children: <Widget>[
+          SizedBox(height: 6),
           SearchBar(
             searchText: '',
             searchPlaceholder: '请输入',
@@ -63,18 +65,25 @@ class _SearchPageState extends State<SearchPage> {
             },
           ),
           Consumer<SearchChangeNotifier>(
-              builder: (context, _searchChangeNotifier, child) {
-            String searchText = _searchChangeNotifier.searchText ?? '';
-            return _searchResultWidget(searchText);
-          }),
-
-          // GestureDetector(
-          //   behavior: HitTestBehavior.translucent,
-          //   onTap: () {
-          //     FocusScope.of(context).requestFocus(new FocusNode());
-          //   },
-          //   child: _searchResultWidget(),
-          // ),
+            builder: (context, _searchChangeNotifier, child) {
+              String searchText = _searchChangeNotifier.searchText ?? '';
+              return Expanded(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  onHorizontalDragEnd: (_) {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  onVerticalDragEnd: (_) {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: _searchResultWidget(searchText),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
@@ -104,14 +113,14 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     if (isSearching && resultSectionDataModels.length == 0) {
-      return EmptyView(text: '没有匹配的搜索结果');
+      return FullEmptyView(text: '没有匹配的搜索结果');
     }
 
     // List<CJSectionDataModel> lastSectionModels =
     List lastSectionModels =
         isSearching ? resultSectionDataModels : originSectionDataModels;
 
-    return Expanded(child: _searchResultListWidget(lastSectionModels));
+    return _searchResultListWidget(lastSectionModels);
   }
 
   Widget _searchResultListWidget(List lastSectionModels) {
@@ -128,7 +137,8 @@ class _SearchPageState extends State<SearchPage> {
         return numOfRowInSection(section);
       },
       headerInSection: (section) {
-        return CJTSTableViewHeader(title: 'Header $section');
+        CJSectionDataModel sectionModel = lastSectionModels[section];
+        return CJTSTableViewHeader(title: sectionModel.theme);
       },
       cellAtIndexPath: (section, row) {
         CJSectionDataModel sectionModel = lastSectionModels[section];

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tsdemodemo_flutter/commonui/base-uikit/round_image.dart';
-import 'package:tsdemodemo_flutter/modules/ranking/components/ranking_list_bean.dart';
 
 typedef ClickCellCallback = void Function(int section, int row);
 

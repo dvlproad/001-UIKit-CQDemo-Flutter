@@ -7,41 +7,9 @@ import 'package:tsdemodemo_flutter/modules/report/report_upload_page/report_uplo
 // 排行榜模块
 import 'package:tsdemodemo_flutter/modules/ranking/ranking_list_page.dart';
 
-// 设计模式模块
-import 'package:tsdemodemo_flutter/modules/architecture/0setState/theme_result_page1.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/Provider/theme_result_page2.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/bloc/theme_result_page3.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/bloc_provider/theme_result_page4.dart';
-import 'package:tsdemodemo_flutter/modules/architecture/redux/theme_result_page5.dart';
-
 class Routers {
   // 模块的测试首页
-  static const uikitHomePage = '/uikit_home_page';
-
-  // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
-
-  // 工具的测试首页
-  static const utilHomePage = '/util_home_page';
-
-  // 设计模式的测试首页
-  static const architectureHomePage = '/architecture_home_page';
-  static const arc0SetStatePage = '/architecture_0setState_page';
-  static const arcProviderUsePage0 = '/architecture_ProviderUse_page0';
-  static const arcProviderUsePage1 = '/architecture_ProviderUse_page1';
-  static const arcProviderUsePage2 = '/architecture_ProviderUse_page2';
-  static const arcProviderUsePage3 = '/architecture_ProviderUse_page3';
-  static const arcProviderUsePage4 = '/architecture_ProviderUse_page4';
-
-  static const arc1ProviderPage = '/architecture_1Provider_page';
-  static const arc1ProviderSharePage = '/architecture_1ProviderShare_page';
-  static const arc2BlockPage = '/architecture_2Block_page';
-  static const arc2BlockProviderPage = '/architecture_2BlockProvider_page';
-  static const arc3ReduxPage = '/architecture_3Redux_page';
-
-  // 组件模块
-  static const sectionTableViewMethod1Page = '/section_table_view_method1_page';
-  static const sectionTableViewMethod2Page = '/section_table_view_method2_page';
 
   // 引导蒙层模块
   static const guideHomePage = '/guide_home_page';
@@ -50,9 +18,6 @@ class Routers {
   static const guideOverlayTestPage3 = '/guide_overlay_test_page3';
   static const guideOverlayTestPage4 = '/guide_overlay_test_page4';
   static const guideOverlayTestPage5 = '/guide_overlay_test_page5';
-
-  // 搜索模块
-  static const searchPage = '/search_page';
 
   // 举报模块
   // static const reportListPage = ReportListPage.routeName;

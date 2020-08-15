@@ -1,6 +1,5 @@
 import 'dart:convert' show json;
 
-
 class UserBean {
   num grade;
   // bool isFollow;
@@ -23,7 +22,6 @@ class UserBean {
     id = jsonRes['id'];
     nickName = jsonRes['nickName'];
   }
-
 
   @override
   String toString() {

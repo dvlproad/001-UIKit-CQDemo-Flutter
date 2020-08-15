@@ -16,7 +16,6 @@ typedef int RowCountInSectionCallBack(int section);
 typedef Widget CellAtIndexPathCallBack(int section, int row);
 typedef Widget SectionHeaderCallBack(int section);
 
-
 class CreateSectionTableView2 extends StatefulWidget {
   //required
   final int sectionCount;
@@ -27,7 +26,6 @@ class CreateSectionTableView2 extends StatefulWidget {
   final SectionHeaderCallBack headerInSection;
   final Widget divider;
 
-
   CreateSectionTableView2({
     Key key,
     @required this.sectionCount,
@@ -35,9 +33,10 @@ class CreateSectionTableView2 extends StatefulWidget {
     @required this.cellAtIndexPath,
     this.headerInSection,
     this.divider,
-  })  : super(key: key);
+  }) : super(key: key);
   @override
-  _CreateSectionTableView2State createState() => new _CreateSectionTableView2State();
+  _CreateSectionTableView2State createState() =>
+      new _CreateSectionTableView2State();
 }
 
 class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
@@ -70,7 +69,6 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
 
   @override
   Widget build(BuildContext context) {
-
     List<IndexPath> _indexToIndexPathSearch = [];
     for (int i = 0; i < widget.sectionCount; i++) {
       if (widget.headerInSection != null) {
@@ -85,11 +83,12 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
     indexToIndexPathSearch = _indexToIndexPathSearch;
 
     return ListView.builder(
-        key: listViewKey,
-        physics: AlwaysScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return _buildCell(context, index);
-        });
+      key: listViewKey,
+      physics: AlwaysScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return _buildCell(context, index);
+      },
+    );
   }
 
   _buildCell(BuildContext context, int index) {

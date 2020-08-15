@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-guide-overlay/guide_overlay_page2.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
+import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
+import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
+import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
+import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -36,7 +41,9 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
-            uikitHomeButton(),
+            demoHomeButton(),
+            baseuiHomeButton(),
+            overlayHomeButton(),
             moduleHomeButton(),
             utilHomeButton(),
             architectureHomeButton(),
@@ -46,22 +53,40 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // 进入UIKit主页的按钮
-  FlatButton uikitHomeButton() {
-    return FlatButton(
-      child: Text("Components"),
-      textColor: Color(0xfff5b63c),
+  // 进入Demo主页的按钮
+  Widget demoHomeButton() {
+    return ThemeBGButton(
+      text: "Demo",
       onPressed: () {
-        Navigator.pushNamed(context, Routers.uikitHomePage);
+        Navigator.pushNamed(context, DemoRouters.demoHomePage);
+      },
+    );
+  }
+
+  // 进入BaseUI测试主页的按钮
+  Widget baseuiHomeButton() {
+    return ThemeBGButton(
+      text: "BaseUI",
+      onPressed: () {
+        Navigator.pushNamed(context, BaseUIKitRouters.uikitHomePage);
+      },
+    );
+  }
+
+  // 进入架构测试主页的按钮
+  Widget overlayHomeButton() {
+    return ThemeBGButton(
+      text: "Overlay",
+      onPressed: () {
+        Navigator.pushNamed(context, OverlayRouters.overlayHomePage);
       },
     );
   }
 
   // 进入举报模块测试主页的按钮
-  FlatButton moduleHomeButton() {
-    return FlatButton(
-      child: Text("功能模块(举报+排行榜+搜索+引导蒙层)"),
-      textColor: Color(0xfff5b63c),
+  Widget moduleHomeButton() {
+    return ThemeBGButton(
+      text: "功能模块(举报+排行榜+搜索+引导蒙层)",
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);
       },
@@ -69,23 +94,21 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   // 进入工具测试主页的按钮
-  FlatButton utilHomeButton() {
-    return FlatButton(
-      child: Text("Util"),
-      textColor: Color(0xfff5b63c),
+  Widget utilHomeButton() {
+    return ThemeBGButton(
+      text: "Util",
       onPressed: () {
-        Navigator.pushNamed(context, Routers.utilHomePage);
+        Navigator.pushNamed(context, UtilRouters.utilHomePage);
       },
     );
   }
 
   // 进入架构测试主页的按钮
-  FlatButton architectureHomeButton() {
-    return FlatButton(
-      child: Text("架构、设计模式"),
-      textColor: Color(0xfff5b63c),
+  Widget architectureHomeButton() {
+    return ThemeBGButton(
+      text: "架构、设计模式",
       onPressed: () {
-        Navigator.pushNamed(context, Routers.architectureHomePage);
+        Navigator.pushNamed(context, ArcRouters.architectureHomePage);
       },
     );
   }

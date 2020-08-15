@@ -61,6 +61,7 @@ flutter:
     - lib/Resources/report/
     - lib/Resources/ranking/
     - lib/commonui/cq-guide-overlay/Resources/
+    - lib/commonui/cq-uikit/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -25,9 +25,19 @@ class CreateSectionList2 extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: <Widget>[
+            Text('aa'),
             Expanded(
-              child: _pageWidget(),
+              child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child: _pageWidget(),
+              ),
             ),
+            // Expanded(
+            //   child: _pageWidget(),
+            // ),
           ],
         ),
       ),
