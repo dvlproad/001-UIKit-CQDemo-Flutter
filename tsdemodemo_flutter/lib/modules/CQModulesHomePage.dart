@@ -85,7 +85,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
           },
           {
             'title': "Search(搜索模块)",
-            'nextPageName': SearchRouters.searchPage,
+            'nextPageName': SearchRouters.searchHomePage,
           },
           {
             'title': "Guide(引导模块)",

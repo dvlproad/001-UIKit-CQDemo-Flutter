@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/message_alert_view.dart';
 
-class TSMessageAlertPage extends StatelessWidget {
-  const TSMessageAlertPage({Key key}) : super(key: key);
+class TSMessageAlertViewPage extends StatelessWidget {
+  const TSMessageAlertViewPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

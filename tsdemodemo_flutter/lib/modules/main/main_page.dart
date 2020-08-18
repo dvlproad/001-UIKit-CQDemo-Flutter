@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
+import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
@@ -47,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
             moduleHomeButton(),
             utilHomeButton(),
             architectureHomeButton(),
+            gestureHomeButton(),
           ],
         ),
       ),
@@ -78,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return ThemeBGButton(
       text: "Overlay",
       onPressed: () {
-        Navigator.pushNamed(context, OverlayRouters.overlayHomePage);
+        Navigator.pushNamed(context, OverlayAllRouters.overlayMainPage);
       },
     );
   }
@@ -109,6 +111,16 @@ class _MyHomePageState extends State<MyHomePage> {
       text: "架构、设计模式",
       onPressed: () {
         Navigator.pushNamed(context, ArcRouters.architectureHomePage);
+      },
+    );
+  }
+
+  // 进入手势测试主页的按钮
+  Widget gestureHomeButton() {
+    return ThemeBGButton(
+      text: "手势 Gesture2",
+      onPressed: () {
+        Navigator.pushNamed(context, GestureRouters.gestureHomePage);
       },
     );
   }

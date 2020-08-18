@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// 文本按钮(未配置 Normal 和 Selected 风格的主题色按钮)
-class TextButton extends FlatButton {
-  TextButton({
+class CJTextButton extends FlatButton {
+  CJTextButton({
     Key key,
     String text,
     double radius = 5.0,

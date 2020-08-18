@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_buttons.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_container.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/searchbar.dart';
 
 /*
  * '我知道了' AlertView
  */
-class IKnowMessageAlertView extends StatelessWidget {
+class IKnowTextInputAlertView extends StatelessWidget {
   final String title;
-  final String message;
+  final String placeholder;
+  final String inputText;
 
   final String iKnowTitle;
   final Function iKnowHandle;
 
-  IKnowMessageAlertView({
+  IKnowTextInputAlertView({
     Key key,
     this.title,
-    this.message,
+    this.placeholder,
+    this.inputText,
     this.iKnowTitle = '我知道了',
     this.iKnowHandle,
   });
@@ -23,9 +27,10 @@ class IKnowMessageAlertView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseTextInputAlertView(
-      contentWidget: AlertTitleContentWidget(
+      contentWidget: AlertTitleTextInputWidget(
         title: this.title,
-        message: this.message,
+        placeholder: this.placeholder,
+        inputText: this.inputText,
       ),
       buttonsWidget: AlertIKnowCloseButton(
         iKnowTitle: this.iKnowTitle,
@@ -43,9 +48,10 @@ class IKnowMessageAlertView extends StatelessWidget {
 /*
  * '取消' + '确定' AlertView
  */
-class CancelOKMessageAlertView extends StatelessWidget {
+class CancelOKTextInputAlertView extends StatelessWidget {
   final String title;
-  final String message;
+  final String placeholder;
+  final String inputText;
 
   final String cancelTitle;
   final Function cancelHandle;
@@ -53,10 +59,11 @@ class CancelOKMessageAlertView extends StatelessWidget {
   final String okTitle;
   final Function okHandle;
 
-  CancelOKMessageAlertView({
+  CancelOKTextInputAlertView({
     Key key,
     this.title,
-    this.message,
+    this.placeholder,
+    this.inputText,
     this.cancelTitle = '取消',
     this.cancelHandle,
     this.okTitle = '确认',
@@ -66,9 +73,10 @@ class CancelOKMessageAlertView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseTextInputAlertView(
-      contentWidget: AlertTitleContentWidget(
+      contentWidget: AlertTitleTextInputWidget(
         title: this.title,
-        message: this.message,
+        placeholder: this.placeholder,
+        inputText: this.inputText,
       ),
       buttonsWidget: AlertCancelOKCloseButtons(
         cancelTitle: this.cancelTitle,
@@ -90,15 +98,17 @@ class CancelOKMessageAlertView extends StatelessWidget {
   }
 }
 
-/* Alert 的 title 和 message 样式视图 */
-class AlertTitleContentWidget extends StatelessWidget {
+/* Alert 的 title 和 textInput 样式视图 */
+class AlertTitleTextInputWidget extends StatelessWidget {
   final String title;
-  final String message;
+  final String placeholder;
+  final String inputText;
 
-  const AlertTitleContentWidget({
+  const AlertTitleTextInputWidget({
     Key key,
     this.title = '',
-    this.message,
+    this.placeholder = '',
+    this.inputText = '',
   }) : super(key: key);
 
   @override
@@ -110,7 +120,7 @@ class AlertTitleContentWidget extends StatelessWidget {
           SizedBox(height: 20),
           _titleWidget(),
           SizedBox(height: 10),
-          _messageWidget(),
+          _textFieldWidget(),
           SizedBox(height: 10),
         ]),
       ),
@@ -128,14 +138,14 @@ class AlertTitleContentWidget extends StatelessWidget {
     );
   }
 
-  Widget _messageWidget() {
-    return Text(
-      this.message,
-      style: TextStyle(
-        fontSize: 16,
-        color: Colors.grey[600],
-        decoration: TextDecoration.none,
-      ),
+  Widget _textFieldWidget() {
+    return CJTextField(
+      height: 40,
+      text: this.inputText,
+      placeholder: this.placeholder,
+      backgroundColor: Colors.white,
+      borderWidth: 0.6,
+      cornerRadius: 10,
     );
   }
 }

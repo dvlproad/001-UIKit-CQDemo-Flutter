@@ -41,7 +41,7 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSBaseUIHomePage> {
           },
           {
             'title': "TextFiled(文本框)",
-            'nextPageName': BaseUIKitRouters.textfieldHomePage,
+            'nextPageName': BaseUIKitRouters.textFieldHomePage,
           },
           // { 'title': "ToolBar(工具器)", 'nextPageName': "ToolBarHomePage" },
         ]

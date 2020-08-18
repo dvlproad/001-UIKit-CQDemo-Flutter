@@ -32,8 +32,12 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSTextFieldHomePage> {
         'theme': "Textfield",
         'values': [
           {
-            'title': "textfield",
-            'nextPageName': BaseUIKitRouters.textfieldPage,
+            'title': "icon textfield(常见于登录)",
+            'nextPageName': BaseUIKitRouters.iconTextFieldPage,
+          },
+          {
+            'title': "text textfield(常见于忘记密码)",
+            'nextPageName': BaseUIKitRouters.textTextFieldPage,
           },
         ]
       },

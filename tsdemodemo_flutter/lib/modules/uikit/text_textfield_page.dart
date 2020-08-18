@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/ForgetPasswordTextFieldRowWidgetFactory.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/TextField/TextTextField.dart';
 
-class TSTextFieldPage extends StatefulWidget {
-  TSTextFieldPage({Key key, this.title, this.username}) : super(key: key);
+class TSTextTextFieldPage extends StatefulWidget {
+  TSTextTextFieldPage({Key key, this.title, this.username}) : super(key: key);
 
   final String title;
   final String username;
 
   @override
-  _TSTextFieldPageState createState() => new _TSTextFieldPageState();
+  _TSTextTextFieldPageState createState() => new _TSTextTextFieldPageState();
 }
 
-class _TSTextFieldPageState extends State<TSTextFieldPage> {
+class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
   bool userNameValid = false;
   bool phoneValid = false;
 
@@ -95,7 +95,7 @@ class _TSTextFieldPageState extends State<TSTextFieldPage> {
 
   /// 用户名 的行视图
   Widget userNameRowWidget() {
-    return ForgetPasswordTextFieldRowWidget(
+    return TextTextFieldRowWidget(
       title: '用户名',
       placeholder: '请输入本人登陆用户名',
       value: userName,
@@ -107,7 +107,7 @@ class _TSTextFieldPageState extends State<TSTextFieldPage> {
 
   /// 手机号 的行视图
   Widget phoneRowWidget() {
-    return ForgetPasswordTextFieldRowWidget(
+    return TextTextFieldRowWidget(
       title: '手机号',
       placeholder: '请输入本人手机号',
       value: '',

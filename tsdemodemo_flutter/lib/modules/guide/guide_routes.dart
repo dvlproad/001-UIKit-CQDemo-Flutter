@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/overlay_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TS221MessageAlertPage.dart';
+import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/TSAlertViewHomePage.dart';
+import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/TSAlertView1_MessageAlertPage.dart';
 
 class OverlayRouters {
   // overlay的测试首页
@@ -9,8 +9,8 @@ class OverlayRouters {
 
   static Map<String, WidgetBuilder> routes = {
     OverlayRouters.overlayHomePage: (BuildContext context) =>
-        TSOverlayHomePage(),
+        TSAlertViewHomePage(),
     OverlayRouters.messageAlertPage: (BuildContext context) =>
-        TSMessageAlertPage(),
+        TSAlertView1_MessageAlertPage(),
   };
 }

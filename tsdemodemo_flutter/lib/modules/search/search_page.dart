@@ -11,7 +11,7 @@ import 'package:tsdemodemo_flutter/modules/search/data_search_util.dart';
 import 'package:tsdemodemo_flutter/modules/search/seach_datas_util.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_change_notifiter.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';
-import 'package:tsdemodemo_flutter/modules/search/serchbar_delegate.dart';
+//import 'package:tsdemodemo_flutter/modules/search/serchbar_delegate.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -52,17 +52,20 @@ class _SearchPageState extends State<SearchPage> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
-          SearchBar(
-            searchText: '',
-            searchPlaceholder: '请输入',
-            onSearchTextChanged: (String text) {
-              print('搜索内容更新为:' + text);
-              _searchChangeNotifier.searchTextChange(text);
-            },
-            onSubmitted: (String text) {
-              print('搜索内容最后为:' + text);
-              // showSearch(context: this.context, delegate: SearchBarDelegate());
-            },
+          Padding(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 0, bottom: 0),
+            child: SearchBar(
+              searchText: '',
+              searchPlaceholder: '请输入',
+              onSearchTextChanged: (String text) {
+                print('搜索内容更新为:' + text);
+                _searchChangeNotifier.searchTextChange(text);
+              },
+              onSubmitted: (String text) {
+                print('搜索内容最后为:' + text);
+                // showSearch(context: this.context, delegate: SearchBarDelegate());
+              },
+            ),
           ),
           Consumer<SearchChangeNotifier>(
             builder: (context, _searchChangeNotifier, child) {

@@ -16,7 +16,7 @@ class ThemeBGButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return CJTextButton(
       text: this.text,
       enable: this.enable,
       onPressed: this.onPressed,
@@ -43,7 +43,7 @@ class WhiteThemeBGButton extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return TextButton(
+    return CJTextButton(
       text: this.text,
       radius: height / 2,
       enable: this.enable,
