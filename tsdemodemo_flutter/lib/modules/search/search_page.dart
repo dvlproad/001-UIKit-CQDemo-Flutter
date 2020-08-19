@@ -7,7 +7,7 @@ import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewHeader.d
 import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/emptyview.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/searchbar.dart';
-import 'package:tsdemodemo_flutter/modules/search/data_search_util.dart';
+import 'package:tsdemodemo_flutter/commonutil/data_search_util.dart';
 import 'package:tsdemodemo_flutter/modules/search/seach_datas_util.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_change_notifiter.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';

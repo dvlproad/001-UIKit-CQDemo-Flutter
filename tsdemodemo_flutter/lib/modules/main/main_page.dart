@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
+import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
@@ -43,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             demoHomeButton(),
+            devtoolHomeButton(),
             baseuiHomeButton(),
             overlayHomeButton(),
             moduleHomeButton(),
@@ -61,6 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
       text: "Demo",
       onPressed: () {
         Navigator.pushNamed(context, DemoRouters.demoHomePage);
+      },
+    );
+  }
+
+  // 进入 DevTool 主页的按钮
+  Widget devtoolHomeButton() {
+    return ThemeBGButton(
+      text: "DevTool(调试工具)",
+      onPressed: () {
+        Navigator.pushNamed(context, DevToolRouters.devtoolHomePage);
       },
     );
   }

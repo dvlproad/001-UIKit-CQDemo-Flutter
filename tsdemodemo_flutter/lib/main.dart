@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
+import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
@@ -90,6 +91,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     });
     // Demo
     routes.addAll(DemoRouters.routes);
+    // devTool
+    routes.addAll(DevToolRouters.routes);
     // BaseUI
     routes.addAll(BaseUIKitRouters.routes);
     // overlay
@@ -100,7 +103,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     routes.addAll(ArcRouters.routes);
     // 手势 Gesture
     routes.addAll(GestureRouters.routes);
-    // 搜索
+    // 搜索 Search
     routes.addAll(SearchRouters.routes);
 
     return MaterialApp(
