@@ -39,10 +39,16 @@ class SearchBar extends StatelessWidget {
         height: 40,
         backgroundColor: Color(0xff323334),
         cornerRadius: 16,
-        tfThemeColor: Colors.white,
-        prefixIcon: Icon(Icons.search, color: Colors.white, size: 14),
+        prefixWidget: Row(
+          children: <Widget>[
+            SizedBox(width: 5),
+            Icon(Icons.search, color: Colors.white, size: 14),
+            SizedBox(width: 5),
+          ],
+        ),
         placeholder: this.searchPlaceholder,
         text: this.searchText,
+        textColor: Colors.white,
         textInputAction: TextInputAction.search,
         controller: this.controller,
         onChanged: this.onSearchTextChanged,

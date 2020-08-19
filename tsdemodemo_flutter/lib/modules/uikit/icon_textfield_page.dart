@@ -90,8 +90,14 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
               height: 40,
               backgroundColor: Color(0xff323334),
               cornerRadius: 16,
-              tfThemeColor: Colors.white,
-              prefixIcon: Icon(Icons.search, color: Colors.white, size: 14),
+              textColor: Colors.white,
+              prefixWidget: Row(
+                children: <Widget>[
+                  SizedBox(width: 5),
+                  Icon(Icons.search, color: Colors.white, size: 14),
+                  SizedBox(width: 5),
+                ],
+              ),
               placeholder: '请输入',
               text: '',
             ),

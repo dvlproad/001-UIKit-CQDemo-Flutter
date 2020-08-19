@@ -70,7 +70,8 @@ class IconTextFieldState extends State<IconTextField> {
     return Container(
       height: 40,
       child: CJTextField(
-        prefixIcon: _prefixIcon(),
+        prefixWidget: _prefixIcon(),
+        suffixWidget: SizedBox(width: 5),
         borderColor: Color(0xff323334),
         borderWidth: 0.6,
         cornerRadius: 16,
@@ -93,6 +94,12 @@ class IconTextFieldState extends State<IconTextField> {
     String assetName = !_prefixIconSelected
         ? widget.prefixIconNormalImageName
         : widget.prefixIconSelectedImageName;
-    return new Image.asset(assetName, width: 14.0, height: 15.0);
+    return Row(
+      children: <Widget>[
+        SizedBox(width: 5),
+        Image.asset(assetName, width: 14.0, height: 15.0),
+        SizedBox(width: 5),
+      ],
+    );
   }
 }

@@ -22,7 +22,7 @@ class IKnowMessageAlertView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseTextInputAlertView(
+    return CQAlertContainer(
       contentWidget: AlertTitleContentWidget(
         title: this.title,
         message: this.message,
@@ -65,7 +65,7 @@ class CancelOKMessageAlertView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseTextInputAlertView(
+    return CQAlertContainer(
       contentWidget: AlertTitleContentWidget(
         title: this.title,
         message: this.message,

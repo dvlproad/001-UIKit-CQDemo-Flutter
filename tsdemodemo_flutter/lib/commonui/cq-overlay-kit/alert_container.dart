@@ -1,11 +1,11 @@
 /*  基础的 MessageAlert 部分 */
 import 'package:flutter/material.dart';
 
-class BaseTextInputAlertView extends StatelessWidget {
+class CQAlertContainer extends StatelessWidget {
   final Widget contentWidget;
   final Widget buttonsWidget;
 
-  BaseTextInputAlertView({
+  CQAlertContainer({
     Key key,
     this.contentWidget,
     this.buttonsWidget,
