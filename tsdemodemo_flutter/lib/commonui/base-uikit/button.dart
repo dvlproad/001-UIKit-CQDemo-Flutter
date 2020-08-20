@@ -77,23 +77,19 @@ class CJTextButton extends StatelessWidget {
     String _currentTitle;
     Color _currentTextColor;
     Color _currentBackgroundColor;
-    Color _currentDisabledTextColor;
-    Color _currentDisabledBackgroundColor;
     Color _currentBorderColor;
     double _currentBorderWidth;
     double _cornerRadius = this.cornerRadius;
     if (selected) {
       _currentTitle = selectedTitle ?? normalTitle;
-      _currentTextColor = selectedTextColor;
-      _currentBackgroundColor = selectedBGColor;
-      _currentDisabledTextColor =
-          selectedTextColor?.withOpacity(disableOpacity);
-      _currentDisabledBackgroundColor =
-          selectedBGColor?.withOpacity(disableOpacity);
 
       if (enable) {
+        _currentTextColor = selectedTextColor;
+        _currentBackgroundColor = selectedBGColor;
         _currentBorderColor = selectedBorderColor ?? Colors.transparent;
       } else {
+        _currentTextColor = selectedTextColor?.withOpacity(disableOpacity);
+        _currentBackgroundColor = selectedBGColor?.withOpacity(disableOpacity);
         _currentBorderColor = selectedBorderColor != null
             ? selectedBorderColor.withOpacity(disableOpacity)
             : Colors.transparent;
@@ -102,14 +98,14 @@ class CJTextButton extends StatelessWidget {
       _currentBorderWidth = selectedBorderWidth;
     } else {
       _currentTitle = normalTitle;
-      _currentTextColor = normalTextColor;
-      _currentBackgroundColor = normalBGColor;
-      _currentDisabledTextColor = normalTextColor.withOpacity(disableOpacity);
-      _currentDisabledBackgroundColor =
-          normalBGColor.withOpacity(disableOpacity);
+
       if (enable) {
+        _currentTextColor = normalTextColor;
+        _currentBackgroundColor = normalBGColor;
         _currentBorderColor = normalBorderColor ?? Colors.transparent;
       } else {
+        _currentTextColor = normalTextColor.withOpacity(disableOpacity);
+        _currentBackgroundColor = normalBGColor.withOpacity(disableOpacity);
         _currentBorderColor = normalBorderColor != null
             ? normalBorderColor.withOpacity(disableOpacity)
             : Colors.transparent;
@@ -133,7 +129,7 @@ class CJTextButton extends StatelessWidget {
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            // color: Colors.white,
+            // color: _currentTextColor,
             fontSize: 18.0,
           ),
         ),
@@ -142,8 +138,8 @@ class CJTextButton extends StatelessWidget {
         color: _currentBackgroundColor,
         textColor: _currentTextColor,
         //highlightColor: selectedBGColor,
-        disabledColor: _currentDisabledBackgroundColor,
-        disabledTextColor: _currentDisabledTextColor,
+        disabledColor: _currentBackgroundColor,
+        disabledTextColor: _currentTextColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_cornerRadius),
           side: BorderSide(
