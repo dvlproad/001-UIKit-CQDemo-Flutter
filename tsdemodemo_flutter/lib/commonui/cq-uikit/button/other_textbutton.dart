@@ -20,7 +20,7 @@ class WhiteThemeBGButton extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
 
-    return CJTextButton(
+    return CJStateTextButton(
       normalTitle: this.text,
       cornerRadius: height / 2,
       enable: this.enable,

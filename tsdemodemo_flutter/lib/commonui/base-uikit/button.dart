@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮，并且颜色已添加用设置的主题色控制)
-class CJStateThemeButton extends CJTextButton {
-  CJStateThemeButton({
+/// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮，并且背景和边框文字的颜色互为反面)
+class CJReverseThemeStateTextButton extends CJStateTextButton {
+  CJReverseThemeStateTextButton({
     Key key,
     Color themeColor,
     Color themeOppositeColor,
@@ -34,7 +34,7 @@ class CJStateThemeButton extends CJTextButton {
 }
 
 /// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮)
-class CJTextButton extends StatelessWidget {
+class CJStateTextButton extends StatelessWidget {
   final String normalTitle;
   final String selectedTitle; // selectedTitle 为 null 的时候，会被自动设为 normalTitle
   final VoidCallback onPressed;
@@ -51,7 +51,7 @@ class CJTextButton extends StatelessWidget {
   final Color selectedBorderColor;
   final double selectedBorderWidth;
 
-  CJTextButton({
+  CJStateTextButton({
     Key key,
     @required this.normalTitle,
     this.selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
