@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 
 /// 可定制背景色、圆角、弧度的 Widget
 class CJBGBorderWidget extends StatelessWidget {
-  final Widget child;
-
   final double height; // 文本框的高度
   final Color backgroundColor; // 文本框的背景颜色
   final double cornerRadius; // 边的圆角
   final double borderWidth; // 边宽
   final Color borderColor; // 边的颜色
 
+  final Widget child; // 控件视图
+
   CJBGBorderWidget({
     Key key,
-    @required this.child,
     this.height = 44,
     this.backgroundColor,
     this.cornerRadius = 0,
     this.borderWidth = 0,
     this.borderColor,
+    @required this.child,
   }) : super(key: key);
 
   @override
@@ -32,6 +32,7 @@ class CJBGBorderWidget extends StatelessWidget {
     double borderWidth = this.borderWidth != null ? this.borderWidth : 0;
     return Container(
       height: height,
+      // color: backgroundColor, // color 和 decoration 不能同时存在，至少一个要为空
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(cornerRadius),
