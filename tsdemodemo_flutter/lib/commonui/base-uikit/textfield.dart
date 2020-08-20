@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
 
 /// 文本框(默认包含 clearButton 的文本框)
 class CJTextField extends StatefulWidget {
@@ -248,24 +249,12 @@ class CJTextFieldContainer extends StatelessWidget {
       textFieldComponents.add(SizedBox(width: 5));
     }
 
-    double height = this.height ?? 0;
-    Color backgroundColor =
-        this.backgroundColor != null ? this.backgroundColor : Colors.white;
-    double cornerRadius = this.cornerRadius != null ? this.cornerRadius : 0;
-    Color borderColor =
-        this.borderColor != null ? this.borderColor : Color(0xffd2d2d2);
-    double borderWidth = this.borderWidth != null ? this.borderWidth : 0;
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(cornerRadius),
-        border: Border.all(
-          color: borderColor,
-          width: borderWidth,
-          style: BorderStyle.solid,
-        ),
-      ),
+    return CJBGBorderWidget(
+      height: this.height,
+      backgroundColor: this.backgroundColor,
+      cornerRadius: this.cornerRadius,
+      borderColor: this.borderColor,
+      borderWidth: this.borderWidth,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
