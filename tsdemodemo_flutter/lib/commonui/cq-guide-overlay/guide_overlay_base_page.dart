@@ -1,6 +1,6 @@
 /// 引导页通用部分：背景+'我知道了'按钮
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/other_textbutton.dart';
 
 typedef ClickOverlayPageBGCallback = void Function();
 typedef ClickOverlayPageIKnowCallback = void Function();

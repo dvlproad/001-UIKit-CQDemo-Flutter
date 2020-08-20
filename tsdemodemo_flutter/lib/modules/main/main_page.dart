@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textbutton.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/textbutton.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'You have pushed the button this many times:',
             ),
+            showLogButton(),
             demoHomeButton(),
             devtoolHomeButton(),
             baseuiHomeButton(),
@@ -59,18 +60,28 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入Demo主页的按钮
   Widget demoHomeButton() {
-    return ThemeBGButton(
-      text: "Demo",
+    return CQPinkThemeBGButton(
+      title: "Demo",
       onPressed: () {
         Navigator.pushNamed(context, DemoRouters.demoHomePage);
       },
     );
   }
 
+  // 显示 Log 窗口的按钮
+  Widget showLogButton() {
+    return CQPinkThemeBGButton(
+      title: "LogWindow",
+      onPressed: () {
+        // showLogWindow();
+      },
+    );
+  }
+
   // 进入 DevTool 主页的按钮
   Widget devtoolHomeButton() {
-    return ThemeBGButton(
-      text: "DevTool(调试工具)",
+    return CQPinkThemeBGButton(
+      title: "DevTool(调试工具)",
       onPressed: () {
         Navigator.pushNamed(context, DevToolRouters.devtoolHomePage);
       },
@@ -79,8 +90,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入BaseUI测试主页的按钮
   Widget baseuiHomeButton() {
-    return ThemeBGButton(
-      text: "BaseUI",
+    return CQPinkThemeBGButton(
+      title: "BaseUI",
       onPressed: () {
         Navigator.pushNamed(context, BaseUIKitRouters.uikitHomePage);
       },
@@ -89,8 +100,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入架构测试主页的按钮
   Widget overlayHomeButton() {
-    return ThemeBGButton(
-      text: "Overlay",
+    return CQPinkThemeBGButton(
+      title: "Overlay",
       onPressed: () {
         Navigator.pushNamed(context, OverlayAllRouters.overlayMainPage);
       },
@@ -99,8 +110,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入举报模块测试主页的按钮
   Widget moduleHomeButton() {
-    return ThemeBGButton(
-      text: "功能模块(举报+排行榜+搜索+引导蒙层)",
+    return CQPinkThemeBGButton(
+      title: "功能模块(举报+排行榜+搜索+引导蒙层)",
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);
       },
@@ -109,8 +120,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入工具测试主页的按钮
   Widget utilHomeButton() {
-    return ThemeBGButton(
-      text: "Util",
+    return CQPinkThemeBGButton(
+      title: "Util",
       onPressed: () {
         Navigator.pushNamed(context, UtilRouters.utilHomePage);
       },
@@ -119,8 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入架构测试主页的按钮
   Widget architectureHomeButton() {
-    return ThemeBGButton(
-      text: "架构、设计模式",
+    return CQPinkThemeBGButton(
+      title: "架构、设计模式",
       onPressed: () {
         Navigator.pushNamed(context, ArcRouters.architectureHomePage);
       },
@@ -129,8 +140,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入手势测试主页的按钮
   Widget gestureHomeButton() {
-    return ThemeBGButton(
-      text: "手势 Gesture2",
+    return CQPinkThemeBGButton(
+      title: "手势 Gesture2",
       onPressed: () {
         Navigator.pushNamed(context, GestureRouters.gestureHomePage);
       },

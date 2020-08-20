@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_buttons.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_container.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/searchbar.dart';
 
 /*
  * '我知道了' AlertView

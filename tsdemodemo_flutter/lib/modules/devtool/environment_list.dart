@@ -10,14 +10,14 @@ import 'package:tsdemodemo_flutter/modules/devtool/environment_datas_util.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/environment_data_bean.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/environment_proxy_cell.dart';
 
-class TSEnvironmentPage extends StatefulWidget {
+class TSEnvironmentList extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _TSEnvironmentPageState();
+    return _TSEnvironmentListState();
   }
 }
 
-class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
+class _TSEnvironmentListState extends State<TSEnvironmentList> {
   TSEnvironmentModel _totalEnvModels;
   EnvironmentChangeNotifier _environmentChangeNotifier =
       EnvironmentChangeNotifier();

@@ -78,7 +78,7 @@ class IconTextFieldState extends State<IconTextField> {
         placeholder: widget.placeholder,
         text: widget.text,
 //        textInputAction: TextInputAction.search,
-        controller: widget.controller,
+        controller: _controller,
         onChanged: (String string) {
           if (widget.prefixIconSelectedCallback != null) {
             _prefixIconSelected = widget.prefixIconSelectedCallback(string);

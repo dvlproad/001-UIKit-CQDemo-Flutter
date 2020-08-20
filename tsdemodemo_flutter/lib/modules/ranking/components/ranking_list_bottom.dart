@@ -6,23 +6,21 @@ typedef ClickCellCallback = void Function(int section, int row);
 
 /// 排行榜底部我的排名视图
 class RankingListBottom extends StatelessWidget {
-  final bool showIndex;                       // 是否显示编号
-  Map<String, dynamic> dataMap;                      // 数据
+  final bool showIndex; // 是否显示编号
+  Map<String, dynamic> dataMap; // 数据
 
   final int section;
   final int row;
-  final ClickCellCallback clickCellCallback;  // cell 的点击
+  final ClickCellCallback clickCellCallback; // cell 的点击
 
   RankingListBottom({
     Key key,
     this.showIndex = true,
     @required this.dataMap,
-
     this.section,
     this.row,
     this.clickCellCallback,
   }) : super(key: key);
-
 
 //   @override
 //   State<StatefulWidget> createState() {
@@ -44,25 +42,23 @@ class RankingListBottom extends StatelessWidget {
   }
 
   void _onTapCell() {
-    if(null != this.clickCellCallback) {
+    if (null != this.clickCellCallback) {
       this.clickCellCallback(this.section, this.row);
     }
   }
 
-
   Widget _cellContainer() {
     return Container(
-      height: 90,
-      color: Colors.black,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-           _leftRow(),
-          _rightRow(),
-        ],
-      )
-    );
+        height: 90,
+        color: Colors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _leftRow(),
+            _rightRow(),
+          ],
+        ));
   }
 
   // Cell 的左侧视图
@@ -73,7 +69,10 @@ class RankingListBottom extends StatelessWidget {
       children: <Widget>[
         showIndex ? _indexText() : Container(),
         SizedBox(width: 16),
-        RoundImage(size: 60, networkSrc:'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg'),
+        RoundImage(
+            size: 60,
+            networkSrc:
+                'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg'),
         SizedBox(width: 8),
         _fansWidget(),
       ],
@@ -93,13 +92,12 @@ class RankingListBottom extends StatelessWidget {
     );
   }
 
-
   // 标号
   Widget _indexText() {
     return Container(
       color: Colors.transparent,
       child: Text(
-        (4+row).toString(),
+        (4 + row).toString(),
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -116,8 +114,8 @@ class RankingListBottom extends StatelessWidget {
 //      dataModel = RankingBean();
 //    }
 
-    String _userName = '';  //用户名
-    String _avatar = '';    // 头像
+    String _userName = ''; //用户名
+    String _avatar = ''; // 头像
     int _rankNumber = dataMap['number']; // 排名
     if (null != dataMap['user']) {
       Map<String, dynamic> userMap = dataMap['user'];
@@ -135,7 +133,8 @@ class RankingListBottom extends StatelessWidget {
           children: <Widget>[
             Container(
               width: 70,
-              child: Text('排名 ' + _rankNumber.toString(), style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
+              child: Text('排名 ' + _rankNumber.toString(),
+                  style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
             ),
           ],
         )
@@ -145,14 +144,18 @@ class RankingListBottom extends StatelessWidget {
 
   // 影响力
   Widget _influenceWidget() {
-    int _influence = dataMap['influence'];          //影响力
+    int _influence = dataMap['influence']; //影响力
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('影响力', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 16)),
+        Text('影响力',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         SizedBox(height: 2),
-        Text(_influence.toString() + 'w', textAlign: TextAlign.center, style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 14)),
+        Text(_influence.toString() + 'w',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 14)),
       ],
     );
   }

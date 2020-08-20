@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/TextField/IconTextField.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/searchbar.dart';
 
 class TSIconTextFieldPage extends StatefulWidget {
   TSIconTextFieldPage({Key key, this.title, this.username}) : super(key: key);

@@ -6,29 +6,25 @@ class TextTextFieldRowWidget extends StatelessWidget {
   final String title;
   final String placeholder;
   final String value;
-  bool autofocus;
-  TextInputType keyboardType;
-  TextEditingController controller;
+  final bool autofocus;
+  final TextInputType keyboardType;
+  final TextEditingController controller;
 
   TextTextFieldRowWidget({
     Key key,
-
     this.title,
     this.placeholder,
     this.value,
-
     this.autofocus = false,
     this.keyboardType,
     this.controller,
   }) : super(
-    key: key,
-  );
-
-
+          key: key,
+        );
 
   @override
   Widget build(BuildContext context) {
-    return Container (
+    return Container(
       color: const Color(0xFFffffff),
       child: Row(
         children: <Widget>[
@@ -50,25 +46,21 @@ class TextTextFieldRowWidget extends StatelessWidget {
     );
   }
 
-
   Widget _prefixWidget(text) {
     return Container(
         width: 100,
         color: Colors.transparent,
         child: Padding(
-          padding: const EdgeInsets.only(left: 15, top: 0, right: 15, bottom: 0),
+          padding:
+              const EdgeInsets.only(left: 15, top: 0, right: 15, bottom: 0),
           child: Text(
             text,
             textAlign: TextAlign.left,
             style: new TextStyle(fontSize: 14),
           ),
-        )
-    );
+        ));
   }
 }
-
-
-
 
 class YSTextfiled extends StatelessWidget {
   final double height;
@@ -109,21 +101,21 @@ class YSTextfiled extends StatelessWidget {
     }
     list.add(Expanded(
         child: TextField(
-          textAlign: textAlign,
-          autofocus: autofocus,
-          controller: controller,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          inputFormatters: inputFormatters,
-          style: TextStyle(
-            color: color,
-            fontSize: 15.0,
-          ),
-          decoration: InputDecoration(
-            hintText: hintText,
-            border: InputBorder.none,
-          ),
-        )));
+      textAlign: textAlign,
+      autofocus: autofocus,
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
+      style: TextStyle(
+        color: color,
+        fontSize: 15.0,
+      ),
+      decoration: InputDecoration(
+        hintText: hintText,
+        border: InputBorder.none,
+      ),
+    )));
 
     if (trailing != null) {
       list.add(trailing);

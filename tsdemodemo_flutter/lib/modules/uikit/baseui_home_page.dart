@@ -33,7 +33,7 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSBaseUIHomePage> {
         'values': [
           {
             'title': "Button(按钮)",
-            'nextPageName': "TSButtonHomePage",
+            'nextPageName': BaseUIKitRouters.buttonHomePage,
           },
           {
             'title': "Image(图片)",
