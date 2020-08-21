@@ -1,31 +1,28 @@
-// 包含主文本main，且可选定制副文本、箭头 的视图
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_data_bean.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
-typedef ClickEnvProxyCellCallback = void Function(int section, int row, TSEnvProxyModel bProxyModel);
+typedef ClickEnvNetworkCellCallback = void Function(
+  int section,
+  int row,
+  TSEnvNetworkModel bNetworkModel,
+);
 
-enum CJTSTableViewCellArrowImageType {
-  none, // 无箭头
-  arrowRight, // 右箭头
-  arrowTopBottom, // 上下箭头
-}
-
-class EnvProxyTableViewCell extends StatelessWidget {
-  final TSEnvProxyModel proxyModel;
-  final CJTSTableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
+class EnvNetworkTableViewCell extends StatelessWidget {
+  @required
+  final TSEnvNetworkModel envModel; // 环境
 
   final int section;
   final int row;
-  final ClickEnvProxyCellCallback clickEnvProxyCellCallback; // cell 的点击
+  final ClickEnvNetworkCellCallback
+      clickEnvNetworkCellCallback; // 网络 networkCell 的点击
 
-  EnvProxyTableViewCell({
+  EnvNetworkTableViewCell({
     Key key,
-    this.proxyModel,
-    this.arrowImageType = CJTSTableViewCellArrowImageType.none,
+    this.envModel,
     this.section,
     this.row,
-    this.clickEnvProxyCellCallback,
+    this.clickEnvNetworkCellCallback,
   }) : super(key: key);
 
   @override
@@ -41,34 +38,47 @@ class EnvProxyTableViewCell extends StatelessWidget {
   }
 
   void _onTapCell() {
-    if (null != this.clickEnvProxyCellCallback) {
-      this.clickEnvProxyCellCallback(this.section, this.row, this.proxyModel);
+    if (null != this.clickEnvNetworkCellCallback) {
+      this.clickEnvNetworkCellCallback(
+        this.section,
+        this.row,
+        this.envModel,
+      );
     }
   }
 
   Widget _cellContainer() {
-    List<Widget> rowWidgets = [];
-
+    List<Widget> columnWidgets = [];
     // 添加主文本
-    rowWidgets.add(
-      Expanded(
-        child: _mainText(),
-      ),
+    columnWidgets.add(
+      _mainText(this.envModel.name),
     );
 
-    // 判断是否添加副文本
-    String detailText = this.proxyModel.name ?? '';
-    if (detailText.length > 0) {
-      rowWidgets.add(_subText());
+    // 判断是否添加其他文本
+    String hostName = this.envModel.hostName ?? '';
+    if (hostName.isNotEmpty) {
+      columnWidgets.add(_subText(hostName));
     }
 
+    String interceptHost = this.envModel.interceptHost ?? '';
+    if (interceptHost.isNotEmpty) {
+      columnWidgets.add(_subText(interceptHost));
+    }
+
+    List<Widget> rowWidgets = [];
+    rowWidgets.add(
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: columnWidgets,
+      ),
+    );
     // 判断是否添加箭头
-    if (this.arrowImageType != CJTSTableViewCellArrowImageType.none) {
+    if (this.envModel.check == true) {
       rowWidgets.add(_arrowImage());
     }
 
     return Container(
-      height: 44,
       color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,14 +89,12 @@ class EnvProxyTableViewCell extends StatelessWidget {
   }
 
   // 主文本
-  Widget _mainText() {
-    String name = this.proxyModel.name ?? '';
-
+  Widget _mainText(text) {
     return Container(
-      padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        name,
+        text ?? '',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -98,18 +106,16 @@ class EnvProxyTableViewCell extends StatelessWidget {
   }
 
   // 副文本
-  Widget _subText() {
-    String name = this.proxyModel.name ?? '';
-
+  Widget _subText(text) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        name,
+        text ?? '',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.white70,
           fontSize: 16.0,
         ),
       ),

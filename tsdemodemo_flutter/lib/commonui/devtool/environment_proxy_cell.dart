@@ -1,24 +1,27 @@
-// 包含主文本main，且可选定制副文本、箭头 的视图
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_data_bean.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
-typedef ClickEnvNetworkCellCallback = void Function(int section, int row, TSEnvNetworkModel bEnvModel);
+typedef ClickEnvProxyCellCallback = void Function(
+  int section,
+  int row,
+  TSEnvProxyModel bProxyModel,
+);
 
-
-class EnvNetworkTableViewCell extends StatelessWidget {
-  @required final TSEnvNetworkModel envModel; // 环境
+class EnvProxyTableViewCell extends StatelessWidget {
+  @required
+  final TSEnvProxyModel proxyModel; // 环境
 
   final int section;
   final int row;
-  final ClickEnvNetworkCellCallback clickEnvNetworkCellCallback; // cell 的点击
+  final ClickEnvProxyCellCallback clickEnvProxyCellCallback; // 协议 proxyCell 的点击
 
-  EnvNetworkTableViewCell({
+  EnvProxyTableViewCell({
     Key key,
-    this.envModel,
+    this.proxyModel,
     this.section,
     this.row,
-    this.clickEnvNetworkCellCallback,
+    this.clickEnvProxyCellCallback,
   }) : super(key: key);
 
   @override
@@ -34,8 +37,12 @@ class EnvNetworkTableViewCell extends StatelessWidget {
   }
 
   void _onTapCell() {
-    if (null != this.clickEnvNetworkCellCallback) {
-      this.clickEnvNetworkCellCallback(this.section, this.row, this.envModel);
+    if (null != this.clickEnvProxyCellCallback) {
+      this.clickEnvProxyCellCallback(
+        this.section,
+        this.row,
+        this.proxyModel,
+      );
     }
   }
 
@@ -43,31 +50,34 @@ class EnvNetworkTableViewCell extends StatelessWidget {
     List<Widget> columnWidgets = [];
     // 添加主文本
     columnWidgets.add(
-      _mainText(this.envModel.name),
+      _mainText(this.proxyModel.name),
     );
 
     // 判断是否添加其他文本
-    String hostName = this.envModel.hostName ?? '';
-    if (hostName.isNotEmpty) {
-      columnWidgets.add(_subText(hostName));
+    String proxyIp = this.proxyModel.proxyIp ?? '';
+    if (proxyIp.isNotEmpty) {
+      columnWidgets.add(_subText(proxyIp));
     }
 
-    String interceptHost = this.envModel.interceptHost ?? '';
-    if (interceptHost.isNotEmpty) {
-      columnWidgets.add(_subText(interceptHost));
+    String useDirection = this.proxyModel.useDirection ?? '';
+    if (useDirection.isNotEmpty) {
+      columnWidgets.add(_subText(useDirection));
     }
-
-
 
     List<Widget> rowWidgets = [];
-    rowWidgets.add(Column(children: columnWidgets));
+    rowWidgets.add(
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: columnWidgets,
+      ),
+    );
     // 判断是否添加箭头
-    if (this.envModel.check == true) {
+    if (this.proxyModel.check == true) {
       rowWidgets.add(_arrowImage());
     }
 
     return Container(
-      height: 44,
       color: Colors.black,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -97,14 +107,14 @@ class EnvNetworkTableViewCell extends StatelessWidget {
   // 副文本
   Widget _subText(text) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
         text ?? '',
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.white70,
           fontSize: 16.0,
         ),
       ),
@@ -114,7 +124,7 @@ class EnvNetworkTableViewCell extends StatelessWidget {
   // 箭头
   Widget _arrowImage() {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
       child: Image(
         image: AssetImage('lib/Resources/report/arrow_right.png'),

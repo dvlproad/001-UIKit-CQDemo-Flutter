@@ -1,16 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewHeader.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_network_cell.dart';
 
-import 'package:tsdemodemo_flutter/modules/devtool/environment_change_notifiter.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_datas_util.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_data_bean.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_proxy_cell.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
+
+import 'package:tsdemodemo_flutter/commonui/devtool/evvironment_header.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_network_cell.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_proxy_cell.dart';
+
+import 'package:provider/provider.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_change_notifiter.dart';
+
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
 class TSEnvironmentList extends StatefulWidget {
+  final TSEnvironmentModel totalEnvModels;
+  final String selectedNetworkId;
+  final String selectedProxyId;
+
+  final ClickEnvNetworkCellCallback
+      clickEnvNetworkCellCallback; // 网络 networkCell 的点击
+  final ClickEnvProxyCellCallback clickEnvProxyCellCallback; // 协议 proxyCell 的点击
+
+  TSEnvironmentList({
+    Key key,
+    @required this.totalEnvModels,
+    @required this.selectedNetworkId,
+    @required this.selectedProxyId,
+    @required this.clickEnvNetworkCellCallback,
+    @required this.clickEnvProxyCellCallback,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _TSEnvironmentListState();
@@ -27,47 +46,40 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
   @override
   void initState() {
     super.initState();
-    _totalEnvModels = TSEnvironmentDataUtil.getEnvironmentModel();
+    _totalEnvModels = widget.totalEnvModels;
 
     List<TSEnvNetworkModel> envModels = _totalEnvModels.networkModels;
     for (int i = 0; i < envModels.length; i++) {
       TSEnvNetworkModel envModel = envModels[i];
-      if (envModel.envId == 'develop') {
+      if (envModel.envId == widget.selectedNetworkId) {
         envModel.check = true;
         _oldSelectedNetworkModel = envModel;
       } else {
         envModel.check = false;
       }
     }
+    assert(_oldSelectedNetworkModel != null);
 
     List<TSEnvProxyModel> proxyModels = _totalEnvModels.proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
-      if (proxyModel.proxyId == 'develop') {
+      if (proxyModel.proxyId == widget.selectedProxyId) {
         proxyModel.check = true;
         _oldSelectedProxyModel = proxyModel;
       } else {
         proxyModel.check = false;
       }
     }
+    assert(_oldSelectedProxyModel != null);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
-      resizeToAvoidBottomInset: false,
-      appBar: _appBar(),
-      body: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+    return Container(
+      child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
         value: _environmentChangeNotifier,
         child: _pageWidget(),
       ),
-    );
-  }
-
-  Widget _appBar() {
-    return AppBar(
-      title: Text('Environment 模块'),
     );
   }
 
@@ -120,9 +132,10 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
       },
       headerInSection: (section) {
         if (section == 0) {
-          return CJTSTableViewHeader(title: _totalEnvModels.networkTitle);
+          return EnvironmentTableViewHeader(
+              title: _totalEnvModels.networkTitle);
         } else {
-          return CJTSTableViewHeader(title: _totalEnvModels.proxyTitle);
+          return EnvironmentTableViewHeader(title: _totalEnvModels.proxyTitle);
         }
       },
       cellAtIndexPath: (section, row) {
@@ -134,16 +147,20 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
             section: section,
             row: row,
             clickEnvNetworkCellCallback:
-                (int section, int row, TSEnvNetworkModel bEnvModel) {
-              print('点击 Network');
-              if (bEnvModel == _oldSelectedNetworkModel) {
+                (int section, int row, TSEnvNetworkModel bNetworkModel) {
+              // print('点击切换 Network 环境');
+              if (bNetworkModel == _oldSelectedNetworkModel) {
                 return;
               }
-              bEnvModel.check = !bEnvModel.check;
+              bNetworkModel.check = !bNetworkModel.check;
               _oldSelectedNetworkModel.check = !_oldSelectedNetworkModel.check;
 
-              _oldSelectedNetworkModel = bEnvModel;
+              _oldSelectedNetworkModel = bNetworkModel;
               setState(() {});
+
+              if (widget.clickEnvNetworkCellCallback != null) {
+                widget.clickEnvNetworkCellCallback(section, row, bNetworkModel);
+              }
             },
           );
         } else {
@@ -155,7 +172,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
             row: row,
             clickEnvProxyCellCallback:
                 (int section, int row, TSEnvProxyModel bProxyModel) {
-              print('点击 Proxy');
+              // print('点击切换 Proxy 环境');
 
               if (bProxyModel == _oldSelectedProxyModel) {
                 return;
@@ -165,6 +182,10 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
 
               _oldSelectedProxyModel = bProxyModel;
               setState(() {});
+
+              if (widget.clickEnvProxyCellCallback != null) {
+                widget.clickEnvProxyCellCallback(section, row, bProxyModel);
+              }
             },
           );
         }

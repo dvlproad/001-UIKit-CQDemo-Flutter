@@ -1,6 +1,12 @@
-import 'package:tsdemodemo_flutter/modules/devtool/environment_data_bean.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
 class TSEnvironmentDataUtil {
+  // network
+  static String developNetworkId = "networkId_develop";
+
+  // proxy
+  static String noneProxykId = "proxyId_none";
+
   static TSEnvironmentModel getEnvironmentModel() {
     TSEnvironmentModel envModel = TSEnvironmentModel();
     envModel.networkTitle = "网络环境";
@@ -16,14 +22,16 @@ class TSEnvironmentDataUtil {
     List<TSEnvProxyModel> envModels = List();
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
-      dataModel.proxyId = 'develop ip';
+      dataModel.proxyId = noneProxykId;
       dataModel.name = "无代理";
+      dataModel.proxyIp = "none";
       envModels.add(dataModel);
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
-      dataModel.proxyId = 'develop ip';
-      dataModel.name = "PROXY 192.168.28.232:8888";
+      dataModel.proxyId = 'develop';
+      dataModel.name = "本地代理1";
+      dataModel.proxyIp = "PROXY 192.168.28.232:8888";
       envModels.add(dataModel);
     }
     return envModels;
@@ -54,7 +62,7 @@ class TSEnvironmentDataUtil {
     }
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = 'develop';
+      dataModel.envId = developNetworkId;
       dataModel.name = "真正的测试环境(develop)";
       dataModel.hostName = "https://wm1440.com";
       dataModel.check = true;

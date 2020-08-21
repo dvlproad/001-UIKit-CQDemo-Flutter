@@ -29,7 +29,9 @@ class TSEnvNetworkModel {
 
 class TSEnvProxyModel {
   String proxyId;
-  String name;
+  String name; // 网络代理的名称
+  String proxyIp; // 网络代理的 ip
+  String useDirection; // 使用说明
   bool check; // 是否选中
 
   TSEnvProxyModel({
