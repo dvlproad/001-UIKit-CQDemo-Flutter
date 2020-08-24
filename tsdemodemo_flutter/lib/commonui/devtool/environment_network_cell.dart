@@ -127,11 +127,7 @@ class EnvNetworkTableViewCell extends StatelessWidget {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
       color: Colors.transparent,
-      child: Image(
-        image: AssetImage('lib/Resources/report/arrow_right.png'),
-        width: 8,
-        height: 12,
-      ),
+      child: Icon(Icons.check_box, color: Colors.white, size: 14),
     );
   }
 }

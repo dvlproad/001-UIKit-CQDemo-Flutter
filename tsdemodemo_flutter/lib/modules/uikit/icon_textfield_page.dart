@@ -47,7 +47,7 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: ListView(
-              children: forgetPasswordWidgets(),
+              children: iconTextFieldWidgets(),
             ),
           ),
         ],
@@ -65,7 +65,7 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
   }
 
   /// 忘记密码页的整体视图
-  List<Widget> forgetPasswordWidgets() {
+  List<Widget> iconTextFieldWidgets() {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     double screenHeight = mediaQuery.size.height;
     double loginIconBottom = screenHeight <= 667 ? 50 : 71;
@@ -81,24 +81,6 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             child: passwordRowWidget(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
-            child: CJTextField(
-              height: 40,
-              backgroundColor: Color(0xff323334),
-              cornerRadius: 16,
-              textColor: Colors.white,
-              prefixWidget: Row(
-                children: <Widget>[
-                  SizedBox(width: 5),
-                  Icon(Icons.search, color: Colors.white, size: 14),
-                  SizedBox(width: 5),
-                ],
-              ),
-              placeholder: '请输入',
-              text: '',
-            ),
           ),
         ],
       )

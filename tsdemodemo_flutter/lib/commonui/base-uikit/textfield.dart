@@ -83,7 +83,7 @@ class _CJTextFieldState extends State<CJTextField> {
 
     // 注意不使用 addListener，而使用 onChanged，会造成执行 _controller.clear 进行文本清空的事件无法监听到
     _controller.addListener(() {
-      print('CJTextField.text addListener: $_controller.text');
+      print('CJTextField.text addListener: ${_controller.text}');
       this._changeText(_controller.text);
     });
   }

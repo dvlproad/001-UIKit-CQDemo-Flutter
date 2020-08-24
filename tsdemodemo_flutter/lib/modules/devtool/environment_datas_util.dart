@@ -1,11 +1,36 @@
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_manager.dart';
+import 'package:flutter/material.dart';
 
 class TSEnvironmentDataUtil {
+  // // 设置默认的环境
+  // static String defaultNetworkId = developNetworkId;
+  // static String defaultProxykId = noneProxykId;
+
   // network
+  static String ipNetworkId = "networkId_ip";
+  static String mockNetworkId = "networkId_mock";
   static String developNetworkId = "networkId_develop";
+  static String preproductNetworkId = "networkId_preproduct";
+  static String productNetworkId = "networkId_product";
 
   // proxy
   static String noneProxykId = "proxyId_none";
+  static String chaoqianProxykId = "proxyId_chaoqian";
+  static String yongshengProxykId = "proxyId_yongsheng";
+  static String weixiangProxykId = "proxyId_weixiang";
+
+  completeInternal({
+    @required String defaultNetworkId,
+    @required String defaultProxykId,
+  }) {
+    TSEnvironmentModel envModel = TSEnvironmentDataUtil.getEnvironmentModel();
+    EnvironmentManager().completeEnvInternal(
+      environmentModel: envModel,
+      defaultNetworkId: defaultNetworkId,
+      defaultProxykId: defaultProxykId,
+    );
+  }
 
   static TSEnvironmentModel getEnvironmentModel() {
     TSEnvironmentModel envModel = TSEnvironmentModel();
@@ -29,9 +54,23 @@ class TSEnvironmentDataUtil {
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
-      dataModel.proxyId = 'develop';
-      dataModel.name = "本地代理1";
-      dataModel.proxyIp = "PROXY 192.168.28.232:8888";
+      dataModel.proxyId = chaoqianProxykId;
+      dataModel.name = "超前代理";
+      dataModel.proxyIp = "PROXY 192.168.28.231:8888";
+      envModels.add(dataModel);
+    }
+    {
+      TSEnvProxyModel dataModel = TSEnvProxyModel();
+      dataModel.proxyId = yongshengProxykId;
+      dataModel.name = "永生代理";
+      dataModel.proxyIp = "PROXY 192.168.1.3:8888";
+      envModels.add(dataModel);
+    }
+    {
+      TSEnvProxyModel dataModel = TSEnvProxyModel();
+      dataModel.proxyId = weixiangProxykId;
+      dataModel.name = "伟详代理";
+      dataModel.proxyIp = "PROXY 192.168.28.107:8888";
       envModels.add(dataModel);
     }
     return envModels;
@@ -42,8 +81,8 @@ class TSEnvironmentDataUtil {
     // develop
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = 'develop ip';
-      dataModel.name = "指定IP测试环境(develop)";
+      dataModel.envId = ipNetworkId;
+      dataModel.name = "指定IP测试环境(ip)";
       dataModel.hostName = "http://192.168.28.58:80";
       dataModel.check = false;
       dataModel.imageUrl =
@@ -52,8 +91,8 @@ class TSEnvironmentDataUtil {
     }
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = 'develop mock';
-      dataModel.name = "模拟的测试环境(develop)";
+      dataModel.envId = mockNetworkId;
+      dataModel.name = "模拟的测试环境(mock)";
       dataModel.hostName = "http://www.1nian.xyz:3000/mock/11";
       dataModel.check = false;
       dataModel.imageUrl =
@@ -71,22 +110,22 @@ class TSEnvironmentDataUtil {
       envModels.add(dataModel);
     }
 
-    // preProduct
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = 'preproduct';
-      dataModel.name = "预生产环境(preproduct)";
-      dataModel.hostName = "http://192.168.28.58:80";
-      dataModel.check = false;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
+    // // preProduct
+    // {
+    //   TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    //   dataModel.envId = preproductNetworkId;
+    //   dataModel.name = "预生产环境(preproduct)";
+    //   dataModel.hostName = "http://192.168.28.58:80";
+    //   dataModel.check = false;
+    //   dataModel.imageUrl =
+    //       "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+    //   envModels.add(dataModel);
+    // }
 
     // product
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = 'product';
+      dataModel.envId = productNetworkId;
       dataModel.name = "生产环境(product)";
       dataModel.hostName = "https://civilization1440.com";
       dataModel.check = false;

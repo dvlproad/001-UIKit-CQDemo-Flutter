@@ -46,7 +46,7 @@ class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
               FocusScope.of(context).requestFocus(new FocusNode());
             },
             child: ListView(
-              children: forgetPasswordWidgets(),
+              children: textTextFieldWidgets(),
             ),
           ),
         ],
@@ -63,8 +63,8 @@ class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
         preferredSize: Size.fromHeight(44));
   }
 
-  /// 忘记密码页的整体视图
-  List<Widget> forgetPasswordWidgets() {
+  /// textTextField Widgets
+  List<Widget> textTextFieldWidgets() {
     return <Widget>[
       new Column(
         children: <Widget>[

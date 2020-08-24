@@ -39,6 +39,10 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSTextFieldHomePage> {
             'title': "text textfield(常见于忘记密码)",
             'nextPageName': BaseUIKitRouters.textTextFieldPage,
           },
+          {
+            'title': "文本内容限制(用户名、昵称)",
+            'nextPageName': BaseUIKitRouters.textinputfomrmatterPage,
+          },
         ]
       },
     ];

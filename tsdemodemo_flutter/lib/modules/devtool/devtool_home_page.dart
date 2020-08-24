@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
+import 'package:tsdemodemo_flutter/modules/devtool/environment_datas_util.dart';
 
 class TSDevToolHomePage extends CJTSBasePage {
   final String title;
@@ -18,6 +19,17 @@ class TSDevToolHomePage extends CJTSBasePage {
 
 class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
   var sectionModels = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 设置默认的网络、代理环境
+    TSEnvironmentDataUtil().completeInternal(
+      defaultNetworkId: TSEnvironmentDataUtil.mockNetworkId,
+      defaultProxykId: TSEnvironmentDataUtil.noneProxykId,
+    );
+  }
 
   @override
   PreferredSizeWidget appBar() {

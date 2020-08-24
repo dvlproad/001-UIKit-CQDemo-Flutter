@@ -8,6 +8,7 @@ class TextTextFieldRowWidget extends StatelessWidget {
   final String value;
   final bool autofocus;
   final TextInputType keyboardType;
+  final List<TextInputFormatter> inputFormatters;
   final TextEditingController controller;
 
   TextTextFieldRowWidget({
@@ -17,6 +18,7 @@ class TextTextFieldRowWidget extends StatelessWidget {
     this.value,
     this.autofocus = false,
     this.keyboardType,
+    this.inputFormatters,
     this.controller,
   }) : super(
           key: key,
@@ -38,6 +40,7 @@ class TextTextFieldRowWidget extends StatelessWidget {
                 border: InputBorder.none,
                 hintText: placeholder,
               ),
+              inputFormatters: this.inputFormatters,
             ),
             flex: 2,
           ),

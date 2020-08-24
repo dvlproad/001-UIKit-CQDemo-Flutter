@@ -1,8 +1,8 @@
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_list.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_datas_util.dart';
 
 class TSEnvironmentPage extends StatefulWidget {
   @override
@@ -13,15 +13,15 @@ class TSEnvironmentPage extends StatefulWidget {
 
 class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
   TSEnvironmentModel _totalEnvModels;
-  String _selectedNetworkId;
-  String _selectedProxyId;
+  TSEnvNetworkModel _selectedNetworkModel;
+  TSEnvProxyModel _selectedProxyModel;
 
   @override
   void initState() {
     super.initState();
-    _totalEnvModels = TSEnvironmentDataUtil.getEnvironmentModel();
-    _selectedNetworkId = TSEnvironmentDataUtil.developNetworkId;
-    _selectedProxyId = TSEnvironmentDataUtil.noneProxykId;
+    _totalEnvModels = EnvironmentManager().environmentModel;
+    _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
+    _selectedProxyModel = EnvironmentManager().selectedProxyModel;
   }
 
   @override
@@ -36,20 +36,26 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('Environment 模块'),
+      title: Text('切换环境'),
     );
   }
 
   Widget _pageWidget() {
     return TSEnvironmentList(
       totalEnvModels: _totalEnvModels,
-      selectedNetworkId: _selectedNetworkId,
-      selectedProxyId: _selectedProxyId,
+      selectedNetworkModel: _selectedNetworkModel,
+      selectedProxyModel: _selectedProxyModel,
       clickEnvNetworkCellCallback: (section, row, bNetworkModel) {
         print('点击了${bNetworkModel.name}');
+        EnvironmentManager()
+            .updateEnvSelectedModel(selectedNetworkModel: bNetworkModel);
+        // 调用 网络域名 的更改接口
+        // Service().changeOptions(baseUrl: bNetworkModel.hostName);
       },
       clickEnvProxyCellCallback: (section, row, bProxyModel) {
         print('点击了${bProxyModel.name}');
+        EnvironmentManager()
+            .updateEnvSelectedModel(selectedProxyModel: bProxyModel);
       },
     );
   }

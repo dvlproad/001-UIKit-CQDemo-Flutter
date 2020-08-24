@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/section_table_view_method2.dart';
 
 import 'package:tsdemodemo_flutter/commonui/devtool/evvironment_header.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_network_cell.dart';
@@ -14,8 +14,8 @@ import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
 class TSEnvironmentList extends StatefulWidget {
   final TSEnvironmentModel totalEnvModels;
-  final String selectedNetworkId;
-  final String selectedProxyId;
+  final TSEnvNetworkModel selectedNetworkModel;
+  final TSEnvProxyModel selectedProxyModel;
 
   final ClickEnvNetworkCellCallback
       clickEnvNetworkCellCallback; // 网络 networkCell 的点击
@@ -24,8 +24,8 @@ class TSEnvironmentList extends StatefulWidget {
   TSEnvironmentList({
     Key key,
     @required this.totalEnvModels,
-    @required this.selectedNetworkId,
-    @required this.selectedProxyId,
+    @required this.selectedNetworkModel,
+    @required this.selectedProxyModel,
     @required this.clickEnvNetworkCellCallback,
     @required this.clickEnvProxyCellCallback,
   }) : super(key: key);
@@ -48,14 +48,14 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
     super.initState();
     _totalEnvModels = widget.totalEnvModels;
 
-    List<TSEnvNetworkModel> envModels = _totalEnvModels.networkModels;
-    for (int i = 0; i < envModels.length; i++) {
-      TSEnvNetworkModel envModel = envModels[i];
-      if (envModel.envId == widget.selectedNetworkId) {
-        envModel.check = true;
-        _oldSelectedNetworkModel = envModel;
+    List<TSEnvNetworkModel> networkModels = _totalEnvModels.networkModels;
+    for (int i = 0; i < networkModels.length; i++) {
+      TSEnvNetworkModel networkModel = networkModels[i];
+      if (networkModel.envId == widget.selectedNetworkModel.envId) {
+        networkModel.check = true;
+        _oldSelectedNetworkModel = networkModel;
       } else {
-        envModel.check = false;
+        networkModel.check = false;
       }
     }
     assert(_oldSelectedNetworkModel != null);
@@ -63,7 +63,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
     List<TSEnvProxyModel> proxyModels = _totalEnvModels.proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
-      if (proxyModel.proxyId == widget.selectedProxyId) {
+      if (proxyModel.proxyId == widget.selectedProxyModel.proxyId) {
         proxyModel.check = true;
         _oldSelectedProxyModel = proxyModel;
       } else {
