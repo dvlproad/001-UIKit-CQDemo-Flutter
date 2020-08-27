@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/TextField/IconTextField.dart';
 
 class TSIconTextFieldPage extends StatefulWidget {
@@ -13,21 +12,6 @@ class TSIconTextFieldPage extends StatefulWidget {
 }
 
 class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
-  bool userNameValid = false;
-  bool passwordValid = false;
-
-  String userName = "";
-  String password = "";
-
-  //定义一个controller
-  TextEditingController _usernameController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
-
-  // 控制文本框焦点
-  FocusNode usernameFocusNode = new FocusNode();
-  FocusNode passwordFocusNode = new FocusNode();
-  FocusScopeNode currentFocusNode;
-
   @override
   void initState() {
     super.initState();
@@ -59,7 +43,7 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
   PreferredSize appBar() {
     return PreferredSize(
         child: AppBar(
-          title: Text('登录', style: TextStyle(fontSize: 17)),
+          title: Text('含Icon头的文本框(常用于登录)', style: TextStyle(fontSize: 17)),
         ),
         preferredSize: Size.fromHeight(44));
   }
@@ -78,6 +62,7 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
             padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
             child: userNameRowWidget(),
           ),
+          // 密码
           Padding(
             padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
             child: passwordRowWidget(),

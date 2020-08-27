@@ -1,3 +1,5 @@
+import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,14 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
     );
   }
 
+  Future<void> showLogWindow() async {
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      await CjMonitorFlutter.showLogSuspendWindow;
+    } on PlatformException {}
+    if (!mounted) return;
+  }
+
   Widget _appBar() {
     return AppBar(
       title: Text('切换环境'),
@@ -56,6 +66,7 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
         print('点击了${bProxyModel.name}');
         EnvironmentManager()
             .updateEnvSelectedModel(selectedProxyModel: bProxyModel);
+        this.showLogWindow();
       },
     );
   }

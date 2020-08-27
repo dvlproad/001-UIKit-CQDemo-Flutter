@@ -4,6 +4,7 @@ import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
+import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
 import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
@@ -52,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
             utilHomeButton(),
             architectureHomeButton(),
             gestureHomeButton(),
+            imagesbrowserHomeButton(),
           ],
         ),
       ),
@@ -144,6 +146,17 @@ class _MyHomePageState extends State<MyHomePage> {
       title: "手势 Gesture2",
       onPressed: () {
         Navigator.pushNamed(context, GestureRouters.gestureHomePage);
+      },
+    );
+  }
+
+  // 进入图片浏览测试主页的按钮
+  Widget imagesbrowserHomeButton() {
+    return CQPinkThemeBGButton(
+      title: "图片浏览 ImagesBrowser",
+      onPressed: () {
+        Navigator.pushNamed(
+            context, ImagesBrowserRouters.imagesbrowserHomePage);
       },
     );
   }

@@ -1,10 +1,20 @@
 PODS:
+  - cj_monitor_flutter (0.0.1):
+    - CJMonitor (~> 0.0.1)
+    - Flutter
+  - CJBaseUIKit/UIView/CJDragAction (0.6.0)
+  - CJMonitor (0.0.1):
+    - CJMonitor/CJLog (= 0.0.1)
+  - CJMonitor/CJLog (0.0.1):
+    - CJBaseUIKit/UIView/CJDragAction
+    - Masonry
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
+  - Masonry (1.1.0)
   - package_info (0.0.1):
     - Flutter
   - path_provider (0.0.1):
@@ -26,6 +36,7 @@ PODS:
     - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
+  - cj_monitor_flutter (from `.symlinks/plugins/cj_monitor_flutter/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -40,9 +51,14 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CJBaseUIKit
+    - CJMonitor
     - FMDB
+    - Masonry
 
 EXTERNAL SOURCES:
+  cj_monitor_flutter:
+    :path: ".symlinks/plugins/cj_monitor_flutter/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
   Flutter:
@@ -67,9 +83,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  cj_monitor_flutter: 4286c6024548bfe0f7882f9eafce516c70fab527
+  CJBaseUIKit: d4945467678c73b872c7ddfb5367d4063ff28add
+  CJMonitor: 9f770c8334f07f237281775b50f0597e5c50b3a0
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
