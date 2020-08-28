@@ -13,7 +13,8 @@ import 'dart:core';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/clearButton_textfield.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/textfield_container.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController controller = TextEditingController();
@@ -35,10 +36,21 @@ class SearchBar extends StatelessWidget {
     return Container(
       height: 40,
       // margin: EdgeInsets.only(left: 0, right: 0, top: 0, bottom: 0),
-      child: CJTextField(
-        height: 40,
+      child: CJTextFieldContainer(
+        height: 44,
         backgroundColor: Color(0xff323334),
         cornerRadius: 16,
+        borderWidth: 0.6,
+        borderColor: Color(0xff323334),
+        textFieldWidget: CJClearButtonTextField(
+          placeholder: this.searchPlaceholder,
+          text: this.searchText,
+          textColor: Colors.white,
+          textInputAction: TextInputAction.search,
+          controller: this.controller,
+          onChanged: this.onSearchTextChanged,
+          onSubmitted: this.onSubmitted,
+        ),
         prefixWidget: Row(
           children: <Widget>[
             SizedBox(width: 5),
@@ -46,13 +58,7 @@ class SearchBar extends StatelessWidget {
             SizedBox(width: 5),
           ],
         ),
-        placeholder: this.searchPlaceholder,
-        text: this.searchText,
-        textColor: Colors.white,
-        textInputAction: TextInputAction.search,
-        controller: this.controller,
-        onChanged: this.onSearchTextChanged,
-        onSubmitted: this.onSubmitted,
+        // suffixWidget: SizedBox(width: 5),
       ),
     );
   }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:extended_image/extended_image.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-imagesbrowser/imagesbrowser_widget.dart';
 
 List<String> egImages = <String>[
@@ -33,7 +31,6 @@ class TSImagesBrowserPage extends StatefulWidget {
 class _TSImagesBrowserPageState extends State<TSImagesBrowserPage> {
   List<String> _images;
   int _currentIndex;
-  PageController _pageController;
 
   @override
   void initState() {
@@ -42,9 +39,6 @@ class _TSImagesBrowserPageState extends State<TSImagesBrowserPage> {
     // _currentIndex = widget.currentIndex;
     _images = egImages;
     _currentIndex = 0;
-    _pageController = PageController(
-      initialPage: _currentIndex,
-    );
   }
 
   @override

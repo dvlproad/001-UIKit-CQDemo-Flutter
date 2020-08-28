@@ -202,16 +202,14 @@ class _CJBGBorderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: this.onPressed,
-      child: CJBGBorderWidget(
-        height: this.height,
-        backgroundColor: this.backgroundColor,
-        borderColor: this.borderColor,
-        borderWidth: this.borderWidth,
-        cornerRadius: this.cornerRadius,
-        child: this.child,
-      ),
+    return CJBGBorderWidget(
+      height: this.height,
+      backgroundColor: this.backgroundColor,
+      borderColor: this.borderColor,
+      borderWidth: this.borderWidth,
+      cornerRadius: this.cornerRadius,
+      child: this.child,
+      onPressed: this.onPressed,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_buttons.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_container.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/components/alert_buttons.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/components/alert_container.dart';
 
 /*
  * '我知道了' AlertView

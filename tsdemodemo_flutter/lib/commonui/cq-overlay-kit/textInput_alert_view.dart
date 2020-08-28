@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_buttons.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/alert_container.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/clearButton_textfield.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/textfield_container.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/components/alert_buttons.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/components/alert_container.dart';
 
 /*
  * '我知道了' AlertView
@@ -138,13 +139,18 @@ class AlertTitleTextInputWidget extends StatelessWidget {
   }
 
   Widget _textFieldWidget() {
-    return CJTextField(
-      height: 40,
-      text: this.inputText,
-      placeholder: this.placeholder,
+    return CJTextFieldContainer(
+      height: 44,
       backgroundColor: Colors.white,
-      borderWidth: 0.6,
       cornerRadius: 10,
+      borderWidth: 0.6,
+      borderColor: Color(0xff323334),
+      textFieldWidget: CJClearButtonTextField(
+        text: this.inputText,
+        placeholder: this.placeholder,
+      ),
+      // prefixWidget: _prefixIcon(),
+      // suffixWidget: SizedBox(width: 5),
     );
   }
 }

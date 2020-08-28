@@ -10,6 +10,7 @@ class CJBGBorderWidget extends StatelessWidget {
   final Color borderColor; // 边的颜色
 
   final Widget child; // 控件视图
+  final VoidCallback onPressed; // 控件视图的点击事件
 
   CJBGBorderWidget({
     Key key,
@@ -19,10 +20,18 @@ class CJBGBorderWidget extends StatelessWidget {
     this.borderWidth = 0,
     this.borderColor,
     @required this.child,
+    this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: this.onPressed,
+      child: _containerWidget(),
+    );
+  }
+
+  Widget _containerWidget() {
     double height = this.height ?? 0;
     Color backgroundColor =
         this.backgroundColor != null ? this.backgroundColor : Colors.white;

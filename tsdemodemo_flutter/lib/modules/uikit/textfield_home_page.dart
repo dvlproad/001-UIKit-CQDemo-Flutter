@@ -29,7 +29,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSTextFieldHomePage> {
   Widget contentWidget() {
     sectionModels = [
       {
-        'theme': "Textfield",
+        'theme': "Textfield UI",
         'values': [
           {
             'title': "icon textfield(常见于登录)",
@@ -39,6 +39,11 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSTextFieldHomePage> {
             'title': "text textfield(常见于忘记密码)",
             'nextPageName': BaseUIKitRouters.textTextFieldPage,
           },
+        ]
+      },
+      {
+        'theme': "Textfield Formatter",
+        'values': [
           {
             'title': "文本内容限制(用户名、昵称)",
             'nextPageName': BaseUIKitRouters.textinputfomrmatterPage,

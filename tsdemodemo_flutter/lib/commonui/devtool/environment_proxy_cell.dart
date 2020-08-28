@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_cell_components.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
 typedef ClickEnvProxyCellCallback = void Function(
@@ -50,18 +51,18 @@ class EnvProxyTableViewCell extends StatelessWidget {
     List<Widget> columnWidgets = [];
     // 添加主文本
     columnWidgets.add(
-      _mainText(this.proxyModel.name),
+      EnvironmentCellComponentsFactory.mainText(this.proxyModel.name),
     );
 
     // 判断是否添加其他文本
     String proxyIp = this.proxyModel.proxyIp ?? '';
     if (proxyIp.isNotEmpty) {
-      columnWidgets.add(_subText(proxyIp));
+      columnWidgets.add(EnvironmentCellComponentsFactory.subText(proxyIp));
     }
 
     String useDirection = this.proxyModel.useDirection ?? '';
     if (useDirection.isNotEmpty) {
-      columnWidgets.add(_subText(useDirection));
+      columnWidgets.add(EnvironmentCellComponentsFactory.subText(useDirection));
     }
 
     List<Widget> rowWidgets = [];
@@ -74,7 +75,7 @@ class EnvProxyTableViewCell extends StatelessWidget {
     );
     // 判断是否添加箭头
     if (this.proxyModel.check == true) {
-      rowWidgets.add(_arrowImage());
+      rowWidgets.add(EnvironmentCellComponentsFactory.arrowImage());
     }
 
     return Container(
@@ -84,49 +85,6 @@ class EnvProxyTableViewCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: rowWidgets,
       ),
-    );
-  }
-
-  // 主文本
-  Widget _mainText(text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        text ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-      ),
-    );
-  }
-
-  // 副文本
-  Widget _subText(text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        text ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Colors.white70,
-          fontSize: 16.0,
-        ),
-      ),
-    );
-  }
-
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Icon(Icons.check_box, color: Colors.white, size: 14),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:tsdemodemo_flutter/commonui/devtool/environment_cell_components.dart';
 import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
 
 typedef ClickEnvNetworkCellCallback = void Function(
@@ -51,18 +52,19 @@ class EnvNetworkTableViewCell extends StatelessWidget {
     List<Widget> columnWidgets = [];
     // 添加主文本
     columnWidgets.add(
-      _mainText(this.envModel.name),
+      EnvironmentCellComponentsFactory.mainText(this.envModel.name),
     );
 
     // 判断是否添加其他文本
     String hostName = this.envModel.hostName ?? '';
     if (hostName.isNotEmpty) {
-      columnWidgets.add(_subText(hostName));
+      columnWidgets.add(EnvironmentCellComponentsFactory.subText(hostName));
     }
 
     String interceptHost = this.envModel.interceptHost ?? '';
     if (interceptHost.isNotEmpty) {
-      columnWidgets.add(_subText(interceptHost));
+      columnWidgets
+          .add(EnvironmentCellComponentsFactory.subText(interceptHost));
     }
 
     List<Widget> rowWidgets = [];
@@ -75,7 +77,7 @@ class EnvNetworkTableViewCell extends StatelessWidget {
     );
     // 判断是否添加箭头
     if (this.envModel.check == true) {
-      rowWidgets.add(_arrowImage());
+      rowWidgets.add(EnvironmentCellComponentsFactory.arrowImage());
     }
 
     return Container(
@@ -85,49 +87,6 @@ class EnvNetworkTableViewCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: rowWidgets,
       ),
-    );
-  }
-
-  // 主文本
-  Widget _mainText(text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        text ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 16.0,
-        ),
-      ),
-    );
-  }
-
-  // 副文本
-  Widget _subText(text) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        text ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Colors.white70,
-          fontSize: 16.0,
-        ),
-      ),
-    );
-  }
-
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-      color: Colors.transparent,
-      child: Icon(Icons.check_box, color: Colors.white, size: 14),
     );
   }
 }

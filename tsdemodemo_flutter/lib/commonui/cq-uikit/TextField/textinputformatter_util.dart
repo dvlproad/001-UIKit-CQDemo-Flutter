@@ -10,7 +10,7 @@ class CQTextInputFormatterUtil {
   /// 用户名文本限制
   static List<TextInputFormatter> usernameInputFormatters() {
     return <TextInputFormatter>[
-      WhitelistingTextInputFormatter(
+      FilteringTextInputFormatter.allow(
         RegExp("[a-zA-Z ]|[\u4e00-\u9fa5]|[0-9]"),
       ), //只能输入汉字或者字母或数字,
     ];

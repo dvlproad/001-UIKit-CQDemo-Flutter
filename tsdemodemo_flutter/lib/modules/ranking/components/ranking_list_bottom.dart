@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/round_image.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/image/round_image.dart';
 
 typedef ClickCellCallback = void Function(int section, int row);
 
 /// 排行榜底部我的排名视图
 class RankingListBottom extends StatelessWidget {
   final bool showIndex; // 是否显示编号
-  Map<String, dynamic> dataMap; // 数据
+  final Map<String, dynamic> dataMap; // 数据
 
   final int section;
   final int row;

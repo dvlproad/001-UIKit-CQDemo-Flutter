@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/clearButton_textfield.dart';
+import 'package:tsdemodemo_flutter/commonui/base-uikit/textfield/textfield_container.dart';
 
 /// 文本框(常用于：登录用户名、密码文本框，在原本基础上增加了 图片 选中状态的判断)
 class IconTextField extends StatefulWidget {
@@ -67,26 +68,31 @@ class IconTextFieldState extends State<IconTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      child: CJTextField(
-        prefixWidget: _prefixIcon(),
-        suffixWidget: SizedBox(width: 5),
-        borderColor: Color(0xff323334),
-        borderWidth: 0.6,
-        cornerRadius: 16,
-        placeholder: widget.placeholder,
-        text: widget.text,
-//        textInputAction: TextInputAction.search,
-        controller: _controller,
-        onChanged: (String string) {
-          if (widget.prefixIconSelectedCallback != null) {
-            _prefixIconSelected = widget.prefixIconSelectedCallback(string);
-          }
-          setState(() {});
-        },
-        onSubmitted: widget.onSubmitted,
-      ),
+    return CJTextFieldContainer(
+      height: 44,
+      backgroundColor: Colors.transparent,
+      cornerRadius: 16,
+      borderWidth: 0.6,
+      borderColor: Color(0xff323334),
+      textFieldWidget: _textField(),
+      prefixWidget: _prefixIcon(),
+      suffixWidget: SizedBox(width: 5),
+    );
+  }
+
+  Widget _textField() {
+    return CJClearButtonTextField(
+      placeholder: widget.placeholder,
+      text: widget.text,
+      // textInputAction: TextInputAction.search,
+      controller: _controller,
+      onChanged: (String string) {
+        if (widget.prefixIconSelectedCallback != null) {
+          _prefixIconSelected = widget.prefixIconSelectedCallback(string);
+        }
+        setState(() {});
+      },
+      onSubmitted: widget.onSubmitted,
     );
   }
 
