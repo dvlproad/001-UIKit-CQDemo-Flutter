@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-pageindicator/pageindicator.dart';
 
 // List<String> egImages = <String>[
 //   'http://pic1.win4000.com/pic/f/04/4f085d0c9b.gif',
@@ -75,9 +76,6 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
         var item = _images[index];
         Widget image = ExtendedImage.network(
           item,
-          enableSlideOutPage: true,
-
-
           fit: BoxFit.contain,
           mode: ExtendedImageMode.gesture,
           initGestureConfigHandler: (ExtendedImageState state) {
@@ -118,21 +116,10 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
   }
 
   Widget _pageIndicator() {
-    return SmoothPageIndicator(
-      controller: _pageController, // PageController
+    return CQPageIndicator(
+      pageController: _pageController, // PageController
       count: _images.length,
-      effect: WormEffect(
-        dotWidth: 6,
-        dotHeight: 6,
-        dotColor: Colors.grey,
-        activeDotColor: Colors.white,
-      ), // your preferred effect
       onDotClicked: (index) {},
     );
-    // return AnimatedSmoothIndicator(
-    //   activeIndex: _currentIndex,
-    //   count: _images.length,
-    //   effect: WormEffect(),
-    // );
   }
 }

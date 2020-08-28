@@ -16,10 +16,10 @@ class GuideOverlayUtil {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     bool shouldShowGuide = sharedPreferences.get('ShouldShowGuideOverlayKey');
     if (shouldShowGuide == null) {
-      shouldShowGuide = false;
+      shouldShowGuide = true;
     }
 
-    shouldShowGuide = true;
+    shouldShowGuide = true; // 测试专用，正式时候应该去掉
     return shouldShowGuide;
   }
 }

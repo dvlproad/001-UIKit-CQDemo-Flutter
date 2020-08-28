@@ -152,7 +152,7 @@ class CJStateTextButton extends StatelessWidget {
       ),
     );
 
-    // return _CJBGBorderButton(
+    // return CJBGBorderWidget(
     //   // height: this.height,
     //   backgroundColor: _currentBackgroundColor,
     //   borderColor: _currentBorderColor,
@@ -175,41 +175,5 @@ class CJStateTextButton extends StatelessWidget {
     //     ],
     //   ),
     // );
-  }
-}
-
-/// 可定制背景色、圆角、弧度的 Button
-class _CJBGBorderButton extends StatelessWidget {
-  final double height; // 文本框的高度
-  final Color backgroundColor; // 文本框的背景颜色
-  final double cornerRadius; // 边的圆角
-  final double borderWidth; // 边宽
-  final Color borderColor; // 边的颜色
-
-  final Widget child; // 控件视图
-  final VoidCallback onPressed; // 控件视图的点击事件
-
-  _CJBGBorderButton({
-    Key key,
-    this.height = 44,
-    this.backgroundColor,
-    this.cornerRadius = 0,
-    this.borderWidth = 0,
-    this.borderColor,
-    @required this.child,
-    this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return CJBGBorderWidget(
-      height: this.height,
-      backgroundColor: this.backgroundColor,
-      borderColor: this.borderColor,
-      borderWidth: this.borderWidth,
-      cornerRadius: this.cornerRadius,
-      child: this.child,
-      onPressed: this.onPressed,
-    );
   }
 }
