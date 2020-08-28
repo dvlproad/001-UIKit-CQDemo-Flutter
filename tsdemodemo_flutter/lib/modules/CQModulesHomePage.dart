@@ -11,8 +11,8 @@
  */
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 

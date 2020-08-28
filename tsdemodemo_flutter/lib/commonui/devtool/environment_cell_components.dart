@@ -36,14 +36,14 @@ class EnvironmentCellComponentsFactory {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
-      child: Text(
-        text ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Colors.white70,
-          fontSize: 16.0,
+      child: TextField(
+        // keyboardType: keyboardType,
+        // controller: controller,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          // hintText: placeholder,
         ),
+        // inputFormatters: this.inputFormatters,
       ),
     );
   }

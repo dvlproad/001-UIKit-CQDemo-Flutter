@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 
 class TSArcHomePage extends CJTSBasePage {

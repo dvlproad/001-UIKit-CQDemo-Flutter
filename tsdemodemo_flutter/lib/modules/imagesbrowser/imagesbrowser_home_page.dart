@@ -1,14 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
 import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_page.dart';
-import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
 
 class TSImagesBrowserHomePage extends CJTSBasePage {
-  final String title;
-
-  TSImagesBrowserHomePage({Key key, this.title}) : super(key: key);
+  TSImagesBrowserHomePage({Key key}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();

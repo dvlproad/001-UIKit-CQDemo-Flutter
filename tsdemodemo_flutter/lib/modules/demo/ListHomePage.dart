@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_section_table_view/flutter_section_table_view.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewCell.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSTableViewHeader.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSTableViewCell.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSTableViewHeader.dart';
 
 class MinList extends StatelessWidget {
   @override

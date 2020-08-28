@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/base/CJTSBasePage.dart';
-import 'package:tsdemodemo_flutter/commonui/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
+import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/overlay_view_routes.dart';
 
 class OverlayViewHomePage extends CJTSBasePage {
@@ -27,7 +27,8 @@ class _CQModulesHomePageState extends CJTSBasePageState<OverlayViewHomePage> {
 
   @override
   Widget contentWidget() {
-    String imageSource = 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3460118221,780234760&fm=26&gp=0.jpg';
+    String imageSource =
+        'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3460118221,780234760&fm=26&gp=0.jpg';
 
     sectionModels = [
       {
