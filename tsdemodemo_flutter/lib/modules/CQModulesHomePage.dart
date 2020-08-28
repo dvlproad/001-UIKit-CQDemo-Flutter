@@ -79,8 +79,11 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
               var params = {
                 'blockId': 'dfjdl895',
               };
-              Navigator.pushNamed(context, Routers.rankingListPage,
-                  arguments: params);
+              Navigator.pushNamed(
+                context,
+                Routers.rankingListPage,
+                arguments: params,
+              );
             }
           },
           {

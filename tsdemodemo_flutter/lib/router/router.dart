@@ -118,10 +118,12 @@ class Routers {
     if (arguments is Map) {
       _blockId = arguments['blockId'];
     }
-    return MaterialPageRoute(builder: (context) {
-      return RankingListPage(
-        blockId: _blockId,
-      );
-    });
+    return MaterialPageRoute(
+      builder: (context) {
+        return RankingListPage(
+          blockId: _blockId,
+        );
+      },
+    );
   }
 }

@@ -15,30 +15,9 @@ abstract class CJTSBasePage extends StatefulWidget {
 
 //class _CJTSTableHomeBasePageState extends State<CJTSBasePage> {
 abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
-  var sectionModels = [];
-
   @override
   void initState() {
     super.initState();
-
-    sectionModels = [
-      {
-        'theme': "组件",
-        'values': [
-          {'title': "Button(按钮)", 'nextPageName': "TSButtonHomePage"},
-          {'title': "Image(图片)", 'nextPageName': "TSImageHomePage"},
-          // { 'title': "ToolBar(工具器)", 'nextPageName': "ToolBarHomePage" },
-        ]
-      },
-      {
-        'theme': "弹窗/蒙层",
-        'values': [
-          {'title': "Toast", 'nextPageName': "TSToastPage"},
-          {'title': "Alert", 'nextPageName': "TSAlertPage"},
-          {'title': "ActionSheet", 'nextPageName': "TSActionSheetPage"},
-        ]
-      }
-    ];
   }
 
   @override

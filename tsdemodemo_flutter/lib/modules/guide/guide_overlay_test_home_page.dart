@@ -50,10 +50,19 @@ class _CQModulesHomePageState
             'actionBlock': () {
               GuideOverlayUtil().shouldShowGuideOverlay().then((value) {
                 bool shouldShowGuide = value;
+                var params = {};
                 if (shouldShowGuide == true) {
-                  Navigator.pushNamed(context, Routers.guideOverlayTestPage1);
+                  Navigator.pushNamed(
+                    context,
+                    Routers.guideOverlayTestPage1,
+                    arguments: params,
+                  );
                 } else {
-                  Navigator.pushNamed(context, Routers.reportUploadPage);
+                  Navigator.pushNamed(
+                    context,
+                    Routers.reportUploadPage,
+                    arguments: params,
+                  );
                 }
               });
             },

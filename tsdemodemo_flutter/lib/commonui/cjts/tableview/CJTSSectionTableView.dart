@@ -73,6 +73,19 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
 
   void __dealDataModel(moduleModel, int section, int row) {
     ClickTSItemCallback clickTSItemCallback = moduleModel['actionBlock'];
+    // // actionBlock 形如：
+    // moduleModel['actionBlock'] = () {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => TSImagesBrowserPage(
+    //         images: ['1', '2'],
+    //         currentIndex: 1,
+    //       ),
+    //     ),
+    //   );
+    // };
+
     if (null != clickTSItemCallback) {
       clickTSItemCallback();
       return;
