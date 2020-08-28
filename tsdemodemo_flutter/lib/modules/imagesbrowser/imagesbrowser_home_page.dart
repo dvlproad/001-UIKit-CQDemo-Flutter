@@ -22,26 +22,20 @@ class _CJTSTableHomeBasePageState
 
   @override
   Widget contentWidget() {
-    // }
-
-    // @override
-    // void initState() {
-    //   super.initState();
-
     sectionModels = [
-      {
-        'theme': "组成组件",
-        'values': [
-          {
-            'title': "ImagesCarousel(图片切换)",
-            'nextPageName': ImagesBrowserRouters.imagesCarouselPage,
-          },
-          {
-            'title': "ImagesZoomable(图片缩放)",
-            'nextPageName': ImagesBrowserRouters.imagesZoomablePage,
-          },
-        ]
-      },
+      // {
+      //   'theme': "组成组件",
+      //   'values': [
+      //     {
+      //       'title': "ImagesCarousel(图片切换)",
+      //       'nextPageName': ImagesBrowserRouters.imagesCarouselPage,
+      //     },
+      //     {
+      //       'title': "ImagesZoomable(图片缩放)",
+      //       'nextPageName': ImagesBrowserRouters.imagesZoomablePage,
+      //     },
+      //   ]
+      // },
       {
         'theme': "完整组件",
         'values': [

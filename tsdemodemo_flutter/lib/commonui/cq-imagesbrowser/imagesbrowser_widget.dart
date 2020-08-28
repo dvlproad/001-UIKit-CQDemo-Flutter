@@ -18,11 +18,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class CQImagesBrowserWidget extends StatefulWidget {
   final List<String> images;
   final int currentIndex;
+  final ValueChanged<int> onPageChanged;
 
   CQImagesBrowserWidget({
     Key key,
     @required this.images,
     @required this.currentIndex,
+    this.onPageChanged,
   })  : assert(images != null),
         assert(currentIndex != null),
         super(key: key);
@@ -106,6 +108,9 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
         _currentIndex = index;
         // rebuild.add(index);
         setState(() {});
+        if (widget.onPageChanged != null) {
+          widget.onPageChanged(index);
+        }
       },
       controller: _pageController,
       scrollDirection: Axis.horizontal,
