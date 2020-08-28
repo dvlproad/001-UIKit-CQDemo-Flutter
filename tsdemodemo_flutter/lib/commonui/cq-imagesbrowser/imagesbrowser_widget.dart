@@ -73,6 +73,9 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
         var item = _images[index];
         Widget image = ExtendedImage.network(
           item,
+          enableSlideOutPage: true,
+
+
           fit: BoxFit.contain,
           mode: ExtendedImageMode.gesture,
           initGestureConfigHandler: (ExtendedImageState state) {
@@ -113,7 +116,12 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
     return SmoothPageIndicator(
       controller: _pageController, // PageController
       count: _images.length,
-      effect: WormEffect(), // your preferred effect
+      effect: WormEffect(
+        dotWidth: 6,
+        dotHeight: 6,
+        dotColor: Colors.grey,
+        activeDotColor: Colors.white,
+      ), // your preferred effect
       onDotClicked: (index) {},
     );
     // return AnimatedSmoothIndicator(

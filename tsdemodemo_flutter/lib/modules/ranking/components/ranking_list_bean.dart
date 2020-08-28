@@ -85,6 +85,7 @@ class RankingBean {
 //    );
 //  }
 
+  // ignore: unused_element
   Map<String, dynamic> _toJson() {
     return {
       'id': id,

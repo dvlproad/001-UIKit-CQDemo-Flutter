@@ -94,7 +94,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
         children: <Widget>[
           SizedBox(height: 6),
           Consumer<EnvironmentChangeNotifier>(
-            builder: (context, _searchChangeNotifier, child) {
+            builder: (context, environmentChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
               );

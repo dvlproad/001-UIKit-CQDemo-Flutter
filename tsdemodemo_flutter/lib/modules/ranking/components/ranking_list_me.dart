@@ -7,23 +7,21 @@ typedef ClickCellCallback = void Function(int section, int row);
 
 /// 排行榜底部我的排名视图
 class RankingListBottom extends StatelessWidget {
-  final bool showIndex;                       // 是否显示编号
-  final RanklingMeBean dataBean;                      // 数据
+  final bool showIndex; // 是否显示编号
+  final RanklingMeBean dataBean; // 数据
 
   final int section;
   final int row;
-  final ClickCellCallback clickCellCallback;  // cell 的点击
+  final ClickCellCallback clickCellCallback; // cell 的点击
 
   RankingListBottom({
     Key key,
     this.showIndex = true,
     @required this.dataBean,
-
     this.section,
     this.row,
     this.clickCellCallback,
   }) : super(key: key);
-
 
 //   @override
 //   State<StatefulWidget> createState() {
@@ -45,25 +43,23 @@ class RankingListBottom extends StatelessWidget {
   }
 
   void _onTapCell() {
-    if(null != this.clickCellCallback) {
+    if (null != this.clickCellCallback) {
       this.clickCellCallback(this.section, this.row);
     }
   }
 
-
   Widget _cellContainer() {
     return Container(
-      height: 90,
-      color: Colors.black,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-           _leftRow(),
-          _rightRow(),
-        ],
-      )
-    );
+        height: 90,
+        color: Colors.black,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            _leftRow(),
+            _rightRow(),
+          ],
+        ));
   }
 
   // Cell 的左侧视图
@@ -93,13 +89,12 @@ class RankingListBottom extends StatelessWidget {
     );
   }
 
-
   // 标号
   Widget _indexText() {
     return Container(
       color: Colors.transparent,
       child: Text(
-        (4+row).toString(),
+        (4 + row).toString(),
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -116,8 +111,8 @@ class RankingListBottom extends StatelessWidget {
 //      dataModel = RankingBean();
 //    }
 
-    String _userName = dataBean.user.nickName ?? '';  //用户名
-    String _avatar = dataBean.user.avatar ?? '';    // 头像
+    String _userName = dataBean.user.nickName ?? ''; //用户名
+    // String _avatar = dataBean.user.avatar ?? '';    // 头像
     int _rankNumber = dataBean.number; // 排名
 
     return Column(
@@ -130,7 +125,8 @@ class RankingListBottom extends StatelessWidget {
           children: <Widget>[
             Container(
               width: 70,
-              child: Text('排名 ' + _rankNumber.toString(), style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
+              child: Text('排名 ' + _rankNumber.toString(),
+                  style: TextStyle(color: Color(0xFFC4C4C4), fontSize: 12)),
             ),
           ],
         )
@@ -146,9 +142,13 @@ class RankingListBottom extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text('影响力', textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 16)),
+        Text('影响力',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontSize: 16)),
         SizedBox(height: 2),
-        Text(_influenceString, textAlign: TextAlign.center, style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 14)),
+        Text(_influenceString,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 14)),
       ],
     );
   }

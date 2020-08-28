@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-imagesbrowser/imagesbrowser_widget.dart';
 
@@ -46,7 +47,14 @@ class _TSImagesBrowserPageState extends State<TSImagesBrowserPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: appBar(),
-      body: contentWidget(),
+      // body: contentWidget(),
+      body: ExtendedImageSlidePage(
+        slideType: SlideType.onlyImage,
+        child: Container(
+          color: Colors.black,
+          child: contentWidget(),
+        ),
+      ),
     );
   }
 

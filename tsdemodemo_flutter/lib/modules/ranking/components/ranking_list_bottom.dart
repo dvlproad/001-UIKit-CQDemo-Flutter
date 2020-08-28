@@ -115,12 +115,12 @@ class RankingListBottom extends StatelessWidget {
 //    }
 
     String _userName = ''; //用户名
-    String _avatar = ''; // 头像
+    // String _avatar = ''; // 头像
     int _rankNumber = dataMap['number']; // 排名
     if (null != dataMap['user']) {
       Map<String, dynamic> userMap = dataMap['user'];
       _userName = userMap['nickName'] ?? '';
-      _avatar = userMap['avatar'] ?? '';
+      // _avatar = userMap['avatar'] ?? '';
     }
 
     return Column(
@@ -160,16 +160,16 @@ class RankingListBottom extends StatelessWidget {
     );
   }
 
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
-      color: Colors.transparent,
-      child: Image(
-        image: AssetImage('lib/Resources/report/arrow_right.png'),
-        width: 8,
-        height: 12,
-      ),
-    );
-  }
+  // // 箭头
+  // Widget _arrowImage() {
+  //   return Container(
+  //     padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
+  //     color: Colors.transparent,
+  //     child: Image(
+  //       image: AssetImage('lib/Resources/report/arrow_right.png'),
+  //       width: 8,
+  //       height: 12,
+  //     ),
+  //   );
+  // }
 }

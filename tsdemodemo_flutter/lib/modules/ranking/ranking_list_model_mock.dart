@@ -10,6 +10,7 @@
 //  }
 //}
 
+// ignore: non_constant_identifier_names
 Future<dynamic> mockRequest_rankingListData(String blockId) async {
   String avatarName =
       'https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1782959667,617309577&fm=26&gp=0.jpg';

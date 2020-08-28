@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-overlay-kit/textInput_alert_view.dart';
 
+// ignore: camel_case_types
 class TSAlertView3_TextInputAlertPage extends StatelessWidget {
   const TSAlertView3_TextInputAlertPage({Key key}) : super(key: key);
 

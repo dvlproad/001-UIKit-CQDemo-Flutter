@@ -40,8 +40,8 @@ class _ProviderUsePage2State extends State<ProviderUsePage2> {
           value: _globalChangeNotifier,
           child: Builder(
             builder: (context) {
-              ThemeIndependentChangeNotifier _xlocalChangeNotifier =
-                  Provider.of<ThemeIndependentChangeNotifier>(context);
+              // ThemeIndependentChangeNotifier _xlocalChangeNotifier =
+              Provider.of<ThemeIndependentChangeNotifier>(context);
               // 为了能够在 Notifier 变化的时候去更新，你应该要么仍用 Provider.of<T>(context)，要么用 Consumer<T>();
 
               print('[全局方式]获取到的主题为:' + _globalChangeNotifier.themeString);
