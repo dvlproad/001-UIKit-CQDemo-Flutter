@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-pageindicator/pageindicator.dart';
 
 // List<String> egImages = <String>[
@@ -58,15 +57,21 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
         Positioned(
           left: 20,
           right: 20,
-          bottom: 80,
-          child: Center(
-            child: Container(
-              child: _pageIndicator(),
-            ),
-          ),
+          bottom: 60,
+          child: _pageIndicator(),
         ),
       ],
     );
+  }
+
+  /// 更新页面切换到第几页
+  _pageChange(int index) {
+    _currentIndex = index;
+    // rebuild.add(index);
+    setState(() {});
+    if (widget.onPageChanged != null) {
+      widget.onPageChanged(index);
+    }
   }
 
   /// 图片浏览页面
@@ -103,12 +108,7 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
       },
       itemCount: _images.length,
       onPageChanged: (int index) {
-        _currentIndex = index;
-        // rebuild.add(index);
-        setState(() {});
-        if (widget.onPageChanged != null) {
-          widget.onPageChanged(index);
-        }
+        this._pageChange(index);
       },
       controller: _pageController,
       scrollDirection: Axis.horizontal,
@@ -117,9 +117,13 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
 
   Widget _pageIndicator() {
     return CQPageIndicator(
-      pageController: _pageController, // PageController
+      alignment: Alignment.center,
+      pageController: _pageController,
       count: _images.length,
-      onDotClicked: (index) {},
+      onDotClicked: (index) {
+        //print('点击切换到第$index页');
+        _pageController.jumpToPage(index);
+      },
     );
   }
 }

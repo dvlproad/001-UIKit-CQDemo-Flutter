@@ -11,16 +11,26 @@ class CQPageIndicator extends StatelessWidget {
   /// on dot clicked callback
   final OnDotClicked onDotClicked;
 
+  final AlignmentGeometry alignment;
+
   CQPageIndicator({
     Key key,
     this.count,
     this.pageController,
     this.onDotClicked,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _pageIndicator();
+    return Align(
+      alignment: this.alignment,
+      child: Container(
+        // color: Colors.red,
+        height: 44,
+        child: _pageIndicator(),
+      ),
+    );
   }
 
   Widget _pageIndicator() {
