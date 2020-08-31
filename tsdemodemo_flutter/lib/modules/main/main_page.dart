@@ -6,6 +6,7 @@ import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
 import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
+import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
@@ -54,6 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             architectureHomeButton(),
             gestureHomeButton(),
             imagesbrowserHomeButton(),
+            photoAlbumHomeButton(),
           ],
         ),
       ),
@@ -157,6 +159,16 @@ class _MyHomePageState extends State<MyHomePage> {
       onPressed: () {
         Navigator.pushNamed(
             context, ImagesBrowserRouters.imagesbrowserHomePage);
+      },
+    );
+  }
+
+  // 进入相册测试主页的按钮
+  Widget photoAlbumHomeButton() {
+    return CQPinkThemeBGButton(
+      title: "相册 photoAlbum",
+      onPressed: () {
+        Navigator.pushNamed(context, PhotoAlbumRouters.photoAlbumHomePage);
       },
     );
   }

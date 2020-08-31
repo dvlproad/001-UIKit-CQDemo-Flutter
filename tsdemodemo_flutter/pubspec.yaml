@@ -48,6 +48,10 @@ dependencies:
   # flutter_page_indicator: ^0.3.0
   # [分页指示器](https://pub.flutter-io.cn/packages/smooth_page_indicator)
   smooth_page_indicator: ^0.2.0
+
+  photo_manager: 0.5.3+1
+  flutter_easyrefresh: 2.1.1
+  lottie: 0.5.1
   
   cj_monitor_flutter:
     path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
@@ -78,6 +82,7 @@ flutter:
     - lib/commonui/cq-guide-overlay/Resources/
     - lib/commonui/cq-uikit/images/
     - lib/modules/uikit/Resources/
+    - lib/commonui/cq-effect-kit/refresh/flare/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
