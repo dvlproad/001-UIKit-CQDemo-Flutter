@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
+// import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
 
 /// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮，并且背景和边框文字的颜色互为反面)
 class CJReverseThemeStateTextButton extends CJStateTextButton {

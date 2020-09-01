@@ -5,7 +5,7 @@ import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_sel
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_notifier.dart';
 
 class CQPhotoList extends StatefulWidget {
-  final List<PhotoAlbumAssetEntity> photoAlbumAssets;
+  final List<CQPhotoAlbumAssetEntity> photoAlbumAssets;
   final PhotoAlbumSelectNotifier photoAlbumSelectNotifier;
   final Widget prefixWidget;
   final Widget suffixWidget;
@@ -35,7 +35,7 @@ class _CQPhotoListState extends State<CQPhotoList> {
 
   @override
   Widget build(BuildContext context) {
-    List<PhotoAlbumAssetEntity> _photoAlbumAssets = widget.photoAlbumAssets;
+    List<CQPhotoAlbumAssetEntity> _photoAlbumAssets = widget.photoAlbumAssets;
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<PhotoAlbumSelectNotifier>.value(
@@ -91,7 +91,7 @@ class _CQPhotoListState extends State<CQPhotoList> {
   }
 
   Widget _photoAlbumGridCell({
-    @required PhotoAlbumAssetEntity photoAlbumAssets,
+    @required CQPhotoAlbumAssetEntity photoAlbumAssets,
     @required int photoAlbumAssetIndex,
   }) {
     return CQPhotoAlbumSelectGridCell(

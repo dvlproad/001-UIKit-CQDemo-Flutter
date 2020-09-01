@@ -131,6 +131,7 @@ class _GuideOverlayTestPage1State extends State<GuideOverlayTestPage1> {
                       'lib/commonui/cq-guide-overlay/Resources/icon_点赞.png',
                   iconButtonSize: iconButtonSize,
                   iconImageSize: iconImageSize,
+                  onPressed: () {},
                 ),
                 Text(
                   "1440",
@@ -151,6 +152,7 @@ class _GuideOverlayTestPage1State extends State<GuideOverlayTestPage1> {
                       'lib/commonui/cq-guide-overlay/Resources/icon_跟拍.png',
                   iconButtonSize: iconButtonSize,
                   iconImageSize: iconImageSize,
+                  onPressed: () {},
                 ),
                 Text(
                   "跟拍我",

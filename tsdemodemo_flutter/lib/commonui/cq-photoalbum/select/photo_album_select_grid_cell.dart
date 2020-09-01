@@ -5,7 +5,7 @@ import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_base_
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_notifier.dart';
 
 class CQPhotoAlbumSelectGridCell extends StatelessWidget {
-  final PhotoAlbumAssetEntity entity;
+  final CQPhotoAlbumAssetEntity entity;
   final int index;
   final bool isSelect;
   final VoidCallback onPressed;

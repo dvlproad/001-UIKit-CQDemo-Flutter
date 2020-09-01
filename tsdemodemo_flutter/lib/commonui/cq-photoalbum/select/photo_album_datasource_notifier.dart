@@ -6,11 +6,11 @@ import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset
 enum PhotoAlbumAssetState { loading, success, failure, empty }
 
 class PhotoAlbumNotifier with ChangeNotifier {
-  List<PhotoAlbumAssetEntity> _assets = List();
+  List<CQPhotoAlbumAssetEntity> _assets = List();
   int page = 0;
   int _pageSize = 20;
 
-  List<PhotoAlbumAssetEntity> get assets => _assets;
+  List<CQPhotoAlbumAssetEntity> get assets => _assets;
 
   PhotoAlbumAssetState state = PhotoAlbumAssetState.loading;
 
@@ -24,7 +24,9 @@ class PhotoAlbumNotifier with ChangeNotifier {
     // _assets.addAll(assets);
     for (final asset in assets) {
       final thumb = await asset.thumbData;
-      _assets.add(PhotoAlbumAssetEntity(asset, thumb));
+      _assets.add(
+        CQPhotoAlbumAssetEntity(asset, thumb),
+      );
     }
   }
 
@@ -32,7 +34,9 @@ class PhotoAlbumNotifier with ChangeNotifier {
     // _assets.addAll(assets);
     for (final asset in assets) {
       final thumb = await asset.thumbData;
-      _assets.add(PhotoAlbumAssetEntity(asset, thumb));
+      _assets.add(
+        CQPhotoAlbumAssetEntity(asset, thumb),
+      );
     }
   }
 

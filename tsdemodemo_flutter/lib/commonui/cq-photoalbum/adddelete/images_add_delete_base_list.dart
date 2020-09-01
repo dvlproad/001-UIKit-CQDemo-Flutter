@@ -1,27 +1,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/adddelete/photo_album_delete_grid_cell.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset_entity.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/image_cell_bean.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/adddelete/images_add_delete_grid_cell.dart';
 
-class CQImagesChooseList extends StatefulWidget {
-  final List<PhotoAlbumAssetEntity> photoAlbumAssets;
+typedef ImageCellConfigureBlock = ImageCellBean Function(dynamic dataModel);
+
+class CQImagesAddDeleteBaseList extends StatefulWidget {
+  final List<dynamic> imageModels;
   final int maxAddCount;
   final Widget prefixWidget;
   final Widget suffixWidget;
 
-  CQImagesChooseList({
+  final ImageCellConfigureBlock imageCellConfigureBlock;
+
+  CQImagesAddDeleteBaseList({
     Key key,
-    @required this.photoAlbumAssets,
+    @required this.imageModels,
     this.maxAddCount = 100000,
     this.prefixWidget,
     this.suffixWidget,
+    this.imageCellConfigureBlock,
   }) : super(key: key);
 
   @override
-  _CQImagesChooseListState createState() => _CQImagesChooseListState();
+  _CQImagesAddDeleteBaseListState createState() =>
+      _CQImagesAddDeleteBaseListState();
 }
 
-class _CQImagesChooseListState extends State<CQImagesChooseList> {
+class _CQImagesAddDeleteBaseListState extends State<CQImagesAddDeleteBaseList> {
   @override
   void initState() {
     super.initState();
@@ -33,7 +39,7 @@ class _CQImagesChooseListState extends State<CQImagesChooseList> {
     bool allowAddPrefixWidget = false;
     bool allowAddSuffixWidget = false;
 
-    List<PhotoAlbumAssetEntity> _photoAlbumAssets = widget.photoAlbumAssets;
+    List<dynamic> _photoAlbumAssets = widget.imageModels ?? [];
     if (_photoAlbumAssets.length > maxShowCount) {
       _photoAlbumAssets = _photoAlbumAssets.sublist(0, widget.maxAddCount);
     }
@@ -71,7 +77,7 @@ class _CQImagesChooseListState extends State<CQImagesChooseList> {
             photoAlbumAssetIndex = index - 1;
           }
           return _photoAlbumGridCell(
-            photoAlbumAssets: _photoAlbumAssets[photoAlbumAssetIndex],
+            imageModel: _photoAlbumAssets[photoAlbumAssetIndex],
             photoAlbumAssetIndex: photoAlbumAssetIndex,
           );
         },
@@ -79,16 +85,25 @@ class _CQImagesChooseListState extends State<CQImagesChooseList> {
     );
   }
 
+  /// 相册 cell
   Widget _photoAlbumGridCell({
-    @required PhotoAlbumAssetEntity photoAlbumAssets,
+    @required dynamic imageModel,
     @required int photoAlbumAssetIndex,
   }) {
-    return CQPhotoAlbumDeleteGridCell(
-      entity: photoAlbumAssets,
+    ImageCellBean cellBean = widget.imageCellConfigureBlock(imageModel);
+    ImageProvider image = cellBean.image;
+    String message = cellBean.message;
+
+    return CQImageDeleteGridCell(
+      image: image,
+      message: message,
       index: photoAlbumAssetIndex,
-      isSelect: false,
       onPressed: () {
         print('点击$photoAlbumAssetIndex');
+      },
+      onPressedDelete: () {
+        widget.imageModels.remove(imageModel);
+        setState(() {});
       },
     );
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:provider/provider.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-effect-kit/refresh/c1440_refresh_footer.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/adddelete/cq-imagechoose-list.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/cq-photo-list.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_datasource_notifier.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_notifier.dart';

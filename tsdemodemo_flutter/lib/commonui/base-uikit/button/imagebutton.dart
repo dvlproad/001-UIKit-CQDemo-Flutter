@@ -2,21 +2,17 @@ import 'package:flutter/material.dart';
 
 /// Icon 位于图片中心，可大小可定制的按钮
 class CenterIconButton extends StatelessWidget {
-  @required
   final String assestName; // 按钮的本地图片名
-  @required
   final double iconButtonSize; // 按钮大小
-  @required
   final double iconImageSize; // 按钮中的图片大小
-  @required
   final VoidCallback onPressed; // 按钮点击事件
 
   CenterIconButton({
     Key key,
-    this.assestName,
-    this.iconButtonSize,
-    this.iconImageSize,
-    this.onPressed,
+    @required this.assestName,
+    @required this.iconButtonSize,
+    @required this.iconImageSize,
+    @required this.onPressed,
   }) : super(key: key);
 
   @override
