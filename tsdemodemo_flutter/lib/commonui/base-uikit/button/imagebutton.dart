@@ -11,9 +11,11 @@ class CenterIconButton extends StatelessWidget {
     Key key,
     @required this.assestName,
     @required this.iconButtonSize,
-    @required this.iconImageSize,
+    iconImageSize,
     @required this.onPressed,
-  }) : super(key: key);
+  })  : this.iconImageSize = iconImageSize ??
+            iconButtonSize, // iconImageSize 没设置时候，使用 iconButtonSize
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

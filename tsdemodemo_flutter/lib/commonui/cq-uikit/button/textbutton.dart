@@ -4,7 +4,7 @@ import 'package:tsdemodemo_flutter/commonui/base-uikit/button/textbutton.dart';
 Color themeColor = Color(0xFFF56C6C); // 粉红色 pink
 Color themeOppositeColor = Colors.white;
 
-/// 以主题色为背景的按钮
+/// 以主题色为背景的按钮( selected 属性的值无法影响 ui 样式)
 class CQPinkThemeBGButton extends CJStateTextButton {
   CQPinkThemeBGButton({
     Key key,
@@ -27,7 +27,7 @@ class CQPinkThemeBGButton extends CJStateTextButton {
         );
 }
 
-/// 以主题色为边框的按钮
+/// 以主题色为边框的按钮( selected 属性的值无法影响 ui 样式)
 class CQPinkThemeBorderButton extends CJStateTextButton {
   CQPinkThemeBorderButton({
     Key key,
@@ -50,7 +50,7 @@ class CQPinkThemeBorderButton extends CJStateTextButton {
         );
 }
 
-/// 以主题色为背景或边框的按钮(可通过 selected 属性来设置)
+/// 以主题色为背景或边框的按钮(selected 属性的值会影响 ui 样式, 即可通过 selected 属性来自动变更样式)
 class CQPinkThemeStateButton extends CJReverseThemeStateTextButton {
   CQPinkThemeStateButton({
     Key key,

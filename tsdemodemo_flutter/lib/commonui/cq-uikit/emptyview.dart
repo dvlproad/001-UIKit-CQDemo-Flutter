@@ -1,3 +1,4 @@
+import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -25,20 +26,9 @@ class PartEmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // color: Colors.red,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('lib/commonui/cq-uikit/images/pic_搜索为空页面.png'),
-          // image: NetworkImage(
-          //     'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
-          fit: BoxFit.cover,
-        ),
-      ),
-      constraints: BoxConstraints(
-        minWidth: double.infinity,
-        minHeight: double.infinity,
-      ),
+    return CJBGImageWidget(
+      backgroundImage:
+          AssetImage('lib/commonui/cq-uikit/images/pic_搜索为空页面.png'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/base-uikit/button/textbutton.dart';
 
 /// 以白色为背景的按钮
-class WhiteThemeBGButton extends StatelessWidget {
+class CQWhiteThemeBGButton extends StatelessWidget {
   final String text;
   final bool enable;
   final VoidCallback onPressed;
 
-  WhiteThemeBGButton({
+  CQWhiteThemeBGButton({
     Key key,
     this.text,
     this.enable = true,
@@ -29,4 +29,27 @@ class WhiteThemeBGButton extends StatelessWidget {
       normalTextColor: Colors.black,
     );
   }
+}
+
+/// 透明背景，白色字的按钮( selected 属性的值无法影响 ui 样式)
+class CQTransparentBGButton extends CJStateTextButton {
+  CQTransparentBGButton({
+    Key key,
+    @required String title,
+    bool enable = true,
+    bool selected = false,
+    @required VoidCallback onPressed,
+  })  : assert(title != null),
+        assert(onPressed != null),
+        super(
+          key: key,
+          normalTitle: title,
+          enable: enable,
+          selected: selected,
+          onPressed: onPressed,
+          normalBGColor: Colors.transparent,
+          normalTextColor: Colors.white,
+          // normalBorderWidth: 0.0,
+          // normalBorderColor: themeOppositeColor,
+        );
 }

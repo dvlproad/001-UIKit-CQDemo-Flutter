@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 typedef TextChangeCallback = void Function(String text);
 
-class InputTextView extends StatefulWidget {
+class CQInputTextView extends StatefulWidget {
+  final String text;
   final String placeholder;
   final int maxLength;
   final int maxLines;
+  final double minHeight; // 文本框的最小高度
+  final double maxHeight; // 文本框的最大高度
   final TextChangeCallback textChangeCallback;
 
-  InputTextView({Key key, this.placeholder, this.maxLength, this.maxLines, this.textChangeCallback}) : super(key: key);
+  CQInputTextView({
+    Key key,
+    this.text,
+    this.placeholder,
+    this.maxLength,
+    this.maxLines,
+    this.minHeight,
+    this.maxHeight,
+    @required this.textChangeCallback,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _InputTextViewState();
+    return _CQInputTextViewState();
   }
 }
 
-class _InputTextViewState extends State<InputTextView> {
+class _CQInputTextViewState extends State<CQInputTextView> {
   TextEditingController _inputTextViewController = new TextEditingController();
 
   String countText = '';
@@ -26,12 +39,25 @@ class _InputTextViewState extends State<InputTextView> {
   void initState() {
     super.initState();
 
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   setState(() {
+    //     // 当前键盘高度：大于零，键盘弹出，否则，键盘隐藏
+    //     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    //   });
+    // });
+
+    _inputTextViewController.text = widget.text ?? '';
+
     _inputTextViewController.addListener(() {
-      var currentTextLength = _inputTextViewController.text.length;
-      setState(() {
-        countText = currentTextLength.toString() + '/' + widget.maxLength.toString();
-      });
-      if(null != widget.textChangeCallback) {
+      if (widget.maxLength != null) {
+        var currentTextLength = _inputTextViewController.text.length;
+        setState(() {
+          countText =
+              currentTextLength.toString() + '/' + widget.maxLength.toString();
+        });
+      }
+
+      if (null != widget.textChangeCallback) {
         widget.textChangeCallback(_inputTextViewController.text);
       }
     });
@@ -40,20 +66,25 @@ class _InputTextViewState extends State<InputTextView> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints(
+        minHeight: widget.minHeight ?? 0,
+        // maxHeight: widget.maxHeight ?? 1000,
+      ),
       color: Colors.transparent,
       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
-//      child: textField1(),
+      // child: textField1(),
       child: textField2(),
     );
   }
 
-  Widget textField1(){
+  /// 文本框右下角最大长度显示的视图使用系统实现的Text
+  Widget textField1() {
     return TextField(
       controller: _inputTextViewController,
-      maxLength: widget.maxLength,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
+      maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
       maxLines: widget.maxLines,
       textAlign: TextAlign.left,
-      style: TextStyle(fontSize: 14.0, color: Colors.white),//输入文本的样式
+      style: TextStyle(fontSize: 14.0, color: Colors.white), //输入文本的样式
       decoration: InputDecoration(
         hintText: widget.placeholder,
         hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
@@ -63,7 +94,8 @@ class _InputTextViewState extends State<InputTextView> {
     );
   }
 
-  Widget textField2(){
+  /// 文本框右下角最大长度显示的视图使用自己实现的Text
+  Widget textField2() {
     return Stack(
       alignment: AlignmentDirectional.topStart,
       // alignment：子Widget的对其方式，默认情况是以左上角为开始点
@@ -78,10 +110,13 @@ class _InputTextViewState extends State<InputTextView> {
       children: <Widget>[
         TextField(
           controller: _inputTextViewController,
-//          maxLength: widget.maxLength,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
+          // maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串。现在改为自己写Text
+          inputFormatters: <TextInputFormatter>[
+            LengthLimitingTextInputFormatter(widget.maxLength), //限制最多15位字符
+          ],
           maxLines: widget.maxLines,
           textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 14.0, color: Colors.white),//输入文本的样式
+          style: TextStyle(fontSize: 14.0, color: Colors.white), //输入文本的样式
           decoration: InputDecoration(
             hintText: widget.placeholder,
             hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
@@ -92,7 +127,8 @@ class _InputTextViewState extends State<InputTextView> {
         Positioned(
           bottom: 0,
           right: 0,
-          child: Text(countText??'', style: TextStyle(color: Color(0xFF7E7E7E))),
+          child:
+              Text(countText ?? '', style: TextStyle(color: Color(0xFF7E7E7E))),
         )
       ],
     );

@@ -52,6 +52,10 @@ dependencies:
   photo_manager: 0.5.3+1
   flutter_easyrefresh: 2.1.1
   lottie: 0.5.1
+  permission_handler: 5.0.1+1
+  image_picker: 0.6.7+3
+  photo: #^0.5.0-dev.3
+    path: ./vendors/photo-0.5.0-dev.3/
   
   cj_monitor_flutter:
     path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter

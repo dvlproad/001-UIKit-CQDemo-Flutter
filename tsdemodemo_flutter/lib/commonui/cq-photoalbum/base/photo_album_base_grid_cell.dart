@@ -18,7 +18,7 @@ class CQPhotoAlbumBaseGridCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider image = MemoryImage(entity.bytes);
+    ImageProvider imageProvider = MemoryImage(entity.bytes);
     String message;
     if (entity.asset.type == AssetType.video) {
       int duration = entity.asset.duration;
@@ -29,7 +29,7 @@ class CQPhotoAlbumBaseGridCell extends StatelessWidget {
     }
 
     return CQImageBaseGridCell(
-      image: image,
+      imageProvider: imageProvider,
       index: index,
       message: message,
     );

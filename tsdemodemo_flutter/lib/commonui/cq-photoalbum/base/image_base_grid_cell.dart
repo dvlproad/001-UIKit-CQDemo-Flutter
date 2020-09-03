@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CQImageBaseGridCell extends StatelessWidget {
-  final ImageProvider image;
+  final ImageProvider imageProvider;
   final String message; // 相册的辅助信息，如视频 video 长度等，可为 null
 
   final int index;
@@ -9,7 +9,7 @@ class CQImageBaseGridCell extends StatelessWidget {
 
   const CQImageBaseGridCell({
     Key key,
-    @required this.image,
+    @required this.imageProvider,
     this.message,
     @required this.index,
     this.onPressed,
@@ -27,7 +27,7 @@ class CQImageBaseGridCell extends StatelessWidget {
           decoration: ShapeDecoration(
             shape: RoundedRectangleBorder(),
             image: DecorationImage(
-              image: this.image,
+              image: this.imageProvider,
               fit: BoxFit.cover,
             ),
           ),

@@ -23,7 +23,7 @@ class CQImageDeleteGridCell extends StatelessWidget {
     return Stack(
       children: [
         CQImageBaseGridCell(
-          image: this.image,
+          imageProvider: this.image,
           index: this.index,
           message: this.message,
           onPressed: this.onPressed,
