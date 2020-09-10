@@ -80,7 +80,14 @@ class _PhotoAlbumPageState extends State<PhotoAlbumPage> {
               enableControlFinishLoad: true,
               controller: _easyCtrl,
               // header: ClassicalHeader(),
-              footer: C1440RefreshFooter(),
+              footer: C1440RefreshFooter(
+                noMoreWidget: Text(
+                  "没有更多媒体了",
+                  style: TextStyle(
+                    color: Color(0xFFBFBFBF),
+                  ),
+                ),
+              ),
 
               child: CQPhotoList(
                 photoAlbumAssets: _photoAlbumNotifier.assets,

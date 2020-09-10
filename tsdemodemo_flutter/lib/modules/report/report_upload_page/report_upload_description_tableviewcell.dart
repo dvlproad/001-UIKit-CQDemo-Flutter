@@ -9,7 +9,9 @@ class ReportDescriptionTableViewCell extends StatefulWidget {
   final String reportReasonString;
   final TextChangeCallback textChangeCallback;
 
-  ReportDescriptionTableViewCell({Key key, this.reportReasonString, this.textChangeCallback}) : super(key: key);
+  ReportDescriptionTableViewCell(
+      {Key key, this.reportReasonString, this.textChangeCallback})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +19,8 @@ class ReportDescriptionTableViewCell extends StatefulWidget {
   }
 }
 
-class _ReportDescriptionTableViewCellState extends State<ReportDescriptionTableViewCell> {
+class _ReportDescriptionTableViewCellState
+    extends State<ReportDescriptionTableViewCell> {
   @override
   void initState() {
     super.initState();
@@ -36,11 +39,12 @@ class _ReportDescriptionTableViewCellState extends State<ReportDescriptionTableV
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        MainSubArrowTableViewCell(text: '举报理由', detailText: widget.reportReasonString),
+        MainSubArrowTableViewCell(
+            text: '举报理由', detailText: widget.reportReasonString),
         MainSubArrowTableViewCell(text: '举报描述(选填)'),
-        InputTextView(
+        CQInputTextView(
           placeholder: '请详细描述举报理由',
-          maxLength: 200,  //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
+          maxLength: 200, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
           maxLines: 5,
           textChangeCallback: widget.textChangeCallback,
         )

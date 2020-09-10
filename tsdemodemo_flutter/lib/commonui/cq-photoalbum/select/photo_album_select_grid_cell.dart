@@ -33,12 +33,10 @@ class CQPhotoAlbumSelectGridCell extends StatelessWidget {
           Positioned(
             right: 5,
             bottom: 5,
-            // child: Icon(C1440Icon.icon_correct,
-            //     size: 20, color: Color(0xFF1FFD92)),
-            child: Image(
-              image: AssetImage('lib/Resources/report/arrow_right.png'),
-              width: 8,
-              height: 12,
+            child: Icon(
+              Icons.check_circle,
+              size: 20,
+              color: Color(0xFF1FFD92),
             ),
           ),
       ],

@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:photo/photo.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-imagepicker/imagepicker_util.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/adddelete/images_delete_list.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_list.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photo-choose-util/photo_permission_pick_take_util.dart';
 
 // GlobalKey<_CQImageDeleteAddPickListState> imageDeleteAddPickListKey =
 //     GlobalKey();
@@ -51,22 +50,9 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
 
   @override
   Widget build(BuildContext context) {
-    return CQImageDeleteList(
-      maxAddCount: 9,
+    return CQImagesAddDeleteList(
       imageOrPhotoModels: _imageOrPhotoModels,
-      prefixWidget: _addCell(),
-    );
-  }
-
-  /// 添加图片的 cell
-  Widget _addCell() {
-    return CJBGImageWidget(
-      backgroundImage: AssetImage('assets/images/photoalbum/pic_添加图片.png'),
-      // child: Icon(C1440Icon.icon_addattention, color: Colors.white),
-      child: Container(),
-      onPressed: () {
-        this._addevent();
-      },
+      onPressedAdd: this._addevent,
     );
   }
 

@@ -1,27 +1,29 @@
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/image_or_photo_grid_cell.dart';
-import 'package:tsdemodemo_flutter/commonutil/c1440_icon.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/components/image_or_photo_grid_cell.dart';
 
-class CQImageDeleteList extends StatefulWidget {
+class CQImagesPreSufBadgeList extends StatefulWidget {
   final List<dynamic> imageOrPhotoModels;
   final int maxAddCount;
   final Widget prefixWidget;
   final Widget suffixWidget;
+  final Widget Function(dynamic imageOrPhotoModel) badgeWidgetSetupBlock;
 
-  CQImageDeleteList({
+  CQImagesPreSufBadgeList({
     Key key,
     @required this.imageOrPhotoModels,
     this.maxAddCount = 100000,
-    this.prefixWidget,
-    this.suffixWidget,
+    this.prefixWidget, // 可以为'添加'按钮
+    this.suffixWidget, // 可以为'添加'按钮
+    this.badgeWidgetSetupBlock, // 可以返回为'删除'按钮 或者 '选中'按钮等任意
   }) : super(key: key);
 
   @override
-  _CQImageDeleteListState createState() => _CQImageDeleteListState();
+  _CQImagesPreSufBadgeListState createState() =>
+      _CQImagesPreSufBadgeListState();
 }
 
-class _CQImageDeleteListState extends State<CQImageDeleteList> {
+class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
   @override
   void initState() {
     super.initState();
@@ -97,21 +99,8 @@ class _CQImageDeleteListState extends State<CQImageDeleteList> {
             print('点击$imageOrPhotoModelIndex');
           },
         ),
-        Positioned(
-          right: 0,
-          top: 0,
-          child: GestureDetector(
-            onTap: () {
-              widget.imageOrPhotoModels.remove(imageOrPhotoModel);
-              setState(() {});
-            },
-            child: Icon(
-              C1440Icon.icon_error,
-              size: 30,
-              color: Colors.white,
-            ),
-          ),
-        ),
+        if (widget.badgeWidgetSetupBlock != null)
+          widget.badgeWidgetSetupBlock(imageOrPhotoModel)
       ],
     );
   }

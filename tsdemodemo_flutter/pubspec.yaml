@@ -87,6 +87,7 @@ flutter:
     - lib/commonui/cq-uikit/images/
     - lib/modules/uikit/Resources/
     - lib/commonui/cq-effect-kit/refresh/flare/
+    - lib/commonui/cq-photo-add-delete-list/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

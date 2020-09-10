@@ -1,6 +1,5 @@
 import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-imagepicker/imagepicker_util.dart';
-import 'package:tsdemodemo_flutter/commonutil/c1440_icon.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photo-choose-util/photo_permission_pick_take_util.dart';
 
 /// 拍照的 cell
 import 'package:flutter/material.dart';
@@ -23,7 +22,7 @@ class CQTakePhotoCell extends StatelessWidget {
     return CJBGBorderWidget(
       backgroundColor: Color(0xff2C2C2E),
       child: Icon(
-        C1440Icon.icon_tab_photo_n,
+        Icons.photo_camera,
         size: 30,
         color: Colors.white,
       ),
@@ -36,8 +35,7 @@ class CQTakePhotoCell extends StatelessWidget {
         // return;
 
         ImagePicker imagePicker = this.imagePicker ?? ImagePicker();
-        CQImagePickerUtil().pickerImageOrVideo(
-          type: 2,
+        CQImagePickerUtil().takePhoto(
           context: context,
           imagePicker: imagePicker,
           imagePickerCallBack: (String path) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/adddelete/images_add_delete_list.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/image_cell_bean.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_list.dart';
 
 class TSPhotoAlbumAddDeletePage extends StatefulWidget {
   TSPhotoAlbumAddDeletePage({
@@ -13,7 +13,7 @@ class TSPhotoAlbumAddDeletePage extends StatefulWidget {
 }
 
 class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
-  List<ImageCellBean> _photoAlbumAssets;
+  List<dynamic> _imageOrPhotoModels;
 
   @override
   void dispose() {
@@ -23,7 +23,7 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
   @override
   void initState() {
     super.initState();
-    _photoAlbumAssets = [];
+    _imageOrPhotoModels = [];
   }
 
   @override
@@ -44,15 +44,26 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
 
   /// contentWidget
   Widget contentWidget() {
-    return CQPhotoAlbumAddDeleteList(
-      photoAlbumAssets: _photoAlbumAssets,
-      imageCellAddCallBlock: () {
-        ImageProvider image = NetworkImage(
-            'https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg');
-        String message = "00:49";
-        ImageCellBean cellBean = ImageCellBean(image, message);
-        return cellBean;
+    return CQImagesAddDeleteList(
+      imageOrPhotoModels: _imageOrPhotoModels,
+      onPressedAdd: () {
+        print('点击添加');
+        // _imageOrPhotoModels.add('lib/commonui/cq-uikit/images/pic_搜索为空页面.png');
+        this._addevent();
       },
     );
+  }
+
+  void _addevent() async {
+    ImagePicker imagePicker = ImagePicker();
+    final PickedFile pickedFile = await imagePicker.getImage(
+      source: ImageSource.camera,
+      maxHeight: 1920,
+      maxWidth: 1080,
+      imageQuality: 70,
+    );
+    print("获取到的图片地址: pickedFile = $pickedFile");
+    _imageOrPhotoModels.add(pickedFile.path);
+    setState(() {});
   }
 }

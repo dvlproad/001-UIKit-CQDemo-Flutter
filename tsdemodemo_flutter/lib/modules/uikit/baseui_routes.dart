@@ -9,6 +9,8 @@ import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/textfield_home_pa
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/icon_textfield_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/text_textfield_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/textinputformmtter_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_page.dart';
 
 class BaseUIKitRouters {
   // 组件模块
@@ -22,6 +24,9 @@ class BaseUIKitRouters {
   static const iconTextFieldPage = '/icon_textfield_page';
   static const textTextFieldPage = '/text_textfield_page';
   static const textinputfomrmatterPage = '/textinputfomrmatter_page';
+  // textView
+  static const textViewHomePage = '/textview_home_page';
+  static const textViewPage = '/textview_page';
 
   static Map<String, WidgetBuilder> routes = {
     // 组件 components
@@ -43,5 +48,9 @@ class BaseUIKitRouters {
         TSTextTextFieldPage(),
     BaseUIKitRouters.textinputfomrmatterPage: (BuildContext context) =>
         TSTextInputFormmaterPage(),
+    // textView
+    BaseUIKitRouters.textViewHomePage: (BuildContext context) =>
+        TSTextViewHomePage(),
+    BaseUIKitRouters.textViewPage: (BuildContext context) => TSTextViewPage(),
   };
 }

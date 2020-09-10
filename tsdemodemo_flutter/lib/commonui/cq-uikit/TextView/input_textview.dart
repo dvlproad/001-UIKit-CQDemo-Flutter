@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -46,21 +47,34 @@ class _CQInputTextViewState extends State<CQInputTextView> {
     //   });
     // });
 
-    _inputTextViewController.text = widget.text ?? '';
+    _inputTextViewController =
+        new TextEditingController(text: widget.text ?? '');
+    //_inputTextViewController.text = widget.text ?? '';
+    _updateCountTextWidget();
 
     _inputTextViewController.addListener(() {
-      if (widget.maxLength != null) {
-        var currentTextLength = _inputTextViewController.text.length;
-        setState(() {
-          countText =
-              currentTextLength.toString() + '/' + widget.maxLength.toString();
-        });
-      }
+      _updateCountTextWidget();
 
       if (null != widget.textChangeCallback) {
         widget.textChangeCallback(_inputTextViewController.text);
       }
     });
+  }
+
+  /// 更新文本长度计算
+  _updateCountTextWidget() {
+    if (widget.maxLength != null) {
+      var currentTextLength = _inputTextViewController.text.runes.length;
+      setState(() {
+        if (currentTextLength > widget.maxLength) {
+          countText =
+              widget.maxLength.toString() + '/' + widget.maxLength.toString();
+        } else {
+          countText =
+              currentTextLength.toString() + '/' + widget.maxLength.toString();
+        }
+      });
+    }
   }
 
   @override
@@ -70,7 +84,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
         minHeight: widget.minHeight ?? 0,
         // maxHeight: widget.maxHeight ?? 1000,
       ),
-      color: Colors.transparent,
+      color: Colors.black,
       margin: EdgeInsets.fromLTRB(30, 0, 30, 0),
       // child: textField1(),
       child: textField2(),

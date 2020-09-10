@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/image_grid_cell.dart';
@@ -57,8 +59,9 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
         // Image image = Image.network(photoAlbumPath);
         imageProvider = NetworkImage(photoAlbumPath);
       } else {
-        // Image image = Image.file(File(photoAlbumPath);
-        imageProvider = AssetImage(photoAlbumPath);
+        Image image = Image.file(File(photoAlbumPath));
+        imageProvider = image.image;
+        // imageProvider = AssetImage(photoAlbumPath);
       }
       String message = '';
 
