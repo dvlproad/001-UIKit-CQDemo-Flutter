@@ -9,6 +9,8 @@ class CQInputTextView extends StatefulWidget {
   final String text;
   final String placeholder;
   final int maxLength;
+  final int Function(String) maxLengthAlgorithm;
+  final List<TextInputFormatter> inputFormatters;
   final int maxLines;
   final double minHeight; // 文本框的最小高度
   final double maxHeight; // 文本框的最大高度
@@ -19,6 +21,8 @@ class CQInputTextView extends StatefulWidget {
     this.text,
     this.placeholder,
     this.maxLength,
+    this.maxLengthAlgorithm, // 最大长度的算法
+    this.inputFormatters,
     this.maxLines,
     this.minHeight,
     this.maxHeight,
@@ -64,16 +68,30 @@ class _CQInputTextViewState extends State<CQInputTextView> {
   /// 更新文本长度计算
   _updateCountTextWidget() {
     if (widget.maxLength != null) {
-      var currentTextLength = _inputTextViewController.text.runes.length;
-      setState(() {
-        if (currentTextLength > widget.maxLength) {
-          countText =
-              widget.maxLength.toString() + '/' + widget.maxLength.toString();
-        } else {
-          countText =
-              currentTextLength.toString() + '/' + widget.maxLength.toString();
+      int showTextLength = _inputTextViewController.text.length;
+      if (widget.maxLengthAlgorithm != null) {
+        // showTextLength = _inputTextViewController.text.runes.length;
+        showTextLength =
+            widget.maxLengthAlgorithm(_inputTextViewController.text);
+        if (showTextLength > widget.maxLength) {
+          showTextLength = widget.maxLength;
         }
+      }
+
+      setState(() {
+        countText =
+            showTextLength.toString() + '/' + widget.maxLength.toString();
       });
+    }
+  }
+
+  List<TextInputFormatter> _inputFormatters() {
+    if (widget.inputFormatters != null) {
+      return widget.inputFormatters;
+    } else {
+      return <TextInputFormatter>[
+        LengthLimitingTextInputFormatter(widget.maxLength), //限制最多 maxLength 位字符
+      ];
     }
   }
 
@@ -122,21 +140,27 @@ class _CQInputTextViewState extends State<CQInputTextView> {
       // 默认值是Overflow.clip，子Widget超出Stack会被截断;
       // Overflow.visible 子Widget超出Stack部分还会显示的
       children: <Widget>[
-        TextField(
-          controller: _inputTextViewController,
-          // maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串。现在改为自己写Text
-          inputFormatters: <TextInputFormatter>[
-            LengthLimitingTextInputFormatter(widget.maxLength), //限制最多15位字符
+        Column(
+          children: [
+            TextField(
+              controller: _inputTextViewController,
+              // maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串。现在改为自己写Text
+              inputFormatters: _inputFormatters(),
+              maxLines: widget.maxLines,
+              textAlign: TextAlign.left,
+              style: TextStyle(fontSize: 14.0, color: Colors.white), //输入文本的样式
+              decoration: InputDecoration(
+                hintText: widget.placeholder,
+                hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
+                enabledBorder: __reportTextFieldDecorationBorder(),
+                focusedBorder: __reportTextFieldDecorationBorder(),
+              ),
+            ),
+            Container(
+              height: 10,
+              color: Colors.transparent,
+            ),
           ],
-          maxLines: widget.maxLines,
-          textAlign: TextAlign.left,
-          style: TextStyle(fontSize: 14.0, color: Colors.white), //输入文本的样式
-          decoration: InputDecoration(
-            hintText: widget.placeholder,
-            hintStyle: TextStyle(color: Color(0xFF7E7E7E)),
-            enabledBorder: __reportTextFieldDecorationBorder(),
-            focusedBorder: __reportTextFieldDecorationBorder(),
-          ),
         ),
         Positioned(
           bottom: 0,

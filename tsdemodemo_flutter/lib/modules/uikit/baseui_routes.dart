@@ -9,7 +9,9 @@ import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/textfield_home_pa
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/icon_textfield_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/text_textfield_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/textinputformmtter_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_emoji_maxlength_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_maxlength_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textviewdemo/textview_page.dart';
 
 class BaseUIKitRouters {
@@ -27,6 +29,8 @@ class BaseUIKitRouters {
   // textView
   static const textViewHomePage = '/textview_home_page';
   static const textViewPage = '/textview_page';
+  static const textViewMaxLengthPage = '/textview_maxlength_page';
+  static const textViewEmojiMaxLengthPage = '/textview_emoji_maxlength_page';
 
   static Map<String, WidgetBuilder> routes = {
     // 组件 components
@@ -52,5 +56,9 @@ class BaseUIKitRouters {
     BaseUIKitRouters.textViewHomePage: (BuildContext context) =>
         TSTextViewHomePage(),
     BaseUIKitRouters.textViewPage: (BuildContext context) => TSTextViewPage(),
+    BaseUIKitRouters.textViewMaxLengthPage: (BuildContext context) =>
+        TSTextViewMaxLengthPage(),
+    BaseUIKitRouters.textViewEmojiMaxLengthPage: (BuildContext context) =>
+        TSTextViewEmojiMaxLengthPage(),
   };
 }

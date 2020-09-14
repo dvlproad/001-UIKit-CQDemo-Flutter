@@ -30,8 +30,16 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSTextViewHomePage> {
         'theme': "TextView UI",
         'values': [
           {
-            'title': "text textview(emoji长度计算)",
+            'title': "text textview(emoji 长度计算)",
             'nextPageName': BaseUIKitRouters.textViewPage,
+          },
+          {
+            'title': "text textview(maxLength 长度计算)",
+            'nextPageName': BaseUIKitRouters.textViewMaxLengthPage,
+          },
+          {
+            'title': "text textview(emoji maxLength 长度计算)",
+            'nextPageName': BaseUIKitRouters.textViewEmojiMaxLengthPage,
           },
         ]
       },
