@@ -12,8 +12,6 @@ class TSTextViewEmojiMaxLengthPage extends StatefulWidget {
 
 class _TSTextViewEmojiMaxLengthPageState
     extends State<TSTextViewEmojiMaxLengthPage> {
-  String _currentText = '我是初始文本';
-
   @override
   void initState() {
     super.initState();
@@ -51,46 +49,15 @@ class _TSTextViewEmojiMaxLengthPageState
 
   /// textView Widgets
   List<Widget> textViewWidgets() {
-    _currentText = '';
     return <Widget>[
       new Column(
         children: <Widget>[
           SizedBox(height: 4),
-          _textView(_currentText),
-          FlatButton(
-            onPressed: () {
-              _currentText = _longNormalTextString();
-              setState(() {});
-            },
-            child: Text('使用正常的文本'),
-          ),
-          FlatButton(
-            onPressed: () {
-              _currentText = _longEmojiString();
-              setState(() {});
-            },
-            child: Text('使用特殊的emoji'),
-          ),
+          _textView('👨‍👩‍👧1234'),
           _pageList(),
         ],
       )
     ];
-  }
-
-  String _longNormalTextString() {
-    String longString = '';
-    for (var i = 0; i < 499; i++) {
-      longString += '正常的文本';
-    }
-    return longString;
-  }
-
-  String _longEmojiString() {
-    String longString = '';
-    for (var i = 0; i < 499; i++) {
-      longString += '👨‍👩‍👧';
-    }
-    return longString;
   }
 
   Widget _textView(text) {

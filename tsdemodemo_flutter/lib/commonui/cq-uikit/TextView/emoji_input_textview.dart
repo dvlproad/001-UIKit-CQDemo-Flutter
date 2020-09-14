@@ -33,11 +33,10 @@ class CQEmojiInputTextView extends CQInputTextView {
           maxHeight: maxHeight,
           textChangeCallback: textChangeCallback,
           maxLengthAlgorithm: (String currentText) {
-            int showTextLength = currentText.runes.length;
+            int showTextLength = currentText.characters.length;
             return showTextLength;
           },
           inputFormatters: <TextInputFormatter>[
-            // LengthLimitingTextInputFormatter(widget.maxLength), //限制最多15位字符
             CQEmojiLengthLimitingTextInputFormatter(maxLength),
           ],
         );

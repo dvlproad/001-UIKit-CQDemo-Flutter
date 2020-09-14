@@ -68,7 +68,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
   /// 更新文本长度计算
   _updateCountTextWidget() {
     if (widget.maxLength != null) {
-      int showTextLength = _inputTextViewController.text.length;
+      int showTextLength = _inputTextViewController.text.characters.length;
       if (widget.maxLengthAlgorithm != null) {
         // showTextLength = _inputTextViewController.text.runes.length;
         showTextLength =
