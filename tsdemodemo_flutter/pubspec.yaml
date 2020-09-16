@@ -81,6 +81,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
+    - lib/Resources/
     - lib/Resources/report/
     - lib/Resources/ranking/
     - lib/commonui/cq-guide-overlay/Resources/

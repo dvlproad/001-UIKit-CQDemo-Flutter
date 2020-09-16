@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/textbutton.dart';
 
 class TSThemeButtonPage extends StatefulWidget {
-  TSThemeButtonPage({Key key, this.title, this.username}) : super(key: key);
-
-  final String title;
-  final String username;
+  TSThemeButtonPage({Key key}) : super(key: key);
 
   @override
   _TSThemeButtonPageState createState() => new _TSThemeButtonPageState();

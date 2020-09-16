@@ -4,6 +4,10 @@ import 'package:tsdemodemo_flutter/modules/uikit/baseui_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/button/button_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/button/theme_button_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/button/other_button_page.dart';
+// imageview
+import 'package:tsdemodemo_flutter/modules/uikit/image/image_home_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/image/image_page.dart';
+import 'package:tsdemodemo_flutter/modules/uikit/image/image_convert_page.dart';
 // textField
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/textfield_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/textfielddemo/icon_textfield_page.dart';
@@ -21,6 +25,10 @@ class BaseUIKitRouters {
   static const buttonHomePage = '/button_home_page';
   static const themeButtonPage = '/theme_button_page';
   static const otherButtonPage = '/other_button_page';
+  // imageview
+  static const imageviewHomePage = '/imageview_home_page';
+  static const imageviewPage = '/imageview_page';
+  static const imageConvertPage = '/image_convert_page';
   // textField
   static const textFieldHomePage = '/textfield_home_page';
   static const iconTextFieldPage = '/icon_textfield_page';
@@ -43,6 +51,14 @@ class BaseUIKitRouters {
         TSThemeButtonPage(),
     BaseUIKitRouters.otherButtonPage: (BuildContext context) =>
         TSOtherButtonsPage(),
+
+    // imageview
+    BaseUIKitRouters.imageviewHomePage: (BuildContext context) =>
+        TSImageHomePage(),
+    BaseUIKitRouters.imageviewPage: (BuildContext context) => TSImagePage(),
+    BaseUIKitRouters.imageConvertPage: (BuildContext context) =>
+        TSImageConvertPage(),
+
     // textField
     BaseUIKitRouters.textFieldHomePage: (BuildContext context) =>
         TSTextFieldHomePage(),

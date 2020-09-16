@@ -37,7 +37,7 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSBaseUIHomePage> {
           },
           {
             'title': "Image(图片)",
-            'nextPageName': "TSImageHomePage",
+            'nextPageName': BaseUIKitRouters.imageviewHomePage,
           },
           {
             'title': "TextFiled(文本框)",
