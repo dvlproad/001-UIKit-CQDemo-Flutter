@@ -61,7 +61,9 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   Widget _addCell() {
     return CJBGImageWidget(
       backgroundImage: AssetImage(
-          'lib/commonui/cq-photo-add-delete-list/assets/pic_添加图片.png'),
+        'assets/icon_images_add.png',
+        package: 'flutter_images_action_list',
+      ),
       child: Container(),
       onPressed: widget.onPressedAdd,
     );

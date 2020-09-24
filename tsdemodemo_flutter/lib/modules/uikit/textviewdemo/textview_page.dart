@@ -81,6 +81,7 @@ class _TSTextViewPageState extends State<TSTextViewPage> {
       maxLength: maxLength,
       placeholder: '请输入你想说的话，最多可输入$maxLength个字',
       text: text,
+      autofocus: true,
       textChangeCallback: (String text) {
         print('text = $text');
         setState(() {});

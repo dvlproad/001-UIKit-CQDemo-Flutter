@@ -28,7 +28,7 @@ class CQInputTextView extends StatefulWidget {
     this.minHeight,
     this.maxHeight,
     @required this.textChangeCallback,
-    this.autofocus, // 如朋友圈文本页面需要直接弹出键盘
+    this.autofocus = false, // 如朋友圈文本页面需要直接弹出键盘
   }) : super(key: key);
 
   @override
