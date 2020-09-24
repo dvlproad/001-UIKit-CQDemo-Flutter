@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_datas_util.dart';
+import './devtool_routes.dart';
+import './environment_datas_util.dart';
 
 class TSDevToolHomePage extends CJTSBasePage {
   final String title;

@@ -20,19 +20,23 @@ class EnvironmentCellComponentsFactory {
 
   // 副文本
   static Widget subText(text) {
-    // return Container(
-    //   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-    //   color: Colors.transparent,
-    //   child: Text(
-    //     text ?? '',
-    //     textAlign: TextAlign.left,
-    //     overflow: TextOverflow.ellipsis,
-    //     style: TextStyle(
-    //       color: Colors.white70,
-    //       fontSize: 16.0,
-    //     ),
-    //   ),
-    // );
+    // return Text(text ?? '', style: TextStyle(color: Colors.red));
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      color: Colors.transparent,
+      child: Text(
+        text ?? '',
+        textAlign: TextAlign.left,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 16.0,
+        ),
+      ),
+    );
+
+    /*
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
@@ -46,6 +50,7 @@ class EnvironmentCellComponentsFactory {
         // inputFormatters: this.inputFormatters,
       ),
     );
+    */
   }
 
   // 箭头

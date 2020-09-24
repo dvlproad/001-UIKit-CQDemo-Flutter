@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/devtool_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/environment_page.dart';
+import './devtool_home_page.dart';
+import './environment_page.dart';
 
 class DevToolRouters {
   // 组件模块

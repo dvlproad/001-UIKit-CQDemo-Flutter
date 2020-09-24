@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
+import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
