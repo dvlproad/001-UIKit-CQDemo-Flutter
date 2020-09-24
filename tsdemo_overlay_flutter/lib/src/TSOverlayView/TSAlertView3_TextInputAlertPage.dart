@@ -23,7 +23,7 @@ class TSAlertView3_TextInputAlertPage extends StatelessWidget {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('Overlay模块'),
+      title: Text('TextInputAlertView'),
     );
   }
 

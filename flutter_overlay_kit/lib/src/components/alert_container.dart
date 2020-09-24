@@ -17,7 +17,11 @@ class CQAlertContainer extends StatelessWidget {
 
     return Container(
       width: width - 100,
-      height: 160,
+      height: 170,
+      // constraints: BoxConstraints(
+      //   //minWidth: double.infinity,
+      //   minHeight: 160,
+      // ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Color(0xffeeeeee),
