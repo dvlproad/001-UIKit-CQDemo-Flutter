@@ -10,7 +10,7 @@ import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page3.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page4.dart';
 import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page5.dart';
 import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/overlay_routes.dart';
+import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';

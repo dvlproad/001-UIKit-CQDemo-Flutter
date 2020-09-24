@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/TSAlertViewHomePage.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/TSAlertView1_MessageAlertPage.dart';
+import 'package:tsdemo_overlay_flutter/src/TSOverlayView/TSAlertViewHomePage.dart';
+import 'package:tsdemo_overlay_flutter/src/TSOverlayView/TSAlertView1_MessageAlertPage.dart';
 
 class OverlayRouters {
   // overlay的测试首页

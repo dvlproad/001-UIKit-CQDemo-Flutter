@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/TSAlertViewHomePage.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayUtil/overlay_util_home_page.dart';
+import './TSOverlayView/TSAlertViewHomePage.dart';
+import './TSOverlayUtil/overlay_util_home_page.dart';
 
 class TSOverlayMainPage extends StatefulWidget {
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/overlay_view_routes.dart';
+import './overlay_view_routes.dart';
 
 class TSAlertViewHomePage extends CJTSBasePage {
   final String title;
@@ -43,7 +43,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSAlertViewHomePage> {
           {
             'title': "ListMessageAlertPage",
             'content': '多条信息的弹窗视图显示测试',
-            'nextPageName': "ListMessageAlertPage",
+            // 'nextPageName': "ListMessageAlertPage",
           },
         ]
       },
@@ -63,7 +63,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSAlertViewHomePage> {
           {
             'title': "ListTextInputAlertPage",
             'content': '多输入框的弹窗视图显示测试',
-            'nextPageName': "ListTextInputAlertPage",
+            // 'nextPageName': "ListTextInputAlertPage",
           },
         ]
       },

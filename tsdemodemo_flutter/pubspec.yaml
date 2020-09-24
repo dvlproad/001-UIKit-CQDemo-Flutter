@@ -63,6 +63,8 @@ dependencies:
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
 
+  tsdemo_overlay_flutter:
+    path: ../tsdemo_overlay_flutter/
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/
 

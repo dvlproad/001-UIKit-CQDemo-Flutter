@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/overlay_view_routes.dart';
+import './overlay_view_routes.dart';
 
 class OverlayViewHomePage extends CJTSBasePage {
   final String title;

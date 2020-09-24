@@ -1,10 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayView/overlay_view_routes.dart';
-import 'package:tsdemodemo_flutter/modules/overlay/overlay_main_page.dart';
+import './TSOverlayView/overlay_view_routes.dart';
+import './overlay_main_page.dart';
 
 // overlay 的 Util 测试
-import 'package:tsdemodemo_flutter/modules/overlay/TSOverlayUtil/overlay_util_home_page.dart';
-
+import './TSOverlayUtil/overlay_util_home_page.dart';
 
 // overlay 的 View 测试
 class OverlayAllRouters {
@@ -25,9 +24,6 @@ class OverlayAllRouters {
   }
 }
 
-
-
-
 class OverlayUtilRouters {
   // overlay 的 Util 测试
   static const overlayUtilHomePage = '/overlay_util_home_page';
@@ -39,4 +35,3 @@ class OverlayUtilRouters {
         TSOverlayUtilHomePage(),
   };
 }
-
