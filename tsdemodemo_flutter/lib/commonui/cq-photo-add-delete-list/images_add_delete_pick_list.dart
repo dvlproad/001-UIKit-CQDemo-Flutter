@@ -95,6 +95,10 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
 
   static Future<List<File>> getFilesFromImageOrPhotoModels(
       List<dynamic> imageOrPhotoModels) async {
+    if (imageOrPhotoModels == null) {
+      return Future.value([]);
+    }
+
     List<File> imageOrPhotoFiles = [];
     for (dynamic imageOrPhotoModel in imageOrPhotoModels) {
       File imageOrPhotoFile;

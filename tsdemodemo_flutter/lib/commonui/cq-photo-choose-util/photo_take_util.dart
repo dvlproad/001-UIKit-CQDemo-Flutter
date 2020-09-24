@@ -39,7 +39,7 @@ class CQTakePhtoUtil {
       maxWidth: 1080,
       imageQuality: 70,
     );
-    print("获取到的图片地址: pickedFile.path = ${pickedFile.path}");
+    print("获取到的图片地址: pickedFile = $pickedFile");
 
     if (pickedFile != null && imagePickerCallBack != null) {
       imagePickerCallBack(pickedFile.path); //获取到图片地址

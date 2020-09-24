@@ -15,6 +15,7 @@ class CQInputTextView extends StatefulWidget {
   final double minHeight; // 文本框的最小高度
   final double maxHeight; // 文本框的最大高度
   final TextChangeCallback textChangeCallback;
+  final bool autofocus;
 
   CQInputTextView({
     Key key,
@@ -27,6 +28,7 @@ class CQInputTextView extends StatefulWidget {
     this.minHeight,
     this.maxHeight,
     @required this.textChangeCallback,
+    this.autofocus, // 如朋友圈文本页面需要直接弹出键盘
   }) : super(key: key);
 
   @override
@@ -113,6 +115,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
   Widget textField1() {
     return TextField(
       controller: _inputTextViewController,
+      autofocus: widget.autofocus,
       maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串
       maxLines: widget.maxLines,
       textAlign: TextAlign.left,
@@ -144,6 +147,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
           children: [
             TextField(
               controller: _inputTextViewController,
+              autofocus: widget.autofocus,
               // maxLength: widget.maxLength, //最大长度，设置此项会让TextField右下角有一个输入数量的统计字符串。现在改为自己写Text
               inputFormatters: _inputFormatters(),
               maxLines: widget.maxLines,
