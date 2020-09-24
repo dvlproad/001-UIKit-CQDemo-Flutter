@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/image/round_image.dart';
+import 'package:flutter_baseui_kit/base-uikit/image/round_image.dart';
 
 class RankingListTop extends StatelessWidget {
   final List<Map<String, dynamic>> topThereMap;

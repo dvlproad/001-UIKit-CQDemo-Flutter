@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/image/round_image.dart';
+import 'package:flutter_baseui_kit/base-uikit/image/round_image.dart';
 
 typedef ClickCellCallback = void Function(int section, int row);
 

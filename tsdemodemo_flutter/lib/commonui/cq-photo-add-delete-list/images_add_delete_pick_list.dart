@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo/photo.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_list.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photo-choose-util/photo_permission_pick_take_util.dart';
+import 'package:flutter_images_action_list/flutter_images_action_list.dart';
+import 'package:flutter_images_picker/flutter_images_picker.dart';
 
 // GlobalKey<_CQImageDeleteAddPickListState> imageDeleteAddPickListKey =
 //     GlobalKey();

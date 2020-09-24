@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textview/input_textview.dart';
+import 'package:flutter_baseui_kit/cq-uikit/textview/input_textview.dart';
 // [Dart学习--之Runes与Symbols相关方法总结](https://www.cnblogs.com/lxlx1798/p/11371285.html)
 // 在Dart中，Runes代表字符串的UTF-32字符集, 另一种Strings
 // Unicode为每一个字符、标点符号、表情符号等都定义了 一个唯一的数值

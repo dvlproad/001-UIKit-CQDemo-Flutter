@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_baseui_kit/cq-uikit/textview/input_textview.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_pick_list.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textview/input_textview.dart';
 
 class TSTextViewMaxLengthPage extends StatefulWidget {
   TSTextViewMaxLengthPage({Key key}) : super(key: key);

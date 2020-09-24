@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-list/main_sub_arrow_tableviewcell.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/TextView/input_textview.dart';
+import 'package:flutter_baseui_kit/cq-uikit/TextView/input_textview.dart';
 
 typedef TextChangeCallback = void Function(String text);
 

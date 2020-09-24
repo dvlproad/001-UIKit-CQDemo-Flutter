@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_list.dart';
+import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 
 class TSPhotoAlbumAddDeletePage extends StatefulWidget {
   TSPhotoAlbumAddDeletePage({

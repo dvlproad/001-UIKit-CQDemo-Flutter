@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textfield/prefixText_textField.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/textfield/textInputFormatter/textinputformatter_util.dart';
+import 'package:flutter_baseui_kit/cq-uikit/textfield/prefixText_textField.dart';
+import 'package:flutter_baseui_kit/cq-uikit/textfield/textInputFormatter/textinputformatter_util.dart';
 
 class TSTextInputFormmaterPage extends StatefulWidget {
   TSTextInputFormmaterPage({Key key}) : super(key: key);

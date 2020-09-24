@@ -59,6 +59,21 @@ dependencies:
   flutter_demo_kit:
     path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
     # path: ../flutter_demo_kit/
+
+  flutter_baseui_kit:
+    path: ../flutter_baseui_kit/
+
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/
+
+  flutter_images_action_list:
+    path: ../flutter_images_action_list/
+
+  flutter_images_picker:
+    path: ../flutter_images_picker/
+    
+  flutter_environment:
+    path: ../flutter_environment/
   
   cj_monitor_flutter:
     path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
@@ -88,10 +103,8 @@ flutter:
     - lib/Resources/report/
     - lib/Resources/ranking/
     - lib/commonui/cq-guide-overlay/Resources/
-    - lib/commonui/cq-uikit/images/
-    - lib/modules/uikit/Resources/
     - lib/commonui/cq-effect-kit/refresh/flare/
-    - lib/commonui/cq-photo-add-delete-list/assets/
+    - lib/modules/uikit/Resources/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/other_textbutton.dart';
+import 'package:flutter_baseui_kit/cq-uikit/button/other_textbutton.dart';
 
 class TSOtherButtonsPage extends StatefulWidget {
   TSOtherButtonsPage({Key key}) : super(key: key);

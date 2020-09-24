@@ -1,10 +1,8 @@
 import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
 import 'package:flutter/services.dart';
-import 'package:tsdemodemo_flutter/commonui/devtool/environment_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
-import 'package:tsdemodemo_flutter/commonui/devtool/environment_list.dart';
+import 'package:flutter_environment/flutter_environment.dart';
 
 class TSEnvironmentPage extends StatefulWidget {
   @override

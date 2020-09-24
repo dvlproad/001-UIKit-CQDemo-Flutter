@@ -1,5 +1,5 @@
-import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class CQImageBaseGridCell extends StatelessWidget {
   final ImageProvider imageProvider;

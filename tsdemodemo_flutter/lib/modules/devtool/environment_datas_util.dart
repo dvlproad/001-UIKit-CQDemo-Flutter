@@ -1,6 +1,5 @@
-import 'package:tsdemodemo_flutter/commonui/devtool/environment_data_bean.dart';
-import 'package:tsdemodemo_flutter/commonui/devtool/environment_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_environment/flutter_environment.dart';
 
 class TSEnvironmentDataUtil {
   // // 设置默认的环境

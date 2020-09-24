@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/textbutton.dart';
+import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
 
 class TSThemeButtonPage extends StatefulWidget {
   TSThemeButtonPage({Key key}) : super(key: key);

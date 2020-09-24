@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/base-uikit/bg_border_widget.dart';
+import 'package:flutter_baseui_kit/base-uikit/bg_border_widget.dart';
 
 // [Flutter - 图片Image组件](https://www.jianshu.com/p/107b1fb6a1d3)
 

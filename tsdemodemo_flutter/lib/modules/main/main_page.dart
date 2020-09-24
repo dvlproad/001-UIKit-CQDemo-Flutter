@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-uikit/button/textbutton.dart';
+import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
