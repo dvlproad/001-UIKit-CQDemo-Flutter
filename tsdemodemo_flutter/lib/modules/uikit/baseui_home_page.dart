@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
-import 'package:flutter_demo_kit/base/CJTSBasePage.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
 
 class TSBaseUIHomePage extends CJTSBasePage {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_demo_kit/base/CJTSBasePage.dart';
-import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 class TSOverlayUtilHomePage extends CJTSBasePage {
   final String title;
