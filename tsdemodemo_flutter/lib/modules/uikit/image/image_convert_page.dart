@@ -46,14 +46,16 @@ class _TSImageConvertPageState extends State<TSImageConvertPage> {
     Image image = Image.network(networkUrl, height: 100, width: 100);
     ImageProvider imageProviderFromImage = image.image;
 
-    return new ListView(
+    // ImageProvider imageProviderAsset = AssetImage(assetName);
+    // ImageProvider imageProviderNetwork = NetworkImage(networkUrl);
+
+    return new Column(
       children: <Widget>[
         Text('Image 转 ImageProvider2'),
-        // Image(image: imageProviderFromImage, height: 100, width: 100),
+        Image(image: imageProviderFromImage, height: 100, width: 100),
         Container(
           height: 100,
           child: CJBGImageWidget(
-            height: 50,
             backgroundImage: imageProviderFromImage,
             child: Container(
               color: Colors.red,

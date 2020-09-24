@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:device_info/device_info.dart';
 import 'package:package_info/package_info.dart';
-import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
 
 class TSDeviceInfoPage extends StatefulWidget {
   final String title;

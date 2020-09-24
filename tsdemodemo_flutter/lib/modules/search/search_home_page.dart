@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
-import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:flutter_demo_kit/base/CJTSBasePage.dart';
+import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
 
 class TSSearchHomePage extends CJTSBasePage {
-  final String title;
-
-  TSSearchHomePage({Key key, this.title}) : super(key: key);
+  TSSearchHomePage({Key key}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
@@ -21,7 +19,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSSearchHomePage> {
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text(widget.title ?? 'Search首页'),
+      title: Text('Search首页'),
     );
   }
 

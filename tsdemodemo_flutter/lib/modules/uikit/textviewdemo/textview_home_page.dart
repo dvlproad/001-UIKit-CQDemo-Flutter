@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/cjts/base/CJTSBasePage.dart';
-import 'package:tsdemodemo_flutter/cjts/tableview/CJTSSectionTableView.dart';
+import 'package:flutter_demo_kit/base/CJTSBasePage.dart';
+import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
 import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
 
 class TSTextViewHomePage extends CJTSBasePage {

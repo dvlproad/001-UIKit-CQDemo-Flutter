@@ -11,8 +11,8 @@
  */
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/cjts/tableview/CJTSTableViewCell.dart';
-import 'package:tsdemodemo_flutter/cjts/tableview/CJTSTableViewHeader.dart';
+import 'package:flutter_demo_kit/tableview/CJTSTableViewCell.dart';
+import 'package:flutter_demo_kit/tableview/CJTSTableViewHeader.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method1.dart';
 
 class CreateSectionList1 extends StatelessWidget {

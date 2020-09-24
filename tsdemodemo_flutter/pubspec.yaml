@@ -31,7 +31,6 @@ dependencies:
   device_info: ^0.4.2+4
   package_info: ^0.4.1
 
-  flutter_section_table_view: ^1.0.5
   dio: ^3.0.9
   cached_network_image: ^2.2.0+1
   provider: ^4.3.1
@@ -56,6 +55,10 @@ dependencies:
   image_picker: 0.6.7+3
   photo: #^0.5.0-dev.3
     path: ./vendors/photo-0.5.0-dev.3/
+
+  flutter_demo_kit:
+    path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
+    # path: ../flutter_demo_kit/
   
   cj_monitor_flutter:
     path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
