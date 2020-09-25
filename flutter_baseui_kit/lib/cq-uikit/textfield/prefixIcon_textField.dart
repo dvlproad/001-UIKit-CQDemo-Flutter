@@ -11,6 +11,7 @@ class IconTextField extends StatefulWidget {
   final bool Function(String currentText) prefixIconSelectedCallback;
   final String prefixIconNormalImageName;
   final String prefixIconSelectedImageName;
+  final String package;
 
   final bool autofocus;
   final bool obscureText;
@@ -30,6 +31,7 @@ class IconTextField extends StatefulWidget {
     this.prefixIconSelectedCallback,
     this.prefixIconNormalImageName,
     this.prefixIconSelectedImageName,
+    this.package,
     this.autofocus = false,
     this.obscureText = false,
     this.keyboardType,
@@ -103,7 +105,12 @@ class IconTextFieldState extends State<IconTextField> {
     return Row(
       children: <Widget>[
         SizedBox(width: 5),
-        Image.asset(assetName, width: 14.0, height: 15.0),
+        Image.asset(
+          assetName,
+          width: 14.0,
+          height: 15.0,
+          package: widget.package,
+        ),
         SizedBox(width: 5),
       ],
     );

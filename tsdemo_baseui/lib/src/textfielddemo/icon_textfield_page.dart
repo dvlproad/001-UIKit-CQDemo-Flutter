@@ -81,10 +81,9 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
         bool userNameValid = currentText.length > 0;
         return userNameValid;
       },
-      prefixIconNormalImageName:
-          'lib/modules/uikit/Resources/login_username_gray.png',
-      prefixIconSelectedImageName:
-          'lib/modules/uikit/Resources/login_username_blue.png',
+      prefixIconNormalImageName: 'assets/login_username_gray.png',
+      prefixIconSelectedImageName: 'assets/login_username_blue.png',
+      package: 'tsdemo_baseui',
     );
   }
 
@@ -96,10 +95,9 @@ class _TSIconTextFieldPageState extends State<TSIconTextFieldPage> {
         bool passwordValid = currentText.length > 0;
         return passwordValid;
       },
-      prefixIconNormalImageName:
-          'lib/modules/uikit/Resources/login_password_gray.png',
-      prefixIconSelectedImageName:
-          'lib/modules/uikit/Resources/login_password_blue.png',
+      prefixIconNormalImageName: 'assets/login_password_gray.png',
+      prefixIconSelectedImageName: 'assets/login_password_blue.png',
+      package: 'tsdemo_baseui',
     );
   }
 }
