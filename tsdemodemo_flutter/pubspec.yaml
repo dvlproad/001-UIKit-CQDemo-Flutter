@@ -60,6 +60,9 @@ dependencies:
 
   flutter_images_picker:
     path: ../flutter_images_picker/
+
+  tsdemo_images_browser:
+    path: ../tsdemo_images_browser/
     
   tsdemo_environment_flutter:
     path: ../tsdemo_environment_flutter/

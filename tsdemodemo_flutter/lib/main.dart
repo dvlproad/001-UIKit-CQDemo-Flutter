@@ -4,7 +4,7 @@ import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemo_guide/src/guide_routes.dart';
-import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
+import 'package:tsdemo_images_browser/src/imagesbrowser_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';

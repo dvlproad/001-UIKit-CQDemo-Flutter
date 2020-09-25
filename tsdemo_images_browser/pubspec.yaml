@@ -19,7 +19,7 @@ dependencies:
   flutter_images_browser:
     path: ../flutter_images_browser/
 
-  provider: 4.1.3
+  provider: any
 
 dev_dependencies:
   flutter_test:
