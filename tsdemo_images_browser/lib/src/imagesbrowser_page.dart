@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-imagesbrowser/imagesbrowser_widget.dart';
-import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_changenotifier.dart';
+import 'package:flutter_images_browser/src/imagesbrowser_widget.dart';
+import './imagesbrowser_changenotifier.dart';
 import 'package:extended_image/extended_image.dart';
 
 class TSImagesBrowserPage extends StatefulWidget {

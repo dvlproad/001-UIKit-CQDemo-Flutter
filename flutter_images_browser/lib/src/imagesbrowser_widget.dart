@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:extended_image/extended_image.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-pageindicator/pageindicator.dart';
+import 'package:flutter_baseui_kit/cq-uikit/pageindicator/pageindicator.dart';
 
 // List<String> egImages = <String>[
 //   'http://pic1.win4000.com/pic/f/04/4f085d0c9b.gif',

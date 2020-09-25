@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_page.dart';
+import './imagesbrowser_home_page.dart';
+import './imagesbrowser_page.dart';
 
 class ImagesBrowserRouters {
   // 组件模块
