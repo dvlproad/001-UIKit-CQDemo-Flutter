@@ -11,14 +11,6 @@ class Routers {
   // 模块的测试首页
   static const moduleHomePage = '/module_home_page';
 
-  // 引导蒙层模块
-  static const guideHomePage = '/guide_home_page';
-  static const guideOverlayTestPage1 = '/guide_overlay_test_page1';
-  static const guideOverlayTestPage2 = '/guide_overlay_test_page2';
-  static const guideOverlayTestPage3 = '/guide_overlay_test_page3';
-  static const guideOverlayTestPage4 = '/guide_overlay_test_page4';
-  static const guideOverlayTestPage5 = '/guide_overlay_test_page5';
-
   // 举报模块
   // static const reportListPage = ReportListPage.routeName;
   // static const reportUploadPage = ReportDetailUploadPage.routeName;

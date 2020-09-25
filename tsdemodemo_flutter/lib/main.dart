@@ -3,12 +3,7 @@ import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page1.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page2.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page3.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page4.dart';
-import 'package:tsdemodemo_flutter/modules/guide/guide_overlay_test_page5.dart';
+import 'package:tsdemo_guide/src/guide_routes.dart';
 import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
@@ -75,21 +70,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     Map<String, WidgetBuilder> routes = {};
-    routes.addAll({
-      // 引导蒙层 guide
-      Routers.guideHomePage: (BuildContext context) =>
-          GuideOverlayTestHomePage(),
-      Routers.guideOverlayTestPage1: (BuildContext context) =>
-          GuideOverlayTestPage1(),
-      Routers.guideOverlayTestPage2: (BuildContext context) =>
-          GuideOverlayTestPage2(),
-      Routers.guideOverlayTestPage3: (BuildContext context) =>
-          GuideOverlayTestPage3(),
-      Routers.guideOverlayTestPage4: (BuildContext context) =>
-          GuideOverlayTestPage4(),
-      Routers.guideOverlayTestPage5: (BuildContext context) =>
-          GuideOverlayTestPage5(),
-    });
+
     // Demo
     routes.addAll(DemoRouters.routes);
     // devTool
@@ -110,6 +91,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     routes.addAll(ImagesBrowserRouters.routes);
     // 相册
     routes.addAll(PhotoAlbumRouters.routes);
+    // 引导蒙层模块 guide
+    routes.addAll(GuideRouters.routes);
 
     return MaterialApp(
       title: 'Flutter Demo',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
-import 'package:tsdemodemo_flutter/modules/devtool/devtool_routes.dart';
+import 'package:tsdemo_environment_flutter/src/devtool_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemodemo_flutter/modules/imagesbrowser/imagesbrowser_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
+import 'package:tsdemo_guide/src/guide_routes.dart';
 
 class CQModulesHomePage extends CJTSBasePage {
   final String title;
@@ -91,7 +92,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
           },
           {
             'title': "Guide(引导模块)",
-            'nextPageName': Routers.guideHomePage,
+            'nextPageName': GuideRouters.guideHomePage,
           },
         ]
       },

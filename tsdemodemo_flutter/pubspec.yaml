@@ -82,6 +82,12 @@ dependencies:
     path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
     # path: ./third/cj_monitor_flutter/
 
+  tsdemo_guide:
+    path: ../tsdemo_guide/
+  flutter_guide_kit:
+    path: ../flutter_guide_kit/
+    
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
