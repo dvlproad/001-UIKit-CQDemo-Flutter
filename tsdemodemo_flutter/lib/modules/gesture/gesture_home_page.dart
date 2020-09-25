@@ -19,6 +19,13 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSGestureHomePage> {
   var sectionModels = [];
 
   @override
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      title: Text(widget.title ?? '手势首页'),
+    );
+  }
+
+  @override
   Widget contentWidget() {
     sectionModels = [
       {

@@ -8,7 +8,7 @@ import 'package:tsdemo_images_browser/src/imagesbrowser_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
 import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
-import 'package:tsdemodemo_flutter/modules/uikit/baseui_routes.dart';
+import 'package:tsdemo_baseui/src/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 
 import 'package:tsdemodemo_flutter/router/router.dart';
