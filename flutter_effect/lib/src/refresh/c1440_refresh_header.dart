@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-effect-kit/refresh/c1440_loading.dart';
+import './c1440_loading.dart';
 
 class C1440RefreshHeader extends Header {
   /// Key

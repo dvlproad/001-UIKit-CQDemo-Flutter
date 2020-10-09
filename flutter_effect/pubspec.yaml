@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  lottie: any
+  flutter_easyrefresh: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
