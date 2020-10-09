@@ -122,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
     );
 
     if (isSearching && resultSectionDataModels.length == 0) {
-      return FullEmptyView(text: '没有匹配的搜索结果');
+      return CQFullEmptyView(text: '没有匹配的搜索结果');
     }
 
     // List<CJSectionDataModel> lastSectionModels =

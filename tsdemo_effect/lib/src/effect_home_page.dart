@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './refresh/refresh_home_page.dart';
+import './empty/empty_home_page.dart';
 
 class TSEffectHomePage extends CJTSBasePage {
   TSEffectHomePage({Key key}) : super(key: key);
@@ -49,10 +50,10 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
         'theme': "Empty",
         'values': [
           {
-            'title': "Empty-待补充",
+            'title': "Empty",
             'actionBlock': () {
-              // Navigator.push(context,
-              //     MaterialPageRoute(builder: (context) => TSRefreshHomePage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSEmptyHomePage()));
             },
           },
         ]

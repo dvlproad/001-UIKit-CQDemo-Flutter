@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './base-uikit/bg_border_widget.dart';
 
-class FullEmptyView extends StatelessWidget {
+class CQFullEmptyView extends StatelessWidget {
   final String text;
-  const FullEmptyView({Key key, this.text}) : super(key: key);
+  const CQFullEmptyView({
+    Key key,
+    @required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +16,19 @@ class FullEmptyView extends StatelessWidget {
         Container(
           color: Colors.transparent,
           height: 446,
-          child: PartEmptyView(text: text),
+          child: CQPartEmptyView(text: text),
         )
       ],
     );
   }
 }
 
-class PartEmptyView extends StatelessWidget {
+class CQPartEmptyView extends StatelessWidget {
   final String text;
-  PartEmptyView({Key key, this.text = ''}) : super(key: key);
+  CQPartEmptyView({
+    Key key,
+    this.text = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
