@@ -10,7 +10,7 @@ class TSImagePage extends StatefulWidget {
 }
 
 class _TSImagePageState extends State<TSImagePage> {
-  String assetName = 'lib/Resources/zhangjiajie.jpg';
+  String assetName = 'assets/zhangjiajie.jpg';
   String networkUrl =
       'https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1600222338&di=caf255ee59c5f36cbf96c04aed8303dc&src=http://a4.att.hudong.com/22/59/19300001325156131228593878903.jpg';
 
@@ -66,7 +66,8 @@ class _TSImagePageState extends State<TSImagePage> {
   }
 
   Widget themeBGButtonsWidget() {
-    ImageProvider imageProviderAsset = AssetImage(assetName);
+    ImageProvider imageProviderAsset =
+        AssetImage(assetName, package: "tsdemo_baseui");
     ImageProvider imageProviderNetwork = NetworkImage(networkUrl);
     return Column(
       children: <Widget>[
@@ -81,7 +82,12 @@ class _TSImagePageState extends State<TSImagePage> {
     return Column(
       children: <Widget>[
         Text('new Image.asset 加载asset项目资源中的文件'),
-        Image.asset(assetName, height: 100, width: 100),
+        Image.asset(
+          assetName,
+          package: "tsdemo_baseui",
+          height: 100,
+          width: 100,
+        ),
         Text('new Image.network 从URL获取网络图片'),
         Image.network(networkUrl, height: 100, width: 100),
         Text('new Image.file 从File获取本地文件图片'),
