@@ -12,7 +12,7 @@ class C1440Loading extends StatelessWidget {
     List<String> images = [];
 
     for (int i = 0; i < 37; ++i) {
-      images.add("assets/images/loading/loading_$i.png");
+      images.add("assets/loading/loading_$i.png");
     }
 
     return C1440FrameAnimationImage(
@@ -93,6 +93,7 @@ class _FrameAnimationImageState extends State<C1440FrameAnimationImage>
       if (i != ix) {
         images.add(Image.asset(
           widget._assetList[i],
+          package: 'flutter_effect',
           width: 0,
           height: 0,
         ));
@@ -101,6 +102,7 @@ class _FrameAnimationImageState extends State<C1440FrameAnimationImage>
 
     images.add(Image.asset(
       widget._assetList[ix],
+      package: 'flutter_effect',
       width: widget.width,
       height: widget.height,
     ));

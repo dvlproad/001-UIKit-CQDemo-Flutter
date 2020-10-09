@@ -279,7 +279,8 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
                       Offstage(
                         offstage: _isLoading,
                         child: Image.asset(
-                          "assets/images/loading/loading_0.png",
+                          "assets/loading/loading_0.png",
+                          package: 'flutter_effect',
                           width: 40,
                           height: 40,
                         ),
@@ -296,7 +297,8 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
                       Offstage(
                         offstage: _isLoading,
                         child: Image.asset(
-                          "assets/images/loading/loading_0.png",
+                          "assets/loading/loading_0.png",
+                          package: 'flutter_effect',
                           width: 40,
                           height: 40,
                         ),

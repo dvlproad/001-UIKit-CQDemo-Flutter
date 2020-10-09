@@ -2,14 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_easyrefresh/bezier_circle_header.dart'; //如果要使用炫酷的样式需要引入，不同的样式引入不同的文件，详见官方api
+import 'package:flutter_easyrefresh/bezier_bounce_footer.dart'; //如果要使用炫酷的样式需要引入，不同的样式引入不同的文件，详见官方api
 
-class TSRefreshDefaultPage extends StatefulWidget {
+class TSRefreshStudyPage extends StatefulWidget {
   @override
-  _TSRefreshDefaultPageState createState() => _TSRefreshDefaultPageState();
+  _TSRefreshStudyPageState createState() => _TSRefreshStudyPageState();
 }
 
-class _TSRefreshDefaultPageState extends State<TSRefreshDefaultPage> {
+class _TSRefreshStudyPageState extends State<TSRefreshStudyPage> {
   List<String> addStr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
   List<String> str = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
@@ -24,20 +25,15 @@ class _TSRefreshDefaultPageState extends State<TSRefreshDefaultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Refresh(全局默认文本)"),
+        title: Text("Refresh(学习例子)"),
       ),
       body: Center(
         child: new EasyRefresh(
-          // header: BezierCircleHeader(
-          //   color: Theme.of(context).scaffoldBackgroundColor,
-          // ),
-          footer: C1440RefreshFooter(
-            noMoreWidget: Text(
-              "没有更多媒体了",
-              style: TextStyle(
-                color: Color(0xFFBFBFBF),
-              ),
-            ),
+          header: BezierCircleHeader(
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
+          footer: BezierBounceFooter(
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
           controller: _refreshController,
           child: new ListView.builder(
@@ -76,6 +72,21 @@ class _TSRefreshDefaultPageState extends State<TSRefreshDefaultPage> {
           },
         ),
       ),
+      // 固定在下方显示的按钮
+      persistentFooterButtons: <Widget>[
+        FlatButton(
+          onPressed: () {
+            _refreshController.callRefresh();
+          },
+          child: Text("refresh", style: TextStyle(color: Colors.black)),
+        ),
+        FlatButton(
+          onPressed: () {
+            _refreshController.callLoad();
+          },
+          child: Text("loadMore", style: TextStyle(color: Colors.black)),
+        )
+      ], // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

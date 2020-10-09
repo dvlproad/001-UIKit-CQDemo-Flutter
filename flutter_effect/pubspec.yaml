@@ -31,6 +31,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
   - assets/
+  - assets/flare/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

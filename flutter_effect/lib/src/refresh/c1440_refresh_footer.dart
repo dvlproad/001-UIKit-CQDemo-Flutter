@@ -136,6 +136,7 @@ class C1440RefreshFooterWidgetState extends State<C1440RefreshFooterWidget> {
           scale: 1,
           child: Lottie.asset(
             'assets/flare/footer.json',
+            package: 'flutter_effect',
             fit: BoxFit.fill,
             alignment: Alignment.bottomCenter,
             repeat: true,

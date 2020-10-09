@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import './refresh_study_page.dart';
 import './refresh_default_page.dart';
 
 class TSRefreshHomePage extends CJTSBasePage {
@@ -26,7 +27,22 @@ class _TSRefreshHomePageState extends CJTSBasePageState<TSRefreshHomePage> {
   Widget contentWidget() {
     sectionModels = [
       {
-        'theme': "Button",
+        'theme': "Refresh 学习",
+        'values': [
+          {
+            'title': "Refresh(学习例子)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSRefreshStudyPage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "Refresh CQApp中",
         'values': [
           {
             'title': "Refresh(全局默认文本)",
