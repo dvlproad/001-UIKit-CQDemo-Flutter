@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
+import './search_page.dart';
 
 class TSSearchHomePage extends CJTSBasePage {
   TSSearchHomePage({Key key}) : super(key: key);
@@ -30,7 +30,11 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSSearchHomePage> {
         'values': [
           {
             'title': "searchPage",
-            'nextPageName': SearchRouters.searchPage,
+            // 'nextPageName': SearchRouters.searchPage,
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchPage()));
+            },
           },
         ]
       },

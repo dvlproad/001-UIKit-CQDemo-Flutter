@@ -57,6 +57,12 @@ dependencies:
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/
 
+
+  tsdemo_effect:
+    path: ../tsdemo_effect/
+  flutter_effect:
+    path: ../flutter_effect/
+
   flutter_images_action_list:
     path: ../flutter_images_action_list/
 
@@ -79,6 +85,10 @@ dependencies:
   flutter_guide_kit:
     path: ../flutter_guide_kit/
     
+  tsdemo_search:
+    path: ../tsdemo_search/
+  flutter_search:
+    path: ../flutter_search/
 
 dev_dependencies:
   flutter_test:
@@ -103,7 +113,6 @@ flutter:
     - lib/Resources/
     - lib/Resources/report/
     - lib/Resources/ranking/
-    - lib/commonui/cq-effect-kit/refresh/flare/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

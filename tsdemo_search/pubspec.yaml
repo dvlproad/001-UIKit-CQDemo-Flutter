@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  provider: any # 4.1.3
+  lpinyin: any # ^1.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

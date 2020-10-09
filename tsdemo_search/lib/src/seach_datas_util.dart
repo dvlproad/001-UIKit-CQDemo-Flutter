@@ -1,4 +1,5 @@
-import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';
+import 'package:flutter_search/util/search_section_bean.dart';
+import './search_data_bean.dart';
 
 class TSSearchDataUtil {
   static List<CJSectionDataModel> getSearchSectionDataModels() {

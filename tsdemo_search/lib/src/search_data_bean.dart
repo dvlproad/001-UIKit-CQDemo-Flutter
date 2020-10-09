@@ -1,10 +1,3 @@
-class CJSectionDataModel {
-  int type;
-  String theme;
-  List<dynamic> values;
-  bool selected;
-}
-
 class CJSearchDataBaseModel {
   bool isSearchResult; // 是否是搜索出来
   bool isContainInSelf; // 搜索的字符串在本身包含

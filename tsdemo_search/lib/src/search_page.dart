@@ -4,14 +4,19 @@ import 'package:lpinyin/lpinyin.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewCell.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewHeader.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
-import 'package:flutter_baseui_kit/cq-uikit/emptyview.dart';
-import 'package:flutter_baseui_kit/cq-uikit/searchbar.dart';
-import 'package:tsdemodemo_flutter/commonutil/data_search_util.dart';
-import 'package:tsdemodemo_flutter/modules/search/seach_datas_util.dart';
-import 'package:tsdemodemo_flutter/modules/search/search_change_notifiter.dart';
-import 'package:tsdemodemo_flutter/modules/search/search_data_bean.dart';
-//import 'package:tsdemodemo_flutter/modules/search/serchbar_delegate.dart';
+// import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
+// import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
+import './section_table_view_method2.dart';
+import 'package:flutter_effect/flutter_effect.dart';
+
+import 'package:flutter_search/flutter_search.dart';
+import 'package:flutter_search/util/search_section_bean.dart';
+import './search_data_bean.dart';
+
+import './seach_datas_util.dart';
+import './search_change_notifiter.dart';
+
+//import './serchbar_delegate.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -43,6 +48,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _pageWidget() {
+    // return Container();
     return Container(
       constraints: BoxConstraints(
         minWidth: double.infinity,

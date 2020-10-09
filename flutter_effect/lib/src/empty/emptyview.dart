@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../base-uikit/bg_border_widget.dart';
+import './base-uikit/bg_border_widget.dart';
 
 class FullEmptyView extends StatelessWidget {
   final String text;
@@ -28,7 +28,7 @@ class PartEmptyView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CJBGImageWidget(
       backgroundImage:
-          AssetImage('lib/commonui/cq-uikit/images/pic_搜索为空页面.png'),
+          AssetImage('assets/empty_bg_empty.png', package: 'flutter_effect'),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[

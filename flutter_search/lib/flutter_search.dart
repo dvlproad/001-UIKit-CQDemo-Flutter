@@ -1,7 +1,7 @@
 library flutter_search;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+// ui
+export './ui/searchbar.dart';
+
+// util
+export './util/search_util.dart';
