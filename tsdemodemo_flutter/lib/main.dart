@@ -7,7 +7,6 @@ import 'package:tsdemo_guide/src/guide_routes.dart';
 import 'package:tsdemo_images_browser/src/imagesbrowser_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
-import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
 import 'package:tsdemo_baseui/src/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 
@@ -85,8 +84,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     routes.addAll(ArcRouters.routes);
     // 手势 Gesture
     routes.addAll(GestureRouters.routes);
-    // 搜索 Search
-    routes.addAll(SearchRouters.routes);
     // 图片浏览 ImagesBrowser
     routes.addAll(ImagesBrowserRouters.routes);
     // 相册

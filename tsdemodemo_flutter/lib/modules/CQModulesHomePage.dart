@@ -12,7 +12,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/search/search_routes.dart';
+import 'package:tsdemo_search/tsdemo_search.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 import 'package:tsdemo_guide/src/guide_routes.dart';
 
@@ -88,7 +88,15 @@ class _CQModulesHomePageState extends CJTSBasePageState<CQModulesHomePage> {
           },
           {
             'title': "Search(搜索模块)",
-            'nextPageName': SearchRouters.searchHomePage,
+            // 'nextPageName': SearchRouters.searchHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TSSearchHomePage(),
+                ),
+              );
+            }
           },
           {
             'title': "Guide(引导模块)",
