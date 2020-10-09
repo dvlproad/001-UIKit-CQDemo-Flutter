@@ -1,4 +1,4 @@
-name: flutter_effect
+name: flutter_search
 description: A new Flutter package project.
 version: 0.0.1
 author:
@@ -26,8 +26,6 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-  assets:
-  - assets/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
