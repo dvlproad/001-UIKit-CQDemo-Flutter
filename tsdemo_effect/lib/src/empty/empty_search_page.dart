@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
 class TSEmptySearchPage extends StatefulWidget {
+  TSEmptySearchPage({Key key}) : super(key: key);
+
   @override
   _TSEmptySearchPagetate createState() => _TSEmptySearchPagetate();
 }

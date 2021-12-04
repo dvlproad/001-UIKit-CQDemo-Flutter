@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './refresh/refresh_home_page.dart';
 import './empty/empty_home_page.dart';
+import './loadstate/loadstate_home_page.dart';
+
+import 'package:flutter_effect/src/load_state_widget/load_state_widget.dart';
 
 class TSEffectHomePage extends CJTSBasePage {
   TSEffectHomePage({Key key}) : super(key: key);
@@ -54,6 +57,18 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
             'actionBlock': () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TSEmptyHomePage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "LoadState(加载各状态视图:加载中、成功、失败、无数据)",
+        'values': [
+          {
+            'title': "LoadState",
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSLoadStateHomePage()));
             },
           },
         ]
