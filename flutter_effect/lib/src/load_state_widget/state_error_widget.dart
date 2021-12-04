@@ -35,21 +35,6 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
               height: 317,
               child: Image.asset('images/error.gif'),
             ),
-        CJBGImageWidget(
-          backgroundImage:
-          AssetImage('assets/empty_bg_empty.png', package: 'flutter_effect'),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Text(
-                this.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
-              SizedBox(height: 120),
-            ],
-          ),
-        ),
             Text(
               "加载失败，请轻触重试!",
               style: TextStyle(
