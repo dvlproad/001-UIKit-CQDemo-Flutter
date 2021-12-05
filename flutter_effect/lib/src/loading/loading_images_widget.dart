@@ -1,45 +1,22 @@
+// 一帧一帧图片组成的动画组件
 import 'package:flutter/material.dart';
 
-class C1440Loading extends StatelessWidget {
-  final double size;
-
-  final int interval;
-
-  C1440Loading({this.size, this.interval});
-
-  @override
-  Widget build(BuildContext context) {
-    List<String> images = [];
-
-    for (int i = 0; i < 37; ++i) {
-      images.add("assets/loading/loading_$i.png");
-    }
-
-    return C1440FrameAnimationImage(
-      images,
-      width: size ?? 40,
-      height: size ?? 40,
-      interval: interval ?? 50,
-    );
-  }
-}
-
-class C1440FrameAnimationImage extends StatefulWidget {
+class FrameAnimationImageWidget extends StatefulWidget {
   final List<String> _assetList;
   final double width;
   final double height;
   final int interval;
 
-  C1440FrameAnimationImage(this._assetList,
+  FrameAnimationImageWidget(this._assetList,
       {this.width, this.height, this.interval = 200});
 
   @override
   State<StatefulWidget> createState() {
-    return _FrameAnimationImageState();
+    return _FrameAnimationImageWidgetState();
   }
 }
 
-class _FrameAnimationImageState extends State<C1440FrameAnimationImage>
+class _FrameAnimationImageWidgetState extends State<FrameAnimationImageWidget>
     with SingleTickerProviderStateMixin {
   /// 动画控制
   Animation<double> _animation;
@@ -91,12 +68,13 @@ class _FrameAnimationImageState extends State<C1440FrameAnimationImage>
 
     for (int i = 0; i < widget._assetList.length; ++i) {
       if (i != ix) {
-        images.add(Image.asset(
+        Image image = Image.asset(
           widget._assetList[i],
           package: 'flutter_effect',
           width: 0,
           height: 0,
-        ));
+        );
+        images.add(image);
       }
     }
 

@@ -6,7 +6,7 @@ class StateErrorWidget extends StatefulWidget {
 
   StateErrorWidget({
     Key key,
-    this.errorRetry
+    this.errorRetry,
   }) : super(key: key);
 
   @override
@@ -33,13 +33,18 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
             Container(
               width: 405,
               height: 317,
-              child: Image.asset('images/error.gif'),
+              child: Image.asset(
+                'assets/empty_bg_empty.png',
+                package: 'flutter_effect',
+                fit: BoxFit.cover,
+              ),
             ),
             Text(
               "加载失败，请轻触重试!",
               style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 24,),
+                color: Colors.green,
+                fontSize: 24,
+              ),
             ),
           ],
         ),

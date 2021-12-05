@@ -6,7 +6,7 @@ class StateNodataWidget extends StatefulWidget {
 
   StateNodataWidget({
     Key key,
-    this.emptyRetry
+    this.emptyRetry,
   }) : super(key: key);
 
   @override
@@ -17,28 +17,30 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.white,
-        width: 750,
-        height: double.infinity,
-        child: InkWell(
-          onTap: widget.emptyRetry,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                width: 405,
-                height: 281,
-                child: Image.asset('images/nodata.gif'),
+      color: Colors.white,
+      width: 750,
+      height: double.infinity,
+      child: InkWell(
+        onTap: widget.emptyRetry,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 405,
+              height: 281,
+              child: Image.asset(
+                'assets/empty_bg_empty.png',
+                package: 'flutter_effect',
+                fit: BoxFit.cover,
               ),
-              Text(
-                '暂无相关数据,轻触重试~',
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 24),
-              ),
-            ],
-          ),
+            ),
+            Text(
+              '暂无相关数据,轻触重试~',
+              style: TextStyle(color: Colors.red, fontSize: 24),
+            ),
+          ],
         ),
+      ),
     );
   }
 }

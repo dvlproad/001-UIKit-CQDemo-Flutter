@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import './c1440_loading.dart';
+import '../loading/c1440_loading.dart';
 
 class C1440RefreshHeader extends Header {
   /// Key
@@ -155,13 +155,13 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
         duration: const Duration(milliseconds: 300), vsync: this);
     _floatBackAnimation = Tween(begin: widget.refreshIndicatorExtent, end: 0.0)
         .animate(_floatBackController)
-          ..addListener(() {
-            setState(() {
-              if (_floatBackAnimation.status != AnimationStatus.dismissed) {
-                _floatBackDistance = _floatBackAnimation.value;
-              }
-            });
-          });
+      ..addListener(() {
+        setState(() {
+          if (_floatBackAnimation.status != AnimationStatus.dismissed) {
+            _floatBackDistance = _floatBackAnimation.value;
+          }
+        });
+      });
     _floatBackAnimation.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         _floatBackController.reset();
@@ -228,8 +228,12 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
                   : null,
           child: Container(
             alignment: widget.classicalHeader.alignment ?? isVertical
-                ? isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : !isReverse ? Alignment.centerRight : Alignment.centerLeft,
+                ? isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : !isReverse
+                    ? Alignment.centerRight
+                    : Alignment.centerLeft,
             width: isVertical
                 ? double.infinity
                 : _floatBackDistance == null

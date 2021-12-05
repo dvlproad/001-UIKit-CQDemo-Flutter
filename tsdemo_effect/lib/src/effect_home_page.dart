@@ -80,8 +80,10 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
           {
             'title': "LoadState",
             'actionBlock': () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSLoadStateHomePage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSLoadStateHomePage()));
             },
           },
         ]

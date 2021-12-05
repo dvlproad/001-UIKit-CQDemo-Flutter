@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
 class TSLoadStatePage extends StatefulWidget {
-  final  LoadState loadState;
+  final LoadState loadState;
   TSLoadStatePage({
     Key key,
     this.loadState = LoadState.State_Loading,
   }) : super(key: key);
-
 
   @override
   _TSLoadStatePageState createState() => _TSLoadStatePageState();
@@ -38,10 +37,10 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
     );
   }
 
-  Widget _listView(BuildContext context){
+  Widget _listView(BuildContext context) {
     return LoadStateLayout(
       state: _layoutState,
-      emptyRetry: (){
+      emptyRetry: () {
         setState(() {
           _layoutState = LoadState.State_Loading;
         });
