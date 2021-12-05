@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './c1440_loading.dart';
+import 'package:lottie/lottie.dart';
 
 class StateLoadingWidget extends StatefulWidget {
   StateLoadingWidget({
@@ -30,7 +31,7 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            C1440Loading(),
+            _loadingWidget,
             SizedBox(height: 10),
             Text(
               '拼命加载中...',
@@ -39,6 +40,17 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget get _loadingWidget {
+    // return C1440Loading();
+    return Lottie.asset(
+      'assets/flare/footer.json',
+      package: 'flutter_effect',
+      fit: BoxFit.fill,
+      alignment: Alignment.bottomCenter,
+      repeat: true,
     );
   }
 }

@@ -28,6 +28,7 @@ class _TSLoadingPageState extends State<TSLoadingPage> {
           //宽高都充满屏幕剩余空间
           width: double.infinity,
           height: double.infinity,
+          color: Colors.red,
           child: _buildWidget,
         ),
       ),
