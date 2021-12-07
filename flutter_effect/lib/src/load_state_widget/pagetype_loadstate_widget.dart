@@ -16,7 +16,7 @@ class PageTypeLoadStateWidget extends StatefulWidget {
 
   PageTypeLoadStateWidget({
     Key key,
-    this.widgetType = WidgetType.Init, //默认为加载状态
+    this.widgetType = WidgetType.Init, //默认为初始界面
     this.initWidget,
     // this.initWidget = const Container(), // 默认Container()
     this.successWidget,

@@ -11,6 +11,8 @@ export './src/empty/emptyview.dart';
 export './src/loading/state_loading_widget.dart';
 
 // load_state_widget
+export './src/load_state_widget/state_error_widget.dart'; // 错误视图组件
+export './src/load_state_widget/state_nodata_widget.dart'; //无网络视图组件
 export './src/load_state_widget/load_state_widget.dart';
 export './src/load_state_widget/pagetype_loadstate_widget.dart';
 export './src/load_state_widget/pagetype_loadstate_default_widget.dart';

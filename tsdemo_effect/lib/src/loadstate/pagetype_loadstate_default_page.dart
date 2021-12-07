@@ -18,51 +18,35 @@ class TSPageTypeLoadStateDefaultPage extends BJHBasePage {
 
 class _TSPageTypeLoadStateDefaultPageState
     extends BJHBasePageState<TSPageTypeLoadStateDefaultPage> {
-  WidgetType _widgetType;
-  bool showSelfLoading = false;
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-    _widgetType = WidgetType.Init;
-    showSelfLoading = false;
-
     getData();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
-      ),
-      body: Container(
-        //宽高都充满屏幕剩余空间
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.red,
-        child: _buildWidget(),
+  PreferredSizeWidget appBar() {
+    return AppBar(
+      title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
+    );
+  }
+
+  @override
+  Widget buildInitWidget(BuildContext context) {
+    return Container(
+      color: Colors.green,
+      height: 100,
+      child: Text(
+        '我是初始视图的底部视图...',
+        style: TextStyle(color: Colors.blue, fontSize: 24),
+        textAlign: TextAlign.center,
       ),
     );
   }
 
-  Widget _buildWidget() {
-    return PageTypeLoadStateDefaultWidget(
-      showSelfLoading: showSelfLoading,
-      widgetType: _widgetType,
-      emptyRetry: () {
-        getData();
-      },
-      errorRetry: () {
-        getData();
-      },
-      successWidget: _successWidget,
-    );
-  }
-
-  Widget get _successWidget {
+  @override
+  Widget buildSuccessWidget(BuildContext context) {
     return TSNetworkResultWidget(
       title: '我是【请求成功，且有数据】的界面',
       getData_Success: getData,
@@ -71,22 +55,42 @@ class _TSPageTypeLoadStateDefaultPageState
     );
   }
 
+  // @override
+  // Widget buildNodataWidget(BuildContext context) {
+  //   return StateNodataWidget(
+  //     emptyRetry: getData,
+  //   );
+  // }
+
+  // @override
+  // Widget buildErrorWidget(BuildContext context) {
+  //   return StateErrorWidget(
+  //     errorRetry: getData,
+  //   );
+  // }
+
+  // @override
+  // Widget buildSelfLoadingWidgetWidget(BuildContext context) {
+  //   return Container(
+  //     height: 242,
+  //     // color: Color.fromRGBO(22, 17, 175, 0.5),
+  //     child: StateLoadingWidget(),
+  //   );
+  // }
+
   // 获取网络数据
   void getData() {
-    showSelfLoading = true;
-    setState(() {});
+    showSelfLoadingAction();
+
     Future.delayed(Duration(seconds: 1), () {
       print('延时1s执行');
       getRequest().then((value) {
-        showSelfLoading = false;
-
         String bean = value;
         if (bean == null) {
-          _widgetType = WidgetType.NoData;
+          updateWidgetType(WidgetType.NoData);
         } else {
-          _widgetType = WidgetType.Success;
+          updateWidgetType(WidgetType.Success);
         }
-        setState(() {});
       });
     });
   }

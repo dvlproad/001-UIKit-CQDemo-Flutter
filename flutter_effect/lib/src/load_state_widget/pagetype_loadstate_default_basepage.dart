@@ -25,8 +25,8 @@ abstract class BJHBasePage extends StatefulWidget {
 
 //class BJHBasePageState extends State<BJHBasePage> {
 abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
-  WidgetType _currentWidgetType;
-  bool _showSelfLoading = false;
+  WidgetType _currentWidgetType = WidgetType.Init; //默认为初始界面
+  bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
   @override
   void initState() {
@@ -87,7 +87,10 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
   void getData() {}
 
   Widget buildInitWidget(BuildContext context) {
-    return null;
+    //return null; // 如果返回null 会黑屏
+    return Container(
+      color: Colors.white,
+    );
   }
 
   Widget buildSuccessWidget(BuildContext context) {
