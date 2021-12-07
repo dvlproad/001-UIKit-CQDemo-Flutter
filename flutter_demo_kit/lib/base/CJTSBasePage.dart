@@ -10,7 +10,11 @@ abstract class CJTSBasePage extends StatefulWidget {
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
   CJTSBasePageState createState() => getState();
-  CJTSBasePageState getState();
+
+  ///子类实现
+  CJTSBasePageState getState() {
+    print('请在子类中实现');
+  }
 }
 
 //class _CJTSTableHomeBasePageState extends State<CJTSBasePage> {

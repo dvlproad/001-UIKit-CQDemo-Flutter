@@ -2,33 +2,32 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
-import 'package:flutter_effect/src/load_state_widget/state_error_widget.dart';
-import 'package:flutter_effect/src/load_state_widget/state_nodata_widget.dart';
-
 import 'package:dio/dio.dart';
 
-class TSLoadStatePage extends StatefulWidget {
-  final WidgetType loadState;
-  TSLoadStatePage({
+import './widget/test_network_widget.dart';
+
+class TSPageTypeLoadStateDefaultPage extends BJHBasePage {
+  TSPageTypeLoadStateDefaultPage({
     Key key,
-    this.loadState = WidgetType.Init,
   }) : super(key: key);
 
   @override
-  _TSLoadStatePageState createState() => _TSLoadStatePageState();
+  _TSPageTypeLoadStateDefaultPageState createState() =>
+      _TSPageTypeLoadStateDefaultPageState();
 }
 
-class _TSLoadStatePageState extends State<TSLoadStatePage> {
+class _TSPageTypeLoadStateDefaultPageState
+    extends BJHBasePageState<TSPageTypeLoadStateDefaultPage> {
   WidgetType _widgetType;
-  bool showLoading = false;
+  bool showSelfLoading = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _widgetType = widget.loadState;
-    showLoading = false;
+    _widgetType = WidgetType.Init;
+    showSelfLoading = false;
 
     getData();
   }
@@ -39,51 +38,47 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
       appBar: AppBar(
         title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
       ),
-      body: Center(
-        child: _pageTypeWidget,
+      body: Container(
+        //宽高都充满屏幕剩余空间
+        width: double.infinity,
+        height: double.infinity,
+        color: Colors.red,
+        child: _buildWidget(),
       ),
     );
   }
 
-  Widget get _pageTypeWidget {
-    return LoadStateLayout(
+  Widget _buildWidget() {
+    return PageTypeLoadStateDefaultWidget(
+      showSelfLoading: showSelfLoading,
       widgetType: _widgetType,
-      // initWidget: widget.initWidget;
-      initWidget: Container(
-        color: Colors.green,
-        height: 100,
-        child: Text(
-          '我是底部视图222...',
-          style: TextStyle(color: Colors.blue, fontSize: 24),
-          textAlign: TextAlign.center,
-        ),
-      ),
-      successWidget: Center(child: Text('成功')),
-      //错误按钮点击过后进行重新加载
-      errorWidget: StateErrorWidget(
-        errorRetry: () {
-          setState(() {
-            //_layoutState = ; // 不变
-          });
-          getData();
-        },
-      ),
-      // nodataWidget: StateNodataWidget(
-      //   emptyRetry: (){
-      //     setState(() {
-      //     // _layoutState = WidgetType.State_Loading; // 不变
-      //   });
-      //   getData();
-      //   }),
-      // ),
+      emptyRetry: () {
+        getData();
+      },
+      errorRetry: () {
+        getData();
+      },
+      successWidget: _successWidget,
     );
   }
 
+  Widget get _successWidget {
+    return TSNetworkResultWidget(
+      title: '我是【请求成功，且有数据】的界面',
+      getData_Success: getData,
+      getData_NoData: getData,
+      getData_Error: getData,
+    );
+  }
+
+  // 获取网络数据
   void getData() {
+    showSelfLoading = true;
+    setState(() {});
     Future.delayed(Duration(seconds: 1), () {
       print('延时1s执行');
       getRequest().then((value) {
-        showLoading = false;
+        showSelfLoading = false;
 
         String bean = value;
         if (bean == null) {

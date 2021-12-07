@@ -13,7 +13,7 @@ class C1440Loading extends StatelessWidget {
     List<String> images = [];
 
     for (int i = 0; i < 37; ++i) {
-      images.add("assets/loading/loading_$i.png");
+      images.add("assets/loading_images/loading_$i.png");
     }
 
     return FrameAnimationImageWidget(

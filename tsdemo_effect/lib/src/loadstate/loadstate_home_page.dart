@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './loadstate_page.dart';
+import './pagetype_loadstate_page.dart';
+import './pagetype_loadstate_default_page.dart';
+import './my_info.dart';
 
 import 'package:flutter_effect/flutter_effect.dart'; // 只为引入状态枚举
 
@@ -34,32 +37,90 @@ class _TSLoadStateHomePageState extends CJTSBasePageState<TSLoadStateHomePage> {
             'title': "加载中",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSLoadStatePage(loadState: LoadState.State_Loading)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TSLoadStatePage(loadState: WidgetType.Init)));
             },
           },
           {
             'title': "成功",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSLoadStatePage(loadState: LoadState.State_Success)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TSLoadStatePage(loadState: WidgetType.Success)));
             },
           },
           {
             'title': "失败",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSLoadStatePage(loadState: LoadState.State_Error)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TSLoadStatePage(loadState: WidgetType.Error)));
             },
           },
           {
             'title': "无数据空页面",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TSLoadStatePage(loadState: WidgetType.NoData)));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "LoadState(加载各状态视图:加载中、成功、失败、无数据)",
+        'values': [
+          {
+            'title': "整体测试（PageType）",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSLoadStatePage(loadState: LoadState.State_Empty)));
+                  MaterialPageRoute(builder: (context) => TSLoadStatePage()));
+            },
+          },
+          {
+            'title': "整体测试(PageType+LoadState)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSPageTypeLoadStatePage()));
+            },
+          },
+          {
+            'title': "整体测试(PageType+LoadState+Default)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSPageTypeLoadStateDefaultPage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "其他",
+        'values': [
+          {
+            'title': "Cell",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => MyInfo()));
             },
           },
         ]
