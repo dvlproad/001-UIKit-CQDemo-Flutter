@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  cached_network_image: any
   lottie: any
   flutter_easyrefresh: any
 
@@ -31,6 +32,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
   - assets/
+  - assets/loading_gif/
   - assets/loading_images/
   - assets/loading_json/
   - assets/flare/

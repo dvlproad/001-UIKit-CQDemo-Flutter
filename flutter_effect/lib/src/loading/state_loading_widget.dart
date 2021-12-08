@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import './c1440_loading.dart';
-import 'package:lottie/lottie.dart';
+import './loading_widget.dart'; // 使用 images
 
 class StateLoadingWidget extends StatefulWidget {
   StateLoadingWidget({
@@ -46,18 +45,6 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
   }
 
   Widget get _loadingWidget {
-    // return C1440Loading();
-    return Container(
-      // color: Colors.yellow,
-      height: 100,
-      child: Lottie.asset(
-        'assets/loading_json/footer.json',
-        // 'assets/loading_json/undefined_ske.json',
-        package: 'flutter_effect',
-        fit: BoxFit.fill,
-        alignment: Alignment.bottomCenter,
-        repeat: true,
-      ),
-    );
+    return LoadingWidget();
   }
 }

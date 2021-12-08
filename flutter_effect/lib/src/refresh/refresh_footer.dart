@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:lottie/lottie.dart';
 
-/// 质感设计FooterC1440RefreshFooter
-class C1440RefreshFooter extends Footer {
+/// 质感设计FooterRefreshFooter
+class RefreshFooter extends Footer {
   final Key key;
   final double displacement;
 
@@ -17,7 +17,7 @@ class C1440RefreshFooter extends Footer {
 
   final Widget noMoreWidget;
 
-  C1440RefreshFooter({
+  RefreshFooter({
     this.noMoreWidget,
     this.key,
     this.displacement = 40.0,
@@ -67,7 +67,7 @@ class C1440RefreshFooter extends Footer {
         enableInfiniteLoad,
         success,
         noMore);
-    return C1440RefreshFooterWidget(
+    return RefreshFooterWidget(
       key: key,
       displacement: displacement,
       valueColor: valueColor,
@@ -79,7 +79,7 @@ class C1440RefreshFooter extends Footer {
 }
 
 /// 质感设计Footer组件
-class C1440RefreshFooterWidget extends StatefulWidget {
+class RefreshFooterWidget extends StatefulWidget {
   final double displacement;
   // 颜色
   final Animation<Color> valueColor;
@@ -89,7 +89,7 @@ class C1440RefreshFooterWidget extends StatefulWidget {
 
   final Widget noMoreWidget;
 
-  const C1440RefreshFooterWidget({
+  const RefreshFooterWidget({
     Key key,
     this.displacement,
     this.valueColor,
@@ -99,12 +99,12 @@ class C1440RefreshFooterWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  C1440RefreshFooterWidgetState createState() {
-    return C1440RefreshFooterWidgetState();
+  RefreshFooterWidgetState createState() {
+    return RefreshFooterWidgetState();
   }
 }
 
-class C1440RefreshFooterWidgetState extends State<C1440RefreshFooterWidget> {
+class RefreshFooterWidgetState extends State<RefreshFooterWidget> {
   LoadMode get _refreshState => widget.linkNotifier.loadState;
   double get _pulledExtent => widget.linkNotifier.pulledExtent;
   double get _riggerPullDistance => widget.linkNotifier.loadTriggerPullDistance;
@@ -155,14 +155,34 @@ class C1440RefreshFooterWidgetState extends State<C1440RefreshFooterWidget> {
     return Stack(
       children: <Widget>[
         Positioned(
-          top: isVertical ? !isReverse ? 0.0 : null : 0.0,
-          bottom: isVertical ? isReverse ? 0.0 : null : 0.0,
-          left: !isVertical ? !isReverse ? 0.0 : null : 0.0,
-          right: !isVertical ? isReverse ? 0.0 : null : 0.0,
+          top: isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          bottom: isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          left: !isVertical
+              ? !isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
+          right: !isVertical
+              ? isReverse
+                  ? 0.0
+                  : null
+              : 0.0,
           child: Container(
             alignment: isVertical
-                ? !isReverse ? Alignment.topCenter : Alignment.bottomCenter
-                : !isReverse ? Alignment.centerLeft : Alignment.centerRight,
+                ? !isReverse
+                    ? Alignment.topCenter
+                    : Alignment.bottomCenter
+                : !isReverse
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
             child: child,
             // child: RefreshProgressIndicator(
             //   value: _refreshState == LoadMode.armed ||

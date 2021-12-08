@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import '../loading/c1440_loading.dart';
+import '../loading/loading_widget.dart';
 
-class C1440RefreshHeader extends Header {
+class RefreshHeader extends Header {
   /// Key
   final Key key;
 
@@ -12,7 +12,7 @@ class C1440RefreshHeader extends Header {
   /// 背景颜色
   final Color bgColor;
 
-  C1440RefreshHeader({
+  RefreshHeader({
     extent = 60.0,
     triggerDistance = 70.0,
     float = false,
@@ -53,7 +53,7 @@ class C1440RefreshHeader extends Header {
       bool enableInfiniteRefresh,
       bool success,
       bool noMore) {
-    return C1440RefreshHeaderWidget(
+    return RefreshHeaderWidget(
       key: key,
       classicalHeader: this,
       refreshState: refreshState,
@@ -71,8 +71,8 @@ class C1440RefreshHeader extends Header {
 }
 
 /// 经典Header组件
-class C1440RefreshHeaderWidget extends StatefulWidget {
-  final C1440RefreshHeader classicalHeader;
+class RefreshHeaderWidget extends StatefulWidget {
+  final RefreshHeader classicalHeader;
   final RefreshMode refreshState;
   final double pulledExtent;
   final double refreshTriggerPullDistance;
@@ -84,7 +84,7 @@ class C1440RefreshHeaderWidget extends StatefulWidget {
   final bool success;
   final bool noMore;
 
-  C1440RefreshHeaderWidget(
+  RefreshHeaderWidget(
       {Key key,
       this.refreshState,
       this.classicalHeader,
@@ -100,12 +100,11 @@ class C1440RefreshHeaderWidget extends StatefulWidget {
       : super(key: key);
 
   @override
-  C1440RefreshHeaderWidgetState createState() =>
-      C1440RefreshHeaderWidgetState();
+  RefreshHeaderWidgetState createState() => RefreshHeaderWidgetState();
 }
 
-class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
-    with TickerProviderStateMixin<C1440RefreshHeaderWidget> {
+class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
+    with TickerProviderStateMixin<RefreshHeaderWidget> {
   // 是否到达触发刷新距离
   bool _overTriggerDistance = false;
 
@@ -278,7 +277,7 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
                     children: <Widget>[
                       Offstage(
                         offstage: !_isLoading,
-                        child: C1440Loading(),
+                        child: LoadingWidget(),
                       ),
                       Offstage(
                         offstage: _isLoading,
@@ -296,7 +295,7 @@ class C1440RefreshHeaderWidgetState extends State<C1440RefreshHeaderWidget>
                     children: <Widget>[
                       Offstage(
                         offstage: !_isLoading,
-                        child: C1440Loading(),
+                        child: LoadingWidget(),
                       ),
                       Offstage(
                         offstage: _isLoading,

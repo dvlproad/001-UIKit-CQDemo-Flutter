@@ -31,7 +31,7 @@ class _TSRefreshDefaultPageState extends State<TSRefreshDefaultPage> {
           // header: BezierCircleHeader(
           //   color: Theme.of(context).scaffoldBackgroundColor,
           // ),
-          footer: C1440RefreshFooter(
+          footer: RefreshFooter(
             noMoreWidget: Text(
               "没有更多媒体了",
               style: TextStyle(
