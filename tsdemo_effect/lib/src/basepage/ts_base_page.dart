@@ -4,31 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:dio/dio.dart';
 
-import './widget/test_network_widget.dart';
+import '../widget/test_network_widget.dart';
 
-class TSPageTypeLoadStateDefaultPage extends BJHBasePage {
-  TSPageTypeLoadStateDefaultPage({
+class TSBasePage extends BJHBasePage {
+  TSBasePage({
     Key key,
   }) : super(key: key);
 
   @override
-  _TSPageTypeLoadStateDefaultPageState createState() =>
-      _TSPageTypeLoadStateDefaultPageState();
+  _TSBasePageState createState() => _TSBasePageState();
 }
 
-class _TSPageTypeLoadStateDefaultPageState
-    extends BJHBasePageState<TSPageTypeLoadStateDefaultPage> {
+class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData();
+    getData_Success();
   }
 
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
+      title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"),
     );
   }
 
@@ -49,25 +47,31 @@ class _TSPageTypeLoadStateDefaultPageState
   Widget buildSuccessWidget(BuildContext context) {
     return TSNetworkResultWidget(
       title: '我是【请求成功，且有数据】的界面',
-      getData_Success: getData,
-      getData_NoData: getData,
-      getData_Error: getData,
+      getData_Success: getData_Success,
+      getData_NoData: getData_NoData,
+      getData_Error: getData_Error,
     );
   }
 
-  // @override
-  // Widget buildNodataWidget(BuildContext context) {
-  //   return StateNodataWidget(
-  //     emptyRetry: getData,
-  //   );
-  // }
+  @override
+  Widget buildNodataWidget(BuildContext context) {
+    return TSNetworkResultWidget(
+      title: '我是【请求成功，但无数据】的界面',
+      getData_Success: getData_Success,
+      getData_NoData: getData_NoData,
+      getData_Error: getData_Error,
+    );
+  }
 
-  // @override
-  // Widget buildErrorWidget(BuildContext context) {
-  //   return StateErrorWidget(
-  //     errorRetry: getData,
-  //   );
-  // }
+  @override
+  Widget buildErrorWidget(BuildContext context) {
+    return TSNetworkResultWidget(
+      title: '我是【请求失败】的界面',
+      getData_Success: getData_Success,
+      getData_NoData: getData_NoData,
+      getData_Error: getData_Error,
+    );
+  }
 
   // @override
   // Widget buildSelfLoadingWidgetWidget(BuildContext context) {
@@ -77,6 +81,36 @@ class _TSPageTypeLoadStateDefaultPageState
   //     child: StateLoadingWidget(),
   //   );
   // }
+
+  // 模拟网络请求：请求成功，且有数据
+  void getData_Success() {
+    showSelfLoadingAction();
+
+    Future.delayed(Duration(seconds: 1), () {
+      print('模拟网络请求结束：请求成功，且有数据');
+      updateWidgetType(WidgetType.Success);
+    });
+  }
+
+  // 模拟网络请求：请求成功，但无数据
+  void getData_NoData() {
+    showSelfLoadingAction();
+
+    Future.delayed(Duration(seconds: 1), () {
+      print('模拟网络请求结束：请求成功，但无数据');
+      updateWidgetType(WidgetType.NoData);
+    });
+  }
+
+  // 模拟网络请求：请求失败
+  void getData_Error() {
+    showSelfLoadingAction();
+
+    Future.delayed(Duration(seconds: 1), () {
+      print('模拟网络请求结束：请求失败');
+      updateWidgetType(WidgetType.Error);
+    });
+  }
 
   // 获取网络数据
   void getData() {

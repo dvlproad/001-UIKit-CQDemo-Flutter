@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:dio/dio.dart';
 
-import './widget/test_network_widget.dart';
+import '../widget/test_network_widget.dart';
 
 class TSPageTypeLoadStatePage extends StatefulWidget {
   TSPageTypeLoadStatePage({

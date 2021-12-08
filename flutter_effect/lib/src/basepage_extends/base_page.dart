@@ -1,11 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
-import './pagetype_loadstate_widget.dart';
-import './load_state_widget.dart'; // 为了引入WidgetType
+import '../load_state_widget/pagetype_loadstate_widget.dart';
+import '../load_state_widget/load_state_widget.dart'; // 为了引入WidgetType
 
-import './state_error_widget.dart';
-import './state_nodata_widget.dart';
 import '../loading/state_loading_widget.dart';
 
 //class BJHBasePage extends StatefulWidget {
@@ -83,9 +81,6 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
     setState(() {});
   }
 
-  /// 请求网络数据(常用此函数名)
-  void getData() {}
-
   Widget buildInitWidget(BuildContext context) {
     //return null; // 如果返回null 会黑屏
     return Container(
@@ -98,15 +93,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
   }
 
   Widget buildNodataWidget(BuildContext context) {
-    return StateNodataWidget(
-      emptyRetry: getData,
-    );
+    return null;
   }
 
   Widget buildErrorWidget(BuildContext context) {
-    return StateErrorWidget(
-      errorRetry: getData,
-    );
+    return null;
   }
 
   Widget buildSelfLoadingWidgetWidget(BuildContext context) {

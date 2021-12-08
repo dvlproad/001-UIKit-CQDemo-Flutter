@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './loadstate_page.dart';
 import './pagetype_loadstate_page.dart';
-import './pagetype_loadstate_default_page.dart';
-import './my_info.dart';
 
 import 'package:flutter_effect/flutter_effect.dart'; // 只为引入状态枚举
 
@@ -98,29 +96,6 @@ class _TSLoadStateHomePageState extends CJTSBasePageState<TSLoadStateHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TSPageTypeLoadStatePage()));
-            },
-          },
-          {
-            'title': "整体测试(PageType+LoadState+Default)",
-            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
-            'actionBlock': () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TSPageTypeLoadStateDefaultPage()));
-            },
-          },
-        ]
-      },
-      {
-        'theme': "其他",
-        'values': [
-          {
-            'title': "Cell",
-            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
-            'actionBlock': () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyInfo()));
             },
           },
         ]

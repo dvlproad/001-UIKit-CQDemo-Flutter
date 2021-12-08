@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import './pagetype_loadstate_widget.dart';
-import './load_state_widget.dart'; // 为了引入WidgetType
+import '../load_state_widget/pagetype_loadstate_widget.dart';
+import '../load_state_widget/load_state_widget.dart'; // 为了引入WidgetType
 
-import './state_error_widget.dart';
-import './state_nodata_widget.dart';
+import '../load_state_widget/state_error_widget.dart';
+import '../load_state_widget/state_nodata_widget.dart';
 import '../loading/state_loading_widget.dart';
 
 ///根据不同状态来展示不同的视图

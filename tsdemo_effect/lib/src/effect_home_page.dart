@@ -6,6 +6,8 @@ import './empty/empty_home_page.dart';
 import './loading/loading_home_page.dart';
 import './loadstate/loadstate_home_page.dart';
 
+import './basepage/tspage_home_page.dart';
+
 import 'package:flutter_effect/src/load_state_widget/load_state_widget.dart';
 
 class TSEffectHomePage extends CJTSBasePage {
@@ -84,6 +86,20 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TSLoadStateHomePage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "BasePage(加载各状态视图:加载中、成功、失败、无数据)",
+        'values': [
+          {
+            'title': "BasePage",
+            'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSBasePageHomePage()));
             },
           },
         ]
