@@ -26,10 +26,10 @@ class _TSLoadingHomePageState extends CJTSBasePageState<TSLoadingHomePage> {
   Widget contentWidget() {
     sectionModels = [
       {
-        'theme': "加载中",
+        'theme': "加载动画",
         'values': [
           {
-            'title': "加载中",
+            'title': "加载动画",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
               Navigator.push(context,

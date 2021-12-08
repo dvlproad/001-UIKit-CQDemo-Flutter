@@ -3,9 +3,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './overlay_view_routes.dart';
 
 class OverlayViewHomePage extends CJTSBasePage {
-  final String title;
-
-  OverlayViewHomePage({Key key, this.title}) : super(key: key);
+  OverlayViewHomePage({Key key}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
@@ -31,19 +29,29 @@ class _CQModulesHomePageState extends CJTSBasePageState<OverlayViewHomePage> {
 
     sectionModels = [
       {
-        'title': "Toast(View)-暂无",
-        'imageSource': imageSource,
-        'nextPageName': "ToastHomePage1"
-      },
-      {
-        'title': "ActionSheet(View)",
-        'imageSource': imageSource,
-        'nextPageName': "ActionSheetHomePage1"
-      },
-      {
-        'title': "Alert(View)",
-        'imageSource': imageSource,
-        'nextPageName': OverlayViewRouters.alertViewHomePage,
+        'theme': "单条信息的弹窗视图",
+        'values': [
+          {
+            'title': "MessageAlertPage",
+            'content': '单条信息的弹窗视图显示测试',
+            'nextPageName': OverlayViewRouters.messageAlertViewPage,
+          },
+          {
+            'title': "Toast(View)-暂无",
+            'imageSource': imageSource,
+            'nextPageName': "ToastHomePage1"
+          },
+          {
+            'title': "ActionSheet(View)",
+            'imageSource': imageSource,
+            'nextPageName': "ActionSheetHomePage1"
+          },
+          {
+            'title': "Alert(View)",
+            'imageSource': imageSource,
+            'nextPageName': OverlayViewRouters.alertViewHomePage,
+          },
+        ]
       },
     ];
 

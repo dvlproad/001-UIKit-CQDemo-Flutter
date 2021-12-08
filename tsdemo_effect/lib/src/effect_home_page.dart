@@ -65,7 +65,7 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
         ]
       },
       {
-        'theme': "Loading(加载中)",
+        'theme': "Loading(加载动画)",
         'values': [
           {
             'title': "Loading",

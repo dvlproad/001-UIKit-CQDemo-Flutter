@@ -36,7 +36,6 @@ flutter:
   - assets/loading_gif/
   - assets/loading_images/
   - assets/loading_json/
-  - assets/flare/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

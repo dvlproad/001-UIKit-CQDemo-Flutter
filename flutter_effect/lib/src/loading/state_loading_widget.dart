@@ -25,19 +25,21 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
       height: double.infinity,
       alignment: Alignment.center,
       child: Container(
-        color: Color.fromRGBO(22, 170, 175, 0.5),
+        // color: Color.fromRGBO(22, 170, 175, 0.5),
+        width: 200,
         height: 200,
+        // alignment: Alignment.center,
         padding: EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             _loadingWidget,
-            SizedBox(height: 10),
-            Text(
-              '拼命加载中...',
-              style: TextStyle(color: Colors.blue, fontSize: 24),
-            ),
+            // SizedBox(height: 10),
+            // Text(
+            //   '拼命加载中...',
+            //   style: TextStyle(color: Colors.blue, fontSize: 24),
+            // ),
           ],
         ),
       ),

@@ -41,8 +41,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
             // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
             onPressed: () {
               if (this.cancelHandle != null) {
-                String string = this.cancelHandle('a');
-                print(string);
+                this.cancelHandle();
               }
             },
             child: Text(

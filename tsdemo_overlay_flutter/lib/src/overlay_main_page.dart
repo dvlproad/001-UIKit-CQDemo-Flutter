@@ -1,48 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+
+import './TSOverlayView/OverlayViewHomePage.dart';
 import './TSOverlayView/TSAlertViewHomePage.dart';
 import './TSOverlayUtil/overlay_util_home_page.dart';
 
-class TSOverlayMainPage extends StatefulWidget {
+class TSOverlayMainPage extends CJTSBaseTabBarPage {
+  TSOverlayMainPage({Key key}) : super(key: key);
+
   @override
-  _TSOverlayMainPageState createState() => _TSOverlayMainPageState();
+//  _TSOverlayMainPageState createState() => _TSOverlayMainPageState();
+  CJTSBaseTabBarPageState getState() => _TSOverlayMainPageState();
 }
 
-class _TSOverlayMainPageState extends State<TSOverlayMainPage> {
-  int _selectedIndex = 0;
-
+class _TSOverlayMainPageState
+    extends CJTSBaseTabBarPageState<TSOverlayMainPage> {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        // 底部导航
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text('OverlayView')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.business), title: Text('OverlayUtil')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.school), title: Text('School')),
-        ],
-        currentIndex: _selectedIndex,
-        fixedColor: Colors.blue,
-        onTap: _onItemTapped,
-      ),
-      body: IndexedStack(
-        index: 0,
-        alignment: Alignment.center,
-        children: <Widget>[
-          TSAlertViewHomePage(),
-          TSOverlayUtilHomePage(),
-          TSAlertViewHomePage(),
-        ],
-      ),
-    );
-  }
+  List<dynamic> get tabbarModels {
+    List<dynamic> tabbarModels = [
+      {
+        'title': "OverlayView",
+        'nextPage': OverlayViewHomePage(),
+      },
+      {
+        'title': "OverlayUtil",
+        'nextPage': TSOverlayUtilHomePage(),
+      },
+      {
+        'title': "OverlayView",
+        'nextPage': TSAlertViewHomePage(),
+      },
+    ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    return tabbarModels;
   }
 }
