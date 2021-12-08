@@ -26,13 +26,12 @@ class TSMessageAlertViewPage extends StatelessWidget {
         Text("信息弹窗"),
         SizedBox(height: 40),
         IKnowMessageAlertView(
-          title: "添加的图片数量超过限制",
-          message: "我是提示",
-          iKnowTitle: "我知道了3",
-          iKnowHandle: () {
-            print("点击Alert按钮:'我知道了'");
-          },
-        ),
+            title: "添加的图片数量超过限制",
+            message: "我是提示",
+            iKnowTitle: "我知道了3",
+            iKnowHandle: () {
+              print("点击Alert按钮:'我知道了'");
+            }),
         SizedBox(height: 40),
         CancelOKMessageAlertView(
           title: "提示",

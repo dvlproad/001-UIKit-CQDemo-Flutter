@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import './overlay_util_routes.dart';
 
 class TSOverlayUtilHomePage extends CJTSBasePage {
   final String title;
@@ -30,44 +31,40 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSOverlayUtilHomePage> {
         'theme': "单条信息的弹窗视图",
         'values': [
           {
-            'title': "MessageAlertPage",
-            'content': '单条信息的弹窗视图显示测试',
-            'nextPageName': "MessageAlertPage"
+            'title': "MessageAlertModalPage",
+            'content': '单条信息的弹窗视图弹出测试',
+            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
           },
-          // { 'title': "MessageAlertModalPage", 'content': '单条信息的弹窗视图弹出测试', 'nextPageName': OverlayRouters.messageAlertUtilPage },
         ]
       },
       {
         'theme': "多条信息的弹窗视图",
         'values': [
           {
-            'title': "ListMessageAlertPage",
-            'content': '多条信息的弹窗视图显示测试',
-            'nextPageName': "ListMessageAlertPage"
+            'title': "ListMessageAlertModalPage(待补充)",
+            'content': '多条信息的弹窗视图弹出测试',
+            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
           },
-          // { 'title': "ListMessageAlertModalPage(待补充)", 'content': '多条信息的弹窗视图弹出测试', 'nextPageName': "ListMessageAlertModalPage" },
         ]
       },
       {
         'theme': "单输入框的弹窗视图",
         'values': [
           {
-            'title': "TextInputAlertPage",
-            'content': '单输入框的弹窗视图显示测试',
-            'nextPageName': "TextInputAlertPage"
+            'title': "TextInputAlertModalPage(待补充)",
+            'content': '单输入框的弹窗视图弹出测试',
+            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
           },
-          // { 'title': "TextInputAlertModalPage(待补充)", 'content': '单输入框的弹窗视图弹出测试', 'nextPageName': "TextInputAlertModalPage" },
         ]
       },
       {
         'theme': "多输入框的弹窗视图",
         'values': [
           {
-            'title': "ListTextInputAlertPage",
-            'content': '多输入框的弹窗视图显示测试',
-            'nextPageName': "ListTextInputAlertPage"
+            'title': "ListTextInputAlertModalPage(待补充)",
+            'content': '多输入框的弹窗视图弹出测试',
+            'nextPageName': OverlayUtilRouters.messageAlertUtilPage
           },
-          // { 'title': "ListTextInputAlertModalPage(待补充)", 'content': '多输入框的弹窗视图弹出测试', 'nextPageName': "ListTextInputAlertModalPage" },
         ]
       },
     ];

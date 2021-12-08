@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_easyloading: any
+
   # flutter_overlay_kit: '^1.0.0'
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/

@@ -39,12 +39,12 @@ class _CQModulesHomePageState extends CJTSBasePageState<OverlayViewHomePage> {
           {
             'title': "Toast(View)-暂无",
             'imageSource': imageSource,
-            'nextPageName': "ToastHomePage1"
+            // 'nextPageName': "ToastHomePage1"
           },
           {
             'title': "ActionSheet(View)",
             'imageSource': imageSource,
-            'nextPageName': "ActionSheetHomePage1"
+            // 'nextPageName': "ActionSheetHomePage1"
           },
           {
             'title': "Alert(View)",

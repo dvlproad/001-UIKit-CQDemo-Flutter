@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import './TSOverlayView/OverlayViewHomePage.dart';
-import './TSOverlayView/TSAlertViewHomePage.dart';
+import './TSOverlayAction/overlay_action_home_page.dart';
 import './TSOverlayUtil/overlay_util_home_page.dart';
 
 class TSOverlayMainPage extends CJTSBaseTabBarPage {
@@ -24,12 +24,12 @@ class _TSOverlayMainPageState
         'nextPage': OverlayViewHomePage(),
       },
       {
-        'title': "OverlayUtil",
-        'nextPage': TSOverlayUtilHomePage(),
+        'title': "OverlayAction",
+        'nextPage': TSOverlayActionHomePage(),
       },
       {
-        'title': "OverlayView",
-        'nextPage': TSAlertViewHomePage(),
+        'title': "OverlayUtil",
+        'nextPage': TSOverlayUtilHomePage(),
       },
     ];
 
