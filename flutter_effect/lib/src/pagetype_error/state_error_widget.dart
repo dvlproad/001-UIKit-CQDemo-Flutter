@@ -2,10 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class StateErrorWidget extends StatefulWidget {
+  final ImageProvider image;
+  // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
+  // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
+
   final VoidCallback errorRetry; //错误事件处理
 
   StateErrorWidget({
     Key key,
+    this.image,
     this.errorRetry,
   }) : super(key: key);
 
@@ -29,15 +34,17 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
         onTap: widget.errorRetry,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              width: 405,
-              height: 317,
-              child: Image.asset(
-                'assets/empty_bg_empty.png',
-                package: 'flutter_effect',
-                fit: BoxFit.cover,
-              ),
+            Image(
+              image: widget.image ??
+                  AssetImage(
+                    'assets/empty/empty_bgForText_default.png',
+                    package: 'flutter_effect',
+                  ),
+              width: 200,
+              height: 200,
+              fit: BoxFit.cover,
             ),
             Text(
               "加载失败，请轻触重试!",

@@ -12,7 +12,7 @@ class StateNodataWidget extends StatefulWidget {
   const StateNodataWidget({
     Key key,
     this.image,
-    this.mainTitle = '很抱歉，出错啦',
+    this.mainTitle = '很抱歉，您暂无相关数据',
     this.subTitle = '',
     this.onClick,
   }) : super(key: key);
@@ -31,20 +31,20 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 290,
-          ),
           Image(
             image: widget.image ??
                 AssetImage(
                   'assets/empty/empty_aboveText_default.png',
                   package: 'flutter_effect',
                 ),
-            width: 300,
+            width: 200,
+            height: 200,
             fit: BoxFit.cover,
           ),
           Container(

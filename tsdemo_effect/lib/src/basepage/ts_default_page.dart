@@ -26,7 +26,7 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
+      title: Text("DefaultPage(加载中、成功、失败、无数据)"),
     );
   }
 
@@ -47,10 +47,25 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
   Widget buildSuccessWidget(BuildContext context) {
     return TSNetworkResultWidget(
       title: '我是【请求成功，且有数据】的界面',
-      getData_Success: getData,
-      getData_NoData: getData,
-      getData_Error: getData,
+      getData_Success: () {
+        simulate_getData(WidgetType.SuccessWithData);
+      },
+      getData_NoData: () {
+        simulate_getData(WidgetType.SuccessNoData);
+      },
+      getData_Error: () {
+        simulate_getData(WidgetType.ErrorNetwork);
+      },
     );
+  }
+
+  void simulate_getData(WidgetType widgetType) {
+    showSelfLoadingAction();
+
+    Future.delayed(Duration(seconds: 1), () {
+      print('延时1s执行');
+      updateWidgetType(widgetType);
+    });
   }
 
   // @override
