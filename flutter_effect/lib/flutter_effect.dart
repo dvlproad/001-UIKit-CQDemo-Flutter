@@ -4,17 +4,19 @@ library flutter_effect;
 export './src/refresh/refresh_header.dart';
 export './src/refresh/refresh_footer.dart';
 
-// empty
-export './src/empty/emptyview.dart';
+// pagetype_nodata:无数据视图组件
+export './src/pagetype_nodata/empty_imageBGForText_widget.dart';
+export './src/pagetype_nodata/empty_imageAboveText_widget.dart';
+
+// pagetype_error:请求成功,但业务错误；或服务器请求失败 的错误视图
+export './src/pagetype_error/state_error_widget.dart'; // 错误视图组件
 
 // loading
 export './src/loading/state_loading_widget.dart';
 
-// load_state_widget
-export './src/load_state_widget/state_error_widget.dart'; // 错误视图组件
-export './src/load_state_widget/state_nodata_widget.dart'; //无网络视图组件
-export './src/load_state_widget/load_state_widget.dart';
-export './src/load_state_widget/pagetype_loadstate_widget.dart';
+// pagetype_change
+export './src/pagetype_change/pagetype_change_widget.dart';
+export './src/pagetype_change/pagetype_loadstate_change_widget.dart';
 
 // basepage_combination 组合形式
 export './src/basepage_combination/pagetype_loadstate_default_widget.dart';

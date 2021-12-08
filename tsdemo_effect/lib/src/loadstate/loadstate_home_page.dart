@@ -49,8 +49,8 @@ class _TSLoadStateHomePageState extends CJTSBasePageState<TSLoadStateHomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          TSLoadStatePage(loadState: WidgetType.Success)));
+                      builder: (context) => TSLoadStatePage(
+                          loadState: WidgetType.SuccessWithData)));
             },
           },
           {
@@ -61,7 +61,7 @@ class _TSLoadStateHomePageState extends CJTSBasePageState<TSLoadStateHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          TSLoadStatePage(loadState: WidgetType.Error)));
+                          TSLoadStatePage(loadState: WidgetType.ErrorNetwork)));
             },
           },
           {
@@ -71,8 +71,8 @@ class _TSLoadStateHomePageState extends CJTSBasePageState<TSLoadStateHomePage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          TSLoadStatePage(loadState: WidgetType.NoData)));
+                      builder: (context) => TSLoadStatePage(
+                          loadState: WidgetType.SuccessNoData)));
             },
           },
         ]

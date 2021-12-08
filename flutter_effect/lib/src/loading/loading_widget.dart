@@ -19,7 +19,7 @@ class LoadingWidget extends StatelessWidget {
   // 动画加载方法1：使用 gif 加载动画
   Widget get _loadingWidget_gif {
     return Image.asset(
-      'assets/loading_gif/fancybox_loading.gif',
+      'assets/loading_gif/loading_bj.gif',
       package: 'flutter_effect',
       width: 100,
       height: 100,
@@ -29,7 +29,6 @@ class LoadingWidget extends StatelessWidget {
   // 动画加载方法2：使用 images 加载动画
   Widget get _loadingWidget_images {
     List<String> images = [];
-
     for (int i = 0; i < 37; ++i) {
       images.add("assets/loading_images/loading_$i.png");
     }

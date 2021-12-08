@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import './base_page.dart';
 
-import '../load_state_widget/state_error_widget.dart';
-import '../load_state_widget/state_nodata_widget.dart';
+import '../pagetype_error/state_error_widget.dart';
+import '../pagetype_nodata/empty_imageAboveText_widget.dart';
 
 //class BJHDefaultPage extends StatefulWidget {
 abstract class BJHDefaultPage extends BJHBasePage {
@@ -42,9 +42,7 @@ abstract class BJHDefaultPageState<V extends BJHDefaultPage>
 
   @override
   Widget buildNodataWidget(BuildContext context) {
-    return StateNodataWidget(
-      emptyRetry: getData,
-    );
+    return StateNodataWidget();
   }
 
   @override

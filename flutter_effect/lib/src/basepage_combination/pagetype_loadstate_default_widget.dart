@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../load_state_widget/pagetype_loadstate_widget.dart';
-import '../load_state_widget/load_state_widget.dart'; // 为了引入WidgetType
+import '../pagetype_change/pagetype_loadstate_change_widget.dart';
+import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
-import '../load_state_widget/state_error_widget.dart';
-import '../load_state_widget/state_nodata_widget.dart';
+import '../pagetype_error/state_error_widget.dart';
+import '../pagetype_nodata/empty_imageAboveText_widget.dart';
 import '../loading/state_loading_widget.dart';
 
 ///根据不同状态来展示不同的视图
@@ -40,9 +40,7 @@ class _PageTypeLoadStateDefaultWidgetState
       widgetType: widget.widgetType,
       initWidget: widget.initWidget,
       successWidget: widget.successWidget,
-      nodataWidget: StateNodataWidget(
-        emptyRetry: widget.emptyRetry,
-      ),
+      nodataWidget: StateNodataWidget(),
       errorWidget: StateErrorWidget(
         errorRetry: widget.errorRetry,
       ),

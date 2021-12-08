@@ -1,14 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import 'package:flutter_effect/flutter_effect.dart';
+
 import './refresh/refresh_home_page.dart';
 import './empty/empty_home_page.dart';
 import './loading/loading_home_page.dart';
 import './loadstate/loadstate_home_page.dart';
 
 import './basepage/tspage_home_page.dart';
-
-import 'package:flutter_effect/src/load_state_widget/load_state_widget.dart';
 
 class TSEffectHomePage extends CJTSBasePage {
   TSEffectHomePage({Key key}) : super(key: key);

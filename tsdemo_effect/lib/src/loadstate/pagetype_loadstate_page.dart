@@ -110,7 +110,7 @@ class _TSPageTypeLoadStatePageState extends State<TSPageTypeLoadStatePage> {
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求成功，且有数据');
       showSelfLoading = false;
-      _widgetType = WidgetType.Success;
+      _widgetType = WidgetType.SuccessWithData;
 
       setState(() {});
     });
@@ -124,7 +124,7 @@ class _TSPageTypeLoadStatePageState extends State<TSPageTypeLoadStatePage> {
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求成功，但无数据');
       showSelfLoading = false;
-      _widgetType = WidgetType.NoData;
+      _widgetType = WidgetType.SuccessNoData;
 
       setState(() {});
     });
@@ -138,7 +138,7 @@ class _TSPageTypeLoadStatePageState extends State<TSPageTypeLoadStatePage> {
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求失败');
       showSelfLoading = false;
-      _widgetType = WidgetType.Error;
+      _widgetType = WidgetType.ErrorNetwork;
 
       setState(() {});
     });

@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 
 import '../widget/test_network_widget.dart';
 
-class TSDefaultPage extends BJHBasePage {
+class TSDefaultPage extends BJHDefaultPage {
   TSDefaultPage({
     Key key,
   }) : super(key: key);
@@ -15,7 +15,7 @@ class TSDefaultPage extends BJHBasePage {
   _TSDefaultPageState createState() => _TSDefaultPageState();
 }
 
-class _TSDefaultPageState extends BJHBasePageState<TSDefaultPage> {
+class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
   @override
   void initState() {
     // TODO: implement initState
@@ -85,9 +85,9 @@ class _TSDefaultPageState extends BJHBasePageState<TSDefaultPage> {
       getRequest().then((value) {
         String bean = value;
         if (bean == null) {
-          updateWidgetType(WidgetType.NoData);
+          updateWidgetType(WidgetType.SuccessNoData);
         } else {
-          updateWidgetType(WidgetType.Success);
+          updateWidgetType(WidgetType.SuccessWithData);
         }
       });
     });

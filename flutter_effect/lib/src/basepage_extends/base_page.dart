@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
-import '../load_state_widget/pagetype_loadstate_widget.dart';
-import '../load_state_widget/load_state_widget.dart'; // 为了引入WidgetType
+import '../pagetype_change/pagetype_loadstate_change_widget.dart';
+import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
 import '../loading/state_loading_widget.dart';
 

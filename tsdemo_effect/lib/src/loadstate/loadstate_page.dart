@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
-import 'package:flutter_effect/src/load_state_widget/state_error_widget.dart';
-import 'package:flutter_effect/src/load_state_widget/state_nodata_widget.dart';
 
 import 'package:dio/dio.dart';
 
@@ -87,9 +85,9 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
 
         String bean = value;
         if (bean == null) {
-          _widgetType = WidgetType.NoData;
+          _widgetType = WidgetType.SuccessNoData;
         } else {
-          _widgetType = WidgetType.Success;
+          _widgetType = WidgetType.SuccessWithData;
         }
         setState(() {});
       });

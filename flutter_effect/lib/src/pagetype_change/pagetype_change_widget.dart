@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 //四种视图类型
 enum WidgetType {
   Init, //初始视图
-  Success, //成功视图
-  Error, //错误视图(网络错误)
-  NoData, //空数据视图(网络请求成功，但数据为空)
+  SuccessWithData, //成功视图
+  SuccessNoData, //空数据视图(网络请求成功，但数据为空)
+  ErrorBusiness, //服务器连接成功，但数据异常的错误视图(网络错误)
+  ErrorNetwork, //服务器连接失败的错误视图(网络错误)
 }
 
 ///根据不同类型来展示不同的视图
@@ -47,14 +48,17 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
       case WidgetType.Init:
         return widget.initWidget;
         break;
-      case WidgetType.Success:
+      case WidgetType.SuccessWithData:
         return widget.successWidget;
         break;
-      case WidgetType.Error:
+      case WidgetType.SuccessNoData:
+        return widget.nodataWidget;
+        break;
+      case WidgetType.ErrorBusiness:
         return widget.errorWidget;
         break;
-      case WidgetType.NoData:
-        return widget.nodataWidget;
+      case WidgetType.ErrorNetwork:
+        return widget.errorWidget;
         break;
       default:
         return null;

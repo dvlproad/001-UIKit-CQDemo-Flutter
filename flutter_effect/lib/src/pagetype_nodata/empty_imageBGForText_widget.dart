@@ -1,3 +1,4 @@
+// 图片+文字:图片作为背景，文字显示在图片上
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import './base-uikit/bg_border_widget.dart';

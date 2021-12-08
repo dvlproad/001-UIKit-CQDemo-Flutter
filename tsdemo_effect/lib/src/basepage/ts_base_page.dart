@@ -88,7 +88,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求成功，且有数据');
-      updateWidgetType(WidgetType.Success);
+      updateWidgetType(WidgetType.SuccessWithData);
     });
   }
 
@@ -98,7 +98,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求成功，但无数据');
-      updateWidgetType(WidgetType.NoData);
+      updateWidgetType(WidgetType.SuccessNoData);
     });
   }
 
@@ -108,7 +108,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
     Future.delayed(Duration(seconds: 1), () {
       print('模拟网络请求结束：请求失败');
-      updateWidgetType(WidgetType.Error);
+      updateWidgetType(WidgetType.ErrorNetwork);
     });
   }
 
@@ -121,9 +121,9 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
       getRequest().then((value) {
         String bean = value;
         if (bean == null) {
-          updateWidgetType(WidgetType.NoData);
+          updateWidgetType(WidgetType.SuccessNoData);
         } else {
-          updateWidgetType(WidgetType.Success);
+          updateWidgetType(WidgetType.SuccessWithData);
         }
       });
     });

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './load_state_widget.dart';
+import './pagetype_change_widget.dart';
 
 ///根据不同状态来展示不同的视图
 class PageTypeLoadStateWidget extends StatefulWidget {
