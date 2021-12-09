@@ -34,7 +34,7 @@ abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        color: Colors.black,
+        color: Colors.black.withAlpha(30),
         child: contentWidget(),
       ),
     );

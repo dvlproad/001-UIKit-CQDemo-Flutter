@@ -149,15 +149,20 @@ class OverlayActionUtil {
         height: 200,
         child: Text('自定义的成功界面'),
       )
+      ..contentPadding = EdgeInsets.zero // 默认时会有边距
+
+      ..loadingStyle = EasyLoadingStyle.custom // 设置custom，才能自定义backgroundColor
+      ..boxShadow = [
+        BoxShadow(color: Colors.transparent)
+      ] // 设置custom后，不设置boxShadow或设为null都会取默认值，而不是真正的null
+      ..backgroundColor = Colors.transparent
+      ..indicatorColor = Colors
+          .green // 为了自定义的backgroundColor生效，设置了 EasyLoadingStyle.custom, 导致必须设置此参数
+      ..textColor = Colors
+          .orange // 为了自定义的backgroundColor生效，设置了 EasyLoadingStyle.custom, 导致必须设置此参数
+      ..maskColor = Colors.blue.withOpacity(0.5)
       ..userInteractions = false // 当loading展示的时候，是否允许用户操作.
       ..displayDuration = const Duration(milliseconds: 2000)
-      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-      ..loadingStyle = EasyLoadingStyle.dark
-      ..indicatorSize = 45.0
-      ..radius = 10.0
-      ..backgroundColor = Colors.green
-      ..indicatorColor = Colors.yellow
-      ..textColor = Colors.yellow
-      ..maskColor = Colors.blue.withOpacity(0.5);
+      ..radius = 10.0;
   }
 }

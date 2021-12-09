@@ -69,7 +69,7 @@ class CJTSTableViewCell extends StatelessWidget {
 
     return Container(
       height: 44,
-      color: Colors.black,
+      color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,7 @@ class CJTSTableViewCell extends StatelessWidget {
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black,
           fontSize: 16.0,
         ),
       ),
@@ -105,7 +105,7 @@ class CJTSTableViewCell extends StatelessWidget {
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.black.withOpacity(0.5),
           fontSize: 16.0,
         ),
       ),
