@@ -96,24 +96,7 @@ class OverlayActionUtil {
   static show_flutter_easyloading() {
     // 'You should call EasyLoading.init() in your MaterialApp',
 
-    EasyLoading.instance
-      ..indicatorWidget = Container(
-        color: Colors.red,
-        child: Text('转圈'),
-      )
-      ..successWidget = Container(
-        color: Colors.red,
-        child: Text('chenggong'),
-      )
-      ..displayDuration = const Duration(milliseconds: 2000)
-      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-      ..loadingStyle = EasyLoadingStyle.dark
-      ..indicatorSize = 45.0
-      ..radius = 10.0
-      ..backgroundColor = Colors.green
-      ..indicatorColor = Colors.yellow
-      ..textColor = Colors.yellow
-      ..maskColor = Colors.blue.withOpacity(0.5);
+    // initInstance_flutter_easyloading();
 
     EasyLoading.show();
     // EasyLoading.show(status: 'loading...');
@@ -125,7 +108,56 @@ class OverlayActionUtil {
     // EasyLoading.showError('Failed with Error');
 
     // EasyLoading.showInfo('Useful Information.');
+  }
 
-    // EasyLoading.dismiss();
+  static dismiss_flutter_easyloading() {
+    EasyLoading.dismiss();
+  }
+
+  /// init EasyLoading
+  static TransitionBuilder init_flutter_easyloading() {
+    TransitionBuilder builder = EasyLoading.init();
+
+    _initInstance_flutter_easyloading();
+
+    return builder;
+  }
+
+  static _initInstance_flutter_easyloading() {
+    EasyLoading.instance
+      ..indicatorWidget = GestureDetector(
+        onTap: () {
+          print('点击本身来隐藏');
+          OverlayActionUtil.dismiss_flutter_easyloading();
+        },
+        child: Container(
+          color: Colors.red,
+          width: 200,
+          height: 200,
+          child: Image.asset(
+            'assets/loading_gif/loading_bj.gif',
+            package: 'tsdemo_overlay_flutter',
+            width: 100,
+            height: 100,
+          ),
+        ),
+      )
+      // 展示成功状态的自定义组件
+      ..successWidget = Container(
+        color: Colors.red,
+        width: 200,
+        height: 200,
+        child: Text('自定义的成功界面'),
+      )
+      ..userInteractions = false // 当loading展示的时候，是否允许用户操作.
+      ..displayDuration = const Duration(milliseconds: 2000)
+      ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+      ..loadingStyle = EasyLoadingStyle.dark
+      ..indicatorSize = 45.0
+      ..radius = 10.0
+      ..backgroundColor = Colors.green
+      ..indicatorColor = Colors.yellow
+      ..textColor = Colors.yellow
+      ..maskColor = Colors.blue.withOpacity(0.5);
   }
 }

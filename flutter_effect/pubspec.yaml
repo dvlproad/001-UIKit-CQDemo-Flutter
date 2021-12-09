@@ -14,7 +14,10 @@ dependencies:
 
   cached_network_image: any
   lottie: any
+  flutter_easyloading: any # 为了弹出自定义的loading组件
+  
   flutter_easyrefresh: any
+  
 
 dev_dependencies:
   flutter_test:

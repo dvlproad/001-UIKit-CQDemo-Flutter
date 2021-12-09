@@ -13,6 +13,8 @@ export './src/pagetype_error/state_error_widget.dart'; // 错误视图组件
 
 // loading
 export './src/loading/state_loading_widget.dart';
+// loading util
+export './src/loading/loading_util.dart';
 
 // pagetype_change
 export './src/pagetype_change/pagetype_change_widget.dart';

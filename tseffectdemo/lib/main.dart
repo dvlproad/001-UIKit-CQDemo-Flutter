@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_effect/flutter_effect.dart';
 import 'package:tsdemo_effect/tsdemo_effect.dart';
 
 void main() {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Effect Demo',
+      builder: LoadingUtil.init(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

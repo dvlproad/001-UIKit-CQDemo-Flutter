@@ -13,7 +13,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      builder: EasyLoading.init(),
+      // builder: EasyLoading.init(),
+      builder: OverlayActionUtil.init_flutter_easyloading(),
+      // builder: (context, Widget child) {
+      //   return child;
+      // },
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

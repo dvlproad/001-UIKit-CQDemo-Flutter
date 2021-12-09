@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import 'package:flutter_effect/flutter_effect.dart';
 import './loading_page.dart';
 
 class TSLoadingHomePage extends CJTSBasePage {
@@ -29,11 +30,22 @@ class _TSLoadingHomePageState extends CJTSBasePageState<TSLoadingHomePage> {
         'theme': "加载动画",
         'values': [
           {
-            'title': "加载动画",
+            'title': "加载动画(个体)",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TSLoadingPage()));
+            },
+          },
+          {
+            'title': "加载动画(单例)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              LoadingUtil.show();
+              Future.delayed(Duration(seconds: 1), () {
+                print('延时1s执行');
+                LoadingUtil.dismiss();
+              });
             },
           },
         ],
