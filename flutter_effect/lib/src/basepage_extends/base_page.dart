@@ -41,7 +41,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        color: Colors.black,
+        color: Color(0xffF0F0F0),
         child: contentWidget(context),
       ),
     );
@@ -49,9 +49,10 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
 
   // appBar
   PreferredSizeWidget appBar() {
-    return AppBar(
-      title: Text(widget.title ?? 'BJHBasePage'),
-    );
+    return null; // 要有导航栏，请在子类中实现
+    // return AppBar(
+    //   title: Text(widget.title ?? 'BJHBasePage'),
+    // );
   }
 
   /// 内容视图
@@ -83,21 +84,20 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
 
   Widget buildInitWidget(BuildContext context) {
     //return null; // 如果返回null 会黑屏
-    return Container(
-      color: Colors.white,
-    );
+    return buildSuccessWidget(context); // 默认为successWidget，解决用户未设置导致页面空空的问题
   }
 
   Widget buildSuccessWidget(BuildContext context) {
+    assert('请在子类中重写此方法,不需要调用super.');
     return null;
   }
 
   Widget buildNodataWidget(BuildContext context) {
-    return null;
+    return buildSuccessWidget(context); // 默认为successWidget
   }
 
   Widget buildErrorWidget(BuildContext context) {
-    return null;
+    return buildSuccessWidget(context); // 默认为successWidget
   }
 
   Widget buildSelfLoadingWidgetWidget(BuildContext context) {
