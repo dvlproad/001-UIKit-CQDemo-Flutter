@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:tsdemo_effect/tsdemo_effect.dart';
 
+import './ts_home_page.dart';
+
 void main() {
   runApp(MyApp());
 }

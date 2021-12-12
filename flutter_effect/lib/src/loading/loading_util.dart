@@ -8,12 +8,12 @@ class LoadingUtil {
   static TransitionBuilder init() {
     TransitionBuilder builder = EasyLoading.init();
 
-    _initInstance_flutter_easyloading();
+    // config_flutter_easyloading();
 
     return builder;
   }
 
-  static _initInstance_flutter_easyloading() {
+  static config_flutter_easyloading() {
     // 'You should call EasyLoading.init() in your MaterialApp',
     EasyLoading.instance
           // 自定义组件

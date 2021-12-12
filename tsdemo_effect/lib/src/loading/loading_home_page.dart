@@ -50,6 +50,31 @@ class _TSLoadingHomePageState extends CJTSBasePageState<TSLoadingHomePage> {
           },
         ],
       },
+      {
+        'theme': "Toast",
+        'values': [
+          {
+            'title': "Toast",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              ToastUtil.showMessage("我是文本");
+            },
+          },
+          {
+            'title': "测试Toast+HUD同时显示（测试未通过）",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              LoadingUtil.show();
+              ToastUtil.showMessage("开始请求");
+              Future.delayed(Duration(seconds: 1), () {
+                print('延时1s执行');
+                ToastUtil.showMessage("开始结束");
+                LoadingUtil.dismiss();
+              });
+            },
+          },
+        ],
+      },
     ];
 
     return Column(

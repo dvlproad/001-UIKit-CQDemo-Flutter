@@ -35,6 +35,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
   - assets/
+  - assets/appbar/
   - assets/empty/
   - assets/loading_gif/
   - assets/loading_images/

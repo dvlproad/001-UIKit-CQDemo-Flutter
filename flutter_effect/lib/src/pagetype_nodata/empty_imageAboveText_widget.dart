@@ -1,27 +1,29 @@
 // 图片+文字:图片在上，文字显示在图片下边
 import 'package:flutter/material.dart';
 
-class StateNodataWidget extends StatefulWidget {
+class EmptyWithImageAboveTextWidget extends StatefulWidget {
   final ImageProvider image;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
   final String mainTitle;
   final String subTitle;
-  final Function onClick;
+  final Widget buttonWidget;
 
-  const StateNodataWidget({
+  const EmptyWithImageAboveTextWidget({
     Key key,
     this.image,
     this.mainTitle = '很抱歉，您暂无相关数据',
-    this.subTitle = '',
-    this.onClick,
+    this.subTitle = '去其他逛逛吧',
+    this.buttonWidget,
   }) : super(key: key);
 
   @override
-  _StateNodataWidgetState createState() => _StateNodataWidgetState();
+  _EmptyWithImageAboveTextWidgetState createState() =>
+      _EmptyWithImageAboveTextWidgetState();
 }
 
-class _StateNodataWidgetState extends State<StateNodataWidget> {
+class _EmptyWithImageAboveTextWidgetState
+    extends State<EmptyWithImageAboveTextWidget> {
   @override
   void initState() {
     // TODO: implement initState
@@ -30,44 +32,52 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> columnWidgets = [
+      Image(
+        image: widget.image ??
+            AssetImage(
+              'assets/empty/empty_aboveText_default.png',
+              package: 'flutter_effect',
+            ),
+        width: 170,
+        height: 133,
+        fit: BoxFit.cover,
+      ),
+      Container(height: 7),
+      Text(
+        widget.mainTitle,
+        style: TextStyle(
+          color: Color(0xff9a9a9a),
+          fontFamily: 'PingFang SC',
+          fontWeight: FontWeight.bold,
+          fontSize: 15,
+        ),
+      ),
+      Text(
+        widget.subTitle,
+        style: TextStyle(
+          color: Color(0xff9a9a9a),
+          fontFamily: 'PingFang SC',
+          fontWeight: FontWeight.w400,
+          fontSize: 13,
+        ),
+      ),
+      Container(height: 25),
+    ];
+
+    if (widget.buttonWidget != null) {
+      columnWidgets.add(widget.buttonWidget);
+    } else {
+      columnWidgets.add(Container(height: 35));
+    }
+
     return Container(
-      color: Colors.white,
+      color: Color(0xFFF0F0F0),
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image(
-            image: widget.image ??
-                AssetImage(
-                  'assets/empty/empty_aboveText_default.png',
-                  package: 'flutter_effect',
-                ),
-            width: 200,
-            height: 200,
-            fit: BoxFit.cover,
-          ),
-          Container(
-            height: 48,
-          ),
-          Text(
-            widget.mainTitle,
-            style: TextStyle(
-              color: Color(0xff9a9a9a),
-              fontSize: 28,
-            ),
-          ),
-          Container(
-            height: 16,
-          ),
-          Text(
-            widget.subTitle,
-            style: TextStyle(
-              color: Color(0xff9a9a9a),
-              fontSize: 24,
-            ),
-          ),
-        ],
+        children: columnWidgets,
       ),
     );
   }

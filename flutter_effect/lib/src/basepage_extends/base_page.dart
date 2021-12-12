@@ -22,7 +22,10 @@ abstract class BJHBasePage extends StatefulWidget {
 }
 
 //class BJHBasePageState extends State<BJHBasePage> {
-abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
+abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   WidgetType _currentWidgetType = WidgetType.Init; //默认为初始界面
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
@@ -38,6 +41,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: appBar(),
       body: Container(
@@ -57,15 +61,23 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
 
   /// 内容视图
   Widget contentWidget(BuildContext context) {
+    // return buildSuccessWidget(context);
     // return Text('请在子类中实现');
-    return PageTypeLoadStateWidget(
-      widgetType: _currentWidgetType,
-      initWidget: buildInitWidget(context),
-      successWidget: buildSuccessWidget(context),
-      nodataWidget: buildNodataWidget(context),
-      errorWidget: buildErrorWidget(context),
-      showSelfLoading: _showSelfLoading,
-      selfLoadingWidget: buildSelfLoadingWidgetWidget(context),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        // 触摸收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: PageTypeLoadStateWidget(
+        widgetType: _currentWidgetType,
+        initWidget: buildInitWidget(context),
+        successWidget: buildSuccessWidget(context),
+        nodataWidget: buildNodataWidget(context),
+        errorWidget: buildErrorWidget(context),
+        showSelfLoading: _showSelfLoading,
+        selfLoadingWidget: buildSelfLoadingWidgetWidget(context),
+      ),
     );
   }
 
@@ -79,7 +91,16 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
   void updateWidgetType(WidgetType widgetType) {
     _currentWidgetType = widgetType;
     _showSelfLoading = false;
+    if (mounted == false) {
+      // 防止页面关闭执行setState()方法
+      return;
+    }
     setState(() {});
+  }
+
+  /// 获取当前状态(如网络异常时候，存在在导航栏上的右边的那些视图是要禁止点击的)
+  WidgetType getCurrentWidgetType() {
+    return _currentWidgetType;
   }
 
   Widget buildInitWidget(BuildContext context) {
@@ -88,7 +109,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V> {
   }
 
   Widget buildSuccessWidget(BuildContext context) {
-    assert('请在子类中重写此方法,不需要调用super.');
+    print('请在子类中重写此方法,不需要调用super.');
     return null;
   }
 

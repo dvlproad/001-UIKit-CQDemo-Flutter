@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import './base_page.dart';
 
 import '../pagetype_error/state_error_widget.dart';
-import '../pagetype_nodata/empty_imageAboveText_widget.dart';
+import '../pagetype_nodata/nodata_widget.dart';
 
 //class BJHDefaultPage extends StatefulWidget {
 abstract class BJHDefaultPage extends BJHBasePage {

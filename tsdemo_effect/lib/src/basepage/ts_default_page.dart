@@ -54,7 +54,8 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
         simulate_getData(WidgetType.SuccessNoData);
       },
       getData_Error: () {
-        simulate_getData(WidgetType.ErrorNetwork);
+        // simulate_getData(WidgetType.ErrorNetwork);
+        getData();
       },
     );
   }
@@ -96,7 +97,7 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
     showSelfLoadingAction();
 
     Future.delayed(Duration(seconds: 1), () {
-      print('延时1s执行');
+      print('延时1s执行 getRequest');
       getRequest().then((value) {
         String bean = value;
         if (bean == null) {
@@ -104,13 +105,17 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
         } else {
           updateWidgetType(WidgetType.SuccessWithData);
         }
+      }).catchError((onError) {
+        print('网络问题');
+        // Toast.show("catchError网络问题111", context);
+        updateWidgetType(WidgetType.ErrorNetwork);
       });
     });
   }
 
   // 获取排行榜列表
   Future<dynamic> getRequest() async {
-    var url = "https://www.baidu.com";
+    var url = "https://www.baidu.com/";
     try {
       Dio dio = new Dio();
       Response response = await dio.get(url);
@@ -122,6 +127,7 @@ class _TSDefaultPageState extends BJHDefaultPageState<TSDefaultPage> {
       }
     } catch (e) {
       throw Exception('网络错误:======>url:$url \nbody:${e.toString()}');
+      // rethrow; // throw Exception或者rethrow
     }
   }
 

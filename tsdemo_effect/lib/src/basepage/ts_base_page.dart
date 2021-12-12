@@ -20,7 +20,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getData_Success();
+    // getData_Success();
   }
 
   @override
@@ -32,6 +32,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
   @override
   Widget buildInitWidget(BuildContext context) {
+    return buildSuccessWidget(context);
     return Container(
       color: Colors.green,
       height: 100,

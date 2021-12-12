@@ -4,7 +4,7 @@ import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
 import '../pagetype_error/state_error_widget.dart';
-import '../pagetype_nodata/empty_imageAboveText_widget.dart';
+import '../pagetype_nodata/nodata_widget.dart';
 import '../loading/state_loading_widget.dart';
 
 ///根据不同状态来展示不同的视图

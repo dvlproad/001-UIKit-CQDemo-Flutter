@@ -8,6 +8,9 @@ import './empty/empty_home_page.dart';
 import './loading/loading_home_page.dart';
 import './loadstate/loadstate_home_page.dart';
 
+// appbar
+import './appbar/ts_appbar_home_page.dart';
+
 import './basepage/tspage_home_page.dart';
 
 class TSEffectHomePage extends CJTSBasePage {
@@ -100,6 +103,18 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => TSBasePageHomePage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "AppBar(导航栏)",
+        'values': [
+          {
+            'title': "AppBar",
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSAppBarHomePage()));
             },
           },
         ]
