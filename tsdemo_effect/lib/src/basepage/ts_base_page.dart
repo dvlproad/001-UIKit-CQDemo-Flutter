@@ -7,12 +7,10 @@ import 'package:dio/dio.dart';
 import '../widget/test_network_widget.dart';
 
 class TSBasePage extends BJHBasePage {
-  final bool
-      successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
-
+  final bool appBarIsAddToSuccess;
   TSBasePage({
     Key key,
-    this.successHasCustomAppBar = false,
+    this.appBarIsAddToSuccess = false,
   }) : super(key: key);
 
   @override
@@ -29,9 +27,20 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
   @override
   PreferredSizeWidget appBar() {
-    return widget.successHasCustomAppBar
+    return widget.appBarIsAddToSuccess
         ? null
         : AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
+  }
+
+  @override
+  Color backgroundColor() {
+    // return Color(0xFFF0F0F0);
+    return Colors.pink;
+  }
+
+  @override
+  bool appBarIsAddToSuccess() {
+    return widget.appBarIsAddToSuccess;
   }
 
   @override
@@ -51,7 +60,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   Widget buildSuccessWidget(BuildContext context) {
     List<Widget> columnWidgets = [];
 
-    if (widget.successHasCustomAppBar) {
+    if (widget.appBarIsAddToSuccess) {
       Widget appBar = EasyAppBarWidget(
         title: '我是成功页面的标题',
         onTap: () {

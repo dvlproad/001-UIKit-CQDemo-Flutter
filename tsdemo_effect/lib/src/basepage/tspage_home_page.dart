@@ -46,7 +46,7 @@ class _TSBasePageHomePageState extends CJTSBasePageState<TSBasePageHomePage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          TSBasePage(successHasCustomAppBar: true)));
+                          TSBasePage(appBarIsAddToSuccess: true)));
             },
           },
           {

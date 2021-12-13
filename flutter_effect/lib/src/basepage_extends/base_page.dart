@@ -9,14 +9,8 @@ import '../loading/state_loading_widget.dart';
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends StatefulWidget {
-  final Color backgroundColor;
-  final bool
-      successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
-
   BJHBasePage({
     Key key,
-    this.backgroundColor = Color(0xffF0F0F0),
-    this.successHasCustomAppBar,
   }) : super(key: key);
 
   // @override
@@ -45,7 +39,6 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   @override
   void dispose() {
     super.dispose();
-    widget.backgroundColor
   }
 
   @override
@@ -54,7 +47,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        color: widget.backgroundColor,
+        color: backgroundColor(),
         child: contentWidget(context),
       ),
     );
@@ -68,6 +61,15 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     // );
   }
 
+  bool appBarIsAddToSuccess() {
+    return false; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
+  }
+
+  // 背景色
+  Color backgroundColor() {
+    return Color(0xFFF0F0F0);
+  }
+
   /// 内容视图
   Widget contentWidget(BuildContext context) {
     // return buildSuccessWidget(context);
@@ -78,7 +80,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
 //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
     double successWidgetCustomAppBarHeight =
-        widget.successHasCustomAppBar ? stautsBarHeight + 44 : 0;
+        this.appBarIsAddToSuccess() ? stautsBarHeight + 44 : 0;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
