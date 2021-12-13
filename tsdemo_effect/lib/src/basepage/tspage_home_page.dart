@@ -31,11 +31,22 @@ class _TSBasePageHomePageState extends CJTSBasePageState<TSBasePageHomePage> {
         'theme': "LoadState(加载各状态视图:加载中、成功、失败、无数据)",
         'values': [
           {
-            'title': "BasePage",
+            'title': "BasePage(系统appBar)",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TSBasePage()));
+            },
+          },
+          {
+            'title': "BasePage(自己的appBar)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          TSBasePage(successHasCustomAppBar: true)));
             },
           },
           {

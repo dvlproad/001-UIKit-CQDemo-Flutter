@@ -52,6 +52,7 @@ class _TSPageTypeLoadStatePageState extends State<TSPageTypeLoadStatePage> {
       widgetType: _widgetType,
       initWidget: _initWidget,
       successWidget: _successWidget,
+      successWidgetCustomAppBarHeight: 0,
       nodataWidget: _nodataWidget,
       errorWidget: _errorWidget,
       showSelfLoading: showSelfLoading,

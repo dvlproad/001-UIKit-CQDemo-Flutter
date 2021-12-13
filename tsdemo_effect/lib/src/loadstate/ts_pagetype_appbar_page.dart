@@ -4,19 +4,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
 import 'package:dio/dio.dart';
+import 'dart:ui';
 
-class TSLoadStatePage extends StatefulWidget {
-  final WidgetType loadState;
-  TSLoadStatePage({
+class TSPageTypeAppBarPage extends StatefulWidget {
+  final WidgetType widgetType;
+  final bool
+      successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
+  TSPageTypeAppBarPage({
     Key key,
-    this.loadState = WidgetType.Init,
+    this.widgetType = WidgetType.Init,
+    this.successHasCustomAppBar = false,
   }) : super(key: key);
 
   @override
-  _TSLoadStatePageState createState() => _TSLoadStatePageState();
+  _TSPageTypeAppBarPageState createState() => _TSPageTypeAppBarPageState();
 }
 
-class _TSLoadStatePageState extends State<TSLoadStatePage> {
+class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
   WidgetType _widgetType;
   bool showLoading = false;
 
@@ -25,7 +29,7 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
     // TODO: implement initState
     super.initState();
 
-    _widgetType = widget.loadState;
+    _widgetType = widget.widgetType;
     showLoading = false;
 
     getData();
@@ -34,16 +38,49 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
-      ),
+      appBar: widget.successHasCustomAppBar
+          ? null
+          : AppBar(
+              title: Text("LoadState(加载各状态视图:加载中、成功、失败、无数据)"),
+            ),
       body: Center(
         child: _pageTypeWidget,
       ),
     );
   }
 
+  /// 成功视图
+  Widget get _successWidget {
+    List<Widget> columnWidgets = [];
+
+    if (widget.successHasCustomAppBar) {
+      Widget appBar = EasyAppBarWidget(
+        title: '我是成功页面的标题',
+        onTap: () {
+          Navigator.pop(context);
+        },
+      );
+      columnWidgets.add(appBar);
+    }
+    columnWidgets.add(
+      Expanded(
+        child: Center(child: Text('成功')),
+      ),
+    );
+
+    return Column(
+      children: columnWidgets,
+    );
+  }
+
   Widget get _pageTypeWidget {
+    MediaQueryData mediaQuery =
+        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
+//或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
+    double successWidgetCustomAppBarHeight =
+        widget.successHasCustomAppBar ? stautsBarHeight + 44 : 0;
+
     return LoadStateLayout(
       widgetType: _widgetType,
       // initWidget: widget.initWidget;
@@ -56,7 +93,9 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
           textAlign: TextAlign.center,
         ),
       ),
-      successWidget: Center(child: Text('成功')),
+      successWidget: _successWidget,
+      successWidgetCustomAppBarHeight: successWidgetCustomAppBarHeight,
+
       //错误按钮点击过后进行重新加载
       errorWidget: StateErrorWidget(
         errorRetry: () {
@@ -89,7 +128,10 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
         } else {
           _widgetType = WidgetType.SuccessWithData;
         }
-        setState(() {});
+        _widgetType = WidgetType.ErrorNetwork;
+        if (mounted) {
+          setState(() {});
+        }
       });
     });
   }
@@ -110,44 +152,4 @@ class _TSLoadStatePageState extends State<TSLoadStatePage> {
       throw Exception('网络错误:======>url:$url \nbody:${e.toString()}');
     }
   }
-
-  /*
-  Widget successWidget() {
-    return Center(
-        child: EasyRefresh(
-          child: ListView.builder(
-            //controller: scrollController,
-            itemBuilder: (context, index) {
-              return _item(orderList, index);
-            },
-            itemCount: orderList.length,
-          ),
-          //firstRefresh: true,
-          controller: _controller,
-          header: ClassicalHeader(
-            refreshText: '下拉刷新',
-            refreshReadyText: '释放刷新',
-            refreshingText: '正在刷新...',
-            refreshedText: '刷新完成',
-            refreshFailedText: '刷新失败',
-            noMoreText: '没有更多',
-            infoText: '更新于 %T',
-          ),
-          footer: ClassicalFooter(
-              loadedText: '加载完成',
-              loadReadyText: '释放加载',
-              loadingText: '正在加载...',
-              loadFailedText: '加载失败',
-              noMoreText: '没有更多',
-              infoText: '更新于 %T'
-          ),
-          onRefresh: () async{
-            _getOrderList();
-          },
-          onLoad: orderList.length==10? () async{
-            _getMoreList();
-          }:null,
-        )
-    );
-  */
 }

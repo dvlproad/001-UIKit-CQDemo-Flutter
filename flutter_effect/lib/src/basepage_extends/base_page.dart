@@ -5,12 +5,17 @@ import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
 import '../loading/state_loading_widget.dart';
+import 'dart:ui';
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends StatefulWidget {
-  final String title;
+  final bool
+      successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
 
-  BJHBasePage({Key key, this.title}) : super(key: key);
+  BJHBasePage({
+    Key key,
+    this.successHasCustomAppBar,
+  }) : super(key: key);
 
   // @override
   // // BJHBasePageState createState() => BJHBasePageState();
@@ -24,10 +29,11 @@ abstract class BJHBasePage extends StatefulWidget {
 //class BJHBasePageState extends State<BJHBasePage> {
 abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
   WidgetType _currentWidgetType = WidgetType.Init; //默认为初始界面
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -55,7 +61,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   PreferredSizeWidget appBar() {
     return null; // 要有导航栏，请在子类中实现
     // return AppBar(
-    //   title: Text(widget.title ?? 'BJHBasePage'),
+    //   title: Text('BJHBasePage'),
     // );
   }
 
@@ -63,6 +69,14 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   Widget contentWidget(BuildContext context) {
     // return buildSuccessWidget(context);
     // return Text('请在子类中实现');
+
+    MediaQueryData mediaQuery =
+        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
+//或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
+    double successWidgetCustomAppBarHeight =
+        widget.successHasCustomAppBar ? stautsBarHeight + 44 : 0;
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -73,6 +87,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
         widgetType: _currentWidgetType,
         initWidget: buildInitWidget(context),
         successWidget: buildSuccessWidget(context),
+        successWidgetCustomAppBarHeight: successWidgetCustomAppBarHeight,
         nodataWidget: buildNodataWidget(context),
         errorWidget: buildErrorWidget(context),
         showSelfLoading: _showSelfLoading,

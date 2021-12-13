@@ -7,8 +7,12 @@ import 'package:dio/dio.dart';
 import '../widget/test_network_widget.dart';
 
 class TSBasePage extends BJHBasePage {
+  final bool
+      successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
+
   TSBasePage({
     Key key,
+    this.successHasCustomAppBar = false,
   }) : super(key: key);
 
   @override
@@ -20,19 +24,18 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getData_Success();
+    getData_Success();
   }
 
   @override
   PreferredSizeWidget appBar() {
-    return AppBar(
-      title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"),
-    );
+    return widget.successHasCustomAppBar
+        ? null
+        : AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
   }
 
   @override
   Widget buildInitWidget(BuildContext context) {
-    return buildSuccessWidget(context);
     return Container(
       color: Colors.green,
       height: 100,
@@ -46,11 +49,30 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
   @override
   Widget buildSuccessWidget(BuildContext context) {
-    return TSNetworkResultWidget(
-      title: '我是【请求成功，且有数据】的界面',
-      getData_Success: getData_Success,
-      getData_NoData: getData_NoData,
-      getData_Error: getData_Error,
+    List<Widget> columnWidgets = [];
+
+    if (widget.successHasCustomAppBar) {
+      Widget appBar = EasyAppBarWidget(
+        title: '我是成功页面的标题',
+        onTap: () {
+          Navigator.pop(context);
+        },
+      );
+      columnWidgets.add(appBar);
+    }
+    columnWidgets.add(
+      Expanded(
+        child: TSNetworkResultWidget(
+          title: '我是【请求成功，且有数据】的界面',
+          getData_Success: getData_Success,
+          getData_NoData: getData_NoData,
+          getData_Error: getData_Error,
+        ),
+      ),
+    );
+
+    return Column(
+      children: columnWidgets,
     );
   }
 
