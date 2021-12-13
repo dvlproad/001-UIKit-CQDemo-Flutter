@@ -1,19 +1,21 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui';
 
 import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
 import '../loading/state_loading_widget.dart';
-import 'dart:ui';
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends StatefulWidget {
+  final Color backgroundColor;
   final bool
       successHasCustomAppBar; // success 是否有自己添加上去的导航栏(默认没有，即默认都是在appBar中设置的)
 
   BJHBasePage({
     Key key,
+    this.backgroundColor = Color(0xffF0F0F0),
     this.successHasCustomAppBar,
   }) : super(key: key);
 
@@ -43,6 +45,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   @override
   void dispose() {
     super.dispose();
+    widget.backgroundColor
   }
 
   @override
@@ -51,7 +54,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        color: Color(0xffF0F0F0),
+        color: widget.backgroundColor,
         child: contentWidget(context),
       ),
     );
