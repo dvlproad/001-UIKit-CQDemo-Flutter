@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:date_format/date_format.dart';
+import './showModal_util.dart';
 
 typedef PickerConfirmCityCallback = void Function(
     List<String> stringData, List<int> selecteds);
@@ -57,10 +58,9 @@ class DatePickerUtil {
       onConfirm: onConfirm,
     );
 
-    showModalBottomSheet(
+    ShowModalUtil.showInBottom(
       context: context, //state.context,
       isScrollControlled: false,
-      // backgroundColor: Colors.black,
       builder: (BuildContext context) {
         return getDatePickerWidget(picker);
       },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 
@@ -62,8 +63,13 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
       maxWidth: 1080,
       imageQuality: 70,
     );
-    print("获取到的图片地址: pickedFile = $pickedFile");
-    _imageOrPhotoModels.add(pickedFile.path);
+    if (pickedFile != null) {
+      CJTSToastUtil.showMessage("获取到的图片地址: pickedFile = $pickedFile");
+      _imageOrPhotoModels.add(pickedFile.path);
+    } else {
+      CJTSToastUtil.showMessage("取消了图片选择");
+    }
+
     setState(() {});
   }
 }

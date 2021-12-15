@@ -2,8 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_datepicker/flutter_datepicker.dart';
-import './basepage/demoallpickerpage.dart';
-import './basepage/tsdatepickerpage.dart';
+import './datepicker/demoallpickerpage.dart';
+import './datepicker/tsdatepickerpage.dart';
+import './itempicker/tsitempickerpage.dart';
 
 class TSDatePickerHomePage extends CJTSBasePage {
   TSDatePickerHomePage({Key key}) : super(key: key);
@@ -46,6 +47,14 @@ class _TSDatePickerHomePageState
             'actionBlock': () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TSDatePickerPage()));
+            },
+          },
+          {
+            'title': "ItemPicker",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSItemPickerPage()));
             },
           },
           {

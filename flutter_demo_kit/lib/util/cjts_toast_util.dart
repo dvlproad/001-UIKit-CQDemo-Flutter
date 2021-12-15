@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 class CJTSToastUtil {
   static showMessage(String message) {
     if (message != null && message is String && message.isNotEmpty) {
+      print(message);
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,

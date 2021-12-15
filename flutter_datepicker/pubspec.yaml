@@ -13,6 +13,7 @@ dependencies:
 
   flutter_picker: any
   date_format: any
+  flutter_screenutil: any
 
 dev_dependencies:
   flutter_test:
