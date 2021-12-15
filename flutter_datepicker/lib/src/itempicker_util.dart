@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import './itempicker.dart';
+import 'package:flutter_picker/flutter_picker.dart';
+import './pickercreater.dart';
 import './showModal_util.dart';
 
 class ItemPickerUtil {
@@ -8,48 +9,67 @@ class ItemPickerUtil {
     BuildContext context, {
     String title,
     @required List<String> itemTitles,
-    int currentSelectedIndex,
+    int currentSelectedIndex = 0,
     @required void Function(int selectedIndex) onConfirm,
-  }) {
-    ShowModalUtil.showInBottom(
+  }) async {
+    Picker picker = getItemPicker(
+      title: title,
+      pickerdata: itemTitles,
+      selectedIndex: currentSelectedIndex,
+      onConfirm: onConfirm,
+    );
+
+    final result = await ShowModalUtil.showInBottom(
       context: context, //state.context,
+      isScrollControlled: false,
       builder: (BuildContext context) {
-        return getItemPickerWidget(
-          title: title,
-          itemTitles: itemTitles,
-          currentSelectedIndex: currentSelectedIndex,
-          onCancel: () {
-            Navigator.of(context).pop();
-          },
-          onConfirm: (int selectedIndex) {
-            if (onConfirm != null) {
-              Navigator.of(context).pop();
-              onConfirm(selectedIndex);
-            }
-          },
-        );
+        return getItemPickerWidget(picker);
       },
     );
+
+    print("事项选择result: $result"); // ffoldKey.currentState);
   }
 
-  static Widget getItemPickerWidget({
+  static Widget getItemPickerWidget(Picker picker) {
+    return picker.makePicker(null, true);
+  }
+
+  static Picker getItemPicker({
     String title,
-    @required List<String> itemTitles,
-    int currentSelectedIndex,
-    void Function() onCancel,
+    List pickerdata,
+    int selectedIndex = 0,
     @required void Function(int selectedIndex) onConfirm,
   }) {
-    //return picker.makePicker(null, true);
-    return ItemPickerWidget(
+    PickerAdapter adapter = PickerDataAdapter<String>(pickerdata: pickerdata);
+
+    Picker picker = PickerCreaterUtil.getPicker(
       title: title,
-      itemTitles: itemTitles,
-      currentSelectedIndex: currentSelectedIndex,
-      onCancel: onCancel,
-      onConfirm: (selectedIndex) async {
+      adapter: adapter,
+      selecteds: [selectedIndex ?? 0],
+      onConfirm: (Picker picker, List<int> selected) {
         if (onConfirm != null) {
+          print('所选择的序号:${selected.toString()},且其内容为${picker.adapter.text}');
+          var selectedIndex = selected[0];
           onConfirm(selectedIndex);
         }
       },
     );
+
+    // Picker picker = Picker(
+    //   adapter: adapter,
+    //   changeToFirst: true,
+    //   hideHeader: false,
+    //   selectedTextStyle: TextStyle(color: Colors.blue),
+    //   // builderHeader: (context) {
+    //   //   final picker = PickerWidget.of(context);
+    //   //   return picker?.data?.title ?? Text("xxx");
+    //   // },
+    //   onConfirm: (picker, value) {
+    //     print(value.toString());
+    //     print(picker.adapter.text);
+    //   },
+    // );
+
+    return picker;
   }
 }
