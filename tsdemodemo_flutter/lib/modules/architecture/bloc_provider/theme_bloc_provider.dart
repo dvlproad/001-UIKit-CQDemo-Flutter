@@ -11,7 +11,7 @@ class ThemeBlocProvider extends InheritedWidget {
   bool updateShouldNotify(_) => true;
 
   static ThemeBloc of(BuildContext context) =>
-      (context.inheritFromWidgetOfExactType(ThemeBlocProvider)
+      (context.dependOnInheritedWidgetOfExactType<ThemeBlocProvider>()
               as ThemeBlocProvider)
           .bLoC;
   // static ThemeBloc of(BuildContext context) =>

@@ -80,7 +80,7 @@ class _PhotoAlbumPageState extends State<PhotoAlbumPage> {
               enableControlFinishLoad: true,
               controller: _easyCtrl,
               // header: ClassicalHeader(),
-              footer: C1440RefreshFooter(
+              footer: RefreshFooter(
                 noMoreWidget: Text(
                   "没有更多媒体了",
                   style: TextStyle(

@@ -41,5 +41,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSCameraUsageDescription</key>
+	<string>需要访问您的相机，才能使用扫描二维码功能</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>需要访问您的相册，才能使用上传健康证功能</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要访问您的相册，才能使用上传健康证功能</string>
 </dict>
 </plist>
