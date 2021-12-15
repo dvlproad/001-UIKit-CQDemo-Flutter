@@ -37,7 +37,7 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
   Future<void> showLogWindow() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      await CjMonitorFlutter.showLogSuspendWindow;
+      // await CjMonitorFlutter.showLogSuspendWindow;
     } on PlatformException {}
     if (!mounted) return;
   }
