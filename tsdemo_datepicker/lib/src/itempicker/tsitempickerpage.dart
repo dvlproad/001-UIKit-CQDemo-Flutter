@@ -58,7 +58,7 @@ class _TSItemPickerPageState extends State<TSItemPickerPage> {
 
   Widget get _chooseSexRow2 {
     return ListTile(
-      title: Text('2. 选择男女'),
+      title: Text('2. 选择男女(无法设置初始选中值)'),
       onTap: () {
         ItemPickerUtil2.chooseItem(
           context,
