@@ -37,6 +37,7 @@ class CQImagesBrowserWidget extends StatefulWidget {
 class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
   List<String> _images;
   int _currentIndex;
+  ExtendedPageController _extendedPageController;
   PageController _pageController;
 
   @override
@@ -44,6 +45,9 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
     super.initState();
     _images = widget.images;
     _currentIndex = widget.currentIndex;
+    _extendedPageController = ExtendedPageController(
+      initialPage: _currentIndex,
+    );
     _pageController = PageController(
       initialPage: _currentIndex,
     );
@@ -110,7 +114,7 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
       onPageChanged: (int index) {
         this._pageChange(index);
       },
-      controller: _pageController,
+      controller: _extendedPageController,
       scrollDirection: Axis.horizontal,
     );
   }
@@ -123,6 +127,7 @@ class _CQImagesBrowserWidgetState extends State<CQImagesBrowserWidget> {
       onDotClicked: (index) {
         //print('点击切换到第$index页');
         _pageController.jumpToPage(index);
+        _extendedPageController.jumpToPage(index);
       },
     );
   }
