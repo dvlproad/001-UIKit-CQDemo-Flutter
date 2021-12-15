@@ -34,7 +34,7 @@ abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
     return Scaffold(
       appBar: appBar(),
       body: Container(
-        color: Colors.black.withAlpha(30),
+        color: backgroundColor(),
         child: contentWidget(),
       ),
     );
@@ -45,6 +45,11 @@ abstract class CJTSBasePageState<V extends CJTSBasePage> extends State<V> {
     return AppBar(
       title: Text(widget.title ?? 'CJTSBasePage'),
     );
+  }
+
+  // backgroundColor
+  Color backgroundColor() {
+    return Colors.black.withAlpha(30);
   }
 
   /// 内容视图

@@ -9,12 +9,12 @@ import 'package:flutter_datepicker/flutter_datepicker.dart';
 
 final String _fontFamily = Platform.isWindows ? "Roboto" : "";
 
-class MyHomePage extends StatefulWidget {
+class DemoAllPickerPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _DemoAllPickerPageState createState() => _DemoAllPickerPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _DemoAllPickerPageState extends State<DemoAllPickerPage> {
   final double listSpec = 4.0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String stateText = "";
@@ -25,8 +25,6 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Picker ${stateText.isEmpty ? "" : " - " + stateText}'),
-        automaticallyImplyLeading: false,
-        elevation: 0.0,
       ),
       body: Container(
         padding: EdgeInsets.all(10.0),
@@ -36,14 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('1. Picker Show'),
               onTap: () {
-                // showPicker(context);
-                DatePickerUtil.chooseDate(context,
-                    onConfirm: (Picker picker, List<int> selected) {
-                  print(selected);
-                  DateTime dateTime =
-                      (picker.adapter as DateTimePickerAdapter).value;
-                  print(dateTime);
-                });
+                showPicker(context);
               },
             ),
             ListTile(

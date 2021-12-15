@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   flutter_section_table_view: ^1.0.5
+  fluttertoast: any
 
 dev_dependencies:
   flutter_test:
