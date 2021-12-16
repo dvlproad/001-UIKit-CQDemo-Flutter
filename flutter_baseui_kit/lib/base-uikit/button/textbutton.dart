@@ -12,6 +12,8 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
     String selectedTitle,
     bool enable = true,
     bool selected = false,
+    Color normalHighlightColor,
+    Color selectedHighlightColor,
     @required VoidCallback onPressed,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
@@ -26,10 +28,12 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
           normalTextColor: themeOppositeColor,
           normalBorderWidth: normalBorderWidth,
           normalBorderColor: themeColor,
+          normalHighlightColor: normalHighlightColor,
           selectedBGColor: themeOppositeColor,
           selectedTextColor: themeColor,
           selectedBorderWidth: selectedBorderWidth,
           selectedBorderColor: themeColor,
+          selectedHighlightColor: selectedHighlightColor,
         );
 }
 
@@ -46,10 +50,12 @@ class CJStateTextButton extends StatelessWidget {
   final Color normalTextColor;
   final Color normalBorderColor;
   final double normalBorderWidth;
+  final Color normalHighlightColor;
   final Color selectedBGColor;
   final Color selectedTextColor;
   final Color selectedBorderColor;
   final double selectedBorderWidth;
+  final Color selectedHighlightColor;
 
   CJStateTextButton({
     Key key,
@@ -64,10 +70,12 @@ class CJStateTextButton extends StatelessWidget {
     this.normalTextColor,
     this.normalBorderColor,
     this.normalBorderWidth = 0.0,
+    this.normalHighlightColor,
     this.selectedBGColor,
     this.selectedTextColor,
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
+    this.selectedHighlightColor,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
         super(key: key);
@@ -77,6 +85,7 @@ class CJStateTextButton extends StatelessWidget {
     String _currentTitle;
     Color _currentTextColor;
     Color _currentBackgroundColor;
+    Color _highlightColor;
 
     Color _currentBorderColor;
     double _currentBorderWidth;
@@ -88,6 +97,7 @@ class CJStateTextButton extends StatelessWidget {
         _currentTextColor = selectedTextColor;
         _currentBackgroundColor = selectedBGColor;
         _currentBorderColor = selectedBorderColor ?? Colors.transparent;
+        _highlightColor = selectedHighlightColor;
       } else {
         _currentTextColor = selectedTextColor?.withOpacity(disableOpacity);
         _currentBackgroundColor = selectedBGColor?.withOpacity(disableOpacity);
@@ -104,6 +114,7 @@ class CJStateTextButton extends StatelessWidget {
         _currentTextColor = normalTextColor;
         _currentBackgroundColor = normalBGColor;
         _currentBorderColor = normalBorderColor ?? Colors.transparent;
+        _highlightColor = normalHighlightColor;
       } else {
         _currentTextColor = normalTextColor.withOpacity(disableOpacity);
         _currentBackgroundColor = normalBGColor.withOpacity(disableOpacity);
@@ -138,7 +149,7 @@ class CJStateTextButton extends StatelessWidget {
         splashColor: Colors.transparent,
         color: _currentBackgroundColor,
         textColor: _currentTextColor,
-        //highlightColor: selectedBGColor,
+        highlightColor: _highlightColor,
         disabledColor: _currentBackgroundColor,
         disabledTextColor: _currentTextColor,
         shape: RoundedRectangleBorder(

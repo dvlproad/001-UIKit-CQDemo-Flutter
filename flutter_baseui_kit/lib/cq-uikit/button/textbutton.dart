@@ -4,13 +4,12 @@ import '../../base-uikit/button/textbutton.dart';
 Color themeColor = Color(0xFFF56C6C); // 粉红色 pink
 Color themeOppositeColor = Colors.white;
 
-/// 以主题色为背景的按钮( selected 属性的值无法影响 ui 样式)
+/// 以主题色为背景的按钮
 class CQPinkThemeBGButton extends CJStateTextButton {
   CQPinkThemeBGButton({
     Key key,
     String title,
     bool enable = true,
-    bool selected = false,
     @required VoidCallback onPressed,
   })  : assert(title != null),
         assert(onPressed != null),
@@ -18,22 +17,22 @@ class CQPinkThemeBGButton extends CJStateTextButton {
           key: key,
           normalTitle: title,
           enable: enable,
-          selected: selected,
+          selected: false,
           onPressed: onPressed,
           normalBGColor: themeColor,
           normalTextColor: themeOppositeColor,
           normalBorderWidth: 0.0,
           normalBorderColor: themeOppositeColor,
+          normalHighlightColor: Colors.yellow,
         );
 }
 
-/// 以主题色为边框的按钮( selected 属性的值无法影响 ui 样式)
+/// 以主题色为边框的按钮
 class CQPinkThemeBorderButton extends CJStateTextButton {
   CQPinkThemeBorderButton({
     Key key,
     String title,
     bool enable = true,
-    bool selected = false,
     @required VoidCallback onPressed,
   })  : assert(title != null),
         assert(onPressed != null),
@@ -41,12 +40,13 @@ class CQPinkThemeBorderButton extends CJStateTextButton {
           key: key,
           normalTitle: title,
           enable: enable,
-          selected: selected,
+          selected: false,
           onPressed: onPressed,
           normalBGColor: themeOppositeColor,
           normalTextColor: themeColor,
           normalBorderWidth: 1.0,
           normalBorderColor: themeOppositeColor,
+          normalHighlightColor: Colors.pink,
         );
 }
 
@@ -72,5 +72,7 @@ class CQPinkThemeStateButton extends CJReverseThemeStateTextButton {
           themeOppositeColor: Colors.white,
           normalBorderWidth: 0.0,
           selectedBorderWidth: 1.0,
+          normalHighlightColor: Colors.yellow,
+          selectedHighlightColor: Colors.pink,
         );
 }
