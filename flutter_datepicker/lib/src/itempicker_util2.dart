@@ -43,6 +43,11 @@ class ItemPickerUtil2 {
     return ItemPickerWidget(
       title: title,
       itemTitles: itemTitles,
+      onItemTap: (selectedIndex) {
+        if (onConfirm != null) {
+          onConfirm(selectedIndex);
+        }
+      },
       currentSelectedIndex: currentSelectedIndex,
       onCancel: onCancel,
       onConfirm: (selectedIndex) async {

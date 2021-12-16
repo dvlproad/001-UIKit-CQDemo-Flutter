@@ -17,6 +17,9 @@ class ItemPickerUtil {
       pickerdata: itemTitles,
       selectedIndex: currentSelectedIndex,
       onConfirm: onConfirm,
+      onFooterCancel: () {
+        Navigator.pop<List<int>>(context, null);
+      },
     );
 
     final result = await ShowModalUtil.showInBottom(
@@ -38,6 +41,7 @@ class ItemPickerUtil {
     String title,
     List pickerdata,
     int selectedIndex = 0,
+    void Function() onFooterCancel,
     @required void Function(int selectedIndex) onConfirm,
   }) {
     PickerAdapter adapter = PickerDataAdapter<String>(pickerdata: pickerdata);
@@ -46,6 +50,11 @@ class ItemPickerUtil {
       title: title,
       adapter: adapter,
       selecteds: [selectedIndex ?? 0],
+      onFooterCancel: () {
+        if (onFooterCancel != null) {
+          onFooterCancel();
+        }
+      },
       onConfirm: (Picker picker, List<int> selected) {
         if (onConfirm != null) {
           print('所选择的序号:${selected.toString()},且其内容为${picker.adapter.text}');

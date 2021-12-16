@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
-import './pickerheader.dart';
+import './bottomwidget.dart';
 
 class ItemPickerWidget extends StatefulWidget {
   final String title;
@@ -10,6 +10,7 @@ class ItemPickerWidget extends StatefulWidget {
 
   final List<String> itemTitles;
   final int currentSelectedIndex;
+  final void Function(int selectedIndex) onItemTap;
 
   ItemPickerWidget({
     Key key,
@@ -17,6 +18,7 @@ class ItemPickerWidget extends StatefulWidget {
     this.onCancel,
     @required this.onConfirm,
     @required this.itemTitles,
+    this.onItemTap,
     this.currentSelectedIndex = 0,
   }) : super(key: key);
 
@@ -25,6 +27,9 @@ class ItemPickerWidget extends StatefulWidget {
 }
 
 class _ItemPickerWidgetState extends State<ItemPickerWidget> {
+  double itemExtent = 40;
+  double extralHeight = 30; // 为了让滚轮能显示，额外自己添加的高度
+
   int _selectedIndex;
   @override
   void initState() {
@@ -35,77 +40,78 @@ class _ItemPickerWidgetState extends State<ItemPickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> itemWidgets = [];
-    for (String itemTitle in widget.itemTitles) {
-      Widget itemWidget = _createItem(itemTitle);
-      // Widget itemWidget = Container(
-      //   color: Colors.red,
-      //   child: _createItem(itemTitle),
-      // );
-      itemWidgets.add(itemWidget);
-    }
-    double headerHeight = 60;
-
-    double itemExtent = 40;
     double itemWidgetsHeight = widget.itemTitles.length * itemExtent;
 
-    double extralHeight = 30; // 为了让滚轮能显示，额外自己添加的高度
-
-    // MediaQueryData mediaQuery =
-    //     MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
-    // double bottomHeight = mediaQuery.padding.bottom; //这个就是底部的高度
-    double bottomHeight = MediaQuery.of(context).padding.bottom;
-
-    return Container(
-      height: headerHeight + itemWidgetsHeight + extralHeight + bottomHeight,
-      color: Colors.white,
-      child: Column(
-        children: <Widget>[
-          PickerHeader(
-            height: headerHeight,
-            title: widget.title,
-            onCancel: widget.onCancel,
-            onConfirm: () {
-              if (widget.onConfirm != null) {
-                widget.onConfirm(_selectedIndex);
-              }
-            },
-          ),
-          Container(
-            // width: Adapt.screenW(),
-            height: itemWidgetsHeight,
-            alignment: Alignment.center,
-            child: CupertinoPicker(
-              diameterRatio: 1,
-              itemExtent: itemExtent,
-              selectionOverlay: Container(
-                height: itemExtent,
-                decoration: const BoxDecoration(
-                  color: Color(0x20FF4587),
-                ),
-              ),
-              onSelectedItemChanged: (position) {
-                setState(() {
-                  _selectedIndex = position;
-                });
-              },
-              children: itemWidgets,
-            ),
-          )
-        ],
-      ),
+    return BottomWidget(
+      title: widget.title,
+      middleContentWidget: _itemsWidget_useList,
+      middleContentWidgetHeight: itemWidgetsHeight,
+      onCancel: widget.onCancel,
+      // onConfirm: () {
+      //   if (widget.onConfirm != null) {
+      //     widget.onConfirm(_selectedIndex);
+      //   }
+      // },
     );
   }
 
-  Widget _createItem(String title) {
-    return Center(
-      child: Text(
-        title ?? "",
-        style: TextStyle(
-          color: Color(0xFF222222),
-          fontFamily: 'PingFang SC',
-          fontSize: 15.0,
-          fontWeight: FontWeight.w500,
+  Widget get _itemsWidget_userPicker {
+    List<Widget> itemWidgets = [];
+    int count = widget.itemTitles.length;
+    for (int i = 0; i < count; i++) {
+      Widget itemWidget = _createItem(i);
+      itemWidgets.add(itemWidget);
+    }
+
+    return CupertinoPicker(
+      diameterRatio: 1,
+      itemExtent: itemExtent,
+      selectionOverlay: Container(
+        height: itemExtent,
+        decoration: const BoxDecoration(
+          color: Color(0x20FF4587),
+        ),
+      ),
+      onSelectedItemChanged: (position) {
+        setState(() {
+          _selectedIndex = position;
+        });
+      },
+      children: itemWidgets,
+    );
+  }
+
+  Widget get _itemsWidget_useList {
+    return ListView.builder(
+      padding: EdgeInsets.zero, // 保证可以滚回
+      itemCount: widget.itemTitles.length,
+      itemExtent: itemExtent,
+      itemBuilder: (BuildContext context, int index) {
+        return _createItem(index);
+      },
+    );
+  }
+
+  Widget _createItem(int index) {
+    String title = widget.itemTitles[index];
+    return GestureDetector(
+      onTap: () {
+        if (widget.onItemTap != null) {
+          widget.onItemTap(index);
+        }
+      },
+      child: Container(
+        color: Colors.transparent,
+        child: Center(
+          child: Text(
+            title ?? "",
+            style: TextStyle(
+              color: Color(0xFF222222),
+              fontFamily: 'PingFang SC',
+              fontSize: 15.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ),
       ),
     );
