@@ -3,7 +3,6 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_datepicker/flutter_datepicker.dart';
 
 import 'dart:convert';
-import 'package:flutter_picker/flutter_picker.dart';
 
 class TSItemPickerPage extends StatefulWidget {
   @override
@@ -38,12 +37,12 @@ class _TSItemPickerPageState extends State<TSItemPickerPage> {
 
   Widget get _chooseSexRow1 {
     return ListTile(
-      title: Text('1. 选择男女'),
+      title: Text('1. 选择照片(无法设置初始选中值)'),
       onTap: () {
         ItemPickerUtil.chooseItem(
           context,
-          title: '选择性别',
-          itemTitles: ['男', '女'],
+          title: '选择照片',
+          itemTitles: ['相册', '相机'],
           currentSelectedIndex: selectedSexIndex1,
           onConfirm: (selectedIndex) {
             selectedSexIndex1 = selectedIndex;
@@ -58,9 +57,9 @@ class _TSItemPickerPageState extends State<TSItemPickerPage> {
 
   Widget get _chooseSexRow2 {
     return ListTile(
-      title: Text('2. 选择男女(无法设置初始选中值)'),
+      title: Text('2. 选择男女'),
       onTap: () {
-        ItemPickerUtil2.chooseItem(
+        ItemPickerPickerUtil.chooseItem(
           context,
           title: '选择性别',
           itemTitles: ['男', '女'],

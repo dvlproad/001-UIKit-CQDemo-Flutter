@@ -16,7 +16,6 @@ class PickerCreaterUtil {
   }) {
     double headerHeight = 60;
 
-    needConfirmAction = false; // 测试代码
     needConfirmAction == null ? true : false;
 
     // 底部视图

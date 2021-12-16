@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import './itempicker.dart';
 import './showModal_util.dart';
 
-class ItemPickerUtil2 {
+class ItemPickerUtil {
   ///事项选择器
   static void chooseItem(
     BuildContext context, {

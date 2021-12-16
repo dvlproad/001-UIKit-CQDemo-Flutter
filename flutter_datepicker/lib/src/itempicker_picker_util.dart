@@ -3,7 +3,7 @@ import 'package:flutter_picker/flutter_picker.dart';
 import './pickercreater.dart';
 import './showModal_util.dart';
 
-class ItemPickerUtil {
+class ItemPickerPickerUtil {
   ///事项选择器
   static void chooseItem(
     BuildContext context, {
