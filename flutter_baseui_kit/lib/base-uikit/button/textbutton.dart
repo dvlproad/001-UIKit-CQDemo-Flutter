@@ -10,6 +10,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
     double selectedBorderWidth = 0.0,
     String normalTitle,
     String selectedTitle,
+    TextStyle textStyle,
     bool enable = true,
     bool selected = false,
     Color normalHighlightColor,
@@ -21,6 +22,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
           key: key,
           normalTitle: normalTitle,
           selectedTitle: selectedTitle,
+          textStyle: textStyle,
           enable: enable,
           selected: selected,
           onPressed: onPressed,
@@ -41,6 +43,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
 class CJStateTextButton extends StatelessWidget {
   final String normalTitle;
   final String selectedTitle; // selectedTitle 为 null 的时候，会被自动设为 normalTitle
+  final TextStyle textStyle;
   final VoidCallback onPressed;
   final bool enable;
   final double disableOpacity;
@@ -61,6 +64,7 @@ class CJStateTextButton extends StatelessWidget {
     Key key,
     @required this.normalTitle,
     this.selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
+    this.textStyle,
     @required this.onPressed,
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
@@ -140,10 +144,11 @@ class CJStateTextButton extends StatelessWidget {
           _currentTitle,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            // color: _currentTextColor,
-            fontSize: 18.0,
-          ),
+          style: textStyle ??
+              TextStyle(
+                // color: _currentTextColor,
+                fontSize: 18.0,
+              ),
         ),
         onPressed: _onPressed,
         splashColor: Colors.transparent,
@@ -156,7 +161,9 @@ class CJStateTextButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(_cornerRadius),
           side: BorderSide(
             width: _currentBorderWidth,
-            color: _currentBorderColor,
+            color: _currentBorderWidth == 0
+                ? Colors.transparent
+                : _currentBorderColor, // bugfix:等于0的时候，要设置透明色，否则会有描边
           ),
         ),
       ),

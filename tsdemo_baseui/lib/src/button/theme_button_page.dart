@@ -17,7 +17,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
+      backgroundColor: Color(0xFFF0F0F0),
       appBar: appBar(),
       body: Container(
         constraints: BoxConstraints.expand(),
@@ -64,6 +64,11 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
       children: <Widget>[
         CQPinkThemeBGButton(
           title: '以主题色为背景的按钮',
+          titleStyle: TextStyle(
+            fontFamily: 'PingFang SC',
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+          ),
           enable: true,
           onPressed: () {},
         ),
@@ -81,6 +86,11 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
       children: <Widget>[
         CQPinkThemeBorderButton(
           title: '以主题色为边框的按钮',
+          titleStyle: TextStyle(
+            fontFamily: 'PingFang SC',
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+          ),
           enable: true,
           onPressed: () {},
         ),

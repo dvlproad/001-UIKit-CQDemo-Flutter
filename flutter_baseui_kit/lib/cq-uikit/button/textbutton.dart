@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../base-uikit/button/textbutton.dart';
 
-Color themeColor = Color(0xFFF56C6C); // 粉红色 pink
+Color themeColor = Color(0xFFCD3F49); // 粉红色 pink
 Color themeOppositeColor = Colors.white;
 
 /// 以主题色为背景的按钮
@@ -9,6 +9,7 @@ class CQPinkThemeBGButton extends CJStateTextButton {
   CQPinkThemeBGButton({
     Key key,
     String title,
+    TextStyle titleStyle,
     bool enable = true,
     @required VoidCallback onPressed,
   })  : assert(title != null),
@@ -16,6 +17,7 @@ class CQPinkThemeBGButton extends CJStateTextButton {
         super(
           key: key,
           normalTitle: title,
+          textStyle: titleStyle,
           enable: enable,
           selected: false,
           onPressed: onPressed,
@@ -23,7 +25,7 @@ class CQPinkThemeBGButton extends CJStateTextButton {
           normalTextColor: themeOppositeColor,
           normalBorderWidth: 0.0,
           normalBorderColor: themeOppositeColor,
-          normalHighlightColor: Colors.yellow,
+          // normalHighlightColor: Colors.yellow,
         );
 }
 
@@ -32,6 +34,7 @@ class CQPinkThemeBorderButton extends CJStateTextButton {
   CQPinkThemeBorderButton({
     Key key,
     String title,
+    TextStyle titleStyle,
     bool enable = true,
     @required VoidCallback onPressed,
   })  : assert(title != null),
@@ -39,14 +42,15 @@ class CQPinkThemeBorderButton extends CJStateTextButton {
         super(
           key: key,
           normalTitle: title,
+          textStyle: titleStyle,
           enable: enable,
           selected: false,
           onPressed: onPressed,
           normalBGColor: themeOppositeColor,
           normalTextColor: themeColor,
           normalBorderWidth: 1.0,
-          normalBorderColor: themeOppositeColor,
-          normalHighlightColor: Colors.pink,
+          normalBorderColor: themeColor,
+          // normalHighlightColor: Colors.pink,
         );
 }
 
@@ -56,6 +60,7 @@ class CQPinkThemeStateButton extends CJReverseThemeStateTextButton {
     Key key,
     String normalTitle,
     String selectedTitle,
+    TextStyle titleStyle,
     bool enable = true,
     bool selected = false,
     @required VoidCallback onPressed,
@@ -65,6 +70,7 @@ class CQPinkThemeStateButton extends CJReverseThemeStateTextButton {
           key: key,
           normalTitle: normalTitle,
           selectedTitle: selectedTitle,
+          textStyle: titleStyle,
           enable: enable,
           selected: selected,
           onPressed: onPressed,
