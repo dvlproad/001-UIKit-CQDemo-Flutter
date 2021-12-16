@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/cq-uikit/button/other_textbutton.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSOtherButtonsPage extends StatefulWidget {
   TSOtherButtonsPage({Key key}) : super(key: key);
@@ -55,7 +55,11 @@ class _TSOtherButtonsPageState extends State<TSOtherButtonsPage> {
     return Column(
       children: <Widget>[
         CQWhiteThemeBGButton(
-          text: "我知道了",
+          title: "我知道了",
+          onPressed: () {},
+        ),
+        CQTransparentBGButton(
+          title: "我知道了",
           onPressed: () {},
         ),
       ],

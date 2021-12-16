@@ -3,13 +3,13 @@ import '../../base-uikit/button/textbutton.dart';
 
 /// 以白色为背景的按钮
 class CQWhiteThemeBGButton extends StatelessWidget {
-  final String text;
+  final String title;
   final bool enable;
   final VoidCallback onPressed;
 
   CQWhiteThemeBGButton({
     Key key,
-    this.text,
+    this.title,
     this.enable = true,
     @required this.onPressed,
   }) : super(
@@ -21,7 +21,7 @@ class CQWhiteThemeBGButton extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return CJStateTextButton(
-      normalTitle: this.text,
+      normalTitle: this.title,
       cornerRadius: height / 2,
       enable: this.enable,
       onPressed: this.onPressed,

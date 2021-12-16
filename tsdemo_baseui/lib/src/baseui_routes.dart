@@ -3,6 +3,7 @@ import './baseui_home_page.dart';
 // button
 import './button/button_home_page.dart';
 import './button/theme_button_page.dart';
+import './button/state_button_page.dart';
 import './button/other_button_page.dart';
 // imageview
 import './image/image_home_page.dart';
@@ -24,6 +25,7 @@ class BaseUIKitRouters {
   // button
   static const buttonHomePage = '/button_home_page';
   static const themeButtonPage = '/theme_button_page';
+  static const stateButtonPage = '/state_button_page';
   static const otherButtonPage = '/other_button_page';
   // imageview
   static const imageviewHomePage = '/imageview_home_page';
@@ -49,6 +51,8 @@ class BaseUIKitRouters {
         TSButtonHomePage(),
     BaseUIKitRouters.themeButtonPage: (BuildContext context) =>
         TSThemeButtonPage(),
+    BaseUIKitRouters.stateButtonPage: (BuildContext context) =>
+        TSStateButtonPage(),
     BaseUIKitRouters.otherButtonPage: (BuildContext context) =>
         TSOtherButtonsPage(),
 

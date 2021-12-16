@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSThemeButtonPage extends StatefulWidget {
   TSThemeButtonPage({Key key}) : super(key: key);
@@ -51,10 +51,6 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
           child: themeBorderButtonsWidget(),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: themeStateButtonsWidget(),
-        ),
       ],
     );
   }
@@ -62,17 +58,14 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
   Widget themeBGButtonsWidget() {
     return Column(
       children: <Widget>[
-        CQPinkThemeBGButton(
+        PinkThemeBGButton(
           title: '以主题色为背景的按钮',
-          titleStyle: TextStyle(
-            fontFamily: 'PingFang SC',
-            fontSize: 15.0,
-            fontWeight: FontWeight.bold,
-          ),
+          titleStyle: PingFang_Bold_FontSize(15.0),
+          cornerRadius: 20,
           enable: true,
           onPressed: () {},
         ),
-        CQPinkThemeBGButton(
+        PinkThemeBGButton(
           title: '以主题色为背景的按钮',
           enable: false,
           onPressed: () {},
@@ -84,7 +77,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
   Widget themeBorderButtonsWidget() {
     return Column(
       children: <Widget>[
-        CQPinkThemeBorderButton(
+        PinkThemeBorderButton(
           title: '以主题色为边框的按钮',
           titleStyle: TextStyle(
             fontFamily: 'PingFang SC',
@@ -94,8 +87,18 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           enable: true,
           onPressed: () {},
         ),
-        CQPinkThemeBorderButton(
+        PinkThemeBorderButton(
           title: '以主题色为边框的按钮',
+          enable: false,
+          onPressed: () {},
+        ),
+        BlackThemeBorderButton(
+          title: '以主题色(黑色)为边框的按钮',
+          enable: true,
+          onPressed: () {},
+        ),
+        BlackThemeBorderButton(
+          title: '以主题色(黑色)为边框的按钮',
           enable: false,
           onPressed: () {},
         ),
@@ -103,38 +106,11 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
     );
   }
 
-  Widget themeStateButtonsWidget() {
-    return new Column(
-      children: <Widget>[
-        CQPinkThemeStateButton(
-          normalTitle: '修改',
-          selectedTitle: '提交',
-          selected: false,
-          enable: true,
-          onPressed: () {},
-        ),
-        CQPinkThemeStateButton(
-          normalTitle: '修改',
-          selectedTitle: '提交',
-          selected: false,
-          enable: false,
-          onPressed: () {},
-        ),
-        CQPinkThemeStateButton(
-          normalTitle: '修改',
-          selectedTitle: '提交',
-          selected: true,
-          enable: true,
-          onPressed: () {},
-        ),
-        CQPinkThemeStateButton(
-          normalTitle: '修改',
-          selectedTitle: '提交',
-          selected: true,
-          enable: false,
-          onPressed: () {},
-        ),
-      ],
+  TextStyle PingFang_Bold_FontSize(double fontSize) {
+    return TextStyle(
+      fontFamily: 'PingFang SC',
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
     );
   }
 }

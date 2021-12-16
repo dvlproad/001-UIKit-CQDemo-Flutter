@@ -35,6 +35,10 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSButtonHomePage> {
             'nextPageName': BaseUIKitRouters.themeButtonPage,
           },
           {
+            'title': "state button(状态按钮)",
+            'nextPageName': BaseUIKitRouters.stateButtonPage,
+          },
+          {
             'title': "other button(其他按钮)",
             'nextPageName': BaseUIKitRouters.otherButtonPage,
           },

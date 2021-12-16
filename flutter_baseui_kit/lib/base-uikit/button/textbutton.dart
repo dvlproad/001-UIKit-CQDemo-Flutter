@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class CJReverseThemeStateTextButton extends CJStateTextButton {
   CJReverseThemeStateTextButton({
     Key key,
+    double cornerRadius = 5.0,
     Color themeColor,
     Color themeOppositeColor,
     double normalBorderWidth = 0.0,
@@ -26,6 +27,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
           enable: enable,
           selected: selected,
           onPressed: onPressed,
+          cornerRadius: cornerRadius,
           normalBGColor: themeColor,
           normalTextColor: themeOppositeColor,
           normalBorderWidth: normalBorderWidth,
