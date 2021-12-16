@@ -119,36 +119,40 @@ class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
 
   /// 提交按钮 的行视图
   Row submitButtonRowWidget() {
-    return Row(children: <Widget>[
-      Expanded(
+    return Row(
+      children: <Widget>[
+        Expanded(
           child: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 20.0),
-        child: _submitButton(),
-      ))
-    ]);
+            padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 20.0),
+            child: _submitButton(),
+          ),
+        )
+      ],
+    );
   }
 
   // 提交按钮
   FlatButton _submitButton() {
     return FlatButton(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
-          child: Text("提交"),
-        ),
-        color: Color(0xff01adfe),
-        textColor: Colors.white,
-        highlightColor: Color(0xff1393d7),
-        disabledColor: Color(0xffd3d3d5),
-        //colorBrightness: Brightness.dark, //按钮主题，默认是浅色主题
-        //splashColor: Colors.grey, //点击时，水波动画中水波的颜色
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        onPressed: () {
-          String userName = _usernameController.text;
-          Runes runes = userName.runes;
-          int leng = runes.length;
-          print(leng);
-          int userNameLength = userName.length;
-          print(userNameLength);
-        });
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
+        child: Text("提交"),
+      ),
+      color: Color(0xff01adfe),
+      textColor: Colors.white,
+      highlightColor: Color(0xff1393d7),
+      disabledColor: Color(0xffd3d3d5),
+      //colorBrightness: Brightness.dark, //按钮主题，默认是浅色主题
+      //splashColor: Colors.grey, //点击时，水波动画中水波的颜色
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+      onPressed: () {
+        String userName = _usernameController.text;
+        Runes runes = userName.runes;
+        int leng = runes.length;
+        print(leng);
+        int userNameLength = userName.length;
+        print(userNameLength);
+      },
+    );
   }
 }

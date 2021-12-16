@@ -51,16 +51,16 @@ class TextTextFieldRowWidget extends StatelessWidget {
 
   Widget _prefixWidget(text) {
     return Container(
-        width: 100,
-        color: Colors.transparent,
-        child: Padding(
-          padding:
-              const EdgeInsets.only(left: 15, top: 0, right: 15, bottom: 0),
-          child: Text(
-            text,
-            textAlign: TextAlign.left,
-            style: new TextStyle(fontSize: 14),
-          ),
-        ));
+      width: 100,
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, top: 0, right: 15, bottom: 0),
+        child: Text(
+          text,
+          textAlign: TextAlign.left,
+          style: new TextStyle(fontSize: 14),
+        ),
+      ),
+    );
   }
 }
