@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
-class TSBaseInTabPage extends StatefulWidget {
+class TSBaseInTabPage extends BJHBasePage {
   TSBaseInTabPage({Key key}) : super(key: key);
 
   @override
@@ -9,7 +9,7 @@ class TSBaseInTabPage extends StatefulWidget {
 }
 
 // 1 实现 SingleTickerProviderStateMixin
-class _TSBaseInTabPageState extends State<TSBaseInTabPage>
+class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
     with SingleTickerProviderStateMixin {
   // 2 定义 TabController 变量
   TabController _tabController;
@@ -26,11 +26,13 @@ class _TSBaseInTabPageState extends State<TSBaseInTabPage>
     });
   }
 
+  // appBar
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar,
-      body: _bodyWidget,
+  PreferredSizeWidget appBar() {
+    // return null; // 要有导航栏，请在子类中实现
+    return AppBar(
+      title: Text('tabController'),
+      bottom: _tabbar,
     );
   }
 
@@ -39,24 +41,23 @@ class _TSBaseInTabPageState extends State<TSBaseInTabPage>
   //   return false;
   // }
 
-  // @override
-  // Widget buildSuccessWidget(BuildContext context) {}
+  @override
+  Widget buildSuccessWidget(BuildContext context) {
+    return _tabBarView;
+  }
 
-  AppBar get _appBar {
-    return AppBar(
-      title: Text('tabController'),
-      bottom: TabBar(
-        controller: _tabController, // 4 需要配置 controller！！！
-        // isScrollable: true,
-        tabs: <Widget>[
-          Tab(text: '推荐'),
-          Tab(text: '最新'),
-        ],
-      ),
+  TabBar get _tabbar {
+    return TabBar(
+      controller: _tabController, // 4 需要配置 controller！！！
+      // isScrollable: true,
+      tabs: <Widget>[
+        Tab(text: '推荐'),
+        Tab(text: '最新'),
+      ],
     );
   }
 
-  Widget get _bodyWidget {
+  TabBarView get _tabBarView {
     return TabBarView(
       controller: _tabController, // 4 需要配置 controller！！！
       children: <Widget>[
