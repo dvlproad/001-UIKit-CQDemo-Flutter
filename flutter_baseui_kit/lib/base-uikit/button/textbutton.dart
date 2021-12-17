@@ -208,11 +208,21 @@ class CJStateTextButton extends StatelessWidget {
       shape: MaterialStateProperty.all(shapeBorder),
     );
     */
-    return Container(
-      width: this.width,
-      height: this.height,
-      child: FlatButton(
-        child: Text(
+
+    Widget _childWidget = Text(
+      _currentTitle,
+      textAlign: TextAlign.left,
+      overflow: TextOverflow.ellipsis,
+      style: textStyle ??
+          TextStyle(
+            // color: _currentTextColor,
+            fontSize: 18.0,
+          ),
+    );
+    /*
+    Widget _childWidget = Column(
+      children: [
+        Text(
           _currentTitle,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
@@ -222,6 +232,24 @@ class CJStateTextButton extends StatelessWidget {
                 fontSize: 18.0,
               ),
         ),
+        Text(
+          _currentTitle,
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          style: textStyle ??
+              TextStyle(
+                // color: _currentTextColor,
+                fontSize: 18.0,
+              ),
+        ),
+      ],
+    );
+    */
+    return Container(
+      width: this.width,
+      height: this.height,
+      child: FlatButton(
+        child: _childWidget,
         onPressed: _onPressed,
         // style: buttonStyle,
         splashColor: Colors.transparent,
