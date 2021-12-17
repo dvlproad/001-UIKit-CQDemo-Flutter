@@ -60,9 +60,10 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
+          titleStyle: PingFang_Bold_FontSize(25.0),
           cornerRadius: 20,
           selected: false,
-          enable: true,
+          enable: true, // 不设置,默认ture
           onPressed: () {},
         ),
         ThemeStateButton(
@@ -90,6 +91,14 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           onPressed: () {},
         ),
       ],
+    );
+  }
+
+  TextStyle PingFang_Bold_FontSize(double fontSize) {
+    return TextStyle(
+      fontFamily: 'PingFang SC',
+      fontSize: fontSize,
+      fontWeight: FontWeight.bold,
     );
   }
 }
