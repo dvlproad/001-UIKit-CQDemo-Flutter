@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './ts_base_page.dart';
+import './ts_baseInTab_page.dart';
 import './ts_default_page.dart';
 import './my_info.dart';
 
@@ -47,6 +48,14 @@ class _TSBasePageHomePageState extends CJTSBasePageState<TSBasePageHomePage> {
                   MaterialPageRoute(
                       builder: (context) =>
                           TSBasePage(appBarIsAddToSuccess: true)));
+            },
+          },
+          {
+            'title': "BaseInTabPage(自己的appBar)",
+            // 'nextPageName': BaseUIKitRouters.buttonHomePage,
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSBaseInTabPage()));
             },
           },
           {
