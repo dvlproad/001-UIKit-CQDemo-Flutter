@@ -58,15 +58,19 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
   Widget themeBGButtonsWidget() {
     return Column(
       children: <Widget>[
-        PinkThemeBGButton(
-          title: '以主题色为背景的按钮',
+        ThemeBGButton(
+          width: 300, // 不设置会根据内容自适应
+          height: 80, // 不设置会根据内容自适应
+          bgColorType: ThemeBGType.pink,
+          title: '以主题色(红色)为背景的按钮',
           titleStyle: PingFang_Bold_FontSize(15.0),
           cornerRadius: 20,
-          enable: true,
+          enable: true, // 不设置,默认true
           onPressed: () {},
         ),
-        PinkThemeBGButton(
-          title: '以主题色为背景的按钮',
+        ThemeBGButton(
+          bgColorType: ThemeBGType.pink,
+          title: '以主题色(红色)为背景的按钮',
           enable: false,
           onPressed: () {},
         ),
@@ -77,8 +81,9 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
   Widget themeBorderButtonsWidget() {
     return Column(
       children: <Widget>[
-        PinkThemeBorderButton(
-          title: '以主题色为边框的按钮',
+        ThemeBorderButton(
+          borderColorType: ThemeBGType.pink,
+          title: '以主题色(红色)为边框的按钮',
           titleStyle: TextStyle(
             fontFamily: 'PingFang SC',
             fontSize: 15.0,
@@ -87,17 +92,20 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           enable: true,
           onPressed: () {},
         ),
-        PinkThemeBorderButton(
-          title: '以主题色为边框的按钮',
+        ThemeBorderButton(
+          borderColorType: ThemeBGType.pink,
+          title: '以主题色(红色)为边框的按钮',
           enable: false,
           onPressed: () {},
         ),
-        BlackThemeBorderButton(
+        ThemeBorderButton(
+          borderColorType: ThemeBGType.black,
           title: '以主题色(黑色)为边框的按钮',
           enable: true,
           onPressed: () {},
         ),
-        BlackThemeBorderButton(
+        ThemeBorderButton(
+          borderColorType: ThemeBGType.black,
           title: '以主题色(黑色)为边框的按钮',
           enable: false,
           onPressed: () {},

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_effect/flutter_effect.dart';
 import 'dart:math';
 
-class CQTSRipeButton  {
+class CQTSRipeButton {
   static Widget tsRipeButtonIndex(index) {
     Color randomColor = Color.fromRGBO(
       Random().nextInt(256), // 需要引入 import 'dart:math';

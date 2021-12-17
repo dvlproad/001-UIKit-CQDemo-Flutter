@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 class CJReverseThemeStateTextButton extends CJStateTextButton {
   CJReverseThemeStateTextButton({
     Key key,
+    double width,
+    double height,
     double cornerRadius = 5.0,
     Color themeColor,
     Color themeOppositeColor,
     double normalBorderWidth = 0.0,
     double selectedBorderWidth = 0.0,
     String normalTitle,
-    String selectedTitle,
+    String selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
     TextStyle textStyle,
     bool enable = true,
     bool selected = false,
@@ -21,6 +23,8 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
         assert(onPressed != null),
         super(
           key: key,
+          width: width,
+          height: height,
           normalTitle: normalTitle,
           selectedTitle: selectedTitle,
           textStyle: textStyle,
@@ -43,6 +47,8 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
 
 /// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮)
 class CJStateTextButton extends StatelessWidget {
+  double width;
+  double height;
   final String normalTitle;
   final String selectedTitle; // selectedTitle 为 null 的时候，会被自动设为 normalTitle
   final TextStyle textStyle;
@@ -64,6 +70,8 @@ class CJStateTextButton extends StatelessWidget {
 
   CJStateTextButton({
     Key key,
+    this.width,
+    this.height,
     @required this.normalTitle,
     this.selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
     this.textStyle,
@@ -141,6 +149,8 @@ class CJStateTextButton extends StatelessWidget {
     }
 
     return Container(
+      width: this.width,
+      height: this.height,
       child: FlatButton(
         child: Text(
           _currentTitle,

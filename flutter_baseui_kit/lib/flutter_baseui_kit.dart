@@ -5,3 +5,4 @@ export './base-uikit/button/imagebutton.dart';
 export './cq-uikit/button/other_textbutton.dart';
 export './cq-uikit/button/themtextbutton.dart';
 export './cq-uikit/button/statetextbutton.dart';
+export './cq-uikit/button/theme.dart' show ThemeBGType;

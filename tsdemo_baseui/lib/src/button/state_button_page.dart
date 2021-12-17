@@ -54,7 +54,10 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
   Widget themeStateButtonsWidget() {
     return new Column(
       children: <Widget>[
-        PinkThemeStateButton(
+        ThemeStateButton(
+          width: 300, // 不设置会根据内容自适应
+          height: 80, // 不设置会根据内容自适应
+          normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
           cornerRadius: 20,
@@ -62,21 +65,24 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           enable: true,
           onPressed: () {},
         ),
-        PinkThemeStateButton(
+        ThemeStateButton(
+          normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: false,
           enable: false,
           onPressed: () {},
         ),
-        PinkThemeStateButton(
+        ThemeStateButton(
+          normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: true,
           enable: true,
           onPressed: () {},
         ),
-        PinkThemeStateButton(
+        ThemeStateButton(
+          normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: true,

@@ -3,11 +3,14 @@ import '../../base-uikit/button/textbutton.dart';
 import './theme.dart';
 
 /// 以主题色为背景或边框的按钮(selected 属性的值会影响 ui 样式, 即可通过 selected 属性来自动变更样式)
-class PinkThemeStateButton extends CJReverseThemeStateTextButton {
-  PinkThemeStateButton({
+class ThemeStateButton extends CJReverseThemeStateTextButton {
+  ThemeStateButton({
     Key key,
+    double width,
+    double height,
+    @required ThemeBGType normalBGColorType,
     double cornerRadius = 5.0,
-    String normalTitle,
+    @required String normalTitle,
     String selectedTitle,
     TextStyle titleStyle,
     bool enable = true,
@@ -17,6 +20,8 @@ class PinkThemeStateButton extends CJReverseThemeStateTextButton {
         assert(onPressed != null),
         super(
           key: key,
+          width: width,
+          height: height,
           normalTitle: normalTitle,
           selectedTitle: selectedTitle,
           textStyle: titleStyle,
@@ -24,8 +29,8 @@ class PinkThemeStateButton extends CJReverseThemeStateTextButton {
           selected: selected,
           onPressed: onPressed,
           cornerRadius: cornerRadius,
-          themeColor: themeColor,
-          themeOppositeColor: Colors.white,
+          themeColor: themeColor(normalBGColorType),
+          themeOppositeColor: themeOppositeColor(normalBGColorType),
           normalBorderWidth: 0.0,
           selectedBorderWidth: 1.0,
           normalHighlightColor: Colors.yellow,
