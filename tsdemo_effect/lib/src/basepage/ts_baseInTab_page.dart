@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import 'dart:math';
+
+import './ts_baseInTab_subpage1.dart';
+import './ts_baseInTab_subpage2.dart';
 
 class TSBaseInTabPage extends BJHBasePage {
   TSBaseInTabPage({Key key}) : super(key: key);
@@ -26,24 +31,60 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
     });
   }
 
-  // appBar
   @override
-  PreferredSizeWidget appBar() {
-    // return null; // 要有导航栏，请在子类中实现
-    return AppBar(
-      title: Text('tabController'),
-      bottom: _tabbar,
-    );
+  Color backgroundColor() {
+    return Colors.red;
   }
+
+  // appBar
+  // @override
+  // PreferredSizeWidget appBar() {
+  //   // return null; // 要有导航栏，请在子类中实现
+  //   return AppBar(
+  //     title: Text('tabController'),
+  //     bottom: _tabbar,
+  //   );
+  // }
 
   // @override
   // bool appBarIsAddToSuccess() {
   //   return false;
   // }
 
+  // @override
+  // Widget buildSuccessWidget(BuildContext context) {
+  //   return _tabBarView;
+  // }
+
   @override
   Widget buildSuccessWidget(BuildContext context) {
-    return _tabBarView;
+    return Stack(
+      children: [
+        Container(
+          color: Colors.green,
+        ),
+        Positioned(
+          child: Container(
+            padding: EdgeInsets.only(top: 40, bottom: 0),
+            child: _tabBarAndTabBarView,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget get _tabBarAndTabBarView {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.only(left: 50, right: 50),
+          child: _tabbar,
+        ),
+        Expanded(
+          child: Container(child: _tabBarView),
+        ),
+      ],
+    );
   }
 
   TabBar get _tabbar {
@@ -51,8 +92,9 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
       controller: _tabController, // 4 需要配置 controller！！！
       // isScrollable: true,
       tabs: <Widget>[
-        Tab(text: '推荐'),
-        Tab(text: '最新'),
+        // Tab(text: '同文件'),
+        Tab(text: '新文件没Base'),
+        Tab(text: '新文件有Base'),
       ],
     );
   }
@@ -61,45 +103,28 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
     return TabBarView(
       controller: _tabController, // 4 需要配置 controller！！！
       children: <Widget>[
-        _subPage1,
-        _subPage2,
+        // _subPage1,
+        TSBaseInTabSubPage1(),
+        TSBaseInTabSubPage2(),
       ],
     );
   }
 
   Widget get _subPage1 {
-    return ListView(
-      children: <Widget>[
-        ListTile(
-          onTap: () {
-            print('点击按钮1-1');
-          },
-          title: Text(
-            'diyigezuixin  推荐',
-            style: TextStyle(fontSize: 14.0),
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            print('点击按钮1-2');
-          },
-          title: Text('diyigezuixin  推荐'),
-        ),
-      ],
-    );
-  }
-
-  Widget get _subPage2 {
     return Container(
-      child: GestureDetector(
-        onTap: () {
-          print('点击按钮2-1');
-        },
-        child: Container(
-          color: Colors.green,
-          height: 40,
-          child: Text('按钮2-1'),
-        ),
+      color: Colors.yellow,
+      child: Column(
+        // 改为 ListView 会偏移
+        children: <Widget>[
+          CQTSRipeButton.tsRipeButtonIndex(1),
+          CQTSRipeButton.tsRipeButtonIndex(2),
+          ListTile(
+            onTap: () {
+              print('点击按钮1-2');
+            },
+            title: Text('diyigezuixin  推荐'),
+          ),
+        ],
       ),
     );
   }

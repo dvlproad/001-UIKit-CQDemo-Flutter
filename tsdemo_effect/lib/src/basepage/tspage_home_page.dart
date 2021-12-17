@@ -51,7 +51,7 @@ class _TSBasePageHomePageState extends CJTSBasePageState<TSBasePageHomePage> {
             },
           },
           {
-            'title': "BaseInTabPage(自己的appBar)",
+            'title': "BaseInTabPage(测试顶部的点击)",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
               Navigator.push(context,

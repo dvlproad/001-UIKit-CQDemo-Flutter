@@ -5,3 +5,5 @@ export 'base/CJTSBaseTabBarPage.dart';
 export 'tableview/CJTSSectionTableView.dart';
 
 export 'util/cjts_toast_util.dart';
+
+export './Demo_RipeView/CQTSRipeButton.dart';
