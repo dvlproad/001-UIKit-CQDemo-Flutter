@@ -16,8 +16,8 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
     TextStyle textStyle,
     bool enable = true,
     bool selected = false,
-    Color normalHighlightColor,
-    Color selectedHighlightColor,
+    Color normalBackgroundHighlightColor,
+    Color selectedBackgroundHighlightColor,
     @required VoidCallback onPressed,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
@@ -36,12 +36,12 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
           normalTextColor: themeOppositeColor,
           normalBorderWidth: normalBorderWidth,
           normalBorderColor: themeColor,
-          normalHighlightColor: normalHighlightColor,
+          normalBackgroundHighlightColor: normalBackgroundHighlightColor,
           selectedBGColor: themeOppositeColor,
           selectedTextColor: themeColor,
           selectedBorderWidth: selectedBorderWidth,
           selectedBorderColor: themeColor,
-          selectedHighlightColor: selectedHighlightColor,
+          selectedBackgroundHighlightColor: selectedBackgroundHighlightColor,
         );
 }
 
@@ -61,12 +61,12 @@ class CJStateTextButton extends StatelessWidget {
   final Color normalTextColor;
   final Color normalBorderColor;
   final double normalBorderWidth;
-  final Color normalHighlightColor;
+  final Color normalBackgroundHighlightColor;
   final Color selectedBGColor;
   final Color selectedTextColor;
   final Color selectedBorderColor;
   final double selectedBorderWidth;
-  final Color selectedHighlightColor;
+  final Color selectedBackgroundHighlightColor;
 
   CJStateTextButton({
     Key key,
@@ -84,12 +84,12 @@ class CJStateTextButton extends StatelessWidget {
     this.normalTextColor,
     this.normalBorderColor,
     this.normalBorderWidth = 0.0,
-    this.normalHighlightColor,
+    this.normalBackgroundHighlightColor,
     this.selectedBGColor,
     this.selectedTextColor,
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
-    this.selectedHighlightColor,
+    this.selectedBackgroundHighlightColor,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
         super(key: key);
@@ -99,7 +99,7 @@ class CJStateTextButton extends StatelessWidget {
     String _currentTitle;
     Color _currentTextColor;
     Color _currentBackgroundColor;
-    Color _highlightColor;
+    Color _currentBackgroundHighlightColor;
 
     Color _currentBorderColor;
     double _currentBorderWidth;
@@ -111,7 +111,7 @@ class CJStateTextButton extends StatelessWidget {
         _currentTextColor = selectedTextColor;
         _currentBackgroundColor = selectedBGColor;
         _currentBorderColor = selectedBorderColor ?? Colors.transparent;
-        _highlightColor = selectedHighlightColor;
+        _currentBackgroundHighlightColor = selectedBackgroundHighlightColor;
       } else {
         _currentTextColor = selectedTextColor?.withOpacity(disableOpacity);
         _currentBackgroundColor = selectedBGColor?.withOpacity(disableOpacity);
@@ -128,7 +128,7 @@ class CJStateTextButton extends StatelessWidget {
         _currentTextColor = normalTextColor;
         _currentBackgroundColor = normalBGColor;
         _currentBorderColor = normalBorderColor ?? Colors.transparent;
-        _highlightColor = normalHighlightColor;
+        _currentBackgroundHighlightColor = normalBackgroundHighlightColor;
       } else {
         _currentTextColor = normalTextColor.withOpacity(disableOpacity);
         _currentBackgroundColor = normalBGColor.withOpacity(disableOpacity);
@@ -148,6 +148,66 @@ class CJStateTextButton extends StatelessWidget {
       _onPressed = null; // 这里是用 onPressed 的是否为空，来内部设置 enable 属性的
     }
 
+    BorderSide borderSide = BorderSide(
+      width: _currentBorderWidth,
+      color: _currentBorderWidth == 0
+          ? Colors.transparent
+          : _currentBorderColor, // bugfix:等于0的时候，要设置透明色，否则会有描边
+    );
+
+    OutlinedBorder shapeBorder = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(_cornerRadius),
+      side: borderSide,
+    );
+
+    OutlinedBorder shapeBorder2 = StadiumBorder();
+    /*
+    //[Flutter TextButton 详细使用配置、Flutter ButtonStyle概述实践](https://zhuanlan.zhihu.com/p/278330232)
+    ButtonStyle buttonStyle = ButtonStyle(
+      //定义文本的样式 这里设置的颜色是不起作用的
+      textStyle:
+          MaterialStateProperty.all(TextStyle(fontSize: 18, color: Colors.red)),
+      //设置按钮上字体与图标的颜色
+      // foregroundColor: MaterialStateProperty.all(_currentTextColor),
+      //更优美的方式来设置
+      foregroundColor: MaterialStateProperty.resolveWith(
+        (states) {
+          if (states.contains(MaterialState.focused) &&
+              !states.contains(MaterialState.pressed)) {
+            //获取焦点时的颜色
+            return Colors.yellow;
+          } else if (states.contains(MaterialState.pressed)) {
+            //按下时的颜色
+            return Colors.red;
+          }
+          //默认状态使用灰色
+          return _currentTextColor;
+        },
+      ),
+      //背景颜色
+      backgroundColor: MaterialStateProperty.resolveWith((states) {
+        //设置按下时的背景颜色
+        if (states.contains(MaterialState.pressed)) {
+          return _currentBackgroundHighlightColor ?? Colors.pink;
+        }
+        //默认不使用背景颜色
+        return _currentBackgroundColor;
+      }),
+      //设置水波纹颜色
+      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      // //设置阴影  不适用于这里的TextButton
+      // elevation: MaterialStateProperty.all(0),
+      //设置按钮内边距
+      // padding: MaterialStateProperty.all(EdgeInsets.all(10)),
+      //设置按钮的大小
+      // minimumSize: MaterialStateProperty.all(Size(200, 100)),
+
+      //设置边框
+      // side: MaterialStateProperty.all(borderSide),
+      //外边框装饰 会覆盖 side 配置的样式
+      shape: MaterialStateProperty.all(shapeBorder),
+    );
+    */
     return Container(
       width: this.width,
       height: this.height,
@@ -163,21 +223,14 @@ class CJStateTextButton extends StatelessWidget {
               ),
         ),
         onPressed: _onPressed,
+        // style: buttonStyle,
         splashColor: Colors.transparent,
         color: _currentBackgroundColor,
         textColor: _currentTextColor,
-        highlightColor: _highlightColor,
+        highlightColor: _currentBackgroundHighlightColor,
         disabledColor: _currentBackgroundColor,
         disabledTextColor: _currentTextColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_cornerRadius),
-          side: BorderSide(
-            width: _currentBorderWidth,
-            color: _currentBorderWidth == 0
-                ? Colors.transparent
-                : _currentBorderColor, // bugfix:等于0的时候，要设置透明色，否则会有描边
-          ),
-        ),
+        shape: shapeBorder,
       ),
     );
 

@@ -33,7 +33,7 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
           themeOppositeColor: themeOppositeColor(normalBGColorType),
           normalBorderWidth: 0.0,
           selectedBorderWidth: 1.0,
-          normalHighlightColor: Colors.yellow,
-          selectedHighlightColor: Colors.pink,
+          normalBackgroundHighlightColor: Colors.yellow,
+          selectedBackgroundHighlightColor: Colors.pink,
         );
 }
