@@ -45,7 +45,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
     );
   }
 
-  ///根据不同状态来显示不同的视图(新方式：能够复用 successWidget 上的导航栏)
+  ///根据不同状态来显示不同的视图(新方式：使用 stack 隐藏方式，使其能够复用 successWidget 上的导航栏)
   Widget get _buildWidget {
     double marginTop = widget.successWidgetCustomAppBarHeight;
     List<Widget> stackWidgets = [];
@@ -62,8 +62,15 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
       );
     }
     if (widget.successWidget != null) {
+      bool hideSuccessWidget = false;
+      if (widget.initWidget != null && widget.widgetType == WidgetType.Init) {
+        hideSuccessWidget = true;
+      }
       stackWidgets.add(
-        widget.successWidget,
+        Visibility(
+          visible: !hideSuccessWidget,
+          child: widget.successWidget,
+        ),
       );
     }
     if (widget.nodataWidget != null) {

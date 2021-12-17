@@ -124,8 +124,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   }
 
   Widget buildInitWidget(BuildContext context) {
-    //return null; // 如果返回null 会黑屏
-    return buildSuccessWidget(context); // 默认为successWidget，解决用户未设置导致页面空空的问题
+    return null; // 如果返回null 不会黑屏，因为上面盖着 buildSuccessWidget
   }
 
   Widget buildSuccessWidget(BuildContext context) {
@@ -134,11 +133,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   }
 
   Widget buildNodataWidget(BuildContext context) {
-    return buildSuccessWidget(context); // 默认为successWidget
+    return null;
   }
 
   Widget buildErrorWidget(BuildContext context) {
-    return buildSuccessWidget(context); // 默认为successWidget
+    return null;
   }
 
   Widget buildSelfLoadingWidgetWidget(BuildContext context) {
