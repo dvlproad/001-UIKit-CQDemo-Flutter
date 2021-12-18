@@ -14,7 +14,7 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
     String selectedTitle,
     TextStyle titleStyle,
     bool enable = true,
-    bool selected = false,
+    @required bool selected = false,
     @required VoidCallback onPressed,
   })  : assert(normalTitle != null),
         assert(onPressed != null),

@@ -60,7 +60,7 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           normalBGColorType: ThemeBGType.pink,
           normalTitle: '修改',
           selectedTitle: '提交',
-          titleStyle: ButtonThemeUtil.PingFang_FontSize_Bold(25.0),
+          titleStyle: ButtonBoldTextStyle(fontSize: 25.0),
           cornerRadius: 20,
           selected: false,
           enable: true, // 不设置,默认ture

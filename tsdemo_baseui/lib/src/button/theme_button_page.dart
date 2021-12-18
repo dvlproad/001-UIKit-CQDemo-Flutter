@@ -63,7 +63,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           height: 80, // 不设置会根据内容自适应
           bgColorType: ThemeBGType.pink,
           title: '以主题色(红色)为背景的按钮',
-          titleStyle: ButtonThemeUtil.PingFang_FontSize_Bold(18.0),
+          titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
           cornerRadius: 20,
           enable: true, // 不设置,默认true
           onPressed: () {},
@@ -96,7 +96,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           height: 80, // 不设置会根据内容自适应
           borderColorType: ThemeBGType.pink,
           title: '以主题色(红色)为边框的按钮',
-          titleStyle: ButtonThemeUtil.PingFang_FontSize_Bold(18.0),
+          titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
           cornerRadius: 20,
           enable: true, // 不设置,默认ture
           onPressed: () {},
