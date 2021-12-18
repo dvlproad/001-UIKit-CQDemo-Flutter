@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../base-uikit/button/textbutton.dart';
-import './theme.dart';
+import './buttontheme.dart';
 
 /// 以主题色为背景的按钮
 class ThemeBGButton extends CJStateTextButton {
