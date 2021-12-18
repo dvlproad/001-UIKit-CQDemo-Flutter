@@ -63,7 +63,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           height: 80, // 不设置会根据内容自适应
           bgColorType: ThemeBGType.pink,
           title: '以主题色(红色)为背景的按钮',
-          titleStyle: PingFang_Bold_FontSize(18.0),
+          titleStyle: ButtonThemeUtil.PingFang_FontSize_Bold(18.0),
           cornerRadius: 20,
           enable: true, // 不设置,默认true
           onPressed: () {},
@@ -72,6 +72,16 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           bgColorType: ThemeBGType.pink,
           title: '以主题色(红色)为背景的按钮',
           enable: false,
+          onPressed: () {},
+        ),
+        ThemeBGButton(
+          bgColorType: ThemeBGType.purple,
+          title: '以主题色(紫色)为背景的按钮',
+          onPressed: () {},
+        ),
+        ThemeBGButton(
+          bgColorType: ThemeBGType.blue,
+          title: '以主题色(蓝色)为背景的按钮',
           onPressed: () {},
         ),
       ],
@@ -86,7 +96,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           height: 80, // 不设置会根据内容自适应
           borderColorType: ThemeBGType.pink,
           title: '以主题色(红色)为边框的按钮',
-          titleStyle: PingFang_Bold_FontSize(18.0),
+          titleStyle: ButtonThemeUtil.PingFang_FontSize_Bold(18.0),
           cornerRadius: 20,
           enable: true, // 不设置,默认ture
           onPressed: () {},
@@ -110,14 +120,6 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           onPressed: () {},
         ),
       ],
-    );
-  }
-
-  TextStyle PingFang_Bold_FontSize(double fontSize) {
-    return TextStyle(
-      fontFamily: 'PingFang SC',
-      fontSize: fontSize,
-      fontWeight: FontWeight.bold,
     );
   }
 }
