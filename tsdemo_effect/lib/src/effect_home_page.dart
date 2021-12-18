@@ -13,6 +13,9 @@ import './appbar/ts_appbar_home_page.dart';
 
 import './basepage/tspage_home_page.dart';
 
+// TextStyle
+import './theme/ts_textstyle_page.dart';
+
 class TSEffectHomePage extends CJTSBasePage {
   TSEffectHomePage({Key key}) : super(key: key);
 
@@ -115,6 +118,18 @@ class _TSEffectHomePageState extends CJTSBasePageState<TSEffectHomePage> {
             'actionBlock': () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => TSAppBarHomePage()));
+            },
+          },
+        ]
+      },
+      {
+        'theme': "TextStyle",
+        'values': [
+          {
+            'title': "TextStyle",
+            'actionBlock': () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => TSTextStylePage()));
             },
           },
         ]

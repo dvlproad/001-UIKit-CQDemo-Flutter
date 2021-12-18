@@ -1,5 +1,8 @@
 library flutter_effect;
 
+// theme
+export './src/theme/theme.dart';
+
 // refresh
 export './src/refresh/refresh_header.dart';
 export './src/refresh/refresh_footer.dart';
