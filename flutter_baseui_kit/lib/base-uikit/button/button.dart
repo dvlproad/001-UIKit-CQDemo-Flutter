@@ -1,57 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮，并且背景和边框文字的颜色互为反面)
-class CJReverseThemeStateTextButton extends CJStateTextButton {
-  CJReverseThemeStateTextButton({
-    Key key,
-    double width,
-    double height,
-    double cornerRadius = 5.0,
-    Color themeColor,
-    Color themeOppositeColor,
-    double normalBorderWidth = 0.0,
-    double selectedBorderWidth = 0.0,
-    String normalTitle,
-    String selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
-    TextStyle textStyle,
-    bool enable = true,
-    bool selected = false,
-    Color normalBackgroundHighlightColor,
-    Color selectedBackgroundHighlightColor,
-    @required VoidCallback onPressed,
-  })  : assert(normalTitle != null),
-        assert(onPressed != null),
-        super(
-          key: key,
-          width: width,
-          height: height,
-          normalTitle: normalTitle,
-          selectedTitle: selectedTitle,
-          textStyle: textStyle,
-          enable: enable,
-          selected: selected,
-          onPressed: onPressed,
-          cornerRadius: cornerRadius,
-          normalBGColor: themeColor,
-          normalTextColor: themeOppositeColor,
-          normalBorderWidth: normalBorderWidth,
-          normalBorderColor: themeColor,
-          normalBackgroundHighlightColor: normalBackgroundHighlightColor,
-          selectedBGColor: themeOppositeColor,
-          selectedTextColor: themeColor,
-          selectedBorderWidth: selectedBorderWidth,
-          selectedBorderColor: themeColor,
-          selectedBackgroundHighlightColor: selectedBackgroundHighlightColor,
-        );
-}
-
-/// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮)
-class CJStateTextButton extends StatelessWidget {
-  double width;
-  double height;
-  final String normalTitle;
-  final String selectedTitle; // selectedTitle 为 null 的时候，会被自动设为 normalTitle
-  final TextStyle textStyle;
+/// 底层按钮(已配置 Normal 和 Selected 风格的主题色按钮)
+class CJStateButton extends StatelessWidget {
+  final double width;
+  final double height;
+  final Widget child;
   final VoidCallback onPressed;
   final bool enable;
   final double disableOpacity;
@@ -68,13 +21,11 @@ class CJStateTextButton extends StatelessWidget {
   final double selectedBorderWidth;
   final Color selectedBackgroundHighlightColor;
 
-  CJStateTextButton({
+  CJStateButton({
     Key key,
     this.width,
     this.height,
-    @required this.normalTitle,
-    this.selectedTitle, // selectedTitle 为 null 的时候，会被自动设为 normalTitle
-    this.textStyle,
+    @required this.child,
     @required this.onPressed,
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
@@ -90,13 +41,11 @@ class CJStateTextButton extends StatelessWidget {
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
     this.selectedBackgroundHighlightColor,
-  })  : assert(normalTitle != null),
-        assert(onPressed != null),
+  })  : assert(onPressed != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String _currentTitle;
     Color _currentTextColor;
     Color _currentBackgroundColor;
     Color _currentBackgroundHighlightColor;
@@ -105,8 +54,6 @@ class CJStateTextButton extends StatelessWidget {
     double _currentBorderWidth;
     double _cornerRadius = this.cornerRadius;
     if (selected) {
-      _currentTitle = selectedTitle ?? normalTitle;
-
       if (enable) {
         _currentTextColor = selectedTextColor;
         _currentBackgroundColor = selectedBGColor;
@@ -122,8 +69,6 @@ class CJStateTextButton extends StatelessWidget {
 
       _currentBorderWidth = selectedBorderWidth;
     } else {
-      _currentTitle = normalTitle;
-
       if (enable) {
         _currentTextColor = normalTextColor;
         _currentBackgroundColor = normalBGColor;
@@ -209,69 +154,11 @@ class CJStateTextButton extends StatelessWidget {
     );
     */
 
-    Widget _childWidget = Text(
-      _currentTitle,
-      textAlign: TextAlign.left,
-      overflow: TextOverflow.ellipsis,
-      style: textStyle ??
-          TextStyle(
-            // color: _currentTextColor,
-            fontSize: 18.0,
-          ),
-    );
-
-    // 为什么 Button 里 不要再设置颜色。猜测是由于[DefaultTextStyle](https://blog.csdn.net/jungle_pig/article/details/94383759)
-    Widget _childWidget1 = Center(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.network(
-            "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg",
-            width: 22,
-            height: 22,
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            "邀请好友许愿",
-            style: TextStyle(/*color: Colors.green, */ fontSize: 15), //不要设颜色
-          )
-        ],
-      ),
-    );
-    /*
-    Widget _childWidget = Column(
-      children: [
-        Text(
-          _currentTitle,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          style: textStyle ??
-              TextStyle(
-                // color: _currentTextColor,
-                fontSize: 18.0,
-              ),
-        ),
-        Text(
-          _currentTitle,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          style: textStyle ??
-              TextStyle(
-                // color: _currentTextColor,
-                fontSize: 18.0,
-              ),
-        ),
-      ],
-    );
-    */
     return Container(
       width: this.width,
       height: this.height,
       child: FlatButton(
-        child: _childWidget,
+        child: this.child,
         onPressed: _onPressed,
         // style: buttonStyle,
         splashColor: Colors.transparent,
