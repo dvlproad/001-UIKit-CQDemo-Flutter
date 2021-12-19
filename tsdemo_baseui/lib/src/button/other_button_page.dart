@@ -54,14 +54,7 @@ class _TSOtherButtonsPageState extends State<TSOtherButtonsPage> {
   Widget otherButtonsWidget() {
     return Column(
       children: <Widget>[
-        CQWhiteThemeBGButton(
-          title: "我知道了",
-          onPressed: () {},
-        ),
-        CQTransparentBGButton(
-          title: "我知道了",
-          onPressed: () {},
-        ),
+        Text("暂无"),
       ],
     );
   }

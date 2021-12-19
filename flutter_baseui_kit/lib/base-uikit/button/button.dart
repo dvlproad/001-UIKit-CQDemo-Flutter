@@ -20,6 +20,7 @@ class CJStateButton extends StatelessWidget {
   final Color selectedBorderColor;
   final double selectedBorderWidth;
   final Color selectedBackgroundHighlightColor;
+  final double highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
 
   CJStateButton({
     Key key,
@@ -41,6 +42,7 @@ class CJStateButton extends StatelessWidget {
     this.selectedBorderColor,
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
     this.selectedBackgroundHighlightColor,
+    this.highlightOpacity,
   })  : assert(onPressed != null),
         super(key: key);
 
@@ -53,6 +55,12 @@ class CJStateButton extends StatelessWidget {
     Color _currentBorderColor;
     double _currentBorderWidth;
     double _cornerRadius = this.cornerRadius;
+
+    double _highlightOpacity = 1.0; // 默认为1.0,即没直接设置高亮颜色的时候，高亮为原色
+    if (this.highlightOpacity != null) {
+      _highlightOpacity = this.highlightOpacity;
+    }
+
     if (selected) {
       if (enable) {
         _currentTextColor = selectedTextColor;
@@ -106,8 +114,20 @@ class CJStateButton extends StatelessWidget {
     );
 
     OutlinedBorder shapeBorder2 = StadiumBorder();
-    /*
+    //* // 使用新版 TextButton
     //[Flutter TextButton 详细使用配置、Flutter ButtonStyle概述实践](https://zhuanlan.zhihu.com/p/278330232)
+
+    // 检查 高亮颜色 的值(使用 FlatButton 的时候,空值会自动补上高亮效果)
+    if (_currentBackgroundHighlightColor == null) {
+      if (_currentBackgroundColor == Colors.transparent) {
+        //bugfix:修复透明时候的取值
+        _currentBackgroundHighlightColor = _currentBackgroundColor;
+      } else {
+        _currentBackgroundHighlightColor =
+            _currentBackgroundColor.withOpacity(_highlightOpacity);
+      }
+    }
+
     ButtonStyle buttonStyle = ButtonStyle(
       //定义文本的样式 这里设置的颜色是不起作用的
       textStyle:
@@ -123,7 +143,11 @@ class CJStateButton extends StatelessWidget {
             return Colors.yellow;
           } else if (states.contains(MaterialState.pressed)) {
             //按下时的颜色
-            return Colors.red;
+            if (_currentTextColor == Colors.transparent) {
+              //bugfix:修复透明时候的取值
+              return _currentTextColor;
+            }
+            return _currentTextColor.withOpacity(_highlightOpacity);
           }
           //默认状态使用灰色
           return _currentTextColor;
@@ -133,9 +157,9 @@ class CJStateButton extends StatelessWidget {
       backgroundColor: MaterialStateProperty.resolveWith((states) {
         //设置按下时的背景颜色
         if (states.contains(MaterialState.pressed)) {
-          return _currentBackgroundHighlightColor ?? Colors.pink;
+          _currentBackgroundHighlightColor;
         }
-        //默认不使用背景颜色
+        //默认使用背景颜色
         return _currentBackgroundColor;
       }),
       //设置水波纹颜色
@@ -152,7 +176,16 @@ class CJStateButton extends StatelessWidget {
       //外边框装饰 会覆盖 side 配置的样式
       shape: MaterialStateProperty.all(shapeBorder),
     );
-    */
+    return Container(
+      width: this.width,
+      height: this.height,
+      child: TextButton(
+        child: this.child,
+        onPressed: _onPressed,
+        style: buttonStyle,
+      ),
+    );
+    //*/
 
     return Container(
       width: this.width,
@@ -160,7 +193,6 @@ class CJStateButton extends StatelessWidget {
       child: FlatButton(
         child: this.child,
         onPressed: _onPressed,
-        // style: buttonStyle,
         splashColor: Colors.transparent,
         color: _currentBackgroundColor,
         textColor: _currentTextColor,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../base-uikit/button/textbutton.dart';
+import './button_child_widget.dart';
 import './buttontheme.dart';
 
 /// 以主题色为背景或边框的按钮(selected 属性的值会影响 ui 样式, 即可通过 selected 属性来自动变更样式)
@@ -9,31 +10,47 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
     double width,
     double height,
     @required ThemeBGType normalBGColorType,
+    bool needHighlight = false, // 是否需要高亮样式(默认false)
     double cornerRadius = 5.0,
     @required String normalTitle,
     String selectedTitle,
     TextStyle titleStyle,
+    ImageProvider image,
     bool enable = true,
     @required bool selected = false,
-    @required VoidCallback onPressed,
+    @required void Function() onPressed,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
         super(
           key: key,
           width: width,
           height: height,
-          normalTitle: normalTitle,
-          selectedTitle: selectedTitle,
-          textStyle: titleStyle,
+          childBuider: (bSelected) {
+            String _currentTitle = normalTitle;
+            if (selected) {
+              _currentTitle = selectedTitle ?? normalTitle;
+            }
+
+            return ButtonChildWidget(
+              title: _currentTitle,
+              titleStyle: titleStyle,
+              image: image,
+            );
+          },
           enable: enable,
           selected: selected,
-          onPressed: onPressed,
+          onPressed: () {
+            if (onPressed != null) {
+              onPressed();
+            }
+          },
           cornerRadius: cornerRadius,
           themeColor: themeColor(normalBGColorType),
           themeOppositeColor: themeOppositeColor(normalBGColorType),
           normalBorderWidth: 0.0,
           selectedBorderWidth: 1.0,
-          normalBackgroundHighlightColor: Colors.yellow,
-          selectedBackgroundHighlightColor: Colors.pink,
+          // normalBackgroundHighlightColor: Colors.yellow,
+          // selectedBackgroundHighlightColor: Colors.pink,
+          highlightOpacity: needHighlight ? 0.7 : 1.0,
         );
 }

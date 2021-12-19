@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSStateButtonPage extends StatefulWidget {
@@ -64,7 +65,9 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           cornerRadius: 20,
           selected: false,
           enable: true, // 不设置,默认ture
-          onPressed: () {},
+          onPressed: () {
+            CJTSToastUtil.showMessage('selected=false');
+          },
         ),
         ThemeStateButton(
           normalBGColorType: ThemeBGType.pink,
@@ -80,7 +83,9 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           selectedTitle: '提交',
           selected: true,
           enable: true,
-          onPressed: () {},
+          onPressed: () {
+            CJTSToastUtil.showMessage('selected=true');
+          },
         ),
         ThemeStateButton(
           normalBGColorType: ThemeBGType.pink,

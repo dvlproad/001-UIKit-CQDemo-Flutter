@@ -18,6 +18,14 @@ final Map theme = {
     "themeColor": Color(0xFF222222), // 黑色 black,
     "themeOppositeColor": Colors.white,
   },
+  "white": {
+    "themeColor": Colors.white, // 白色 white,
+    "themeOppositeColor": Color(0xFF222222),
+  },
+  "transparent_whiteText": {
+    "themeColor": Colors.transparent, // 透明色 transparent,
+    "themeOppositeColor": Color(0xFF222222),
+  },
 };
 
 // 颜色分类
@@ -26,6 +34,8 @@ enum ThemeBGType {
   purple,
   blue,
   black,
+  white,
+  transparent_whiteText, //透明背景，白色字的按钮
 }
 
 Color themeColor(ThemeBGType type) {

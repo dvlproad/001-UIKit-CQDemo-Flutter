@@ -41,6 +41,20 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
     double screenHeight = mediaQuery.size.height;
     double loginIconBottom = screenHeight <= 667 ? 50 : 71;
 
+    //double height = MediaQuery.of(context).size.height; // 获取本视图的高度
+
+    // return Column(
+    //   children: [
+    //     ThemeBGButton(
+    //       width: 300,
+    //       height: 40,
+    //       bgColorType: ThemeBGType.pink,
+    //       needHighlight: true,
+    //       title: '以主题色(红色)为背景的按钮',
+    //       onPressed: () {},
+    //     )
+    //   ],
+    // );
     return new Column(
       children: <Widget>[
         Padding(
@@ -62,8 +76,11 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           width: 300, // 不设置会根据内容自适应
           height: 80, // 不设置会根据内容自适应
           bgColorType: ThemeBGType.pink,
+          needHighlight: true,
           title: '以主题色(红色)为背景的按钮',
           titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
+          image: NetworkImage(
+              'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
           cornerRadius: 20,
           enable: true, // 不设置,默认true
           onPressed: () {},
@@ -81,6 +98,23 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
         ),
         ThemeBGButton(
           bgColorType: ThemeBGType.blue,
+          title: '以主题色(蓝色)为背景的按钮',
+          onPressed: () {},
+        ),
+        ThemeBGButton(
+          width: 300,
+          height: 40,
+          bgColorType: ThemeBGType.white,
+          title: '微信登录',
+          titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
+          image: NetworkImage(
+              'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+          cornerRadius: 20,
+          enable: true, // 不设置,默认true
+          onPressed: () {},
+        ),
+        ThemeBGButton(
+          bgColorType: ThemeBGType.transparent_whiteText,
           title: '以主题色(蓝色)为背景的按钮',
           onPressed: () {},
         ),
