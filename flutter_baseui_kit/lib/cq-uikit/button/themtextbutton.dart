@@ -13,7 +13,8 @@ class ThemeBGButton extends CJStateTextButton {
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     @required String title,
     TextStyle titleStyle,
-    ImageProvider image,
+    Image imageWidget, // 图片
+    double imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double cornerRadius = 5.0,
     bool enable = true,
     @required VoidCallback onPressed,
@@ -27,7 +28,8 @@ class ThemeBGButton extends CJStateTextButton {
             return ButtonChildWidget(
               title: title,
               titleStyle: titleStyle,
-              image: image,
+              imageWidget: imageWidget,
+              imageTitleGap: imageTitleGap,
             );
           },
           enable: enable,
@@ -53,7 +55,8 @@ class ThemeBorderButton extends CJStateTextButton {
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     @required String title,
     TextStyle titleStyle,
-    ImageProvider image,
+    Image imageWidget, // 图片
+    double imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double cornerRadius = 5.0,
     bool enable = true,
     @required VoidCallback onPressed,
@@ -67,7 +70,8 @@ class ThemeBorderButton extends CJStateTextButton {
             return ButtonChildWidget(
               title: title,
               titleStyle: titleStyle,
-              image: image,
+              imageWidget: imageWidget,
+              imageTitleGap: imageTitleGap,
             );
           },
           enable: enable,

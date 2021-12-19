@@ -4,18 +4,20 @@ import 'package:flutter/material.dart';
 class ButtonChildWidget extends StatelessWidget {
   final String title;
   final TextStyle titleStyle;
-  final ImageProvider image;
+  final Image imageWidget; // 图片
+  final double imageTitleGap; // 图片和文字之间的距离(imageWidget存在的时候才有效)
 
   const ButtonChildWidget({
     Key key,
     this.title,
     this.titleStyle,
-    this.image,
+    this.imageWidget,
+    this.imageTitleGap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (this.image != null) {
+    if (this.imageWidget != null) {
       return _childWidget_textAndImage;
     } else {
       return _childWidget_onlyText;
@@ -42,14 +44,8 @@ class ButtonChildWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image(
-            image: this.image,
-            width: 22,
-            height: 22,
-          ),
-          SizedBox(
-            width: 5,
-          ),
+          this.imageWidget,
+          SizedBox(width: this.imageTitleGap ?? 5),
           _childWidget_onlyText,
         ],
       ),

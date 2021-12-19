@@ -51,6 +51,12 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
     //       bgColorType: ThemeBGType.pink,
     //       needHighlight: true,
     //       title: '以主题色(红色)为背景的按钮',
+    //       imageWidget: Image(
+    //         image: NetworkImage(
+    //             'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+    //         width: 22,
+    //         height: 22,
+    //       ),
     //       onPressed: () {},
     //     )
     //   ],
@@ -76,11 +82,16 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           width: 300, // 不设置会根据内容自适应
           height: 80, // 不设置会根据内容自适应
           bgColorType: ThemeBGType.pink,
-          needHighlight: true,
+          needHighlight: true, // 默认false,不需要高亮
           title: '以主题色(红色)为背景的按钮',
           titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
-          image: NetworkImage(
-              'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+          imageWidget: Image(
+            image: NetworkImage(
+                'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+            width: 22,
+            height: 22,
+          ),
+          imageTitleGap: 20,
           cornerRadius: 20,
           enable: true, // 不设置,默认true
           onPressed: () {},
@@ -107,8 +118,12 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           bgColorType: ThemeBGType.white,
           title: '微信登录',
           titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
-          image: NetworkImage(
-              'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+          imageWidget: Image(
+            image: NetworkImage(
+                'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg'),
+            width: 22,
+            height: 22,
+          ),
           cornerRadius: 20,
           enable: true, // 不设置,默认true
           onPressed: () {},

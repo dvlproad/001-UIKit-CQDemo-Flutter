@@ -15,7 +15,8 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
     @required String normalTitle,
     String selectedTitle,
     TextStyle titleStyle,
-    ImageProvider image,
+    Image imageWidget, // 图片
+    double imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     bool enable = true,
     @required bool selected = false,
     @required void Function() onPressed,
@@ -34,7 +35,8 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
             return ButtonChildWidget(
               title: _currentTitle,
               titleStyle: titleStyle,
-              image: image,
+              imageWidget: imageWidget,
+              imageTitleGap: imageTitleGap,
             );
           },
           enable: enable,
