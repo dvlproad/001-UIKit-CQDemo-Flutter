@@ -25,8 +25,8 @@ dependencies:
     sdk: flutter
 
   flutter_demo_kit:
-    path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
-    # path: ../flutter_demo_kit/
+    # path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
+    path: ../flutter_demo_kit/
 
   tsdemo_baseui:
     path: ../tsdemo_baseui/

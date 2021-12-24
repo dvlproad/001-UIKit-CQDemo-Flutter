@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/base-uikit/textfield/clearButton_textfield.dart';
 import 'package:flutter_baseui_kit/base-uikit/textfield/textfield_container.dart';
-import './components/alert_buttons.dart';
+import './components/alert_closed_buttons.dart';
+import './components/alert_spaced_buttons.dart';
 import './components/alert_container.dart';
 
 /*

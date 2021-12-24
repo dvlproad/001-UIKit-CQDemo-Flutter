@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/src/message_alert_view.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 class TSMessageAlertViewPage extends StatelessWidget {
   const TSMessageAlertViewPage({Key key}) : super(key: key);
@@ -24,25 +25,14 @@ class TSMessageAlertViewPage extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text("信息弹窗"),
-        SizedBox(height: 40),
-        IKnowMessageAlertView(
-            title: "添加的图片数量超过限制",
-            message: "我是提示",
-            iKnowTitle: "我知道了3",
-            iKnowHandle: () {
-              print("点击Alert按钮:'我知道了'");
-            }),
-        SizedBox(height: 40),
-        CancelOKMessageAlertView(
-          title: "提示",
-          message: "确定删除选中图片",
-          cancelTitle: "取消",
-          cancelHandle: () {
-            print("点击Alert按钮:'取消'");
-          },
-          okTitle: "确定",
-          okHandle: () {
-            print("点击Alert按钮:'确定'");
+        CQTSThemeBGButton(
+          title: '测试Alert',
+          onPressed: () {
+            AlertUtil.showCancelOKAlert(context, "提示", null, () {
+              print("点击Alert按钮:'取消'");
+            }, () {
+              print("点击Alert按钮:'确定'");
+            });
           },
         ),
       ],
