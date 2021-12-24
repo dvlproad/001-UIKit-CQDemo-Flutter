@@ -57,37 +57,49 @@ class OverlayActionUtil {
       // 传入 context
       context: context,
       // 构建 Dialog 的视图
-      builder: (_) => Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              alignment: Alignment.center,
-              color: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Text('Custom Dialog',
-                        style: TextStyle(
-                            fontSize: 16, decoration: TextDecoration.none)),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 15, bottom: 8),
-                    child: FlatButton(
-                        onPressed: () {
-                          // 关闭 Dialog
-                          Navigator.pop(_);
-                        },
-                        child: Text('确定')),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
+      builder: (_) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[_customPopupWidget(context)],
+      ),
+      // builder: (_) => Container(
+      //   color: Colors.green,
+      //   alignment: Alignment.center,
+      //   child: _customPopupWidget(context),
+      // ),
+    );
+  }
+
+  static Widget _customPopupWidget(BuildContext context) {
+    // return FlatButton(
+    //   onPressed: () {
+    //     // 关闭 Dialog
+    //     Navigator.pop(context);
+    //   },
+    //   child: Text('确定'),
+    // );
+
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.white,
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text('Custom Dialog',
+                style:
+                    TextStyle(fontSize: 16, decoration: TextDecoration.none)),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 15, bottom: 8),
+            child: FlatButton(
+                onPressed: () {
+                  // 关闭 Dialog
+                  Navigator.pop(context);
+                },
+                child: Text('确定')),
+          )
+        ],
       ),
     );
   }

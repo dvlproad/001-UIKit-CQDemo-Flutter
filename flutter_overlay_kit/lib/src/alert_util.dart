@@ -21,9 +21,9 @@ class AlertUtil {
     Function() cancelHandle,
     Function() okHandle,
   ) {
-    showDialog(
-      context: context,
-      builder: (context) {
+    showAlert(
+      context,
+      alertViewBulider: (context) {
         return CancelOKMessageAlertView(
           title: title,
           message: message,
@@ -43,6 +43,20 @@ class AlertUtil {
           },
         );
       },
+    );
+  }
+
+  static void showAlert(
+    @required BuildContext context, {
+    @required Widget Function(BuildContext context) alertViewBulider,
+  }) {
+    showDialog(
+      context: context,
+      builder: (_) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[alertViewBulider(context)],
+      ),
     );
   }
 }

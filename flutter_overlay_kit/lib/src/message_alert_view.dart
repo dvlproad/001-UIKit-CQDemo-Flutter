@@ -35,8 +35,8 @@ class CJBaseMessageAlertView extends StatelessWidget {
     int titleVerticalIndex = 0;
     int messageVerticalIndex = 0;
     int buttonsVerticalIndex = 0;
-    if (this.title.isNotEmpty) {
-      if (this.message.isNotEmpty) {
+    if (this.title != null) {
+      if (this.message != null) {
         alertMarginVerticals = allAlertMarginVertical["title_message_buttons"];
         titleVerticalIndex = 0;
         messageVerticalIndex = 1;
@@ -48,7 +48,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
         buttonsVerticalIndex = 1;
       }
     } else {
-      if (this.message.isNotEmpty) {
+      if (this.message != null) {
         alertMarginVerticals = allAlertMarginVertical["message_buttons"];
         titleVerticalIndex = -1;
         messageVerticalIndex = 0;
@@ -57,7 +57,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
     }
 
     Widget alertTitleComponent = null;
-    if (this.title.isNotEmpty) {
+    if (this.title != null) {
       alertTitleComponent = Container(
         margin: EdgeInsets.only(top: alertMarginVerticals[titleVerticalIndex]),
         child: Text(
@@ -72,7 +72,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
     }
 
     Widget alertMessageComponent = null;
-    if (this.message.isNotEmpty) {
+    if (this.message != null) {
       alertMessageComponent = Container(
         margin:
             EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
