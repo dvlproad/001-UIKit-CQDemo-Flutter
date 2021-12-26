@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, unnecessary_this
-
 import 'package:dio/dio.dart';
 
 ///日志拦截器
@@ -44,7 +42,7 @@ class DioLogInterceptor extends Interceptor {
         "- METHOD: ${err.requestOptions.method}\n";
 
     errorStr +=
-    "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
+        "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
     if (err.response != null && err.response.data != null) {
       print('╔ ${err.type.toString()}');
       errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
@@ -65,7 +63,7 @@ class DioLogInterceptor extends Interceptor {
         "- URL:\n${response.requestOptions.uri}\n";
     responseStr += "- HEADER:\n{";
     response.headers.forEach(
-            (key, list) => responseStr += "\n  " + "\"$key\" : \"$list\",");
+        (key, list) => responseStr += "\n  " + "\"$key\" : \"$list\",");
     responseStr += "\n}\n";
     responseStr += "- STATUS: ${response.statusCode}\n";
 
@@ -95,7 +93,6 @@ class DioLogInterceptor extends Interceptor {
     return responseStr;
   }
 }
-
 
 ///Map拓展，MAp转字符串输出
 extension Map2StringEx on Map {

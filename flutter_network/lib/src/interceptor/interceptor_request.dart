@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import './device_info.dart';
 
-class HeaderInterceptor extends Interceptor {
+class RequestInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     ///注入公共 header

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network/src/network_client.dart';
-import 'package:flutter_network/src/interceptor/interceptor_header.dart';
+import 'package:flutter_network/src/interceptor/interceptor_request.dart';
 import 'package:flutter_network/src/interceptor/interceptor_response.dart';
-// import 'package:flutter_network/src/interceptor/ResponseInterceptor.dart';
-// import 'package:flutter_network/src/interceptor/DioLogInterceptor.dart';
+import 'package:flutter_network/src/interceptor/interceptor_error.dart';
+import 'package:flutter_network/src/interceptor/interceptor_log.dart';
 import 'package:dio/dio.dart';
 
 import 'dart:convert';
@@ -30,7 +30,10 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
     Service().init(
       baseUrl: baseUrl,
       interceptors: [
-        HeaderInterceptor(),
+        RequestInterceptor(),
+        ResponseInterceptor(),
+        ErrorInterceptor(),
+        DioLogInterceptor(),
       ],
     );
   }

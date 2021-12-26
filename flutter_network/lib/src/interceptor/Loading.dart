@@ -2,7 +2,7 @@
 
 class Loading {
   static init() {
-    LoadingUtil.init();
+    // LoadingUtil.init();
   }
 
   static config() {
