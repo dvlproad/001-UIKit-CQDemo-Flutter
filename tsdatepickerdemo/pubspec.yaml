@@ -31,8 +31,8 @@ dependencies:
     sdk: flutter
 
   flutter_demo_kit:
-    path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
-    # path: ../flutter_demo_kit/
+    #path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
+    path: ../flutter_demo_kit/
 
 
   # The following adds the Cupertino Icons font to your application.

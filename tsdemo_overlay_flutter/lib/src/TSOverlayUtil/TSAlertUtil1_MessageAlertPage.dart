@@ -17,7 +17,7 @@ class TSMessageAlertViewPage extends StatelessWidget {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('Overlay模块'),
+      title: Text('Alert'),
     );
   }
 

@@ -3,9 +3,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './overlay_util_routes.dart';
 
 class TSOverlayUtilHomePage extends CJTSBasePage {
-  final String title;
-
-  TSOverlayUtilHomePage({Key key, this.title}) : super(key: key);
+  TSOverlayUtilHomePage({Key key}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
@@ -26,44 +24,27 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSOverlayUtilHomePage> {
 
   @override
   Widget contentWidget() {
+    String imageSource =
+        'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3460118221,780234760&fm=26&gp=0.jpg';
+
     sectionModels = [
       {
         'theme': "单条信息的弹窗视图",
         'values': [
           {
-            'title': "MessageAlertModalPage",
-            'content': '单条信息的弹窗视图弹出测试',
-            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
+            'title': "Toast(View)-暂无",
+            'imageSource': imageSource,
+            // 'nextPageName': "ToastHomePage1"
           },
-        ]
-      },
-      {
-        'theme': "多条信息的弹窗视图",
-        'values': [
           {
-            'title': "ListMessageAlertModalPage(待补充)",
-            'content': '多条信息的弹窗视图弹出测试',
-            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
+            'title': "Alert(View)",
+            'imageSource': imageSource,
+            'nextPageName': OverlayUtilRouters.alertUtilHomePage,
           },
-        ]
-      },
-      {
-        'theme': "单输入框的弹窗视图",
-        'values': [
           {
-            'title': "TextInputAlertModalPage(待补充)",
-            'content': '单输入框的弹窗视图弹出测试',
-            'nextPageName': OverlayUtilRouters.messageAlertUtilPage,
-          },
-        ]
-      },
-      {
-        'theme': "多输入框的弹窗视图",
-        'values': [
-          {
-            'title': "ListTextInputAlertModalPage(待补充)",
-            'content': '多输入框的弹窗视图弹出测试',
-            'nextPageName': OverlayUtilRouters.messageAlertUtilPage
+            'title': "ActionSheet(View)",
+            'imageSource': imageSource,
+            'nextPageName': OverlayUtilRouters.actionsheetUtilHomePage,
           },
         ]
       },
