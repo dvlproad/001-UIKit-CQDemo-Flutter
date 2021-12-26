@@ -3,7 +3,7 @@ import 'package:flutter_environment/flutter_environment.dart';
 
 extension SimulateExtension on EnvironmentManager {
   // 初始方法
-  check() async {
+  Future check() async {
     if (EnvironmentManager().environmentModel == null) {
       // 获取列表model
       TSEnvironmentModel envModel = TSEnvironmentDataUtil.getEnvironmentModel();
@@ -13,7 +13,7 @@ extension SimulateExtension on EnvironmentManager {
       String defaultNetworkId = TSEnvironmentDataUtil.mockNetworkId;
       String defaultProxykId = TSEnvironmentDataUtil.noneProxykId;
 
-      await EnvironmentManager().completeEnvInternal(
+      return EnvironmentManager().completeEnvInternal(
         environmentModel: envModel,
         defaultNetworkId: defaultNetworkId,
         defaultProxykId: defaultProxykId,

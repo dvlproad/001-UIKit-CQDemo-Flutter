@@ -28,7 +28,7 @@ class EnvironmentManager {
   }
 
   /// 初始化完成后继续完善信息
-  completeEnvInternal({
+  Future completeEnvInternal({
     @required TSEnvironmentModel environmentModel,
     @required String defaultNetworkId,
     @required String defaultProxykId,
@@ -36,17 +36,19 @@ class EnvironmentManager {
     assert(environmentModel != null);
     _environmentModel = environmentModel;
 
-    _getDefaultModel(
+    return _getDefaultModel(
       defaultNetworkId: defaultNetworkId,
       defaultProxykId: defaultProxykId,
-    );
+    ).then((value) {
+      print('。。。。。。。。。。');
+    });
   }
 
-  _getDefaultModel({
+  Future _getDefaultModel({
     @required String defaultNetworkId,
     @required String defaultProxykId,
   }) async {
-    Future.wait([
+    return Future.wait([
       // network
       EnvironmentSharedPreferenceUtil().getNetworkId().then((value) {
         String networkId = value;

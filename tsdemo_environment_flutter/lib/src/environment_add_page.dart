@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import './prefixText_textField.dart';
 
 class EnvironmentAddPage extends StatefulWidget {
-  EnvironmentAddPage({Key key, this.title, this.username}) : super(key: key);
+  final Function(String bProxyId) callBack;
 
-  final String title;
-  final String username;
+  EnvironmentAddPage({
+    Key key,
+    this.callBack,
+  }) : super(key: key);
 
   @override
   _EnvironmentAddPageState createState() => new _EnvironmentAddPageState();
@@ -96,8 +98,8 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
   /// 用户名 的行视图
   Widget userNameRowWidget() {
     return TextTextFieldRowWidget(
-      title: '用户名',
-      placeholder: '请输入本人登陆用户名',
+      title: '代理ip',
+      placeholder: '请输入代理ip',
       value: userName,
       keyboardType: TextInputType.text,
       autofocus: true,
@@ -108,8 +110,8 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
   /// 手机号 的行视图
   Widget phoneRowWidget() {
     return TextTextFieldRowWidget(
-      title: '手机号',
-      placeholder: '请输入本人手机号',
+      title: '端口号',
+      placeholder: '请输入端口号,默认8888',
       value: '',
       keyboardType: TextInputType.number,
       autofocus: true,
@@ -152,6 +154,12 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
         print(leng);
         int userNameLength = userName.length;
         print(userNameLength);
+
+        Navigator.pop(context);
+        if (widget.callBack != null) {
+          String proxyId = 'PROXY $userName:${_phoneController.text}';
+          widget.callBack(proxyId);
+        }
       },
     );
   }

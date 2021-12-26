@@ -24,11 +24,14 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
   void initState() {
     super.initState();
 
-    EnvironmentManager().check(); // 设置默认的网络、代理环境
+    EnvironmentManager().check().then((value) {
+      print('。。。。。。。。。。22');
+      _totalEnvModels = EnvironmentManager().environmentModel;
+      _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
+      _selectedProxyModel = EnvironmentManager().selectedProxyModel;
 
-    _totalEnvModels = EnvironmentManager().environmentModel;
-    _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
-    _selectedProxyModel = EnvironmentManager().selectedProxyModel;
+      setState(() {});
+    }); // 设置默认的网络、代理环境
   }
 
   @override
@@ -71,11 +74,17 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
             cancelText: '添加/修改代理',
             onCancel: () {
               print('添加/修改代理');
-              EnvironmentManager().addEnvProxyModel(
-                proxyIp: '1111.111',
+
+              EnvironmentAddUtil.showAddPage(
+                context,
+                addCompleteBlock: (bProxyId) {
+                  print('proxyId =$bProxyId');
+                  EnvironmentManager().addEnvProxyModel(
+                    proxyIp: bProxyId,
+                  );
+                  setState(() {});
+                },
               );
-              setState(() {});
-              // EnvironmentAddUtil.showAddPage(context);
             },
           ),
         ],

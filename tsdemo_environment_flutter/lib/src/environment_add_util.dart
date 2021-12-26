@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
-import './environment_add_widget.dart';
 import './environment_add_page.dart';
 
 class EnvironmentAddUtil {
   // 取消 + 确定
   static showAddPage(
-    BuildContext context,
-    // String title,
-    // String message,
-    // Function() cancelHandle,
-    // Function() okHandle,
-  ) {
+    @required BuildContext context, {
+    @required Function(String bProxyId) addCompleteBlock,
+  }) {
     showAlert(
       context,
       alertViewBulider: (context) {
-        return EnvironmentAddPage();
+        return EnvironmentAddPage(
+          callBack: (bProxyId) {
+            if (addCompleteBlock != null) {
+              addCompleteBlock(bProxyId);
+            }
+          },
+        );
       },
     );
   }
@@ -35,7 +37,9 @@ class EnvironmentAddUtil {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EnvironmentAddPage(),
+        builder: (context) {
+          return alertViewBulider(context);
+        },
       ),
     );
   }
