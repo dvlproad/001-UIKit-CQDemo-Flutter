@@ -30,6 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  dio: 3.0.9
+
   flutter_easyloading: any
   
   flutter_demo_kit:
