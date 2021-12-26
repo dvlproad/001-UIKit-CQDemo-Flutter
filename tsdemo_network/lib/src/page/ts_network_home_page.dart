@@ -6,9 +6,8 @@ import 'package:flutter_network/src/interceptor/interceptor_request.dart';
 import 'package:flutter_network/src/interceptor/interceptor_response.dart';
 import 'package:flutter_network/src/interceptor/interceptor_error.dart';
 import 'package:flutter_network/src/interceptor/interceptor_log.dart';
+import 'package:flutter_network/src/log_util.dart';
 import 'package:dio/dio.dart';
-
-import 'dart:convert';
 
 class TSNetworkHomePage extends StatefulWidget {
   @override
@@ -27,6 +26,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
 
     String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
 
+    LogUtil.init(isDebug: true);
     Service().init(
       baseUrl: baseUrl,
       interceptors: [
