@@ -29,20 +29,20 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSOverlayUtilHomePage> {
 
     sectionModels = [
       {
-        'theme': "单条信息的弹窗视图",
+        'theme': "Util",
         'values': [
           {
-            'title': "Toast(View)-暂无",
+            'title': "Toast(Util)",
             'imageSource': imageSource,
-            // 'nextPageName': "ToastHomePage1"
+            'nextPageName': OverlayUtilRouters.toastUtilHomePage,
           },
           {
-            'title': "Alert(View)",
+            'title': "Alert(Util)",
             'imageSource': imageSource,
             'nextPageName': OverlayUtilRouters.alertUtilHomePage,
           },
           {
-            'title': "ActionSheet(View)",
+            'title': "ActionSheet(Util)",
             'imageSource': imageSource,
             'nextPageName': OverlayUtilRouters.actionsheetUtilHomePage,
           },

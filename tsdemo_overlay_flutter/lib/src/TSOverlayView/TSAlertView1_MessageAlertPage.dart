@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/src/message_alert_view.dart';
+import 'package:flutter_overlay_kit/alert/message_alert_view.dart';
 
 // ignore: camel_case_types
 class TSAlertView1_MessageAlertPage extends StatelessWidget {
@@ -23,7 +23,7 @@ class TSAlertView1_MessageAlertPage extends StatelessWidget {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('Overlay模块'),
+      title: Text('MessageAlertView 模块'),
     );
   }
 
