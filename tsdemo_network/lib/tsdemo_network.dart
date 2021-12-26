@@ -1,7 +1,4 @@
 library tsdemo_network;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export './src/network_main_page.dart';
+export './src/network_routes.dart';
