@@ -6,6 +6,8 @@ import './log_util.dart';
 import './sp_util.dart';
 import './lang_util.dart';
 
+import 'dart:convert' as convert;
+
 typedef T JsonParse<T>(dynamic data);
 
 Future<T> request<T>(
@@ -32,22 +34,32 @@ Future<T> request<T>(
         await Service().dio.post(url, data: formData, cancelToken: cancelToken);
     LogUtil.v("回复：" + response.data.toString());
     if (response.statusCode == 200) {
-      var err = response.data['code'];
+      Map<String, dynamic> responseMap;
+      if (response.data is String) {
+        responseMap = convert.jsonDecode(response.data);
+      } else {
+        //String dataString = response.data.toString();
+        String dataJsonString = convert.jsonEncode(response.data);
+        responseMap = convert.jsonDecode(dataJsonString);
+      }
+
+      var err = responseMap['code'];
       if (err is int && err == 0) {
-        Map<String, dynamic> result = response.data["data"];
+        Map<String, dynamic> result = responseMap["data"];
         if (jsonParse != null) {
           return jsonParse(result);
         } else {
           return result ?? true;
         }
       } else {
-        var data = response.data['data'];
-        if (data != null && data is String && data.isNotEmpty) {
-          // AppUtil.makeToast(LangUtil.l(data));
-        } else {
-          // AppUtil.makeToast("${response.data}");
-        }
-        return Future.error(response.data);
+        var msg = responseMap['msg'];
+        print('请求失败$msg');
+        // if (data != null && data is String && data.isNotEmpty) {
+        //   // AppUtil.makeToast(LangUtil.l(data));
+        // } else {
+        //   // AppUtil.makeToast("${response.data}");
+        // }
+        // return Future.error(response.data);
       }
     } else {
       throw Exception('后端接口出现异常');
