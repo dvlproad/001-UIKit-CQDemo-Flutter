@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
+extension SimulateExtension on EnvironmentManager {
+  // 初始方法
+  check() async {
+    if (EnvironmentManager().environmentModel == null) {
+      // 获取列表model
+      TSEnvironmentModel envModel = TSEnvironmentDataUtil.getEnvironmentModel();
+      // 使用获取的model，完善 network 和 proxy
+
+      // 设置默认的网络、代理环境
+      String defaultNetworkId = TSEnvironmentDataUtil.mockNetworkId;
+      String defaultProxykId = TSEnvironmentDataUtil.noneProxykId;
+
+      await EnvironmentManager().completeEnvInternal(
+        environmentModel: envModel,
+        defaultNetworkId: defaultNetworkId,
+        defaultProxykId: defaultProxykId,
+      );
+    }
+  }
+}
+
 class TSEnvironmentDataUtil {
   // // 设置默认的环境
   // static String defaultNetworkId = developNetworkId;
@@ -18,18 +39,7 @@ class TSEnvironmentDataUtil {
   static String chaoqianProxykId = "proxyId_chaoqian";
   static String yongshengProxykId = "proxyId_yongsheng";
   static String weixiangProxykId = "proxyId_weixiang";
-
-  completeInternal({
-    @required String defaultNetworkId,
-    @required String defaultProxykId,
-  }) {
-    TSEnvironmentModel envModel = TSEnvironmentDataUtil.getEnvironmentModel();
-    EnvironmentManager().completeEnvInternal(
-      environmentModel: envModel,
-      defaultNetworkId: defaultNetworkId,
-      defaultProxykId: defaultProxykId,
-    );
-  }
+  static String customProxykId = "proxyId_custom";
 
   static TSEnvironmentModel getEnvironmentModel() {
     TSEnvironmentModel envModel = TSEnvironmentModel();
@@ -42,6 +52,7 @@ class TSEnvironmentDataUtil {
     return envModel;
   }
 
+  // 环境:网络代理
   static List<TSEnvProxyModel> _getEnvProxyModels() {
     List<TSEnvProxyModel> envModels = List();
     {
@@ -54,27 +65,28 @@ class TSEnvironmentDataUtil {
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
       dataModel.proxyId = chaoqianProxykId;
-      dataModel.name = "超前代理";
+      dataModel.name = "用户1代理";
       dataModel.proxyIp = "PROXY 192.168.28.231:8888";
       envModels.add(dataModel);
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
       dataModel.proxyId = yongshengProxykId;
-      dataModel.name = "永生代理";
+      dataModel.name = "用户2代理";
       dataModel.proxyIp = "PROXY 192.168.1.3:8888";
       envModels.add(dataModel);
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
       dataModel.proxyId = weixiangProxykId;
-      dataModel.name = "伟详代理";
+      dataModel.name = "用户3代理";
       dataModel.proxyIp = "PROXY 192.168.28.107:8888";
       envModels.add(dataModel);
     }
     return envModels;
   }
 
+  // 环境:网络环境
   static List<TSEnvNetworkModel> _getEnvNetworkModels() {
     List<TSEnvNetworkModel> envModels = List();
     // develop

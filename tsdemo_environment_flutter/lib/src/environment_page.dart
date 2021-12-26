@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import './actionsheet_footer.dart';
+import './environment_add_util.dart';
+
+import './environment_datas_util.dart';
 
 class TSEnvironmentPage extends StatefulWidget {
   @override
@@ -19,6 +23,9 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
   @override
   void initState() {
     super.initState();
+
+    EnvironmentManager().check(); // 设置默认的网络、代理环境
+
     _totalEnvModels = EnvironmentManager().environmentModel;
     _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
     _selectedProxyModel = EnvironmentManager().selectedProxyModel;
@@ -30,7 +37,7 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
       backgroundColor: Colors.yellow,
       resizeToAvoidBottomInset: false,
       appBar: _appBar(),
-      body: _pageWidget(),
+      body: _bodyWidget,
     );
   }
 
@@ -48,7 +55,38 @@ class _TSEnvironmentPageState extends State<TSEnvironmentPage> {
     );
   }
 
+  Widget get _bodyWidget {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        // 触摸收起键盘
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: _pageWidget(),
+          ),
+          BottomButtonsWidget(
+            cancelText: '添加/修改代理',
+            onCancel: () {
+              print('添加/修改代理');
+              EnvironmentManager().addEnvProxyModel(
+                proxyIp: '1111.111',
+              );
+              setState(() {});
+              // EnvironmentAddUtil.showAddPage(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _pageWidget() {
+    if (_selectedNetworkModel == null || _selectedProxyModel == null) {
+      return Container();
+    }
     return TSEnvironmentList(
       totalEnvModels: _totalEnvModels,
       selectedNetworkModel: _selectedNetworkModel,

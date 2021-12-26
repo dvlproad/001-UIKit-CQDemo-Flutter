@@ -31,8 +31,7 @@ dependencies:
     sdk: flutter
 
   flutter_demo_kit:
-    path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
-    # path: ../flutter_demo_kit/
+    path: ../flutter_demo_kit/
   
   provider: any #4.1.3
   tsdemo_environment_flutter:

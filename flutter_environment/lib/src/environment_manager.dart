@@ -32,10 +32,20 @@ class EnvironmentManager {
     @required TSEnvironmentModel environmentModel,
     @required String defaultNetworkId,
     @required String defaultProxykId,
-  }) {
+  }) async {
     assert(environmentModel != null);
     _environmentModel = environmentModel;
 
+    _getDefaultModel(
+      defaultNetworkId: defaultNetworkId,
+      defaultProxykId: defaultProxykId,
+    );
+  }
+
+  _getDefaultModel({
+    @required String defaultNetworkId,
+    @required String defaultProxykId,
+  }) async {
     Future.wait([
       // network
       EnvironmentSharedPreferenceUtil().getNetworkId().then((value) {
@@ -57,26 +67,21 @@ class EnvironmentManager {
         // envManager._currentProxykId = proxyId;
 
         return proxyId;
-      })
+      }),
     ]).then((List results) {
       //then 是所有都执行完之后走的回调   results是上面三个异步的结果拼到results里面来;
-      String networkId = results[0];
-      String proxyId = results[1];
-      this._getSelectedModel(
-        environmentModel: environmentModel,
-        selectedNetworkId: networkId,
-        selectedProxyId: proxyId,
-      );
+      String selectedNetworkId = results[0];
+      String selectedProxyId = results[1];
+      this._getSelectedNetworkModel(selectedNetworkId);
+      this._getSelectedProxyModel(selectedProxyId);
     }).catchError((onError) {
       print("onError = $onError");
     });
   }
 
-  _getSelectedModel({
-    TSEnvironmentModel environmentModel,
-    String selectedNetworkId,
-    String selectedProxyId,
-  }) {
+  // 根据 selectedNetworkId 和 selectedProxyId 从 environmentModel 获取到 _selectedNetworkModel 和 _selectedProxyModel，
+  // 同时会对各 NetworkModel 和 ProxyModel 进行是否 check 的标记
+  _getSelectedNetworkModel(String selectedNetworkId) {
     List<TSEnvNetworkModel> networkModels = environmentModel.networkModels;
     for (int i = 0; i < networkModels.length; i++) {
       TSEnvNetworkModel networkModel = networkModels[i];
@@ -88,8 +93,10 @@ class EnvironmentManager {
       }
     }
     assert(this._selectedNetworkModel != null);
+  }
 
-    List<TSEnvProxyModel> proxyModels = environmentModel.proxyModels;
+  _getSelectedProxyModel(String selectedProxyId) {
+    List<TSEnvProxyModel> proxyModels = _environmentModel.proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
       if (proxyModel.proxyId == selectedProxyId) {
@@ -102,19 +109,52 @@ class EnvironmentManager {
     assert(this._selectedProxyModel != null);
   }
 
+  // 环境:添加自定义的网络代理，并是否直接选中新添加的
+  TSEnvProxyModel addEnvProxyModel({
+    String proxyIp,
+    bool selectedNew = true,
+  }) {
+    List<TSEnvProxyModel> proxyModels = _environmentModel.proxyModels;
+
+    TSEnvProxyModel newProxyModel = TSEnvProxyModel();
+    newProxyModel.proxyId = "proxykId_custom";
+    newProxyModel.name = "自定义代理";
+    newProxyModel.proxyIp = proxyIp;
+
+    int proxyIpIndex = -1;
+    proxyIpIndex = proxyModels
+        .indexWhere((element) => element.proxyId == newProxyModel.proxyId);
+    if (proxyIpIndex != -1) {
+      //print('修改前$proxyModels');
+      proxyModels[proxyIpIndex] = newProxyModel;
+      //print('修改后$proxyModels');
+    } else {
+      proxyModels.add(newProxyModel);
+    }
+
+    if (selectedNew) {
+      newProxyModel.check = true;
+      updateEnvSelectedModel(selectedProxyModel: newProxyModel);
+    }
+
+    return newProxyModel;
+  }
+
   /// 更新选中的环境信息
   updateEnvSelectedModel({
     TSEnvNetworkModel selectedNetworkModel,
     TSEnvProxyModel selectedProxyModel,
   }) {
     if (selectedNetworkModel != null) {
-      this._selectedNetworkModel = selectedNetworkModel;
+      this._getSelectedNetworkModel(selectedNetworkModel.envId);
+
       EnvironmentSharedPreferenceUtil()
           .setNetworkId(selectedNetworkModel.envId);
     }
 
     if (selectedProxyModel != null) {
-      this._selectedProxyModel = selectedProxyModel;
+      this._getSelectedProxyModel(selectedProxyModel.proxyId);
+
       EnvironmentSharedPreferenceUtil().setProxykId(selectedProxyModel.proxyId);
     }
   }

@@ -2,7 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './devtool_routes.dart';
-import './environment_datas_util.dart';
 
 class TSDevToolHomePage extends CJTSBasePage {
   final String title;
@@ -22,12 +21,6 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
   @override
   void initState() {
     super.initState();
-
-    // 设置默认的网络、代理环境
-    TSEnvironmentDataUtil().completeInternal(
-      defaultNetworkId: TSEnvironmentDataUtil.mockNetworkId,
-      defaultProxykId: TSEnvironmentDataUtil.noneProxykId,
-    );
   }
 
   @override

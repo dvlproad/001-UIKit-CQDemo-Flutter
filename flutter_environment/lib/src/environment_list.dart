@@ -138,6 +138,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
       },
       cellAtIndexPath: (section, row) {
         if (section == 0) {
+          // Network 环境
           List<dynamic> dataModels = _totalEnvModels.networkModels;
           TSEnvNetworkModel dataModel = dataModels[row] as TSEnvNetworkModel;
           return EnvNetworkTableViewCell(
@@ -162,6 +163,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
             },
           );
         } else {
+          // Proxy 环境
           List<TSEnvProxyModel> dataModels = _totalEnvModels.proxyModels;
           TSEnvProxyModel dataModel = dataModels[row];
           return EnvProxyTableViewCell(
