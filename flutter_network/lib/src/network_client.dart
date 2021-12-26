@@ -35,7 +35,7 @@ class Service {
       int connectTimeout,
       int receiveTimeout,
       List<Interceptor> interceptors}) {
-    _dio.options = _dio.options.merge(
+    _dio.options = _dio.options.copyWith(
       baseUrl: baseUrl,
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
@@ -48,7 +48,7 @@ class Service {
   /// 修改 baseUrl
   void changeOptions({String baseUrl}) {
     LogUtil.v('baseUrl = $baseUrl');
-    _dio.options = _dio.options.merge(
+    _dio.options = _dio.options.copyWith(
       baseUrl: baseUrl,
     );
   }

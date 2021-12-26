@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class ResponseInterceptor extends Interceptor {
   @override
-  Future onResponse(Response response) {
-    return super.onResponse(response);
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    return super.onResponse(response, handler);
   }
 }

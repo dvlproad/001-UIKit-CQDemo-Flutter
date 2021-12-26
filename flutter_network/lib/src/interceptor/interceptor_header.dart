@@ -3,17 +3,26 @@ import './device_info.dart';
 
 class HeaderInterceptor extends Interceptor {
   @override
-  onRequest(RequestOptions options) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     ///注入公共 header
-    options.headers.addAll(await getHeaders());
+    // Map<String, Object> header = {
+    //   'version': '1000',
+    // };
+    // options.headers.addAll(header);
+    // handler.next(options);
 
-    return super.onRequest(options);
+    getHeaders().then((header) {
+      options.headers.addAll(header);
+      handler.next(options);
+    });
   }
 
   ///获取公共 header 信息
-  static Future<Map<String, Object>> getHeaders() async {
-    return {
-      'version': await DeviceInfo.version(),
+  Future<Map<String, dynamic>> getHeaders() async {
+    String version = await DeviceInfo.version();
+    Map<String, dynamic> header = {
+      'version': version,
     };
+    return header;
   }
 }

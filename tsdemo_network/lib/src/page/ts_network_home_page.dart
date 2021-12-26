@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network/src/network_client.dart';
+import 'package:flutter_network/src/interceptor/interceptor_header.dart';
+import 'package:flutter_network/src/interceptor/interceptor_response.dart';
+// import 'package:flutter_network/src/interceptor/ResponseInterceptor.dart';
+// import 'package:flutter_network/src/interceptor/DioLogInterceptor.dart';
 import 'package:dio/dio.dart';
 
 import 'dart:convert';
@@ -23,7 +27,12 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
 
     String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
 
-    Service().init(baseUrl: baseUrl);
+    Service().init(
+      baseUrl: baseUrl,
+      interceptors: [
+        HeaderInterceptor(),
+      ],
+    );
   }
 
   @override
@@ -42,14 +51,18 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               title: Text('切换环境:real'),
               onTap: () {
                 String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
-                Service().changeOptions(baseUrl: baseUrl);
+                Service().changeOptions(
+                  baseUrl: baseUrl,
+                );
               },
             ),
             ListTile(
               title: Text('切换环境:mock'),
               onTap: () {
                 String baseUrl = "http://121.41.91.92:3000/mock/28/api/bjh/";
-                Service().changeOptions(baseUrl: baseUrl);
+                Service().changeOptions(
+                  baseUrl: baseUrl,
+                );
               },
             ),
           ],
