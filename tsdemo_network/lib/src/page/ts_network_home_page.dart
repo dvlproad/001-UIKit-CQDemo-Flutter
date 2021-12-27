@@ -97,11 +97,33 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   }
 
   requestData(String id, String message) async {
-    Map<String, dynamic> result = await request(
+    ResponseModel responseModel1 = await NetworkUtil.postRequestUrl(
       '/account/wallet/wishStar/page',
       formData: {"accountId": id, "message": message},
       cancelToken: cancelToken,
     );
-    print('result=$result');
+    print(
+        '请求结果1:responseModel=$responseModel1,result=${responseModel1.result}');
+
+    NetworkUtil.postRequestUrl(
+      '/account/wallet/wishStar/page',
+      formData: {"accountId": id, "message": message},
+      cancelToken: cancelToken,
+    ).then((ResponseModel responseModel) {
+      print(
+          '请求结果2:responseModel=$responseModel,result=${responseModel.result}');
+    });
+
+    NetworkUtil.postUrl(
+      '/account/wallet/wishStar/page',
+      formData: {"accountId": id, "message": message},
+      cancelToken: cancelToken,
+      onSuccess: (result) {
+        print('请求结果3:result=$result');
+      },
+      onFailure: (failureMessage) {
+        print('请求结果3:failureMessage=$failureMessage');
+      },
+    );
   }
 }
