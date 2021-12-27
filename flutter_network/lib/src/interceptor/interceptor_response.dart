@@ -6,8 +6,7 @@ import 'ResultData.dart';
 class ResponseInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    RequestOptions option = response.requestOptions;
-
+    //RequestOptions option = response.requestOptions;
     handler.next(response);
   }
 }

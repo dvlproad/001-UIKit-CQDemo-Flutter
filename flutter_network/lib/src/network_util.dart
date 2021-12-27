@@ -30,8 +30,8 @@ Future<T> request<T>(
       formData['sessionID'] = sessionID;
     }
 
-    response =
-        await Service().dio.post(url, data: formData, cancelToken: cancelToken);
+    Dio dio = NetworkManager.instance.serviceDio;
+    response = await dio.post(url, data: formData);
     LogUtil.v("回复：" + response.data.toString());
     if (response.statusCode == 200) {
       Map<String, dynamic> responseMap;
@@ -92,12 +92,13 @@ Future<T> updateFile<T>(
 
     FormData data = FormData.fromMap(formData);
 
-    Response response = await Service().dio.post(
-          url,
-          data: data,
-          cancelToken: cancelToken,
-          onSendProgress: onSendProgress,
-        );
+    Dio dio = NetworkManager.instance.serviceDio;
+    Response response = await dio.post(
+      url,
+      data: data,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+    );
 
     if (response.statusCode == 200) {
       var err = response.data['err'];
@@ -156,12 +157,13 @@ Future<T> updateMultiFile<T>(url, Map<String, dynamic> formData,
       }
     }
 
-    Response response = await Service().dio.post(
-          url,
-          data: data,
-          cancelToken: cancelToken,
-          onSendProgress: onSendProgress,
-        );
+    Dio dio = NetworkManager.instance.serviceDio;
+    Response response = await dio.post(
+      url,
+      data: data,
+      cancelToken: cancelToken,
+      onSendProgress: onSendProgress,
+    );
 
     if (response.statusCode == 200) {
       var err = response.data['err'];

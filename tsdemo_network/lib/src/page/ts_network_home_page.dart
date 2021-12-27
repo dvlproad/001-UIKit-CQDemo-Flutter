@@ -27,12 +27,13 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
     String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
 
     LogUtil.init(isDebug: true);
-    Service().init(
+    // NetworkManager();
+    NetworkManager.start(
       baseUrl: baseUrl,
       interceptors: [
-        RequestInterceptor(),
-        ResponseInterceptor(),
-        ErrorInterceptor(),
+        // RequestInterceptor(),
+        // ResponseInterceptor(),
+        // ErrorInterceptor(),
         DioLogInterceptor(),
       ],
     );
@@ -54,7 +55,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               title: Text('切换环境:real'),
               onTap: () {
                 String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
-                Service().changeOptions(
+                NetworkChangeUtil.changeOptions(
                   baseUrl: baseUrl,
                 );
               },
@@ -63,9 +64,21 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               title: Text('切换环境:mock'),
               onTap: () {
                 String baseUrl = "http://121.41.91.92:3000/mock/28/api/bjh/";
-                Service().changeOptions(
+                NetworkChangeUtil.changeOptions(
                   baseUrl: baseUrl,
                 );
+              },
+            ),
+            ListTile(
+              title: Text('切换代理:none'),
+              onTap: () {
+                NetworkChangeUtil.changeProxy(null);
+              },
+            ),
+            ListTile(
+              title: Text('切换代理:mac'),
+              onTap: () {
+                NetworkChangeUtil.changeProxy('192.168.72.55:8888');
               },
             ),
           ],

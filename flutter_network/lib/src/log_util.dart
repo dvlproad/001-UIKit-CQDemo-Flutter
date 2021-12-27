@@ -1,5 +1,5 @@
 class LogUtil {
-  static const String _TAG_DEFAULT = "###1440###";
+  static const String _TAG_DEFAULT = "###qianqianqian###";
 
   ///是否 debug
   static bool debug = false; //是否是debug模式,true: log v 不输出.
