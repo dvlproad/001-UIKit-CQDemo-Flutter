@@ -46,6 +46,10 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
             'title': "Environment(环境)",
             'nextPageName': DevToolRouters.environmentPage,
           },
+          {
+            'title': "ApiMock(模拟)",
+            'nextPageName': DevToolRouters.apiMockPage,
+          },
         ]
       },
     ];
