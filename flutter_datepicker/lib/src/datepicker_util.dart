@@ -3,6 +3,7 @@ import 'package:flutter_picker/flutter_picker.dart';
 import 'package:date_format/date_format.dart';
 import './showModal_util.dart';
 import './pickercreater.dart';
+// import 'package:bruno/bruno.dart';
 
 typedef PickerConfirmCityCallback = void Function(
     List<String> stringData, List<int> selecteds);
@@ -19,6 +20,26 @@ class DatePickerUtil {
       DateTime yyyyMMddDate = DateTime.parse(selectedyyyyMMddDateString);
       selectedyyyyMMddDate = yyyyMMddDate;
     }
+
+    /*
+    BrnDatePicker.showDatePicker(context,
+        maxDateTime: DateTime.parse('2021-12-31 23:59:59'),
+        minDateTime: DateTime.parse('2020-01-15 00:00:00'),
+        initialDateTime: DateTime.parse('2020-01-01 18:26:59'),
+        pickerMode: BrnDateTimePickerMode.date,
+        minuteDivider: 30,
+        pickerTitleConfig: BrnPickerTitleConfig.Default,
+        dateFormat: 'yyyy-MMMM-dd', onConfirm: (dateTime, list) {
+      BrnToast.show("onConfirm:  $dateTime   $list", context);
+    }, onClose: () {
+      print("onClose");
+    }, onCancel: () {
+      print("onCancel");
+    }, onChange: (dateTime, list) {
+      print("onChange:  $dateTime    $list");
+    });
+    return
+    */
 
     DatePickerUtil.chooseDate(
       context,

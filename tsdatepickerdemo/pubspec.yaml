@@ -30,6 +30,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # bruno: 2.0.0
+
   flutter_demo_kit:
     #path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
     path: ../flutter_demo_kit/
