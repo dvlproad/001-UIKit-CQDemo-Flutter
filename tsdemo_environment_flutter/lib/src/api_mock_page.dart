@@ -1,14 +1,9 @@
-import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+
 import './actionsheet_footer.dart';
-import './environment_add_util.dart';
-
-import './environment_datas_util.dart';
-
-import 'dart:math';
 
 class TSApiMockPage extends StatefulWidget {
   @override
@@ -48,6 +43,17 @@ class _TSApiMockPageState extends State<TSApiMockPage> {
   Widget _appBar() {
     return AppBar(
       title: Text('切换Mock'),
+      actions: [
+        CQTSThemeBGButton(
+          title: '添加',
+          onPressed: () {
+            ApiManager.tryAddApi(
+                cqtsRandomString(0, 10, CQRipeStringType.english));
+            print('添加后的api个数:${ApiManager().apiModels.length}');
+            setState(() {});
+          },
+        ),
+      ],
     );
   }
 
@@ -64,23 +70,9 @@ class _TSApiMockPageState extends State<TSApiMockPage> {
             child: _pageWidget(),
           ),
           BottomButtonsWidget(
-            cancelText: '移除所有mock',
+            cancelText: '移除所有mock(暂无)',
             onCancel: () {
-              print('移除所有mock');
-
-              ApiManager.tryAddApi(getRandomString(10));
-              print('添加后的api个数:${ApiManager().apiModels.length}');
-              setState(() {});
-              // EnvironmentAddUtil.showAddPage(
-              //   context,
-              //   addCompleteBlock: (bProxyId) {
-              //     print('proxyId =$bProxyId');
-              //     EnvironmentManager().addEnvProxyModel(
-              //       proxyIp: bProxyId,
-              //     );
-              //     setState(() {});
-              //   },
-              // );
+              print('移除所有mock(暂无)');
             },
           ),
         ],
@@ -94,26 +86,9 @@ class _TSApiMockPageState extends State<TSApiMockPage> {
     }
     return TSApiList(
       apiMockModels: _apiModels,
-      clickApiMockCellCallback: (section, row, bNetworkModel) {
-        print('点击了${bNetworkModel.name}');
-        // EnvironmentManager()
-        //     .updateEnvSelectedModel(selectedNetworkModel: bNetworkModel);
-        // 调用 网络域名 的更改接口
-        // Service().changeOptions(baseUrl: bNetworkModel.hostName);
+      clickApiMockCellCallback: (section, row, bApiModel) {
+        print('点击了${bApiModel.name}');
       },
-      // clickEnvProxyCellCallback: (section, row, bProxyModel) {
-      //   print('点击了${bProxyModel.name}');
-      //   // EnvironmentManager()
-      //   //     .updateEnvSelectedModel(selectedProxyModel: bProxyModel);
-      //   this.showLogWindow();
-      // },
     );
   }
 }
-
-// 需要 import 'dart:math';
-const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-Random _rnd = Random();
-
-String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
-    length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));

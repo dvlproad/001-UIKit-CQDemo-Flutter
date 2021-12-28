@@ -9,3 +9,4 @@ export 'baseuikit/cqts_button_factory.dart';
 export 'baseutil/cjts_toast_util.dart';
 
 export './Demo_RipeView/CQTSRipeButton.dart';
+export './Demo_Resources/CQTSRandomUtil.dart';
