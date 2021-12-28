@@ -3,8 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
-import './actionsheet_footer.dart';
-
 class TSApiMockPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -13,13 +11,9 @@ class TSApiMockPage extends StatefulWidget {
 }
 
 class _TSApiMockPageState extends State<TSApiMockPage> {
-  List<ApiModel> _apiModels;
-
   @override
   void initState() {
     super.initState();
-
-    _apiModels = ApiManager().apiModels;
   }
 
   @override
@@ -58,37 +52,6 @@ class _TSApiMockPageState extends State<TSApiMockPage> {
   }
 
   Widget get _bodyWidget {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        // 触摸收起键盘
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Column(
-        children: [
-          Expanded(
-            child: _pageWidget(),
-          ),
-          BottomButtonsWidget(
-            cancelText: '移除所有mock(暂无)',
-            onCancel: () {
-              print('移除所有mock(暂无)');
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _pageWidget() {
-    if (_apiModels == null) {
-      return Container();
-    }
-    return TSApiList(
-      apiMockModels: _apiModels,
-      clickApiMockCellCallback: (section, row, bApiModel) {
-        print('点击了${bApiModel.name}');
-      },
-    );
+    return ApiMockPageContent();
   }
 }

@@ -1,14 +1,19 @@
 // 创建一个单例的Manager类
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import './environment_manager.dart';
 import './environment_data_bean.dart';
 
+import 'dart:convert';
+
 class EnvironmentManager {
-  TSEnvironmentModel _environmentModel;
+  List<TSEnvNetworkModel> _networkModels;
+  List<TSEnvProxyModel> _proxyModels;
   TSEnvNetworkModel _selectedNetworkModel;
   TSEnvProxyModel _selectedProxyModel;
 
-  TSEnvironmentModel get environmentModel => _environmentModel;
+  List<TSEnvNetworkModel> get networkModels => _networkModels;
+  List<TSEnvProxyModel> get proxyModels => _proxyModels;
   TSEnvNetworkModel get selectedNetworkModel => _selectedNetworkModel;
   TSEnvProxyModel get selectedProxyModel => _selectedProxyModel;
 
@@ -29,12 +34,15 @@ class EnvironmentManager {
 
   /// 初始化完成后继续完善信息
   Future completeEnvInternal({
-    @required TSEnvironmentModel environmentModel,
+    @required List<TSEnvNetworkModel> networkModels,
+    @required List<TSEnvProxyModel> proxyModels,
     @required String defaultNetworkId,
     @required String defaultProxykId,
   }) async {
-    assert(environmentModel != null);
-    _environmentModel = environmentModel;
+    assert(networkModels != null);
+    assert(proxyModels != null);
+    _networkModels = networkModels;
+    _proxyModels = proxyModels;
 
     return _getDefaultModel(
       defaultNetworkId: defaultNetworkId,
@@ -81,10 +89,10 @@ class EnvironmentManager {
     });
   }
 
-  // 根据 selectedNetworkId 和 selectedProxyId 从 environmentModel 获取到 _selectedNetworkModel 和 _selectedProxyModel，
+  // 根据 selectedNetworkId 和 selectedProxyId 获取到 _selectedNetworkModel 和 _selectedProxyModel，
   // 同时会对各 NetworkModel 和 ProxyModel 进行是否 check 的标记
   _getSelectedNetworkModel(String selectedNetworkId) {
-    List<TSEnvNetworkModel> networkModels = environmentModel.networkModels;
+    List<TSEnvNetworkModel> networkModels = _networkModels;
     for (int i = 0; i < networkModels.length; i++) {
       TSEnvNetworkModel networkModel = networkModels[i];
       if (networkModel.envId == selectedNetworkId) {
@@ -98,7 +106,7 @@ class EnvironmentManager {
   }
 
   _getSelectedProxyModel(String selectedProxyId) {
-    List<TSEnvProxyModel> proxyModels = _environmentModel.proxyModels;
+    List<TSEnvProxyModel> proxyModels = _proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
       if (proxyModel.proxyId == selectedProxyId) {
@@ -116,7 +124,7 @@ class EnvironmentManager {
     String proxyIp,
     bool selectedNew = true,
   }) {
-    List<TSEnvProxyModel> proxyModels = _environmentModel.proxyModels;
+    List<TSEnvProxyModel> proxyModels = _proxyModels;
 
     TSEnvProxyModel newProxyModel = TSEnvProxyModel();
     newProxyModel.proxyId = "proxykId_custom";
@@ -178,6 +186,39 @@ class EnvironmentSharedPreferenceUtil {
   }
 
   // proxy
+
+  // proxy:list
+  static const String EnvProxyListKey = "EnvProxyListKey";
+  Future setProxyList(List<TSEnvProxyModel> proxys) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> strings = [];
+    for (TSEnvProxyModel proxy in proxys) {
+      Map map = proxy.toJson();
+      String mapString = json.encode(map);
+      strings.add(mapString);
+    }
+
+    prefs.setStringList(EnvProxyListKey, strings);
+  }
+
+  Future<List<TSEnvProxyModel>> getProxyList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List proxys = prefs.getStringList(EnvProxyListKey);
+    if (proxys == null) {
+      return null;
+    }
+
+    List<TSEnvProxyModel> proxyModels = [];
+    for (String proxyString in proxys) {
+      Map map = json.decode(proxyString);
+      TSEnvProxyModel proxyModel = TSEnvProxyModel.fromJson(map);
+      proxyModels.add(proxyModel);
+    }
+    return proxyModels;
+  }
+
+  // proxy:selectedId
   static const String EnvProxyIdKey = "EnvProxyIdKey";
   Future setProxykId(String proxykId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

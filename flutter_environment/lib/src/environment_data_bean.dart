@@ -37,6 +37,27 @@ class TSEnvProxyModel {
   TSEnvProxyModel({
     this.proxyId,
     this.name,
+    this.proxyIp,
+    this.useDirection,
     this.check,
   });
+
+  factory TSEnvProxyModel.fromJson(Map<String, dynamic> json) {
+    return TSEnvProxyModel(
+      proxyId: json['proxyId'],
+      name: json['name'],
+      proxyIp: json['proxyIp'],
+      useDirection: json['useDirection'],
+      check: json['check'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      "proxyId": this.proxyId,
+      "name": this.name,
+      "proxyIp": this.proxyIp,
+      "useDirection": this.useDirection,
+      "check": this.check,
+    };
+  }
 }

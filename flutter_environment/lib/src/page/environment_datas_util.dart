@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+
+import '../environment_data_bean.dart';
+import '../environment_manager.dart';
 
 extension SimulateExtension on EnvironmentManager {
   // 初始方法
   Future check() async {
-    if (EnvironmentManager().environmentModel == null) {
+    if (EnvironmentManager().networkModels == null) {
       // 获取列表model
-      TSEnvironmentModel envModel = TSEnvironmentDataUtil.getEnvironmentModel();
+
+      List<TSEnvNetworkModel> networkModels =
+          TSEnvironmentDataUtil.getEnvNetworkModels();
+
+      List<TSEnvProxyModel> proxyModels =
+          await EnvironmentSharedPreferenceUtil().getProxyList();
+      if (proxyModels == null || proxyModels?.length == 0) {
+        proxyModels = TSEnvironmentDataUtil.getEnvProxyModels();
+        EnvironmentSharedPreferenceUtil().setProxyList(proxyModels);
+      }
+
       // 使用获取的model，完善 network 和 proxy
 
       // 设置默认的网络、代理环境
@@ -14,7 +26,8 @@ extension SimulateExtension on EnvironmentManager {
       String defaultProxykId = TSEnvironmentDataUtil.noneProxykId;
 
       return EnvironmentManager().completeEnvInternal(
-        environmentModel: envModel,
+        networkModels: networkModels,
+        proxyModels: proxyModels,
         defaultNetworkId: defaultNetworkId,
         defaultProxykId: defaultProxykId,
       );
@@ -41,19 +54,8 @@ class TSEnvironmentDataUtil {
   static String weixiangProxykId = "proxyId_weixiang";
   static String customProxykId = "proxyId_custom";
 
-  static TSEnvironmentModel getEnvironmentModel() {
-    TSEnvironmentModel envModel = TSEnvironmentModel();
-    envModel.networkTitle = "网络环境";
-    envModel.networkModels = TSEnvironmentDataUtil._getEnvNetworkModels();
-
-    envModel.proxyTitle = "网络代理";
-    envModel.proxyModels = TSEnvironmentDataUtil._getEnvProxyModels();
-
-    return envModel;
-  }
-
   // 环境:网络代理
-  static List<TSEnvProxyModel> _getEnvProxyModels() {
+  static List<TSEnvProxyModel> getEnvProxyModels() {
     List<TSEnvProxyModel> envModels = List();
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel();
@@ -87,7 +89,7 @@ class TSEnvironmentDataUtil {
   }
 
   // 环境:网络环境
-  static List<TSEnvNetworkModel> _getEnvNetworkModels() {
+  static List<TSEnvNetworkModel> getEnvNetworkModels() {
     List<TSEnvNetworkModel> envModels = List();
     // develop
     {
