@@ -14,13 +14,13 @@ class AlertUtil {
   // }
 
   // 取消 + 确定
-  static showCancelOKAlert(
-    BuildContext context,
+  static showCancelOKAlert({
+    @required BuildContext context,
     String title,
     String message,
     Function() cancelHandle,
-    Function() okHandle,
-  ) {
+    @required Function() okHandle,
+  }) {
     showAlert(
       context,
       alertViewBulider: (context) {
@@ -55,7 +55,9 @@ class AlertUtil {
       builder: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[alertViewBulider(context)],
+        children: <Widget>[
+          alertViewBulider(context),
+        ],
       ),
     );
   }

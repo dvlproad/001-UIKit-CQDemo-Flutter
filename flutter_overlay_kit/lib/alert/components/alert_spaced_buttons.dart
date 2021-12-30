@@ -5,6 +5,8 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
  * 有间隔的'取消'+'确定' Buttons
  */
 class AlertdCancelOKSpacedButtons extends StatelessWidget {
+  final height;
+
   final String cancelTitle;
   final Function cancelHandle;
   // final Void Function(Void) cancelHandle;
@@ -14,6 +16,7 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
 
   AlertdCancelOKSpacedButtons({
     Key key,
+    this.height,
     this.cancelTitle = '取消',
     this.cancelHandle,
     this.okTitle = '确认',
@@ -34,13 +37,15 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
   }
 
   Widget _row() {
+    double buttonHeight = this.height ?? 40;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         ThemeBorderButton(
           width: 100,
-          height: 40,
+          height: buttonHeight,
           borderColorType: ThemeBGType.pink,
           title: this.cancelTitle,
           titleStyle: ButtonBoldTextStyle(fontSize: 15.0),
@@ -50,7 +55,7 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
         ),
         ThemeBGButton(
           width: 100,
-          height: 40,
+          height: buttonHeight,
           bgColorType: ThemeBGType.pink,
           title: this.okTitle,
           titleStyle: ButtonBoldTextStyle(fontSize: 15.0),

@@ -7,15 +7,10 @@ class CJBaseMessageAlertView extends StatelessWidget {
   final String title;
   final String message;
 
-  final String iKnowTitle;
-  final Function iKnowHandle;
-
   CJBaseMessageAlertView({
     Key key,
     this.title,
     this.message,
-    this.iKnowTitle = '我知道了',
-    this.iKnowHandle,
   });
 
   Widget renderButtons() {
@@ -76,6 +71,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       alertMessageComponent = Container(
         margin:
             EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
+        padding: EdgeInsets.only(left: 20, right: 20),
         child: Text(
           this.message ?? '',
           style: TextStyle(
@@ -98,12 +94,17 @@ class CJBaseMessageAlertView extends StatelessWidget {
       columnWidgets.add(alertMessageComponent);
     }
 
+    double buttonHeight = 40;
+    double buttonsWidgetHeight = marginTop + buttonHeight + marginBottom;
+
     return CQAlertContainer(
       contentWidget: Column(
         children: columnWidgets,
       ),
+      buttonsWidgetHeight: buttonsWidgetHeight,
       buttonsWidget: Container(
-        margin: EdgeInsets.only(top: marginTop, bottom: marginBottom),
+        // color: Colors.pink,
+        padding: EdgeInsets.only(top: marginTop, bottom: marginBottom),
         child: renderButtons(),
       ),
     );

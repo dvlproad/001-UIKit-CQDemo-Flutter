@@ -36,7 +36,7 @@ class TSAlertView1_MessageAlertPage extends StatelessWidget {
         SizedBox(height: 40),
         IKnowMessageAlertView(
           title: "添加的图片数量超过限制",
-          message: "我是提示",
+          message: "我是提示（我是一串很长的字符串我是一串很长的字符串我是一串很长的字符串我是一串很长的字符串）",
           iKnowTitle: "我知道了3",
           iKnowHandle: () {
             print("点击Alert按钮:'我知道了'");
