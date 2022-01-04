@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
 
   webview_flutter: any
+  flutter_webview_plugin: any
 
 dev_dependencies:
   flutter_test:

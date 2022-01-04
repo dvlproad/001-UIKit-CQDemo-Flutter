@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import './webview/tswebviewpage.dart';
+import './webview_plugin/ts_webview_plugin_home_page.dart';
 
 class TSWebViewHomePage extends CJTSBasePage {
   TSWebViewHomePage({Key key}) : super(key: key);
@@ -30,11 +30,13 @@ class _TSWebViewHomePageState extends CJTSBasePageState<TSWebViewHomePage> {
         'theme': "WebView",
         'values': [
           {
-            'title': "WebView",
+            'title': "WebViewPlugin",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => TSWebViewPage()));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TSWebViewPluginHomePage()));
             },
           },
         ]

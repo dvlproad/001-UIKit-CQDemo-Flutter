@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type='text/css'>
+        html {
+            font-family: Helvetica;
+            color: #222;
+        }
+
+        h1 {
+            color: steelblue;
+            font-size: 24px;
+            margin-top: 24px;
+        }
+
+        button {
+            margin: 0 3px 10px;
+            font-size: 12px;
+        }
+
+        .logLine {
+            border-bottom: 1px solid #ccc;
+            padding: 4px 2px;
+            font-family: courier;
+            font-size: 11px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>OA测试H5的JS</h1>
+    <h6>本页面仅在app上才会显示操作按钮</h6>
+    <!-- <button type="button" onclick="callAppShare()">微信分享</button> -->
+    <script>
+        window.onerror = function (err) {
+            log('window.onerror: ' + err)
+        }
+
+        function setupWebViewJavascriptBridge(callback) {
+            if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+            if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+            window.WVJBCallbacks = [callback];
+            var WVJBIframe = document.createElement('iframe');
+            WVJBIframe.style.display = 'none';
+            WVJBIframe.src = 'https://__bridge_loaded__';
+            document.documentElement.appendChild(WVJBIframe);
+            setTimeout(function () { document.documentElement.removeChild(WVJBIframe) }, 0)
+        }
+
+        setupWebViewJavascriptBridge(function (bridge) {
+            var uniqueId = 1
+            function log(message, data) {
+                var log = document.getElementById('log')
+                var el = document.createElement('div')
+                el.className = 'logLine'
+                el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+                if (log.children.length) { log.insertBefore(el, log.children[0]) }
+                else { log.appendChild(el) }
+            }
+
+            bridge.registerHandler('testJavascriptHandler', function (data, responseCallback) {
+                log('ObjC called testJavascriptHandler with', data)
+                var responseData = { 'Javascript Says': 'Right back atcha!' }
+                log('JS responding with', responseData)
+                responseCallback(responseData)
+            })
+
+            document.body.appendChild(document.createElement('br'))
+
+            var callbackButton = document.getElementById('commonShareButtons').appendChild(document.createElement('button'))
+            callbackButton.innerHTML = '微信分享'
+            callbackButton.onclick = function (e) {
+                e.preventDefault()
+                var shareDict = {
+                    'moduleType': '505',
+                    'entity': {
+                        'shareType': 0,
+                        'shareWebUrl': 'http://www.umei.cc/meinvtupian/xingganmeinv/88259.htm',
+                        'shareTitle': '震惊！！！',
+                        'shareContent': '大战一触即发，赶快点击进入',
+                        'shareImageUrls': [
+                            'https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1553580275&di=f66151ca1a4ee5c2249be0936287161f&src=http://hbimg.b0.upaiyun.com/d5376c479764c959befd3f036e13a0c16ba25b05ef35-bNXhvs_fw658',
+                            'https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1553580289&di=835a5f5424c70a119a3df762c8536fae&src=http://hbimg.b0.upaiyun.com/ea52c1c9e5df4039ce5275095a0649921ad083244d20a-Lf82xv_fw658',
+                            'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=73620610,2366156866&fm=26&gp=0.jpg',
+                            'https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3609652509,3900649996&fm=26&gp=0.jpg']
+                    }, 'callback': 'window.shareResult'
+                }
+                bridge.callHandler('commonShare', shareDict, function (response) {
+                    log('分享JS传给app的response值如下', response)
+                })
+            }
+                                     
+                                     
+                                     
+                                     
+                                     
+                                     
+             var callbackButton2 = document.getElementById('commonShowShareButtons').appendChild(document.createElement('button'))
+             callbackButton2.innerHTML = '弹出分享'
+             callbackButton2.onclick = function (e) {
+             e.preventDefault()
+                                     var shareDict = {
+                                     "moduleType": 502,
+                                     "shareOptions": [{
+                                                      "iconShareType": 0,
+                                                      "iconImageUrl": "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2982647271,3673243887&fm=26&gp=0.jpg",
+                                                      "iconTitle": "微信分享"
+                                                      },
+                                                      {
+                                                      "iconShareType": 1,
+                                                      "iconImageUrl": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555494667190&di=ca16a00c51585a25af21956072976c11&imgtype=0&src=http%3A%2F%2Fwww.sj520.cn%2Fsc%2Fima%2Fweixin_sj520_16.jpg",
+                                                      "iconTitle": "朋友圈分享"
+                                                      },
+                                                      {
+                                                      "iconShareType": 2,
+                                                      "iconImageUrl": "https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=119350367,2488384006&fm=26&gp=0.jpg",
+                                                      "iconTitle": "复制链接"
+                                                      }
+                                                      ],
+                                     "shareData": {
+                                     "shareWebUrl": "http://",
+                                     "shareTitle": "标题 ",
+                                     "shareContent": "内容",
+                                     "shareImageUrls": [],
+                                     "shareCallback": "window.shareResult"
+                                     }
+                                     }
+                                     bridge.callHandler('commonShowShare', shareDict, function (response) {
+                                log('分享JS传给app的response值如下', response)
+                                })
+             }
+        })
+    </script>
+    <div id='commonShareButtons'></div>
+    <div id='commonShowShareButtons'></div>
+    <div id='log'></div>
+</body>
+
+</html>
