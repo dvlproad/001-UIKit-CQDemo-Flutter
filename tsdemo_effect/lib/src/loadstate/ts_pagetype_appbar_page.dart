@@ -54,7 +54,7 @@ class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
     List<Widget> columnWidgets = [];
 
     if (widget.successHasCustomAppBar) {
-      Widget appBar = EasyAppBarWidget(
+      Widget appBar = CommonAppBar(
         title: AppBarTitleWidget(text: '我是成功页面的标题'),
         leading: AppBarBackWidget(
           onPressed: () {
@@ -79,8 +79,8 @@ class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
-//或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
-    double successWidgetCustomAppBarHeight =
+    //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
+    double hasAppBarWidget =
         widget.successHasCustomAppBar ? stautsBarHeight + 44 : 0;
 
     return LoadStateLayout(
@@ -96,7 +96,6 @@ class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
         ),
       ),
       successWidget: _successWidget,
-      successWidgetCustomAppBarHeight: successWidgetCustomAppBarHeight,
 
       //错误按钮点击过后进行重新加载
       errorWidget: StateErrorWidget(

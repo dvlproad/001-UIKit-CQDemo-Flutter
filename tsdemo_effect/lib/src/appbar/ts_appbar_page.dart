@@ -76,7 +76,7 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
     return Column(
       children: [
         Container(color: Colors.white, height: 20),
-        EasyAppBarWidget(
+        CommonAppBar(
           backgroundColor: Colors.transparent,
           title: AppBarTitleWidget(text: '我是有返回按钮的导航栏标题'),
           automaticallyImplyLeading: true,
@@ -86,12 +86,12 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
             },
           ),
         ),
-        EasyAppBarWidget(
+        CommonAppBar(
           title: AppBarTitleWidget(text: '我是没有返回按钮的导航栏标题'),
           automaticallyImplyLeading: false,
         ),
         appBar(),
-        EasyAppBarWidget(
+        CommonAppBar(
           title: AppBarTitleWidget(
             text: '商品收藏',
             // onPressed: () {

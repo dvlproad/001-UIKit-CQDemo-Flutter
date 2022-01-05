@@ -29,6 +29,9 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
     _tabController.addListener(() {
       print(_tabController.index);
     });
+
+    // 显示界面 SuccessWithData, 若未设置，则会显示init视图
+    updateWidgetType(WidgetType.SuccessWithData, needUpdateUI: false);
   }
 
   @override

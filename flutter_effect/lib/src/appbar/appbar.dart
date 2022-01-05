@@ -5,7 +5,7 @@ import './appbar_component.dart';
 export './appbar_component.dart';
 import '../../flutter_effect_adapt.dart';
 
-class EasyAppBarWidget extends AppBar {
+class CommonAppBar extends AppBar {
   final Color backgroundColor;
 
   final Widget title;
@@ -21,7 +21,7 @@ class EasyAppBarWidget extends AppBar {
 
   final List<Widget> actions;
 
-  EasyAppBarWidget({
+  CommonAppBar({
     Key key,
     this.backgroundColor,
     this.title,
@@ -31,10 +31,10 @@ class EasyAppBarWidget extends AppBar {
   }) : super(key: key);
 
   @override
-  _EasyAppBarWidgetState createState() => _EasyAppBarWidgetState();
+  _CommonAppBarState createState() => _CommonAppBarState();
 }
 
-class _EasyAppBarWidgetState extends State<EasyAppBarWidget> {
+class _CommonAppBarState extends State<CommonAppBar> {
   @override
   Widget build(BuildContext context) {
     // return buildAppBarWidget(context);

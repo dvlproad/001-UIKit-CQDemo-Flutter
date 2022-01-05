@@ -25,13 +25,6 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
     getData_Success();
   }
 
-  @override
-  PreferredSizeWidget appBar() {
-    return widget.appBarIsAddToSuccess
-        ? null
-        : AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
-  }
-
   // @override
   // Color backgroundColor() {
   //   // return Color(0xFFF0F0F0);
@@ -75,10 +68,55 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   }
 
   @override
+  PreferredSizeWidget appBar() {
+    return widget.appBarIsAddToSuccess ? null : _appBar;
+  }
+
+  Widget get _appBar {
+    // return AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
+    return CommonAppBar(
+      title: AppBarTitleWidget(
+        text: '商品收藏',
+        // onPressed: () {
+        //   print('点击标题');
+        // },
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () {
+            print('search....');
+          },
+        ),
+        AppBarActionWidget(
+          image: AssetImage(
+            'assets/appbar/icon_search.png',
+            package: 'flutter_effect',
+          ),
+          onPressed: () {
+            print('点击管理');
+          },
+        ),
+        AppBarActionWidget(
+          text: '地址管理',
+          onPressed: () {
+            print('点击管理');
+          },
+        ),
+      ],
+    );
+  }
+
+  @override
   Widget appBarWidget(BuildContext context) {
     if (widget.appBarIsAddToSuccess) {
-      return Container(
-        height: 0,
+      return CommonAppBar(
+        title: AppBarTitleWidget(text: '我是成功页面的标题'),
+        leading: AppBarBackWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       );
     }
     return null;
@@ -102,20 +140,11 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   Widget buildSuccessWidget(BuildContext context) {
     List<Widget> columnWidgets = [];
 
-    if (widget.appBarIsAddToSuccess) {
-      Widget appBar = EasyAppBarWidget(
-        title: AppBarTitleWidget(text: '我是成功页面的标题'),
-        leading: AppBarBackWidget(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      );
-      columnWidgets.add(appBar);
-    }
     columnWidgets.add(
       Expanded(
         child: TSNetworkResultWidget(
+          // color: Colors.red.withOpacity(0.3),
+          marginTop: 0,
           title: '我是【请求成功，且有数据】的界面',
           getData_Success: getData_Success,
           getData_NoData: getData_NoData,
@@ -132,6 +161,8 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   @override
   Widget buildNodataWidget(BuildContext context) {
     return TSNetworkResultWidget(
+      // color: Colors.green.withOpacity(0.3),
+      marginTop: 100,
       title: '我是【请求成功，但无数据】的界面',
       getData_Success: getData_Success,
       getData_NoData: getData_NoData,
@@ -142,6 +173,8 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   @override
   Widget buildErrorWidget(BuildContext context) {
     return TSNetworkResultWidget(
+      // color: Colors.blue.withOpacity(0.3),
+      marginTop: 200,
       title: '我是【请求失败】的界面',
       getData_Success: getData_Success,
       getData_NoData: getData_NoData,

@@ -41,7 +41,7 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
     List<Widget> columnWidgets = [];
 
     if (widget.needAppBar) {
-      Widget appBar = EasyAppBarWidget(
+      Widget appBar = CommonAppBar(
         title: AppBarTitleWidget(text: '数据异常'),
         leading: AppBarBackWidget(onPressed: widget.onNavBackTap),
       );

@@ -3,6 +3,7 @@ import 'package:flutter_effect/flutter_effect.dart';
 
 class TSNetworkResultWidget extends StatefulWidget {
   final Color color;
+  final double marginTop; // title离顶部的距离，为了防止有数据、无数据、无网络三种视图重叠，而导致看不出是否在显示
   final String title;
   final Function() getData_Success;
   final Function() getData_NoData;
@@ -11,6 +12,7 @@ class TSNetworkResultWidget extends StatefulWidget {
   TSNetworkResultWidget({
     Key key,
     this.color,
+    this.marginTop,
     this.title,
     this.getData_Success,
     this.getData_NoData,
@@ -42,6 +44,7 @@ class _TSNetworkResultWidgetState extends State<TSNetworkResultWidget> {
   Widget _buildWidget() {
     return Column(
       children: [
+        Container(height: widget.marginTop),
         Text(widget.title ?? '我是等你传进来设置的标题'),
         FlatButton(
           onPressed: widget.getData_Success,

@@ -65,7 +65,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     // );
   }
 
-  // appBar(非Scaffold中):该值非空时候, init\error\nodata 等视图会自动下移，以此来复用 success 中的导航栏
+  // appBar(非Scaffold中)
   // appBar不能设置在success中，只能设置在appBar()或此处appBarWidget(BuildContext context)的原因是:
   // 原因是在有背景图存在的情况下，其他buildErrorWidget(BuildContext context)返回的视图为了能够显示背景图会设置成透明色，
   // 同样的因为设置了这个透明色，导致原本想的通过下移复用buildSuccessWidget(BuildContext context)中的导航栏，
@@ -127,8 +127,8 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
-//或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
-    double successWidgetCustomAppBarHeight =
+    //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
+    double hasAppBarWidget =
         appBarWidget(context) != null ? stautsBarHeight + 44 : 0;
 
     assert(backgroundWidget(context) != null);
@@ -146,7 +146,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
             children: [
               appBarWidget(context) ?? Container(height: 0),
               Expanded(
-                child: _contentWidget(context, successWidgetCustomAppBarHeight),
+                child: _contentWidget(context, hasAppBarWidget),
               ),
             ],
           )
@@ -156,13 +156,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   }
 
   /// 内容视图
-  Widget _contentWidget(
-      BuildContext context, double successWidgetCustomAppBarHeight) {
+  Widget _contentWidget(BuildContext context, double hasAppBarWidget) {
     return PageTypeLoadStateWidget(
       widgetType: _currentWidgetType,
       initWidget: buildInitWidget(context),
       successWidget: buildSuccessWidget(context),
-      successWidgetCustomAppBarHeight: successWidgetCustomAppBarHeight,
       nodataWidget: buildNodataWidget(context),
       errorWidget: buildErrorWidget(context),
       showSelfLoading: _showSelfLoading,
@@ -176,15 +174,22 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     setState(() {});
   }
 
-  /// 更新当前页面的页面类型(会自动停止动画)
-  void updateWidgetType(WidgetType widgetType) {
+  /// 更新当前页面的页面类型(会自动停止动画)，调用此方法未设置 needUpdateUI 会默认刷新
+  void updateWidgetType(WidgetType widgetType, {bool needUpdateUI}) {
     _currentWidgetType = widgetType;
     _showSelfLoading = false;
     if (mounted == false) {
       // 防止页面关闭执行setState()方法
       return;
     }
-    setState(() {});
+
+    bool needSetState = true;
+    if (needUpdateUI != null) {
+      needSetState = needUpdateUI;
+    }
+    if (needSetState && mounted) {
+      setState(() {});
+    }
   }
 
   /// 获取当前状态(如网络异常时候，存在在导航栏上的右边的那些视图是要禁止点击的)

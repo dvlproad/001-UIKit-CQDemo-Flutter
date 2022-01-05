@@ -8,8 +8,6 @@ class PageTypeLoadStateWidget extends StatefulWidget {
 
   final Widget initWidget; //初始视图(未设置时，将使用Container())
   final Widget successWidget; //成功视图
-  final double
-      successWidgetCustomAppBarHeight; // 成功视图上有自己添加上去的导航栏时候，其导航栏高度(默认0)
   final Widget nodataWidget; //空数据视图(网络请求成功，但数据为空):不同页面无数据视图可能不一样
   final Widget errorWidget; //错误视图(网络错误)
 
@@ -22,7 +20,6 @@ class PageTypeLoadStateWidget extends StatefulWidget {
     this.initWidget,
     // this.initWidget = const Container(), // 默认Container()
     this.successWidget,
-    this.successWidgetCustomAppBarHeight,
     this.nodataWidget,
     this.errorWidget,
     this.selfLoadingWidget,
@@ -68,7 +65,6 @@ class _PageTypeLoadStateWidgetState extends State<PageTypeLoadStateWidget> {
       widgetType: widget.widgetType,
       initWidget: widget.initWidget,
       successWidget: widget.successWidget,
-      successWidgetCustomAppBarHeight: widget.successWidgetCustomAppBarHeight,
       nodataWidget: widget.nodataWidget,
       errorWidget: widget.errorWidget,
     );

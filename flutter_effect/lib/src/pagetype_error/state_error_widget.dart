@@ -39,7 +39,7 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
     List<Widget> columnWidgets = [];
 
     if (widget.needAppBar) {
-      Widget appBar = EasyAppBarWidget(
+      Widget appBar = CommonAppBar(
         title: AppBarTitleWidget(text: '数据异常'),
         leading: AppBarBackWidget(onPressed: widget.onNavBackTap),
       );
