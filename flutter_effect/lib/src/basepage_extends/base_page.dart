@@ -25,7 +25,7 @@ abstract class BJHBasePage extends StatefulWidget {
 //class BJHBasePageState extends State<BJHBasePage> {
 abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     with AutomaticKeepAliveClientMixin {
-  WidgetType _currentWidgetType = WidgetType.Init; //默认为初始界面
+  WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
   @override
@@ -157,9 +157,19 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
 
   /// 内容视图
   Widget _contentWidget(BuildContext context, double hasAppBarWidget) {
+    Widget initWidget = buildInitWidget(context);
+    if (_currentWidgetType == WidgetType.Unknow) {
+      // 如果未知，则进行判断初始界面类型
+      if (initWidget != null) {
+        // 未设置 initWidget, 则默认初始类型都为 SuccessWithData
+        _currentWidgetType = WidgetType.Init;
+      } else {
+        _currentWidgetType = WidgetType.SuccessWithData;
+      }
+    }
     return PageTypeLoadStateWidget(
       widgetType: _currentWidgetType,
-      initWidget: buildInitWidget(context),
+      initWidget: initWidget,
       successWidget: buildSuccessWidget(context),
       nodataWidget: buildNodataWidget(context),
       errorWidget: buildErrorWidget(context),

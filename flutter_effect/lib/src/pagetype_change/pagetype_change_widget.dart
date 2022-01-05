@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 
 //四种视图类型
 enum WidgetType {
+  Unknow, //未知类型
   Init, //初始视图
   SuccessWithData, //成功视图
   SuccessNoData, //空数据视图(网络请求成功，但数据为空)

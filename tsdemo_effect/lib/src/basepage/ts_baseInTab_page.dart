@@ -30,8 +30,8 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
       print(_tabController.index);
     });
 
-    // 显示界面 SuccessWithData, 若未设置，则会显示init视图
-    updateWidgetType(WidgetType.SuccessWithData, needUpdateUI: false);
+    // 显  示界面 SuccessWithData, 若未设置，则会显示init视图
+    // updateWidgetType(WidgetType.SuccessWithData, needUpdateUI: false);
   }
 
   @override
@@ -49,15 +49,21 @@ class _TSBaseInTabPageState extends BJHBasePageState<TSBaseInTabPage>
   //   );
   // }
 
-  // @override
-  // bool appBarIsAddToSuccess() {
-  //   return false;
-  // }
-
-  // @override
-  // Widget buildSuccessWidget(BuildContext context) {
-  //   return _tabBarView;
-  // }
+  /*
+  @override
+  Widget buildInitWidget(BuildContext context) {
+    return Container(
+      color: Colors.transparent,
+      height: double.infinity, // 撑满父视图
+      width: double.infinity, // 撑满父视图
+      child: Text(
+        '我是初始视图的底部视图...',
+        style: TextStyle(color: Colors.blue, fontSize: 24),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+  */
 
   @override
   Widget buildSuccessWidget(BuildContext context) {
