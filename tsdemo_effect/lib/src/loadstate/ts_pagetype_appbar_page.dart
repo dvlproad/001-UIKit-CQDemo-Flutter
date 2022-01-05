@@ -55,10 +55,12 @@ class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
 
     if (widget.successHasCustomAppBar) {
       Widget appBar = EasyAppBarWidget(
-        title: '我是成功页面的标题',
-        onTap: () {
-          Navigator.pop(context);
-        },
+        title: AppBarTitleWidget(text: '我是成功页面的标题'),
+        leading: AppBarBackWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       );
       columnWidgets.add(appBar);
     }

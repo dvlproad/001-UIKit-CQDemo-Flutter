@@ -32,22 +32,64 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
         : AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
   }
 
+  // @override
+  // Color backgroundColor() {
+  //   // return Color(0xFFF0F0F0);
+  //   return Colors.pink;
+  // }
+
+  // 背景视图(常用来设置背景图片)
   @override
-  Color backgroundColor() {
-    // return Color(0xFFF0F0F0);
-    return Colors.pink;
+  Widget backgroundWidget(BuildContext context) {
+    // 设置背景色
+    // return Container(
+    //   color: Color(0xFFF0F0F0),
+    // );
+
+    // eg1:设置铺满的背景图片
+    return Container(
+      alignment: Alignment.topCenter,
+      //color: Colors.yellow,
+      constraints: const BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: double.infinity,
+      ),
+      child: Image.asset(
+        "assets/page_bg.png",
+        package: 'tsdemo_effect',
+        fit: BoxFit.fitWidth,
+      ),
+    );
+
+    // eg2:设置绝对定位的背景图片
+    // return Positioned(
+    //   top: 0,
+    //   right: 0,
+    //   left: 0,
+    //   height: Adapt.px(678),
+    //   child: Image.asset(
+    //     "images/wish/bg_icon.png",
+    //     fit: BoxFit.fitWidth,
+    //   ),
+    // );
   }
 
   @override
-  bool appBarIsAddToSuccess() {
-    return widget.appBarIsAddToSuccess;
+  Widget appBarWidget(BuildContext context) {
+    if (widget.appBarIsAddToSuccess) {
+      return Container(
+        height: 0,
+      );
+    }
+    return null;
   }
 
   @override
   Widget buildInitWidget(BuildContext context) {
     return Container(
-      color: Colors.green,
-      height: 100,
+      color: Colors.transparent,
+      height: double.infinity, // 撑满父视图
+      width: double.infinity, // 撑满父视图
       child: Text(
         '我是初始视图的底部视图...',
         style: TextStyle(color: Colors.blue, fontSize: 24),
@@ -62,10 +104,12 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
 
     if (widget.appBarIsAddToSuccess) {
       Widget appBar = EasyAppBarWidget(
-        title: '我是成功页面的标题',
-        onTap: () {
-          Navigator.pop(context);
-        },
+        title: AppBarTitleWidget(text: '我是成功页面的标题'),
+        leading: AppBarBackWidget(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       );
       columnWidgets.add(appBar);
     }

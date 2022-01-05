@@ -40,8 +40,8 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
 
     if (widget.needAppBar) {
       Widget appBar = EasyAppBarWidget(
-        title: '网络异常',
-        onTap: widget.onNavBackTap,
+        title: AppBarTitleWidget(text: '数据异常'),
+        leading: AppBarBackWidget(onPressed: widget.onNavBackTap),
       );
       columnWidgets.add(appBar);
     }

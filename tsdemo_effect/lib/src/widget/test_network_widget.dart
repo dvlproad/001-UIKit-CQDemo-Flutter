@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
 class TSNetworkResultWidget extends StatefulWidget {
+  final Color color;
   final String title;
   final Function() getData_Success;
   final Function() getData_NoData;
@@ -9,6 +10,7 @@ class TSNetworkResultWidget extends StatefulWidget {
 
   TSNetworkResultWidget({
     Key key,
+    this.color,
     this.title,
     this.getData_Success,
     this.getData_NoData,
@@ -32,7 +34,7 @@ class _TSNetworkResultWidgetState extends State<TSNetworkResultWidget> {
       //宽高都充满屏幕剩余空间
       width: double.infinity,
       height: double.infinity,
-      color: Colors.red,
+      color: widget.color,
       child: _buildWidget(),
     );
   }
