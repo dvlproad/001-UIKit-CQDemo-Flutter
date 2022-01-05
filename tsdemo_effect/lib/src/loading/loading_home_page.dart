@@ -57,7 +57,7 @@ class _TSLoadingHomePageState extends CJTSBasePageState<TSLoadingHomePage> {
             'title': "Toast",
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
-              ToastUtil.showMessage("我是文本");
+              CJTSToastUtil.showMessage("我是文本");
             },
           },
           {
@@ -65,10 +65,10 @@ class _TSLoadingHomePageState extends CJTSBasePageState<TSLoadingHomePage> {
             // 'nextPageName': BaseUIKitRouters.buttonHomePage,
             'actionBlock': () {
               LoadingUtil.show();
-              ToastUtil.showMessage("开始请求");
+              CJTSToastUtil.showMessage("开始请求");
               Future.delayed(Duration(seconds: 1), () {
                 print('延时1s执行');
-                ToastUtil.showMessage("开始结束");
+                CJTSToastUtil.showMessage("开始结束");
                 LoadingUtil.dismiss();
               });
             },

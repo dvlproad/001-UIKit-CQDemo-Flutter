@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class EasyAppBarWidget extends StatefulWidget {
-  // final bool hideBackButton; // 隐藏返回按钮(默认不隐藏)
   final ImageProvider image;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),

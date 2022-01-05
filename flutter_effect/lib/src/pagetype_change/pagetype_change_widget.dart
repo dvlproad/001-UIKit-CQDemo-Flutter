@@ -5,7 +5,7 @@ enum WidgetType {
   Init, //初始视图
   SuccessWithData, //成功视图
   SuccessNoData, //空数据视图(网络请求成功，但数据为空)
-  ErrorBusiness, //服务器连接成功，但数据异常的错误视图(网络错误)
+  // ErrorBusiness, //服务器连接成功，但数据异常的错误视图(网络错误)
   ErrorNetwork, //服务器连接失败的错误视图(网络错误)
 }
 
@@ -49,6 +49,21 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
   Widget get _buildWidget {
     double marginTop = widget.successWidgetCustomAppBarHeight;
     List<Widget> stackWidgets = [];
+
+    if (widget.successWidget != null) {
+      // 当状态是 SuccessWithData 或者 marginTop!=0要复用success上的导航栏时候,才显示success
+      // bool shouldShowSuccess =
+      //     widget.widgetType == WidgetType.SuccessWithData || marginTop != 0;
+      bool shouldShowSuccess =
+          true; // 临时修复外界请求成功时候,没有更新 updateWidgetType(WidgetType.SuccessWithData); 导致无法使用 widget.widgetType == WidgetType.SuccessWithData 来判断的问题. eg: 我的关注 my_follow_page
+      stackWidgets.add(
+        Visibility(
+          visible: shouldShowSuccess,
+          child: widget.successWidget,
+        ),
+      );
+    }
+
     if (widget.initWidget != null) {
       stackWidgets.add(
         Visibility(
@@ -61,18 +76,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
         ),
       );
     }
-    if (widget.successWidget != null) {
-      bool hideSuccessWidget = false;
-      if (widget.initWidget != null && widget.widgetType == WidgetType.Init) {
-        hideSuccessWidget = true;
-      }
-      stackWidgets.add(
-        Visibility(
-          visible: !hideSuccessWidget,
-          child: widget.successWidget,
-        ),
-      );
-    }
+
     if (widget.nodataWidget != null) {
       stackWidgets.add(
         Visibility(

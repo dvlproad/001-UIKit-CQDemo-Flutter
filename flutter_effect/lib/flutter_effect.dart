@@ -20,8 +20,6 @@ export './src/loading/state_loading_widget.dart';
 // loading util
 export './src/loading/loading_util.dart';
 
-// toast
-export './src/toast/toast_util.dart';
 // appbar
 export './src/appbar/appbar.dart';
 
