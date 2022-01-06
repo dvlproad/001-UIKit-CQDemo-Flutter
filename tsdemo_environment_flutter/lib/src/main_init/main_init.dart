@@ -3,6 +3,8 @@ import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import './environment_datas_util.dart';
 
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+
 class Main_Init {
   static init() {
     _initNetwork();
@@ -50,5 +52,9 @@ class Main_Init {
 
   static _initApiMockManager() {
     ApiManager.updateCanMock(false);
+
+    for (int i = 0; i < 10; i++) {
+      ApiManager.tryAddApi(cqtsRandomString(0, 10, CQRipeStringType.english));
+    }
   }
 }

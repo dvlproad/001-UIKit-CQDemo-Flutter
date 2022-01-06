@@ -98,6 +98,7 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
   Widget _goChangeApiMock(bool showTestApiWidget) {
     EnvironmentUtil.goChangeApiMock(
       context,
+      mockApiHost: 'http://121.41.91.92:3000/mock/28/api/bjh',
       onPressTestApiCallback: showTestApiWidget
           ? () {
               print('测试 mock api 后，网络请求的情况');
@@ -106,6 +107,17 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
               //     {"accountId": UserInfoManager.instance.userModel.id});
             }
           : null,
+      // navbarActions: [
+      //   CQTSThemeBGButton(
+      //     title: '添加',
+      //     onPressed: () {
+      //       ApiManager.tryAddApi(
+      //           cqtsRandomString(0, 10, CQRipeStringType.english));
+      //       print('添加后的api个数:${ApiManager().apiModels.length}');
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      // ],
     );
   }
 }

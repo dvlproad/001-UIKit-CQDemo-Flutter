@@ -6,10 +6,16 @@ import '../apimock/manager/api_manager.dart';
 import '../apimock/manager/api_data_bean.dart';
 
 class ApiMockPageContent extends StatefulWidget {
+  final String mockApiHost;
+  final String normalApiHost;
+  final List<Widget> navbarActions;
   final Function() onPressTestApiCallback;
 
   ApiMockPageContent({
     Key key,
+    this.mockApiHost, // mock 后该 api 请求的 host
+    this.normalApiHost, // 正常 api 请求的 host
+    this.navbarActions, // 导航栏上右侧的按钮视图及事件
     this.onPressTestApiCallback, // 为空时候，不显示视图
   }) : super(key: key);
 
@@ -50,6 +56,7 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
   Widget _appBar() {
     return AppBar(
       title: Text('切换Mock'),
+      actions: widget.navbarActions,
     );
   }
 
@@ -90,6 +97,8 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
       return Container();
     }
     return TSApiList(
+      mockApiHost: widget.mockApiHost,
+      normalApiHost: widget.normalApiHost,
       apiMockModels: _apiModels,
       clickApiMockCellCallback: (section, row, bApiModel) {
         print('点击了${bApiModel.name}');

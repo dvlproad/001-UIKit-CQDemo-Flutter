@@ -83,13 +83,21 @@ class EnvironmentUtil {
   // 进入切换 Api mock 的页面
   static void goChangeApiMock(
     BuildContext context, {
+    String mockApiHost,
     Function() onPressTestApiCallback,
+    List<Widget> navbarActions,
   }) {
+    String normalApiHost =
+        EnvironmentManager.instance.selectedNetworkModel.apiHost;
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return ApiMockPageContent(
+            mockApiHost: mockApiHost,
+            normalApiHost: normalApiHost,
             onPressTestApiCallback: onPressTestApiCallback,
+            navbarActions: navbarActions,
           );
         },
       ),

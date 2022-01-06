@@ -11,11 +11,15 @@ import '../environment_change_notifiter.dart';
 import './manager/api_data_bean.dart';
 
 class TSApiList extends StatefulWidget {
+  final String mockApiHost;
+  final String normalApiHost;
   final List apiMockModels;
   final ClickApiMockCellCallback clickApiMockCellCallback; // apimockCell 的点击
 
   TSApiList({
     Key key,
+    this.mockApiHost, // mock 后该 api 请求的 host
+    this.normalApiHost, // 正常 api 请求的 host
     @required this.apiMockModels,
     @required this.clickApiMockCellCallback,
   }) : super(key: key);
@@ -100,9 +104,17 @@ class _TSApiListState extends State<TSApiList> {
       },
       headerInSection: (section) {
         if (section == 0) {
-          return EnvironmentTableViewHeader(title: '之前已mock');
+          String suffixString = '';
+          if (widget.mockApiHost != null) {
+            suffixString = ':${widget.mockApiHost}';
+          }
+          return EnvironmentTableViewHeader(title: '执行mock环境的api$suffixString');
         } else {
-          return EnvironmentTableViewHeader(title: '其他');
+          String suffixString = '';
+          if (widget.mockApiHost != null) {
+            suffixString = ':${widget.normalApiHost}';
+          }
+          return EnvironmentTableViewHeader(title: '执行当前环境的api$suffixString');
         }
       },
       cellAtIndexPath: (section, row) {
