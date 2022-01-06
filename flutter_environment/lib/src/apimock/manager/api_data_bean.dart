@@ -11,4 +11,20 @@ class ApiModel {
 
   @override
   String toString() => '$url $mock';
+
+  // json 与 model 转换
+  factory ApiModel.fromJson(Map<String, dynamic> json) {
+    return ApiModel(
+      name: json['name'],
+      url: json['url'],
+      mock: json['mock'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      "name": this.name,
+      "url": this.url,
+      "mock": this.mock,
+    };
+  }
 }

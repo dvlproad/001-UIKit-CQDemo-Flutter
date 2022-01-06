@@ -53,8 +53,13 @@ class Main_Init {
   static _initApiMockManager() {
     ApiManager.updateCanMock(false);
 
+    List<ApiModel> apiModels = [];
     for (int i = 0; i < 10; i++) {
-      ApiManager.tryAddApi(cqtsRandomString(0, 10, CQRipeStringType.english));
+      String Url = cqtsRandomString(0, 10, CQRipeStringType.english);
+      ApiModel apiModel = ApiModel(url: Url, mock: false);
+      apiModels.add(apiModel);
+      // ApiManager.tryAddApi(Url);
     }
+    ApiManager().completeApiMock_whenNull(apiModels_whenNull: apiModels);
   }
 }

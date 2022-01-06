@@ -101,7 +101,11 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
       normalApiHost: widget.normalApiHost,
       apiMockModels: _apiModels,
       clickApiMockCellCallback: (section, row, bApiModel) {
-        print('点击了${bApiModel.name}');
+        print('点击了${bApiModel.url}');
+
+        ApiManager.changeMockForApiModel(bApiModel);
+
+        setState(() {});
       },
     );
   }

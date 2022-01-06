@@ -1,7 +1,8 @@
 // 创建一个单例的Manager类
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import './api_data_bean.dart';
+
+import './api_cache.dart';
 
 class ApiManager {
   bool _allowMock;
@@ -30,6 +31,21 @@ class ApiManager {
     return _instance;
   }
 
+  /// 初始化完成后继续完善信息,此方法只为了做测试，开发情况下使用 tryAddApi 来添加 apiModel
+  Future completeApiMock_whenNull({
+    @required List<ApiModel> apiModels_whenNull,
+  }) async {
+    List<ApiModel> apiModels = ApiManager().apiModels;
+    if (apiModels == null || apiModels.isEmpty) {
+      apiModels = await ApiSharedPreferenceUtil().getApiList();
+      if (apiModels == null || apiModels?.length == 0) {
+        apiModels = apiModels_whenNull;
+        ApiSharedPreferenceUtil().setApiList(apiModels);
+      }
+    }
+    _apiModels = apiModels;
+  }
+
   // 设置是否允许 mock api
   static void updateCanMock(bool allow) {
     ApiManager.instance._allowMock = allow;
@@ -51,6 +67,8 @@ class ApiManager {
       bool mock = url.startsWith(RegExp(r'https?:')) ? true : false;
       ApiModel apiModel = ApiModel(url: url, mock: mock);
       apiModels.add(apiModel);
+
+      ApiSharedPreferenceUtil().setApiList(apiModels);
     }
     // String log1 = apiModels.toString();
     // String log2 = apiModels.listToStructureString();
@@ -68,6 +86,8 @@ class ApiManager {
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
     String log = apiModels.toString();
     print('log...apiModels=${apiModels.length}======$log');
+
+    ApiSharedPreferenceUtil().setApiList(apiModels);
   }
 
   // 是否要再打包后为指定的这个url加上mock（打包前的mock使用url.toSimulateApi();实现）
@@ -88,34 +108,5 @@ class ApiManager {
 
     ApiModel apiModel = apiModels[index];
     return apiModel.mock;
-  }
-}
-
-/// desc：本地储存
-class ApiSharedPreferenceUtil {
-  // network
-  static const String EnvNetworkIdKey = "EnvNetworkIdKey";
-  Future setNetworkId(String networkId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(EnvNetworkIdKey, networkId);
-  }
-
-  Future<String> getNetworkId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String networkId = prefs.getString(EnvNetworkIdKey);
-    return networkId;
-  }
-
-  // proxy
-  static const String EnvProxyIdKey = "EnvProxyIdKey";
-  Future setProxykId(String proxykId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(EnvProxyIdKey, proxykId);
-  }
-
-  Future<String> getProxykId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String proxykId = prefs.getString(EnvProxyIdKey);
-    return proxykId;
   }
 }

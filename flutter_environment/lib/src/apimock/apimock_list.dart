@@ -129,9 +129,7 @@ class _TSApiListState extends State<TSApiList> {
             clickApiMockCellCallback:
                 (int section, int row, ApiModel bApiModel) {
               // print('点击切换 Proxy 环境');
-
-              bApiModel.mock = !bApiModel.mock;
-              setState(() {});
+              // setState(() {}); // 请在外部执行
 
               if (widget.clickApiMockCellCallback != null) {
                 widget.clickApiMockCellCallback(section, row, bApiModel);
@@ -149,9 +147,7 @@ class _TSApiListState extends State<TSApiList> {
             clickApiMockCellCallback:
                 (int section, int row, ApiModel bApiModel) {
               // print('点击切换 Proxy 环境');
-
-              bApiModel.mock = !bApiModel.mock;
-              setState(() {});
+              // setState(() {}); // 请在外部执行
 
               if (widget.clickApiMockCellCallback != null) {
                 widget.clickApiMockCellCallback(section, row, bApiModel);
