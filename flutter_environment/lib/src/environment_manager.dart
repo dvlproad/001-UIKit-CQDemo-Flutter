@@ -22,6 +22,22 @@ class EnvironmentManager {
   static EnvironmentManager _instance;
   EnvironmentManager._internal() {
     // 初始化
+    init();
+  }
+
+  init() {
+    _getCache();
+  }
+
+  // 获取缓存数据
+  void _getCache() async {
+    if (_proxyModels == null || _proxyModels.isEmpty) {
+      _proxyModels = await EnvironmentSharedPreferenceUtil().getProxyList();
+    }
+
+    if (_proxyModels == null) {
+      _proxyModels = [];
+    }
   }
 
   static EnvironmentManager _getInstance() {

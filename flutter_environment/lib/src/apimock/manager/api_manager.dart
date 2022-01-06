@@ -21,7 +21,18 @@ class ApiManager {
   }
 
   init() {
-    _apiModels = [];
+    _getCache();
+  }
+
+  // 获取缓存数据
+  void _getCache() async {
+    if (_apiModels == null || _apiModels.isEmpty) {
+      _apiModels = await ApiSharedPreferenceUtil().getApiList();
+    }
+
+    if (_apiModels == null) {
+      _apiModels = [];
+    }
   }
 
   static ApiManager _getInstance() {
