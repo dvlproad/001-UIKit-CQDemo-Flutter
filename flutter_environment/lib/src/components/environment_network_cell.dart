@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import './environment_cell_components.dart';
+import './environment_base_cell.dart';
 import '../environment_data_bean.dart';
 
 typedef ClickEnvNetworkCellCallback = void Function(
@@ -28,65 +28,21 @@ class EnvNetworkTableViewCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return cellWidget();
-  }
-
-  Widget cellWidget() {
-    return GestureDetector(
-      child: _cellContainer(),
-      onTap: _onTapCell,
-    );
-  }
-
-  void _onTapCell() {
-    if (null != this.clickEnvNetworkCellCallback) {
-      this.clickEnvNetworkCellCallback(
-        this.section,
-        this.row,
-        this.envModel,
-      );
-    }
-  }
-
-  Widget _cellContainer() {
-    List<Widget> columnWidgets = [];
-    // 添加主文本
-    columnWidgets.add(
-      EnvironmentCellComponentsFactory.mainText(this.envModel.name),
-    );
-
-    // 判断是否添加其他文本
-    String hostName = this.envModel.hostName ?? '';
-    if (hostName.isNotEmpty) {
-      columnWidgets.add(EnvironmentCellComponentsFactory.subText(hostName));
-    }
-
-    String interceptHost = this.envModel.interceptHost ?? '';
-    if (interceptHost.isNotEmpty) {
-      columnWidgets
-          .add(EnvironmentCellComponentsFactory.subText(interceptHost));
-    }
-
-    List<Widget> rowWidgets = [];
-    rowWidgets.add(
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: columnWidgets,
-      ),
-    );
-    // 判断是否添加箭头
-    if (this.envModel.check == true) {
-      rowWidgets.add(EnvironmentCellComponentsFactory.arrowImage());
-    }
-
-    return Container(
-      color: Colors.black,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: rowWidgets,
-      ),
+    return EnvBaseTableViewCell(
+      mainTitle: envModel.name,
+      subTitles: [envModel.apiHost, envModel.webHost, envModel.gameHost],
+      check: envModel.check,
+      section: section,
+      row: row,
+      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {
+        if (null != this.clickEnvNetworkCellCallback) {
+          this.clickEnvNetworkCellCallback(
+            this.section,
+            this.row,
+            this.envModel,
+          );
+        }
+      },
     );
   }
 }

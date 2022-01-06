@@ -4,8 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './api_data_bean.dart';
 
 class ApiManager {
+  bool _allowMock;
   List<ApiModel> _apiModels;
 
+  bool get allowMock => _allowMock;
   List<ApiModel> get apiModels => _apiModels;
 
   // 工厂模式
@@ -27,6 +29,17 @@ class ApiManager {
     }
     return _instance;
   }
+
+  // 设置是否允许 mock api
+  static void updateCanMock(bool allow) {
+    ApiManager.instance._allowMock = allow;
+  }
+
+  // 获取是否允许 mock api
+  // static bool allowMock() {
+  //   bool allowMock = ApiManager.instance.allowMock;
+  //   return allowMock;
+  // }
 
   static void tryAddApi(String url) {
     List<ApiModel> apiModels = ApiManager.instance.apiModels;

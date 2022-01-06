@@ -33,7 +33,49 @@ class EnvironmentManager {
   }
 
   /// 初始化完成后继续完善信息
-  Future completeEnvInternal({
+  Future completeEnvInternal_whenNull({
+    @required List<TSEnvNetworkModel> networkModels_whenNull,
+    @required List<TSEnvProxyModel> proxyModels_whenNull,
+    @required String defaultNetworkId_whenNull,
+    @required String defaultProxykId_whenNull,
+  }) async {
+    List<TSEnvNetworkModel> networkModels = EnvironmentManager().networkModels;
+    if (networkModels == null) {
+      networkModels = networkModels_whenNull;
+    }
+
+    List<TSEnvProxyModel> proxyModels = EnvironmentManager().proxyModels;
+    if (proxyModels == null) {
+      proxyModels = await EnvironmentSharedPreferenceUtil().getProxyList();
+      if (proxyModels == null || proxyModels?.length == 0) {
+        proxyModels = proxyModels_whenNull;
+        EnvironmentSharedPreferenceUtil().setProxyList(proxyModels);
+      }
+    }
+
+    // 设置默认的网络、代理环境
+    String defaultNetworkId =
+        await EnvironmentSharedPreferenceUtil().getNetworkId();
+    if (defaultNetworkId == null) {
+      defaultNetworkId = defaultNetworkId_whenNull;
+    }
+
+    String defaultProxykId =
+        await EnvironmentSharedPreferenceUtil().getProxykId();
+    if (defaultProxykId == null) {
+      defaultProxykId = defaultProxykId_whenNull;
+    }
+
+    return EnvironmentManager()._completeEnvInternal(
+      networkModels: networkModels,
+      proxyModels: proxyModels,
+      defaultNetworkId: defaultNetworkId,
+      defaultProxykId: defaultProxykId,
+    );
+  }
+
+  /// 初始化完成后继续完善信息
+  Future _completeEnvInternal({
     @required List<TSEnvNetworkModel> networkModels,
     @required List<TSEnvProxyModel> proxyModels,
     @required String defaultNetworkId,
@@ -141,6 +183,7 @@ class EnvironmentManager {
     } else {
       proxyModels.add(newProxyModel);
     }
+    EnvironmentSharedPreferenceUtil().setProxyList(proxyModels);
 
     if (selectedNew) {
       newProxyModel.check = true;

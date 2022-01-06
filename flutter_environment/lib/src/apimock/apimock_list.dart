@@ -63,7 +63,7 @@ class _TSApiListState extends State<TSApiList> {
         minWidth: double.infinity,
         minHeight: double.infinity,
       ),
-      color: Colors.black,
+      color: Colors.transparent,
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),

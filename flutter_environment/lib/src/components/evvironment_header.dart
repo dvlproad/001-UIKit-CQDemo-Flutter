@@ -29,19 +29,25 @@ class _EnvironmentTableViewHeaderState
 
   Widget _headerContainer() {
     return Container(
-      height: 30,
-//      padding: EdgeInsets.fromLTRB(30, 20, 0, 0),
-      margin: EdgeInsets.fromLTRB(30, 20, 0, 0),
-      color: Colors.transparent,
+      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+      // color: Colors.green,
       alignment: Alignment.centerLeft,
-      child: Text(
-        widget.title,
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: Color(0xFF898989),
-          fontSize: 14.0,
-        ),
+      height: 40,
+      child: Row(
+        children: [
+          Center(
+            child: Text(
+              widget.title,
+              // textAlign: TextAlign.right,
+              // overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

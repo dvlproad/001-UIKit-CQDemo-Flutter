@@ -12,7 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  shared_preferences:
+  shared_preferences: any
+  fluttertoast: any
+
 
 dev_dependencies:
   flutter_test:

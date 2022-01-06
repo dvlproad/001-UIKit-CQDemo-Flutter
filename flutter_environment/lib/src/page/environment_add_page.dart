@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
 
 class EnvironmentAddPage extends StatefulWidget {
-  final Function(String bProxyId) callBack;
+  final Function(String bProxyIp) callBack;
 
   EnvironmentAddPage({
     Key key,
@@ -101,7 +102,7 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
       title: '代理ip',
       placeholder: '请输入代理ip',
       value: userName,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.url,
       autofocus: true,
       controller: _usernameController,
     );
@@ -155,12 +156,47 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
         int userNameLength = userName.length;
         print(userNameLength);
 
-        Navigator.pop(context);
-        if (widget.callBack != null) {
-          String proxyId = 'PROXY $userName:${_phoneController.text}';
-          widget.callBack(proxyId);
+        String port = _phoneController.text;
+        if (port == null || port.length == 0) {
+          port = '8888';
+        }
+
+        String proxyIp = '$userName:$port';
+        if (IsIPAddress(proxyIp) == false) {
+          showMessage('代理ip格式出错,请先修改');
+        } else {
+          Navigator.pop(context);
+          if (widget.callBack != null) {
+            widget.callBack(proxyIp);
+          }
         }
       },
     );
+  }
+
+  static bool IsIPAddress(String ipString) {
+    if (ipString == null) {
+      return false;
+    }
+
+    final reg = RegExp(r'^\d{1,3}[\.]\d{1,3}[\.]\d{1,3}[\.]\d{1,3}');
+
+    bool isMatch = reg.hasMatch(ipString);
+    return isMatch;
+  }
+
+  static showMessage(String message) {
+    if (message != null && message is String && message.isNotEmpty) {
+      print(message);
+      Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Color(0xAA000000),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
   }
 }

@@ -6,6 +6,13 @@ import '../apimock/manager/api_manager.dart';
 import '../apimock/manager/api_data_bean.dart';
 
 class ApiMockPageContent extends StatefulWidget {
+  final Function() onPressTestApiCallback;
+
+  ApiMockPageContent({
+    Key key,
+    this.onPressTestApiCallback, // 为空时候，不显示视图
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _ApiMockPageContentState();
@@ -24,7 +31,12 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
 
   @override
   Widget build(BuildContext context) {
-    return _bodyWidget;
+    return Scaffold(
+      backgroundColor: Color(0xFFF0F0F0),
+      resizeToAvoidBottomInset: false,
+      appBar: _appBar(),
+      body: _bodyWidget,
+    );
   }
 
   Future<void> showLogWindow() async {
@@ -33,6 +45,12 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
       // await CjMonitorFlutter.showLogSuspendWindow;
     } on PlatformException {}
     if (!mounted) return;
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      title: Text('切换Mock'),
+    );
   }
 
   Widget get _bodyWidget {
@@ -47,6 +65,15 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
           Expanded(
             child: _pageWidget(),
           ),
+          widget.onPressTestApiCallback == null
+              ? Container()
+              : BottomButtonsWidget(
+                  cancelText: '测试请求',
+                  onCancel: () {
+                    print('测试请求');
+                    widget.onPressTestApiCallback();
+                  },
+                ),
           BottomButtonsWidget(
             cancelText: '移除所有mock(暂无)',
             onCancel: () {

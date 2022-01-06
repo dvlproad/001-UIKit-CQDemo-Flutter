@@ -6,7 +6,6 @@ import './environment_add_util.dart';
 
 import '../environment_manager.dart';
 import '../environment_data_bean.dart';
-import './environment_datas_util.dart';
 
 import '../environment_list.dart';
 
@@ -14,6 +13,18 @@ import 'package:provider/provider.dart';
 import '../environment_change_notifiter.dart';
 
 class EnvironmentPageContent extends StatefulWidget {
+  final Function() onPressTestApiCallback;
+  final Function(String apiHost, String webHost, String gameHost)
+      updateNetworkCallback;
+  final Function(String proxyIp) updateProxyCallback;
+
+  EnvironmentPageContent({
+    Key key,
+    this.onPressTestApiCallback, // 为空时候，不显示视图
+    @required this.updateNetworkCallback,
+    @required this.updateProxyCallback,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _EnvironmentPageContentState();
@@ -34,20 +45,31 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
   void initState() {
     super.initState();
 
-    EnvironmentManager().check().then((value) {
-      print('。。。。。。。。。。22');
-      _networkModels = EnvironmentManager().networkModels;
-      _proxyModels = EnvironmentManager().proxyModels;
-      _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
-      _selectedProxyModel = EnvironmentManager().selectedProxyModel;
-
-      setState(() {});
-    }); // 设置默认的网络、代理环境
+    if (EnvironmentManager().networkModels == null ||
+        EnvironmentManager().networkModels.isEmpty) {
+      print(
+          'error:请在 main_init.dart 中 执行 EnvironmentUtil.completeEnvInternal_whenNull();');
+    }
+    _networkModels = EnvironmentManager().networkModels;
+    _proxyModels = EnvironmentManager().proxyModels;
+    _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
+    _selectedProxyModel = EnvironmentManager().selectedProxyModel;
   }
 
   @override
   Widget build(BuildContext context) {
-    return _bodyWidget;
+    return Scaffold(
+      backgroundColor: Color(0xFFF0F0F0),
+      resizeToAvoidBottomInset: false,
+      appBar: _appBar(),
+      body: _bodyWidget,
+    );
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      title: Text('切换环境'),
+    );
   }
 
   Future<void> showLogWindow() async {
@@ -70,25 +92,38 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
           Expanded(
             child: _pageWidget(),
           ),
-          BottomButtonsWidget(
-            cancelText: '添加/修改代理',
-            onCancel: () {
-              print('添加/修改代理');
-
-              EnvironmentAddUtil.showAddPage(
-                context,
-                addCompleteBlock: (bProxyId) {
-                  print('proxyId =$bProxyId');
-                  EnvironmentManager().addEnvProxyModel(
-                    proxyIp: bProxyId,
-                  );
-                  setState(() {});
-                },
-              );
-            },
-          ),
+          widget.onPressTestApiCallback == null
+              ? Container()
+              : BottomButtonsWidget(
+                  cancelText: '测试请求',
+                  onCancel: () {
+                    print('测试请求');
+                    widget.onPressTestApiCallback();
+                  },
+                ),
+          _bottomAddProxyWidget,
         ],
       ),
+    );
+  }
+
+  Widget get _bottomAddProxyWidget {
+    return BottomButtonsWidget(
+      cancelText: '添加/修改代理',
+      onCancel: () {
+        print('添加/修改代理');
+
+        EnvironmentAddUtil.showAddPage(
+          context,
+          addCompleteBlock: (bProxyIp) {
+            print('proxyIp =$bProxyIp');
+            EnvironmentManager().addEnvProxyModel(
+              proxyIp: bProxyIp,
+            );
+            setState(() {});
+          },
+        );
+      },
     );
   }
 
@@ -108,6 +143,14 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
         // 调用 网络域名 的更改接口
         // Service().changeOptions(baseUrl: bNetworkModel.hostName);
         setState(() {});
+
+        if (widget.updateNetworkCallback != null) {
+          widget.updateNetworkCallback(
+            bNetworkModel.apiHost,
+            bNetworkModel.webHost,
+            bNetworkModel.gameHost,
+          );
+        }
       },
       clickEnvProxyCellCallback: (section, row, bProxyModel) {
         print('点击了${bProxyModel.name}');
@@ -116,6 +159,10 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
             .updateEnvSelectedModel(selectedProxyModel: bProxyModel);
         this.showLogWindow();
         setState(() {});
+
+        if (widget.updateProxyCallback != null) {
+          widget.updateProxyCallback(bProxyModel.proxyIp);
+        }
       },
     );
   }
