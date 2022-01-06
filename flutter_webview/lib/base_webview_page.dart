@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import './empty_imageAboveText_widget.dart';
 
 class BaseWebPage extends StatefulWidget {
   final FlutterWebviewPlugin flutterWebViewPlugin;
@@ -83,8 +85,9 @@ class _BaseWebPageState extends State<BaseWebPage> {
     _onDestroy = flutterWebViewPlugin.onDestroy.listen((_) {
       if (mounted) {
         // Actions like show a info toast.
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Webview Destroyed2')));
+        print('web关闭了');
+        // ScaffoldMessenger.of(context)
+        //     .showSnackBar(const SnackBar(content: Text('Webview Destroyed2')));
       }
     });
 
@@ -184,38 +187,26 @@ class _BaseWebPageState extends State<BaseWebPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Plugin example app'),
+        title: const Text('网页加载失败'),
       ),
-      body: Container(
-        color: Colors.green,
-        alignment: Alignment.topCenter,
-        child: Column(
-          children: [
-            Center(
-              child: Text(
-                '加载失败',
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-            ElevatedButton(
-              child: const Text('刷新有效地址 https://www.baidu.com'),
-              onPressed: () {
-                flutterWebViewPlugin.launch('https://www.baidu.com');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('刷新无效地址 https://www.baidu2.com'),
-              onPressed: () {
-                flutterWebViewPlugin.launch('https://www.baidu2.com');
-              },
-            ),
-            ElevatedButton(
-              child: const Text('退出'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+      body: EmptyWithImageAboveTextWidget(
+        color: Color(0xFFF0F0F0),
+        image: AssetImage(
+          'assets/nonetwork.png',
+          package: 'flutter_webview',
+        ),
+        mainTitle: '咦，网络开小差啦！',
+        subTitle: '点击下方按钮帮你叫醒它！',
+        buttonWidget: ThemeBorderButton(
+          width: 110, // 不设置会根据内容自适应
+          height: 35, // 不设置会根据内容自适应
+          borderColorType: ThemeBGType.pink,
+          title: '刷新',
+          titleStyle: ButtonBoldTextStyle(fontSize: 13.0),
+          cornerRadius: 17.5,
+          onPressed: () {
+            flutterWebViewPlugin.reload();
+          },
         ),
       ),
     );
