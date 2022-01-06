@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # fluwx: any
+  image_picker: any
+  toast: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

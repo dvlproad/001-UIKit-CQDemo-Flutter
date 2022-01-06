@@ -5,11 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 
 class BaseWebPage extends StatefulWidget {
+  final FlutterWebviewPlugin flutterWebViewPlugin;
   final String Url;
+  final Set<JavascriptChannel> javascriptChannels;
 
   const BaseWebPage({
     Key key,
+    this.flutterWebViewPlugin,
     @required this.Url,
+    this.javascriptChannels,
   }) : super(key: key);
 
   @override
@@ -18,7 +22,8 @@ class BaseWebPage extends StatefulWidget {
 
 class _BaseWebPageState extends State<BaseWebPage> {
   // Instance of WebView plugin
-  final flutterWebViewPlugin = FlutterWebviewPlugin();
+  // final FlutterWebviewPlugin flutterWebViewPlugin = FlutterWebviewPlugin();
+  FlutterWebviewPlugin flutterWebViewPlugin;
 
   // On destroy stream
   StreamSubscription _onDestroy;
@@ -65,6 +70,11 @@ class _BaseWebPageState extends State<BaseWebPage> {
   void initState() {
     super.initState();
 
+    flutterWebViewPlugin = widget.flutterWebViewPlugin;
+    if (flutterWebViewPlugin == null) {
+      flutterWebViewPlugin = FlutterWebviewPlugin();
+    }
+
     flutterWebViewPlugin.close();
 
     // Add a listener to on destroy WebView, so you can make came actions.
@@ -80,7 +90,7 @@ class _BaseWebPageState extends State<BaseWebPage> {
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         setState(() {
-          _history.add('onUrlChanged: $url');
+          _historyAdd('onUrlChanged: $url');
         });
       }
     });
@@ -89,7 +99,7 @@ class _BaseWebPageState extends State<BaseWebPage> {
         flutterWebViewPlugin.onProgressChanged.listen((double progress) {
       if (mounted) {
         setState(() {
-          _history.add('onProgressChanged: $progress');
+          _historyAdd('onProgressChanged: $progress');
         });
       }
     });
@@ -98,7 +108,7 @@ class _BaseWebPageState extends State<BaseWebPage> {
         flutterWebViewPlugin.onScrollYChanged.listen((double y) {
       if (mounted) {
         setState(() {
-          _history.add('Scroll in Y Direction: $y');
+          _historyAdd('Scroll in Y Direction: $y');
         });
       }
     });
@@ -107,7 +117,7 @@ class _BaseWebPageState extends State<BaseWebPage> {
         flutterWebViewPlugin.onScrollXChanged.listen((double x) {
       if (mounted) {
         setState(() {
-          _history.add('Scroll in X Direction: $x');
+          _historyAdd('Scroll in X Direction: $x');
         });
       }
     });
@@ -116,7 +126,7 @@ class _BaseWebPageState extends State<BaseWebPage> {
         flutterWebViewPlugin.onStateChanged.listen((WebViewStateChanged state) {
       if (mounted) {
         setState(() {
-          _history.add('onStateChanged: ${state.type} ${state.url}');
+          _historyAdd('onStateChanged: ${state.type} ${state.url}');
         });
       }
     });
@@ -128,10 +138,15 @@ class _BaseWebPageState extends State<BaseWebPage> {
           _loadSuccess = false;
           flutterWebViewPlugin.close();
 
-          _history.add('onHttpError: ${error.code} ${error.url}');
+          _historyAdd('onHttpError: ${error.code} ${error.url}');
         });
       }
     });
+  }
+
+  void _historyAdd(String text) {
+    print(text);
+    _history.add(text);
   }
 
   @override
@@ -139,13 +154,17 @@ class _BaseWebPageState extends State<BaseWebPage> {
     if (_loadSuccess == true) {
       bool withLocalUrl = !widget.Url.startsWith(RegExp(r'https?:'));
       return WebviewScaffold(
+        javascriptChannels: widget.javascriptChannels,
         url: widget.Url,
-        withLocalUrl: withLocalUrl,
+        // withLocalUrl: withLocalUrl,
         //当WebView没加载出来前显示
         initialChild: Container(
-          color: Colors.white,
+          color: Colors.red,
           child: Center(
-            child: Text("正在加载中...."),
+            child: Text(
+              "正在加载中....",
+              style: TextStyle(color: Colors.green),
+            ),
           ),
         ),
         debuggingEnabled: true,

@@ -3,6 +3,7 @@ import 'package:flutter_webview/flutter_webview.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import './ts_webview_plugin_demo_page.dart';
+import './ts_webview_plugin_page.dart';
 
 class TSWebViewPluginHomePage extends StatefulWidget {
   TSWebViewPluginHomePage({Key key}) : super(key: key);
@@ -75,8 +76,10 @@ class _TSWebViewPluginHomePageState extends State<TSWebViewPluginHomePage> {
             title: 'webview_plugin 的 二次封装(无效网络地址)',
             onPressed: () {
               Route route = MaterialPageRoute(
-                builder: (context) => BaseWebPage(
-                  Url: 'https://www.baidu2.com',
+                builder: (context) => WebViewPage(
+                  // Url: 'https://www.baidu2.com',
+                  Url:
+                      'http://dev.game.h5.xihuanwu.com/id=1470575934695165952&top=20.0&bottom=0.0', // 需要先支持http
                 ),
               );
               Navigator.push(context, route);
@@ -89,7 +92,7 @@ class _TSWebViewPluginHomePageState extends State<TSWebViewPluginHomePage> {
             title: 'WebPage本地地址(暂无)',
             onPressed: () {
               // Route route = MaterialPageRoute(
-              //   builder: (context) => BaseWebPage(
+              //   builder: (context) => WebViewPage(
               //     Url: '../test_oa_h5js.html',
               //   ),
               // );
