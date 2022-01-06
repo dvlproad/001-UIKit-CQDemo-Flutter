@@ -111,7 +111,7 @@ class _TSApiListState extends State<TSApiList> {
           return EnvironmentTableViewHeader(title: '执行mock环境的api$suffixString');
         } else {
           String suffixString = '';
-          if (widget.mockApiHost != null) {
+          if (widget.normalApiHost != null) {
             suffixString = ':${widget.normalApiHost}';
           }
           return EnvironmentTableViewHeader(title: '执行当前环境的api$suffixString');

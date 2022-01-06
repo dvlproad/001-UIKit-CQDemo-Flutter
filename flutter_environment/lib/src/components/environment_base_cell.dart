@@ -68,7 +68,6 @@ class EnvBaseTableViewCell extends StatelessWidget {
   }
 
   Widget _cellContainer() {
-
     return Container(
       color: Colors.transparent,
       child: Row(
@@ -92,7 +91,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
       child: Text(
         this.mainTitle ?? '',
         textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
+        // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
         style: TextStyle(
           color: Colors.black,
           fontSize: 16.0,
@@ -110,7 +109,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
           child: Text(
             subTitle ?? '',
             textAlign: TextAlign.left,
-            // overflow: TextOverflow.ellipsis,
+            // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
             style: TextStyle(
               color: Colors.black,
               fontSize: 16.0,

@@ -29,26 +29,47 @@ class _EnvironmentTableViewHeaderState
 
   Widget _headerContainer() {
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 10, 0, 0),
+      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
       // color: Colors.green,
       alignment: Alignment.centerLeft,
-      height: 40,
+      constraints: BoxConstraints(
+        minHeight: 44,
+      ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Center(
-            child: Text(
-              widget.title,
-              // textAlign: TextAlign.right,
-              // overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+          Expanded(child: _rowLeftWidget),
         ],
       ),
     );
+  }
+
+  // row 右边箭头以外的左视图
+  Widget get _rowLeftWidget {
+    List<Widget> columnWidgets = [];
+    // 添加主文本
+    Widget mainTextWidget = Container(
+      padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+      color: Colors.transparent,
+      child: Text(
+        widget.title ?? '',
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          color: Colors.red,
+          fontSize: 18.0,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+    columnWidgets.add(mainTextWidget);
+
+    Widget rowLeftWidget = Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: columnWidgets,
+    );
+
+    return rowLeftWidget;
   }
 }
