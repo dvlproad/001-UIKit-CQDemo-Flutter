@@ -30,6 +30,13 @@ class _WebViewPageState extends State<WebViewPage> {
       jsutil.backJsChannel(context),
     };
     jsutil.configJavascriptChannels(javascriptChannels);
+
+    // 测试在webView上弹出其他视图
+    Future.delayed(Duration(seconds: 2), () {
+      print('延时1s执行');
+      // Navigator.of(context).pop();
+      _showPopup();
+    });
   }
 
   @override
@@ -38,6 +45,76 @@ class _WebViewPageState extends State<WebViewPage> {
       flutterWebViewPlugin: flutterWebViewPlugin,
       Url: widget.Url, // 需要先支持http
       javascriptChannels: jsutil.javascriptChannels,
+      failureWidget: Scaffold(
+        appBar: AppBar(
+          title: const Text('h5请求失败的视图'),
+        ),
+        body: Container(
+          color: Colors.green,
+          alignment: Alignment.topCenter,
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  '加载失败',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              ElevatedButton(
+                child: const Text('测试在webView上弹出其他视图'),
+                onPressed: () {
+                  _showPopup();
+                },
+              ),
+              ElevatedButton(
+                child: const Text('刷新有效地址 https://www.baidu.com'),
+                onPressed: () {
+                  flutterWebViewPlugin.launch('https://www.baidu.com');
+                },
+              ),
+              ElevatedButton(
+                child: const Text('刷新无效地址 https://www.baidu2.com'),
+                onPressed: () {
+                  flutterWebViewPlugin.launch('https://www.baidu2.com');
+                },
+              ),
+              ElevatedButton(
+                child: const Text('退出'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  void _showPopup() {
+    showDialog<Null>(
+      context: context,
+      builder: (BuildContext context) {
+        return new SimpleDialog(
+          title: new Text('选择'),
+          children: <Widget>[
+            new SimpleDialogOption(
+              child: new Text('选项 1'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            new SimpleDialogOption(
+              child: new Text('选项 2'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    ).then((val) {
+      print(val);
+    });
   }
 }

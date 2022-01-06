@@ -8,12 +8,14 @@ class BaseWebPage extends StatefulWidget {
   final FlutterWebviewPlugin flutterWebViewPlugin;
   final String Url;
   final Set<JavascriptChannel> javascriptChannels;
+  final Widget failureWidget; // 请求失败时候的显示视图
 
   const BaseWebPage({
     Key key,
     this.flutterWebViewPlugin,
     @required this.Url,
     this.javascriptChannels,
+    this.failureWidget,
   }) : super(key: key);
 
   @override
@@ -175,6 +177,10 @@ class _BaseWebPageState extends State<BaseWebPage> {
   }
 
   Widget bodyWidget_failure(BuildContext context) {
+    if (widget.failureWidget != null) {
+      return widget.failureWidget;
+    }
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
