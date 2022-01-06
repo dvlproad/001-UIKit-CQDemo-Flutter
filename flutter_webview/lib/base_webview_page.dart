@@ -156,6 +156,22 @@ class _BaseWebPageState extends State<BaseWebPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: WillPopScope(
+        onWillPop: () async {
+          return !_loadSuccess; // 成功则必须通过h5自己调用js来返回
+        },
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            _buildPage(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPage(BuildContext context) {
     if (_loadSuccess == true) {
       bool withLocalUrl = !widget.Url.startsWith(RegExp(r'https?:'));
       return WebviewScaffold(
