@@ -9,3 +9,5 @@ export 'src/apimock/manager/api_data_bean.dart';
 export 'src/page/api_mock_page_content.dart';
 
 export 'src/environment_util.dart';
+
+export './darg/draggable_manager.dart';

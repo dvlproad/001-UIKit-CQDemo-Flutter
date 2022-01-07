@@ -2,6 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment/darg/darg_page1.dart';
+import 'package:flutter_environment/darg/darg_page2.dart';
 import 'package:flutter_network/flutter_network.dart';
 import './devtool_routes.dart';
 
@@ -59,6 +61,24 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
             // 'nextPageName': DevToolRouters.apiMockPage,
             'actionBlock': () {
               _goChangeApiMock(true);
+            },
+          },
+          {
+            'title': "Floating(悬浮按钮)",
+            // 'nextPageName': DevToolRouters.apiMockPage,
+            'actionBlock': () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return DraggablePage1();
+              }));
+            },
+          },
+          {
+            'title': "Floating(悬浮按钮)",
+            // 'nextPageName': DevToolRouters.apiMockPage,
+            'actionBlock': () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return DraggablePage2();
+              }));
             },
           },
         ]
