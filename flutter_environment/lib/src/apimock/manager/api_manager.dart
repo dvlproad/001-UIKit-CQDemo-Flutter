@@ -68,7 +68,7 @@ class ApiManager {
   //   return allowMock;
   // }
 
-  static void tryAddApi(String url) {
+  static void tryAddApi(String url, {String name, bool isGet}) {
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
     int index = apiModels.indexWhere((element) {
       return element.url == url;
@@ -76,7 +76,17 @@ class ApiManager {
 
     if (index == -1) {
       bool mock = url.startsWith(RegExp(r'https?:')) ? true : false;
-      ApiModel apiModel = ApiModel(url: url, mock: mock);
+
+      if (name == null) {
+        int count = apiModels.length;
+        name = '接口$count';
+      }
+      if (isGet == true) {
+        name = '$name:Get';
+      } else {
+        name = '$name:Post';
+      }
+      ApiModel apiModel = ApiModel(name: name, url: url, mock: mock);
       apiModels.add(apiModel);
 
       ApiSharedPreferenceUtil().setApiList(apiModels);

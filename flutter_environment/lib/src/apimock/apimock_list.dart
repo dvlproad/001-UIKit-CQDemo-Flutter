@@ -106,13 +106,13 @@ class _TSApiListState extends State<TSApiList> {
         if (section == 0) {
           String suffixString = '';
           if (widget.mockApiHost != null) {
-            suffixString = ':${widget.mockApiHost}';
+            suffixString = ':\n${widget.mockApiHost}';
           }
           return EnvironmentTableViewHeader(title: '执行mock环境的api$suffixString');
         } else {
           String suffixString = '';
           if (widget.normalApiHost != null) {
-            suffixString = ':${widget.normalApiHost}';
+            suffixString = ':\n${widget.normalApiHost}';
           }
           return EnvironmentTableViewHeader(title: '执行当前环境的api$suffixString');
         }
