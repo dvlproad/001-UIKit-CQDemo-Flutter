@@ -4,6 +4,14 @@ class ApplicationDraggableManager {
   static GlobalKey<NavigatorState> globalKey;
   static OverlayEntry overlayEntry;
 
+  // 关闭悬浮按钮
+  static Future removeOverlayEntry() {
+    OverlayEntry overlayEntry = ApplicationDraggableManager.overlayEntry;
+    overlayEntry?.remove(); // 删除重新绘制
+
+    ApplicationDraggableManager.overlayEntry = null;
+  }
+
   static Future addOverlayEntry({
     double left,
     double top,

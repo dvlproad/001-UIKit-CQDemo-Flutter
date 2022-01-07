@@ -8,6 +8,7 @@ import 'package:flutter_network/flutter_network.dart';
 import './devtool_routes.dart';
 
 import './main_init/main_init.dart';
+import './dev_util.dart';
 
 class TSDevToolHomePage extends CJTSBasePage {
   final String title;
@@ -79,6 +80,12 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return DraggablePage2();
               }));
+            },
+          },
+          {
+            'title': "显示开工工具的悬浮按钮",
+            'actionBlock': () {
+              DevUtil.showDevFloatingWidget(context);
             },
           },
         ]
