@@ -11,6 +11,7 @@ import './dev_util.dart';
 
 import './drag/darg_page1.dart';
 import './drag/darg_page2.dart';
+import './drag/log_page.dart';
 
 class TSDevToolHomePage extends CJTSBasePage {
   final String title;
@@ -81,6 +82,15 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
             'actionBlock': () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return DraggablePage2();
+              }));
+            },
+          },
+          {
+            'title': "Floating logView(全部底部log视图)",
+            // 'nextPageName': DevToolRouters.apiMockPage,
+            'actionBlock': () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TSLogPage();
               }));
             },
           },

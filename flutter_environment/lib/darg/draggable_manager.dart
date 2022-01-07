@@ -52,4 +52,42 @@ class ApplicationDraggableManager {
     ApplicationDraggableManager.globalKey.currentState.overlay
         .insert(overlayEntry);
   }
+
+  // 全局log视图
+  static OverlayEntry logOverlayEntry;
+  // 关闭全局log视图
+  static Future removeLogOverlayEntry() {
+    OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
+    logOverlayEntry?.remove(); // 删除重新绘制
+
+    ApplicationDraggableManager.logOverlayEntry = null;
+  }
+
+  // 显示全局log视图
+  static Future showLogOverlayEntry({
+    double left,
+    double top,
+    @required Widget child,
+  }) async {
+    OverlayEntry logOverlayEntry = ApplicationDraggableManager.overlayEntry;
+    if (overlayEntry != null) {
+      return;
+    }
+    logOverlayEntry?.remove(); // 删除重新绘制
+
+    logOverlayEntry = OverlayEntry(
+      builder: (BuildContext context) => Positioned(
+        bottom: 0,
+        child: GestureDetector(
+          onTap: () async {},
+          child: child,
+        ),
+      ),
+    );
+
+    /// 赋值方便移除
+    ApplicationDraggableManager.logOverlayEntry = logOverlayEntry;
+    ApplicationDraggableManager.globalKey.currentState.overlay
+        .insert(logOverlayEntry);
+  }
 }
