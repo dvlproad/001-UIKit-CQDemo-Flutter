@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_network/flutter_network.dart';
 
 class DevUtil {
   // 显示开发工具的悬浮按钮
@@ -68,6 +69,7 @@ class DevUtil {
       context,
       onPressTestApiCallback: showTestApiWidget
           ? () {
+              print('测试切换环境后，网络请求的情况');
               // 我的收货地址
               // Api.getAddressList(
               //     {"accountId": UserInfoManager.instance.userModel.id});
@@ -78,14 +80,10 @@ class DevUtil {
             }
           : null,
       updateNetworkCallback: (apiHost, webHost, gameHost) {
-        HttpManager.changeHost(
-          apiHost: apiHost,
-          webHost: webHost,
-          gameHost: gameHost,
-        );
+        NetworkChangeUtil.changeOptions(baseUrl: apiHost);
       },
       updateProxyCallback: (proxyIp) {
-        HttpManager.changeProxy(proxyIp);
+        NetworkChangeUtil.changeProxy(proxyIp);
       },
     );
   }
@@ -96,14 +94,26 @@ class DevUtil {
   }) {
     EnvironmentUtil.goChangeApiMock(
       context,
-      mockApiHost: simulateApiHost,
+      mockApiHost: 'http://121.41.91.92:3000/mock/28/api/bjh',
       onPressTestApiCallback: showTestApiWidget
           ? () {
+              print('测试 mock api 后，网络请求的情况');
               // 我的收货地址
               // Api.getAddressList(
               //     {"accountId": UserInfoManager.instance.userModel.id});
             }
           : null,
+      // navbarActions: [
+      //   CQTSThemeBGButton(
+      //     title: '添加',
+      //     onPressed: () {
+      //       ApiManager.tryAddApi(
+      //           cqtsRandomString(0, 10, CQRipeStringType.english));
+      //       print('添加后的api个数:${ApiManager().apiModels.length}');
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      // ],
     );
   }
 }

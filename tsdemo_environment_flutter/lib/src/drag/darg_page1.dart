@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './darg_widget.dart';
-import './draggable_manager.dart';
+import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment/darg/darg_widget.dart';
 
 class DraggablePage1 extends StatelessWidget {
   final GlobalKey _parentKey = GlobalKey();

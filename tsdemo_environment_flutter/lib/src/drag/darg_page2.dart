@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import './draggable_manager.dart';
+import 'package:flutter_environment/flutter_environment.dart';
+
+import '../dev_util.dart';
 
 class DraggablePage2 extends StatefulWidget {
   @override
@@ -16,15 +18,16 @@ class _DraggablePage2State extends State<DraggablePage2> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         // 需要在 main.dart 中设置 ApplicationDraggableManager.globalKey = xx; 和 navigatorKey: ApplicationDraggableManager.globalKey,
+        DevUtil.showDevFloatingWidget(context, showTestApiWidget: true);
 
         ///MediaQuery.of(context).size.width  屏幕宽度
         ///MediaQuery.of(context).size.height 屏幕高度
-        ApplicationDraggableManager.addOverlayEntry(
-          left: MediaQuery.of(context).size.width - 80,
-          top: MediaQuery.of(context).size.height - 80,
-          child: Icon(Icons.add_call, color: Colors.red),
-          ifExistUseOld: true,
-        );
+        // ApplicationDraggableManager.addOverlayEntry(
+        //   left: MediaQuery.of(context).size.width - 80,
+        //   top: MediaQuery.of(context).size.height - 80,
+        //   child: Icon(Icons.add_call, color: Colors.red),
+        //   ifExistUseOld: true,
+        // );
       },
     );
   }
