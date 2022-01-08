@@ -67,6 +67,7 @@ class _LogListState extends State<LogList> {
 
   @override
   Widget build(BuildContext context) {
+    print('build log 视图...');
     return Container(
       child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
         value: _environmentChangeNotifier,

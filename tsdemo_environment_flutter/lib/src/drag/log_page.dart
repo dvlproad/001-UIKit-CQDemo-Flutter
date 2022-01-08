@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
-import '../dev_util.dart';
+// import '../dev_util.dart';
 
 class TSLogPage extends StatefulWidget {
   TSLogPage({Key key}) : super(key: key);
@@ -68,7 +68,12 @@ class _TSLogPageState extends State<TSLogPage> {
               ///MediaQuery.of(context).size.width  屏幕宽度
               ///MediaQuery.of(context).size.height 屏幕高度
               ApplicationDraggableManager.showLogOverlayEntry(
-                child: logWidget(context),
+                child: LogList(
+                  logModels: apiLogModels,
+                  clickLogCellCallback: (section, row, bApiModel) {
+                    print('点击${bApiModel.url}');
+                  },
+                ),
               );
             },
           ),
@@ -103,7 +108,8 @@ class _TSLogPageState extends State<TSLogPage> {
                       ApiModel(name: name, url: Url, mock: false);
                   apiLogModels.add(apiLogModel);
                   print('添加log:$name');
-                  setState(() {});
+                  ApplicationDraggableManager.updateLogOverlayEntry();
+                  // setState(() {});
                 },
               ),
               CQTSThemeBGButton(
@@ -112,7 +118,9 @@ class _TSLogPageState extends State<TSLogPage> {
                 onPressed: () {
                   print('清空log');
                   apiLogModels = [];
-                  setState(() {});
+
+                  ApplicationDraggableManager.updateLogOverlayEntry();
+                  // setState(() {});
                 },
               )
             ],
@@ -129,15 +137,6 @@ class _TSLogPageState extends State<TSLogPage> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget logWidget(BuildContext context) {
-    return LogList(
-      logModels: apiLogModels,
-      clickLogCellCallback: (section, row, bApiModel) {
-        print('点击${bApiModel.url}');
-      },
     );
   }
 }

@@ -55,18 +55,26 @@ class ApplicationDraggableManager {
 
   // 全局log视图
   static OverlayEntry logOverlayEntry;
+  static bool logVisible = true;
   // 关闭全局log视图
   static void dismissLogOverlayEntry({
     bool onlyHideNoSetnull =
         false, // true:只隐藏，不set null,下次可继续使用;false,会set null,下次重新创建
   }) {
     OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
-    logOverlayEntry?.remove(); // 删除重新绘制
+    if (onlyHideNoSetnull == true) {
+      logVisible = false;
+      logOverlayEntry.markNeedsBuild(); // 刷新 overlay
+      return;
+    }
 
-    // if (onlyHideNoSetnull == true) {
-    //   return;
-    // }
+    logOverlayEntry?.remove(); // 删除重新绘制
     ApplicationDraggableManager.logOverlayEntry = null;
+  }
+
+  static void updateLogOverlayEntry() {
+    print('尝试刷新 log 视图....');
+    logOverlayEntry.markNeedsBuild();
   }
 
   // 显示全局log视图
@@ -77,23 +85,26 @@ class ApplicationDraggableManager {
   }) async {
     OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
     if (logOverlayEntry != null) {
-      // ApplicationDraggableManager.globalKey.currentState.overlay
-      //     .insert(logOverlayEntry);
+      logVisible = true;
+      logOverlayEntry.markNeedsBuild();
       return;
     }
     logOverlayEntry?.remove(); // 删除重新绘制
 
     logOverlayEntry = OverlayEntry(
-      builder: (BuildContext context) => Positioned(
-        bottom: 0,
-        child: GestureDetector(
-          onTap: () async {},
-          child: Visibility(
-            visible: true,
-            child: child,
+      builder: (BuildContext context) {
+        print('正式刷新 log 视图....');
+        return Positioned(
+          bottom: 0,
+          child: GestureDetector(
+            onTap: () async {},
+            child: Visibility(
+              visible: logVisible,
+              child: child,
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
 
     /// 赋值方便移除
