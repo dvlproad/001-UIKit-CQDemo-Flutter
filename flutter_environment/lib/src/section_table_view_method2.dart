@@ -26,6 +26,10 @@ class CreateSectionTableView2 extends StatefulWidget {
   final SectionHeaderCallBack headerInSection;
   final Widget divider;
 
+  // controller
+  ScrollController controller;
+  bool reverse;
+
   CreateSectionTableView2({
     Key key,
     @required this.sectionCount,
@@ -33,6 +37,8 @@ class CreateSectionTableView2 extends StatefulWidget {
     @required this.cellAtIndexPath,
     this.headerInSection,
     this.divider,
+    this.controller,
+    this.reverse,
   }) : super(key: key);
   @override
   _CreateSectionTableView2State createState() =>
@@ -88,6 +94,8 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
       itemBuilder: (context, index) {
         return _buildCell(context, index);
       },
+      controller: widget.controller,
+      reverse: widget.reverse,
     );
   }
 

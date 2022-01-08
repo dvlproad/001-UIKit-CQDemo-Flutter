@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
-class TSWebViewPage extends StatefulWidget {
-  TSWebViewPage({Key key}) : super(key: key);
+class TSPage extends StatefulWidget {
+  TSPage({Key key}) : super(key: key);
 
   @override
-  _TSWebViewPageState createState() => new _TSWebViewPageState();
+  _TSPageState createState() => new _TSPageState();
 }
 
-class _TSWebViewPageState extends State<TSWebViewPage> {
+class _TSPageState extends State<TSPage> {
   @override
   void initState() {
     super.initState();
@@ -44,15 +45,27 @@ class _TSWebViewPageState extends State<TSWebViewPage> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: Text('1'),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '1',
+            onPressed: () {},
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: Text('1'),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '2',
+            onPressed: () {},
+          ),
         ),
         Padding(
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: Text('1'),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '3',
+            onPressed: () {},
+          ),
         ),
       ],
     );

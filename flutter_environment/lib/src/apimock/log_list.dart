@@ -13,13 +13,13 @@ import './manager/api_data_bean.dart';
 import 'dart:ui';
 
 class LogList extends StatefulWidget {
-  final List apiMockModels;
-  final ClickApiMockCellCallback clickApiMockCellCallback; // apimockCell 的点击
+  final List logModels;
+  final ClickApiMockCellCallback clickLogCellCallback; // apimockCell 的点击
 
   LogList({
     Key key,
-    @required this.apiMockModels,
-    @required this.clickApiMockCellCallback,
+    @required this.logModels,
+    @required this.clickLogCellCallback,
   }) : super(key: key);
 
   @override
@@ -29,28 +29,44 @@ class LogList extends StatefulWidget {
 }
 
 class _LogListState extends State<LogList> {
-  List<ApiModel> _apiMockModels_normal = [];
-  List<ApiModel> _apiMockModels_selected = [];
+  ScrollController _controller = new ScrollController();
+  bool _reverse = false;
+
+  List<ApiModel> _logModels = [];
   EnvironmentChangeNotifier _environmentChangeNotifier =
       EnvironmentChangeNotifier();
 
   @override
   void initState() {
     super.initState();
+
+    _logModels = widget.logModels ?? [];
+
+    ///WidgetsBinding.instance.addPostFrameCallback 这个作用是界面绘制完成的监听回调  必须在绘制完成后添加OverlayEntry
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        // if (_apiMockModels_selected.length > 0 ||
+        //     _logModels.length > 0) {
+        // Future.delayed(Duration(milliseconds: 500), () {
+        //   double maxOffset = _controller.position.maxScrollExtent;
+        //   maxOffset = 10000;
+        //   // jumpTo(double offset)、animateTo(double offset,...)：这两个方法用于跳转到指定的位置，它们不同之处在于，后者在跳转时会执行一个动画，而前者不会。
+
+        //   // _controller.jumpTo(maxOffset);
+
+        //   _controller.animateTo(
+        //     maxOffset, //滚动位置
+        //     curve: Curves.easeOut, //动画效果
+        //     duration: const Duration(milliseconds: 100), //动画时间
+        //   );
+        // });
+        // }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    _apiMockModels_normal = [];
-    _apiMockModels_selected = [];
-    for (ApiModel apiModel in widget.apiMockModels) {
-      if (apiModel.mock) {
-        _apiMockModels_selected.add(apiModel);
-      } else {
-        _apiMockModels_normal.add(apiModel);
-      }
-    }
-
     return Container(
       child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
         value: _environmentChangeNotifier,
@@ -69,7 +85,7 @@ class _LogListState extends State<LogList> {
       // ),
       width: mediaQuery.size.width,
       height: mediaQuery.size.height - 300,
-      color: Colors.red,
+      color: Colors.red.withOpacity(0.2),
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
@@ -86,77 +102,37 @@ class _LogListState extends State<LogList> {
   }
 
   Widget _searchResultWidget() {
-    int sectionCount = 2;
+    int sectionCount = 1;
 
     int numOfRowInSection(section) {
-      if (section == 0) {
-        List dataModels = _apiMockModels_selected;
-        return dataModels.length;
-      } else if (section == 1) {
-        List dataModels = _apiMockModels_normal;
-        return dataModels.length;
-      }
-      return 0;
+      return _logModels.length;
     }
 
     return CreateSectionTableView2(
+      controller: _controller,
+      reverse: _reverse,
       sectionCount: sectionCount,
       numOfRowInSection: (section) {
         return numOfRowInSection(section);
       },
       headerInSection: (section) {
-        if (section == 0) {
-          String suffixString = '';
-          // if (widget.mockApiHost != null) {
-          //   suffixString = ':\n${widget.mockApiHost}';
-          // }
-          return EnvironmentTableViewHeader(title: '执行mock环境的api$suffixString');
-        } else {
-          String suffixString = '';
-          // if (widget.normalApiHost != null) {
-          //   suffixString = ':\n${widget.normalApiHost}';
-          // }
-          return EnvironmentTableViewHeader(title: '执行当前环境的api$suffixString');
-        }
+        return EnvironmentTableViewHeader(title: 'api log');
       },
       cellAtIndexPath: (section, row) {
-        if (section == 0) {
-          // Network 环境
-          List<ApiModel> dataModels = _apiMockModels_selected;
-          ApiModel dataModel = dataModels[row];
-          return ApiMockTableViewCell(
-            apiModel: dataModel,
-            section: section,
-            row: row,
-            clickApiMockCellCallback:
-                (int section, int row, ApiModel bApiModel) {
-              // print('点击切换 Proxy 环境');
-              // setState(() {}); // 请在外部执行
+        ApiModel logModel = _logModels[row];
+        return ApiMockTableViewCell(
+          apiModel: logModel,
+          section: section,
+          row: row,
+          clickApiMockCellCallback: (int section, int row, ApiModel bApiModel) {
+            // print('点击选中 log');
+            // setState(() {}); // 请在外部执行
 
-              if (widget.clickApiMockCellCallback != null) {
-                widget.clickApiMockCellCallback(section, row, bApiModel);
-              }
-            },
-          );
-        } else {
-          // Proxy 环境
-          List<ApiModel> dataModels = _apiMockModels_normal;
-          ApiModel dataModel = dataModels[row];
-          return ApiMockTableViewCell(
-            apiModel: dataModel,
-            section: section,
-            row: row,
-            clickApiMockCellCallback:
-                (int section, int row, ApiModel bApiModel) {
-              // print('点击切换 Proxy 环境');
-              // setState(() {}); // 请在外部执行
-
-              if (widget.clickApiMockCellCallback != null) {
-                widget.clickApiMockCellCallback(section, row, bApiModel);
-              }
-            },
-          );
-        }
+            if (widget.clickLogCellCallback != null) {
+              widget.clickLogCellCallback(section, row, bApiModel);
+            }
+          },
+        );
       },
       divider: Container(color: Colors.green, height: 1.0),
     );

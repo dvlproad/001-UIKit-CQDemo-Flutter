@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
 import '../dev_util.dart';
@@ -11,9 +12,20 @@ class TSLogPage extends StatefulWidget {
 }
 
 class _TSLogPageState extends State<TSLogPage> {
+  List<ApiModel> apiLogModels;
+
   @override
   void initState() {
     super.initState();
+
+    apiLogModels = [];
+    for (int i = 0; i < 2; i++) {
+      String name = '接口$i';
+      String Url = cqtsRandomString(0, 10, CQRipeStringType.english);
+      ApiModel apiLogModel = ApiModel(name: name, url: Url, mock: false);
+      apiLogModels.add(apiLogModel);
+      // ApiManager.tryAddApi(Url);
+    }
   }
 
   @override
@@ -47,8 +59,9 @@ class _TSLogPageState extends State<TSLogPage> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: TextButton(
-            child: Text('显示全局log视图'),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '显示全局log视图',
             onPressed: () {
               // DevUtil.showDevFloatingWidget(context, showTestApiWidget: true);
 
@@ -61,12 +74,59 @@ class _TSLogPageState extends State<TSLogPage> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: Text('1'),
+          padding: EdgeInsets.only(top: 10, left: 25, right: 25),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '关闭全局log视图',
+            onPressed: () {
+              ApplicationDraggableManager.dismissLogOverlayEntry(
+                onlyHideNoSetnull: true,
+              );
+            },
+          ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: Text('1'),
+          padding: EdgeInsets.only(top: 10, left: 25, right: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CQTSThemeBGButton(
+                bgColorType: CQTSThemeBGType.pink,
+                title: '添加log',
+                onPressed: () {
+                  int i = apiLogModels.length;
+                  String name = '接口$i';
+                  String Url =
+                      cqtsRandomString(0, 10, CQRipeStringType.english);
+                  ApiModel apiLogModel =
+                      ApiModel(name: name, url: Url, mock: false);
+                  apiLogModels.add(apiLogModel);
+                  print('添加log:$name');
+                  setState(() {});
+                },
+              ),
+              CQTSThemeBGButton(
+                bgColorType: CQTSThemeBGType.pink,
+                title: '清空log',
+                onPressed: () {
+                  print('清空log');
+                  apiLogModels = [];
+                  setState(() {});
+                },
+              )
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 100, left: 25, right: 25),
+          child: CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '测试log视图弹出时候的透传',
+            onPressed: () {
+              CJTSToastUtil.showMessage('测试log视图弹出时候的透传');
+            },
+          ),
         ),
       ],
     );
@@ -74,13 +134,9 @@ class _TSLogPageState extends State<TSLogPage> {
 
   Widget logWidget(BuildContext context) {
     return LogList(
-      apiMockModels: [
-        ApiModel(name: '111', url: 'hfhf'),
-        ApiModel(name: '222', url: 'hfhf'),
-        ApiModel(name: '333', url: 'hfhf'),
-      ],
-      clickApiMockCellCallback: (section, row, bApiModel) {
-        print('点击');
+      logModels: apiLogModels,
+      clickLogCellCallback: (section, row, bApiModel) {
+        print('点击${bApiModel.url}');
       },
     );
   }

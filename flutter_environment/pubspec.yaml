@@ -14,6 +14,8 @@ dependencies:
 
   shared_preferences: any
   fluttertoast: any
+  flutter_network:
+    path: ../flutter_network/
 
 
 dev_dependencies:

@@ -56,10 +56,16 @@ class ApplicationDraggableManager {
   // 全局log视图
   static OverlayEntry logOverlayEntry;
   // 关闭全局log视图
-  static Future removeLogOverlayEntry() {
+  static void dismissLogOverlayEntry({
+    bool onlyHideNoSetnull =
+        false, // true:只隐藏，不set null,下次可继续使用;false,会set null,下次重新创建
+  }) {
     OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
     logOverlayEntry?.remove(); // 删除重新绘制
 
+    // if (onlyHideNoSetnull == true) {
+    //   return;
+    // }
     ApplicationDraggableManager.logOverlayEntry = null;
   }
 
@@ -69,8 +75,10 @@ class ApplicationDraggableManager {
     double top,
     @required Widget child,
   }) async {
-    OverlayEntry logOverlayEntry = ApplicationDraggableManager.overlayEntry;
-    if (overlayEntry != null) {
+    OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
+    if (logOverlayEntry != null) {
+      // ApplicationDraggableManager.globalKey.currentState.overlay
+      //     .insert(logOverlayEntry);
       return;
     }
     logOverlayEntry?.remove(); // 删除重新绘制
@@ -80,7 +88,10 @@ class ApplicationDraggableManager {
         bottom: 0,
         child: GestureDetector(
           onTap: () async {},
-          child: child,
+          child: Visibility(
+            visible: true,
+            child: child,
+          ),
         ),
       ),
     );
