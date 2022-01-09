@@ -36,7 +36,10 @@ class _TSLogPageState extends State<TSLogPage> {
       appBar: appBar(),
       body: Container(
         constraints: BoxConstraints.expand(),
-        child: contentWidget(),
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: contentWidget(),
+        ),
       ),
     );
   }
@@ -137,6 +140,10 @@ class _TSLogPageState extends State<TSLogPage> {
               CJTSToastUtil.showMessage('测试log视图弹出时候的透传');
             },
           ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 1000, left: 25, right: 25),
+          child: Text('我是为了超出视图'),
         ),
       ],
     );
