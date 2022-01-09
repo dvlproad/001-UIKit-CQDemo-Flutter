@@ -88,7 +88,7 @@ class _TSLogPageState extends State<TSLogPage> {
                 bgColorType: CQTSThemeBGType.pink,
                 title: '添加log',
                 onPressed: () {
-                  String name = '接口';
+                  String name = '接口${DevLogUtil.logModels.length + 1}';
                   String Url =
                       cqtsRandomString(100, 600, CQRipeStringType.english);
                   ApiModel apiLogModel =
