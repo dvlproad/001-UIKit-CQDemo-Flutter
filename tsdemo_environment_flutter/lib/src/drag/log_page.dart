@@ -14,6 +14,7 @@ class TSLogPage extends StatefulWidget {
 class _TSLogPageState extends State<TSLogPage> {
   List<ApiModel> apiLogModels;
 
+  bool logOpenSelected = false;
   @override
   void initState() {
     super.initState();
@@ -59,34 +60,29 @@ class _TSLogPageState extends State<TSLogPage> {
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: loginIconBottom, left: 25, right: 25),
-          child: CQTSThemeBGButton(
-            bgColorType: CQTSThemeBGType.pink,
-            title: '显示全局log视图',
+          child: CQTSThemeStateButton(
+            normalBGColorType: CQTSThemeBGType.pink,
+            normalTitle: '显示全局log视图',
+            selectedTitle: '关闭全局log视图',
+            selected: logOpenSelected,
             onPressed: () {
-              // DevUtil.showDevFloatingWidget(context, showTestApiWidget: true);
-
-              ///MediaQuery.of(context).size.width  屏幕宽度
-              ///MediaQuery.of(context).size.height 屏幕高度
-              ApplicationDraggableManager.showLogOverlayEntry(
-                child: LogList(
+              if (logOpenSelected == false) {
+                ///MediaQuery.of(context).size.width  屏幕宽度
+                ///MediaQuery.of(context).size.height 屏幕高度
+                ApplicationDraggableManager.showLogOverlayEntry(
                   logModels: apiLogModels,
                   clickLogCellCallback: (section, row, bApiModel) {
                     print('点击${bApiModel.url}');
                   },
-                ),
-              );
-            },
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10, left: 25, right: 25),
-          child: CQTSThemeBGButton(
-            bgColorType: CQTSThemeBGType.pink,
-            title: '关闭全局log视图',
-            onPressed: () {
-              ApplicationDraggableManager.dismissLogOverlayEntry(
-                onlyHideNoSetnull: true,
-              );
+                );
+              } else {
+                ApplicationDraggableManager.dismissLogOverlayEntry(
+                  onlyHideNoSetnull: true,
+                );
+              }
+
+              logOpenSelected = !logOpenSelected;
+              setState(() {});
             },
           ),
         ),
@@ -117,7 +113,7 @@ class _TSLogPageState extends State<TSLogPage> {
                 title: '清空log',
                 onPressed: () {
                   print('清空log');
-                  apiLogModels = [];
+                  apiLogModels.clear();
 
                   ApplicationDraggableManager.updateLogOverlayEntry();
                   // setState(() {});

@@ -9,6 +9,7 @@ import './apimock_cell.dart';
 
 import '../environment_change_notifiter.dart';
 import './manager/api_data_bean.dart';
+export './manager/api_data_bean.dart';
 
 import 'dart:ui';
 
@@ -67,7 +68,8 @@ class _LogListState extends State<LogList> {
 
   @override
   Widget build(BuildContext context) {
-    print('build log 视图...');
+    print(
+        '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
     return Container(
       child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
         value: _environmentChangeNotifier,

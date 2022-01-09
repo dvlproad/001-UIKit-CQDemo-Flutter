@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../src/apimock/log_list.dart';
 
 class ApplicationDraggableManager {
   static GlobalKey<NavigatorState> globalKey;
@@ -73,7 +74,7 @@ class ApplicationDraggableManager {
   }
 
   static void updateLogOverlayEntry() {
-    print('尝试刷新 log 视图....');
+    print('尝试刷新 overlay 的 chid 视图....');
     logOverlayEntry.markNeedsBuild();
   }
 
@@ -81,7 +82,10 @@ class ApplicationDraggableManager {
   static Future showLogOverlayEntry({
     double left,
     double top,
-    @required Widget child,
+    @required List logModels,
+    @required
+        void Function(int section, int row, ApiModel bApiModel)
+            clickLogCellCallback, // logCell 的点击
   }) async {
     OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
     if (logOverlayEntry != null) {
@@ -93,14 +97,19 @@ class ApplicationDraggableManager {
 
     logOverlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        print('正式刷新 log 视图....');
+        print('正式刷新 overlay 的 chid 视图....');
+
         return Positioned(
           bottom: 0,
           child: GestureDetector(
             onTap: () async {},
             child: Visibility(
               visible: logVisible,
-              child: child,
+              // child: child,
+              child: LogList(
+                logModels: logModels,
+                clickLogCellCallback: clickLogCellCallback,
+              ),
             ),
           ),
         );
