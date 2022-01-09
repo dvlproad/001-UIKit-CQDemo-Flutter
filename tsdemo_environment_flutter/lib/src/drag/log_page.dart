@@ -83,15 +83,24 @@ class _TSLogPageState extends State<TSLogPage> {
 
                     ApplicationDraggableManager.updateLogOverlayEntry();
                   },
+                  onPressedClose: () {
+                    ApplicationDraggableManager.dismissLogOverlayEntry(
+                      onlyHideNoSetnull: true,
+                    );
+                    logOpenSelected = !logOpenSelected;
+                    setState(() {});
+                  },
                 );
+
+                logOpenSelected = !logOpenSelected;
+                setState(() {});
               } else {
                 ApplicationDraggableManager.dismissLogOverlayEntry(
                   onlyHideNoSetnull: true,
                 );
+                logOpenSelected = !logOpenSelected;
+                setState(() {});
               }
-
-              logOpenSelected = !logOpenSelected;
-              setState(() {});
             },
           ),
         ),

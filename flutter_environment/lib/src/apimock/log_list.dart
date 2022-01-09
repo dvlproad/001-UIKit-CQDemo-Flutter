@@ -18,12 +18,14 @@ class LogList extends StatefulWidget {
   final ClickApiMockCellCallback clickLogCellCallback; // apimockCell 的点击
 
   final void Function() onPressedClear; // 点击清空按钮的事件
+  final void Function() onPressedClose; // 点击关闭按钮的事件
 
   LogList({
     Key key,
     @required this.logModels,
     @required this.clickLogCellCallback,
     @required this.onPressedClear,
+    @required this.onPressedClose,
   }) : super(key: key);
 
   @override
@@ -98,24 +100,8 @@ class _LogListState extends State<LogList> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextButton(
-                child: Container(
-                  color: Colors.pink,
-                  width: 100,
-                  height: 44,
-                  child: Center(
-                    child: Text(
-                      '清空',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                onPressed: widget.onPressedClear,
-              ),
+              _buildButton('清空', onPressed: widget.onPressedClear),
+              _buildButton('关闭', onPressed: widget.onPressedClose),
             ],
           ),
           SizedBox(height: 6),
@@ -128,6 +114,27 @@ class _LogListState extends State<LogList> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildButton(String text, {void Function() onPressed}) {
+    return TextButton(
+      child: Container(
+        color: Colors.pink,
+        width: 100,
+        height: 44,
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+      onPressed: onPressed,
     );
   }
 
