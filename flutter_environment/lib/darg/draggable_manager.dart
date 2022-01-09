@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../src/apimock/log_list.dart';
+import '../src/log/log_list.dart';
 
 class ApplicationDraggableManager {
   static GlobalKey<NavigatorState> globalKey;

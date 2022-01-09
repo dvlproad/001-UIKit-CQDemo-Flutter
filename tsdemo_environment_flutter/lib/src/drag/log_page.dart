@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
-// import '../dev_util.dart';
-
 class TSLogPage extends StatefulWidget {
   TSLogPage({Key key}) : super(key: key);
 
@@ -12,21 +10,11 @@ class TSLogPage extends StatefulWidget {
 }
 
 class _TSLogPageState extends State<TSLogPage> {
-  List<ApiModel> apiLogModels;
-
   bool logOpenSelected = false;
+
   @override
   void initState() {
     super.initState();
-
-    apiLogModels = [];
-    for (int i = 0; i < 2; i++) {
-      String name = '接口$i';
-      String Url = cqtsRandomString(0, 10, CQRipeStringType.english);
-      ApiModel apiLogModel = ApiModel(name: name, url: Url, mock: false);
-      apiLogModels.add(apiLogModel);
-      // ApiManager.tryAddApi(Url);
-    }
   }
 
   @override
@@ -47,10 +35,11 @@ class _TSLogPageState extends State<TSLogPage> {
   /// 导航栏
   PreferredSize appBar() {
     return PreferredSize(
-        child: AppBar(
-          title: Text('测试 Test', style: TextStyle(fontSize: 17)),
-        ),
-        preferredSize: Size.fromHeight(44));
+      child: AppBar(
+        title: Text('测试 Test', style: TextStyle(fontSize: 17)),
+      ),
+      preferredSize: Size.fromHeight(44),
+    );
   }
 
   /// 内容视图
@@ -70,34 +59,18 @@ class _TSLogPageState extends State<TSLogPage> {
             selected: logOpenSelected,
             onPressed: () {
               if (logOpenSelected == false) {
-                ///MediaQuery.of(context).size.width  屏幕宽度
-                ///MediaQuery.of(context).size.height 屏幕高度
-                ApplicationDraggableManager.showLogOverlayEntry(
-                  logModels: apiLogModels,
-                  clickLogCellCallback: (section, row, bApiModel) {
-                    print('点击${bApiModel.url}');
-                  },
-                  onPressedClear: () {
-                    print('点击清空数据');
-                    apiLogModels.clear();
-
-                    ApplicationDraggableManager.updateLogOverlayEntry();
-                  },
-                  onPressedClose: () {
-                    ApplicationDraggableManager.dismissLogOverlayEntry(
-                      onlyHideNoSetnull: true,
-                    );
-                    logOpenSelected = !logOpenSelected;
-                    setState(() {});
+                DevLogUtil.showLogView(
+                  onPressedCloseCompleteBlock: () {
+                    if (mounted) {
+                      logOpenSelected = !logOpenSelected;
+                      setState(() {});
+                    }
                   },
                 );
-
                 logOpenSelected = !logOpenSelected;
                 setState(() {});
               } else {
-                ApplicationDraggableManager.dismissLogOverlayEntry(
-                  onlyHideNoSetnull: true,
-                );
+                DevLogUtil.dismissLogView();
                 logOpenSelected = !logOpenSelected;
                 setState(() {});
               }
@@ -114,15 +87,13 @@ class _TSLogPageState extends State<TSLogPage> {
                 bgColorType: CQTSThemeBGType.pink,
                 title: '添加log',
                 onPressed: () {
-                  int i = apiLogModels.length;
-                  String name = '接口$i';
+                  String name = '接口';
                   String Url =
-                      cqtsRandomString(0, 10, CQRipeStringType.english);
+                      cqtsRandomString(100, 600, CQRipeStringType.english);
                   ApiModel apiLogModel =
                       ApiModel(name: name, url: Url, mock: false);
-                  apiLogModels.add(apiLogModel);
-                  print('添加log:$name');
-                  ApplicationDraggableManager.updateLogOverlayEntry();
+                  DevLogUtil.addLogModel(apiLogModel);
+
                   // setState(() {});
                 },
               ),
@@ -131,9 +102,7 @@ class _TSLogPageState extends State<TSLogPage> {
                 title: '清空log',
                 onPressed: () {
                   print('清空log');
-                  apiLogModels.clear();
-
-                  ApplicationDraggableManager.updateLogOverlayEntry();
+                  DevLogUtil.clearLogs();
                   // setState(() {});
                 },
               )

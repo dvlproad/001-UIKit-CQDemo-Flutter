@@ -38,7 +38,7 @@ class CreateSectionTableView2 extends StatefulWidget {
     this.headerInSection,
     this.divider,
     this.controller,
-    this.reverse,
+    this.reverse = false,
   }) : super(key: key);
   @override
   _CreateSectionTableView2State createState() =>

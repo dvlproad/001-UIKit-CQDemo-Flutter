@@ -5,17 +5,17 @@ import 'package:provider/provider.dart';
 import '../section_table_view_method2.dart';
 import '../components/evvironment_header.dart';
 import '../components/environment_network_cell.dart';
-import './apimock_cell.dart';
+import './log_cell.dart';
 
 import '../environment_change_notifiter.dart';
-import './manager/api_data_bean.dart';
-export './manager/api_data_bean.dart';
+import '../apimock/manager/api_data_bean.dart';
+export '../apimock/manager/api_data_bean.dart';
 
 import 'dart:ui';
 
 class LogList extends StatefulWidget {
   final List logModels;
-  final ClickApiMockCellCallback clickLogCellCallback; // apimockCell 的点击
+  final ClickApiLogCellCallback clickLogCellCallback; // apimockCell 的点击
 
   final void Function() onPressedClear; // 点击清空按钮的事件
   final void Function() onPressedClose; // 点击关闭按钮的事件
@@ -157,11 +157,11 @@ class _LogListState extends State<LogList> {
       },
       cellAtIndexPath: (section, row) {
         ApiModel logModel = _logModels[row];
-        return ApiMockTableViewCell(
+        return ApiLogTableViewCell(
           apiModel: logModel,
           section: section,
           row: row,
-          clickApiMockCellCallback: (int section, int row, ApiModel bApiModel) {
+          clickApiLogCellCallback: (int section, int row, ApiModel bApiModel) {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 
