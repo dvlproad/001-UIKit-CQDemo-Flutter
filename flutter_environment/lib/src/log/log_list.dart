@@ -14,6 +14,7 @@ export '../apimock/manager/api_data_bean.dart';
 import 'dart:ui';
 
 class LogList extends StatefulWidget {
+  final Color color;
   final List logModels;
   final ClickApiLogCellCallback clickLogCellCallback; // apimockCell 的点击
 
@@ -22,6 +23,7 @@ class LogList extends StatefulWidget {
 
   LogList({
     Key key,
+    this.color,
     @required this.logModels,
     @required this.clickLogCellCallback,
     @required this.onPressedClear,
@@ -76,6 +78,7 @@ class _LogListState extends State<LogList> {
     print(
         '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
     return Container(
+      color: widget.color,
       child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
         value: _environmentChangeNotifier,
         child: _pageWidget(),
@@ -93,7 +96,6 @@ class _LogListState extends State<LogList> {
       // ),
       width: mediaQuery.size.width,
       height: mediaQuery.size.height - 300,
-      color: Colors.red.withOpacity(0.2),
       child: Column(
         children: <Widget>[
           Row(

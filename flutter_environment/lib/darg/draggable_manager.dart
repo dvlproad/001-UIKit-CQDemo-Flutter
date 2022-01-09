@@ -108,11 +108,19 @@ class ApplicationDraggableManager {
             child: Visibility(
               visible: logVisible,
               // child: child,
-              child: LogList(
-                logModels: logModels,
-                clickLogCellCallback: clickLogCellCallback,
-                onPressedClear: onPressedClear,
-                onPressedClose: onPressedClose,
+              child: Material(
+                // [Flutter Text 文字下有黄色下划线](https://www.jianshu.com/p/1f0a29cddba1)
+                color: Colors.transparent,
+                child: Opacity(
+                  opacity: 0.7,
+                  child: LogList(
+                    color: Colors.white,
+                    logModels: logModels,
+                    clickLogCellCallback: clickLogCellCallback,
+                    onPressedClear: onPressedClear,
+                    onPressedClose: onPressedClose,
+                  ),
+                ),
               ),
             ),
           ),

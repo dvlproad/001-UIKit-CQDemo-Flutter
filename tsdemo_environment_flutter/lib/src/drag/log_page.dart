@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment/src/log/log_list.dart';
 
 class TSLogPage extends StatefulWidget {
   TSLogPage({Key key}) : super(key: key);
@@ -123,6 +124,12 @@ class _TSLogPageState extends State<TSLogPage> {
           padding: EdgeInsets.only(top: 1000, left: 25, right: 25),
           child: Text('我是为了超出视图'),
         ),
+        // LogList(
+        //   logModels: DevLogUtil.logModels,
+        //   clickLogCellCallback: null,
+        //   onPressedClear: null,
+        //   onPressedClose: null,
+        // ),
       ],
     );
   }
