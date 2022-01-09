@@ -86,6 +86,7 @@ class ApplicationDraggableManager {
     @required
         void Function(int section, int row, ApiModel bApiModel)
             clickLogCellCallback, // logCell 的点击
+    @required void Function() onPressedClear, // 点击清空按钮的事件
   }) async {
     OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
     if (logOverlayEntry != null) {
@@ -109,6 +110,7 @@ class ApplicationDraggableManager {
               child: LogList(
                 logModels: logModels,
                 clickLogCellCallback: clickLogCellCallback,
+                onPressedClear: onPressedClear,
               ),
             ),
           ),

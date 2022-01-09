@@ -74,6 +74,12 @@ class _TSLogPageState extends State<TSLogPage> {
                   clickLogCellCallback: (section, row, bApiModel) {
                     print('点击${bApiModel.url}');
                   },
+                  onPressedClear: () {
+                    print('点击清空数据');
+                    apiLogModels.clear();
+
+                    ApplicationDraggableManager.updateLogOverlayEntry();
+                  },
                 );
               } else {
                 ApplicationDraggableManager.dismissLogOverlayEntry(

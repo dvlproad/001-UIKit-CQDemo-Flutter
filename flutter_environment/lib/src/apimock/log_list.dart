@@ -17,10 +17,13 @@ class LogList extends StatefulWidget {
   final List logModels;
   final ClickApiMockCellCallback clickLogCellCallback; // apimockCell 的点击
 
+  final void Function() onPressedClear; // 点击清空按钮的事件
+
   LogList({
     Key key,
     @required this.logModels,
     @required this.clickLogCellCallback,
+    @required this.onPressedClear,
   }) : super(key: key);
 
   @override
@@ -91,6 +94,30 @@ class _LogListState extends State<LogList> {
       color: Colors.red.withOpacity(0.2),
       child: Column(
         children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              TextButton(
+                child: Container(
+                  color: Colors.pink,
+                  width: 100,
+                  height: 44,
+                  child: Center(
+                    child: Text(
+                      '清空',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                onPressed: widget.onPressedClear,
+              ),
+            ],
+          ),
           SizedBox(height: 6),
           Consumer<EnvironmentChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
