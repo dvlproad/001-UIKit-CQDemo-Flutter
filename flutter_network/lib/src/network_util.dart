@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
 
+import 'package:flutter_log/flutter_log.dart';
+
 import './network_client.dart';
-import './log_util.dart';
 import './sp_util.dart';
 import './lang_util.dart';
 
@@ -17,19 +18,29 @@ class ResponseModel {
   String message;
   dynamic result;
 
-  ResponseModel(this.statusCode, this.message, this.result);
+  ResponseModel({this.statusCode, this.message, this.result});
+}
+
+enum RequestMethod {
+  post,
+  get,
 }
 
 class NetworkUtil {
   static void postUrl<T>(
     url, {
-    Map<String, dynamic> formData,
+    Map<String, dynamic> customParams,
     cancelToken,
+    Options options,
     void Function(dynamic resultMap) onSuccess,
     void Function(String failureMessage) onFailure,
   }) {
-    postRequestUrl(url, formData: formData, cancelToken: cancelToken)
-        .then((ResponseModel responseModel) {
+    postRequestUrl(
+      url,
+      customParams: customParams,
+      options: options,
+      cancelToken: cancelToken,
+    ).then((ResponseModel responseModel) {
       int errorCode = responseModel.statusCode;
       if (errorCode == 0) {
         if (onSuccess != null) {
@@ -45,26 +56,72 @@ class NetworkUtil {
 
   static Future<ResponseModel> postRequestUrl(
     url, {
-    Map<String, dynamic> formData,
+    Map<String, dynamic> customParams,
+    Options options,
+    cancelToken,
+  }) async {
+    return _requestUrl(
+      url,
+      requestMethod: RequestMethod.post,
+      customParams: customParams,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  static Future<ResponseModel> getRequestUrl(
+    url, {
+    Map<String, dynamic> customParams,
+    Options options,
+    cancelToken,
+  }) async {
+    return _requestUrl(
+      url,
+      requestMethod: RequestMethod.get,
+      customParams: customParams,
+      options: options,
+      cancelToken: cancelToken,
+    );
+  }
+
+  static Future<ResponseModel> _requestUrl(
+    url, {
+    RequestMethod requestMethod,
+    Map<String, dynamic> customParams,
+    Options options,
     cancelToken,
   }) async {
     if (cancelToken == null) {
       cancelToken = CancelToken();
     }
-    LogUtil.v("请求：" + formData.toString());
+
     try {
-      Response response;
-      if (formData == null) {
-        formData = {};
+      if (customParams == null) {
+        customParams = {};
       }
       String sessionID = await SpUtil().getAccountSessionID();
       if (sessionID != null && sessionID.length > 0) {
-        formData['sessionID'] = sessionID;
+        customParams['sessionID'] = sessionID;
       }
 
       Dio dio = NetworkManager.instance.serviceDio;
-      response = await dio.post(url, data: formData, cancelToken: cancelToken);
-      LogUtil.v("回复：" + response.data.toString());
+
+      Response response;
+      if (requestMethod == RequestMethod.post) {
+        response = await dio.post(
+          url,
+          data: customParams,
+          options: options,
+          cancelToken: cancelToken,
+        );
+      } else {
+        response = await dio.get(
+          url,
+          queryParameters: customParams,
+          options: options,
+          cancelToken: cancelToken,
+        );
+      }
 
       if (response.statusCode == 200) {
         Map<String, dynamic> responseMap;
@@ -79,15 +136,33 @@ class NetworkUtil {
 
         var errorCode = responseMap['code'];
         var msg = responseMap['msg'];
-        Map<String, dynamic> result = responseMap["data"];
-        ResponseModel responseModel = ResponseModel(errorCode, msg, result);
+        dynamic result = responseMap["data"];
+        ResponseModel responseModel = ResponseModel(
+          statusCode: errorCode,
+          message: msg,
+          result: result,
+        );
         return responseModel;
       } else {
-        throw Exception('后端接口出现异常');
+        String errorMessage = '后端接口出现异常';
+        String message = '请求$url的时候，发生网络错误:$errorMessage';
+        ResponseModel responseModel = ResponseModel(
+          statusCode: -500,
+          message: message,
+          result: null,
+        );
+        return responseModel;
       }
     } catch (e) {
-      // AppUtil.makeToast("url:$url \nbody:${e.toString()}");
-      throw Exception('网络错误:======>url:$url \nbody:${e.toString()}');
+      String errorMessage = e.toString();
+      String message = '请求$url的时候，发生网络错误:$errorMessage';
+      LogUtil.v("请求失败的异常：" + message);
+      ResponseModel responseModel = ResponseModel(
+        statusCode: -1,
+        message: message,
+        result: null,
+      );
+      return responseModel;
     }
   }
 

@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../section_table_view_method2.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
+    show CreateSectionTableView2, IndexPath;
+
 import '../components/evvironment_header.dart';
 import '../components/environment_network_cell.dart';
 import './apimock_cell.dart';

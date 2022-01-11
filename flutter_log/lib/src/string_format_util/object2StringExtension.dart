@@ -1,3 +1,15 @@
+/// 自定义类的话，请重写 toString() 方法即可
+
+class LogStringUtil {
+  static String stringFromMap(Map map, {int indentation = 2}) {
+    return map.mapToStructureString();
+  }
+
+  static String stringFromList(List list, {int indentation = 2}) {
+    return list.listToStructureString();
+  }
+}
+
 ///Map拓展，MAp转字符串输出
 extension Map2StringExtension on Map {
   String mapToStructureString({int indentation = 2}) {

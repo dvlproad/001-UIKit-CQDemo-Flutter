@@ -16,6 +16,9 @@ dependencies:
   shared_preferences: any
   ez_localization: any
 
+  flutter_log:
+    path: ../flutter_log/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

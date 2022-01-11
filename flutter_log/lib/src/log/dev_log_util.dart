@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import '../../darg/draggable_manager.dart';
-import '../apimock/manager/api_data_bean.dart';
+import './draggable_manager.dart';
+import './api_data_bean.dart';
 
 class DevLogUtil {
   static List<ApiModel> logModels = [];
 
   static showLogView({
-    @required void Function() onPressedCloseCompleteBlock,
+    void Function() onPressedCloseCompleteBlock,
   }) {
     // MediaQuery.of(context).size.width  屏幕宽度
     // MediaQuery.of(context).size.height 屏幕高度
-    ApplicationDraggableManager.showLogOverlayEntry(
+    ApplicationLogViewManager.showLogOverlayEntry(
       logModels: logModels,
       clickLogCellCallback: (section, row, bApiModel) {
         print('点击${bApiModel.url}');
@@ -19,10 +19,10 @@ class DevLogUtil {
         print('点击清空数据');
         logModels.clear();
 
-        ApplicationDraggableManager.updateLogOverlayEntry();
+        ApplicationLogViewManager.updateLogOverlayEntry();
       },
       onPressedClose: () {
-        ApplicationDraggableManager.dismissLogOverlayEntry(
+        ApplicationLogViewManager.dismissLogOverlayEntry(
           onlyHideNoSetnull: true,
         );
 
@@ -34,19 +34,19 @@ class DevLogUtil {
   }
 
   static dismissLogView() {
-    ApplicationDraggableManager.dismissLogOverlayEntry(
+    ApplicationLogViewManager.dismissLogOverlayEntry(
       onlyHideNoSetnull: true,
     );
   }
 
-  static addLogModel(ApiModel logModel) {
+  static addLogModel({String logTitle, String logText}) {
+    ApiModel logModel = ApiModel(name: logTitle, url: logText, mock: false);
     logModels.add(logModel);
-    print('添加log:${logModel.name}');
-    ApplicationDraggableManager.updateLogOverlayEntry();
+    ApplicationLogViewManager.updateLogOverlayEntry();
   }
 
   static clearLogs() {
     logModels.clear();
-    ApplicationDraggableManager.updateLogOverlayEntry();
+    ApplicationLogViewManager.updateLogOverlayEntry();
   }
 }

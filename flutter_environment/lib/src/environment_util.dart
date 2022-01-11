@@ -106,3 +106,29 @@ class EnvironmentUtil {
     );
   }
 }
+
+// api 模拟
+extension ApiSimulateExtension on String {
+  String addSimulateApiHost(String simulateApiHost) {
+    String path;
+
+    if (simulateApiHost.endsWith('/')) {
+      if (this.startsWith('/')) {
+        path = this.substring(1);
+      } else {
+        path = this;
+      }
+    } else {
+      if (this.startsWith('/')) {
+        path = this;
+      } else {
+        path = '/' + this;
+      }
+    }
+
+    String newApi = simulateApiHost + path;
+
+    //print('mock newApi = ${newApi}');
+    return newApi;
+  }
+}

@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_network/flutter_network.dart';
 
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_log/flutter_log.dart';
 import './environment_datas_util.dart';
 
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
@@ -11,6 +13,11 @@ class Main_Init {
 
     _initEnvironmentManager();
     _initApiMockManager();
+  }
+
+  static initView(GlobalKey globalKey) {
+    ApplicationDraggableManager.globalKey = globalKey;
+    ApplicationLogViewManager.globalKey = globalKey;
   }
 
   // 配置网络

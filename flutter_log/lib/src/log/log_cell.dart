@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../components/environment_base_cell.dart';
-import '../apimock/manager/api_data_bean.dart';
+import './environment_base_cell.dart';
+import './api_data_bean.dart';
 
 typedef ClickApiLogCellCallback = void Function(
   int section,

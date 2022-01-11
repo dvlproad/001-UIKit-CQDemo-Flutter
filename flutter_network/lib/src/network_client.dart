@@ -6,6 +6,8 @@ import './interceptor/interceptor_response.dart';
 import './interceptor/interceptor_error.dart';
 import './interceptor/interceptor_log.dart';
 
+import './network_change_util.dart';
+
 class NetworkManager {
   static const int CONNECT_TIMEOUT = 60000;
   static const int RECEIVE_TIMEOUT = 60000;
@@ -21,6 +23,10 @@ class NetworkManager {
   NetworkManager._internal() {
     print('这个单例里的初始化方法只会执行一次');
 
+    _init();
+  }
+
+  _init() {
     Dio dio = serviceDio;
     if (dio == null) {
       BaseOptions options = BaseOptions(
@@ -49,6 +55,7 @@ class NetworkManager {
     String baseUrl,
     int connectTimeout,
     int receiveTimeout,
+    Map<String, dynamic> headers,
     List<Interceptor> interceptors,
   }) {
     if (NetworkManager.instance._hasStart == true) {
@@ -62,9 +69,18 @@ class NetworkManager {
       baseUrl: baseUrl,
       connectTimeout: connectTimeout,
       receiveTimeout: receiveTimeout,
+      headers: headers,
     );
     if (interceptors != null && interceptors.isNotEmpty) {
       dio.interceptors..addAll(interceptors);
+    } else {
+      List<Interceptor> defaultInterceptors = [
+        RequestInterceptor(),
+        ResponseInterceptor(),
+        ErrorInterceptor(),
+        DioLogInterceptor(),
+      ];
+      dio.interceptors..addAll(defaultInterceptors);
     }
 
     NetworkManager.instance._hasStart = true;
@@ -73,10 +89,24 @@ class NetworkManager {
 
 class NetworkChangeUtil {
   /// 修改 baseUrl
-  static void changeOptions({String baseUrl}) {
+  static void changeOptions({
+    String baseUrl,
+  }) {
     Dio dio = NetworkManager.instance.serviceDio;
     dio.options = dio.options.copyWith(
       baseUrl: baseUrl,
+    );
+  }
+
+  static void changeHeaders({
+    Map<String, dynamic> headers,
+  }) {
+    Dio dio = NetworkManager.instance.serviceDio;
+
+    // Options options = Options(headers: headers);
+    // dio.options = options;
+    dio.options = dio.options.copyWith(
+      headers: headers,
     );
   }
 
@@ -86,7 +116,7 @@ class NetworkChangeUtil {
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.findProxy = (uri) {
-        if (proxyIp != null) {
+        if (IsIPAddress(proxyIp)) {
           return "PROXY $proxyIp";
         } else {
           return 'DIRECT';
@@ -97,5 +127,16 @@ class NetworkChangeUtil {
       //   return true;
       // };
     };
+  }
+
+  static bool IsIPAddress(String ipString) {
+    if (ipString == null) {
+      return false;
+    }
+
+    final reg = RegExp(r'^\d{1,3}[\.]\d{1,3}[\.]\d{1,3}[\.]\d{1,3}');
+
+    bool isMatch = reg.hasMatch(ipString);
+    return isMatch;
   }
 }

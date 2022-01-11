@@ -1,3 +1,5 @@
+import './log/dev_log_util.dart';
+
 class LogUtil {
   static const String _TAG_DEFAULT = "###qianqianqian###";
 
@@ -11,13 +13,15 @@ class LogUtil {
     tag = tag;
   }
 
-  static void e(Object object, {String tag}) {
+  static void e(Object object, {String tag = _TAG_DEFAULT}) {
     _printLog(tag, '  e  ', object);
   }
 
-  static void v(Object object, {String tag}) {
+  static void v(Object object, {String tag = _TAG_DEFAULT}) {
     if (debug) {
       _printLog(tag, '  v  ', object);
+      // print(object);
+      DevLogUtil.addLogModel(logTitle: 'logTitle', logText: object);
     }
   }
 

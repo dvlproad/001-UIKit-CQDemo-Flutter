@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../src/log/log_list.dart';
 
 class ApplicationDraggableManager {
   static GlobalKey<NavigatorState> globalKey;
@@ -52,85 +51,5 @@ class ApplicationDraggableManager {
     ApplicationDraggableManager.overlayEntry = overlayEntry;
     ApplicationDraggableManager.globalKey.currentState.overlay
         .insert(overlayEntry);
-  }
-
-  // 全局log视图
-  static OverlayEntry logOverlayEntry;
-  static bool logVisible = true;
-  // 关闭全局log视图
-  static void dismissLogOverlayEntry({
-    bool onlyHideNoSetnull =
-        false, // true:只隐藏，不set null,下次可继续使用;false,会set null,下次重新创建
-  }) {
-    OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
-    if (onlyHideNoSetnull == true) {
-      logVisible = false;
-      logOverlayEntry.markNeedsBuild(); // 刷新 overlay
-      return;
-    }
-
-    logOverlayEntry?.remove(); // 删除重新绘制
-    ApplicationDraggableManager.logOverlayEntry = null;
-  }
-
-  static void updateLogOverlayEntry() {
-    print('尝试刷新 overlay 的 chid 视图....');
-    logOverlayEntry.markNeedsBuild();
-  }
-
-  // 显示全局log视图
-  static Future showLogOverlayEntry({
-    double left,
-    double top,
-    @required List logModels,
-    @required
-        void Function(int section, int row, ApiModel bApiModel)
-            clickLogCellCallback, // logCell 的点击
-    @required void Function() onPressedClear, // 点击清空按钮的事件
-    @required void Function() onPressedClose, // 点击关闭按钮的事件
-  }) async {
-    OverlayEntry logOverlayEntry = ApplicationDraggableManager.logOverlayEntry;
-    if (logOverlayEntry != null) {
-      logVisible = true;
-      logOverlayEntry.markNeedsBuild();
-      return;
-    }
-    logOverlayEntry?.remove(); // 删除重新绘制
-
-    logOverlayEntry = OverlayEntry(
-      builder: (BuildContext context) {
-        print('正式刷新 overlay 的 chid 视图....');
-
-        return Positioned(
-          bottom: 0,
-          child: GestureDetector(
-            onTap: () async {},
-            child: Visibility(
-              visible: logVisible,
-              // child: child,
-              child: Material(
-                // [Flutter Text 文字下有黄色下划线](https://www.jianshu.com/p/1f0a29cddba1)
-                color: Colors.transparent,
-                child: Opacity(
-                  opacity: 0.7,
-                  child: LogList(
-                    color: Colors.white,
-                    logModels: logModels,
-                    clickLogCellCallback: clickLogCellCallback,
-                    onPressedClear: onPressedClear,
-                    onPressedClose: onPressedClose,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-
-    /// 赋值方便移除
-    ApplicationDraggableManager.logOverlayEntry = logOverlayEntry;
-    ApplicationDraggableManager.globalKey.currentState.overlay
-        .insert(logOverlayEntry);
   }
 }

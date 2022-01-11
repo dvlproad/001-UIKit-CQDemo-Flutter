@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+
+GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
-  ApplicationDraggableManager.globalKey = globalKey;
+  Main_Init.initView(globalKey);
 
   runApp(MyApp());
 }
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
 
       ///注意 一定要navigatorKey 才能在所有界面上显示
-      navigatorKey: ApplicationDraggableManager.globalKey,
+      navigatorKey: globalKey,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -16,6 +16,8 @@ dependencies:
   fluttertoast: any
   flutter_network:
     path: ../flutter_network/
+  flutter_baseui_kit:
+    path: ../flutter_baseui_kit/
 
 
 dev_dependencies:

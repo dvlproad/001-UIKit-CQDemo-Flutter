@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
-import '../string_format_util/object2StringExtension.dart';
-import '../log_util.dart';
+import 'package:flutter_log/flutter_log.dart';
 
 ///日志拦截器
 class DioLogInterceptor extends Interceptor {
@@ -32,9 +31,9 @@ class DioLogInterceptor extends Interceptor {
         requestStr += "- BODY:\n${data.toString()}\n";
       }
     }
-    print(requestStr);
 
-    // LogUtil.v("请求：" + data.toString());
+    // LogUtil.v("请求开始的信息1：" + data.toString());
+    LogUtil.v("请求开始的信息：" + requestStr);
 
     handler.next(options);
   }
@@ -42,12 +41,20 @@ class DioLogInterceptor extends Interceptor {
   ///出错前
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    String errorStr = "\n==================== RESPONSE ====================\n"
-        "- URL:\n${err.requestOptions.baseUrl + err.requestOptions.path}\n"
-        "- METHOD: ${err.requestOptions.method}\n";
+    String errorStr = '''
+\n==================== RESPONSE ====================\n
+    - URL:\n${err.requestOptions.baseUrl + err.requestOptions.path}\n
+    - METHOD: ${err.requestOptions.method}\n
+    ''';
 
-    errorStr +=
-        "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
+    if (err != null &&
+        err.response != null &&
+        err.response.headers != null
+    ) {
+      errorStr +=
+          "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
+    }
+
     if (err.response != null && err.response.data != null) {
       print('╔ ${err.type.toString()}');
       errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
@@ -55,7 +62,8 @@ class DioLogInterceptor extends Interceptor {
       errorStr += "- ERRORTYPE: ${err.type}\n";
       errorStr += "- MSG: ${err.message}\n";
     }
-    print(errorStr);
+
+    LogUtil.v("请求失败的回复：" + errorStr);
 
     handler.next(err);
   }
@@ -63,6 +71,10 @@ class DioLogInterceptor extends Interceptor {
   ///响应前
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (response.headers == null) {
+      print('---- response.headers = null');
+      response.headers = Headers();
+    }
     String responseStr =
         "\n==================== RESPONSE ====================\n"
         "- URL:\n${response.requestOptions.uri}\n";
@@ -75,16 +87,24 @@ class DioLogInterceptor extends Interceptor {
     if (response.data != null) {
       responseStr += "- BODY:\n ${_parseResponse(response)}";
     }
-    printWrapped(responseStr);
+    responseStr = printWrapped(responseStr);
 
-    // LogUtil.v("回复：" + response.data.toString());
+    // LogUtil.v("请求成功的回复1：" + response.data.toString());
+    LogUtil.v("请求成功的回复：" + responseStr);
 
     handler.next(response);
   }
 
-  void printWrapped(String text) {
+  String printWrapped(String text) {
     final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
-    pattern.allMatches(text).forEach((match) => print(match.group(0)));
+
+    String allString = '';
+    pattern.allMatches(text).forEach((match) {
+      String string = match.group(0);
+      allString = allString + '\n' + string;
+    });
+
+    return allString;
   }
 
   String _parseResponse(Response response) {

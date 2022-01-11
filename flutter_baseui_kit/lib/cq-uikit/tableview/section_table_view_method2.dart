@@ -11,6 +11,7 @@
  */
 import 'package:flutter/material.dart';
 import './index_path.dart';
+export './index_path.dart';
 
 typedef int RowCountInSectionCallBack(int section);
 typedef Widget CellAtIndexPathCallBack(int section, int row);

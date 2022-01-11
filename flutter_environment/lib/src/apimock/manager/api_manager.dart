@@ -68,15 +68,22 @@ class ApiManager {
   //   return allowMock;
   // }
 
+  // 添加api (添加的时候为path统一添加上/，比较的时候也统一添加上/后再和村粗的数组比较相等，兼容path有时候添加上/又去掉)
   static void tryAddApi(String url, {String name, bool isGet}) {
+    String addUrl;
+    bool hasHttpPrefix = url.startsWith(RegExp(r'https?:')) ? true : false;
+    if (hasHttpPrefix == false && url.startsWith('/') == false) {
+      addUrl = '/$url';
+    } else {
+      addUrl = '$url';
+    }
+
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
     int index = apiModels.indexWhere((element) {
-      return element.url == url;
+      return element.url == addUrl;
     }); // no found return -1
 
     if (index == -1) {
-      bool mock = url.startsWith(RegExp(r'https?:')) ? true : false;
-
       if (name == null) {
         int count = apiModels.length;
         name = '接口$count';
@@ -86,7 +93,10 @@ class ApiManager {
       } else {
         name = '$name:Post';
       }
-      ApiModel apiModel = ApiModel(name: name, url: url, mock: mock);
+
+      bool mock = false;
+
+      ApiModel apiModel = ApiModel(name: name, url: addUrl, mock: mock);
       apiModels.add(apiModel);
 
       ApiSharedPreferenceUtil().setApiList(apiModels);
@@ -105,22 +115,32 @@ class ApiManager {
     apiModel.mock = !apiModel.mock;
 
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
-    String log = apiModels.toString();
-    print('log...apiModels=${apiModels.length}======$log');
+    //String log = apiModels.toString();
+    //print('log...apiModels=${apiModels.length}======$log');
 
     ApiSharedPreferenceUtil().setApiList(apiModels);
   }
 
   // 是否要再打包后为指定的这个url加上mock（打包前的mock使用url.toSimulateApi();实现）
+  // (添加的时候为path统一添加上/，比较的时候也统一添加上/后再和村粗的数组比较相等，兼容path有时候添加上/又去掉)
   static bool shouldAfterMockApi(String url) {
-    bool hasMock = url.startsWith(RegExp(r'https?:')) ? true : false;
-    if (hasMock) {
+    String checkUrl;
+    bool hasHttpPrefix = url.startsWith(RegExp(r'https?:')) ? true : false;
+    if (hasHttpPrefix == false && url.startsWith('/') == false) {
+      checkUrl = '/$url';
+    } else {
+      checkUrl = '$url';
+    }
+
+    bool unneedMock = hasHttpPrefix ? true : false; // 不需要mock
+    if (unneedMock) {
       return false; // 已经在url里mock的不用再一层mock
     }
 
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
     int index = apiModels.indexWhere((element) {
-      return element.url == url;
+      bool found = element.url == checkUrl;
+      return found;
     }); // no found return -1
 
     if (index == -1) {

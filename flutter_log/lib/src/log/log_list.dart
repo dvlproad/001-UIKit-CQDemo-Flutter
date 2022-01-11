@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
+    show CreateSectionTableView2, IndexPath;
 
-import '../section_table_view_method2.dart';
-import '../components/evvironment_header.dart';
-import '../components/environment_network_cell.dart';
+import './evvironment_header.dart';
 import './log_cell.dart';
 
-import '../environment_change_notifiter.dart';
-import '../apimock/manager/api_data_bean.dart';
-export '../apimock/manager/api_data_bean.dart';
+import './log_change_notifiter.dart';
+import './api_data_bean.dart';
+export './api_data_bean.dart';
 
 import 'dart:ui';
 
@@ -41,8 +41,7 @@ class _LogListState extends State<LogList> {
   bool _reverse = false;
 
   List<ApiModel> _logModels = [];
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
+  ApiLogChangeNotifier _environmentChangeNotifier = ApiLogChangeNotifier();
 
   @override
   void initState() {
@@ -79,7 +78,7 @@ class _LogListState extends State<LogList> {
         '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
     return Container(
       color: widget.color,
-      child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+      child: ChangeNotifierProvider<ApiLogChangeNotifier>.value(
         value: _environmentChangeNotifier,
         child: _pageWidget(),
       ),
@@ -107,7 +106,7 @@ class _LogListState extends State<LogList> {
             ],
           ),
           SizedBox(height: 6),
-          Consumer<EnvironmentChangeNotifier>(
+          Consumer<ApiLogChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
