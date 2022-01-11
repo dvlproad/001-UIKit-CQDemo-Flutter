@@ -18,6 +18,11 @@ class ApplicationDraggableManager {
     @required Widget child,
     bool ifExistUseOld, // 如果存在则使用旧的,默认false
   }) async {
+    if (ApplicationDraggableManager.globalKey == null) {
+      print(
+          'Error:请先在main.dart中设置 ApplicationDraggableManager.globalKey = GlobalKey<NavigatorState>();');
+    }
+
     OverlayEntry overlayEntry = ApplicationDraggableManager.overlayEntry;
     if (ifExistUseOld == true && overlayEntry != null) {
       return;

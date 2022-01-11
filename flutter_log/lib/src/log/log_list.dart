@@ -8,8 +8,8 @@ import './evvironment_header.dart';
 import './log_cell.dart';
 
 import './log_change_notifiter.dart';
-import './api_data_bean.dart';
-export './api_data_bean.dart';
+import './log_data_bean.dart';
+export './log_data_bean.dart';
 
 import 'dart:ui';
 
@@ -40,7 +40,7 @@ class _LogListState extends State<LogList> {
   ScrollController _controller = new ScrollController();
   bool _reverse = false;
 
-  List<ApiModel> _logModels = [];
+  List<LogModel> _logModels = [];
   ApiLogChangeNotifier _environmentChangeNotifier = ApiLogChangeNotifier();
 
   @override
@@ -97,6 +97,7 @@ class _LogListState extends State<LogList> {
       height: mediaQuery.size.height - 300,
       child: Column(
         children: <Widget>[
+          Container(color: Colors.red, height: 2),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -157,12 +158,12 @@ class _LogListState extends State<LogList> {
         return EnvironmentTableViewHeader(title: 'api log');
       },
       cellAtIndexPath: (section, row) {
-        ApiModel logModel = _logModels[row];
+        LogModel logModel = _logModels[row];
         return ApiLogTableViewCell(
           apiModel: logModel,
           section: section,
           row: row,
-          clickApiLogCellCallback: (int section, int row, ApiModel bApiModel) {
+          clickApiLogCellCallback: (int section, int row, LogModel bApiModel) {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 

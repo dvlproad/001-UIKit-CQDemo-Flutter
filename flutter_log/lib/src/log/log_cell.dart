@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './environment_base_cell.dart';
-import './api_data_bean.dart';
+import './log_data_bean.dart';
 
 typedef ClickApiLogCellCallback = void Function(
   int section,
   int row,
-  ApiModel bApiModel,
+  LogModel bApiModel,
 );
 
 class ApiLogTableViewCell extends StatelessWidget {
   @required
-  final ApiModel apiModel; // 环境
+  final LogModel apiModel; // 环境
 
   final int section;
   final int row;

@@ -1,9 +1,9 @@
-class ApiModel {
+class LogModel {
   String name;
   String url;
   bool mock; // 是否mock
 
-  ApiModel({
+  LogModel({
     this.name = '',
     this.url,
     this.mock = false,
@@ -13,8 +13,8 @@ class ApiModel {
   String toString() => '$url $mock';
 
   // json 与 model 转换
-  factory ApiModel.fromJson(Map<String, dynamic> json) {
-    return ApiModel(
+  factory LogModel.fromJson(Map<String, dynamic> json) {
+    return LogModel(
       name: json['name'],
       url: json['url'],
       mock: json['mock'],

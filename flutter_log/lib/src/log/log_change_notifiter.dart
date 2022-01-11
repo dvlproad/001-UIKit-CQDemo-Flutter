@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-import './api_data_bean.dart';
+import './log_data_bean.dart';
 
 class ApiLogChangeNotifier extends ChangeNotifier {
   String _searchText;
-  List<ApiModel> _proxyModels;
+  List<LogModel> _proxyModels;
 
   String get searchText => _searchText;
-  List<ApiModel> get proxyModels => _proxyModels;
+  List<LogModel> get proxyModels => _proxyModels;
 
   searchTextChange(String searchText) {
     _searchText = searchText;
     notifyListeners();
   }
 
-  updateNetworkModels(ApiModel networkModel) {
+  updateNetworkModels(LogModel networkModel) {
     _searchText = searchText;
     notifyListeners();
   }

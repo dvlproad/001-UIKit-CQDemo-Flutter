@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './draggable_manager.dart';
-import './api_data_bean.dart';
+import './popup_logview_manager.dart';
+import './log_data_bean.dart';
 
 class DevLogUtil {
-  static List<ApiModel> logModels = [];
+  static List<LogModel> logModels = [];
 
   static showLogView({
     void Function() onPressedCloseCompleteBlock,
@@ -11,6 +11,7 @@ class DevLogUtil {
     // MediaQuery.of(context).size.width  屏幕宽度
     // MediaQuery.of(context).size.height 屏幕高度
     ApplicationLogViewManager.showLogOverlayEntry(
+      opacity: 1.0,
       logModels: logModels,
       clickLogCellCallback: (section, row, bApiModel) {
         print('点击${bApiModel.url}');
@@ -40,7 +41,7 @@ class DevLogUtil {
   }
 
   static addLogModel({String logTitle, String logText}) {
-    ApiModel logModel = ApiModel(name: logTitle, url: logText, mock: false);
+    LogModel logModel = LogModel(name: logTitle, url: logText, mock: false);
     logModels.add(logModel);
     ApplicationLogViewManager.updateLogOverlayEntry();
   }

@@ -109,24 +109,45 @@ class EnvironmentUtil {
 
 // api 模拟
 extension ApiSimulateExtension on String {
-  String addSimulateApiHost(String simulateApiHost) {
-    String path;
+  String addSimulateApiHost(
+    String simulateApiHost, {
+    List<String> allMockApiHosts, // 允许 mock api 的 host
+  }) {
+    String apiPath; //api path
+    bool hasHttpPrefix = this.startsWith(RegExp(r'https?:'));
+    if (hasHttpPrefix) {
+      bool getShortPathSuccess = false;
+      for (String checkApiHost in allMockApiHosts) {
+        if (this.startsWith(checkApiHost)) {
+          apiPath = this.substring(checkApiHost.length);
+          getShortPathSuccess = true;
+          break;
+        }
+      }
 
-    if (simulateApiHost.endsWith('/')) {
-      if (this.startsWith('/')) {
-        path = this.substring(1);
-      } else {
-        path = this;
+      if (getShortPathSuccess == false) {
+        print('获取api path失败$this, 无法mock, 仍然是请求原地址');
+        return this;
       }
     } else {
-      if (this.startsWith('/')) {
-        path = this;
-      } else {
-        path = '/' + this;
-      }
+      apiPath = this;
     }
 
-    String newApi = simulateApiHost + path;
+    String noslashApiHost; // 没带斜杠的 api host
+    if (simulateApiHost.endsWith('/')) {
+      noslashApiHost = simulateApiHost.substring(0, simulateApiHost.length - 1);
+    } else {
+      noslashApiHost = simulateApiHost;
+    }
+
+    String hasslashPath; // 带有斜杠的api path
+    if (this.startsWith('/')) {
+      hasslashPath = apiPath;
+    } else {
+      hasslashPath = '/' + apiPath;
+    }
+
+    String newApi = noslashApiHost + hasslashPath;
 
     //print('mock newApi = ${newApi}');
     return newApi;

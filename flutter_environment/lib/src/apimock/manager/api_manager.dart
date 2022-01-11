@@ -107,8 +107,8 @@ class ApiManager {
     // print('log...type=${type}');
     // print('log...apiModels=${apiModels.length}======$log1\======$log2');
 
-    String log = apiModels.toString();
-    print('log...apiModels=${apiModels.length}======$log');
+    // String log = apiModels.toString();
+    // print('log...apiModels=${apiModels.length}======$log');
   }
 
   static void changeMockForApiModel(ApiModel apiModel) {
@@ -130,11 +130,6 @@ class ApiManager {
       checkUrl = '/$url';
     } else {
       checkUrl = '$url';
-    }
-
-    bool unneedMock = hasHttpPrefix ? true : false; // 不需要mock
-    if (unneedMock) {
-      return false; // 已经在url里mock的不用再一层mock
     }
 
     List<ApiModel> apiModels = ApiManager.instance.apiModels;
