@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_image_kit/flutter_image_kit.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class TSImageCachePage extends StatefulWidget {
   TSImageCachePage({Key key}) : super(key: key);
