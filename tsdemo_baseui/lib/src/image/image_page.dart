@@ -66,8 +66,10 @@ class _TSImagePageState extends State<TSImagePage> {
   }
 
   Widget themeBGButtonsWidget() {
-    ImageProvider imageProviderAsset =
-        AssetImage(assetName, package: "tsdemo_baseui");
+    ImageProvider imageProviderAsset = AssetImage(
+      assetName,
+      package: "tsdemo_baseui",
+    );
     ImageProvider imageProviderNetwork = NetworkImage(networkUrl);
     return Column(
       children: <Widget>[

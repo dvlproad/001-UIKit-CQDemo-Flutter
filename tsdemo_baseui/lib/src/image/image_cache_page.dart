@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_image_kit/flutter_image_kit.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class TSImageCachePage extends StatefulWidget {
   TSImageCachePage({Key key}) : super(key: key);
@@ -15,13 +16,44 @@ class _TSImageCachePageState extends State<TSImageCachePage> {
   String netImagePrefix =
       'https://bojuehui-1302324914.cos.ap-guangzhou.myqcloud.com/image/tag_bg';
 
-  String networkUrl;
+  List networkImageModels;
+  int showImageIndex;
+
+  List<ImageProvider> imageProviders_network;
 
   @override
   void initState() {
     super.initState();
 
-    networkUrl = '$netImagePrefix/shuma_bg%403xz.png';
+    networkImageModels = [
+      {
+        "title": '节日',
+        "networkUrl": '$netImagePrefix/jieri_bg2%403xz.png',
+      },
+      {
+        "title": '美妆',
+        "networkUrl": '$netImagePrefix/meizhuang_bg%403xz.png',
+      },
+      {
+        "title": '潮玩',
+        "networkUrl": '$netImagePrefix/chaowan_bg%403xz.png',
+      },
+      {
+        "title": '数码',
+        "networkUrl": '$netImagePrefix/shuma_bg%403xz.png',
+      },
+    ];
+    showImageIndex = 0;
+
+    imageProviders_network = [];
+    for (var i = 0; i < networkImageModels.length; i++) {
+      Map networkImageMap = networkImageModels[i];
+
+      String networkUrl = networkImageMap['networkUrl'];
+      ImageProvider imageProvider_network =
+          CachedNetworkImageProvider(networkUrl);
+      imageProviders_network.add(imageProvider_network);
+    }
   }
 
   @override
@@ -71,47 +103,43 @@ class _TSImageCachePageState extends State<TSImageCachePage> {
   }
 
   Widget themeBGButtonsWidget() {
-    ImageProvider imageProviderAsset =
-        AssetImage(assetName, package: "tsdemo_baseui");
-    ImageProvider imageProviderNetwork = NetworkImage(networkUrl);
+    Map networkImageMap = networkImageModels[showImageIndex];
+
+    String networkUrl = networkImageMap['networkUrl'];
+
+    ImageProvider imageProvider_network =
+        imageProviders_network[showImageIndex];
+
     return Column(
       children: <Widget>[
         CQTSThemeBGButton(
           bgColorType: CQTSThemeBGType.pink,
-          title: '切换图片到节日',
+          title: '切换掉图片${networkImageMap['title']}',
           onPressed: () {
-            networkUrl = '$netImagePrefix/jieri_bg2%403xz.png';
+            showImageIndex++;
+            if (showImageIndex >= networkImageModels.length) {
+              showImageIndex = 0;
+            }
             setState(() {});
           },
         ),
-        CQTSThemeBGButton(
-          bgColorType: CQTSThemeBGType.pink,
-          title: '切换图片到美妆',
-          onPressed: () {
-            networkUrl = '$netImagePrefix/meizhuang_bg%403xz.png';
-            setState(() {});
-          },
-        ),
-        CQTSThemeBGButton(
-          bgColorType: CQTSThemeBGType.pink,
-          title: '切换图片到潮玩',
-          onPressed: () {
-            networkUrl = '$netImagePrefix/chaowan_bg%403xz.png';
-            setState(() {});
-          },
-        ),
-        CQTSThemeBGButton(
-          bgColorType: CQTSThemeBGType.pink,
-          title: '切换图片到数码',
-          onPressed: () {
-            networkUrl = '$netImagePrefix/shuma_bg%403xz.png';
-            setState(() {});
-          },
-        ),
-        TolerantNetworkImage(
-          imageUrl: networkUrl,
-          width: 100,
-          height: 300,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TolerantNetworkImage(
+              imageUrl: networkUrl,
+              width: 100,
+              height: 300,
+            ),
+            Container(width: 10),
+            Image(
+              image: imageProvider_network,
+              width: 100,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+          ],
         ),
       ],
     );
