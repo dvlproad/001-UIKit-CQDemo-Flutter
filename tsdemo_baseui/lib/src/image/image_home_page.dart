@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemo_baseui/src/baseui_routes.dart';
+import './image_cache_page.dart';
 
 class TSImageHomePage extends CJTSBasePage {
   TSImageHomePage({Key key}) : super(key: key);
@@ -36,6 +37,20 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSImageHomePage> {
             'title': "Image(转换)",
             'nextPageName': BaseUIKitRouters.imageConvertPage,
             // 'actionBlock': () {}
+          },
+          {
+            'title': "Image(缓存)",
+            // 'nextPageName': BaseUIKitRouters.imageConvertPage,
+            'actionBlock': () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return TSImageCachePage();
+                  },
+                ),
+              );
+            }
           },
         ]
       },
