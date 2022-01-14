@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemodemo_flutter/modules/report/report_upload_page/report_upload_model.dart';
 import 'report_upload_description_tableviewcell.dart';
 
@@ -49,8 +49,12 @@ class _ReportDetailUploadPageState extends State<ReportDetailUploadPage> {
             left: 20,
             right: 20,
             bottom: 20,
-            child: CQPinkThemeBGButton(
-                title: "提交", enable: true, onPressed: _uploadReport),
+            child: CQTSThemeBGButton(
+              bgColorType: CQTSThemeBGType.pink,
+              title: "提交",
+              enable: true,
+              onPressed: _uploadReport,
+            ),
           )
         ],
       )),

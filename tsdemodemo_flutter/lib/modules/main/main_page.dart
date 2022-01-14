@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/cq-uikit/button/textbutton.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
@@ -64,7 +64,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入Demo主页的按钮
   Widget demoHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "Demo",
       onPressed: () {
         Navigator.pushNamed(context, DemoRouters.demoHomePage);
@@ -74,7 +75,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 显示 Log 窗口的按钮
   Widget showLogButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "LogWindow",
       onPressed: () {
         // showLogWindow();
@@ -84,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入 DevTool 主页的按钮
   Widget devtoolHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "DevTool(调试工具)",
       onPressed: () {
         Navigator.pushNamed(context, DevToolRouters.devtoolHomePage);
@@ -94,7 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入BaseUI测试主页的按钮
   Widget baseuiHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "BaseUI",
       onPressed: () {
         Navigator.pushNamed(context, BaseUIKitRouters.uikitHomePage);
@@ -104,7 +108,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入架构测试主页的按钮
   Widget overlayHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "Overlay",
       onPressed: () {
         Navigator.pushNamed(context, OverlayAllRouters.overlayMainPage);
@@ -114,7 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入举报模块测试主页的按钮
   Widget moduleHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "功能模块(举报+排行榜+搜索+引导蒙层)",
       onPressed: () {
         Navigator.pushNamed(context, Routers.moduleHomePage);
@@ -124,7 +130,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入工具测试主页的按钮
   Widget utilHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "Util",
       onPressed: () {
         Navigator.pushNamed(context, UtilRouters.utilHomePage);
@@ -134,7 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入架构测试主页的按钮
   Widget architectureHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "架构、设计模式",
       onPressed: () {
         Navigator.pushNamed(context, ArcRouters.architectureHomePage);
@@ -144,7 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入手势测试主页的按钮
   Widget gestureHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "手势 Gesture2",
       onPressed: () {
         Navigator.pushNamed(context, GestureRouters.gestureHomePage);
@@ -154,7 +163,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入图片浏览测试主页的按钮
   Widget imagesbrowserHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "图片浏览 ImagesBrowser",
       onPressed: () {
         Navigator.pushNamed(
@@ -165,7 +175,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // 进入相册测试主页的按钮
   Widget photoAlbumHomeButton() {
-    return CQPinkThemeBGButton(
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
       title: "相册 photoAlbum",
       onPressed: () {
         Navigator.pushNamed(context, PhotoAlbumRouters.photoAlbumHomePage);
