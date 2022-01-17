@@ -18,6 +18,8 @@ class LogList extends StatefulWidget {
   final List logModels;
   final ClickApiLogCellCallback clickLogCellCallback; // apimockCell 的点击
 
+  final void Function(List<LogModel> bLogModels)
+      onPressedCopyAll; // 点击复制所有按钮的事件
   final void Function() onPressedClear; // 点击清空按钮的事件
   final void Function() onPressedClose; // 点击关闭按钮的事件
 
@@ -26,6 +28,7 @@ class LogList extends StatefulWidget {
     this.color,
     @required this.logModels,
     @required this.clickLogCellCallback,
+    @required this.onPressedCopyAll,
     @required this.onPressedClear,
     @required this.onPressedClose,
   }) : super(key: key);
@@ -74,8 +77,8 @@ class _LogListState extends State<LogList> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
+    // print(
+    //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
     return Container(
       color: widget.color,
       child: ChangeNotifierProvider<ApiLogChangeNotifier>.value(
@@ -99,9 +102,32 @@ class _LogListState extends State<LogList> {
         children: <Widget>[
           Container(color: Colors.red, height: 2),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                '日志系统(单击可复制)',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              _buildButton(
+                '复制所有',
+                onPressed: () {
+                  if (widget.onPressedCopyAll != null) {
+                    widget.onPressedCopyAll(_logModels);
+                  }
+                },
+              ),
               _buildButton('清空', onPressed: widget.onPressedClear),
               _buildButton('关闭', onPressed: widget.onPressedClose),
             ],
@@ -123,8 +149,8 @@ class _LogListState extends State<LogList> {
     return TextButton(
       child: Container(
         color: Colors.pink,
-        width: 100,
-        height: 44,
+        width: 80,
+        height: 30,
         child: Center(
           child: Text(
             text,

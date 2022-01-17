@@ -20,12 +20,16 @@ class LogUtil {
   static void v(Object object, {String tag = _TAG_DEFAULT}) {
     if (debug) {
       _printLog(tag, '  v  ', object);
-      // print(object);
-      DevLogUtil.addLogModel(logTitle: 'logTitle', logText: object);
+      DevLogUtil.addLogModel(logTitle: '', logText: object);
     }
   }
 
   static void _printLog(String tag, String stag, Object object) {
+    if (object is String) {
+      print(object);
+      return;
+    }
+
     StringBuffer sb = StringBuffer();
     sb.write((tag == null || tag.isEmpty) ? tagDefault : tag);
     sb.write(stag);

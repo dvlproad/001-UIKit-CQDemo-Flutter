@@ -36,9 +36,9 @@ class ApplicationLogViewManager {
     double top,
     double opacity = 0.7, // 视图的透明不
     @required List logModels,
-    @required
-        void Function(int section, int row, LogModel bApiModel)
-            clickLogCellCallback, // logCell 的点击
+    void Function(int section, int row, LogModel bApiModel)
+        clickLogCellCallback, // logCell 的点击
+    void Function(List<LogModel> bLogModels) onPressedCopyAll, // 点击复制所有按钮的事件
     @required void Function() onPressedClear, // 点击清空按钮的事件
     @required void Function() onPressedClose, // 点击关闭按钮的事件
   }) async {
@@ -77,6 +77,7 @@ class ApplicationLogViewManager {
                     clickLogCellCallback: clickLogCellCallback,
                     onPressedClear: onPressedClear,
                     onPressedClose: onPressedClose,
+                    onPressedCopyAll: onPressedCopyAll,
                   ),
                 ),
               ),
