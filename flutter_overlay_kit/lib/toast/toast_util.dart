@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastUtil {
-  static showMessage(String message) {
+  static showMessage(
+    String message, {
+    BuildContext context,
+  }) {
     if (message != null && message is String && message.isNotEmpty) {
       print(message);
       Fluttertoast.showToast(
@@ -15,6 +18,11 @@ class ToastUtil {
         fontSize: 16.0,
       );
     }
+  }
+
+  // 此方法为为了替换项目中的 Toast.show 方法，临时增加了一个无用变量(此方法最后要删掉)
+  static showMsg(String message, BuildContext context, {int duration = 1}) {
+    showMessage(message, context: context);
   }
 
   // 需要产品补充完善需求
@@ -35,27 +43,3 @@ class ToastUtil {
     showMessage(lastMessage);
   }
 }
-
-
-
-/*
-// toast 单例形式的弹出方法
-import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-
-class ToastUtil {
-  static showMessage(String message) {
-    // EasyLoading.show(status: message);
-    EasyLoading.show(
-      indicator: Container(
-        color: Colors.red,
-        // width: 250,
-        // height: 200,
-        child: Text(
-          message,
-        ),
-      ),
-    );
-  }
-}
-*/
