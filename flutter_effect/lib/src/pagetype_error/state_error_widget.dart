@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了引入 ThemeBorderButton
 import '../pagetype_nodata/empty_imageAboveText_widget.dart';
-import './completetextbutton.dart';
 import '../appbar/appbar.dart';
 
 class StateErrorWidget extends StatefulWidget {
@@ -65,9 +65,13 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
       ),
       mainTitle: '咦，网络开小差啦！',
       subTitle: '点击下方按钮帮你叫醒它！',
-      buttonWidget: CQPinkThemeBorderButton(
+      buttonWidget: ThemeBorderButton(
+        width: 110, // 不设置会根据内容自适应
+        height: 35, // 不设置会根据内容自适应
+        borderColorType: ThemeBGType.pink,
         title: '刷新',
-        enable: true,
+        titleStyle: ButtonBoldTextStyle(fontSize: 13.0),
+        cornerRadius: 17.5,
         onPressed: widget.errorRetry,
       ),
     );

@@ -5,13 +5,45 @@ import './appbar_component.dart';
 export './appbar_component.dart';
 import '../../flutter_effect_adapt.dart';
 
+// 左侧(返回)按钮视图的类型
+enum NavBarBackType {
+  none, // 不显示
+  defalut, // 默认(黑色)
+  white, // 白色
+}
+
+// 一个可以快速设置 导航栏标题 和 导航栏返回按钮 的导航栏视图
+class QuickAppBar extends CommonAppBar {
+  QuickAppBar(
+    BuildContext context, {
+    Key key,
+    Color backgroundColor, // 导航栏背景色
+    String title, // 中间导航栏标题文本
+    NavBarBackType backType, // 左侧(返回)按钮视图的类型
+    List<Widget> actions, // 右侧操作按钮视图
+  }) : super(
+          key: key,
+          backgroundColor: backgroundColor,
+          title: AppBarTitleWidget(text: title),
+          leading: AppBarBackWidget(
+            onPressed: () {
+              FocusScope.of(context).requestFocus(FocusNode()); // 默认返回时候,关闭键盘
+              Navigator.pop(context);
+            },
+          ),
+          automaticallyImplyLeading: backType != NavBarBackType.none,
+          actions: actions,
+        );
+}
+
+// 一个可 任意设置 的导航栏视图
 class CommonAppBar extends AppBar {
   final Color backgroundColor;
 
-  final Widget title;
+  final Widget title; // 中间标题视图
 
-  final Widget leading;
-  final bool automaticallyImplyLeading;
+  final Widget leading; // 左侧(返回)按钮视图
+  final bool automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图
   // final ImageProvider navbackImage;
   // final String navbackTitle;
   // // navbackImage: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
@@ -19,14 +51,22 @@ class CommonAppBar extends AppBar {
   // final VoidCallback
   //     onTapNavback; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
 
-  final List<Widget> actions;
+  final List<Widget> actions; // 右侧操作按钮视图
 
   CommonAppBar({
     Key key,
     this.backgroundColor,
-    this.title,
-    this.leading,
-    this.automaticallyImplyLeading = true,
+    this.title, // 中间标题视图
+    // AppBarTitleWidget(text: title)
+
+    this.leading, // 左侧(返回)按钮视图
+    // AppBarBackWidget(
+    //   onPressed: () {
+    //     Navigator.pop(context);
+    //   },
+    // )
+
+    this.automaticallyImplyLeading = true, // 是否显示左侧(返回)按钮视图
     this.actions,
   }) : super(key: key);
 
@@ -94,7 +134,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
   // 使用系统的布局方式
   PreferredSizeWidget appBar() {
     return AppBar(
-      backgroundColor: widget.backgroundColor, // 导航栏背景颜色
+      backgroundColor: widget.backgroundColor ?? Colors.white, // 导航栏背景颜色
       elevation: 0, //隐藏底部阴影分割线
       centerTitle: true, // 标题统一居中(ios下默认居中对对齐,安卓下默认左对齐)
       // titleSpacing: 88, // 距离屏幕两边的距离默认16，当我们设置搜索的时候感觉两边距离太大太小可以调
