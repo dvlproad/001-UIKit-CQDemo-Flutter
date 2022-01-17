@@ -19,3 +19,9 @@ class AdaptCJHelper {
     return number * _ratio;
   }
 }
+
+extension CJSizeExtension on num {
+  double get w_cj => AdaptCJHelper.setWidth(this);
+  double get h_cj => AdaptCJHelper.setWidth(this);
+}
+
