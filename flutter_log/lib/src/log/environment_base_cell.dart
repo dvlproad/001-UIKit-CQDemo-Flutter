@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import './brn_expandable_text.dart';
 
 typedef ClickEnvBaseCellCallback = void Function(
   int section,
@@ -106,14 +107,26 @@ class EnvBaseTableViewCell extends StatelessWidget {
         Widget subTextWidget = Container(
           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           color: Colors.transparent,
-          child: Text(
-            subTitle ?? '',
-            textAlign: TextAlign.left,
-            // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16.0,
-            ),
+          // child: Text(
+          //   subTitle ?? '',
+          //   textAlign: TextAlign.left,
+          //   // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
+          //   style: TextStyle(
+          //     color: Colors.black,
+          //     fontSize: 16.0,
+          //   ),
+          // ),
+          child: BrnExpandableText(
+            //当文案过长时，可以设置展开和收起
+            text: subTitle ?? '',
+            maxLines: 6,
+            onExpanded: (bool isExpanded) {
+              if (isExpanded) {
+                //debugPrint('已经展开');
+              } else {
+                //debugPrint('已经收起');
+              }
+            },
           ),
         );
         columnWidgets.add(subTextWidget);
