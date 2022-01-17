@@ -4,6 +4,10 @@ import 'package:dio/adapter.dart';
 class DioChangeUtil {
   /// 修改 baseUrl
   static void changeOptions(Dio dio, {String baseUrl}) {
+    if (baseUrl.endsWith('/') == false) {
+      baseUrl = '$baseUrl/';
+    }
+
     dio.options = dio.options.copyWith(
       baseUrl: baseUrl,
     );

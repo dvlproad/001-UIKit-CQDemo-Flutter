@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 
 import 'package:flutter_log/flutter_log.dart';
+import './interceptor/appendPathExtension.dart';
 
 import './network_client.dart';
 import './sp_util.dart';
@@ -55,7 +56,7 @@ class NetworkUtil {
   }
 
   static Future<ResponseModel> postRequestUrl(
-    url, {
+    String url, {
     Map<String, dynamic> customParams,
     Options options,
     cancelToken,
@@ -85,7 +86,7 @@ class NetworkUtil {
   }
 
   static Future<ResponseModel> _requestUrl(
-    url, {
+    String url, {
     RequestMethod requestMethod,
     Map<String, dynamic> customParams,
     Options options,
@@ -124,14 +125,33 @@ class NetworkUtil {
       }
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> responseMap;
+        dynamic responseObject;
         if (response.data is String) {
           // 后台把data按字符串返回的时候
-          responseMap = convert.jsonDecode(response.data);
+          responseObject = convert.jsonDecode(response.data);
         } else {
           //String dataString = response.data.toString();
           String dataJsonString = convert.jsonEncode(response.data);
-          responseMap = convert.jsonDecode(dataJsonString);
+          responseObject = convert.jsonDecode(dataJsonString);
+        }
+
+        Map<String, dynamic> responseMap;
+        if (responseObject is Map) {
+          //print('responseObject.keys=${responseObject.keys}');
+          if (responseObject.keys.contains('code') == false) {
+            // 不是项目结构
+            responseMap = Map();
+            responseMap['code'] = 0;
+            responseMap['msg'] = '请求成功';
+            responseMap["data"] = responseObject;
+          } else {
+            responseMap = responseObject;
+          }
+        } else {
+          responseMap = Map();
+          responseMap['code'] = 0;
+          responseMap['msg'] = '请求成功';
+          responseMap["data"] = responseObject;
         }
 
         var errorCode = responseMap['code'];
@@ -155,7 +175,21 @@ class NetworkUtil {
       }
     } catch (e) {
       String errorMessage = e.toString();
-      String message = '请求$url的时候，发生网络错误:$errorMessage';
+
+      String fullUrl;
+      if (url.startsWith(RegExp(r'https?:'))) {
+        fullUrl = url;
+      } else {
+        if (e is DioError) {
+          DioError err = e;
+          fullUrl = err.requestOptions.baseUrl
+              .appendPathString(err.requestOptions.path);
+        } else {
+          fullUrl = url;
+        }
+      }
+
+      String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
       LogUtil.v("请求失败的异常：" + message);
       ResponseModel responseModel = ResponseModel(
         statusCode: -1,

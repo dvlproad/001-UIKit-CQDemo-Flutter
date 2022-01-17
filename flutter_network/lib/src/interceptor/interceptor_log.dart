@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_log/flutter_log.dart';
+import './appendPathExtension.dart';
 
 ///日志拦截器
 class DioLogInterceptor extends Interceptor {
@@ -10,7 +11,7 @@ class DioLogInterceptor extends Interceptor {
     if (options.path.startsWith(RegExp(r'https?:'))) {
       url = options.path;
     } else {
-      url = options.baseUrl + options.path;
+      url = options.baseUrl.appendPathString(options.path);
     }
     String requestStr = "\n==================== REQUEST ====================\n"
         "- URL:\n${url}\n"
@@ -41,16 +42,16 @@ class DioLogInterceptor extends Interceptor {
   ///出错前
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
+    String url =
+        err.requestOptions.baseUrl.appendPathString(err.requestOptions.path);
+
     String errorStr = '''
 \n==================== RESPONSE ====================\n
-    - URL:\n${err.requestOptions.baseUrl + err.requestOptions.path}\n
+    - URL:\n${url}\n
     - METHOD: ${err.requestOptions.method}\n
     ''';
 
-    if (err != null &&
-        err.response != null &&
-        err.response.headers != null
-    ) {
+    if (err != null && err.response != null && err.response.headers != null) {
       errorStr +=
           "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
     }
@@ -75,9 +76,12 @@ class DioLogInterceptor extends Interceptor {
       print('---- response.headers = null');
       response.headers = Headers();
     }
+
+    Uri uri = response.requestOptions.uri;
+
     String responseStr =
         "\n==================== RESPONSE ====================\n"
-        "- URL:\n${response.requestOptions.uri}\n";
+        "- URL:\n${uri}\n";
     responseStr += "- HEADER:\n{";
     response.headers.forEach(
         (key, list) => responseStr += "\n  " + "\"$key\" : \"$list\",");
