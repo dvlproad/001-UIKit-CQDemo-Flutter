@@ -13,7 +13,7 @@ dependencies:
 
   webview_flutter: any
   flutter_webview_plugin: any
-  flutter_baseui_kit:
+  flutter_baseui_kit:       # 为了引入 ThemeBorderButton
     path: ../flutter_baseui_kit/
 
 
