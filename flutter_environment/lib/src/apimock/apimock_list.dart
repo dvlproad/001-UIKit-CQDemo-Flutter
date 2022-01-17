@@ -6,10 +6,9 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
     show CreateSectionTableView2, IndexPath;
 
 import '../components/evvironment_header.dart';
-import '../components/environment_network_cell.dart';
 import './apimock_cell.dart';
 
-import '../environment_change_notifiter.dart';
+import './manager/apimock_change_notifiter.dart';
 import './manager/api_data_bean.dart';
 
 class TSApiList extends StatefulWidget {
@@ -35,8 +34,7 @@ class TSApiList extends StatefulWidget {
 class _TSApiListState extends State<TSApiList> {
   List<ApiModel> _apiMockModels_normal = [];
   List<ApiModel> _apiMockModels_selected = [];
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
+  ApiMockChangeNotifier _apimockChangeNotifier = ApiMockChangeNotifier();
 
   @override
   void initState() {
@@ -56,8 +54,8 @@ class _TSApiListState extends State<TSApiList> {
     }
 
     return Container(
-      child: ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
-        value: _environmentChangeNotifier,
+      child: ChangeNotifierProvider<ApiMockChangeNotifier>.value(
+        value: _apimockChangeNotifier,
         child: _pageWidget(),
       ),
     );
@@ -73,8 +71,8 @@ class _TSApiListState extends State<TSApiList> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
-          Consumer<EnvironmentChangeNotifier>(
-            builder: (context, environmentChangeNotifier, child) {
+          Consumer<ApiMockChangeNotifier>(
+            builder: (context, apimockChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
               );

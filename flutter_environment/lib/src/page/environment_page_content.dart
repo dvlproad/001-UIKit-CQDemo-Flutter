@@ -11,6 +11,7 @@ import '../environment_list.dart';
 
 import 'package:provider/provider.dart';
 import '../environment_change_notifiter.dart';
+export '../environment_change_notifiter.dart';
 
 class EnvironmentPageContent extends StatefulWidget {
   final Function() onPressTestApiCallback;

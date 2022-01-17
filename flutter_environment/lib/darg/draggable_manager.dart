@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ApplicationDraggableManager {
   static GlobalKey<NavigatorState> globalKey;
   static OverlayEntry overlayEntry;
+  static bool overlayEntryIsShow = false; // overlayEntry 是否在显示中
 
   // 关闭悬浮按钮
   static Future removeOverlayEntry() {
@@ -10,6 +11,46 @@ class ApplicationDraggableManager {
     overlayEntry?.remove(); // 删除重新绘制
 
     ApplicationDraggableManager.overlayEntry = null;
+    ApplicationDraggableManager.overlayEntryIsShow = false;
+  }
+
+  // 弹出只是一个悬浮按钮的视图
+  static Future showEasyOverlayEntry({
+    double left,
+    double top,
+    @required void Function() onTap, // 点击事件
+    void Function() onLongPress, // 长按事件
+  }) async {
+    Widget overlayChildWidget = ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(22)),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: GestureDetector(
+        child: Container(
+          // color: Colors.red,
+          decoration: const BoxDecoration(
+            color: Colors.red,
+            image: DecorationImage(
+              image: AssetImage(
+                'assets/icon_dev.png',
+                package: 'flutter_environment',
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          width: 44,
+          height: 44,
+        ),
+        onTap: onTap,
+        onLongPress: onLongPress,
+      ),
+    );
+
+    ApplicationDraggableManager.addOverlayEntry(
+      left: left,
+      top: top,
+      child: overlayChildWidget,
+      ifExistUseOld: true,
+    );
   }
 
   static Future addOverlayEntry({
@@ -56,5 +97,6 @@ class ApplicationDraggableManager {
     ApplicationDraggableManager.overlayEntry = overlayEntry;
     ApplicationDraggableManager.globalKey.currentState.overlay
         .insert(overlayEntry);
+    ApplicationDraggableManager.overlayEntryIsShow = true;
   }
 }

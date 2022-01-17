@@ -145,4 +145,17 @@ class ApiManager {
     ApiModel apiModel = apiModels[index];
     return apiModel.mock;
   }
+
+  // 获取mock的api数量
+  static int mockCount() {
+    int mockCount = 0;
+
+    List<ApiModel> apiModels = ApiManager().apiModels;
+    for (ApiModel apiModel in apiModels) {
+      if (apiModel.mock) {
+        mockCount++;
+      }
+    }
+    return mockCount;
+  }
 }

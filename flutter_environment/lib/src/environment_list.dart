@@ -122,7 +122,7 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
     //     Provider.of<EnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
     EnvironmentChangeNotifier notifier =
         _environmentChangeNotifier; // 在本组件中，使用此取法
-    print('searchText = ${notifier.searchText}');
+    print('envName = ${notifier.networkModel?.name}');
 
     int sectionCount = 2;
 
