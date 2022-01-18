@@ -10,57 +10,54 @@ class LocalStorage {
     prefs = await SharedPreferences.getInstance();
   }
 
-  static Future<bool> saveCustom(String key, value) async {
-    if (prefs == null) {
-      await LocalStorage.init(); // await 同步
-    }
-
-    if (value is List) {
-      List<String> strings = [];
-      for (var item in value) {
-        Map map = item.toJson();
-        String mapString = json.encode(map);
-        strings.add(mapString);
-      }
-      prefs.setStringList(key, strings);
-    } else {
-      Map map = value.toJson();
-      String mapString = json.encode(map);
-
-      return prefs.setString(key, mapString);
-    }
+  /*
+  // 工厂模式
+  factory LocalStorage() => _getInstance();
+  static LocalStorage get instance => _getInstance();
+  static LocalStorage _instance;
+  LocalStorage._internal() {
+    // 初始化
+    init();
   }
 
-  static getCustomBean<T>(String key, {T Function(Map bMap) fromJson}) {
-    String mapString = prefs.getString(key);
-    if (mapString == null) {
-      return null;
-    }
-
-    Map map = json.decode(mapString);
-    T customBean = fromJson(map);
-
-    return customBean;
+  init() {
+    _getCache();
   }
 
-  static getCustomBeans<T>(String key, {T Function(Map bMap) fromJson}) {
-    List mapStrings = prefs.getStringList(key);
-    if (mapStrings == null) {
-      return null;
+  static SharedPreferences _sharePrefs;
+  static SharedPreferences get prefs async {
+    if (_sharePrefs == null) {
+      _sharePrefs = await SharedPreferences.getInstance();
     }
+    return _sharePrefs;
+  }
 
-    List<T> customBeans = [];
-    for (String mapString in mapStrings) {
-      Map map = json.decode(mapString);
-      T customBean = fromJson(map);
-      customBeans.add(customBean);
+  // static SharedPreferences prefs;
+  void _getCache() async {
+    // prefs = await SharedPreferences.getInstance();
+  }
+
+  static LocalStorage _getInstance() {
+    if (_instance == null) {
+      _instance = new LocalStorage._internal();
     }
-    return customBeans;
+    return _instance;
+  }
+  */
+
+  // 清空所有 key
+  static Future<bool> cleanAll() async {
+    return prefs.clear();
+  }
+
+  static Future<bool> remove(String key) async {
+    return prefs.remove(key);
   }
 
   static Future<bool> save(String key, value) async {
     if (prefs == null) {
-      await LocalStorage.init(); // await 同步
+      print('Error:请先执行await LocalStorage.init();');
+      return null;
     }
 
     if (value is String) {
@@ -79,19 +76,12 @@ class LocalStorage {
     }
   }
 
-  static Future<bool> cleanAll() async {
-    return prefs.clear();
-  }
-
-  static Future<bool> signOut() async {
-    return await prefs.remove("tokenkey");
-  }
-
-  static Future<bool> remove(String key) async {
-    return prefs.remove(key);
-  }
-
   static get<T>(String key) {
+    if (prefs == null) {
+      print('Error:请先执行await LocalStorage.init();');
+      return;
+    }
+
     if (T is String) {
       return prefs.getString(key) as T;
     } else if (T is int) {
@@ -104,5 +94,89 @@ class LocalStorage {
       return prefs.getStringList(key) as T;
     }
     return prefs.get(key);
+  }
+
+  // 保存自定义类
+  static Future<bool> saveCustomBean<T>(
+    String key,
+    value, {
+    Map Function(dynamic bItem) valueToJson,
+  }) async {
+    return _saveCustom(key, value, itemToJson: valueToJson);
+  }
+
+  static Future<bool> saveCustomBeans(
+    String key,
+    value, {
+    Map Function(dynamic bItem) itemToJson,
+  }) async {
+    return _saveCustom(key, value, itemToJson: itemToJson);
+  }
+
+  static Future<bool> _saveCustom(
+    String key,
+    value, {
+    Map Function(dynamic bItem) itemToJson,
+  }) async {
+    if (prefs == null) {
+      print('Error:请先执行await LocalStorage.init();');
+      return null;
+    }
+
+    if (value is List) {
+      List<String> strings = [];
+      for (var item in value) {
+        Map map = itemToJson(item);
+        String mapString = json.encode(map);
+        strings.add(mapString);
+      }
+      return prefs.setStringList(key, strings);
+    } else {
+      Map map = itemToJson(value);
+      String mapString = json.encode(map);
+
+      return prefs.setString(key, mapString);
+    }
+  }
+
+  // 获取自定义类
+  static getCustomBean<T>(
+    String key, {
+    T Function(Map bMap) fromJson,
+  }) {
+    if (prefs == null) {
+      print('Error:请先执行await LocalStorage.init();');
+      return;
+    }
+
+    String mapString = prefs.getString(key);
+    if (mapString == null) {
+      return null;
+    }
+
+    Map map = json.decode(mapString);
+    T customBean = fromJson(map);
+
+    return customBean;
+  }
+
+  static getCustomBeans<T>(String key, {T Function(Map bMap) fromJson}) {
+    if (prefs == null) {
+      print('Error:请先执行await LocalStorage.init();');
+      return;
+    }
+
+    List mapStrings = prefs.getStringList(key);
+    if (mapStrings == null) {
+      return null;
+    }
+
+    List<T> customBeans = [];
+    for (String mapString in mapStrings) {
+      Map map = json.decode(mapString);
+      T customBean = fromJson(map);
+      customBeans.add(customBean);
+    }
+    return customBeans;
   }
 }

@@ -13,6 +13,8 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
   @override
   void initState() {
     super.initState();
+
+    LocalStorage.init();
   }
 
   @override
@@ -84,7 +86,7 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                   proxyIp: '192.168.1.1',
                   name: '代理',
                 );
-                LocalStorage.saveCustom('test_custom', customBean);
+                LocalStorage.saveCustomBean('test_custom', customBean);
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取自定义类 Custom',
@@ -112,7 +114,7 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                   customBeans.add(customBean);
                 }
 
-                LocalStorage.saveCustom('test_customBeans', customBeans);
+                LocalStorage.saveCustomBeans('test_customBeans', customBeans);
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取自定义类 CustomBeans',
