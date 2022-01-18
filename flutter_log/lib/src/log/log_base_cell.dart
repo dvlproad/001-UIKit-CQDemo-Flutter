@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import './brn_expandable_text.dart';
+import './expandable_text.dart';
 
 typedef ClickEnvBaseCellCallback = void Function(
   int section,
@@ -10,7 +10,9 @@ typedef ClickEnvBaseCellCallback = void Function(
   bool check,
 );
 
-class EnvBaseTableViewCell extends StatelessWidget {
+class LogBaseTableViewCell extends StatelessWidget {
+  final int maxLines;
+
   final String mainTitle;
   final List<String> subTitles;
   final bool check;
@@ -19,8 +21,9 @@ class EnvBaseTableViewCell extends StatelessWidget {
   final int row;
   final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 网络 networkCell 的点击
 
-  EnvBaseTableViewCell({
+  LogBaseTableViewCell({
     Key key,
+    this.maxLines = 20,
     @required this.mainTitle,
     @required this.subTitles,
     this.check,
@@ -116,10 +119,10 @@ class EnvBaseTableViewCell extends StatelessWidget {
           //     fontSize: 16.0,
           //   ),
           // ),
-          child: BrnExpandableText(
+          child: ExpandableText(
             //当文案过长时，可以设置展开和收起
             text: subTitle ?? '',
-            maxLines: 6,
+            maxLines: this.maxLines,
             onExpanded: (bool isExpanded) {
               if (isExpanded) {
                 //debugPrint('已经展开');

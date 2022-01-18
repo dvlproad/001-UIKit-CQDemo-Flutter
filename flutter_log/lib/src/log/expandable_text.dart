@@ -11,11 +11,11 @@ typedef TextExpandedCallback = Function(bool);
 ///     点击更多，则显示全部文本
 ///
 /// ```dart
-///   BrnExpandableText(
+///   ExpandableText(
 ///      text: '在文本的右下角有更多或者收起按钮',
 ///   )
 ///
-///   BrnExpandableText(
+///   ExpandableText(
 ///      text: '具备展开收起功能的文字面板，在文本的右下角有更多或者收起按钮',
 ///      maxLines: 2,
 ///      onExpanded: (value) {
@@ -25,11 +25,7 @@ typedef TextExpandedCallback = Function(bool);
 ///
 /// ```
 ///
-/// 相关文本组件如下:
-///  * [BrnBubbleText], 气泡背景的展开收起文本组件
-///  * [BrnInsertInfo], 气泡背景的文本组件
-///
-class BrnExpandableText extends StatefulWidget {
+class ExpandableText extends StatefulWidget {
   ///显示的文本
   final String text;
 
@@ -45,7 +41,7 @@ class BrnExpandableText extends StatefulWidget {
   /// 更多按钮渐变色的初始色 默认白色
   final Color color;
 
-  const BrnExpandableText(
+  const ExpandableText(
       {Key key,
       @required this.text,
       this.maxLines = 1000000,
@@ -54,10 +50,10 @@ class BrnExpandableText extends StatefulWidget {
       this.color})
       : super(key: key);
 
-  _BrnExpandableTextState createState() => _BrnExpandableTextState();
+  _ExpandableTextState createState() => _ExpandableTextState();
 }
 
-class _BrnExpandableTextState extends State<BrnExpandableText> {
+class _ExpandableTextState extends State<ExpandableText> {
   bool _expanded;
 
   @override

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import './environment_base_cell.dart';
+import './log_base_cell.dart';
 import './log_data_bean.dart';
 
 typedef ClickApiLogCellCallback = void Function(
@@ -27,7 +27,8 @@ class ApiLogTableViewCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return EnvBaseTableViewCell(
+    return LogBaseTableViewCell(
+      maxLines: 18,
       mainTitle: apiModel.name,
       subTitles: [apiModel.url],
       check: apiModel.mock,
