@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastUtil {
-  static showMessage(
-    String message, {
-    BuildContext context,
-  }) {
+  static showMessage(String message) {
     if (message != null && message is String && message.isNotEmpty) {
       print(message);
       Fluttertoast.showToast(
@@ -22,7 +19,7 @@ class ToastUtil {
 
   // 此方法为为了替换项目中的 Toast.show 方法，临时增加了一个无用变量(此方法最后要删掉)
   static showMsg(String message, BuildContext context, {int duration = 1}) {
-    showMessage(message, context: context);
+    showMessage(message);
   }
 
   // 需要产品补充完善需求

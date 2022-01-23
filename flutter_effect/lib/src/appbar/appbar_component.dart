@@ -4,9 +4,16 @@ import 'dart:ui';
 
 import '../../flutter_effect_adapt.dart';
 
+// 导航栏文本颜色类型
+enum AppBarTextColorType {
+  defalut, // 默认(黑色)
+  white, // 白色
+}
+
 // 左侧返回视图
 class AppBarTitleWidget extends StatelessWidget {
   final String text;
+  final AppBarTextColorType textColorType;
   final double width;
 
   final VoidCallback onPressed;
@@ -14,12 +21,17 @@ class AppBarTitleWidget extends StatelessWidget {
   const AppBarTitleWidget({
     Key key,
     @required this.text,
+    this.textColorType = AppBarTextColorType.defalut,
     this.width,
     this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = Color(0xFF222222);
+    if (textColorType == AppBarTextColorType.white) {
+      textColor = Colors.white;
+    }
     return Container(
       color: Colors.transparent,
       width: this.width == 0 ? 150 : this.width,
@@ -29,7 +41,7 @@ class AppBarTitleWidget extends StatelessWidget {
           child: Text(
             this.text ?? '',
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: textColor,
               fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
@@ -57,6 +69,7 @@ class AppBarTitleWidget extends StatelessWidget {
 // 左侧返回视图
 class AppBarBackWidget extends StatelessWidget {
   final String text;
+  final AppBarTextColorType textColorType; // 导航栏标题颜色能影响到返回按钮的颜色
 
   final VoidCallback
       onPressed; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
@@ -64,6 +77,7 @@ class AppBarBackWidget extends StatelessWidget {
   const AppBarBackWidget({
     Key key,
     this.text,
+    this.textColorType = AppBarTextColorType.defalut,
     @required this.onPressed,
   }) : super(key: key);
 
@@ -88,6 +102,7 @@ class AppBarBackWidget extends StatelessWidget {
 // 右侧按钮视图
 class AppBarActionWidget extends StatelessWidget {
   final String text;
+  final AppBarTextColorType textColorType; // 导航栏标题颜色能影响到其他按钮的颜色
 
   final ImageProvider image;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
@@ -97,12 +112,18 @@ class AppBarActionWidget extends StatelessWidget {
   const AppBarActionWidget({
     Key key,
     this.text,
+    this.textColorType = AppBarTextColorType.defalut,
     this.image,
     @required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = Color(0xFF222222);
+    if (textColorType == AppBarTextColorType.white) {
+      textColor = Colors.white;
+    }
+
     if (this.text != null) {
       return TextButton(
         child: Container(
@@ -110,7 +131,7 @@ class AppBarActionWidget extends StatelessWidget {
           child: Text(
             this.text,
             style: TextStyle(
-              color: const Color(0xFF222222),
+              color: textColor,
               fontSize: 13,
               fontWeight: FontWeight.bold,
             ),

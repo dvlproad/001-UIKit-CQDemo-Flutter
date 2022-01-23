@@ -5,13 +5,6 @@ import './appbar_component.dart';
 export './appbar_component.dart';
 import '../../flutter_effect_adapt.dart';
 
-// 左侧(返回)按钮视图的类型
-enum NavBarBackType {
-  none, // 不显示
-  defalut, // 默认(黑色)
-  white, // 白色
-}
-
 // 一个可以快速设置 导航栏标题 和 导航栏返回按钮 的导航栏视图
 class QuickAppBar extends CommonAppBar {
   QuickAppBar(
@@ -19,19 +12,21 @@ class QuickAppBar extends CommonAppBar {
     Key key,
     Color backgroundColor, // 导航栏背景色
     String title, // 中间导航栏标题文本
-    NavBarBackType backType, // 左侧(返回)按钮视图的类型
+    AppBarTextColorType textColorType, // 左侧(返回)按钮视图的类型
+    bool automaticallyImplyLeading, // 是否显示左侧(返回)按钮视图
     List<Widget> actions, // 右侧操作按钮视图
   }) : super(
           key: key,
           backgroundColor: backgroundColor,
-          title: AppBarTitleWidget(text: title),
+          title: AppBarTitleWidget(text: title, textColorType: textColorType),
           leading: AppBarBackWidget(
+            textColorType: textColorType,
             onPressed: () {
               FocusScope.of(context).requestFocus(FocusNode()); // 默认返回时候,关闭键盘
               Navigator.pop(context);
             },
           ),
-          automaticallyImplyLeading: backType != NavBarBackType.none,
+          automaticallyImplyLeading: automaticallyImplyLeading,
           actions: actions,
         );
 }
@@ -140,7 +135,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
       // titleSpacing: 88, // 距离屏幕两边的距离默认16，当我们设置搜索的时候感觉两边距离太大太小可以调
 
       leading: widget.leading,
-      automaticallyImplyLeading: widget.automaticallyImplyLeading,
+      automaticallyImplyLeading: widget.automaticallyImplyLeading ?? true,
       title: widget.title,
       actions: widget.actions,
     );

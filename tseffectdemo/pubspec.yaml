@@ -32,6 +32,8 @@ dependencies:
     path: ../tsdemo_effect/
   flutter_effect:
     path: ../flutter_effect/
+  # flutter_baseui_kit:
+  #   path: ../flutter_baseui_kit/
 
   flutter_easyrefresh: 2.1.1
 
