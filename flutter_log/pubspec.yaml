@@ -10,9 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-flutter_baseui_kit:
-  path: ../flutter_baseui_kit/
-fluttertoast: any
+  flutter_baseui_kit:
+    path: ../flutter_baseui_kit/
+  fluttertoast: any
+  provider: any
 
 dev_dependencies:
   flutter_test:

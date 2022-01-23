@@ -41,6 +41,10 @@ dependencies:
     path: ../tsdemo_network/
   flutter_network:
     path: ../flutter_network/
+  flutter_log:
+    path: ../flutter_log/
+  flutter_baseui_kit:
+    path: ../flutter_baseui_kit/
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

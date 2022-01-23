@@ -6,7 +6,7 @@ import 'package:flutter_network/src/interceptor/interceptor_request.dart';
 import 'package:flutter_network/src/interceptor/interceptor_response.dart';
 import 'package:flutter_network/src/interceptor/interceptor_error.dart';
 import 'package:flutter_network/src/interceptor/interceptor_log.dart';
-import 'package:flutter_network/src/log_util.dart';
+import 'package:flutter_log/flutter_log.dart';
 import 'package:dio/dio.dart';
 
 class TSNetworkHomePage extends StatefulWidget {
@@ -97,17 +97,20 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   }
 
   requestData(String id, String message) async {
+    String url = '/account/wallet/wishStar/page';
+    Map<String, dynamic> customParams = {"accountId": id, "message": message};
+
     ResponseModel responseModel1 = await NetworkUtil.postRequestUrl(
-      '/account/wallet/wishStar/page',
-      formData: {"accountId": id, "message": message},
+      url,
+      customParams: customParams,
       cancelToken: cancelToken,
     );
     print(
         '请求结果1:responseModel=$responseModel1,result=${responseModel1.result}');
 
     NetworkUtil.postRequestUrl(
-      '/account/wallet/wishStar/page',
-      formData: {"accountId": id, "message": message},
+      url,
+      customParams: customParams,
       cancelToken: cancelToken,
     ).then((ResponseModel responseModel) {
       print(
@@ -115,8 +118,8 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
     });
 
     NetworkUtil.postUrl(
-      '/account/wallet/wishStar/page',
-      formData: {"accountId": id, "message": message},
+      url,
+      customParams: customParams,
       cancelToken: cancelToken,
       onSuccess: (result) {
         print('请求结果3:result=$result');
