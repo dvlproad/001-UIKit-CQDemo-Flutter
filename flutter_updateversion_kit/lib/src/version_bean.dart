@@ -1,11 +1,17 @@
 import 'dart:convert' show json;
 
 class VersionBean {
-  String downloadUrl;
-  String isson;
   String version;
+  String buildNumber;
+  String updateLog;
+  String downloadUrl;
 
-  VersionBean.fromParams({this.downloadUrl, this.isson, this.version});
+  VersionBean.fromParams({
+    this.version,
+    this.buildNumber,
+    this.updateLog,
+    this.downloadUrl,
+  });
 
   factory VersionBean(jsonStr) => jsonStr == null
       ? null
@@ -14,13 +20,14 @@ class VersionBean {
           : VersionBean._fromJson(jsonStr);
 
   VersionBean._fromJson(jsonRes) {
-    downloadUrl = jsonRes['downloadUrl'];
-    isson = jsonRes['isson'];
     version = jsonRes['version'];
+    buildNumber = jsonRes['buildNumber'];
+    updateLog = jsonRes['updateLog'];
+    downloadUrl = jsonRes['downloadUrl'];
   }
 
   @override
   String toString() {
-    return '{"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'},"isson": ${isson != null ? '${json.encode(isson)}' : 'null'},"version": ${version != null ? '${json.encode(version)}' : 'null'}}';
+    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
   }
 }

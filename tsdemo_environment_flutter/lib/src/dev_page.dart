@@ -205,7 +205,7 @@ class _DevPageState extends State<DevPage> {
   }
 
   void _getAppVersion(BuildContext context) {
-    launcherPyger();
+    // launcherPyger();
 
     // VersionBean bean = VersionBean.fromParams(
     //   version: '10100',
@@ -214,15 +214,17 @@ class _DevPageState extends State<DevPage> {
     // );
     // versionUpdateDialog(bean, context);
 
-    // _commonModel.checkPgyerVersion();
+    PygerUtil.checkPgyerVersion().then((VersionBean bean) {
+      checkVersionBean(bean, context);
+    }).catchError((onError) {});
 
     // _commonModel.checkVersion().then((VersionBean bean) {
-    //   versionUpdateDialog(bean, context);
+    //   checkVersionBean(bean, context);
     // }).catchError((onError) {});
   }
 
   launcherPyger() async {
-    var url = "https://www.pgyer.com/kKTt";
+    var url = "https://www.pgyer.com/auto_package";
     if (await canLaunch(url)) {
       await launch(url);
     } else {

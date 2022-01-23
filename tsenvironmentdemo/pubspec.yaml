@@ -43,6 +43,8 @@ dependencies:
   cj_monitor_flutter:
     # path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
     path: ../cj_monitor_flutter/
+  flutter_updateversion_kit:
+    path: ../flutter_updateversion_kit/
 
 
   # The following adds the Cupertino Icons font to your application.

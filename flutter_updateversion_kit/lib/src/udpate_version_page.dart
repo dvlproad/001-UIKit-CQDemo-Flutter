@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_html/style.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../flutter_updateversion_kit_adapt.dart';
 
 import './version_bean.dart';
 import './download_file.dart';
@@ -134,7 +136,10 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
         text: TextSpan(
             text: ' \ue636 ',
             style: TextStyle(
-                fontFamily: "iconfont", fontSize: 50.sp, color: Colors.black)),
+              fontFamily: "iconfont",
+              fontSize: 50.sp_cj,
+              color: Colors.black,
+            )),
       ),
     );
   }
@@ -143,7 +148,7 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
     return Container(
       padding: EdgeInsets.all(10),
       child: Html(
-        data: widget.versionBean.isson,
+        data: widget.versionBean.updateLog,
         style: {
           "div": Style(color: Colors.grey),
           "b": Style(color: Colors.grey),
@@ -156,6 +161,8 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   }
 
   Widget _versionTitle() {
+    VersionBean versionBean = widget.versionBean;
+    String newVersion = '${versionBean.version}\_${versionBean.buildNumber}';
     return Container(
       padding: EdgeInsets.only(top: 10),
       child: Row(
@@ -163,21 +170,21 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
           Expanded(child: Container()),
           Text(
             "--",
-            style: TextStyle(color: Colors.grey, fontSize: 18.sp),
+            style: TextStyle(color: Colors.grey, fontSize: 18.sp_cj),
           ),
           SizedBox(
             width: 10,
           ),
           Text(
-            "发现新版本 ${widget.versionBean.version}",
-            style: TextStyle(color: Colors.black, fontSize: 18.sp),
+            "发现新版本 $newVersion",
+            style: TextStyle(color: Colors.black, fontSize: 18.sp_cj),
           ),
           SizedBox(
             width: 10,
           ),
           Text(
             "--",
-            style: TextStyle(color: Colors.grey, fontSize: 18.sp),
+            style: TextStyle(color: Colors.grey, fontSize: 18.sp_cj),
           ),
           Expanded(child: Container()),
         ],
