@@ -49,7 +49,7 @@ class EnvironmentUtil {
   }
 
   // 进入切换环境页面
-  static void goChangeEnvironment(
+  static Future goChangeEnvironment(
     BuildContext context, {
     Function() onPressTestApiCallback,
     @required
@@ -57,7 +57,7 @@ class EnvironmentUtil {
             updateNetworkCallback,
     @required Function(String proxyIp) updateProxyCallback,
   }) {
-    Navigator.of(context).push(
+    return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return EnvironmentPageContent(
@@ -83,7 +83,7 @@ class EnvironmentUtil {
   }
 
   // 进入切换 Api mock 的页面
-  static void goChangeApiMock(
+  static Future goChangeApiMock(
     BuildContext context, {
     String mockApiHost,
     Function() onPressTestApiCallback,
@@ -92,7 +92,7 @@ class EnvironmentUtil {
     String normalApiHost =
         EnvironmentManager.instance.selectedNetworkModel.apiHost;
 
-    Navigator.of(context).push(
+    return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return ApiMockPageContent(

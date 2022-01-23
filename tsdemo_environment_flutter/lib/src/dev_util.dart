@@ -119,11 +119,11 @@ class DevUtil {
     );
   }
 
-  static goChangeEnvironment(
+  static Future goChangeEnvironment(
     BuildContext context, {
     bool showTestApiWidget,
   }) {
-    EnvironmentUtil.goChangeEnvironment(
+    return EnvironmentUtil.goChangeEnvironment(
       context,
       onPressTestApiCallback: showTestApiWidget
           ? () {
@@ -146,12 +146,12 @@ class DevUtil {
     );
   }
 
-  static goChangeApiMock(
+  static Future goChangeApiMock(
     BuildContext context, {
     bool showTestApiWidget,
   }) {
     String simulateApiHost = TSEnvironmentDataUtil.dev_mockApiHost;
-    EnvironmentUtil.goChangeApiMock(
+    return EnvironmentUtil.goChangeApiMock(
       context,
       mockApiHost: simulateApiHost,
       onPressTestApiCallback: showTestApiWidget

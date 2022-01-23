@@ -146,7 +146,9 @@ class _DevPageState extends State<DevPage> {
         DevUtil.goChangeEnvironment(
           context,
           showTestApiWidget: showTestApiWidget,
-        );
+        ).then((value) {
+          setState(() {});
+        });
       },
     );
   }
@@ -164,7 +166,9 @@ class _DevPageState extends State<DevPage> {
         DevUtil.goChangeApiMock(
           context,
           showTestApiWidget: showTestApiWidget,
-        );
+        ).then((value) {
+          setState(() {});
+        });
       },
     );
   }
