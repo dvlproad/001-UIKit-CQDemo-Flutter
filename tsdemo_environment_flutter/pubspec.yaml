@@ -16,6 +16,8 @@ dependencies:
     path: ../flutter_network
   flutter_log:
     path: ../flutter_log/
+  flutter_updateversion_kit:
+    path: ../flutter_updateversion_kit/
 
 dev_dependencies:
   flutter_test:

@@ -3,6 +3,7 @@ import 'package:flutter_network/flutter_network.dart';
 
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
+import '../dev_util.dart';
 import './environment_datas_util.dart';
 
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
@@ -13,17 +14,26 @@ class Main_Init {
 
     _initEnvironmentManager();
     _initApiMockManager();
+
+    LogUtil.init(isDebug: true);
   }
 
   static initView(GlobalKey globalKey) {
     ApplicationDraggableManager.globalKey = globalKey;
     ApplicationLogViewManager.globalKey = globalKey;
+
+    DevUtil.navigatorKey = globalKey;
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      DevUtil.showDevFloatingWidget(
+        showTestApiWidget: true,
+      );
+    });
   }
 
   // 配置网络
   static _initNetwork() {
     NetworkManager.start(
-      baseUrl: "http://dev.api.xihuanwu.com/hapi/",
+      baseUrl: TSEnvironmentDataUtil.productApiHost,
       connectTimeout: 15000,
     );
 
@@ -38,7 +48,7 @@ class Main_Init {
         TSEnvironmentDataUtil.getEnvNetworkModels();
     List<TSEnvProxyModel> proxyModels_whenNull =
         TSEnvironmentDataUtil.getEnvProxyModels();
-    String defaultNetworkId_whenNull = TSEnvironmentDataUtil.developNetworkId;
+    String defaultNetworkId_whenNull = TSEnvironmentDataUtil.developNetworkId2;
     String defaultProxykId_whenNull = TSEnvironmentDataUtil.noneProxykId;
     EnvironmentUtil.completeEnvInternal_whenNull(
       networkModels_whenNull: networkModels_whenNull,

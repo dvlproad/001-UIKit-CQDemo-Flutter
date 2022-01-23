@@ -44,12 +44,6 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
 
   @override
   Widget contentWidget() {
-    // }
-
-    // @override
-    // void initState() {
-    //   super.initState();
-
     sectionModels = [
       {
         'theme': "Dev Tool(调试工具)",
@@ -97,7 +91,9 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
           {
             'title': "显示开工工具的悬浮按钮",
             'actionBlock': () {
-              DevUtil.showDevFloatingWidget(context);
+              DevUtil.showDevFloatingWidget(
+                showTestApiWidget: true,
+              );
             },
           },
         ]
