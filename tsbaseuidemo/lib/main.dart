@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemo_baseui/tsdemo_baseui.dart';
+import './piechart/PieChartPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TSBaseUIHomePage(),
+      home: PieChartPage(),
       routes: BaseUIKitRouters.routes,
     );
   }
