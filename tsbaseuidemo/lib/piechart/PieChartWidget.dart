@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './ChartUtils.dart';
 
 class PieChartWidget extends StatefulWidget {
@@ -15,6 +16,7 @@ class PieChartWidget extends StatefulWidget {
   ///文案集合
   @required
   List<String> contents;
+  ui.Image image;
 
   ///颜色集合
   @required
@@ -23,8 +25,14 @@ class PieChartWidget extends StatefulWidget {
   double startTurns = .0;
   double radius = 130;
 
-  PieChartWidget(this.proportions, this.colors,
-      {this.contents, this.radius, this.startTurns});
+  PieChartWidget(
+    this.proportions,
+    this.colors, {
+    this.contents,
+    this.radius,
+    this.startTurns,
+    this.image,
+  });
 
   @override
   _PieChartWidgetState createState() => _PieChartWidgetState();
@@ -73,6 +81,7 @@ class _PieChartWidgetState extends State<PieChartWidget>
       height: 2 * widget.radius,
       child: GestureDetector(
         child: CustomPaint(
+          // size: Size(100, 100),
           painter: PieChartPainter(
             turns,
             widget.startTurns,
@@ -80,6 +89,7 @@ class _PieChartWidgetState extends State<PieChartWidget>
             widget.colors,
             widget.contents,
             _key,
+            mmimage: widget.image,
           ),
           key: _key,
         ),
@@ -244,6 +254,23 @@ class _PieChartWidgetState extends State<PieChartWidget>
   }
 }
 
+class ImageNode {
+  int curIndex;
+  int index;
+  Path path;
+  Rect rect;
+  // ignore: undefined_class
+  ui.Image image;
+
+  int getXIndex(int level) {
+    return index % level;
+  }
+
+  int getYIndex(int level) {
+    return (index / level).floor();
+  }
+}
+
 class PieChartPainter extends CustomPainter {
   GlobalKey _key = GlobalKey();
 
@@ -251,6 +278,7 @@ class PieChartPainter extends CustomPainter {
   double startTurns = .0;
 
   List<String> contents;
+  ui.Image mmimage;
 
   PieChartPainter(
     this.turns,
@@ -258,8 +286,9 @@ class PieChartPainter extends CustomPainter {
     this.angles,
     this.colors,
     this.contents,
-    this._key,
-  );
+    this._key, {
+    this.mmimage,
+  });
 
   List<double> angles;
 
@@ -287,18 +316,42 @@ class PieChartPainter extends CustomPainter {
       radius: size.width / 2,
     );
     Paint paint = Paint()
-      ..color = Colors.red
-      ..strokeWidth = 3.0
-      ..isAntiAlias = true
+      ..color = Colors.red // 画笔颜色
+      ..strokeWidth = 3.0 // 画笔宽度
+      ..isAntiAlias = true // 是否抗锯齿
       ..style = PaintingStyle.fill;
 
     //画扇形
     for (int i = 0; i < angles.length; i++) {
       paint..color = colors[i];
-      canvas.drawArc(rect, 2 * pi * startAngles + turns + startTurns,
-          2 * pi * angles[i], true, paint);
+      double startAngle = 2 * pi * startAngles + turns + startTurns; // 开始角度
+      double sweepAngle = 2 * pi * angles[i]; // 绘制的弧形占用角度弧度(360°角=2π)
+      // if (i == 1) {
+      //   rect = Rect.fromLTRB(0.0, 0.0, 160.0, 140.0);
+      //   continue;
+      // }
+      canvas.drawArc(rect, startAngle, sweepAngle, true, paint);
+      print(
+          'rect=${rect.toString()},startAngle=${startAngle.toString()},sweepAngle=${sweepAngle.toString()}');
+
       startAngles += angles[i];
     }
+    if (mmimage != null) {
+      Rect imageRect = Rect.fromLTRB(0.0, 0.0, 40, 40);
+      // mmimage.width = 140;
+
+      Paint _paint = new Paint()
+        ..color = Colors.blueAccent // 画笔颜色
+        ..strokeCap = StrokeCap.round //画笔笔触类型
+        ..isAntiAlias = true //是否启动抗锯齿
+        ..strokeWidth = 6.0 //画笔的宽度
+        ..style = PaintingStyle.stroke // 样式
+        ..blendMode = BlendMode.colorDodge; // 模式
+      // canvas.drawImage(mmimage, Offset(40, 0), _paint);
+
+      canvas.drawImageRect(mmimage, imageRect, imageRect, _paint);
+    }
+    return;
 
     startAngles = 0;
 
