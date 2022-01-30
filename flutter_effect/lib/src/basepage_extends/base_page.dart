@@ -28,6 +28,8 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
+  Widget _initWidget = null;
+
   @override
   bool get wantKeepAlive => true;
 
@@ -44,6 +46,18 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    _initWidget = buildInitWidget(context);
+    if (_currentWidgetType == WidgetType.Unknow) {
+      // 如果未知，则进行判断初始界面类型
+      if (_initWidget != null) {
+        // 未设置 initWidget, 则默认初始类型都为 SuccessWithData
+        _currentWidgetType = WidgetType.Init;
+      } else {
+        _currentWidgetType = WidgetType.SuccessWithData;
+      }
+    }
+
     return isHideStatusBar()
         ? _bodyWidget(context)
         : Scaffold(
@@ -157,19 +171,9 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
 
   /// 内容视图
   Widget _contentWidget(BuildContext context, double hasAppBarWidget) {
-    Widget initWidget = buildInitWidget(context);
-    if (_currentWidgetType == WidgetType.Unknow) {
-      // 如果未知，则进行判断初始界面类型
-      if (initWidget != null) {
-        // 未设置 initWidget, 则默认初始类型都为 SuccessWithData
-        _currentWidgetType = WidgetType.Init;
-      } else {
-        _currentWidgetType = WidgetType.SuccessWithData;
-      }
-    }
     return PageTypeLoadStateWidget(
       widgetType: _currentWidgetType,
-      initWidget: initWidget,
+      initWidget: _initWidget,
       successWidget: buildSuccessWidget(context),
       nodataWidget: buildNodataWidget(context),
       errorWidget: buildErrorWidget(context),
@@ -181,6 +185,16 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   ///显示当前页面自己的loading动画（目前使用场景：请求网络请求开始的时候调用）
   void showSelfLoadingAction() {
     _showSelfLoading = true;
+    setState(() {});
+  }
+
+  ///隐藏当前页面自己的loading动画
+  void dismissSelfLoadingAction() {
+    _showSelfLoading = false;
+    if (mounted == false) {
+      // 防止页面关闭执行setState()方法
+      return;
+    }
     setState(() {});
   }
 

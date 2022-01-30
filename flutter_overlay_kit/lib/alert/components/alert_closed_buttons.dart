@@ -45,7 +45,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
               }
             },
             child: Text(
-              "取消",
+              this.cancelTitle,
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.grey, fontSize: 16.0),
             ),

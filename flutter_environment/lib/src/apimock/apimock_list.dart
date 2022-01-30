@@ -114,7 +114,8 @@ class _TSApiListState extends State<TSApiList> {
           if (widget.normalApiHost != null) {
             suffixString = ':\n${widget.normalApiHost}';
           }
-          return EnvironmentTableViewHeader(title: '执行当前环境的api$suffixString');
+          return EnvironmentTableViewHeader(
+              title: '执行自身或当前环境的api$suffixString');
         }
       },
       cellAtIndexPath: (section, row) {

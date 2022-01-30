@@ -82,9 +82,12 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
                   },
                 ),
           BottomButtonsWidget(
-            cancelText: '移除所有mock(暂无)',
+            cancelText: '重新收集非mock的接口',
             onCancel: () {
-              print('移除所有mock(暂无)');
+              _apiModels.removeWhere((element) {
+                return element.mock == false;
+              });
+              setState(() {});
             },
           ),
         ],
