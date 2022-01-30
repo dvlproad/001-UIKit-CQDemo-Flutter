@@ -3,6 +3,7 @@ import 'package:flutter_network/flutter_network.dart';
 
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import '../dev_util.dart';
 import './environment_datas_util.dart';
 
@@ -28,6 +29,8 @@ class Main_Init {
         showTestApiWidget: true,
       );
     });
+
+    CheckVersionUtil.navigatorKey = globalKey;
   }
 
   // 配置网络

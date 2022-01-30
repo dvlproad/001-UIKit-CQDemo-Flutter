@@ -16,10 +16,28 @@ import '../flutter_updateversion_kit_adapt.dart';
 import './version_bean.dart';
 import './download_file.dart';
 import './update_version_notifier.dart';
+import './alert_closed_buttons.dart';
 
 class UpdateVersionPage extends StatefulWidget {
-  final VersionBean versionBean;
-  UpdateVersionPage({Key key, this.versionBean}) : super(key: key);
+  final String version;
+  final String buildNumber;
+  final String updateLog;
+  final String downloadUrl;
+  final void Function() closeUpdateBlock; // 取消关闭
+  final void Function() skipUpdateBlock; // 跳过此版本
+  final void Function() updateVersionBlock;
+
+  UpdateVersionPage({
+    Key key,
+    this.version,
+    this.buildNumber,
+    this.updateLog,
+    this.downloadUrl,
+    this.closeUpdateBlock, // 点击'取消升级'执行的方法
+    this.skipUpdateBlock, // 点击'跳过此版本'执行的方法
+    this.updateVersionBlock, // 点击"立即升级”执行的方法(默认不传null，内部会自己处理,这里设置只是为了内部没处理完前点击时候跳到下载的网页)
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _UpdateVersionPageState();
@@ -32,7 +50,7 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
 
   @override
   void dispose() {
-    DownLoadFile().stop(widget.versionBean.downloadUrl);
+    DownLoadFile().stop(widget.downloadUrl);
     _updateNotifier.dispose();
     _updateNotifier = null;
     super.dispose();
@@ -40,17 +58,23 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: ChangeNotifierProvider<UpdateNotifier>.value(
-        value: _updateNotifier,
-        child: Container(
-          color: Color(0x99000000),
-          alignment: Alignment.center,
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: <Widget>[_uploadDIalogBuild(), _progressBuild()],
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        alertViewBulider(context),
+      ],
+    );
+  }
+
+  Widget alertViewBulider(BuildContext context) {
+    return ChangeNotifierProvider<UpdateNotifier>.value(
+      value: _updateNotifier,
+      child: Container(
+        color: Colors.transparent,
+        alignment: Alignment.center,
+        child: Stack(
+          children: <Widget>[_uploadDIalogBuild()],
         ),
       ),
     );
@@ -96,9 +120,10 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   Widget _uploadDIalogBuild() {
     final screenSize = MediaQuery.of(context).size;
     var _maxContentHeight = max(screenSize.height - 400, 180.0);
-    double width = screenSize.height > screenSize.width ? 265 : 370;
+    double width = screenSize.width - 80;
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40),
+      width: width,
       height: _maxContentHeight,
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -147,8 +172,15 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   Widget _versionContent() {
     return Container(
       padding: EdgeInsets.all(10),
+      child: Text(
+        widget.updateLog ?? '',
+        style: TextStyle(color: Colors.grey),
+      ),
+    );
+    return Container(
+      padding: EdgeInsets.all(10),
       child: Html(
-        data: widget.versionBean.updateLog,
+        data: widget.updateLog ?? '',
         style: {
           "div": Style(color: Colors.grey),
           "b": Style(color: Colors.grey),
@@ -161,8 +193,7 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   }
 
   Widget _versionTitle() {
-    VersionBean versionBean = widget.versionBean;
-    String newVersion = '${versionBean.version}\_${versionBean.buildNumber}';
+    String newVersion = widget.version;
     return Container(
       padding: EdgeInsets.only(top: 10),
       child: Row(
@@ -193,47 +224,25 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   }
 
   Widget _bottomMenu(double w) {
-    return Container(
-      height: 60,
-      width: w,
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            height: 5,
-          ),
-          Divider(height: 1.0),
-          Container(
-            height: 49,
-            width: w,
-            child: Row(
-              children: <Widget>[
-                _cancelBtn(w - 2),
-                VerticalDivider(
-                  width: 1,
-                  indent: 10,
-                ),
-                _downloadBtn(w)
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
+    return FlexWidthButtons(
+      titles: ['关闭', '跳过此版本', '立即升级'],
+      onPressed: (buttonIndex) {
+        print(buttonIndex);
 
-  Widget _cancelBtn(double w) {
-    return InkWell(
-      child: Container(
-        width: w / 2,
-        alignment: Alignment.center,
-        child: Text(
-          "取消",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      onTap: () {
-        print("取消升级");
-        Navigator.pop(context);
+        if (buttonIndex == 0) {
+          Navigator.pop(context);
+          if (widget.closeUpdateBlock != null) {
+            widget.closeUpdateBlock();
+          }
+        } else if (buttonIndex == 1) {
+          Navigator.pop(context);
+          if (widget.skipUpdateBlock != null) {
+            widget.skipUpdateBlock();
+          }
+        } else if (buttonIndex == 2) {
+          this._updateNotifier.setIsClickAble(false);
+          _update();
+        }
       },
     );
   }
@@ -262,7 +271,12 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
   }
 
   void _update() async {
-    String url = widget.versionBean.downloadUrl;
+    if (widget.updateVersionBlock != null) {
+      widget.updateVersionBlock();
+      return;
+    }
+
+    String url = widget.downloadUrl;
     if (url != null || url != "") {
       if (Platform.isIOS) {
         this._downloadIos(url);
@@ -282,7 +296,7 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
 
   void _downloadAndroid(String url) async {
     String _storePath = (await getExternalStorageDirectory()).path.toString();
-    String _fileName = "dvlproad_" + widget.versionBean.version + ".apk";
+    String _fileName = "dvlproad_" + widget.version + ".apk";
     String _savePath = _storePath + _fileName;
     File file = File(_savePath);
     if (await file.exists()) {

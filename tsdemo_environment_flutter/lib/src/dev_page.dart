@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
@@ -42,9 +45,10 @@ class _DevPageState extends State<DevPage> {
   // 获取版本号
   _getVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    var version = packageInfo.version;
+    String version = packageInfo.version;
+    String buildNumber = packageInfo.buildNumber;
     setState(() {
-      versionName = "v $version";
+      versionName = "v $version($buildNumber)";
     });
   }
 
@@ -90,8 +94,17 @@ class _DevPageState extends State<DevPage> {
         child: ListView(
           children: [
             _devtool_floating_cell(true),
-            Container(height: 40),
+            Container(height: 20),
+            // 版本信息
             _devtool_appinfo_cell(),
+            _devtool_appdownloadpage_cell(),
+            _devtool_cancelNewVersionsPage_cell(),
+            _devtool_checkVersion_cell(context),
+            //_devtool_historyPackage_cell(),
+            Container(height: 20),
+            _devtool_userinfo_cell(),
+            _devtool_forceLogout_cell(), // 强制退出
+            Container(height: 20),
             Consumer<EnvironmentChangeNotifier>(
               builder: (context, environmentChangeNotifier, child) {
                 return _devtool_env_cell(context, showTestApiWidget: true);
@@ -99,7 +112,6 @@ class _DevPageState extends State<DevPage> {
             ),
             _devtool_apimock_cell(context, showTestApiWidget: true),
             _devtool_logSwtich_cell(),
-            _devtool_checkVersion_cell(context),
           ],
         ),
       ),
@@ -130,7 +142,86 @@ class _DevPageState extends State<DevPage> {
     return BJHTitleTextValueCell(
       title: "app信息",
       textValue: versionName,
-      onTap: () {},
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: versionName));
+        ToastUtil.showMessage('app信息拷贝成功');
+      },
+    );
+  }
+
+  Widget _devtool_appdownloadpage_cell() {
+    String downloadUrl = "https://www.pgyer.com/kKTt";
+    return BJHTitleTextValueCell(
+      title: "app下载页",
+      textValue: downloadUrl,
+      onTap: () async {
+        if (await canLaunch(downloadUrl)) {
+          await launch(downloadUrl);
+        } else {
+          throw 'cloud not launcher url';
+        }
+      },
+    );
+  }
+
+  Widget _devtool_historyPackage_cell() {
+    return BJHTitleTextValueCell(
+      title: "app打包记录",
+      textValue: '',
+      onTap: () {
+        //LoadingUtil.show();
+        PygerUtil.getPgyerHistoryVersions().then((value) {
+          //LoadingUtil.dismiss();
+        }).catchError((onError) {
+          //LoadingUtil.dismiss();
+        });
+      },
+    );
+  }
+
+  Widget _devtool_cancelNewVersionsPage_cell() {
+    return BJHTitleTextValueCell(
+      title: "不再提示更新的新版本",
+      textValue: '',
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CancelVersionPage(),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _devtool_checkVersion_cell(BuildContext context) {
+    return BJHTitleTextValueCell(
+      title: "检查更新",
+      textValue: '',
+      onTap: () {
+        //LoadingUtil.show();
+        CheckVersionUtil.checkVersion(
+          isManualCheck: true,
+          isPyger: true,
+        ).then((value) {
+          //LoadingUtil.dismiss();
+        }).catchError((onError) {
+          //LoadingUtil.dismiss();
+        });
+      },
+    );
+  }
+
+  Widget _devtool_userinfo_cell() {
+    String userId = 'UserInfoManager().userModel.userId';
+    String textValue = 'uid:$userId';
+    return BJHTitleTextValueCell(
+      title: "user信息",
+      textValue: textValue,
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: textValue));
+        ToastUtil.showMessage('user信息拷贝成功');
+      },
     );
   }
 
@@ -191,44 +282,25 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_checkVersion_cell(BuildContext context) {
+  Widget _devtool_forceLogout_cell() {
+    // if (UserInfoManager.instance.isLogin == false) {
+    //   return Container(height: 1);
+    // }
     return BJHTitleTextValueCell(
-      title: "检查更新",
+      title: "强制退出",
       textValue: '',
       onTap: () {
-        // if (VersionManager.instance.firstSHow) {
-        //   VersionManager.instance.setFirstShow(false);
-        _getAppVersion(context);
-        // }
+        AlertUtil.showCancelOKAlert(
+          context: context,
+          title: '确认强制退出吗？',
+          message: '强制退出本仅用于某个环境无法退出导致无法使用其他环境时候使用，其他情况仅尽量不要使用',
+          okHandle: () {
+            // UserInfoManager.instance.userLoginOut().then((value) {
+            Navigator.of(context).pop();
+            // });
+          },
+        );
       },
     );
-  }
-
-  void _getAppVersion(BuildContext context) {
-    // launcherPyger();
-
-    // VersionBean bean = VersionBean.fromParams(
-    //   version: '10100',
-    //   isson: 's..s',
-    //   downloadUrl: 'downloadUrl',
-    // );
-    // versionUpdateDialog(bean, context);
-
-    PygerUtil.checkPgyerVersion().then((VersionBean bean) {
-      checkVersionBean(bean, context);
-    }).catchError((onError) {});
-
-    // _commonModel.checkVersion().then((VersionBean bean) {
-    //   checkVersionBean(bean, context);
-    // }).catchError((onError) {});
-  }
-
-  launcherPyger() async {
-    var url = "https://www.pgyer.com/auto_package";
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'cloud not launcher url';
-    }
   }
 }
