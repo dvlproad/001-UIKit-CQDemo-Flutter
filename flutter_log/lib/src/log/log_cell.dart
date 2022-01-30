@@ -11,7 +11,7 @@ typedef ClickApiLogCellCallback = void Function(
 
 class ApiLogTableViewCell extends StatelessWidget {
   @required
-  final LogModel apiModel; // 环境
+  final LogModel apiLogModel; // 环境
 
   final int section;
   final int row;
@@ -19,7 +19,7 @@ class ApiLogTableViewCell extends StatelessWidget {
 
   ApiLogTableViewCell({
     Key key,
-    this.apiModel,
+    this.apiLogModel,
     this.section,
     this.row,
     this.clickApiLogCellCallback,
@@ -27,11 +27,20 @@ class ApiLogTableViewCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color subTitleColor = Colors.black;
+    if (apiLogModel.logLevel == LogLevel.error) {
+      subTitleColor = Colors.red;
+    } else if (apiLogModel.logLevel == LogLevel.warning) {
+      subTitleColor = Colors.orange;
+    }
+
+    String mainTitle = '${row + 1}.${apiLogModel.name}';
     return LogBaseTableViewCell(
       maxLines: 18,
-      mainTitle: apiModel.name,
-      subTitles: [apiModel.url],
-      check: apiModel.mock,
+      mainTitle: mainTitle,
+      subTitles: [apiLogModel.url],
+      subTitleColor: subTitleColor,
+      check: apiLogModel.mock,
       section: section,
       row: row,
       clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {
@@ -39,7 +48,7 @@ class ApiLogTableViewCell extends StatelessWidget {
           this.clickApiLogCellCallback(
             this.section,
             this.row,
-            this.apiModel,
+            this.apiLogModel,
           );
         }
       },

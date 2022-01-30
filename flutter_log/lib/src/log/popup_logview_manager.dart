@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import './log_list.dart';
+import './log_home_page.dart';
+export './log_home_page.dart' show LogType;
 
 class ApplicationLogViewManager {
   static GlobalKey<NavigatorState> globalKey;
@@ -39,7 +42,7 @@ class ApplicationLogViewManager {
     void Function(int section, int row, LogModel bApiModel)
         clickLogCellCallback, // logCell 的点击
     void Function(List<LogModel> bLogModels) onPressedCopyAll, // 点击复制所有按钮的事件
-    @required void Function() onPressedClear, // 点击清空按钮的事件
+    @required void Function(LogType bLogType) onPressedClear, // 点击清空按钮的事件
     @required void Function() onPressedClose, // 点击关闭按钮的事件
   }) async {
     if (ApplicationLogViewManager.globalKey == null) {
@@ -59,6 +62,25 @@ class ApplicationLogViewManager {
       builder: (BuildContext context) {
         //print('正式刷新 overlay 的 chid 视图....');
 
+        MediaQueryData mediaQuery =
+            MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+        Widget lastChild = Container(
+          // constraints: BoxConstraints(
+          //   minWidth: double.infinity,
+          //   minHeight: double.infinity,
+          // ),
+          color: Colors.white,
+          width: mediaQuery.size.width,
+          height: mediaQuery.size.height - 300,
+          child: LogHomePage(
+            logModels: logModels,
+            clickLogCellCallback: clickLogCellCallback,
+            onPressedClear: onPressedClear,
+            onPressedClose: onPressedClose,
+            onPressedCopyAll: onPressedCopyAll,
+          ),
+        );
+
         return Positioned(
           bottom: 0,
           child: GestureDetector(
@@ -71,14 +93,7 @@ class ApplicationLogViewManager {
                 color: Colors.transparent,
                 child: Opacity(
                   opacity: opacity,
-                  child: LogList(
-                    color: Color(0xFFF2F2F2),
-                    logModels: logModels,
-                    clickLogCellCallback: clickLogCellCallback,
-                    onPressedClear: onPressedClear,
-                    onPressedClose: onPressedClose,
-                    onPressedCopyAll: onPressedCopyAll,
-                  ),
+                  child: lastChild,
                 ),
               ),
             ),

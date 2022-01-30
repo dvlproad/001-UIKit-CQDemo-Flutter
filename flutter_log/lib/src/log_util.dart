@@ -13,18 +13,29 @@ class LogUtil {
     tag = tag;
   }
 
-  static void e(Object object, {String tag = _TAG_DEFAULT}) {
-    _printLog(tag, '  e  ', object);
+  static void error(Object object, {String tag = _TAG_DEFAULT}) {
+    _printConsoleLog(tag, '  error  ', object);
+    DevLogUtil.addLogModel(
+        logLevel: LogLevel.error, logTitle: '', logText: object);
   }
 
-  static void v(Object object, {String tag = _TAG_DEFAULT}) {
+  static void normal(Object object, {String tag = _TAG_DEFAULT}) {
     if (debug) {
-      _printLog(tag, '  v  ', object);
-      DevLogUtil.addLogModel(logTitle: '', logText: object);
+      _printConsoleLog(tag, '  normal  ', object);
+      DevLogUtil.addLogModel(
+          logLevel: LogLevel.normal, logTitle: '', logText: object);
     }
   }
 
-  static void _printLog(String tag, String stag, Object object) {
+  static void warning(Object object, {String tag = _TAG_DEFAULT}) {
+    if (debug) {
+      _printConsoleLog(tag, '  warning  ', object);
+      DevLogUtil.addLogModel(
+          logLevel: LogLevel.warning, logTitle: '', logText: object);
+    }
+  }
+
+  static void _printConsoleLog(String tag, String stag, Object object) {
     if (object is String) {
       print(object);
       return;

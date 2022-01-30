@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,12 +8,11 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
 
 import './evvironment_header.dart';
 import './log_cell.dart';
+export './log_cell.dart' show ClickApiLogCellCallback;
 
 import './log_change_notifiter.dart';
 import './log_data_bean.dart';
 export './log_data_bean.dart';
-
-import 'dart:ui';
 
 class LogList extends StatefulWidget {
   final Color color;
@@ -21,7 +22,6 @@ class LogList extends StatefulWidget {
   final void Function(List<LogModel> bLogModels)
       onPressedCopyAll; // 点击复制所有按钮的事件
   final void Function() onPressedClear; // 点击清空按钮的事件
-  final void Function() onPressedClose; // 点击关闭按钮的事件
 
   LogList({
     Key key,
@@ -30,7 +30,6 @@ class LogList extends StatefulWidget {
     @required this.clickLogCellCallback,
     @required this.onPressedCopyAll,
     @required this.onPressedClear,
-    @required this.onPressedClose,
   }) : super(key: key);
 
   @override
@@ -79,6 +78,7 @@ class _LogListState extends State<LogList> {
   Widget build(BuildContext context) {
     // print(
     //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
+
     return Container(
       color: widget.color,
       child: ChangeNotifierProvider<ApiLogChangeNotifier>.value(
@@ -91,48 +91,47 @@ class _LogListState extends State<LogList> {
   Widget _pageWidget() {
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    EdgeInsets padding = mediaQuery.padding;
+    padding = padding.copyWith(bottom: mediaQuery.viewPadding.top);
+    double bottomHeight = padding.top;
+    // [flutter-获取刘海屏头部高度，以及没有home键时底部高度](https://www.jianshu.com/p/27603ac09b36)
+
     return Container(
       // constraints: BoxConstraints(
       //   minWidth: double.infinity,
       //   minHeight: double.infinity,
       // ),
-      width: mediaQuery.size.width,
-      height: mediaQuery.size.height - 300,
+      // width: mediaQuery.size.width,
+      // height: mediaQuery.size.height - 300,
       child: Column(
         children: <Widget>[
-          Container(color: Colors.red, height: 2),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                '日志系统(单击可复制)',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+          Container(
+            // color: Colors.cyan,
+            // height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _buildButton('清空', onPressed: widget.onPressedClear),
+                _buildButton(
+                  _reverse ? '正序' : '逆序',
+                  onPressed: () {
+                    setState(() {
+                      _reverse = !_reverse;
+                    });
+                  },
                 ),
-              ),
-            ],
+                _buildButton(
+                  '复制所有',
+                  onPressed: () {
+                    if (widget.onPressedCopyAll != null) {
+                      widget.onPressedCopyAll(_logModels);
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildButton(
-                '复制所有',
-                onPressed: () {
-                  if (widget.onPressedCopyAll != null) {
-                    widget.onPressedCopyAll(_logModels);
-                  }
-                },
-              ),
-              _buildButton('清空', onPressed: widget.onPressedClear),
-              _buildButton('关闭', onPressed: widget.onPressedClose),
-            ],
-          ),
-          SizedBox(height: 6),
           Consumer<ApiLogChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
@@ -140,6 +139,7 @@ class _LogListState extends State<LogList> {
               );
             },
           ),
+          Container(height: bottomHeight)
         ],
       ),
     );
@@ -181,12 +181,13 @@ class _LogListState extends State<LogList> {
         return numOfRowInSection(section);
       },
       headerInSection: (section) {
-        return EnvironmentTableViewHeader(title: 'api log');
+        // return EnvironmentTableViewHeader(title: 'api log');
+        return Container();
       },
       cellAtIndexPath: (section, row) {
         LogModel logModel = _logModels[row];
         return ApiLogTableViewCell(
-          apiModel: logModel,
+          apiLogModel: logModel,
           section: section,
           row: row,
           clickApiLogCellCallback: (int section, int row, LogModel bApiModel) {

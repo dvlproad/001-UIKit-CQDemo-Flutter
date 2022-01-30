@@ -1,3 +1,4 @@
+import 'dart:convert' as convert;
 import 'package:dio/dio.dart';
 import 'package:flutter_log/flutter_log.dart';
 import './appendPathExtension.dart';
@@ -19,22 +20,11 @@ class DioLogInterceptor extends Interceptor {
 
     requestStr += "- HEADER:\n${options.headers.mapToStructureString()}\n";
 
-    final data = options.data;
-    if (data != null) {
-      if (data is Map) {
-        requestStr += "- BODY:\n${data.mapToStructureString()}\n";
-      } else if (data is FormData) {
-        final formDataMap = Map()
-          ..addEntries(data.fields)
-          ..addEntries(data.files);
-        requestStr += "- BODY:\n${formDataMap.mapToStructureString()}\n";
-      } else {
-        requestStr += "- BODY:\n${data.toString()}\n";
-      }
-    }
+    String bodyString = _getBodyString(options);
+    requestStr += bodyString;
 
-    // LogUtil.v("请求开始的信息1：" + data.toString());
-    LogUtil.v("请求开始的信息：" + requestStr);
+    // LogUtil.normal("请求开始的信息1：" + data.toString());
+    LogUtil.normal("请求开始的信息：" + requestStr);
 
     handler.next(options);
   }
@@ -56,15 +46,18 @@ class DioLogInterceptor extends Interceptor {
           "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
     }
 
+    String bodyString = _getBodyString(err.requestOptions);
+    errorStr += bodyString;
+
+    errorStr += "- ERRORTYPE: ${err.type}\n";
+    print('╔ ${err.type.toString()}');
     if (err.response != null && err.response.data != null) {
-      print('╔ ${err.type.toString()}');
       errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
     } else {
-      errorStr += "- ERRORTYPE: ${err.type}\n";
       errorStr += "- MSG: ${err.message}\n";
     }
 
-    LogUtil.v("请求失败的回复：" + errorStr);
+    LogUtil.error("请求失败的回复：" + errorStr);
 
     handler.next(err);
   }
@@ -86,17 +79,71 @@ class DioLogInterceptor extends Interceptor {
     response.headers.forEach(
         (key, list) => responseStr += "\n  " + "\"$key\" : \"$list\",");
     responseStr += "\n}\n";
+    // body
+    String bodyString = _getBodyString(response.requestOptions);
+    responseStr += bodyString;
+    // status
     responseStr += "- STATUS: ${response.statusCode}\n";
 
     if (response.data != null) {
-      responseStr += "- BODY:\n ${_parseResponse(response)}";
+      responseStr += "- RESPONSE:\n ${_parseResponse(response)}";
     }
     responseStr = printWrapped(responseStr);
 
-    // LogUtil.v("请求成功的回复1：" + response.data.toString());
-    LogUtil.v("请求成功的回复：" + responseStr);
+    dynamic responseObject;
+    if (response.data is String) {
+      // 后台把data按字符串返回的时候
+      responseObject = convert.jsonDecode(response.data);
+    } else {
+      //String dataString = response.data.toString();
+      String dataJsonString = convert.jsonEncode(response.data);
+      responseObject = convert.jsonDecode(dataJsonString);
+    }
+    // LogUtil.normal("请求成功的回复1：" + response.data.toString());
+    if (responseObject.keys.contains('code') == false) {
+      // 不是项目结构，比如是yapi格式
+      if (responseObject.keys.contains('errcode') == true) {
+        // yapi的格式
+        int businessCode = responseObject["errcode"];
+        if (businessCode != 0) {
+          LogUtil.error("请求失败(code$businessCode)的回复：" + responseStr);
+        } else {
+          LogUtil.normal("请求成功(code$businessCode)的回复：" + responseStr);
+        }
+      } else {
+        // 其他非项目结构的，暂时都当做成功，目前不会有此情况
+        LogUtil.normal("请求成功的回复：" + responseStr);
+      }
+    } else {
+      int businessCode = responseObject["code"];
+      if (businessCode == 0) {
+        LogUtil.normal("请求成功(code$businessCode)的回复：" + responseStr);
+      } else if (businessCode == 500) {
+        LogUtil.error("请求失败(code$businessCode)的回复：" + responseStr);
+      } else {
+        LogUtil.warning("请求成功(code$businessCode)的回复：" + responseStr);
+      }
+    }
 
     handler.next(response);
+  }
+
+  String _getBodyString(RequestOptions options) {
+    String bodyString = '';
+    final data = options.data;
+    if (data != null) {
+      if (data is Map) {
+        bodyString += "- BODY:\n${data.mapToStructureString()}\n";
+      } else if (data is FormData) {
+        final formDataMap = Map()
+          ..addEntries(data.fields)
+          ..addEntries(data.files);
+        bodyString += "- BODY:\n${formDataMap.mapToStructureString()}\n";
+      } else {
+        bodyString += "- BODY:\n${data.toString()}\n";
+      }
+    }
+    return bodyString;
   }
 
   String printWrapped(String text) {
@@ -114,12 +161,13 @@ class DioLogInterceptor extends Interceptor {
   String _parseResponse(Response response) {
     String responseStr = "";
     var data = response.data;
-    if (data is Map)
+    if (data is Map) {
       responseStr += data.mapToStructureString();
-    else if (data is List)
+    } else if (data is List) {
       responseStr += data.listToStructureString();
-    else
-      responseStr += response.data.toString();
+    } else {
+      responseStr += data.toString();
+    }
 
     return responseStr;
   }

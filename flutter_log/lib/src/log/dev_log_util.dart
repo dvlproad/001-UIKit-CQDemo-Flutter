@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './popup_logview_manager.dart';
 import './log_data_bean.dart';
+export './log_data_bean.dart' show LogLevel;
 
 class DevLogUtil {
   static List<LogModel> logModels = [];
@@ -31,7 +32,7 @@ class DevLogUtil {
         Clipboard.setData(ClipboardData(text: copyText));
         CJTSToastUtil.showMessage('复制所有到粘贴板成功');
       },
-      onPressedClear: () {
+      onPressedClear: (LogType bLogType) {
         print('点击清空数据');
         logModels.clear();
 
@@ -55,11 +56,16 @@ class DevLogUtil {
     );
   }
 
-  static addLogModel({String logTitle, String logText}) {
+  static addLogModel({LogLevel logLevel, String logTitle, String logText}) {
     if (logTitle == null || logTitle.isEmpty == true) {
       logTitle = '第${logModels.length + 1}条日志:';
     }
-    LogModel logModel = LogModel(name: logTitle, url: logText, mock: false);
+    LogModel logModel = LogModel(
+      logLevel: logLevel,
+      name: logTitle,
+      url: logText,
+      mock: false,
+    );
     logModels.add(logModel);
     ApplicationLogViewManager.updateLogOverlayEntry();
   }

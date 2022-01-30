@@ -29,11 +29,11 @@ class _EnvironmentTableViewHeaderState
 
   Widget _headerContainer() {
     return Container(
-      margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      // color: Colors.green,
+      padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+      //color: Colors.green,
       alignment: Alignment.centerLeft,
       constraints: BoxConstraints(
-        minHeight: 44,
+        minHeight: 30,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

@@ -15,6 +15,7 @@ class LogBaseTableViewCell extends StatelessWidget {
 
   final String mainTitle;
   final List<String> subTitles;
+  final Color subTitleColor;
   final bool check;
 
   final int section;
@@ -26,6 +27,7 @@ class LogBaseTableViewCell extends StatelessWidget {
     this.maxLines = 20,
     @required this.mainTitle,
     @required this.subTitles,
+    this.subTitleColor,
     this.check,
     this.section,
     this.row,
@@ -122,6 +124,7 @@ class LogBaseTableViewCell extends StatelessWidget {
           child: ExpandableText(
             //当文案过长时，可以设置展开和收起
             text: subTitle ?? '',
+            textStyle: TextStyle(color: this.subTitleColor ?? Colors.black),
             maxLines: this.maxLines,
             onExpanded: (bool isExpanded) {
               if (isExpanded) {

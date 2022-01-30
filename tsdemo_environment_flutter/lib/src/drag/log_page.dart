@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
@@ -38,7 +39,7 @@ class _TSLogPageState extends State<TSLogPage> {
   PreferredSize appBar() {
     return PreferredSize(
       child: AppBar(
-        title: Text('测试 Test', style: TextStyle(fontSize: 17)),
+        title: Text('测试 Log', style: TextStyle(fontSize: 17)),
       ),
       preferredSize: Size.fromHeight(44),
     );
@@ -91,8 +92,20 @@ class _TSLogPageState extends State<TSLogPage> {
                 onPressed: () {
                   String Url =
                       cqtsRandomString(100, 600, CQRipeStringType.english);
+                  int iRandom = Random().nextInt(3);
 
-                  DevLogUtil.addLogModel(logTitle: '', logText: Url);
+                  LogLevel logLevel = LogLevel.normal;
+                  if (iRandom == 1) {
+                    logLevel = LogLevel.warning;
+                  } else if (iRandom == 2) {
+                    logLevel = LogLevel.error;
+                  }
+
+                  DevLogUtil.addLogModel(
+                    logLevel: logLevel,
+                    logTitle: '',
+                    logText: Url,
+                  );
 
                   // setState(() {});
                 },

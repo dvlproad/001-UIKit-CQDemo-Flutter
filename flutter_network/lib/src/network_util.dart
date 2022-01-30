@@ -190,7 +190,7 @@ class NetworkUtil {
       }
 
       String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
-      LogUtil.v("请求失败的异常：" + message);
+      LogUtil.error("请求失败的异常：" + message);
       ResponseModel responseModel = ResponseModel(
         statusCode: -1,
         message: message,
