@@ -6,7 +6,7 @@ import '../../flutter_effect_adapt.dart';
 
 // 导航栏文本颜色类型
 enum AppBarTextColorType {
-  defalut, // 默认(黑色)
+  default_black, // 默认(黑色)
   white, // 白色
 }
 
@@ -21,7 +21,7 @@ class AppBarTitleWidget extends StatelessWidget {
   const AppBarTitleWidget({
     Key key,
     @required this.text,
-    this.textColorType = AppBarTextColorType.defalut,
+    this.textColorType = AppBarTextColorType.default_black,
     this.width,
     this.onPressed,
   }) : super(key: key);
@@ -32,23 +32,16 @@ class AppBarTitleWidget extends StatelessWidget {
     if (textColorType == AppBarTextColorType.white) {
       textColor = Colors.white;
     }
-    return Container(
-      color: Colors.transparent,
-      width: this.width == 0 ? 150 : this.width,
-      child: TextButton(
-        child: Container(
-          alignment: Alignment.center,
-          child: Text(
-            this.text ?? '',
-            style: TextStyle(
-              color: textColor,
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+    return TextButton(
+      child: Text(
+        this.text ?? '',
+        style: TextStyle(
+          color: textColor,
+          fontSize: 15,
+          fontWeight: FontWeight.bold,
         ),
-        onPressed: this.onPressed,
       ),
+      onPressed: this.onPressed,
     );
 
     // return Center(
@@ -77,7 +70,7 @@ class AppBarBackWidget extends StatelessWidget {
   const AppBarBackWidget({
     Key key,
     this.text,
-    this.textColorType = AppBarTextColorType.defalut,
+    this.textColorType = AppBarTextColorType.default_black,
     @required this.onPressed,
   }) : super(key: key);
 
@@ -85,15 +78,24 @@ class AppBarBackWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ImageProvider image = null;
     if (this.text == null) {
-      image = AssetImage(
-        'assets/appbar/navback.png',
-        package: 'flutter_effect',
-      );
+      if (textColorType == AppBarTextColorType.white) {
+        image = AssetImage(
+          'assets/appbar/nav_back_white.png',
+          package: 'flutter_effect',
+        );
+      } else {
+        image = AssetImage(
+          'assets/appbar/nav_back_black.png',
+          package: 'flutter_effect',
+        );
+      }
     }
 
     return AppBarActionWidget(
       text: this.text,
+      textColorType: this.textColorType,
       image: image,
+      needUpdateImageColor: false,
       onPressed: this.onPressed,
     );
   }
@@ -107,13 +109,15 @@ class AppBarActionWidget extends StatelessWidget {
   final ImageProvider image;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
+  final bool needUpdateImageColor; // 是否需要根据 textColorType 来自动更新图片的颜色(默认false)
   final VoidCallback onPressed;
 
   const AppBarActionWidget({
     Key key,
     this.text,
-    this.textColorType = AppBarTextColorType.defalut,
+    this.textColorType = AppBarTextColorType.default_black,
     this.image,
+    this.needUpdateImageColor = false,
     @required this.onPressed,
   }) : super(key: key);
 
@@ -140,16 +144,26 @@ class AppBarActionWidget extends StatelessWidget {
         onPressed: this.onPressed,
       );
     } else {
+      Color imageColor = null;
+      if (needUpdateImageColor == true &&
+          textColorType == AppBarTextColorType.white) {
+        imageColor = Colors.white;
+      }
+
+      // [Flutter Image 参数详解](https://blog.csdn.net/chenlove1/article/details/84111554)
+      //BoxFit.cover:以原图填满Image为目的，如果原图size大于Image的size，按比例缩小，居中显示在Image上。如果原图size小于Image的size，则按比例拉升原图的宽和高，填充Image居中显示。
       return IconButton(
+        iconSize: 36.w_cj,
         icon: Image(
           image: this.image ??
               AssetImage(
                 'assets/appbar/navback.png',
                 package: 'flutter_effect',
               ),
-          width: 34.w_cj,
-          height: 34.h_cj,
-          fit: BoxFit.scaleDown,
+          // width: 36.w_cj,
+          // height: 36.h_cj,
+          fit: BoxFit.cover,
+          color: imageColor,
         ),
         onPressed: this.onPressed,
       );
