@@ -60,7 +60,7 @@ class ApplicationDraggableManager {
     bool ifExistUseOld, // 如果存在则使用旧的,默认false
   }) async {
     if (ApplicationDraggableManager.globalKey == null) {
-      print(
+      throw Exception(
           'Error:请先在main.dart中设置 ApplicationDraggableManager.globalKey = GlobalKey<NavigatorState>();');
     }
 

@@ -12,7 +12,8 @@ class DraggableFloatingActionButton extends StatefulWidget {
     @required this.child,
     @required this.initialOffset,
     @required this.onPressed,
-  }) : super(key: key);
+  })  : assert(parentKey != null),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() => _DraggableFloatingActionButtonState();
@@ -37,7 +38,7 @@ class _DraggableFloatingActionButtonState
 
   void _setBoundary(_) {
     final RenderBox parentRenderBox =
-        widget.parentKey.currentContext?.findRenderObject() as RenderBox;
+        widget.parentKey?.currentContext?.findRenderObject() as RenderBox;
     final RenderBox renderBox =
         _key.currentContext?.findRenderObject() as RenderBox;
 

@@ -3,14 +3,22 @@ import 'package:flutter_network/flutter_network.dart';
 
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import '../dev_util.dart';
 import './environment_datas_util.dart';
 
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 class Main_Init {
-  static init() {
+  static initWithGlobalKey(GlobalKey globalKey) {
+    Future.delayed(const Duration(milliseconds: 000), () {
+      // 这里的适当延迟，只是为了修复 main() 的第一方法就执行这里的init方法，导致内部执行到 SharedPreferences prefs = await SharedPreferences.getInstance(); 的时候会发生错误
+      // 其他情况不用延迟
+      _init();
+    });
+    _initView(globalKey);
+  }
+
+  static _init() {
     _initNetwork();
 
     _initEnvironmentManager();
@@ -19,18 +27,13 @@ class Main_Init {
     LogUtil.init(isDebug: true);
   }
 
-  static initView(GlobalKey globalKey) {
-    ApplicationDraggableManager.globalKey = globalKey;
-    ApplicationLogViewManager.globalKey = globalKey;
-
+  static _initView(GlobalKey globalKey) {
     DevUtil.navigatorKey = globalKey;
     Future.delayed(const Duration(milliseconds: 3000), () {
       DevUtil.showDevFloatingWidget(
         showTestApiWidget: true,
       );
     });
-
-    CheckVersionUtil.navigatorKey = globalKey;
   }
 
   // 配置网络

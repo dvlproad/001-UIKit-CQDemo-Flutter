@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import './main_init/environment_datas_util.dart';
 
@@ -9,7 +10,16 @@ import './dev_page.dart';
 
 class DevUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
-  static GlobalKey navigatorKey;
+  static GlobalKey _navigatorKey;
+
+  // 定义 navigatorKey 属性的 get 和 set 方法
+  static GlobalKey get navigatorKey => _navigatorKey;
+  static set navigatorKey(GlobalKey globalKey) {
+    _navigatorKey = globalKey; // ①悬浮按钮的显示功能需要
+    ApplicationDraggableManager.globalKey = globalKey; // ①悬浮按钮的拖动功能需要
+    ApplicationLogViewManager.globalKey = globalKey; // ②日志系统需要
+    CheckVersionUtil.navigatorKey = globalKey; // ③检查更新需要
+  }
 
   static bool isDevPageShowing =
       false; //[暂时没有更好解决办法的Flutter获取当前页面的问题](https://www.cnblogs.com/xsiOS/p/15676609.html)
@@ -31,7 +41,8 @@ class DevUtil {
     bool showTestApiWidget,
   }) {
     if (navigatorKey == null) {
-      print("Warning:请先执行setupAppNavigatorKey设置app 的 navigatorKey,才能正常显示悬浮按钮");
+      print(
+          "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
       return;
     }
     BuildContext context = navigatorKey.currentContext;
@@ -108,6 +119,11 @@ class DevUtil {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
+              // DevPage 中
+              // ①悬浮按钮的显示功能:需要 DevUtil.navigatorKey = GlobalKey<NavigatorState>();
+              // ①悬浮按钮的拖动功能:需要 ApplicationDraggableManager.globalKey = GlobalKey<NavigatorState>();
+              // ②日志系统:需要 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();
+              // ③检查更新:需要 CheckVersionUtil.navigatorKey = GlobalKey<NavigatorState>();
               return const DevPage();
             },
           ),

@@ -89,8 +89,13 @@ class EnvironmentUtil {
     Function() onPressTestApiCallback,
     List<Widget> navbarActions,
   }) {
-    String normalApiHost =
-        EnvironmentManager.instance.selectedNetworkModel.apiHost;
+    TSEnvNetworkModel selectedNetworkModel =
+        EnvironmentManager.instance.selectedNetworkModel;
+    if (selectedNetworkModel == null) {
+      throw Exception(
+          '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+    }
+    String normalApiHost = selectedNetworkModel.apiHost;
 
     return Navigator.of(context).push(
       MaterialPageRoute(

@@ -31,8 +31,6 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
   @override
   void initState() {
     super.initState();
-
-    Main_Init.init(); // 初始化数据，正式项目中放在main.dart中处理
   }
 
   @override
