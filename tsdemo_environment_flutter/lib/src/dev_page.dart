@@ -229,7 +229,13 @@ class _DevPageState extends State<DevPage> {
     BuildContext context, {
     bool showTestApiWidget,
   }) {
-    String envName = EnvironmentManager.instance.selectedNetworkModel.name;
+    TSEnvNetworkModel selectedNetworkModel =
+        EnvironmentManager.instance.selectedNetworkModel;
+    if (selectedNetworkModel == null) {
+      throw Exception(
+          '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+    }
+    String envName = selectedNetworkModel.name;
     return BJHTitleTextValueCell(
       title: "切换环境",
       textValue: envName,

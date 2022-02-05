@@ -13,7 +13,11 @@ import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 import 'package:tsdemodemo_flutter/modules/main/main_page.dart';
 
+GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
+
 void main() {
+  Main_Init.initView(globalKey);
+
   runApp(MyApp());
 }
 
@@ -92,6 +96,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     routes.addAll(GuideRouters.routes);
 
     return MaterialApp(
+      ///注意 一定要navigatorKey 才能在所有界面上显示
+      navigatorKey: globalKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.

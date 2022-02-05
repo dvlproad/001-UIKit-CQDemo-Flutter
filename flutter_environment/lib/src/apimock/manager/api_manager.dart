@@ -150,7 +150,7 @@ class ApiManager {
   static int mockCount() {
     int mockCount = 0;
 
-    List<ApiModel> apiModels = ApiManager().apiModels;
+    List<ApiModel> apiModels = ApiManager().apiModels ?? [];
     for (ApiModel apiModel in apiModels) {
       if (apiModel.mock) {
         mockCount++;
