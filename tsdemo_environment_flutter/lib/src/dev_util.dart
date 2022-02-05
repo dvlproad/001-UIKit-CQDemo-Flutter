@@ -41,7 +41,7 @@ class DevUtil {
     bool showTestApiWidget,
   }) {
     if (navigatorKey == null) {
-      print(
+      throw Exception(
           "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
       return;
     }

@@ -46,7 +46,7 @@ class ApplicationLogViewManager {
     @required void Function() onPressedClose, // 点击关闭按钮的事件
   }) async {
     if (ApplicationLogViewManager.globalKey == null) {
-      print(
+      throw Exception(
           'Error:请先在main.dart中设置 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();');
     }
 
