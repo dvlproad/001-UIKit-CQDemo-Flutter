@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './check_version_common_util.dart';
 
 class CancelVersionPage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _CancelVersionPageState extends State<CancelVersionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('不再提示更新的新版本'),
+        title: Text('不再提示更新的版本'),
         actions: _cancelShowVersions?.length > 0
             ? [
                 TextButton(
@@ -41,6 +42,14 @@ class _CancelVersionPageState extends State<CancelVersionPage> {
                       CheckVersionCommonUtil.removeAllCancelShowVersions()
                           .then((value) {
                         _cancelShowVersions = [];
+
+                        AlertUtil.showIKnowAlert(
+                          context,
+                          title: '清空成功',
+                          iKnowHandle: () {
+                            Navigator.pop(context);
+                          },
+                        );
                       });
                     });
                   },

@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
 
-import 'package:flutter_log/flutter_log.dart';
-import './interceptor/appendPathExtension.dart';
+import './interceptor/url_util.dart';
 
 import './network_client.dart';
 import './sp_util.dart';
@@ -18,8 +17,9 @@ class ResponseModel {
   int statusCode;
   String message;
   dynamic result;
+  bool isCache;
 
-  ResponseModel({this.statusCode, this.message, this.result});
+  ResponseModel({this.statusCode, this.message, this.result, this.isCache});
 }
 
 enum RequestMethod {
@@ -85,12 +85,13 @@ class NetworkUtil {
     );
   }
 
+  // 网络请求的最底层方法
   static Future<ResponseModel> _requestUrl(
     String url, {
     RequestMethod requestMethod,
     Map<String, dynamic> customParams,
     Options options,
-    cancelToken,
+    CancelToken cancelToken,
   }) async {
     if (cancelToken == null) {
       cancelToken = CancelToken();
@@ -124,6 +125,17 @@ class NetworkUtil {
         );
       }
 
+      // String fromCacheValue = response.headers.map.values.last[0];
+      // bool isFromCache = fromCacheValue == 'from_cache';
+
+      bool isFromCache = false;
+      List<String> cacheHeaders =
+          response.headers.map['dio_cache_header_key_data_source'];
+      if (cacheHeaders != null && cacheHeaders.isNotEmpty) {
+        String fromCacheValue = cacheHeaders[0];
+        isFromCache = fromCacheValue == 'from_cache';
+      }
+
       if (response.statusCode == 200) {
         dynamic responseObject;
         if (response.data is String) {
@@ -138,16 +150,47 @@ class NetworkUtil {
         Map<String, dynamic> responseMap;
         if (responseObject is Map) {
           //print('responseObject.keys=${responseObject.keys}');
-          if (responseObject.keys.contains('code') == false) {
-            // 不是项目结构
-            responseMap = Map();
-            responseMap['code'] = 0;
-            responseMap['msg'] = '请求成功';
-            responseMap["data"] = responseObject;
+          bool isMockEnvironment =
+              url.startsWith('http://121.41.91.92:3000/mock/');
+          if (isMockEnvironment == true) {
+            // 是模拟的环境，不是本项目
+
+            bool mockHappenError =
+                responseObject.keys.contains('errcode') == true; // mock环境是否发生错误
+
+            if (mockHappenError == true) {
+              responseMap = Map();
+              responseMap['code'] = responseObject["errcode"];
+              responseMap['msg'] = responseObject["errmsg"];
+              responseMap["data"] = responseObject["data"];
+            } else {
+              if (responseObject.keys.contains('code') == false) {
+                // 请求成功，但是模拟的环境，忘了在外层套上 code msg result，来使得和正常项目的结构一致，我们兼容这种返回
+                responseMap = Map();
+                responseMap['code'] = 0;
+                responseMap['msg'] = '请求成功';
+                responseMap["data"] = responseObject;
+              } else {
+                responseMap = responseObject;
+
+                responseMap = Map();
+                if (url.startsWith(
+                    'http://121.41.91.92:3000/mock/3/api/beyond/')) {
+                  responseMap['code'] = responseObject["code"];
+                  responseMap['msg'] = responseObject["msg"];
+                  responseMap["data"] = responseObject["result"];
+                } else {
+                  responseMap['code'] = responseObject["code"];
+                  responseMap['msg'] = responseObject["msg"];
+                  responseMap["data"] = responseObject["data"];
+                }
+              }
+            }
           } else {
             responseMap = responseObject;
           }
         } else {
+          // 肯定不是正常项目返回的，一般都是mock环境
           responseMap = Map();
           responseMap['code'] = 0;
           responseMap['msg'] = '请求成功';
@@ -161,6 +204,7 @@ class NetworkUtil {
           statusCode: errorCode,
           message: msg,
           result: result,
+          isCache: isFromCache,
         );
         return responseModel;
       } else {
@@ -170,6 +214,7 @@ class NetworkUtil {
           statusCode: -500,
           message: message,
           result: null,
+          isCache: isFromCache,
         );
         return responseModel;
       }
@@ -182,15 +227,19 @@ class NetworkUtil {
       } else {
         if (e is DioError) {
           DioError err = e;
-          fullUrl = err.requestOptions.baseUrl
-              .appendPathString(err.requestOptions.path);
+          fullUrl = UrlUtil.fullUrlFromDioError(err);
+          if (err.message.isNotEmpty) {
+            errorMessage = err.message;
+            if (err.type == DioErrorType.connectTimeout) {
+              // errorMessage = '请求超时';
+            }
+          }
         } else {
           fullUrl = url;
         }
       }
 
       String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
-      LogUtil.error("请求失败的异常：" + message);
       ResponseModel responseModel = ResponseModel(
         statusCode: -1,
         message: message,

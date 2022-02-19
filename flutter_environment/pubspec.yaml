@@ -18,6 +18,8 @@ dependencies:
     path: ../flutter_network/
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/ # 切换环境时候的alert确认
 
 
 dev_dependencies:

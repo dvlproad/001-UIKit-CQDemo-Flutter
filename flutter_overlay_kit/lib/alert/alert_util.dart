@@ -3,15 +3,29 @@ import './message_alert_view.dart';
 
 class AlertUtil {
   // 我知道了
-  // static showIKnowAlert(
-  //     String title, String message, Void Function() iKnowHandle) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       // return Container();
-  //     },
-  //   );
-  // }
+  static showIKnowAlert(
+    @required BuildContext context, {
+    String title,
+    String message,
+    void Function() iKnowHandle,
+  }) {
+    showAlert(
+      context,
+      alertViewBulider: (context) {
+        return IKnowMessageAlertView(
+          title: title,
+          message: message,
+          iKnowTitle: "我知道了",
+          iKnowHandle: () {
+            Navigator.pop(context);
+            if (iKnowHandle != null) {
+              iKnowHandle();
+            }
+          },
+        );
+      },
+    );
+  }
 
   // 取消 + 确定
   static showCancelOKAlert({

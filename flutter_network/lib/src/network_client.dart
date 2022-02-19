@@ -57,6 +57,7 @@ class NetworkManager {
     int receiveTimeout,
     Map<String, dynamic> headers,
     List<Interceptor> interceptors,
+    bool nouseDefalutInterceptors = false,
   }) {
     if (NetworkManager.instance._hasStart == true) {
       //print('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
@@ -71,23 +72,31 @@ class NetworkManager {
       receiveTimeout: receiveTimeout,
       headers: headers,
     );
-    if (interceptors != null && interceptors.isNotEmpty) {
-      dio.interceptors..addAll(interceptors);
-    } else {
+
+    List<Interceptor> lastInterceptors = [];
+    if (nouseDefalutInterceptors == null || nouseDefalutInterceptors == false) {
       List<Interceptor> defaultInterceptors = [
         RequestInterceptor(),
         ResponseInterceptor(),
         ErrorInterceptor(),
         DioLogInterceptor(),
       ];
-      dio.interceptors..addAll(defaultInterceptors);
+      lastInterceptors.addAll(defaultInterceptors);
     }
+
+    if (interceptors != null && interceptors.isNotEmpty) {
+      lastInterceptors..addAll(interceptors);
+    }
+
+    dio.interceptors..addAll(lastInterceptors);
 
     NetworkManager.instance._hasStart = true;
   }
 }
 
 class NetworkChangeUtil {
+  static String serviceValidProxyIp; // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，该值会是null)
+
   /// 修改 baseUrl
   static void changeOptions({
     String baseUrl,
@@ -110,14 +119,21 @@ class NetworkChangeUtil {
     );
   }
 
-  // 修改代理 proxy
-  static void changeProxy(String proxyIp) {
+  // 修改代理 proxy(返回代理设置成功与否，当传入的ip地址格式不正确等则无法成功设置代理)
+  static bool changeProxy(String proxyIp) {
+    isValidProxyIp(proxyIp) {
+      return false;
+    }
+
+    String serviceValidProxyIp = proxyIp;
+    NetworkChangeUtil.serviceValidProxyIp = serviceValidProxyIp;
+
     Dio dio = NetworkManager.instance.serviceDio;
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.findProxy = (uri) {
-        if (IsIPAddress(proxyIp)) {
-          return "PROXY $proxyIp";
+        if (serviceValidProxyIp != null) {
+          return "PROXY $serviceValidProxyIp";
         } else {
           return 'DIRECT';
         }
@@ -127,9 +143,12 @@ class NetworkChangeUtil {
       //   return true;
       // };
     };
+
+    return true;
   }
 
-  static bool IsIPAddress(String ipString) {
+  // 判断是否是有效的代理ip地址
+  static bool isValidProxyIp(String ipString) {
     if (ipString == null) {
       return false;
     }

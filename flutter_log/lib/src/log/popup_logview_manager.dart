@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import './log_home_page.dart';
 export './log_home_page.dart' show LogType;
 
+// import 'package:sliding_up_panel/sliding_up_panel.dart';
+
 class ApplicationLogViewManager {
   static GlobalKey<NavigatorState> globalKey;
 
@@ -24,6 +26,9 @@ class ApplicationLogViewManager {
 
     logOverlayEntry?.remove(); // 删除重新绘制
     ApplicationLogViewManager.logOverlayEntry = null;
+
+    // BuildContext context = ApplicationLogViewManager.globalKey.currentContext;
+    // Navigator.pop(context);
   }
 
   static void updateLogOverlayEntry() {
@@ -31,6 +36,56 @@ class ApplicationLogViewManager {
     if (logOverlayEntry != null) {
       logOverlayEntry.markNeedsBuild();
     }
+  }
+
+  static Widget _logView({
+    double opacity = 0.7, // 视图的透明不
+    @required List logModels,
+    void Function(int section, int row, LogModel bApiModel)
+        clickLogCellCallback, // logCell 的点击
+    void Function(List<LogModel> bLogModels) onPressedCopyAll, // 点击复制所有按钮的事件
+    @required void Function(LogType bLogType) onPressedClear, // 点击清空按钮的事件
+    @required void Function() onPressedClose, // 点击关闭按钮的事件
+  }) {
+    Widget logPage = LogHomePage(
+      logModels: logModels,
+      clickLogCellCallback: clickLogCellCallback,
+      onPressedClear: onPressedClear,
+      onPressedClose: onPressedClose,
+      onPressedCopyAll: onPressedCopyAll,
+    );
+
+    MediaQueryData mediaQuery =
+        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    Widget lastChild = Container(
+      // constraints: BoxConstraints(
+      //   minWidth: double.infinity,
+      //   minHeight: double.infinity,
+      // ),
+      color: Colors.white,
+      width: mediaQuery.size.width,
+      height: mediaQuery.size.height - 300,
+      child: logPage,
+    );
+
+    return Positioned(
+      bottom: 0,
+      child: GestureDetector(
+        onTap: () async {},
+        child: Visibility(
+          visible: logVisible,
+          // child: child,
+          child: Material(
+            // [Flutter Text 文字下有黄色下划线](https://www.jianshu.com/p/1f0a29cddba1)
+            color: Colors.transparent,
+            child: Opacity(
+              opacity: opacity,
+              child: lastChild,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   // 显示全局log视图
@@ -45,6 +100,30 @@ class ApplicationLogViewManager {
     @required void Function(LogType bLogType) onPressedClear, // 点击清空按钮的事件
     @required void Function() onPressedClose, // 点击关闭按钮的事件
   }) async {
+    return _showLogOverlayEntry(
+      left: left,
+      top: top,
+      builder: (context) {
+        return _logView(
+          opacity: opacity,
+          logModels: logModels,
+          clickLogCellCallback: clickLogCellCallback,
+          onPressedCopyAll: onPressedCopyAll,
+          onPressedClear: onPressedClear,
+          onPressedClose: onPressedClose,
+        );
+      },
+    );
+  }
+
+  // 显示全局log视图
+  static Future _showLogOverlayEntry({
+    double left,
+    double top,
+    @required WidgetBuilder builder,
+  }) async {
+    assert(builder != null);
+
     if (ApplicationLogViewManager.globalKey == null) {
       throw Exception(
           'Error:请先在main.dart中设置 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();');
@@ -61,44 +140,7 @@ class ApplicationLogViewManager {
     logOverlayEntry = OverlayEntry(
       builder: (BuildContext context) {
         //print('正式刷新 overlay 的 chid 视图....');
-
-        MediaQueryData mediaQuery =
-            MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
-        Widget lastChild = Container(
-          // constraints: BoxConstraints(
-          //   minWidth: double.infinity,
-          //   minHeight: double.infinity,
-          // ),
-          color: Colors.white,
-          width: mediaQuery.size.width,
-          height: mediaQuery.size.height - 300,
-          child: LogHomePage(
-            logModels: logModels,
-            clickLogCellCallback: clickLogCellCallback,
-            onPressedClear: onPressedClear,
-            onPressedClose: onPressedClose,
-            onPressedCopyAll: onPressedCopyAll,
-          ),
-        );
-
-        return Positioned(
-          bottom: 0,
-          child: GestureDetector(
-            onTap: () async {},
-            child: Visibility(
-              visible: logVisible,
-              // child: child,
-              child: Material(
-                // [Flutter Text 文字下有黄色下划线](https://www.jianshu.com/p/1f0a29cddba1)
-                color: Colors.transparent,
-                child: Opacity(
-                  opacity: opacity,
-                  child: lastChild,
-                ),
-              ),
-            ),
-          ),
-        );
+        return builder(context);
       },
     );
 
@@ -106,5 +148,16 @@ class ApplicationLogViewManager {
     ApplicationLogViewManager.logOverlayEntry = logOverlayEntry;
     ApplicationLogViewManager.globalKey.currentState.overlay
         .insert(logOverlayEntry);
+    /*
+    BuildContext context = ApplicationLogViewManager.globalKey.currentContext;
+
+    showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      context: context,
+      isDismissible: true,
+      enableDrag: true,
+      builder: builder,
+    );
+    */
   }
 }

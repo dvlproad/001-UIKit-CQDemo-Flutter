@@ -1,4 +1,4 @@
-name: flutter_network
+name: flutter_network_kit
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
@@ -11,13 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dio: any
-  package_info: any
-  shared_preferences: any
-  ez_localization: any
-
-  flutter_log:  # 需要用到 mapToStructureString 和 listToStructureString
-    path: ../flutter_log/
+  flutter_network:
+    path: ../flutter_network/
+  flutter_environment:
+    path: ../flutter_environment/ # 为了引入 ApiManager
+    
+  # dio_http_cache: any
+  dio_http_cache:
+    path: ../dio_http_cache/ # 0.3.0
 
 dev_dependencies:
   flutter_test:

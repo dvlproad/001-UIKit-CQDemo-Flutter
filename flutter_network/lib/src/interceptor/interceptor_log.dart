@@ -1,30 +1,62 @@
 import 'dart:convert' as convert;
 import 'package:dio/dio.dart';
 import 'package:flutter_log/flutter_log.dart';
-import './appendPathExtension.dart';
+import './url_util.dart';
+
+/// api 日志信息类型
+enum ApiLogLevel {
+  normal, // 正常日志信息
+  warning, // 警告信息
+  error, // 错误信息
+}
+
+/// api 请求的阶段类型
+enum ApiProcessType {
+  request, // 请求阶段
+  error, // 请求失败
+  response, // 请求成功
+}
 
 ///日志拦截器
 class DioLogInterceptor extends Interceptor {
+  static void Function(
+    String fullUrl, // 完整的url路径
+    String logString, {
+    ApiProcessType apiProcessType, // api 请求的阶段类型
+    ApiLogLevel apiLogLevel, // api 日志信息类型
+  }) logApiInfoAction; // 打印请求各阶段出现的不同等级的日志信息
+
+  void logApi(
+    String fullUrl, // 完整的url路径
+    String logString, // api 日志信息
+    ApiProcessType apiProcessType, // api 请求的阶段类型
+    ApiLogLevel apiLogLevel, // api 日志信息类型
+  ) {
+    if (DioLogInterceptor.logApiInfoAction != null) {
+      DioLogInterceptor.logApiInfoAction(
+        fullUrl,
+        logString,
+        apiProcessType: apiProcessType,
+        apiLogLevel: apiLogLevel,
+      );
+    }
+  }
+
   ///请求前
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    String url;
-    if (options.path.startsWith(RegExp(r'https?:'))) {
-      url = options.path;
-    } else {
-      url = options.baseUrl.appendPathString(options.path);
-    }
-    String requestStr = "\n==================== REQUEST ====================\n"
-        "- URL:\n${url}\n"
-        "- METHOD: ${options.method}\n";
-
+    String url = UrlUtil.fullUrlFromDioRequestOptions(options);
+    String requestStr = "======== REQUEST(请求开始的信息) ========\n";
+    requestStr += "- URL:\n${url}\n";
+    requestStr += "- METHOD: ${options.method}\n";
     requestStr += "- HEADER:\n${options.headers.mapToStructureString()}\n";
 
     String bodyString = _getBodyString(options);
     requestStr += bodyString;
 
-    // LogUtil.normal("请求开始的信息1：" + data.toString());
-    LogUtil.normal("请求开始的信息：" + requestStr);
+    //requestStr = data.toString();
+    // requestStr = "请求开始的信息：" + requestStr;
+    logApi(url, requestStr, ApiProcessType.request, ApiLogLevel.normal);
 
     handler.next(options);
   }
@@ -32,13 +64,11 @@ class DioLogInterceptor extends Interceptor {
   ///出错前
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
-    String url =
-        err.requestOptions.baseUrl.appendPathString(err.requestOptions.path);
+    String url = UrlUtil.fullUrlFromDioError(err);
 
     String errorStr = '''
-\n==================== RESPONSE ====================\n
-    - URL:\n${url}\n
-    - METHOD: ${err.requestOptions.method}\n
+    - URL:\n${url}
+    - METHOD: ${err.requestOptions.method}
     ''';
 
     if (err != null && err.response != null && err.response.headers != null) {
@@ -49,7 +79,7 @@ class DioLogInterceptor extends Interceptor {
     String bodyString = _getBodyString(err.requestOptions);
     errorStr += bodyString;
 
-    errorStr += "- ERRORTYPE: ${err.type}\n";
+    errorStr += "- ERRORTYPE: ${err.type}\n"; // 错误类型
     print('╔ ${err.type.toString()}');
     if (err.response != null && err.response.data != null) {
       errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
@@ -57,7 +87,12 @@ class DioLogInterceptor extends Interceptor {
       errorStr += "- MSG: ${err.message}\n";
     }
 
-    LogUtil.error("请求失败的回复：" + errorStr);
+    String logHeaderString = ''; // 日志头
+    logHeaderString += "请求失败(${err.type.toString()})的回复：\n";
+    logHeaderString += "============== Error ==============\n";
+
+    errorStr = logHeaderString + errorStr;
+    logApi(url, errorStr, ApiProcessType.error, ApiLogLevel.error);
 
     handler.next(err);
   }
@@ -72,9 +107,8 @@ class DioLogInterceptor extends Interceptor {
 
     Uri uri = response.requestOptions.uri;
 
-    String responseStr =
-        "\n==================== RESPONSE ====================\n"
-        "- URL:\n${uri}\n";
+    String responseStr = "";
+    responseStr += "- URL:\n${uri}\n";
     responseStr += "- HEADER:\n{";
     response.headers.forEach(
         (key, list) => responseStr += "\n  " + "\"$key\" : \"$list\",");
@@ -100,30 +134,39 @@ class DioLogInterceptor extends Interceptor {
       responseObject = convert.jsonDecode(dataJsonString);
     }
     // LogUtil.normal("请求成功的回复1：" + response.data.toString());
-    if (responseObject.keys.contains('code') == false) {
-      // 不是项目结构，比如是yapi格式
-      if (responseObject.keys.contains('errcode') == true) {
-        // yapi的格式
+    String url = uri.toString();
+    bool isMockEnvironment = url.startsWith('http://121.41.91.92:3000/mock/');
+
+    String logHeaderString = "=========== RESPONSE ===========\n"; // 日志头
+    ApiLogLevel apiLogLevel = ApiLogLevel.normal;
+    if (isMockEnvironment == true) {
+      // 是模拟的环境，不是本项目
+      bool mockHappenError =
+          responseObject.keys.contains('errcode') == true; // mock环境是否发生错误
+      if (mockHappenError == true) {
         int businessCode = responseObject["errcode"];
-        if (businessCode != 0) {
-          LogUtil.error("请求失败(code$businessCode)的回复：" + responseStr);
-        } else {
-          LogUtil.normal("请求成功(code$businessCode)的回复：" + responseStr);
-        }
+        logHeaderString += "请求失败(code$businessCode)的回复\n";
+        apiLogLevel = ApiLogLevel.error;
       } else {
-        // 其他非项目结构的，暂时都当做成功，目前不会有此情况
-        LogUtil.normal("请求成功的回复：" + responseStr);
+        logHeaderString += "请求成功的回复\n";
+        apiLogLevel = ApiLogLevel.normal;
       }
     } else {
       int businessCode = responseObject["code"];
       if (businessCode == 0) {
-        LogUtil.normal("请求成功(code$businessCode)的回复：" + responseStr);
+        logHeaderString += "请求成功(code$businessCode)的回复\n";
+        apiLogLevel = ApiLogLevel.normal;
       } else if (businessCode == 500) {
-        LogUtil.error("请求失败(code$businessCode)的回复：" + responseStr);
+        logHeaderString += "请求失败(code$businessCode)的回复\n";
+        apiLogLevel = ApiLogLevel.error;
       } else {
-        LogUtil.warning("请求成功(code$businessCode)的回复：" + responseStr);
+        logHeaderString += "请求成功(code$businessCode)的回复\n";
+        apiLogLevel = ApiLogLevel.warning;
       }
     }
+
+    responseStr = logHeaderString + responseStr;
+    logApi(url, responseStr, ApiProcessType.response, apiLogLevel);
 
     handler.next(response);
   }

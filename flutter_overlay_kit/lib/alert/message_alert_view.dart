@@ -55,8 +55,10 @@ class CJBaseMessageAlertView extends StatelessWidget {
     if (this.title != null) {
       alertTitleComponent = Container(
         margin: EdgeInsets.only(top: alertMarginVerticals[titleVerticalIndex]),
+        padding: EdgeInsets.only(left: 20, right: 20),
         child: Text(
           this.title ?? '',
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 18,
             color: Colors.black,
