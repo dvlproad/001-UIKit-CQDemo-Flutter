@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_network_kit/flutter_network_kit.dart';
+
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import './main_init/environment_datas_util.dart';
@@ -135,6 +137,7 @@ class DevUtil {
     );
   }
 
+  static int requestCount = 0;
   static Future goChangeEnvironment(
     BuildContext context, {
     bool showTestApiWidget,
@@ -147,13 +150,39 @@ class DevUtil {
               // 我的收货地址
               // Api.getAddressList(
               //     {"accountId": UserInfoManager.instance.userModel.id});
-              // HttpManager.getInstance().post(
+              // requestCount = 0;
+              // NetworkKit
+              //     .post(
               //   'user/account/getConsigneeAddresses',
-              //   params: {"accountId": UserInfoManager.instance.userModel.id},
-              // );
+              //   params: {},
+              //   cacheLevel: NetworkCacheLevel.one,
+              // )
+              //     .then((value) {
+              //   requestCount++;
+              //   print('测试网络请求的缓存功能:${requestCount}');
+              // });
+
+              // 测试网络请求的缓存功能
+              requestCount = 0;
+              NetworkKit.postWithCallback(
+                'user/account/getConsigneeAddresses',
+                params: {},
+                cacheLevel: NetworkCacheLevel.one,
+                completeCallBack: (resultData) {
+                  requestCount++;
+                  print('测试网络请求的缓存功能:${requestCount}');
+                },
+              );
             }
           : null,
-      updateNetworkCallback: (apiHost, webHost, gameHost) {
+      updateNetworkCallback: (apiHost, webHost, gameHost, {shouldExit}) {
+        /*
+        if (shouldExit == true && UserInfoManager.isLoginState() == true) {
+          UserInfoManager.instance.userLoginOut().then((value) {
+            eventBus.fire(LogoutSuccessEvent());
+          });
+        }
+        */
         NetworkChangeUtil.changeOptions(baseUrl: apiHost);
       },
       updateProxyCallback: (proxyIp) {
@@ -166,13 +195,10 @@ class DevUtil {
     BuildContext context, {
     bool showTestApiWidget,
   }) {
-    String simulateApiHost = TSEnvironmentDataUtil.dev_mockApiHost;
     return EnvironmentUtil.goChangeApiMock(
       context,
-      mockApiHost: simulateApiHost,
       onPressTestApiCallback: showTestApiWidget
           ? () {
-              print('测试 mock api 后，网络请求的情况');
               // 我的收货地址
               // Api.getAddressList(
               //     {"accountId": UserInfoManager.instance.userModel.id});

@@ -8,11 +8,14 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
+import 'package:flutter_updateversion_kit/src/check_version_common_util.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import './dev_util.dart';
 import './dev_notifier.dart';
+
+import './userInfoManager.dart';
 
 class DevPage extends StatefulWidget {
   const DevPage({Key key}) : super(key: key);
@@ -25,6 +28,7 @@ class _DevPageState extends State<DevPage> {
   bool devSwtichValue = DevUtil.isDevFloatingWidgetShowing();
 
   String versionName = "";
+  List<String> _cancelShowVersions;
 
   CommonModel _commonModel = CommonModel();
 
@@ -32,6 +36,8 @@ class _DevPageState extends State<DevPage> {
   void dispose() {
     super.dispose();
     DevUtil.isDevPageShowing = false;
+
+    LoadingUtil.dismissInContext(context);
   }
 
   @override
@@ -40,6 +46,7 @@ class _DevPageState extends State<DevPage> {
 
     DevUtil.isDevPageShowing = true;
     _getVersion();
+    _getCancelShowVersions();
   }
 
   // 获取版本号
@@ -49,6 +56,16 @@ class _DevPageState extends State<DevPage> {
     String buildNumber = packageInfo.buildNumber;
     setState(() {
       versionName = "v $version($buildNumber)";
+    });
+  }
+
+  // 获取被跳过的版本个数
+  _getCancelShowVersions() {
+    CheckVersionCommonUtil.getCancelShowVersion()
+        .then((List<String> bCancelShowVersions) {
+      setState(() {
+        _cancelShowVersions = bCancelShowVersions;
+      });
     });
   }
 
@@ -110,6 +127,7 @@ class _DevPageState extends State<DevPage> {
                 return _devtool_env_cell(context, showTestApiWidget: true);
               },
             ),
+            _devtool_proxy_cell(context, showTestApiWidget: true),
             _devtool_apimock_cell(context, showTestApiWidget: true),
             _devtool_logSwtich_cell(),
           ],
@@ -169,11 +187,11 @@ class _DevPageState extends State<DevPage> {
       title: "app打包记录",
       textValue: '',
       onTap: () {
-        //LoadingUtil.show();
+        LoadingUtil.show();
         PygerUtil.getPgyerHistoryVersions().then((value) {
-          //LoadingUtil.dismiss();
+          LoadingUtil.dismiss();
         }).catchError((onError) {
-          //LoadingUtil.dismiss();
+          LoadingUtil.dismiss();
         });
       },
     );
@@ -181,15 +199,18 @@ class _DevPageState extends State<DevPage> {
 
   Widget _devtool_cancelNewVersionsPage_cell() {
     return BJHTitleTextValueCell(
-      title: "不再提示更新的新版本",
-      textValue: '',
+      title: "不再提示更新的版本",
+      textValue: '已跳过:${_cancelShowVersions?.length}个',
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => CancelVersionPage(),
           ),
-        );
+        ).then((value) {
+          // setState(() {});
+          _getCancelShowVersions();
+        });
       },
     );
   }
@@ -199,28 +220,54 @@ class _DevPageState extends State<DevPage> {
       title: "检查更新",
       textValue: '',
       onTap: () {
-        //LoadingUtil.show();
+        LoadingUtil.showInContext(context);
         CheckVersionUtil.checkVersion(
           isManualCheck: true,
           isPyger: true,
         ).then((value) {
-          //LoadingUtil.dismiss();
+          LoadingUtil.dismissInContext(context);
         }).catchError((onError) {
-          //LoadingUtil.dismiss();
+          LoadingUtil.dismissInContext(context);
         });
       },
     );
   }
 
+  // 用户相关信息
   Widget _devtool_userinfo_cell() {
     String userId = 'UserInfoManager().userModel.userId';
-    String textValue = 'uid:$userId';
+    String textValue = '';
+    if (UserInfoManager.isLoginState()) {
+      textValue = 'uid:$userId';
+    } else {
+      textValue = '您还未登录';
+    }
     return BJHTitleTextValueCell(
       title: "user信息",
       textValue: textValue,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
         ToastUtil.showMessage('user信息拷贝成功');
+      },
+    );
+  }
+
+  Widget _devtool_forceLogout_cell() {
+    if (UserInfoManager.isLoginState() == false) {
+      return Container(height: 1);
+    }
+    return BJHTitleTextValueCell(
+      title: "强制退出",
+      textValue: '',
+      onTap: () {
+        AlertUtil.showCancelOKAlert(
+          context: context,
+          title: '确认强制退出吗？',
+          message: '强制退出本仅用于某个环境无法退出导致无法使用其他环境时候使用，其他情况仅尽量不要使用',
+          okHandle: () {
+            Navigator.of(context).pop();
+          },
+        );
       },
     );
   }
@@ -239,6 +286,31 @@ class _DevPageState extends State<DevPage> {
     return BJHTitleTextValueCell(
       title: "切换环境",
       textValue: envName,
+      onTap: () {
+        DevUtil.goChangeEnvironment(
+          context,
+          showTestApiWidget: showTestApiWidget,
+        ).then((value) {
+          setState(() {});
+        });
+      },
+    );
+  }
+
+  Widget _devtool_proxy_cell(
+    BuildContext context, {
+    bool showTestApiWidget,
+  }) {
+    TSEnvProxyModel selectedProxyModel =
+        EnvironmentManager.instance.selectedProxyModel;
+    if (selectedProxyModel == null) {
+      throw Exception(
+          '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+    }
+    String proxyName = selectedProxyModel.name;
+    return BJHTitleTextValueCell(
+      title: "添加代理",
+      textValue: proxyName,
       onTap: () {
         DevUtil.goChangeEnvironment(
           context,
@@ -284,28 +356,6 @@ class _DevPageState extends State<DevPage> {
             DevLogUtil.dismissLogView();
           }
         });
-      },
-    );
-  }
-
-  Widget _devtool_forceLogout_cell() {
-    // if (UserInfoManager.instance.isLogin == false) {
-    //   return Container(height: 1);
-    // }
-    return BJHTitleTextValueCell(
-      title: "强制退出",
-      textValue: '',
-      onTap: () {
-        AlertUtil.showCancelOKAlert(
-          context: context,
-          title: '确认强制退出吗？',
-          message: '强制退出本仅用于某个环境无法退出导致无法使用其他环境时候使用，其他情况仅尽量不要使用',
-          okHandle: () {
-            // UserInfoManager.instance.userLoginOut().then((value) {
-            Navigator.of(context).pop();
-            // });
-          },
-        );
       },
     );
   }
