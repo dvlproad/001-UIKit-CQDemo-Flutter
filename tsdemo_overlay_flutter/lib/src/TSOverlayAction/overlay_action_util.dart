@@ -5,12 +5,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 OverlayEntry overlayEntry1;
 
 class OverlayActionUtil {
-  static OverlayEntry getOverlayEntry1() {
+  static OverlayEntry getOverlayEntry1(BuildContext context) {
     OverlayEntry _overlayEntry1 = OverlayEntry(
       builder: (context) {
         return Container(
-          // color: Colors.red,
-          color: Colors.black.withOpacity(0.4),
+          color: Colors.red.withOpacity(0.4),
+          // color: Colors.black.withOpacity(0.4),
+          width: 200,
+          height: 200,
           child: GestureDetector(
             onTap: () {
               print('点击了空白区域');
@@ -39,11 +41,62 @@ class OverlayActionUtil {
         );
       },
     );
+
+    // Widget child = FlatButton(
+    //   onPressed: () {
+    //     OverlayActionUtil.dismiss();
+    //   },
+    //   child: Text('点击隐藏22'),
+    //   color: Colors.red,
+    // );
+
+    double left = MediaQuery.of(context).size.width / 2 - 100 / 2;
+    double top = MediaQuery.of(context).size.height / 2 - 100 / 2;
+    Widget child = _loadingWidget_gif;
+
+    _overlayEntry1 = OverlayEntry(
+      builder: (BuildContext context) {
+        // return Container(
+        //   color: Colors.green,
+        //   width: 200,
+        //   height: 200,
+        //   child: Positioned(
+        //     top: top,
+        //     left: left,
+        //     child: GestureDetector(
+        //       onTap: () async {},
+        //       child: child,
+        //     ),
+        //   ),
+        // );
+        return Positioned(
+          top: top,
+          left: left,
+          child: GestureDetector(
+            onTap: () async {
+              OverlayActionUtil.dismiss();
+            },
+            child: child,
+          ),
+        );
+      },
+    );
+
     return _overlayEntry1;
   }
 
+  // 动画加载方法1：使用 gif 加载动画
+  static Widget get _loadingWidget_gif {
+    return Image.asset(
+      'assets/loading_gif/loading_bj.gif',
+      package: 'tsdemo_overlay_flutter',
+      width: 100,
+      height: 100,
+    );
+  }
+
   static void show(BuildContext context) {
-    overlayEntry1 = getOverlayEntry1();
+    overlayEntry1 = getOverlayEntry1(context);
     Overlay.of(context).insert(overlayEntry1);
   }
 
@@ -86,19 +139,21 @@ class OverlayActionUtil {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(top: 8),
-            child: Text('Custom Dialog',
-                style:
-                    TextStyle(fontSize: 16, decoration: TextDecoration.none)),
+            child: Text(
+              'Custom Dialog',
+              style: TextStyle(fontSize: 16, decoration: TextDecoration.none),
+            ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 15, bottom: 8),
             child: FlatButton(
-                onPressed: () {
-                  // 关闭 Dialog
-                  Navigator.pop(context);
-                },
-                child: Text('确定')),
-          )
+              child: Text('确定'),
+              onPressed: () {
+                // 关闭 Dialog
+                Navigator.pop(context);
+              },
+            ),
+          ),
         ],
       ),
     );

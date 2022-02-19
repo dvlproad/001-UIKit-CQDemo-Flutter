@@ -23,6 +23,12 @@ class _CQModulesHomePageState
   OverlayEntry _overlayEntry1;
 
   @override
+  void dispose() {
+    super.dispose();
+    OverlayActionUtil.dismiss();
+  }
+
+  @override
   PreferredSizeWidget appBar() {
     return AppBar(
       title: Text(widget.title ?? 'Overlay Action 首页'),
@@ -54,6 +60,15 @@ class _CQModulesHomePageState
             'content': 'Overlay的弹出',
             'actionBlock': () {
               OverlayActionUtil.show_flutter_easyloading();
+            },
+          },
+          {
+            'title': "本页面",
+            'content': '本页面',
+            'actionBlock': () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return TSOverlayActionHomePage();
+              }));
             },
           },
         ]

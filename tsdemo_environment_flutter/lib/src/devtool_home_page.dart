@@ -9,6 +9,7 @@ import './devtool_routes.dart';
 import './main_init/main_init.dart';
 import './dev_util.dart';
 
+import './overlay_page2.dart';
 import './drag/darg_page1.dart';
 import './drag/darg_page2.dart';
 import './drag/log_page.dart';
@@ -57,6 +58,15 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
             // 'nextPageName': DevToolRouters.apiMockPage,
             'actionBlock': () {
               DevUtil.goChangeApiMock(context, showTestApiWidget: true);
+            },
+          },
+          {
+            'title': "Overlay",
+            // 'nextPageName': DevToolRouters.apiMockPage,
+            'actionBlock': () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return OverlayPage2();
+              }));
             },
           },
           {

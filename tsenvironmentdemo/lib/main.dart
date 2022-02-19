@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
+import 'package:tsdemo_environment_flutter/src/overlay_page2.dart';
 
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  Main_Init.initView(globalKey);
+  Main_Init.initWithGlobalKey(globalKey);
+  OverlayPage2.globalKey = globalKey;
 
   runApp(MyApp());
 }
