@@ -58,7 +58,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
       }
     }
 
-    return isHideStatusBar()
+    return shouldGiveUpScaffold()
         ? _bodyWidget(context)
         : Scaffold(
             resizeToAvoidBottomInset: resizeToAvoidBottomInset(),
@@ -79,7 +79,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     // );
   }
 
-  // appBar(非Scaffold中)
+  // appBar(非Scaffold中):appBarWidget 只要非null，则有 stautsBarHeight + 44 的高度
   // appBar不能设置在success中，只能设置在appBar()或此处appBarWidget(BuildContext context)的原因是:
   // 原因是在有背景图存在的情况下，其他buildErrorWidget(BuildContext context)返回的视图为了能够显示背景图会设置成透明色，
   // 同样的因为设置了这个透明色，导致原本想的通过下移复用buildSuccessWidget(BuildContext context)中的导航栏，
@@ -90,7 +90,8 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     return null;
   }
 
-  bool isHideStatusBar() {
+  /// 是否不添加 Scaffold 层
+  bool shouldGiveUpScaffold() {
     return false;
   }
 
@@ -142,8 +143,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
     //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
-    double hasAppBarWidget =
+    double appBarHeight =
         appBarWidget(context) != null ? stautsBarHeight + 44 : 0;
+
+    double contentWidgetTopDistance =
+        contentWidgetTop(_currentWidgetType, appBarHeight);
 
     assert(backgroundWidget(context) != null);
 
@@ -156,21 +160,29 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
       child: Stack(
         children: [
           backgroundWidget(context),
+          // appBarWidget(context) ?? Container(height: 0),
           Column(
             children: [
-              appBarWidget(context) ?? Container(height: 0),
+              Container(height: contentWidgetTopDistance),
               Expanded(
-                child: _contentWidget(context, hasAppBarWidget),
+                child: _contentWidget(context),
               ),
             ],
-          )
+          ),
+          // appbar 使用 Positioned 包起来,以避免当 _contentWidget 从 appbar的顶部绘制时候，会遮挡住或被遮挡住
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: appBarWidget(context) ?? Container(height: 0),
+          ),
         ],
       ),
     );
   }
 
   /// 内容视图
-  Widget _contentWidget(BuildContext context, double hasAppBarWidget) {
+  Widget _contentWidget(BuildContext context) {
     return PageTypeLoadStateWidget(
       widgetType: _currentWidgetType,
       initWidget: _initWidget,
@@ -219,6 +231,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   /// 获取当前状态(如网络异常时候，存在在导航栏上的右边的那些视图是要禁止点击的)
   WidgetType getCurrentWidgetType() {
     return _currentWidgetType;
+  }
+
+  /// 设置指定的 widgetType 离屏幕顶部的距离(默认是直接距离 appBar 的高度 Height)
+  double contentWidgetTop(WidgetType widgetType, double appBarHeight) {
+    return appBarHeight;
   }
 
   Widget buildInitWidget(BuildContext context) {

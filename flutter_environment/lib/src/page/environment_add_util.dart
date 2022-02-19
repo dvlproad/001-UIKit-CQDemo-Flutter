@@ -5,12 +5,14 @@ class EnvironmentAddUtil {
   // 取消 + 确定
   static showAddPage(
     @required BuildContext context, {
+    String proxyIp,
     @required Function(String bProxyIp) addCompleteBlock,
   }) {
     showAlert(
       context,
       alertViewBulider: (context) {
         return EnvironmentAddPage(
+          oldProxyIp: proxyIp,
           callBack: (bProxyIp) {
             if (addCompleteBlock != null) {
               addCompleteBlock(bProxyIp);

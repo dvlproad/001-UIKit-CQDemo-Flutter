@@ -3,6 +3,7 @@ import './environment_manager.dart';
 import './environment_data_bean.dart';
 import './page/environment_page_content.dart';
 import './page/api_mock_page_content.dart';
+import './apimock/manager/api_manager.dart';
 
 import '../darg/draggable_manager.dart';
 
@@ -53,7 +54,8 @@ class EnvironmentUtil {
     BuildContext context, {
     Function() onPressTestApiCallback,
     @required
-        Function(String apiHost, String webHost, String gameHost)
+        Function(String apiHost, String webHost, String gameHost,
+                {bool shouldExit})
             updateNetworkCallback,
     @required Function(String proxyIp) updateProxyCallback,
   }) {
@@ -82,20 +84,23 @@ class EnvironmentUtil {
     return noneProxy;
   }
 
+  /// 从from网络环境切换到to网络环境，是否需要自动关闭app.(且如果已登录则重启后需要重新登录)
+  static bool Function(TSEnvNetworkModel fromNetworkEnvModel,
+      TSEnvNetworkModel toNetworkEnvModel) shouldExitWhenChangeNetworkEnv;
+
   // 进入切换 Api mock 的页面
   static Future goChangeApiMock(
     BuildContext context, {
-    String mockApiHost,
     Function() onPressTestApiCallback,
     List<Widget> navbarActions,
   }) {
-    TSEnvNetworkModel selectedNetworkModel =
-        EnvironmentManager.instance.selectedNetworkModel;
-    if (selectedNetworkModel == null) {
+    String mockApiHost = ApiManager.instance.mockApiHost;
+    if (mockApiHost == null) {
       throw Exception(
-          '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+          '请先调用 ApiManager.configMockApiHost(simulateApiHost)设置api要mock到的地址');
     }
-    String normalApiHost = selectedNetworkModel.apiHost;
+    String normalApiHost =
+        EnvironmentManager.instance.selectedNetworkModel.apiHost;
 
     return Navigator.of(context).push(
       MaterialPageRoute(

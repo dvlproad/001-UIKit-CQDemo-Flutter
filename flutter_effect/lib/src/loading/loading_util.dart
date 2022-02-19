@@ -2,6 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import './loading_widget.dart';
+
+OverlayEntry pageOverlayEntry;
+
 class LoadingUtil {
   // [Flutter EasyLoading的实现原理](https://blog.csdn.net/weixin_44492423/article/details/104388056)
   /// init EasyLoading
@@ -64,5 +68,34 @@ class LoadingUtil {
 
   static dismiss() {
     EasyLoading.dismiss();
+  }
+
+  /// 在 context 中展示 loading ，(一定记得在 dispose 方法中调用 LoadingUtil.dismissInContext(context);)
+  static showInContext(BuildContext context) {
+    assert(context != null);
+    double left = MediaQuery.of(context).size.width / 2 - 100 / 2;
+    double top = MediaQuery.of(context).size.height / 2 - 100 / 2;
+    Widget child = LoadingWidget();
+
+    pageOverlayEntry = OverlayEntry(
+      builder: (BuildContext context) {
+        return Positioned(
+          top: top,
+          left: left,
+          child: GestureDetector(
+            onTap: () async {
+              dismissInContext(context);
+            },
+            child: child,
+          ),
+        );
+      },
+    );
+
+    Overlay.of(context).insert(pageOverlayEntry);
+  }
+
+  static dismissInContext(BuildContext context) {
+    pageOverlayEntry?.remove();
   }
 }

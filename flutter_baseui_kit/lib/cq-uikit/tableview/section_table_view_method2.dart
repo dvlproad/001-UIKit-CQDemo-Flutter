@@ -91,6 +91,7 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
 
     return ListView.builder(
       key: listViewKey,
+      padding: EdgeInsets.only(top: 0), // 修复 ListView 没有顶部对齐的问题
       physics: AlwaysScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return _buildCell(context, index);

@@ -6,8 +6,9 @@ import '../environment_data_bean.dart';
 typedef ClickEnvProxyCellCallback = void Function(
   int section,
   int row,
-  TSEnvProxyModel bProxyModel,
-);
+  TSEnvProxyModel bProxyModel, {
+  bool isLongPress,
+});
 
 class EnvProxyTableViewCell extends StatelessWidget {
   @required
@@ -33,12 +34,14 @@ class EnvProxyTableViewCell extends StatelessWidget {
       check: proxyModel.check,
       section: section,
       row: row,
-      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {
+      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check,
+          {isLongPress}) {
         if (null != this.clickEnvProxyCellCallback) {
           this.clickEnvProxyCellCallback(
             this.section,
             this.row,
             this.proxyModel,
+            isLongPress: isLongPress,
           );
         }
       },

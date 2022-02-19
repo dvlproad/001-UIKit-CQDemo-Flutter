@@ -33,7 +33,14 @@ class ApiMockTableViewCell extends StatelessWidget {
       check: apiModel.mock,
       section: section,
       row: row,
-      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {
+      clickEnvBaseCellCallback: (
+        section,
+        row,
+        mainTitle,
+        subTitles,
+        check, {
+        bool isLongPress,
+      }) {
         if (null != this.clickApiMockCellCallback) {
           this.clickApiMockCellCallback(
             this.section,

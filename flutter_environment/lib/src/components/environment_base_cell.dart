@@ -6,8 +6,9 @@ typedef ClickEnvBaseCellCallback = void Function(
   int row,
   String mainTitle,
   List<String> subTitles,
-  bool check,
-);
+  bool check, {
+  bool isLongPress, // 是否是长按
+});
 
 class EnvBaseTableViewCell extends StatelessWidget {
   final String mainTitle;
@@ -16,7 +17,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
 
   final int section;
   final int row;
-  final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 网络 networkCell 的点击
+  final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 点击 cell
 
   EnvBaseTableViewCell({
     Key key,
@@ -51,11 +52,16 @@ class EnvBaseTableViewCell extends StatelessWidget {
   Widget cellWidget() {
     return GestureDetector(
       child: _cellContainer(),
-      onTap: _onTapCell,
+      onTap: () {
+        _onTapCell(isLongPress: false);
+      },
+      onLongPress: () {
+        _onTapCell(isLongPress: true);
+      },
     );
   }
 
-  void _onTapCell() {
+  void _onTapCell({bool isLongPress}) {
     if (null != this.clickEnvBaseCellCallback) {
       this.clickEnvBaseCellCallback(
         this.section,
@@ -63,6 +69,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
         this.mainTitle,
         this.subTitles,
         this.check,
+        isLongPress: isLongPress,
       );
     }
   }

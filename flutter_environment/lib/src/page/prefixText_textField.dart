@@ -26,6 +26,10 @@ class TextTextFieldRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (value != null && value.isNotEmpty) {
+      controller.text = value; // 修复未设置value
+    }
+
     return Container(
       color: const Color(0xFFffffff),
       child: Row(

@@ -34,7 +34,8 @@ class EnvNetworkTableViewCell extends StatelessWidget {
       check: envModel.check,
       section: section,
       row: row,
-      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {
+      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check,
+          {bool isLongPress}) {
         if (null != this.clickEnvNetworkCellCallback) {
           this.clickEnvNetworkCellCallback(
             this.section,

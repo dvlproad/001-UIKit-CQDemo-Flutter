@@ -53,6 +53,8 @@ class _PageTypeLoadStateWidgetState extends State<PageTypeLoadStateWidget> {
           right: 40,
           child: Offstage(
             offstage: !widget.showSelfLoading,
+            // 当offstage为true，控件隐藏； 当offstage为false，显示；
+            // 当Offstage不可见的时候，如果child有动画等，需要手动停掉，Offstage并不会停掉动画等操作。
             child: widget.selfLoadingWidget,
           ),
         ),

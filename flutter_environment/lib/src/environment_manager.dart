@@ -177,16 +177,27 @@ class EnvironmentManager {
   }
 
   // 环境:添加自定义的网络代理，并是否直接选中新添加的
-  TSEnvProxyModel addEnvProxyModel({
+  TSEnvProxyModel addOrUpdateCustomEnvProxyIp({
     String proxyIp,
     bool selectedNew = true,
   }) {
-    List<TSEnvProxyModel> proxyModels = _proxyModels;
-
     TSEnvProxyModel newProxyModel = TSEnvProxyModel();
     newProxyModel.proxyId = "proxykId_custom";
     newProxyModel.name = "自定义代理";
     newProxyModel.proxyIp = proxyIp;
+
+    addOrUpdateEnvProxyModel(
+      newProxyModel: newProxyModel,
+      selectedNew: selectedNew,
+    );
+  }
+
+  // 环境:修改或新增网络代理，并是否直接选中新添加的
+  TSEnvProxyModel addOrUpdateEnvProxyModel({
+    TSEnvProxyModel newProxyModel,
+    bool selectedNew = true,
+  }) {
+    List<TSEnvProxyModel> proxyModels = _proxyModels;
 
     int proxyIpIndex = -1;
     proxyIpIndex = proxyModels

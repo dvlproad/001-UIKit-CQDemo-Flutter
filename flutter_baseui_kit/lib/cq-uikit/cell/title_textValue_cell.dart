@@ -36,7 +36,7 @@ class BJHTitleTextValueCell extends StatelessWidget {
     List<Widget> widgets = [];
 
     if (this.addDotForValue == true) {
-      widgets.add(_dot());
+      widgets.add(_dot(7));
       widgets.add(SizedBox(width: AdaptCJHelper.setWidth(20)));
     }
 
@@ -52,18 +52,18 @@ class BJHTitleTextValueCell extends StatelessWidget {
   }
 
   // 文本前面的点(一般不添加)
-  Widget _dot() {
+  Widget _dot(double radius) {
     return Container(
-      width: AdaptCJHelper.setWidth(14),
-      height: AdaptCJHelper.setWidth(14),
+      width: 2 * radius.w_cj,
+      height: 2 * radius.h_cj,
       decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.all(Radius.circular(AdaptCJHelper.setWidth(7))),
-          border: Border.all(
-            color: const Color(0xffCD3F49),
-            width: AdaptCJHelper.setWidth(7),
-            style: BorderStyle.solid,
-          )),
+        borderRadius: BorderRadius.all(Radius.circular(radius.w_cj)),
+        border: Border.all(
+          color: const Color(0xffCD3F49),
+          width: radius.w_cj,
+          style: BorderStyle.solid,
+        ),
+      ),
     );
   }
 

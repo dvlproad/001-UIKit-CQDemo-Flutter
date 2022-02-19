@@ -6,9 +6,11 @@ import './api_cache.dart';
 
 class ApiManager {
   bool _allowMock;
+  String _mockApiHost;
   List<ApiModel> _apiModels;
 
   bool get allowMock => _allowMock;
+  String get mockApiHost => _mockApiHost;
   List<ApiModel> get apiModels => _apiModels;
 
   // 工厂模式
@@ -55,6 +57,11 @@ class ApiManager {
       }
     }
     _apiModels = apiModels;
+  }
+
+  // 设置 api 要 mock 到的地址
+  static void configMockApiHost(String mockApiHost) {
+    ApiManager.instance._mockApiHost = mockApiHost;
   }
 
   // 设置是否允许 mock api

@@ -164,10 +164,6 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
               if (bNetworkModel == _oldSelectedNetworkModel) {
                 return;
               }
-              bNetworkModel.check = !bNetworkModel.check;
-              _oldSelectedNetworkModel.check = !_oldSelectedNetworkModel.check;
-
-              _oldSelectedNetworkModel = bNetworkModel;
 
               // setState(() {}); // 请在外部执行
               // notifier.searchTextChange(bNetworkModel.envId);
@@ -185,21 +181,19 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
             proxyModel: dataModel,
             section: section,
             row: row,
-            clickEnvProxyCellCallback:
-                (int section, int row, TSEnvProxyModel bProxyModel) {
+            clickEnvProxyCellCallback: (
+              int section,
+              int row,
+              TSEnvProxyModel bProxyModel, {
+              bool isLongPress,
+            }) {
               // print('点击切换 Proxy 环境');
 
-              if (bProxyModel == _oldSelectedProxyModel) {
-                return;
-              }
-              bProxyModel.check = !bProxyModel.check;
-              _oldSelectedProxyModel.check = !_oldSelectedProxyModel.check;
-
-              _oldSelectedProxyModel = bProxyModel;
               // setState(() {}); // 请在外部执行
 
               if (widget.clickEnvProxyCellCallback != null) {
-                widget.clickEnvProxyCellCallback(section, row, bProxyModel);
+                widget.clickEnvProxyCellCallback(section, row, bProxyModel,
+                    isLongPress: isLongPress);
               }
             },
           );

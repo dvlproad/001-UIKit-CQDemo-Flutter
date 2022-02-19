@@ -4,10 +4,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
 
 class EnvironmentAddPage extends StatefulWidget {
+  final String oldProxyIp;
   final Function(String bProxyIp) callBack;
 
   EnvironmentAddPage({
     Key key,
+    this.oldProxyIp,
     this.callBack,
   }) : super(key: key);
 
@@ -34,6 +36,15 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.oldProxyIp != null && widget.oldProxyIp.isNotEmpty) {
+      List<String> proxyComponents = widget.oldProxyIp.split(':');
+      userName = proxyComponents[0];
+      phone = proxyComponents[1];
+    } else {
+      userName = "";
+      phone = "";
+    }
   }
 
   @override
@@ -113,7 +124,7 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
     return TextTextFieldRowWidget(
       title: '端口号',
       placeholder: '请输入端口号,默认8888',
-      value: '',
+      value: phone,
       keyboardType: TextInputType.number,
       autofocus: true,
       controller: _phoneController,
