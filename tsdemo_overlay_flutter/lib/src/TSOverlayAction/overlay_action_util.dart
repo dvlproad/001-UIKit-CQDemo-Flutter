@@ -101,7 +101,7 @@ class OverlayActionUtil {
   }
 
   static void dismiss() {
-    overlayEntry1.remove();
+    overlayEntry1?.remove();
   }
 
   //[实现Flutter弹窗的正确姿势](https://www.jianshu.com/p/0f417c75cb41)

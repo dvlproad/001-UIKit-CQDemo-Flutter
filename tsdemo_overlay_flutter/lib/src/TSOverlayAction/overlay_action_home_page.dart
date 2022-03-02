@@ -24,8 +24,8 @@ class _CQModulesHomePageState
 
   @override
   void dispose() {
-    super.dispose();
     OverlayActionUtil.dismiss();
+    super.dispose();
   }
 
   @override

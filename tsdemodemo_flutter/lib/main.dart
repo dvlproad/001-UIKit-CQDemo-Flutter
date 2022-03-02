@@ -16,7 +16,7 @@ import 'package:tsdemodemo_flutter/modules/main/main_page.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  Main_Init.initWithGlobalKey(globalKey);
+  Main_Init.initWithGlobalKey(globalKey, PackageType.develop1);
 
   runApp(MyApp());
 }
