@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './environment_base_cell.dart';
-import '../environment_data_bean.dart';
+import '../proxy_page_data_bean.dart';
 
 typedef ClickEnvProxyCellCallback = void Function(
   int section,

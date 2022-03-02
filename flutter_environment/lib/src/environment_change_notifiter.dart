@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './environment_data_bean.dart';
+import './network_page_data_bean.dart';
+import './proxy_page_data_bean.dart';
 
 class EnvironmentChangeNotifier extends ChangeNotifier {
   List<TSEnvNetworkModel> _networkModels;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './environment_manager.dart';
-import './environment_data_bean.dart';
+import './network_page_data_manager.dart';
+import './proxy_page_data_manager.dart';
 import './page/environment_page_content.dart';
 import './page/api_mock_page_content.dart';
 import './apimock/manager/api_manager.dart';
@@ -8,56 +8,14 @@ import './apimock/manager/api_manager.dart';
 import '../darg/draggable_manager.dart';
 
 class EnvironmentUtil {
-  static Future completeEnvInternal_whenNull({
-    @required List<TSEnvNetworkModel> networkModels_whenNull,
-    @required List<TSEnvProxyModel> proxyModels_whenNull,
-    @required String defaultNetworkId_whenNull,
-    @required String defaultProxykId_whenNull,
-  }) async {
-    assert(networkModels_whenNull != null);
-    assert(proxyModels_whenNull != null);
-    assert(defaultNetworkId_whenNull != null);
-    assert(defaultProxykId_whenNull != null);
-    return EnvironmentManager()
-        .completeEnvInternal_whenNull(
-      networkModels_whenNull: networkModels_whenNull,
-      proxyModels_whenNull: proxyModels_whenNull,
-      defaultNetworkId_whenNull: defaultNetworkId_whenNull,
-      defaultProxykId_whenNull: defaultProxykId_whenNull,
-    )
-        .then((value) {
-      TSEnvNetworkModel selectedNetworkModel =
-          EnvironmentManager().selectedNetworkModel;
-      String apiHost = selectedNetworkModel.apiHost;
-      String webHost = selectedNetworkModel.webHost;
-      String gameHost = selectedNetworkModel.gameHost;
-
-      TSEnvProxyModel selectedProxyModel =
-          EnvironmentManager().selectedProxyModel;
-      String proxyIp = selectedProxyModel.proxyIp;
-
-      Map map = {
-        'apiHost': apiHost,
-        'webHost': webHost,
-        'gameHost': gameHost,
-      };
-
-      if (isNoneProxyIp(proxyIp) == false) {
-        map['proxyIp'] = proxyIp;
-      }
-      return map;
-    });
-  }
-
   // 进入切换环境页面
   static Future goChangeEnvironment(
     BuildContext context, {
     Function() onPressTestApiCallback,
     @required
-        Function(String apiHost, String webHost, String gameHost,
-                {bool shouldExit})
+        Function(TSEnvNetworkModel bNetworkModel, {bool shouldExit})
             updateNetworkCallback,
-    @required Function(String proxyIp) updateProxyCallback,
+    @required Function(TSEnvProxyModel bProxyModel) updateProxyCallback,
   }) {
     return Navigator.of(context).push(
       MaterialPageRoute(
@@ -70,18 +28,6 @@ class EnvironmentUtil {
         },
       ),
     );
-  }
-
-  static bool isNoneProxy() {
-    String proxyIp = EnvironmentManager.instance.selectedProxyModel.proxyIp;
-    bool noneProxy = isNoneProxyIp(proxyIp);
-    return noneProxy;
-  }
-
-  static bool isNoneProxyIp(String proxyIp) {
-    bool noneProxy = proxyIp == TSEnvProxyModel.noneProxykIp ? true : false;
-
-    return noneProxy;
   }
 
   /// 从from网络环境切换到to网络环境，是否需要自动关闭app.(且如果已登录则重启后需要重新登录)
@@ -100,7 +46,7 @@ class EnvironmentUtil {
           '请先调用 ApiManager.configMockApiHost(simulateApiHost)设置api要mock到的地址');
     }
     String normalApiHost =
-        EnvironmentManager.instance.selectedNetworkModel.apiHost;
+        NetworkPageDataManager.instance.selectedNetworkModel.apiHost;
 
     return Navigator.of(context).push(
       MaterialPageRoute(

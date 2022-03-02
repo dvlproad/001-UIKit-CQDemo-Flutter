@@ -10,7 +10,8 @@ import './components/environment_network_cell.dart';
 import './components/environment_proxy_cell.dart';
 
 import './environment_change_notifiter.dart';
-import './environment_data_bean.dart';
+import './network_page_data_bean.dart';
+import './proxy_page_data_bean.dart';
 
 class TSEnvironmentList extends StatefulWidget {
   final String networkTitle;

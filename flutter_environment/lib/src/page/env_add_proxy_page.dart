@@ -3,28 +3,33 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
 
-class EnvironmentAddPage extends StatefulWidget {
+class EnvironmentAddProxyPage extends StatefulWidget {
+  final String proxyName;
   final String oldProxyIp;
-  final Function(String bProxyIp) callBack;
+  final Function({String bProxyName, String bProxyIp}) callBack;
 
-  EnvironmentAddPage({
+  EnvironmentAddProxyPage({
     Key key,
+    this.proxyName,
     this.oldProxyIp,
     this.callBack,
   }) : super(key: key);
 
   @override
-  _EnvironmentAddPageState createState() => new _EnvironmentAddPageState();
+  _EnvironmentAddProxyPageState createState() =>
+      new _EnvironmentAddProxyPageState();
 }
 
-class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
+class _EnvironmentAddProxyPageState extends State<EnvironmentAddProxyPage> {
   bool userNameValid = false;
   bool phoneValid = false;
 
+  String proxyName = "";
   String userName = "";
   String phone = "";
 
   //定义一个controller
+  TextEditingController _proxyNameController = new TextEditingController();
   TextEditingController _usernameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
 
@@ -36,6 +41,8 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
   @override
   void initState() {
     super.initState();
+
+    proxyName = widget.proxyName ?? '';
 
     if (widget.oldProxyIp != null && widget.oldProxyIp.isNotEmpty) {
       List<String> proxyComponents = widget.oldProxyIp.split(':');
@@ -82,11 +89,16 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
     return <Widget>[
       new Column(
         children: <Widget>[
-          userNameRowWidget(),
+          /// 代理名称
+          proxyNameRowWidget(),
 
-          /// 用户名
+          /// 代理ip
           _separateLine(),
-          phoneRowWidget(),
+          proxyIpRowWidget(),
+
+          /// 代理ip端口
+          _separateLine(),
+          proxyPortRowWidget(),
 
           /// 密码提示语
           submitButtonRowWidget(),
@@ -107,11 +119,23 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
     );
   }
 
-  /// 用户名 的行视图
-  Widget userNameRowWidget() {
+  /// 代理名称 的行视图
+  Widget proxyNameRowWidget() {
+    return TextTextFieldRowWidget(
+      title: '代理名称',
+      placeholder: '请输入代理名称',
+      value: proxyName,
+      keyboardType: TextInputType.name,
+      autofocus: true,
+      controller: _proxyNameController,
+    );
+  }
+
+  /// 代理ip 的行视图
+  Widget proxyIpRowWidget() {
     return TextTextFieldRowWidget(
       title: '代理ip',
-      placeholder: '请输入代理ip',
+      placeholder: '请输入代理ip,形如192.168.1.1',
       value: userName,
       keyboardType: TextInputType.url,
       autofocus: true,
@@ -119,8 +143,8 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
     );
   }
 
-  /// 手机号 的行视图
-  Widget phoneRowWidget() {
+  /// 端口号 的行视图
+  Widget proxyPortRowWidget() {
     return TextTextFieldRowWidget(
       title: '端口号',
       placeholder: '请输入端口号,默认8888',
@@ -160,6 +184,10 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
       //splashColor: Colors.grey, //点击时，水波动画中水波的颜色
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
       onPressed: () {
+        // 代理名称
+        String proxyName = _proxyNameController.text;
+
+        // 代理ip
         String userName = _usernameController.text;
         Runes runes = userName.runes;
         int leng = runes.length;
@@ -167,6 +195,7 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
         int userNameLength = userName.length;
         print(userNameLength);
 
+        // 代理ip端口port
         String port = _phoneController.text;
         if (port == null || port.length == 0) {
           port = '8888';
@@ -174,11 +203,11 @@ class _EnvironmentAddPageState extends State<EnvironmentAddPage> {
 
         String proxyIp = '$userName:$port';
         if (IsIPAddress(proxyIp) == false) {
-          showMessage('代理ip格式出错,请先修改');
+          showMessage('代理ip格式出错,请先修改成形如192.168.1.1');
         } else {
           Navigator.pop(context);
           if (widget.callBack != null) {
-            widget.callBack(proxyIp);
+            widget.callBack(bProxyName: proxyName, bProxyIp: proxyIp);
           }
         }
       },

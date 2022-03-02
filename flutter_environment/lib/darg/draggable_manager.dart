@@ -15,6 +15,8 @@ class ApplicationDraggableManager {
   }
 
   // 弹出只是一个悬浮按钮的视图
+  static ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
+  static String floatingToolText; // 悬浮按钮上的文本
   static Future showEasyOverlayEntry({
     double left,
     double top,
@@ -27,18 +29,29 @@ class ApplicationDraggableManager {
       child: GestureDetector(
         child: Container(
           // color: Colors.red,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: Colors.red,
             image: DecorationImage(
-              image: AssetImage(
-                'assets/icon_dev.png',
-                package: 'flutter_environment',
-              ),
+              image: floatingToolImageProvider ??
+                  AssetImage(
+                    'assets/icon_dev.png',
+                    package: 'flutter_environment',
+                  ),
               fit: BoxFit.cover,
             ),
           ),
           width: 44,
           height: 44,
+          child: Center(
+            child: Text(
+              floatingToolText ?? '',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+          ),
         ),
         onTap: onTap,
         onLongPress: onLongPress,

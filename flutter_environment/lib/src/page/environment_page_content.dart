@@ -7,8 +7,10 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './actionsheet_footer.dart';
 import './environment_add_util.dart';
 
-import '../environment_manager.dart';
-import '../environment_data_bean.dart';
+import '../network_page_data_manager.dart';
+import '../network_page_data_bean.dart';
+import '../proxy_page_data_manager.dart';
+import '../proxy_page_data_bean.dart';
 
 import '../environment_list.dart';
 
@@ -21,12 +23,10 @@ import '../environment_util.dart';
 class EnvironmentPageContent extends StatefulWidget {
   final Function() onPressTestApiCallback;
   final Function(
-    String apiHost,
-    String webHost,
-    String gameHost, {
+    TSEnvNetworkModel bNetworkModel, {
     bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
   }) updateNetworkCallback;
-  final Function(String proxyIp) updateProxyCallback;
+  final Function(TSEnvProxyModel bProxyModel) updateProxyCallback;
 
   EnvironmentPageContent({
     Key key,
@@ -55,15 +55,15 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
   void initState() {
     super.initState();
 
-    if (EnvironmentManager().networkModels == null ||
-        EnvironmentManager().networkModels.isEmpty) {
+    if (NetworkPageDataManager().networkModels == null ||
+        NetworkPageDataManager().networkModels.isEmpty) {
       print(
           'error:请在 main_init.dart 中 执行 EnvironmentUtil.completeEnvInternal_whenNull();');
     }
-    _networkModels = EnvironmentManager().networkModels;
-    _proxyModels = EnvironmentManager().proxyModels;
-    _selectedNetworkModel = EnvironmentManager().selectedNetworkModel;
-    _selectedProxyModel = EnvironmentManager().selectedProxyModel;
+    _networkModels = NetworkPageDataManager().networkModels;
+    _proxyModels = ProxyPageDataManager().proxyModels;
+    _selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
+    _selectedProxyModel = ProxyPageDataManager().selectedProxyModel;
   }
 
   @override
@@ -80,14 +80,6 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
     return AppBar(
       title: Text('切换环境'),
     );
-  }
-
-  Future<void> showLogWindow() async {
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      // await CjMonitorFlutter.showLogSuspendWindow;
-    } on PlatformException {}
-    if (!mounted) return;
   }
 
   Widget get _bodyWidget {
@@ -128,30 +120,15 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
   }
 
   void _addOrUpdateCustomEnvProxyIp() {
-    EnvironmentAddUtil.showAddPage(
+    EnvironmentAddUtil.showAddOrUpdateProxyPage(
       context,
+      proxyName: '自定义代理',
       proxyIp: null,
-      addCompleteBlock: (bProxyIp) {
+      addCompleteBlock: ({bProxyName, bProxyIp}) {
         print('proxyIp =$bProxyIp');
-        EnvironmentManager().addOrUpdateCustomEnvProxyIp(
+        ProxyPageDataManager().addOrUpdateCustomEnvProxyIp(
+          proxyName: bProxyName,
           proxyIp: bProxyIp,
-        );
-
-        setState(() {});
-      },
-    );
-  }
-
-  void _tryUpdateProxyModel(TSEnvProxyModel bProxyModel) {
-    EnvironmentAddUtil.showAddPage(
-      context,
-      proxyIp: bProxyModel.proxyIp,
-      addCompleteBlock: (bProxyIp) {
-        print('proxyIp =$bProxyIp');
-
-        bProxyModel.proxyIp = bProxyIp;
-        EnvironmentManager().addOrUpdateEnvProxyModel(
-          newProxyModel: bProxyModel,
         );
 
         setState(() {});
@@ -170,12 +147,17 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
       clickEnvNetworkCellCallback: (section, row, bNetworkModel,
           {isLongPress}) {
         print('点击了${bNetworkModel.name}');
-        _tryUpdateToNetworkModel(bNetworkModel);
+
+        if (isLongPress == true) {
+        } else {
+          _tryUpdateToNetworkModel(bNetworkModel);
+        }
       },
       clickEnvProxyCellCallback: (section, row, bProxyModel, {isLongPress}) {
         print('点击了${bProxyModel.name}');
         if (isLongPress == true) {
           if (bProxyModel.proxyId == TSEnvProxyModel.noneProxykId) {
+            // 无代理不支持修改
             return;
           }
           _tryUpdateProxyModel(bProxyModel);
@@ -185,6 +167,25 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
           }
           _tryUpdateToProxyModel(bProxyModel);
         }
+      },
+    );
+  }
+
+  /// 尝试修改代理
+  void _tryUpdateProxyModel(TSEnvProxyModel bProxyModel) {
+    EnvironmentAddUtil.showAddOrUpdateProxyPage(
+      context,
+      proxyName: bProxyModel.name,
+      proxyIp: bProxyModel.proxyIp,
+      addCompleteBlock: ({bProxyName, bProxyIp}) {
+        print('proxyName=$bProxyName, proxyIp =$bProxyIp');
+        bProxyModel.name = bProxyName;
+        bProxyModel.proxyIp = bProxyIp;
+        ProxyPageDataManager().addOrUpdateEnvProxyModel(
+          newProxyModel: bProxyModel,
+        );
+
+        setState(() {});
       },
     );
   }
@@ -222,32 +223,18 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
     bool shouldExit,
   }) {
     _selectedNetworkModel = bNetworkModel;
-    EnvironmentManager()
-        .updateEnvSelectedModel(selectedNetworkModel: bNetworkModel);
-    // 调用 网络域名 的更改接口
-    // Service().changeOptions(baseUrl: bNetworkModel.hostName);
-    setState(() {});
 
     if (widget.updateNetworkCallback != null) {
       widget.updateNetworkCallback(
-        bNetworkModel.apiHost,
-        bNetworkModel.webHost,
-        bNetworkModel.gameHost,
+        bNetworkModel,
         shouldExit: shouldExit,
       );
     }
 
-    if (shouldExit == true) {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        // [Flutter如何有效地退出程序](https://zhuanlan.zhihu.com/p/191052343)
-        exit(0); // 需要 import 'dart:io';
-        // SystemNavigator
-        //     .pop(); // 该方法在iOS中并不适用。需要  import 'package:flutter/services.dart';
-      });
-    }
+    setState(() {});
   }
 
-  /// 确认切换代理
+  /// 尝试切换代理
   void _tryUpdateToProxyModel(TSEnvProxyModel bProxyModel) {
     String oldProxy = _selectedProxyModel.name;
     String newProxy = bProxyModel.name;
@@ -271,13 +258,11 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
   /// 确认切换代理
   void _confirmUpdateToProxyModel(TSEnvProxyModel bProxyModel) {
     _selectedProxyModel = bProxyModel;
-    EnvironmentManager()
-        .updateEnvSelectedModel(selectedProxyModel: bProxyModel);
-    this.showLogWindow();
-    setState(() {});
 
     if (widget.updateProxyCallback != null) {
-      widget.updateProxyCallback(bProxyModel.proxyIp);
+      widget.updateProxyCallback(bProxyModel);
     }
+
+    setState(() {});
   }
 }

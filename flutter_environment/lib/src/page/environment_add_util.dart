@@ -1,9 +1,33 @@
 import 'package:flutter/material.dart';
-import './environment_add_page.dart';
+import './env_add_proxy_page.dart';
+import './env_add_network_page.dart';
 
 class EnvironmentAddUtil {
-  // 取消 + 确定
-  static showAddPage(
+  // 显示添加或修改协议的页面
+  static showAddOrUpdateProxyPage(
+    @required BuildContext context, {
+    String proxyName,
+    String proxyIp,
+    @required Function({String bProxyName, String bProxyIp}) addCompleteBlock,
+  }) {
+    showAlert(
+      context,
+      alertViewBulider: (context) {
+        return EnvironmentAddProxyPage(
+          proxyName: proxyName,
+          oldProxyIp: proxyIp,
+          callBack: ({bProxyIp, bProxyName}) {
+            if (addCompleteBlock != null) {
+              addCompleteBlock(bProxyName: bProxyName, bProxyIp: bProxyIp);
+            }
+          },
+        );
+      },
+    );
+  }
+
+  // 显示添加或修改网络环境的页面
+  static showAddOrUpdateNetworkPage(
     @required BuildContext context, {
     String proxyIp,
     @required Function(String bProxyIp) addCompleteBlock,
@@ -11,7 +35,7 @@ class EnvironmentAddUtil {
     showAlert(
       context,
       alertViewBulider: (context) {
-        return EnvironmentAddPage(
+        return EnvironmentAddNetworkPage(
           oldProxyIp: proxyIp,
           callBack: (bProxyIp) {
             if (addCompleteBlock != null) {
