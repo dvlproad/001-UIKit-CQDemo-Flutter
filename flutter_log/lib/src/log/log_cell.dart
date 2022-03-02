@@ -32,15 +32,17 @@ class ApiLogTableViewCell extends StatelessWidget {
       subTitleColor = Colors.red;
     } else if (apiLogModel.logLevel == LogLevel.warning) {
       subTitleColor = Colors.orange;
+    } else if (apiLogModel.logLevel == LogLevel.success) {
+      subTitleColor = Colors.green;
     }
 
-    String mainTitle = '${row + 1}.${apiLogModel.name}';
+    String mainTitle = '${row + 1}.${apiLogModel.title}';
     return LogBaseTableViewCell(
       maxLines: 18,
       mainTitle: mainTitle,
-      subTitles: [apiLogModel.url],
+      subTitles: [apiLogModel.content],
       subTitleColor: subTitleColor,
-      check: apiLogModel.mock,
+      check: false,
       section: section,
       row: row,
       clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check) {

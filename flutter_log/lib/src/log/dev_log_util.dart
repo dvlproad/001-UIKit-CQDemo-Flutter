@@ -21,7 +21,7 @@ class DevLogUtil {
       logModels: logModels,
       clickLogCellCallback: (section, row, bApiModel) {
         //print('点击${bApiModel.url},复制到粘贴板成功');
-        Clipboard.setData(ClipboardData(text: bApiModel.url));
+        Clipboard.setData(ClipboardData(text: bApiModel.content));
         CJTSToastUtil.showMessage('复制当行到粘贴板成功');
       },
       onPressedCopyAll: (bLogModels) {
@@ -56,15 +56,20 @@ class DevLogUtil {
     );
   }
 
-  static addLogModel({LogLevel logLevel, String logTitle, String logText}) {
+  static addLogModel({
+    LogLevel logLevel,
+    String logTitle,
+    String logText,
+    Map logInfo,
+  }) {
     if (logTitle == null || logTitle.isEmpty == true) {
       logTitle = '第${logModels.length + 1}条日志:';
     }
     LogModel logModel = LogModel(
       logLevel: logLevel,
-      name: logTitle,
-      url: logText,
-      mock: false,
+      title: logTitle,
+      content: logText,
+      logInfo: logInfo,
     );
     logModels.add(logModel);
     ApplicationLogViewManager.updateLogOverlayEntry();

@@ -25,7 +25,13 @@ extension Map2StringExtension on Map {
           result += "\n$indentationStr" +
               "\"$key\" : ${value.listToStructureString(indentation: indentation + 2)},";
         } else {
-          result += "\n$indentationStr" + "\"$key\" : \"$value\",";
+          if (value is int || value is double) {
+            result += "\n$indentationStr" + "\"$key\" : $value,";
+          } else if (value is String) {
+            result += "\n$indentationStr" + "\"$key\" : \"$value\",";
+          } else {
+            result += "\n$indentationStr" + "\"$key\" : \"$value\",";
+          }
         }
       });
       result = result.substring(0, result.length - 1);
