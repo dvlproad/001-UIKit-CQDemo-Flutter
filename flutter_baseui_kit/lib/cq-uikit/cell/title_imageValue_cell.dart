@@ -22,7 +22,7 @@ class BJHTitleImageValueCell extends StatelessWidget {
       title: this.title,
       valueWidget: _imageValueWidget(),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
-      clickCellCallback: (section, row) {
+      clickCellCallback: (section, row, {bIsLongPress}) {
         this.onTap();
       },
     );

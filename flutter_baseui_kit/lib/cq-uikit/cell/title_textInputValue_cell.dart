@@ -24,7 +24,7 @@ class BJHTitleTextInputValueCell extends StatelessWidget {
       title: this.title,
       valueWidget: _textInputValueWidget(),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
-      clickCellCallback: (section, row) {
+      clickCellCallback: (section, row, {bIsLongPress}) {
         this.onTap();
       },
     );

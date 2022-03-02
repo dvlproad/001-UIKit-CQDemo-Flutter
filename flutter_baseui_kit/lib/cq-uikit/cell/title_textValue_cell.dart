@@ -3,47 +3,71 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
+export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
+// import '../text/text.dart';
 
 class BJHTitleTextValueCell extends StatelessWidget {
+  final double height; // cell 的高度
+  final double leftRightPadding; // cell 内容的左右间距
+
   final String title; // 标题
   final String textValue; // 值文本（此值为空时候，视图会自动隐藏）
+  final double textValueFontSize; // 值文本的字体大小(默认30)
   bool textThemeIsRed = false; // 值文本是否是红色主题(不设置即默认灰色)
   bool addDotForValue = false; // 是否在value前添加·点(不设置即默认不添加，如果添加则点的颜色和文本颜色一直)
-  void Function() onTap; // 点击事件
+  final TableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
+
+  final GestureTapCallback onTap; // 点击事件
+  final GestureLongPressCallback onLongPress;
 
   BJHTitleTextValueCell({
     Key key,
+    this.height,
+    this.leftRightPadding,
     this.title,
     this.textValue,
+    this.textValueFontSize,
     this.textThemeIsRed,
     this.addDotForValue,
     this.onTap,
+    this.onLongPress,
+    this.arrowImageType,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
+      height: this.height,
+      leftRightPadding: this.leftRightPadding,
       title: this.title,
-      valueWidget: _textValueWidget(),
-      arrowImageType: TableViewCellArrowImageType.arrowRight,
-      clickCellCallback: (section, row) {
-        this.onTap();
+      valueWidget: _valueWidget(),
+      arrowImageType: arrowImageType ?? TableViewCellArrowImageType.arrowRight,
+      clickCellCallback: (section, row, {bIsLongPress}) {
+        if (bIsLongPress == true) {
+          if (this.onLongPress != null) {
+            this.onLongPress();
+          }
+        } else {
+          if (this.onTap != null) {
+            this.onTap();
+          }
+        }
       },
     );
   }
 
-  Widget _textValueWidget() {
+  Widget _valueWidget() {
     List<Widget> widgets = [];
 
     if (this.addDotForValue == true) {
       widgets.add(_dot(7));
-      widgets.add(SizedBox(width: AdaptCJHelper.setWidth(20)));
+      widgets.add(SizedBox(width: 20.w_cj));
     }
 
     Color textColor =
         this.textThemeIsRed == true ? Color(0xffCD3F49) : Color(0xff999999);
-    if (_subText(textColor) != null) {
-      widgets.add(_subText(textColor));
+    if (_textValueWidget(textColor) != null) {
+      widgets.add(_textValueWidget(textColor));
     }
 
     return Row(
@@ -68,22 +92,29 @@ class BJHTitleTextValueCell extends StatelessWidget {
   }
 
   // 副文本
-  Widget _subText(Color textColor) {
+  Widget _textValueWidget(Color textColor) {
     // 判断是否添加副文本，存在才构建视图
     if (null == this.textValue || this.textValue.length == 0) {
       return null;
     }
 
+    // // 自动缩小字体的组件
+    // return FlutterAutoText(
+    //   text: this.textValue ?? '',
+    // );
+
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      constraints: BoxConstraints(maxWidth: 180),
       color: Colors.transparent,
       child: Text(
         this.textValue ?? '',
         textAlign: TextAlign.right,
+        maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: textColor,
-          fontSize: AdaptCJHelper.setWidth(30),
+          fontSize: this.textValueFontSize ?? 30.w_cj,
           fontWeight: FontWeight.w500,
         ),
       ),

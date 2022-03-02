@@ -22,6 +22,15 @@ class ToastUtil {
     showMessage(message);
   }
 
+  // 开发中
+  static showDoing({String message}) {
+    String lastMessage = '开发中';
+    if (message != null) {
+      lastMessage = '$lastMessage:$message';
+    }
+    showMessage(lastMessage);
+  }
+
   // 需要产品补充完善需求
   static showNeedProduct({String message}) {
     String lastMessage = '需要产品补充完善需求';

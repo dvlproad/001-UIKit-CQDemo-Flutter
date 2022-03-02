@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import './components/alert_closed_buttons.dart';
 import './components/alert_spaced_buttons.dart';
+import './components/flex_width_buttons.dart';
 import './components/alert_container.dart';
 
 class CJBaseMessageAlertView extends StatelessWidget {
   final String title;
   final String message;
+  final bool isCloseButton; // button按钮是否是紧密的，如果是的话底部间隔是0
 
   CJBaseMessageAlertView({
     Key key,
     this.title,
     this.message,
+    this.isCloseButton = false,
   });
 
   Widget renderButtons() {
@@ -19,11 +22,12 @@ class CJBaseMessageAlertView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double buttonToBottomDistance = isCloseButton ? 0 : 20.0;
     Map allAlertMarginVertical = {
       // alert 竖直上的间距
-      "title_buttons": [30.0, 30.0, 20.0, 0.0],
-      "title_message_buttons": [20.0, 10.0, 20.0, 20.0],
-      "message_buttons": [20.0, 20.0, 0.0, 0.0],
+      "title_buttons": [30.0, 30.0, 20.0, buttonToBottomDistance],
+      "title_message_buttons": [20.0, 10.0, 20.0, buttonToBottomDistance],
+      "message_buttons": [20.0, 20.0, 0.0, buttonToBottomDistance],
     };
 
     dynamic alertMarginVerticals = [];
@@ -187,6 +191,36 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
           this.okHandle();
         }
       },
+    );
+  }
+}
+
+/*
+ * '等宽均分的 Buttons' AlertView
+ */
+class FlexWidthButtonsMessageAlertView extends CJBaseMessageAlertView {
+  final List<String> buttonTitles;
+  final void Function(int buttonIndex) onPressedButton;
+
+  FlexWidthButtonsMessageAlertView({
+    Key key,
+    String title,
+    String message,
+    this.buttonTitles,
+    this.onPressedButton,
+  }) : super(
+          key: key,
+          title: title,
+          message: message,
+          isCloseButton: true,
+        );
+
+  @override
+  Widget renderButtons() {
+    return FlexWidthButtons(
+      height: 50,
+      titles: buttonTitles,
+      onPressed: onPressedButton,
     );
   }
 }

@@ -60,12 +60,34 @@ class AlertUtil {
     );
   }
 
+  // '等宽均分的 Buttons' AlertView
+  static showFlexWidthButtonsAlert({
+    @required BuildContext context,
+    String title,
+    String message,
+    List<String> buttonTitles,
+    void Function(int buttonIndex) onPressedButton,
+  }) {
+    showAlert(
+      context,
+      alertViewBulider: (context) {
+        return FlexWidthButtonsMessageAlertView(
+          title: title,
+          message: message,
+          buttonTitles: buttonTitles,
+          onPressedButton: onPressedButton, // Navigator.pop(context);
+        );
+      },
+    );
+  }
+
   static void showAlert(
     @required BuildContext context, {
     @required Widget Function(BuildContext context) alertViewBulider,
   }) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

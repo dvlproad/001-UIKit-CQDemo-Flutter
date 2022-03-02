@@ -2,7 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
-typedef ClickCellCallback = void Function(int section, int row);
+typedef ClickCellCallback = void Function(int section, int row,
+    {bool bIsLongPress});
 
 enum TableViewCellArrowImageType {
   none, // 无箭头
@@ -11,6 +12,9 @@ enum TableViewCellArrowImageType {
 }
 
 class BJHTitleCommonValueTableViewCell extends StatelessWidget {
+  final double height; // cell 的高度
+  final double leftRightPadding; // cell 内容的左右间距
+
   final String title; // 主文本
   final Widget valueWidget; // 值视图（此值为空时候，视图会自动隐藏）
   final TableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
@@ -21,6 +25,8 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
   const BJHTitleCommonValueTableViewCell({
     Key key,
+    this.height,
+    this.leftRightPadding,
     this.title,
     this.valueWidget,
     this.arrowImageType = TableViewCellArrowImageType.none,
@@ -37,46 +43,74 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   Widget cellWidget() {
     return GestureDetector(
       child: _cellContainer(),
-      onTap: _onTapCell,
+      onTap: () {
+        _onTapCell(isLongPress: false);
+      },
+      onLongPress: () {
+        _onTapCell(isLongPress: true);
+      },
     );
   }
 
-  void _onTapCell() {
+  void _onTapCell({bool isLongPress}) {
     if (null != this.clickCellCallback) {
-      this.clickCellCallback(this.section, this.row);
+      this.clickCellCallback(
+        this.section,
+        this.row,
+        bIsLongPress: isLongPress,
+      );
     }
   }
 
   Widget _cellContainer() {
-    List<Widget> rowWidgets = [];
-
-    // 添加主文本到rowWidgets中(肯定存在主文本)
-    rowWidgets.add(
-      Expanded(
-        child: _mainText(),
-      ),
-    );
+    List<Widget> rightRowWidgets = [];
 
     // 添加valueWidget到rowWidgets中
     if (null != this.valueWidget) {
-      rowWidgets.add(this.valueWidget);
+      rightRowWidgets.add(SizedBox(width: 10.w_cj));
+      rightRowWidgets.add(this.valueWidget);
     }
 
     // 判断是否添加箭头，存在则添加到rowWidgets中
     if (this.arrowImageType != TableViewCellArrowImageType.none) {
-      rowWidgets.add(SizedBox(width: AdaptCJHelper.setWidth(30)));
-      rowWidgets.add(_arrowImage());
+      rightRowWidgets.add(SizedBox(width: 30.w_cj));
+      rightRowWidgets.add(_arrowImage());
     }
+    if (rightRowWidgets.length == 0) {
+      rightRowWidgets.add(Container());
+    }
+    Widget rightRowWidget = Row(children: rightRowWidgets);
+
+    double leftRightPadding = this.leftRightPadding ?? 40.w_cj;
 
     return Container(
-      height: AdaptCJHelper.setWidth(100),
-      padding: EdgeInsets.only(
-          left: AdaptCJHelper.setWidth(40), right: AdaptCJHelper.setWidth(40)),
+      height: this.height ?? 88.w_cj,
+      padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: rowWidgets,
+        children: [
+          _mainText(),
+          // Expanded(
+          //   child: Container(
+          //     color: Colors.orange,
+          //     child: Row(
+          //       children: [
+          //         Expanded(
+          //           child: Row(
+          //             children: [
+          //               Expanded(child: Text('砥砺奋进代理费林德洛夫冻死了发动机')),
+          //               Text('1'),
+          //             ],
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          rightRowWidget,
+        ],
       ),
     );
   }
@@ -92,7 +126,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: Color(0xff222222),
-          fontSize: AdaptCJHelper.setWidth(30),
+          fontSize: 30.w_cj,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -107,8 +141,8 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
       child: Image(
         image:
             AssetImage('assets/arrow_right.png', package: 'flutter_baseui_kit'),
-        width: AdaptCJHelper.setWidth(17),
-        height: AdaptCJHelper.setWidth(32),
+        width: 17.w_cj,
+        height: 32.h_cj,
       ),
     );
   }

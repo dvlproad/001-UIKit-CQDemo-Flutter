@@ -3,11 +3,12 @@ import './loading_images_base_widget.dart'; // 使用 images 加载动画
 import 'package:lottie/lottie.dart'; // 使用 json 加载动画
 
 class LoadingWidget extends StatelessWidget {
-  final double size;
+  final double width;
+  final double height;
 
   final int interval;
 
-  LoadingWidget({this.size, this.interval});
+  LoadingWidget({this.width, this.height, this.interval});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +20,10 @@ class LoadingWidget extends StatelessWidget {
   // 动画加载方法1：使用 gif 加载动画
   Widget get _loadingWidget_gif {
     return Image.asset(
-      'assets/loading_gif/loading_bj.gif',
+      'assets/loading_gif/loading_bj2.gif',
       package: 'flutter_effect',
-      width: 100,
-      height: 100,
+      width: width ?? 100,
+      height: height ?? 100,
     );
   }
 
@@ -35,8 +36,8 @@ class LoadingWidget extends StatelessWidget {
 
     return FrameAnimationImageWidget(
       images,
-      width: size ?? 40,
-      height: size ?? 40,
+      width: width ?? 40,
+      height: height ?? 40,
       interval: interval ?? 50,
     );
   }

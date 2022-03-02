@@ -13,6 +13,7 @@ dependencies:
     sdk: flutter
 
   cached_network_image: any
+  # flutter_marquee: any # 跑马灯
 
   # [分页指示器](https://pub.flutter-io.cn/packages/flutter_page_indicator)
   # flutter_page_indicator: ^0.3.0

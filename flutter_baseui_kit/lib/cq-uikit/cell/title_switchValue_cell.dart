@@ -23,7 +23,6 @@ class BJHTitleSwitchValueCell extends StatelessWidget {
       title: this.title,
       valueWidget: _switchValueWidget(),
       arrowImageType: TableViewCellArrowImageType.none,
-      clickCellCallback: (section, row) {},
     );
   }
 
