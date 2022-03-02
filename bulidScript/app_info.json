@@ -1,0 +1,35 @@
+{
+    "version": "1.0.0",
+    "time": "unknow time",
+    "brance": "unknow brance",
+    "brances": [
+        {
+            "name": "master",
+            "des": "主分支"
+        },
+        {
+            "name": "development",
+            "des": "开发稳定分支"
+        },
+        {
+            "name": "dev_all",
+            "des": "线上+修复+目前所有开发中需求"
+        },
+        {
+            "name": "dev_1.0.0_fix",
+            "des": "线上版问题修复或优化"
+        },
+        {
+            "name": "dev_hunderd_wishes",
+            "des": "百愿清单"
+        },
+        {
+            "name": "dev_home",
+            "des": "首页改版+主题颜色修改"
+        },
+        {
+            "name": "order",
+            "des": "物流"
+        }
+    ]
+}

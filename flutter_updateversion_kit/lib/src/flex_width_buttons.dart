@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
  * 等宽均分的 Buttons
  */
 class FlexWidthButtons extends StatelessWidget {
+  final double height;
   final List<String> titles;
   final void Function(int buttonIndex) onPressed;
 
   FlexWidthButtons({
     Key key,
+    this.height,
     @required this.titles,
     @required this.onPressed,
   }) : super(key: key);
@@ -16,10 +18,12 @@ class FlexWidthButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(
+      color: Colors.transparent,
+      height: this.height ?? 50,
+      child: Stack(
         children: <Widget>[
           Divider(color: Colors.grey, height: 1),
-          Container(height: 50, child: _row())
+          Container(child: _row())
         ],
       ),
     );

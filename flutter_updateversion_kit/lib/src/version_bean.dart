@@ -1,12 +1,14 @@
 import 'dart:convert' show json;
 
 class VersionBean {
+  bool forceUpdate;
   String version;
   String buildNumber;
   String updateLog;
   String downloadUrl;
 
   VersionBean.fromParams({
+    this.forceUpdate, // 是否强制升级
     this.version,
     this.buildNumber,
     this.updateLog,
@@ -20,6 +22,7 @@ class VersionBean {
           : VersionBean._fromJson(jsonStr);
 
   VersionBean._fromJson(jsonRes) {
+    forceUpdate = jsonRes['forceUpdate'];
     version = jsonRes['version'];
     buildNumber = jsonRes['buildNumber'];
     updateLog = jsonRes['updateLog'];
@@ -28,6 +31,6 @@ class VersionBean {
 
   @override
   String toString() {
-    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
+    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"forceUpdate": ${forceUpdate != null ? '${json.encode(forceUpdate)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
   }
 }

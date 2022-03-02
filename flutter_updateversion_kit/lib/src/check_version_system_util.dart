@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:package_info/package_info.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'dart:io' show Platform;
 import 'dart:convert' as convert;
@@ -24,7 +23,7 @@ class CheckVersionSystemUtil {
     } else if (Platform.isAndroid) {
       platformName = 'android';
     }
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     String appBundleID = packageInfo.packageName;
     String appVersion = packageInfo.version;
     // String channel = await UmengAnalyticsPlugin.getChannel();

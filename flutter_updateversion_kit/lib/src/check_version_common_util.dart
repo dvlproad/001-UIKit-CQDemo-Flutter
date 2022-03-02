@@ -1,5 +1,6 @@
 import 'dart:math';
-import 'package:package_info/package_info.dart';
+import './branch_package_info/branch_package_info.dart';
+export './branch_package_info/branch_package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // 服务器的版本与本地版本的比较结果
@@ -50,7 +51,7 @@ class CheckVersionCommonUtil {
     String serviceBuildNumber,
     bool isManualCheck,
   ) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     String appVersion = packageInfo.version;
 
     int currentVersionValue = getVersionValue(appVersion);

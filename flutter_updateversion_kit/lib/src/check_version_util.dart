@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
@@ -17,9 +16,26 @@ class CheckVersionUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
   static GlobalKey navigatorKey;
 
+  static bool isUsePygerVersion; // 是否使用蒲公英上的版本
+  static String packageDownloadUrl; // 安装包的下载地址
+  static String pygerAppKey; // 应用在蒲公英上的appKey
+  static void init({
+    @required
+        String Function() downloadUrlGetBlock, // 下载地址的获取方法(不同环境的版本有不同的下载地址)
+    bool isPyger = false, // 是否使用蒲公英上的版本
+    String Function() pygerAppKeyGetBlock, // 蒲公英上的appkey的获取方法
+  }) {
+    packageDownloadUrl = downloadUrlGetBlock();
+
+    isUsePygerVersion = isPyger;
+    if (isPyger) {
+      assert(pygerAppKeyGetBlock != null);
+      pygerAppKey = pygerAppKeyGetBlock();
+    }
+  }
+
   static Future checkVersion({
     bool isManualCheck = false, // 是否是手动检查，手动检查即使点击取消，也应该弹窗
-    bool isPyger = false, // 是否是请求蒲公英上的版本
   }) {
     // if (VersionManager.instance.firstSHow) {
     //   VersionManager.instance.setFirstShow(false);
@@ -41,8 +57,9 @@ class CheckVersionUtil {
     }
     BuildContext context = navigatorKey.currentContext;
 
-    if (isPyger == true) {
-      return PygerUtil.getVersion().then((VersionPygerBean bean) async {
+    if (isUsePygerVersion == true) {
+      return PygerUtil.getVersion(pygerAppKey)
+          .then((VersionPygerBean bean) async {
         ServiceVersionCompareResult compareResult =
             await PygerUtil.checkNeedShowUpdateView(bean, isManualCheck);
         if (compareResult == ServiceVersionCompareResult.noNew) {
@@ -64,8 +81,10 @@ class CheckVersionUtil {
         String buildNumber = bean.buildNumber;
         String updateLog = bean.updateLog;
         String downloadUrl = bean.downloadUrl;
+        bool forceUpdate = bean.forceUpdate;
         showUpdateView(
           context: context,
+          forceUpdate: forceUpdate,
           version: newVersion,
           buildNumber: buildNumber,
           updateLog: updateLog,
@@ -102,8 +121,10 @@ class CheckVersionUtil {
         String buildNumber = bean.buildNumber;
         String updateLog = bean.updateLog;
         String downloadUrl = bean.downloadUrl;
+        bool forceUpdate = bean.forceUpdate;
         showUpdateView(
           context: context,
+          forceUpdate: forceUpdate,
           version: newVersion,
           buildNumber: buildNumber,
           updateLog: updateLog,
@@ -121,7 +142,7 @@ class CheckVersionUtil {
   }
 
   static launcherPyger() async {
-    var url = "https://www.pgyer.com/kKTt";
+    var url = packageDownloadUrl;
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -131,6 +152,7 @@ class CheckVersionUtil {
 
   static Future showUpdateView({
     BuildContext context,
+    bool forceUpdate,
     String version,
     String buildNumber,
     String updateLog,
@@ -142,6 +164,7 @@ class CheckVersionUtil {
       barrierDismissible: false,
       builder: (context) {
         return UpdateVersionPage(
+          forceUpdate: forceUpdate,
           version: version,
           buildNumber: buildNumber,
           updateLog: updateLog,

@@ -16,16 +16,17 @@ import '../flutter_updateversion_kit_adapt.dart';
 import './version_bean.dart';
 import './download_file.dart';
 import './update_version_notifier.dart';
-import './alert_closed_buttons.dart';
+import './flex_width_buttons.dart';
 
 class UpdateVersionPage extends StatefulWidget {
   final String version;
   final String buildNumber;
   final String updateLog;
   final String downloadUrl;
-  final void Function() closeUpdateBlock; // 取消关闭
-  final void Function() skipUpdateBlock; // 跳过此版本
+  final void Function() closeUpdateBlock;
+  final void Function() skipUpdateBlock;
   final void Function() updateVersionBlock;
+  final bool forceUpdate;
 
   UpdateVersionPage({
     Key key,
@@ -36,6 +37,7 @@ class UpdateVersionPage extends StatefulWidget {
     this.closeUpdateBlock, // 点击'取消升级'执行的方法
     this.skipUpdateBlock, // 点击'跳过此版本'执行的方法
     this.updateVersionBlock, // 点击"立即升级”执行的方法(默认不传null，内部会自己处理,这里设置只是为了内部没处理完前点击时候跳到下载的网页)
+    this.forceUpdate, // 是否是强制升级
   }) : super(key: key);
 
   @override
@@ -119,8 +121,8 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
 
   Widget _uploadDIalogBuild() {
     final screenSize = MediaQuery.of(context).size;
-    var _maxContentHeight = max(screenSize.height - 400, 180.0);
-    double width = screenSize.width - 80;
+    double width = screenSize.width * 0.9;
+    var _maxContentHeight = width * 1.2;
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40),
       width: width,
@@ -198,32 +200,35 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
       padding: EdgeInsets.only(top: 10),
       child: Row(
         children: <Widget>[
-          Expanded(child: Container()),
-          Text(
-            "--",
-            style: TextStyle(color: Colors.grey, fontSize: 18.sp_cj),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            "发现新版本 $newVersion",
-            style: TextStyle(color: Colors.black, fontSize: 18.sp_cj),
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Text(
-            "--",
-            style: TextStyle(color: Colors.grey, fontSize: 18.sp_cj),
-          ),
-          Expanded(child: Container()),
+          SizedBox(width: 10),
+          Expanded(child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return Container(
+              width: constraints.maxWidth,
+              child: Text(
+                "发现新版本 $newVersion",
+                style: TextStyle(color: Colors.black, fontSize: 18.sp_cj),
+              ),
+            );
+          })),
+          SizedBox(width: 10),
         ],
       ),
     );
   }
 
   Widget _bottomMenu(double w) {
+    if (widget.forceUpdate == true) {
+      return FlexWidthButtons(
+        titles: ['立即升级'],
+        onPressed: (buttonIndex) {
+          print(buttonIndex);
+          this._updateNotifier.setIsClickAble(false);
+          _update();
+        },
+      );
+    }
+
     return FlexWidthButtons(
       titles: ['关闭', '跳过此版本', '立即升级'],
       onPressed: (buttonIndex) {

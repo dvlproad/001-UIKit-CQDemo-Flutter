@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 class VersionPygerBean {
+  bool forceUpdate;
   String version;
   String buildNumber;
   String buildNumberInPyger;
@@ -9,6 +10,7 @@ class VersionPygerBean {
   String downloadUrl;
 
   VersionPygerBean.fromParams({
+    this.forceUpdate, // 是否强制升级
     this.version,
     this.buildNumber,
     this.buildNumberInPyger, // 蒲公英生成的用于区分历史版本的build号
@@ -24,6 +26,7 @@ class VersionPygerBean {
           : VersionPygerBean._fromJson(jsonStr);
 
   VersionPygerBean._fromJson(jsonRes) {
+    forceUpdate = jsonRes['forceUpdate'];
     version = jsonRes['version'];
     buildNumber = jsonRes['buildNumber'];
     buildNumberInPyger = jsonRes['buildNumberInPyger'];
@@ -34,6 +37,6 @@ class VersionPygerBean {
 
   @override
   String toString() {
-    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"buildNumberInPyger": ${buildNumberInPyger != null ? '${json.encode(buildNumberInPyger)}' : 'null'},"buildHaveNewVersion": ${buildHaveNewVersion != null ? '${json.encode(buildHaveNewVersion)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
+    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"forceUpdate": ${forceUpdate != null ? '${json.encode(forceUpdate)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"buildNumberInPyger": ${buildNumberInPyger != null ? '${json.encode(buildNumberInPyger)}' : 'null'},"buildHaveNewVersion": ${buildHaveNewVersion != null ? '${json.encode(buildHaveNewVersion)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
   }
 }

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:package_info/package_info.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'dart:io' show Platform;
 import 'dart:convert' as convert;
@@ -11,23 +10,22 @@ import './check_version_common_util.dart';
 export './check_version_common_util.dart' show ServiceVersionCompareResult;
 
 class PygerUtil {
+  static void init(String downloadUrl, String appKey) {}
+
   // 之前对升级弹窗点击取消，后续不再弹出的那些版本号
   static void cancelShowVersion(VersionPygerBean bean) async {
     CheckVersionCommonUtil.addCancelShowVersion(bean.version, bean.buildNumber);
   }
 
   ///版本检查:蒲公英
-  static Future<VersionPygerBean> getVersion() async {
+  static Future<VersionPygerBean> getVersion(String appKey) async {
     String platformName = "";
-    String appKey = "";
     if (Platform.isIOS) {
       platformName = 'ios';
-      appKey = "3aa46e5f75c648922bb2450ac2da7909";
     } else if (Platform.isAndroid) {
       platformName = 'android';
-      appKey = "0ff51c2519a23078fac1f8e8ea1bbdef";
     }
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     String appBundleID = packageInfo.packageName;
     String appVersion = packageInfo.version;
     String buildBuildVersion = packageInfo.buildNumber;
@@ -63,12 +61,9 @@ class PygerUtil {
 
     Map result = responseObject['data'];
     //print('蒲公英请求结果:result=${result.toString()}');
-    bool hasNew = result['buildHaveNewVersion']; //是否有新版本
+    // bool hasNew = result['buildHaveNewVersion']; //是否有新版本，发现build设置四位数以上时候，此值不准确，所以不适用
 
-    if (hasNew == false) {
-      //print('没有新版本');
-      return null;
-    } else {
+    {
       // 新版本 version_buildId
       String buildVersion = result['buildVersion']; // 版本号, 默认为1.0
       String buildNumber = result['buildVersionNo']; // 上传包的版本编号，默认为1 (即编译的版本号)
@@ -77,7 +72,7 @@ class PygerUtil {
       bool buildHaveNewVersion = result['buildHaveNewVersion'];
 
       //应用更新说明
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
       String currentVersion =
           "您当前的版本为${packageInfo.version}(${packageInfo.buildNumber})";
       String newVersion = '检查到有新版本$buildVersion($buildNumber)';
@@ -92,10 +87,14 @@ class PygerUtil {
       //应用安装地址
       String downloadURL = result['downloadURL'];
 
+      // 是否需要强制更新
+      bool needForceUpdate = result['needForceUpdate'];
+
       // print(
       //     '版本:$buildVersion\_$buildNumber已更新\n更新内容:updteContent\n下载地址:$downloadURL');
 
       VersionPygerBean bean = VersionPygerBean.fromParams(
+        forceUpdate: needForceUpdate,
         version: buildVersion,
         buildNumber: buildNumber,
         buildNumberInPyger: buildBuildVersion,
@@ -119,12 +118,15 @@ class PygerUtil {
     VersionPygerBean bean,
     bool isManualCheck,
   ) async {
-    bool hasNewVersion = bean.buildHaveNewVersion;
+    /*
+    bool buildHaveNewVersion =
+        bean.buildHaveNewVersion; //是否有新版本，发现build设置四位数以上时候，此值不准确，所以不适用
 
     // 没有新版本的情况：
-    if (hasNewVersion == false) {
+    if (buildHaveNewVersion == false) {
       return ServiceVersionCompareResult.noNew;
     }
+    */
 
     // 新版本可能确实是新的情况下：
     return CheckVersionCommonUtil.checkNeedShowUpdateView(
@@ -145,7 +147,7 @@ class PygerUtil {
       platformName = 'android';
       appKey = "0ff51c2519a23078fac1f8e8ea1bbdef";
     }
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     String appBundleID = packageInfo.packageName;
     String appVersion = packageInfo.version;
     String buildBuildVersion = packageInfo.buildNumber;
