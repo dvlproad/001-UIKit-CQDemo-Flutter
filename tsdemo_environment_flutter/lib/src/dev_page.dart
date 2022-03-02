@@ -4,18 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:package_info/package_info.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:flutter_updateversion_kit/src/check_version_common_util.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import './main_init/package_environment_util.dart';
 
+import './package_info_cell.dart';
 import './dev_util.dart';
 import './dev_notifier.dart';
 
 import './userInfoManager.dart';
+import './main_init/main_diff_util.dart';
 
 class DevPage extends StatefulWidget {
   const DevPage({Key key}) : super(key: key);
@@ -27,7 +30,7 @@ class DevPage extends StatefulWidget {
 class _DevPageState extends State<DevPage> {
   bool devSwtichValue = DevUtil.isDevFloatingWidgetShowing();
 
-  String versionName = "";
+  BranchPackageInfo packageInfo;
   List<String> _cancelShowVersions;
 
   CommonModel _commonModel = CommonModel();
@@ -51,12 +54,9 @@ class _DevPageState extends State<DevPage> {
 
   // 获取版本号
   _getVersion() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    setState(() {
-      versionName = "v $version($buildNumber)";
-    });
+    packageInfo = await BranchPackageInfo.fromPlatform();
+
+    setState(() {});
   }
 
   // 获取被跳过的版本个数
@@ -111,12 +111,17 @@ class _DevPageState extends State<DevPage> {
         child: ListView(
           children: [
             _devtool_floating_cell(true),
+
             Container(height: 20),
+            // // header 的 增删该
+            // _devtool_changeheader_cell(),
+            // _devtool_removeheaderKey_cell(),
             // 版本信息
             _devtool_appinfo_cell(),
-            _devtool_appdownloadpage_cell(),
-            _devtool_cancelNewVersionsPage_cell(),
             _devtool_checkVersion_cell(context),
+            _devtool_cancelNewVersionsPage_cell(),
+            Container(height: 20),
+            _app_downloadpage_cell(),
             //_devtool_historyPackage_cell(),
             Container(height: 20),
             _devtool_userinfo_cell(),
@@ -129,7 +134,9 @@ class _DevPageState extends State<DevPage> {
             ),
             _devtool_proxy_cell(context, showTestApiWidget: true),
             _devtool_apimock_cell(context, showTestApiWidget: true),
+            Container(height: 20),
             _devtool_logSwtich_cell(),
+            // _devtool_logTest_cell(),
           ],
         ),
       ),
@@ -157,27 +164,48 @@ class _DevPageState extends State<DevPage> {
   }
 
   Widget _devtool_appinfo_cell() {
-    return BJHTitleTextValueCell(
-      title: "app信息",
-      textValue: versionName,
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: versionName));
-        ToastUtil.showMessage('app信息拷贝成功');
-      },
+    return PackageInfoCell(packageInfo: packageInfo);
+  }
+
+  Widget _app_downloadpage_cell() {
+    return Container(
+      color: const Color(0xfff0f0f0),
+      child: Column(
+        children: [
+          BJHTitleTextValueCell(
+            height: 40,
+            title: "app下载页",
+            textValue: '',
+            arrowImageType: TableViewCellArrowImageType.none,
+          ),
+          _devtool_app_downloadpage_cell(PackageType.develop1),
+          _devtool_app_downloadpage_cell(PackageType.preproduct),
+          _devtool_app_downloadpage_cell(PackageType.product),
+        ],
+      ),
     );
   }
 
-  Widget _devtool_appdownloadpage_cell() {
-    String downloadUrl = "https://www.pgyer.com/kKTt";
+  Widget _devtool_app_downloadpage_cell(PackageType packageType) {
+    DiffPackageBean diffPackageBean =
+        MainDiffUtil.diffPackageBeanByType(packageType);
+
+    String downloadUrl = diffPackageBean.downloadUrl;
     return BJHTitleTextValueCell(
-      title: "app下载页",
+      height: 40,
+      title: "${diffPackageBean.des}：",
       textValue: downloadUrl,
+      textValueFontSize: 12,
       onTap: () async {
         if (await canLaunch(downloadUrl)) {
           await launch(downloadUrl);
         } else {
           throw 'cloud not launcher url';
         }
+      },
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(text: downloadUrl));
+        ToastUtil.showMessage('app下载页地址拷贝成功');
       },
     );
   }
@@ -221,9 +249,11 @@ class _DevPageState extends State<DevPage> {
       textValue: '',
       onTap: () {
         LoadingUtil.showInContext(context);
+        // Future.delayed(Duration(milliseconds: 3000)).then((value) {
+        //   LoadingUtil.dismissInContext(context);
+        // });
         CheckVersionUtil.checkVersion(
           isManualCheck: true,
-          isPyger: true,
         ).then((value) {
           LoadingUtil.dismissInContext(context);
         }).catchError((onError) {
@@ -245,9 +275,32 @@ class _DevPageState extends State<DevPage> {
     return BJHTitleTextValueCell(
       title: "user信息",
       textValue: textValue,
+      textValueFontSize: 12,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
         ToastUtil.showMessage('user信息拷贝成功');
+      },
+    );
+  }
+
+  Widget _devtool_changeheader_cell() {
+    return BJHTitleTextValueCell(
+      title: "添加/修改header",
+      textValue: '',
+      onTap: () {
+        NetworkManager.addOrUpdateToken('12345');
+        ToastUtil.showMessage('添加/修改header成功');
+      },
+    );
+  }
+
+  Widget _devtool_removeheaderKey_cell() {
+    return BJHTitleTextValueCell(
+      title: "删除header",
+      textValue: '',
+      onTap: () {
+        NetworkManager.removeToken();
+        ToastUtil.showMessage('删除header成功');
       },
     );
   }
@@ -277,7 +330,7 @@ class _DevPageState extends State<DevPage> {
     bool showTestApiWidget,
   }) {
     TSEnvNetworkModel selectedNetworkModel =
-        EnvironmentManager.instance.selectedNetworkModel;
+        NetworkPageDataManager().selectedNetworkModel;
     if (selectedNetworkModel == null) {
       throw Exception(
           '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
@@ -287,14 +340,94 @@ class _DevPageState extends State<DevPage> {
       title: "切换环境",
       textValue: envName,
       onTap: () {
-        DevUtil.goChangeEnvironment(
-          context,
-          showTestApiWidget: showTestApiWidget,
-        ).then((value) {
-          setState(() {});
-        });
+        clickChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
       },
     );
+  }
+
+  void clickChangeEnvironment(
+    BuildContext context, {
+    bool showTestApiWidget,
+  }) {
+    PackageEnvironmentUtil.checkShouldResetNetwork(
+      goChangeHandle: () {
+        _tryGoChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+      },
+    );
+  }
+
+  void _tryGoChangeEnvironment(
+    BuildContext context, {
+    bool showTestApiWidget,
+  }) {
+    DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
+    PackageType packageType = packageBean.packageType;
+    if (packageType == PackageType.develop1 ||
+        packageType == PackageType.develop2) {
+      _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+    } else if (packageType == PackageType.preproduct) {
+      // _showPasswordAlert(
+      //   context,
+      //   title: '${packageBean.des}切换环境需要密码',
+      //   message: "您当前包为${packageBean.des}，不建议随便切换环境。如一定要切换，请输入密码",
+      //   password: '654321',
+      //   passwordCorrectAction: () {
+      //     _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+      //   },
+      // );
+      _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+    } else {
+      ToastUtil.showMsg('温馨提示：您当前包为${packageBean.des}，不支持切换环境。', context);
+    }
+  }
+
+  void _showPasswordAlert(
+    BuildContext context, {
+    String title,
+    String message,
+    String password,
+    void Function() passwordCorrectAction,
+  }) {
+    /*
+    BrnMiddleInputDialog(
+      title: title,
+      message: message,
+      hintText: '请输入密码$password',
+      cancelText: '取消',
+      confirmText: '确定',
+      autoFocus: true,
+      maxLength: 1000,
+      maxLines: 2,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+      dismissOnActionsTap: false,
+      barrierDismissible: true,
+      onConfirm: (value) {
+        if (value != '654321') {
+          ToastUtil.showMsg('密码错误', context);
+          return;
+        }
+        Navigator.pop(context);
+        if (passwordCorrectAction != null) {
+          passwordCorrectAction();
+        }
+      },
+      onCancel: () {
+        Navigator.pop(context);
+      },
+    ).show(context);
+    */
+  }
+
+  void _goChangeEnvironment(
+    BuildContext context, {
+    bool showTestApiWidget,
+  }) {
+    DevUtil.goChangeEnvironment(
+      context,
+      showTestApiWidget: showTestApiWidget,
+    ).then((value) {
+      setState(() {});
+    });
   }
 
   Widget _devtool_proxy_cell(
@@ -302,7 +435,7 @@ class _DevPageState extends State<DevPage> {
     bool showTestApiWidget,
   }) {
     TSEnvProxyModel selectedProxyModel =
-        EnvironmentManager.instance.selectedProxyModel;
+        ProxyPageDataManager().selectedProxyModel;
     if (selectedProxyModel == null) {
       throw Exception(
           '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
@@ -312,12 +445,7 @@ class _DevPageState extends State<DevPage> {
       title: "添加代理",
       textValue: proxyName,
       onTap: () {
-        DevUtil.goChangeEnvironment(
-          context,
-          showTestApiWidget: showTestApiWidget,
-        ).then((value) {
-          setState(() {});
-        });
+        clickChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
       },
     );
   }
@@ -332,12 +460,20 @@ class _DevPageState extends State<DevPage> {
       title: "Mock工具",
       textValue: mockCountString,
       onTap: () {
-        DevUtil.goChangeApiMock(
-          context,
-          showTestApiWidget: showTestApiWidget,
-        ).then((value) {
-          setState(() {});
-        });
+        DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
+        PackageType packageType = packageBean.packageType;
+        if (packageType == PackageType.develop1 ||
+            packageType == PackageType.develop2) {
+          DevUtil.goChangeApiMock(
+            context,
+            showTestApiWidget: showTestApiWidget,
+          ).then((value) {
+            setState(() {});
+          });
+        } else {
+          String message = "您当前包为${packageBean.des}，不支持Mock";
+          ToastUtil.showMsg(message, context);
+        }
       },
     );
   }
@@ -356,6 +492,23 @@ class _DevPageState extends State<DevPage> {
             DevLogUtil.dismissLogView();
           }
         });
+      },
+    );
+  }
+
+  Widget _devtool_logTest_cell() {
+    return BJHTitleTextValueCell(
+      title: "测试日志上报到企业微信",
+      textValue: '',
+      onTap: () {
+        // String title = '我只是个测试标题';
+        // String customMessage = '我只是测试信息';
+        // LogUtil.postError(null, title, customMessage, ['lichaoqian']);
+
+        String apiFullUrl =
+            "http://121.41.91.92:3000/mock/28/hapi/test_test_test/";
+        String apiMessage = '我只是测试的api的上报信息';
+        LogUtil.apiError(apiFullUrl, apiMessage);
       },
     );
   }

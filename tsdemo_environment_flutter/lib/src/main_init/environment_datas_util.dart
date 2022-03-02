@@ -52,55 +52,91 @@ class TSEnvironmentDataUtil {
   }
 
   // 环境:网络环境
-  static String dev_mockApiHost = "http://121.41.91.92:3000/mock/28/";
-  static String productApiHost = "http://api.xxx.com/hapi/";
+  // mock环境
+  static String apiHost_mock = "http://121.41.91.92:3000/mock/28/hapi/";
+  static TSEnvNetworkModel get networkModel_mock {
+    TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    dataModel.envId = mockNetworkId;
+    dataModel.name = "模拟的测试环境(mock)";
+    dataModel.apiHost = apiHost_mock;
+    dataModel.webHost = "http://dev.h5.xxx.com/";
+    dataModel.gameHost = "http://dev.game.h5.xxx.com/";
+    dataModel.check = false;
+    dataModel.imageUrl =
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+    return dataModel;
+  }
+
+  // 开发环境1
+  static String apiHost_dev1 = "http://dev.api.xxx.com/hapi/";
+  static TSEnvNetworkModel get networkModel_dev1 {
+    TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    dataModel.envId = developNetworkId1;
+    dataModel.name = "开发环境1(develop1)";
+    dataModel.apiHost = apiHost_dev1;
+    dataModel.webHost = "http://dev.h5.xxx.com/";
+    dataModel.gameHost = "http://dev.game.h5.xxx.com/";
+    dataModel.check = true;
+    dataModel.imageUrl =
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+
+    return dataModel;
+  }
+
+  // 开发环境2
+  static String apiHost_dev2 = "http://dev2.api.xxx.com/hapi/";
+  static TSEnvNetworkModel get networkModel_dev2 {
+    TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    dataModel.envId = developNetworkId2;
+    dataModel.name = "开发环境2(develop2)";
+    dataModel.apiHost = apiHost_dev2;
+    dataModel.webHost = "http://dev2.h5.xxx.com/";
+    dataModel.gameHost = "http://dev2.game.h5.xxx.com/";
+    dataModel.check = false;
+    dataModel.imageUrl =
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+
+    return dataModel;
+  }
+
+  // preProduct
+  static String apiHost_preProduct = "http://test.api.xxx.com/hapi/";
+  static TSEnvNetworkModel get networkModel_preProduct {
+    TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    dataModel.envId = preproductNetworkId;
+    dataModel.name = "tke环境(tke)";
+    dataModel.apiHost = apiHost_preProduct;
+    dataModel.webHost = "http://test.h5.xxx.com/";
+    dataModel.gameHost = "http://test.game.h5.xxx.com/";
+    dataModel.check = false;
+    dataModel.imageUrl =
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+    return dataModel;
+  }
+
+  // product 生产环境
+  static String apiHost_product = "http://appletapi.xxx.com/hapi/";
+  static TSEnvNetworkModel get networkModel_product {
+    TSEnvNetworkModel dataModel = TSEnvNetworkModel();
+    dataModel.envId = productNetworkId;
+    dataModel.name = "生产环境(product)";
+    dataModel.apiHost = apiHost_product;
+    dataModel.webHost = "http://h5.xxx.com/";
+    dataModel.gameHost = "http://game.h5.xxx.com/";
+    dataModel.check = false;
+    dataModel.imageUrl =
+        "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
+    return dataModel;
+  }
 
   static List<TSEnvNetworkModel> getEnvNetworkModels() {
     List<TSEnvNetworkModel> envModels = [];
-    // develop
+    // 指定IP环境
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
       dataModel.envId = ipNetworkId;
       dataModel.name = "指定IP测试环境(ip)";
-      dataModel.apiHost = "http://192.168.28.58:80/";
-      dataModel.webHost = "http://dev.h5.xxx.com/";
-      dataModel.gameHost = "http://dev.game.h5.xxx.com/";
-      dataModel.check = false;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = mockNetworkId;
-      dataModel.name = "模拟的测试环境(mock)";
-      dataModel.apiHost = dev_mockApiHost;
-      dataModel.webHost = "http://dev.h5.xxx.com/";
-      dataModel.gameHost = "http://dev.game.h5.xxx.com/";
-      dataModel.check = false;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
-    // 开发环境
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = developNetworkId1;
-      dataModel.name = "开发环境1(develop1)";
-      dataModel.apiHost = "http://dev.api.xxx.com/hapi/";
-      dataModel.webHost = "http://dev.h5.xxx.com/";
-      dataModel.gameHost = "http://dev.game.h5.xxx.com/";
-      dataModel.check = true;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
-    // 开发环境2
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = developNetworkId2;
-      dataModel.name = "开发环境2(develop2)";
-      dataModel.apiHost = "http://dev2.api.xxx.com/hapi/";
+      dataModel.apiHost = "http://192.168.72.69:8888/hapi/";
       dataModel.webHost = "http://dev2.h5.xxx.com/";
       dataModel.gameHost = "http://dev2.game.h5.xxx.com/";
       dataModel.check = false;
@@ -108,49 +144,12 @@ class TSEnvironmentDataUtil {
           "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
       envModels.add(dataModel);
     }
-
-    // preProduct
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = preproductNetworkId;
-      dataModel.name = "预生产环境(preproduct)";
-      dataModel.apiHost = "http://test.api.xxx.com/hapi/";
-      dataModel.webHost = "http://test.h5.xxx.com/";
-      dataModel.gameHost = "http://test.game.h5.xxx.com/";
-      dataModel.check = false;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
-
-    // product 生产环境
-    {
-      TSEnvNetworkModel dataModel = TSEnvNetworkModel();
-      dataModel.envId = productNetworkId;
-      dataModel.name = "生产环境(product)";
-      dataModel.apiHost = productApiHost;
-      dataModel.webHost = "http://h5.xxx.com/";
-      dataModel.gameHost = "http://game.h5.xxx.com/";
-      dataModel.check = false;
-      dataModel.imageUrl =
-          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
-      envModels.add(dataModel);
-    }
+    envModels.add(networkModel_mock); // mock环境
+    envModels.add(networkModel_dev1); // 开发环境1
+    envModels.add(networkModel_dev2); // 开发环境2
+    envModels.add(networkModel_preProduct); // preProduct
+    envModels.add(networkModel_product); // product 生产环境
 
     return envModels;
-  }
-}
-
-extension SimulateExtension on String {
-  String toSimulateApi() {
-    String simulateApiHost = TSEnvironmentDataUtil.dev_mockApiHost;
-    List<String> allMockApiHosts = ["http://dev.api.xxx.com/hapi/"];
-    String newApi = this.addSimulateApiHost(
-      simulateApiHost,
-      allMockApiHosts: allMockApiHosts,
-    );
-
-    //print('mock newApi = ${newApi}');
-    return newApi;
   }
 }

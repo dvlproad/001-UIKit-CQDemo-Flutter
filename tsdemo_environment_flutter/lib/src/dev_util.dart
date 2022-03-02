@@ -1,13 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
-import './main_init/environment_datas_util.dart';
-
+import './userInfoManager.dart';
 import './dev_page.dart';
 
 class DevUtil {
@@ -21,6 +22,17 @@ class DevUtil {
     ApplicationDraggableManager.globalKey = globalKey; // ①悬浮按钮的拖动功能需要
     ApplicationLogViewManager.globalKey = globalKey; // ②日志系统需要
     CheckVersionUtil.navigatorKey = globalKey; // ③检查更新需要
+  }
+
+  static init({
+    GlobalKey navigatorKey,
+    ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
+    String floatingToolText, // 悬浮按钮上的文本
+  }) {
+    DevUtil.navigatorKey = navigatorKey;
+    ApplicationDraggableManager.floatingToolImageProvider =
+        floatingToolImageProvider;
+    ApplicationDraggableManager.floatingToolText = floatingToolText;
   }
 
   static bool isDevPageShowing =
@@ -45,7 +57,6 @@ class DevUtil {
     if (navigatorKey == null) {
       throw Exception(
           "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
-      return;
     }
     BuildContext context = navigatorKey.currentContext;
 
@@ -114,7 +125,7 @@ class DevUtil {
       top: top,
       onTap: () {
         if (DevUtil.isDevPageShowing == true) {
-          print('当前已是开发工具页面,无需重复跳转');
+          debugPrint('当前已是开发工具页面,无需重复跳转');
           return;
         }
 
@@ -132,7 +143,11 @@ class DevUtil {
         );
       },
       onLongPress: () {
-        DevLogUtil.showLogView();
+        if (DevLogUtil.isLogShowing == false) {
+          DevLogUtil.showLogView();
+        } else {
+          DevLogUtil.dismissLogView();
+        }
       },
     );
   }
@@ -146,49 +161,106 @@ class DevUtil {
       context,
       onPressTestApiCallback: showTestApiWidget
           ? () {
-              print('测试切换环境后，网络请求的情况');
-              // 我的收货地址
-              // Api.getAddressList(
-              //     {"accountId": UserInfoManager.instance.userModel.id});
+              // 测试请求
               // requestCount = 0;
               // NetworkKit
               //     .post(
-              //   'user/account/getConsigneeAddresses',
-              //   params: {},
+              //   'login/doLogin',
+              //   params: {
+              //     "clientId": "clientApp",
+              //     "clientSecret": "123123",
+              //   },
               //   cacheLevel: NetworkCacheLevel.one,
               // )
               //     .then((value) {
               //   requestCount++;
-              //   print('测试网络请求的缓存功能:${requestCount}');
+              //   debugPrint('测试网络请求的缓存功能:$requestCount');
               // });
 
               // 测试网络请求的缓存功能
               requestCount = 0;
               NetworkKit.postWithCallback(
-                'user/account/getConsigneeAddresses',
-                params: {},
-                cacheLevel: NetworkCacheLevel.one,
+                'login/doLogin',
+                params: {
+                  "clientId": "clientApp",
+                  "clientSecret": "123123",
+                  'retryCount': 3,
+                },
+                cacheLevel: NetworkCacheLevel.none,
                 completeCallBack: (resultData) {
                   requestCount++;
-                  print('测试网络请求的缓存功能:${requestCount}');
+                  debugPrint('测试网络请求的缓存功能:$requestCount');
                 },
               );
             }
           : null,
-      updateNetworkCallback: (apiHost, webHost, gameHost, {shouldExit}) {
-        /*
-        if (shouldExit == true && UserInfoManager.isLoginState() == true) {
-          UserInfoManager.instance.userLoginOut().then((value) {
-            eventBus.fire(LogoutSuccessEvent());
-          });
-        }
-        */
-        NetworkChangeUtil.changeOptions(baseUrl: apiHost);
+      updateNetworkCallback: (bNetworkModel, {shouldExit}) {
+        changeEnv(bNetworkModel, shouldExit, context: context);
       },
-      updateProxyCallback: (proxyIp) {
-        NetworkChangeUtil.changeProxy(proxyIp);
+      updateProxyCallback: (TSEnvProxyModel bProxyModel) {
+        changeProxyTo(bProxyModel);
       },
     );
+  }
+
+  static void changeProxyToNone() {
+    TSEnvProxyModel proxyModel = TSEnvProxyModel.noneProxyModel();
+    changeProxyTo(proxyModel);
+  }
+
+  static void changeProxyTo(TSEnvProxyModel proxyModel) {
+    /// ①修改代理环境_页面数据
+    ProxyPageDataManager().updateProxyPageSelectedData(proxyModel);
+
+    /// ②修改代理环境_SDK数据
+    changeAllProxy(proxyModel.proxyIp);
+  }
+
+  static void changeEnv(TSEnvNetworkModel bNetworkModel, bool shouldExit,
+      {BuildContext context}) {
+    /// ①修改网络环境_页面数据
+    NetworkPageDataManager().updateNetworkPageSelectedData(bNetworkModel);
+
+    /// ②修改网络环境_SDK数据
+    if (shouldExit == true && UserInfoManager.isLoginState() == true) {
+      /*
+      UserInfoManager.instance.userLoginOut().then((value) {
+        eventBus.fire(LogoutSuccessEvent());
+      });
+      */
+    }
+
+    changeHost(
+      apiHost: bNetworkModel.apiHost,
+      webHost: bNetworkModel.webHost,
+      gameHost: bNetworkModel.gameHost,
+    );
+
+    /// ③修改网络环境_更改完数据后，是否退出应用
+    if (shouldExit == true) {
+      // Future.delayed(const Duration(milliseconds: 500), () {
+      LoadingUtil.showDongingTextInContext(
+        context,
+        '退出中...',
+        milliseconds: 500,
+        completeBlock: () {
+          // [Flutter如何有效地退出程序](https://zhuanlan.zhihu.com/p/191052343)
+          exit(0); // 需要 import 'dart:io';
+          // SystemNavigator
+          //     .pop(); // 该方法在iOS中并不适用。需要  import 'package:flutter/services.dart';
+        },
+      );
+    }
+  }
+
+  static changeHost({String apiHost, String webHost, String gameHost}) {
+    if (apiHost != null) {
+      NetworkManager.changeOptions(baseUrl: apiHost);
+    }
+  }
+
+  static bool changeAllProxy(String proxyIp) {
+    return NetworkManager.changeProxy(proxyIp);
   }
 
   static Future goChangeApiMock(
