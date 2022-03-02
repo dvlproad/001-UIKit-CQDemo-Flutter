@@ -16,7 +16,9 @@ dependencies:
   flutter_environment:
     path: ../flutter_environment/ # 为了引入 ApiManager
     
-  dio_http_cache: any
+  # dio_http_cache: any
+  dio_http_cache:
+    path: ../dio_http_cache/ # 0.3.0
 
 dev_dependencies:
   flutter_test:

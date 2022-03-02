@@ -4,9 +4,6 @@ import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import './api_error_robot.dart';
-import './compile_mode_util.dart';
-export './compile_mode_util.dart';
 
 extension SimulateExtension on String {
   String toSimulateApi() {
@@ -44,6 +41,8 @@ class NetworkKit {
   /// [baseUrl] 地址前缀
   static void start({
     String baseUrl,
+    Map<String, dynamic> commonParams,
+    String token,
     bool allowMock, // 是否允许 mock api
     String mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
   }) {
@@ -53,36 +52,20 @@ class NetworkKit {
       ApiProcessType apiProcessType, // api 请求的阶段类型
       ApiLogLevel apiLogLevel, // api 日志信息类型
     }) {
+      String serviceValidProxyIp = NetworkManager.serviceValidProxyIp;
+      Map extraApiLogInfo = {
+        "hasProxy": serviceValidProxyIp != null,
+      };
       if (apiLogLevel == ApiLogLevel.error) {
-        LogUtil.error(logString);
+        LogUtil.apiError(fullUrl, logString, extraLogInfo: extraApiLogInfo);
       } else if (apiLogLevel == ApiLogLevel.warning) {
-        LogUtil.warning(logString);
+        LogUtil.apiWarning(fullUrl, logString, extraLogInfo: extraApiLogInfo);
       } else {
-        LogUtil.normal(logString);
-      }
-
-      bool shouldPostApiError = false;
-      String serviceValidProxyIp = NetworkChangeUtil.serviceValidProxyIp;
-      if (apiLogLevel == ApiLogLevel.error) {
-        ComplieMode complieMode = ComplieModeUtil.getCompileMode();
-        if (complieMode == ComplieMode.debug) {
-          if (serviceValidProxyIp != null) {
-            // debug 且有代理的时候，如果发生错误，是否通知到企业微信
-            shouldPostApiError = false;
-          } else {
-            shouldPostApiError = true;
-          }
+        if (apiProcessType == ApiProcessType.response) {
+          LogUtil.apiSuccess(fullUrl, logString, extraLogInfo: extraApiLogInfo);
         } else {
-          shouldPostApiError = true;
+          LogUtil.apiNormal(fullUrl, logString, extraLogInfo: extraApiLogInfo);
         }
-      }
-
-      if (shouldPostApiError) {
-        ApiErrorRobot.postApiError(
-          fullUrl,
-          logString,
-          serviceValidProxyIp: serviceValidProxyIp,
-        );
       }
     };
 
@@ -90,8 +73,20 @@ class NetworkKit {
       getCacheManager(baseUrl: baseUrl).interceptor,
     ];
 
+    Map<String, dynamic> headers;
+    if (token != null && token.isNotEmpty) {
+      headers = {'Authorization': token};
+    }
+    if (commonParams != null) {
+      if (headers == null) {
+        headers = commonParams;
+      } else {
+        headers.addAll(commonParams);
+      }
+    }
     NetworkManager.start(
       baseUrl: baseUrl,
+      headers: headers,
       connectTimeout: 15000,
       interceptors: extraInterceptors,
     );
@@ -139,9 +134,10 @@ class NetworkKit {
         print('温馨提示:本次请求，你没有实现回调方法$api');
         return;
       }
-      completeCallBack(responseModel);
 
       if (responseModel.isCache == true) {
+        completeCallBack(responseModel);
+
         //print('底层网络库:这是缓存数据');
 
         if (cacheLevel == NetworkCacheLevel.one) {
@@ -155,6 +151,8 @@ class NetworkKit {
           cacheLevel: cacheLevel,
           completeCallBack: completeCallBack,
         );
+      } else {
+        completeCallBack(responseModel);
       }
     });
   }
@@ -202,5 +200,26 @@ class NetworkKit {
     }
 
     return dioOptions;
+  }
+
+  Future retryWhenError(DioError err) async {
+    Dio dio = NetworkManager.instance.serviceDio; // 获取dio单例
+
+    RequestOptions requestOptions =
+        err.response.requestOptions; //千万不要调用 err.request
+    try {
+      var response = await dio.request(
+        requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        cancelToken: requestOptions.cancelToken,
+        // options: requestOptions,
+        onReceiveProgress:
+            requestOptions.onReceiveProgress, //TODO 差一个onSendProgress
+      );
+      return response;
+    } on DioError catch (e) {
+      return e;
+    }
   }
 }

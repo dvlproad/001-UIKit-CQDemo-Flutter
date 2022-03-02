@@ -14,18 +14,31 @@ class DioChangeUtil {
   }
 
   static void changeHeaders(Dio dio, {Map<String, dynamic> headers}) {
+    // Options options = Options(headers: headers);
+    // dio.options = options;
     dio.options = dio.options.copyWith(
       headers: headers,
     );
   }
 
+  static void removeHeadersKey(Dio dio, String removeKey) {
+    dio.options.headers.remove(removeKey);
+  }
+
   // 修改代理 proxy
-  static void changeProxy(Dio dio, {String proxyIp}) {
+  // 修改代理 proxy(返回代理设置成功与否，当传入的ip地址格式不正确等则无法成功设置代理)
+  static bool changeProxy(Dio dio, {String proxyIp}) {
+    bool canUpdate = canUpdateProxy(proxyIp); // 无代理的话，一定是null
+    if (canUpdate == false) {
+      return false;
+    }
+
+    String serviceValidProxyIp = proxyIp;
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.findProxy = (uri) {
-        if (proxyIp != null) {
-          return "PROXY $proxyIp";
+        if (serviceValidProxyIp != null) {
+          return "PROXY $serviceValidProxyIp";
         } else {
           return 'DIRECT';
         }
@@ -35,5 +48,33 @@ class DioChangeUtil {
       //   return true;
       // };
     };
+
+    return true;
+  }
+
+  // 判断是否能够更新代理（无代理 或 指定ip代理）
+  static bool canUpdateProxy(String ipString) {
+    if (ipString == null) {
+      return true; // 设置成”无代理“
+    }
+
+    bool isValid = isValidProxyIp(ipString); // 设置指定的代理ip地址
+    if (isValid == false) {
+      throw Exception(
+          'Error:您设置的代理ipString=$ipString，既不是无代理，也不是有效的代理ip地址。(如果不设置代理,ip请设为null；如果要设置代理,ip请设置形如192.168.1.1)');
+    }
+    return isValid;
+  }
+
+  // 判断是否是有效的代理ip地址
+  static bool isValidProxyIp(String ipString) {
+    if (ipString == null) {
+      return false;
+    }
+
+    final reg = RegExp(r'^\d{1,3}[\.]\d{1,3}[\.]\d{1,3}[\.]\d{1,3}');
+
+    bool isMatch = reg.hasMatch(ipString);
+    return isMatch;
   }
 }

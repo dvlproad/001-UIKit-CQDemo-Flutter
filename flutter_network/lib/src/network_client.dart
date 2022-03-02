@@ -92,70 +92,42 @@ class NetworkManager {
 
     NetworkManager.instance._hasStart = true;
   }
-}
 
-class NetworkChangeUtil {
-  static String serviceValidProxyIp; // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，该值会是null)
+  // 以下代码为 NetworkManager 的 ChangeUtil
+  /************************* token 设置 *************************/
+  /// 添加/修改token(登录成功后调用)
+  static void addOrUpdateToken(String token) {
+    Dio dio = NetworkManager.instance.serviceDio;
+    Map<String, dynamic> requestHeaders = {'Authorization': token};
+    DioChangeUtil.changeHeaders(dio, headers: requestHeaders);
+  }
 
+  /// 删除token(退出成功后调用)
+  static void removeToken() {
+    Dio dio = NetworkManager.instance.serviceDio;
+    String removeKey = 'Authorization';
+    DioChangeUtil.removeHeadersKey(dio, removeKey);
+  }
+
+  /************************* baseUrl 设置 *************************/
   /// 修改 baseUrl
   static void changeOptions({
     String baseUrl,
   }) {
     Dio dio = NetworkManager.instance.serviceDio;
-    dio.options = dio.options.copyWith(
-      baseUrl: baseUrl,
-    );
+    DioChangeUtil.changeOptions(dio, baseUrl: baseUrl);
   }
 
-  static void changeHeaders({
-    Map<String, dynamic> headers,
-  }) {
-    Dio dio = NetworkManager.instance.serviceDio;
-
-    // Options options = Options(headers: headers);
-    // dio.options = options;
-    dio.options = dio.options.copyWith(
-      headers: headers,
-    );
-  }
-
-  // 修改代理 proxy(返回代理设置成功与否，当传入的ip地址格式不正确等则无法成功设置代理)
+  /************************* proxy 设置 *************************/
+  static String serviceValidProxyIp; // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，该值会是null)
+  // 修改代理 proxy(返回代理设置成功与否，当传入的不是ip地址格式不正确等则无法成功设置代理)
   static bool changeProxy(String proxyIp) {
-    isValidProxyIp(proxyIp) {
-      return false;
-    }
-
-    String serviceValidProxyIp = proxyIp;
-    NetworkChangeUtil.serviceValidProxyIp = serviceValidProxyIp;
-
     Dio dio = NetworkManager.instance.serviceDio;
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      client.findProxy = (uri) {
-        if (serviceValidProxyIp != null) {
-          return "PROXY $serviceValidProxyIp";
-        } else {
-          return 'DIRECT';
-        }
-      };
-      // client.badCertificateCallback =
-      //     (X509Certificate cert, String host, int port) {
-      //   return true;
-      // };
-    };
-
-    return true;
-  }
-
-  // 判断是否是有效的代理ip地址
-  static bool isValidProxyIp(String ipString) {
-    if (ipString == null) {
-      return false;
+    bool changeSuccess = DioChangeUtil.changeProxy(dio, proxyIp: proxyIp);
+    if (changeSuccess) {
+      NetworkManager.serviceValidProxyIp = proxyIp;
     }
 
-    final reg = RegExp(r'^\d{1,3}[\.]\d{1,3}[\.]\d{1,3}[\.]\d{1,3}');
-
-    bool isMatch = reg.hasMatch(ipString);
-    return isMatch;
+    return changeSuccess;
   }
 }

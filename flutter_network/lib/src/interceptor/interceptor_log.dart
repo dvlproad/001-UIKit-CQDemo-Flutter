@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'package:dio/dio.dart';
 import 'package:flutter_log/flutter_log.dart';
 import './url_util.dart';
+import '../mock_analy_util.dart';
 
 /// api 日志信息类型
 enum ApiLogLevel {
@@ -135,7 +136,7 @@ class DioLogInterceptor extends Interceptor {
     }
     // LogUtil.normal("请求成功的回复1：" + response.data.toString());
     String url = uri.toString();
-    bool isMockEnvironment = url.startsWith('http://121.41.91.92:3000/mock/');
+    bool isMockEnvironment = MockAnalyUtil.isMockEnvironment(url);
 
     String logHeaderString = "=========== RESPONSE ===========\n"; // 日志头
     ApiLogLevel apiLogLevel = ApiLogLevel.normal;
@@ -156,9 +157,20 @@ class DioLogInterceptor extends Interceptor {
       if (businessCode == 0) {
         logHeaderString += "请求成功(code$businessCode)的回复\n";
         apiLogLevel = ApiLogLevel.normal;
-      } else if (businessCode == 500) {
+      } else if (businessCode == 500 ||
+          businessCode == 401 ||
+          businessCode == 404) {
+        // 500 Internal Server Error 服务器错误
+        // 401 Unauthorized 当前请求需要用户验证(token不能为空)
+        // 404 Not Found 请求路径不存在
         logHeaderString += "请求失败(code$businessCode)的回复\n";
-        apiLogLevel = ApiLogLevel.error;
+        String errorMessage = responseObject["msg"];
+        bool needRelogin = errorMessage == '暂未登录或token已经过期';
+        if (needRelogin) {
+          apiLogLevel = ApiLogLevel.warning;
+        } else {
+          apiLogLevel = ApiLogLevel.error;
+        }
       } else {
         logHeaderString += "请求成功(code$businessCode)的回复\n";
         apiLogLevel = ApiLogLevel.warning;

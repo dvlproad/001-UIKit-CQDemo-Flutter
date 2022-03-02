@@ -10,6 +10,7 @@ import './lang_util.dart';
 import 'dart:convert' as convert;
 
 import './network_client.dart';
+import './mock_analy_util.dart';
 
 typedef T JsonParse<T>(dynamic data);
 
@@ -148,53 +149,13 @@ class NetworkUtil {
         }
 
         Map<String, dynamic> responseMap;
-        if (responseObject is Map) {
-          //print('responseObject.keys=${responseObject.keys}');
-          bool isMockEnvironment =
-              url.startsWith('http://121.41.91.92:3000/mock/');
-          if (isMockEnvironment == true) {
-            // 是模拟的环境，不是本项目
 
-            bool mockHappenError =
-                responseObject.keys.contains('errcode') == true; // mock环境是否发生错误
-
-            if (mockHappenError == true) {
-              responseMap = Map();
-              responseMap['code'] = responseObject["errcode"];
-              responseMap['msg'] = responseObject["errmsg"];
-              responseMap["data"] = responseObject["data"];
-            } else {
-              if (responseObject.keys.contains('code') == false) {
-                // 请求成功，但是模拟的环境，忘了在外层套上 code msg result，来使得和正常项目的结构一致，我们兼容这种返回
-                responseMap = Map();
-                responseMap['code'] = 0;
-                responseMap['msg'] = '请求成功';
-                responseMap["data"] = responseObject;
-              } else {
-                responseMap = responseObject;
-
-                responseMap = Map();
-                if (url.startsWith(
-                    'http://121.41.91.92:3000/mock/3/api/beyond/')) {
-                  responseMap['code'] = responseObject["code"];
-                  responseMap['msg'] = responseObject["msg"];
-                  responseMap["data"] = responseObject["result"];
-                } else {
-                  responseMap['code'] = responseObject["code"];
-                  responseMap['msg'] = responseObject["msg"];
-                  responseMap["data"] = responseObject["data"];
-                }
-              }
-            }
-          } else {
-            responseMap = responseObject;
-          }
+        bool isMockEnvironment = MockAnalyUtil.isMockEnvironment(url);
+        if (isMockEnvironment == true) {
+          // 是模拟的环境，不是本项目
+          responseMap = MockAnalyUtil.responseMapFromMock(responseObject, url);
         } else {
-          // 肯定不是正常项目返回的，一般都是mock环境
-          responseMap = Map();
-          responseMap['code'] = 0;
-          responseMap['msg'] = '请求成功';
-          responseMap["data"] = responseObject;
+          responseMap = responseObject;
         }
 
         var errorCode = responseMap['code'];
