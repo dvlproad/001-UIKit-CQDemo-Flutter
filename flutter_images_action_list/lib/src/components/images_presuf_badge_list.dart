@@ -53,7 +53,8 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
     return Container(
       color: Colors.transparent,
       child: GridView.builder(
-        shrinkWrap: true,
+        shrinkWrap: true, //该属性表示是否根据子组件的总长度来设置ListView的长度，默认值为false
+        physics: NeverScrollableScrollPhysics(), // 不响应用户的滚动
         itemCount: itemCount,
         padding: EdgeInsets.fromLTRB(10, 10, 80, 10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

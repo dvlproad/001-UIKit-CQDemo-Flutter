@@ -6,7 +6,7 @@ import 'package:tsdemodemo_flutter/modules/gesture/gesture_routes.dart';
 import 'package:tsdemo_overlay_flutter/src/overlay_routes.dart';
 import 'package:tsdemo_images_browser/src/imagesbrowser_routes.dart';
 import 'package:tsdemo_environment_flutter/src/devtool_routes.dart';
-import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_routes.dart';
+import 'package:tsdemo_images_action/src/photoalbum_routes.dart';
 import 'package:tsdemo_baseui/src/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
