@@ -10,7 +10,7 @@
  * Copyright (c) dvlproad. All rights reserved.
  */
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-list/index_path.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 typedef int RowCountInSectionCallBack(int section);
 typedef Widget CellAtIndexPathCallBack(int section, int row);
@@ -26,7 +26,6 @@ class CreateSectionTableView1 extends StatefulWidget {
   final SectionHeaderCallBack headerInSection;
   final Widget divider;
 
-
   CreateSectionTableView1({
     Key key,
     @required this.sectionCount,
@@ -34,15 +33,15 @@ class CreateSectionTableView1 extends StatefulWidget {
     @required this.cellAtIndexPath,
     this.headerInSection,
     this.divider,
-  })  : super(key: key);
+  }) : super(key: key);
   @override
-  _CreateSectionTableView1State createState() => new _CreateSectionTableView1State();
+  _CreateSectionTableView1State createState() =>
+      new _CreateSectionTableView1State();
 }
 
 class _CreateSectionTableView1State extends State<CreateSectionTableView1> {
 //  final sectionLstViewKey = GlobalKey();
 //  final listViewKey = GlobalKey();
-
 
   @override
   void initState() {
@@ -63,7 +62,6 @@ class _CreateSectionTableView1State extends State<CreateSectionTableView1> {
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
-
 
   @override
   Widget build(BuildContext context) {

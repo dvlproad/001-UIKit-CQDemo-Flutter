@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_page.dart';
+import 'package:flutter_photoalbum/flutter_photoalbum.dart';
 
 class TSPhotoAlbumSelectPage extends StatefulWidget {
-  TSPhotoAlbumSelectPage({
+  const TSPhotoAlbumSelectPage({
     Key key,
   }) : super(key: key);
 
   @override
-  _TSPhotoAlbumSelectPageState createState() =>
-      new _TSPhotoAlbumSelectPageState();
+  _TSPhotoAlbumSelectPageState createState() => _TSPhotoAlbumSelectPageState();
 }
 
 class _TSPhotoAlbumSelectPageState extends State<TSPhotoAlbumSelectPage> {
@@ -34,12 +33,12 @@ class _TSPhotoAlbumSelectPageState extends State<TSPhotoAlbumSelectPage> {
   /// 导航栏
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text('相册'),
+      title: const Text('相册'),
     );
   }
 
   /// contentWidget
   Widget contentWidget() {
-    return PhotoAlbumPage();
+    return const PhotoAlbumPage();
   }
 }

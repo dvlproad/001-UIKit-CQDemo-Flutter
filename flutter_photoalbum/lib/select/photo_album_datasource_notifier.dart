@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset_entity.dart';
+import '../base/photo_album_asset_entity.dart';
 
 enum PhotoAlbumAssetState { loading, success, failure, empty }
 
 class PhotoAlbumNotifier with ChangeNotifier {
-  List<CQPhotoAlbumAssetEntity> _assets = List();
+  final List<CQPhotoAlbumAssetEntity> _assets = [];
   int page = 0;
-  int _pageSize = 20;
+  final int _pageSize = 20;
 
   List<CQPhotoAlbumAssetEntity> get assets => _assets;
 
@@ -44,9 +44,9 @@ class PhotoAlbumNotifier with ChangeNotifier {
     List<AssetPathEntity> assetPath = [];
     try {
       assetPath = await PhotoManager.getAssetPathList(onlyAll: true)
-          .timeout(Duration(seconds: 5));
+          .timeout(const Duration(seconds: 5));
     } catch (e) {
-      throw Future.error("${e.toString()}");
+      throw Future.error(e.toString());
     }
 
     if (assetPath.isEmpty) {
@@ -60,7 +60,7 @@ class PhotoAlbumNotifier with ChangeNotifier {
         assetList.first.file
             .then((value) => value.parent.delete(recursive: true));
       }
-      if (assetList.length == 0) {
+      if (assetList.isEmpty) {
         return;
       }
 

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-list/index_path.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
-typedef void SectionTableViewScrollToCallBack(int section, int row, bool isScrollDown);
+typedef void SectionTableViewScrollToCallBack(
+    int section, int row, bool isScrollDown);
 
 class SectionTableController extends ChangeNotifier {
   IndexPath topIndex = IndexPath(section: 0, row: -1);

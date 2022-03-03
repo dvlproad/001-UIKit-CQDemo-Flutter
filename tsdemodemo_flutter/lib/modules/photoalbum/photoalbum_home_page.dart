@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_adddelete_page.dart';
-import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_selected_page.dart';
+import './photoalbum_adddelete_page.dart';
+import './photoalbum_selected_page.dart';
 
 class TSPhotoAlbumHomePage extends CJTSBasePage {
   TSPhotoAlbumHomePage({Key key}) : super(key: key);
@@ -19,7 +19,7 @@ class _CJTSTableHomeBasePageState
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text('图片浏览首页'),
+      title: const Text('ImageAddDelete首页'),
     );
   }
 
@@ -36,7 +36,7 @@ class _CJTSTableHomeBasePageState
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TSPhotoAlbumSelectPage(),
+                  builder: (context) => const TSPhotoAlbumSelectPage(),
                 ),
               );
             }
@@ -48,7 +48,7 @@ class _CJTSTableHomeBasePageState
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TSPhotoAlbumAddDeletePage(),
+                  builder: (context) => const TSPhotoAlbumAddDeletePage(),
                 ),
               );
             }

@@ -13,7 +13,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewCell.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewHeader.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class CreateSectionList2 extends StatelessWidget {
   @override

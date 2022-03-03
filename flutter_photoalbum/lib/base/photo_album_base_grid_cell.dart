@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/image_grid_cell.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset_entity.dart';
+import './image_grid_cell.dart';
+import './photo_album_asset_entity.dart';
 
 class CQPhotoAlbumBaseGridCell extends StatelessWidget {
   final CQPhotoAlbumAssetEntity entity;

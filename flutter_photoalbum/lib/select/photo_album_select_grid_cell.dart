@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset_entity.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_base_grid_cell.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_notifier.dart';
+import '../base/photo_album_asset_entity.dart';
+import '../base/photo_album_base_grid_cell.dart';
+import './photo_album_select_notifier.dart';
 
 class CQPhotoAlbumSelectGridCell extends StatelessWidget {
   final CQPhotoAlbumAssetEntity entity;
@@ -27,10 +27,10 @@ class CQPhotoAlbumSelectGridCell extends StatelessWidget {
         CQPhotoAlbumBaseGridCell(
           entity: entity,
           index: index,
-          onPressed: this.onPressed,
+          onPressed: onPressed,
         ),
         if (_selectNotifier.isContain(index) == true)
-          Positioned(
+          const Positioned(
             right: 5,
             bottom: 5,
             child: Icon(

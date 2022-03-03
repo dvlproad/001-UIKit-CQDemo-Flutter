@@ -4,13 +4,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 
 class TSPhotoAlbumAddDeletePage extends StatefulWidget {
-  TSPhotoAlbumAddDeletePage({
+  const TSPhotoAlbumAddDeletePage({
     Key key,
   }) : super(key: key);
 
   @override
   _TSPhotoAlbumAddDeletePageState createState() =>
-      new _TSPhotoAlbumAddDeletePageState();
+      _TSPhotoAlbumAddDeletePageState();
 }
 
 class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
@@ -39,7 +39,7 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
   /// 导航栏
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text('图片添加'),
+      title: const Text('图片添加'),
     );
   }
 
@@ -48,17 +48,17 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
     return CQImagesAddDeleteList(
       imageOrPhotoModels: _imageOrPhotoModels,
       onPressedAdd: () {
-        print('点击添加');
+        debugPrint('点击添加');
         // _imageOrPhotoModels.add('lib/commonui/cq-uikit/images/pic_搜索为空页面.png');
-        this._addevent();
+        _addevent();
       },
     );
   }
 
   void _addevent() async {
     ImagePicker imagePicker = ImagePicker();
-    final PickedFile pickedFile = await imagePicker.getImage(
-      source: ImageSource.camera,
+    final XFile pickedFile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
       maxHeight: 1920,
       maxWidth: 1080,
       imageQuality: 70,

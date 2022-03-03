@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_home_page.dart';
-import 'package:tsdemodemo_flutter/modules/photoalbum/photoalbum_selected_page.dart';
+import './photoalbum_home_page.dart';
+import './photoalbum_selected_page.dart';
 
 class PhotoAlbumRouters {
   // 组件模块
@@ -13,7 +13,7 @@ class PhotoAlbumRouters {
         TSPhotoAlbumHomePage(),
 
     PhotoAlbumRouters.photoAlbumPage: (BuildContext context) {
-      return TSPhotoAlbumSelectPage();
+      return const TSPhotoAlbumSelectPage();
     }
 
     // ImagesBrowserRouters.imagesCarouselPage: (BuildContext context) =>

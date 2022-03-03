@@ -76,6 +76,9 @@ dependencies:
     path: ../tsdemo_images_browser/
   flutter_images_browser:
     path: ../flutter_images_browser/
+  
+  flutter_photoalbum:
+    path: ../flutter_photoalbum/
 
   tsdemo_environment_flutter:
     path: ../tsdemo_environment_flutter/

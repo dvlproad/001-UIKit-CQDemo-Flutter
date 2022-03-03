@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/base/photo_album_asset_entity.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_grid_cell.dart';
-import 'package:tsdemodemo_flutter/commonui/cq-photoalbum/select/photo_album_select_notifier.dart';
+import '../base/photo_album_asset_entity.dart';
+import './photo_album_select_grid_cell.dart';
+import './photo_album_select_notifier.dart';
 
 class CQPhotoList extends StatefulWidget {
   final List<CQPhotoAlbumAssetEntity> photoAlbumAssets;

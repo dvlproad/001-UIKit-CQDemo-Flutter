@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:tsdemodemo_flutter/commonui/cq-list/index_path.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_notifier.dart';
 
 typedef int RowCountInSectionCallBack(int section);
@@ -10,7 +10,6 @@ typedef Widget SectionHeaderCallBack(int section);
 typedef double SectionHeaderHeightCallBack(int section);
 typedef double DividerHeightCallBack();
 typedef double CellHeightAtIndexPathCallBack(int section, int row);
-
 
 class SectionTableView extends StatefulWidget {
   //required
@@ -24,13 +23,14 @@ class SectionTableView extends StatefulWidget {
 
   //tell me cell & header & divider height, so that I can scroll to specific index path
   //work with SectionTableController
-  final SectionHeaderHeightCallBack sectionHeaderHeight; // must set when use SectionTableController
-  final DividerHeightCallBack dividerHeight; // must set when use SectionTableController
+  final SectionHeaderHeightCallBack
+      sectionHeaderHeight; // must set when use SectionTableController
+  final DividerHeightCallBack
+      dividerHeight; // must set when use SectionTableController
   final CellHeightAtIndexPathCallBack
       cellHeightAtIndexPath; // must set when use SectionTableController
   final SectionTableController
       controller; //you can use this controller to scroll section table view
-
 
   final ScrollController _scrollController;
   ScrollController get scrollController => _scrollController;
@@ -70,8 +70,8 @@ class _SectionTableViewState extends State<SectionTableView> {
     if (offset == null) {
       return null;
     }
-    final contentHeight =
-        indexPathToOffsetSearch[IndexPath(section: widget.sectionCount, row: -1).toString()];
+    final contentHeight = indexPathToOffsetSearch[
+        IndexPath(section: widget.sectionCount, row: -1).toString()];
 
     if (listViewKey.currentContext != null && contentHeight != null) {
       double listViewHeight = listViewKey.currentContext.size.height;
@@ -130,17 +130,19 @@ class _SectionTableViewState extends State<SectionTableView> {
       double dividerHeight = showDivider ? widget.dividerHeight() : 0.0;
       for (int i = 0; i < widget.sectionCount; i++) {
         if (showSectionHeader) {
-          indexPathToOffsetSearch[IndexPath(section: i, row: -1).toString()] = offset;
+          indexPathToOffsetSearch[IndexPath(section: i, row: -1).toString()] =
+              offset;
           offset += widget.sectionHeaderHeight(i);
         }
         int rows = widget.numOfRowInSection(i);
         for (int j = 0; j < rows; j++) {
-          indexPathToOffsetSearch[IndexPath(section: i, row: j).toString()] = offset;
+          indexPathToOffsetSearch[IndexPath(section: i, row: j).toString()] =
+              offset;
           offset += widget.cellHeightAtIndexPath(i, j) + dividerHeight;
         }
       }
-      indexPathToOffsetSearch[IndexPath(section: widget.sectionCount, row: -1).toString()] =
-          offset; //list view length
+      indexPathToOffsetSearch[IndexPath(section: widget.sectionCount, row: -1)
+          .toString()] = offset; //list view length
     }
 
     //calculate initial scroll offset
@@ -150,7 +152,9 @@ class _SectionTableViewState extends State<SectionTableView> {
 //      }
 
     int findValidIndexPathByIndex(int index, int pace) {
-      for (int i = index + pace; (i >= 0 && i < indexToIndexPathSearch.length); i += pace) {
+      for (int i = index + pace;
+          (i >= 0 && i < indexToIndexPathSearch.length);
+          i += pace) {
         final indexPath = indexToIndexPathSearch[i];
         if (indexPath.section >= 0) {
           return i;
@@ -173,7 +177,8 @@ class _SectionTableViewState extends State<SectionTableView> {
 
 //      final preIndexPath = findValidIndexPathByIndex(currentIndex, -1);
       final currentIndexPath = indexToIndexPathSearch[currentIndex];
-      final nextIndexPath = indexToIndexPathSearch[findValidIndexPathByIndex(currentIndex, 1)];
+      final nextIndexPath =
+          indexToIndexPathSearch[findValidIndexPathByIndex(currentIndex, 1)];
       preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
       nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
     }
@@ -188,8 +193,8 @@ class _SectionTableViewState extends State<SectionTableView> {
           return;
         }
         if (sectionController.animate) {
-          widget.scrollController
-              .animateTo(offset, duration: Duration(milliseconds: 250), curve: Curves.decelerate);
+          widget.scrollController.animateTo(offset,
+              duration: Duration(milliseconds: 250), curve: Curves.decelerate);
         } else {
           widget.scrollController.jumpTo(offset);
         }
@@ -206,12 +211,13 @@ class _SectionTableViewState extends State<SectionTableView> {
             final nextIndexPath = indexToIndexPathSearch[currentIndex];
             currentIndex = findValidIndexPathByIndex(currentIndex, -1);
             final currentIndexPath = indexToIndexPathSearch[currentIndex];
-            preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
+            preIndexOffset =
+                indexPathToOffsetSearch[currentIndexPath.toString()];
             nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
 //            print('go previous index $currentIndexPath');
             if (widget.controller.sectionTableViewScrollTo != null) {
-              widget.controller
-                  .sectionTableViewScrollTo(currentIndexPath.section, currentIndexPath.row, false);
+              widget.controller.sectionTableViewScrollTo(
+                  currentIndexPath.section, currentIndexPath.row, false);
             }
           }
         } else if (currentOffset >= nextIndexOffset) {
@@ -219,14 +225,15 @@ class _SectionTableViewState extends State<SectionTableView> {
           if (currentIndex < indexToIndexPathSearch.length - 2) {
             currentIndex = findValidIndexPathByIndex(currentIndex, 1);
             final currentIndexPath = indexToIndexPathSearch[currentIndex];
-            final nextIndexPath =
-                indexToIndexPathSearch[findValidIndexPathByIndex(currentIndex, 1)];
-            preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
+            final nextIndexPath = indexToIndexPathSearch[
+                findValidIndexPathByIndex(currentIndex, 1)];
+            preIndexOffset =
+                indexPathToOffsetSearch[currentIndexPath.toString()];
             nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
 //            print('go next index $currentIndexPath');
             if (widget.controller.sectionTableViewScrollTo != null) {
-              widget.controller
-                  .sectionTableViewScrollTo(currentIndexPath.section, currentIndexPath.row, true);
+              widget.controller.sectionTableViewScrollTo(
+                  currentIndexPath.section, currentIndexPath.row, true);
             }
           }
         }
