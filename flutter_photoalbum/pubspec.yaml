@@ -10,6 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: any
+  flutter_easyrefresh: any # 从相册中选择后图片数据变化增加刷新效果
+  flutter_effect: # 使用 RefreshFooter
+    path: ../flutter_effect/
+  flutter_baseui_kit: # 图片cell 使用 CJBGImageWidget
+    path: ../flutter_baseui_kit/
 
 dev_dependencies:
   flutter_test:

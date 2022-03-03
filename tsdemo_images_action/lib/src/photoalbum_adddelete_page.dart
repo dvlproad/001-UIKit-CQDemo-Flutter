@@ -23,6 +23,7 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
 
   @override
   void initState() {
+    // 如果运行点击了发生崩溃，请检查是否info.plist中缺少了设置相册/相机权限
     super.initState();
     _imageOrPhotoModels = [];
   }
