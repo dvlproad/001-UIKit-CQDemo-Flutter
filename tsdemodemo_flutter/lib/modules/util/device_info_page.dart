@@ -7,7 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:io';
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
 
