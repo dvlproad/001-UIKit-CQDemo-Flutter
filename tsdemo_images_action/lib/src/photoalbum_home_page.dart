@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './photoalbum_adddelete_page.dart';
+import './images_add_delete_pick_list.dart';
 import './photoalbum_selected_page.dart';
 
 class TSPhotoAlbumHomePage extends CJTSBasePage {
@@ -49,6 +50,18 @@ class _CJTSTableHomeBasePageState
                 context,
                 MaterialPageRoute(
                   builder: (context) => const TSPhotoAlbumAddDeletePage(),
+                ),
+              );
+            }
+          },
+          {
+            'title': "Images AddDelete(图片添加+Pick)",
+            // 'nextPageName': ImagesBrowserRouters.imagesBrowserPage,
+            'actionBlock': () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CQImageDeleteAddPickList(),
                 ),
               );
             }

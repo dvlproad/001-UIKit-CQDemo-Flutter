@@ -11,11 +11,22 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # 图片列表
   flutter_images_action_list:
     path: ../flutter_images_action_list/
+  
+  # 图片选择
+  flutter_images_picker:
+    path: ../flutter_images_picker/
+    
+  image_picker: any
+
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/
+
+  # ???
   flutter_photoalbum:
     path: ../flutter_photoalbum/
-  image_picker: any
 
 dev_dependencies:
   flutter_test:

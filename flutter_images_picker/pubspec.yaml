@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  permission_handler: any
+  image_picker: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

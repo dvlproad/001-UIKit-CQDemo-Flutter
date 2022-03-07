@@ -1,13 +1,8 @@
-import 'dart:io';
-import 'dart:typed_data';
+import 'dart:io' show File;
 import 'package:flutter/material.dart';
-import 'package:photo/photo.dart';
-import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 import 'package:flutter_images_picker/flutter_images_picker.dart';
-
-// GlobalKey<_CQImageDeleteAddPickListState> imageDeleteAddPickListKey =
-//     GlobalKey();
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 typedef CQImageOrPhotoModelsChangeBlock = void Function(
     List<dynamic> imageOrPhotoModels); // 当前选中的相册信息
@@ -57,7 +52,16 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
   }
 
   void _addevent() {
-    CQImagePickerUtil().pickAssetOrTakePhoto(
+    ActionSheetUtil.chooseItem(
+      context,
+      title: '更换头像',
+      itemTitles: ['拍照上传', '从相册选择'],
+      onConfirm: (int selectedIndex) {
+        dealAvatar(selectedIndex);
+      },
+    );
+    /*
+    PhotoPickUtil().pickAssetOrTakePhoto(
       type: PickType.onlyImage,
       pathList: null,
       hasSelectedCount: _imageOrPhotoModels.length,
@@ -85,6 +89,20 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
         }
       },
     );
+    */
+  }
+
+  void dealAvatar(int selectedIndex) async {
+    PhotoPickUtil.pickPhoto(
+      imagePickerCallBack: (path) {
+        _imageOrPhotoModels.add(path);
+
+        if (widget.imageOrPhotoModelsChangeBlock != null) {
+          // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
+          widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
+        }
+      },
+    );
   }
 
   /// 获取 files
@@ -102,10 +120,7 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
     List<File> imageOrPhotoFiles = [];
     for (dynamic imageOrPhotoModel in imageOrPhotoModels) {
       File imageOrPhotoFile;
-      if (imageOrPhotoModel is AssetEntity) {
-        AssetEntity assetEntity = imageOrPhotoModel;
-        imageOrPhotoFile = await assetEntity.file;
-      } else if (imageOrPhotoModel is String) {
+      if (imageOrPhotoModel is String) {
         String path = imageOrPhotoModel;
         imageOrPhotoFile = File(path);
       } else if (imageOrPhotoModel is File) {
