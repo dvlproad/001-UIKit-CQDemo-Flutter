@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import './network_page_data_manager.dart';
 import './proxy_page_data_manager.dart';
-import './page/environment_page_content.dart';
+import './page/network_page_content.dart';
+import './page/proxy_page_content.dart';
 import './page/api_mock_page_content.dart';
 import './apimock/manager/api_manager.dart';
 
@@ -9,20 +10,39 @@ import '../darg/draggable_manager.dart';
 
 class EnvironmentUtil {
   // 进入切换环境页面
-  static Future goChangeEnvironment(
+  static Future goChangeEnvironmentNetwork(
     BuildContext context, {
     Function() onPressTestApiCallback,
     @required
         Function(TSEnvNetworkModel bNetworkModel, {bool shouldExit})
             updateNetworkCallback,
+  }) {
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return NetworkPageContent(
+            currentProxyIp: ProxyPageDataManager().selectedProxyModel.proxyIp,
+            onPressTestApiCallback: onPressTestApiCallback,
+            updateNetworkCallback: updateNetworkCallback,
+          );
+        },
+      ),
+    );
+  }
+
+  // 进入添加代理页面
+  static Future goChangeEnvironmentProxy(
+    BuildContext context, {
+    Function() onPressTestApiCallback,
     @required Function(TSEnvProxyModel bProxyModel) updateProxyCallback,
   }) {
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return EnvironmentPageContent(
+          return ProxyPageContent(
+            currentApiHost:
+                NetworkPageDataManager().selectedNetworkModel.apiHost,
             onPressTestApiCallback: onPressTestApiCallback,
-            updateNetworkCallback: updateNetworkCallback,
             updateProxyCallback: updateProxyCallback,
           );
         },

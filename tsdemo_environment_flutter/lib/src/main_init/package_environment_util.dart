@@ -77,13 +77,15 @@ class PackageEnvironmentUtil {
     String currentEnvId = currentEnvNetworkModel.envId;
 
     if (currentEnvId != defaultEnvId) {
-      String title = '建议恢复环境';
+      String title = '是否恢复默认环境';
       String message =
           '您当前${packageBean.des}不是默认的【$defaultEnvDes】，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
       AlertUtil.showCancelOKAlert(
         context: currentContext,
         title: title,
         message: message,
+        cancelTitle: '继续当前',
+        okTitle: '恢复默认',
         okHandle: () {
           _reset(defaultNetworkModel, context: currentContext);
         },
@@ -113,6 +115,12 @@ class PackageEnvironmentUtil {
       throw Exception('界面获取失败，请检查');
     }
 
+    if (packageBean.packageType == PackageType.product) {
+      ToastUtil.showMsg(
+          '温馨提示：您当前包为${packageBean.des}，不支持切换环境。', currentContext);
+      return;
+    }
+
     String defaultEnvId = defaultNetworkModel.envId;
     String defaultEnvDes = defaultNetworkModel.name;
 
@@ -122,7 +130,7 @@ class PackageEnvironmentUtil {
     String message;
     List<String> buttonTitles = ['取消', '继续切换'];
     if (currentEnvId != defaultEnvId) {
-      title = '建议恢复环境';
+      title = '是否恢复默认环境';
       message =
           '您当前${packageBean.des}不是默认的【$defaultEnvDes】，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
       buttonTitles.add('恢复默认');
@@ -151,5 +159,30 @@ class PackageEnvironmentUtil {
         }
       },
     );
+  }
+
+  /// 设置页点击添加代理的时候，检查包的环境
+  static checkProxyAllowForPackage({
+    void Function()
+        goChangeHandle, // 是否允许有进入添加代理的功能，如果允许的话，其执行的操作(如果为null，则不允许,如启动的时候，只有‘取消+恢复默认')
+  }) {
+    DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
+
+    if (goChangeHandle == null) {
+      throw Exception('进入添加代理的操作不能为空，请检查');
+    }
+
+    BuildContext currentContext = DevUtil.navigatorKey.currentContext;
+    if (currentContext == null) {
+      throw Exception('界面获取失败，请检查');
+    }
+
+    if (packageBean.packageType == PackageType.product) {
+      ToastUtil.showMsg(
+          '温馨提示：您当前包为${packageBean.des}，不支持添加代理。', currentContext);
+      return;
+    }
+
+    goChangeHandle();
   }
 }

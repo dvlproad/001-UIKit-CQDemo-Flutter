@@ -16,11 +16,11 @@ import './main_init/package_environment_util.dart';
 import './package_info_cell.dart';
 import './dev_util.dart';
 import './dev_notifier.dart';
-
-import './userInfoManager.dart';
 import './main_init/main_diff_util.dart';
 
 class DevPage extends StatefulWidget {
+  static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮
+
   const DevPage({Key key}) : super(key: key);
 
   @override
@@ -105,6 +105,7 @@ class _DevPageState extends State<DevPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('开发工具'),
+        actions: DevPage.navbarActions,
       ),
       body: Container(
         color: const Color(0xfff0f0f0),
@@ -123,9 +124,6 @@ class _DevPageState extends State<DevPage> {
             Container(height: 20),
             _app_downloadpage_cell(),
             //_devtool_historyPackage_cell(),
-            Container(height: 20),
-            _devtool_userinfo_cell(),
-            _devtool_forceLogout_cell(), // 强制退出
             Container(height: 20),
             Consumer<EnvironmentChangeNotifier>(
               builder: (context, environmentChangeNotifier, child) {
@@ -263,26 +261,6 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  // 用户相关信息
-  Widget _devtool_userinfo_cell() {
-    String userId = 'UserInfoManager().userModel.userId';
-    String textValue = '';
-    if (UserInfoManager.isLoginState()) {
-      textValue = 'uid:$userId';
-    } else {
-      textValue = '您还未登录';
-    }
-    return BJHTitleTextValueCell(
-      title: "user信息",
-      textValue: textValue,
-      textValueFontSize: 12,
-      onTap: () {
-        Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('user信息拷贝成功');
-      },
-    );
-  }
-
   Widget _devtool_changeheader_cell() {
     return BJHTitleTextValueCell(
       title: "添加/修改header",
@@ -305,26 +283,6 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_forceLogout_cell() {
-    if (UserInfoManager.isLoginState() == false) {
-      return Container(height: 1);
-    }
-    return BJHTitleTextValueCell(
-      title: "强制退出",
-      textValue: '',
-      onTap: () {
-        AlertUtil.showCancelOKAlert(
-          context: context,
-          title: '确认强制退出吗？',
-          message: '强制退出本仅用于某个环境无法退出导致无法使用其他环境时候使用，其他情况仅尽量不要使用',
-          okHandle: () {
-            Navigator.of(context).pop();
-          },
-        );
-      },
-    );
-  }
-
   Widget _devtool_env_cell(
     BuildContext context, {
     bool showTestApiWidget,
@@ -340,47 +298,21 @@ class _DevPageState extends State<DevPage> {
       title: "切换环境",
       textValue: envName,
       onTap: () {
-        clickChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+        PackageEnvironmentUtil.checkShouldResetNetwork(
+          goChangeHandle: () {
+            DevUtil.goChangeEnvironmentNetwork(
+              context,
+              showTestApiWidget: showTestApiWidget,
+            ).then((value) {
+              setState(() {});
+            });
+          },
+        );
       },
     );
   }
 
-  void clickChangeEnvironment(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
-    PackageEnvironmentUtil.checkShouldResetNetwork(
-      goChangeHandle: () {
-        _tryGoChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
-      },
-    );
-  }
-
-  void _tryGoChangeEnvironment(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
-    DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
-    PackageType packageType = packageBean.packageType;
-    if (packageType == PackageType.develop1 ||
-        packageType == PackageType.develop2) {
-      _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
-    } else if (packageType == PackageType.preproduct) {
-      // _showPasswordAlert(
-      //   context,
-      //   title: '${packageBean.des}切换环境需要密码',
-      //   message: "您当前包为${packageBean.des}，不建议随便切换环境。如一定要切换，请输入密码",
-      //   password: '654321',
-      //   passwordCorrectAction: () {
-      //     _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
-      //   },
-      // );
-      _goChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
-    } else {
-      ToastUtil.showMsg('温馨提示：您当前包为${packageBean.des}，不支持切换环境。', context);
-    }
-  }
-
+  /*
   void _showPasswordAlert(
     BuildContext context, {
     String title,
@@ -388,7 +320,6 @@ class _DevPageState extends State<DevPage> {
     String password,
     void Function() passwordCorrectAction,
   }) {
-    /*
     BrnMiddleInputDialog(
       title: title,
       message: message,
@@ -403,7 +334,7 @@ class _DevPageState extends State<DevPage> {
       barrierDismissible: true,
       onConfirm: (value) {
         if (value != '654321') {
-          ToastUtil.showMsg('密码错误', context);
+          BrnToast.show('密码错误', context);
           return;
         }
         Navigator.pop(context);
@@ -415,20 +346,8 @@ class _DevPageState extends State<DevPage> {
         Navigator.pop(context);
       },
     ).show(context);
-    */
   }
-
-  void _goChangeEnvironment(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
-    DevUtil.goChangeEnvironment(
-      context,
-      showTestApiWidget: showTestApiWidget,
-    ).then((value) {
-      setState(() {});
-    });
-  }
+  */
 
   Widget _devtool_proxy_cell(
     BuildContext context, {
@@ -445,7 +364,16 @@ class _DevPageState extends State<DevPage> {
       title: "添加代理",
       textValue: proxyName,
       onTap: () {
-        clickChangeEnvironment(context, showTestApiWidget: showTestApiWidget);
+        PackageEnvironmentUtil.checkProxyAllowForPackage(
+          goChangeHandle: () {
+            DevUtil.goChangeEnvironmentProxy(
+              context,
+              showTestApiWidget: showTestApiWidget,
+            ).then((value) {
+              setState(() {});
+            });
+          },
+        );
       },
     );
   }

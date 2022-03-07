@@ -32,7 +32,9 @@ class AlertUtil {
     @required BuildContext context,
     String title,
     String message,
+    String cancelTitle,
     Function() cancelHandle,
+    String okTitle,
     @required Function() okHandle,
   }) {
     showAlert(
@@ -41,14 +43,14 @@ class AlertUtil {
         return CancelOKMessageAlertView(
           title: title,
           message: message,
-          cancelTitle: "取消",
+          cancelTitle: cancelTitle ?? "取消",
           cancelHandle: () {
             Navigator.pop(context);
             if (cancelHandle != null) {
               cancelHandle();
             }
           },
-          okTitle: "确定",
+          okTitle: okTitle ?? "确定",
           okHandle: () {
             Navigator.pop(context);
             if (okHandle != null) {

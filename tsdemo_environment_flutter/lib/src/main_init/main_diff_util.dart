@@ -1,4 +1,4 @@
-import '../main_init/environment_datas_util.dart';
+import './environment_datas_util.dart';
 
 enum PackageType {
   develop1, // 开发环境1

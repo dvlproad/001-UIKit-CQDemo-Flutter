@@ -6,7 +6,6 @@ import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_network/flutter_network.dart';
 import './devtool_routes.dart';
 
-import './main_init/main_init.dart';
 import './dev_util.dart';
 
 import './overlay_page2.dart';
@@ -50,7 +49,8 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
           {
             'title': "Environment(环境)",
             'actionBlock': () {
-              DevUtil.goChangeEnvironment(context, showTestApiWidget: true);
+              DevUtil.goChangeEnvironmentNetwork(context,
+                  showTestApiWidget: true);
             },
           },
           {

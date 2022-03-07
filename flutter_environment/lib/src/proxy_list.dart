@@ -6,49 +6,36 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
     show CreateSectionTableView2, IndexPath;
 
 import './components/evvironment_header.dart';
-import './components/environment_network_cell.dart';
 import './components/environment_proxy_cell.dart';
 
 import './environment_change_notifiter.dart';
-import './network_page_data_bean.dart';
 import './proxy_page_data_bean.dart';
 
-class TSEnvironmentList extends StatefulWidget {
-  final String networkTitle;
-  final List<TSEnvNetworkModel> networkModels;
+class ProxyList extends StatefulWidget {
   final String proxyTitle;
   final List<TSEnvProxyModel> proxyModels;
-  final TSEnvNetworkModel selectedNetworkModel;
   final TSEnvProxyModel selectedProxyModel;
 
-  final ClickEnvNetworkCellCallback
-      clickEnvNetworkCellCallback; // 网络 networkCell 的点击
   final ClickEnvProxyCellCallback clickEnvProxyCellCallback; // 协议 proxyCell 的点击
 
-  TSEnvironmentList({
+  ProxyList({
     Key key,
-    this.networkTitle,
-    @required this.networkModels,
     this.proxyTitle,
     @required this.proxyModels,
-    @required this.selectedNetworkModel,
     @required this.selectedProxyModel,
-    @required this.clickEnvNetworkCellCallback,
     @required this.clickEnvProxyCellCallback,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _TSEnvironmentListState();
+    return _ProxyListState();
   }
 }
 
-class _TSEnvironmentListState extends State<TSEnvironmentList> {
-  List<TSEnvNetworkModel> _networkModels;
+class _ProxyListState extends State<ProxyList> {
   List<TSEnvProxyModel> _proxyModels;
   EnvironmentChangeNotifier _environmentChangeNotifier =
       EnvironmentChangeNotifier();
-  TSEnvNetworkModel _oldSelectedNetworkModel;
   TSEnvProxyModel _oldSelectedProxyModel;
 
   @override
@@ -59,21 +46,8 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
   }
 
   void getData() {
-    _networkModels = widget.networkModels ?? [];
     _proxyModels = widget.proxyModels ?? [];
-    _oldSelectedNetworkModel = widget.selectedNetworkModel;
     _oldSelectedProxyModel = widget.selectedProxyModel;
-
-    List<TSEnvNetworkModel> networkModels = _networkModels;
-    for (int i = 0; i < networkModels.length; i++) {
-      TSEnvNetworkModel networkModel = networkModels[i];
-      if (networkModel.envId == _oldSelectedNetworkModel.envId) {
-        networkModel.check = true;
-        _oldSelectedNetworkModel = networkModel;
-      } else {
-        networkModel.check = false;
-      }
-    }
 
     List<TSEnvProxyModel> proxyModels = _proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
@@ -125,13 +99,10 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
         _environmentChangeNotifier; // 在本组件中，使用此取法
     print('envName = ${notifier.networkModel?.name}');
 
-    int sectionCount = 2;
+    int sectionCount = 1;
 
     int numOfRowInSection(section) {
       if (section == 0) {
-        List dataModels = _networkModels;
-        return dataModels.length;
-      } else if (section == 1) {
         List dataModels = _proxyModels;
         return dataModels.length;
       }
@@ -145,36 +116,11 @@ class _TSEnvironmentListState extends State<TSEnvironmentList> {
       },
       headerInSection: (section) {
         if (section == 0) {
-          return EnvironmentTableViewHeader(title: widget.networkTitle ?? '');
-        } else {
           return EnvironmentTableViewHeader(title: widget.proxyTitle ?? '');
         }
       },
       cellAtIndexPath: (section, row) {
         if (section == 0) {
-          // Network 环境
-          List<dynamic> dataModels = _networkModels;
-          TSEnvNetworkModel dataModel = dataModels[row] as TSEnvNetworkModel;
-          return EnvNetworkTableViewCell(
-            envModel: dataModel,
-            section: section,
-            row: row,
-            clickEnvNetworkCellCallback:
-                (int section, int row, TSEnvNetworkModel bNetworkModel) {
-              // print('点击切换 Network 环境');
-              if (bNetworkModel == _oldSelectedNetworkModel) {
-                return;
-              }
-
-              // setState(() {}); // 请在外部执行
-              // notifier.searchTextChange(bNetworkModel.envId);
-
-              if (widget.clickEnvNetworkCellCallback != null) {
-                widget.clickEnvNetworkCellCallback(section, row, bNetworkModel);
-              }
-            },
-          );
-        } else {
           // Proxy 环境
           List<TSEnvProxyModel> dataModels = _proxyModels;
           TSEnvProxyModel dataModel = dataModels[row];

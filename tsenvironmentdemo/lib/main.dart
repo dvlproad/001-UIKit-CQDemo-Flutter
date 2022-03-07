@@ -5,7 +5,7 @@ import 'package:tsdemo_environment_flutter/src/overlay_page2.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  Main_Init.initWithGlobalKey(globalKey, PackageType.product);
+  MainInit.initWithGlobalKey(globalKey, PackageType.develop1);
   OverlayPage2.globalKey = globalKey;
 
   runApp(MyApp());

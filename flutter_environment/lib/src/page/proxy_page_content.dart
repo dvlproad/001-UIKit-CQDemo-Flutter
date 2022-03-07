@@ -12,7 +12,7 @@ import '../network_page_data_bean.dart';
 import '../proxy_page_data_manager.dart';
 import '../proxy_page_data_bean.dart';
 
-import '../environment_list.dart';
+import '../proxy_list.dart';
 
 import 'package:provider/provider.dart';
 import '../environment_change_notifiter.dart';
@@ -20,7 +20,8 @@ export '../environment_change_notifiter.dart';
 
 import '../environment_util.dart';
 
-class EnvironmentPageContent extends StatefulWidget {
+class ProxyPageContent extends StatefulWidget {
+  final String currentApiHost;
   final Function() onPressTestApiCallback;
   final Function(
     TSEnvNetworkModel bNetworkModel, {
@@ -28,8 +29,9 @@ class EnvironmentPageContent extends StatefulWidget {
   }) updateNetworkCallback;
   final Function(TSEnvProxyModel bProxyModel) updateProxyCallback;
 
-  EnvironmentPageContent({
+  ProxyPageContent({
     Key key,
+    @required this.currentApiHost, // 当前api请求域名
     this.onPressTestApiCallback, // 为空时候，不显示视图
     @required this.updateNetworkCallback,
     @required this.updateProxyCallback,
@@ -37,11 +39,11 @@ class EnvironmentPageContent extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _EnvironmentPageContentState();
+    return _ProxyPageContentState();
   }
 }
 
-class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
+class _ProxyPageContentState extends State<ProxyPageContent> {
   String networkTitle = "网络环境";
   List<TSEnvNetworkModel> _networkModels;
 
@@ -50,6 +52,8 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
 
   TSEnvNetworkModel _selectedNetworkModel;
   TSEnvProxyModel _selectedProxyModel;
+
+  String _currentApiHost;
 
   @override
   void initState() {
@@ -64,6 +68,8 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
     _proxyModels = ProxyPageDataManager().proxyModels;
     _selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
     _selectedProxyModel = ProxyPageDataManager().selectedProxyModel;
+
+    _currentApiHost = widget.currentApiHost ?? '';
   }
 
   @override
@@ -78,7 +84,7 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
 
   Widget _appBar() {
     return AppBar(
-      title: Text('切换环境'),
+      title: Text('添加代理'),
     );
   }
 
@@ -91,6 +97,11 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
       },
       child: Column(
         children: [
+          Text(
+            '当前api环境:$_currentApiHost',
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.red),
+          ),
           Expanded(
             child: _pageWidget(),
           ),
@@ -137,22 +148,10 @@ class _EnvironmentPageContentState extends State<EnvironmentPageContent> {
   }
 
   Widget _pageWidget() {
-    return TSEnvironmentList(
-      networkTitle: networkTitle,
-      networkModels: _networkModels,
+    return ProxyList(
       proxyTitle: proxyTitle,
       proxyModels: _proxyModels,
-      selectedNetworkModel: _selectedNetworkModel,
       selectedProxyModel: _selectedProxyModel,
-      clickEnvNetworkCellCallback: (section, row, bNetworkModel,
-          {isLongPress}) {
-        print('点击了${bNetworkModel.name}');
-
-        if (isLongPress == true) {
-        } else {
-          _tryUpdateToNetworkModel(bNetworkModel);
-        }
-      },
       clickEnvProxyCellCallback: (section, row, bProxyModel, {isLongPress}) {
         print('点击了${bProxyModel.name}');
         if (isLongPress == true) {

@@ -153,11 +153,11 @@ class DevUtil {
   }
 
   static int requestCount = 0;
-  static Future goChangeEnvironment(
+  static Future goChangeEnvironmentNetwork(
     BuildContext context, {
     bool showTestApiWidget,
   }) {
-    return EnvironmentUtil.goChangeEnvironment(
+    return EnvironmentUtil.goChangeEnvironmentNetwork(
       context,
       onPressTestApiCallback: showTestApiWidget
           ? () {
@@ -197,6 +197,32 @@ class DevUtil {
       updateNetworkCallback: (bNetworkModel, {shouldExit}) {
         changeEnv(bNetworkModel, shouldExit, context: context);
       },
+    );
+  }
+
+  static Future goChangeEnvironmentProxy(
+    BuildContext context, {
+    bool showTestApiWidget,
+  }) {
+    return EnvironmentUtil.goChangeEnvironmentProxy(
+      context,
+      onPressTestApiCallback: showTestApiWidget
+          ? () {
+              // 测试请求
+              requestCount = 0;
+              NetworkKit.post(
+                'login/doLogin',
+                params: {
+                  "clientId": "clientApp",
+                  "clientSecret": "123123",
+                },
+                cacheLevel: NetworkCacheLevel.one,
+              ).then((value) {
+                requestCount++;
+                debugPrint('测试网络请求的缓存功能:$requestCount');
+              });
+            }
+          : null,
       updateProxyCallback: (TSEnvProxyModel bProxyModel) {
         changeProxyTo(bProxyModel);
       },

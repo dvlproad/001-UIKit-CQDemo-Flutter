@@ -4,7 +4,8 @@ export 'src/network_page_data_manager.dart';
 export 'src/network_page_data_bean.dart';
 export 'src/proxy_page_data_manager.dart';
 export 'src/proxy_page_data_bean.dart';
-export 'src/page/environment_page_content.dart';
+export 'src/page/network_page_content.dart';
+export 'src/page/proxy_page_content.dart';
 
 export 'src/apimock/manager/api_manager.dart';
 export 'src/apimock/manager/api_data_bean.dart';

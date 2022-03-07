@@ -13,7 +13,7 @@ import './package_environment_util.dart';
 import './main_diff_util.dart';
 export './main_diff_util.dart' show PackageType;
 
-class Main_Init {
+class DevToolInit {
   static initWithGlobalKey(GlobalKey globalKey, PackageType packageType) {
     // 设置打包环境
     MainDiffUtil.packageType = packageType;
@@ -34,7 +34,7 @@ class Main_Init {
     LogUtil.init(
       packageDescribe: MainDiffUtil.diffPackageBean().des,
       printToConsoleBlock: (logLevel, {Map extraLogInfo}) {
-        return false;
+        return true;
       },
       showToPageBlock: (logLevel, {Map extraLogInfo}) {
         return true;
