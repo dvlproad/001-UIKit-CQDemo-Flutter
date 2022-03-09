@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import './dev_page.dart';
-import './main_init/dev_tool_init.dart';
-export './main_init/main_diff_util.dart' show PackageType;
-
+import 'package:app_devtool_framework/app_devtool_framework.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import './dev_user_page.dart';
 

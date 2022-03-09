@@ -1,14 +1,14 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import '../dev_util.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import './environment_datas_util.dart';
-
-import 'dart:io' show Platform;
 import './package_environment_util.dart';
 import './main_diff_util.dart';
 export './main_diff_util.dart' show PackageType;

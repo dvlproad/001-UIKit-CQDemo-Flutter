@@ -94,6 +94,13 @@ class NetworkUtil {
     Options options,
     CancelToken cancelToken,
   }) async {
+    while (NetworkManager().hasStart == false) {
+      print('NetworkManager:初始化未完成，等待中...');
+      // sleep(Duration(milliseconds: 3500));
+      await Future.delayed(Duration(milliseconds: 500));
+    }
+    //print('NetworkManager:初始化已完成，开始进行请求');
+
     if (cancelToken == null) {
       cancelToken = CancelToken();
     }

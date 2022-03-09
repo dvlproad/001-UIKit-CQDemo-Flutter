@@ -11,12 +11,12 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:flutter_updateversion_kit/src/check_version_common_util.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import './main_init/package_environment_util.dart';
+import './init/package_environment_util.dart';
 
 import './package_info_cell.dart';
 import './dev_util.dart';
 import './dev_notifier.dart';
-import './main_init/main_diff_util.dart';
+import './init/main_diff_util.dart';
 
 class DevPage extends StatefulWidget {
   static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮

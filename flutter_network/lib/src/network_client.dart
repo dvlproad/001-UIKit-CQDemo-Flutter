@@ -13,7 +13,7 @@ class NetworkManager {
   static const int RECEIVE_TIMEOUT = 60000;
 
   Dio serviceDio;
-  bool _hasStart = false;
+  bool hasStart = false;
 
   // 单例
   factory NetworkManager() => _getInstance();
@@ -59,12 +59,12 @@ class NetworkManager {
     List<Interceptor> interceptors,
     bool nouseDefalutInterceptors = false,
   }) {
-    if (NetworkManager.instance._hasStart == true) {
+    if (NetworkManager.instance.hasStart == true) {
       //print('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
       return;
     }
 
-    print('NetworkManager start');
+    print('NetworkManager:初始化开始执行中...');
     Dio dio = NetworkManager.instance.serviceDio;
     dio.options = dio.options.copyWith(
       baseUrl: baseUrl,
@@ -90,7 +90,8 @@ class NetworkManager {
 
     dio.interceptors..addAll(lastInterceptors);
 
-    NetworkManager.instance._hasStart = true;
+    NetworkManager.instance.hasStart = true;
+    print('NetworkManager:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
   }
 
   // 以下代码为 NetworkManager 的 ChangeUtil

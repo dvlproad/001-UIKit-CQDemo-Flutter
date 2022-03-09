@@ -222,4 +222,35 @@ class NetworkKit {
       return e;
     }
   }
+
+  //*
+  static bool Function() _loginStateGetBlock;
+  static List<String>
+      _ignoreRequestApiIfLogout; // 如果是未登录状态下，默认不请求(可省去外部加isLoginState()的判断)
+  /// 是否不请求(如果是未登录状态下，默认不请求(可省去外部加isLoginState()的判断))
+  static bool _shouldIgnoreRequest(String api) {
+    if (_loginStateGetBlock != null &&
+        _ignoreRequestApiIfLogout != null &&
+        _ignoreRequestApiIfLogout.isNotEmpty) {
+      bool isLogin = _loginStateGetBlock();
+      if (isLogin == false) {
+        String apiPath;
+        int index = api.indexOf('/hapi/');
+
+        if (index != -1) {
+          apiPath = api.substring(index + '/hapi'.length);
+        } else {
+          apiPath = api;
+        }
+        if (_ignoreRequestApiIfLogout.contains(apiPath)) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    } else {
+      return false;
+    }
+  }
+  //*/
 }

@@ -4,7 +4,8 @@ export './log_list.dart' show LogModel;
 
 // log类型
 enum LogType {
-  all, // 所有 (LogLevel.normal + LogLevel.warning + LogLevel.error)
+  all, // 所有 (LogLevel.normal + LogLevel.success + LogLevel.warning + LogLevel.error)
+  success_warning_error, // 所有的请求结果(包含成功、警告、失败) (LogLevel.success + LogLevel.warning + LogLevel.error)
   warning, // 警告信息 (LogLevel.warning)
   error, // 错误日志(LogLevel.error)
 }
@@ -40,9 +41,13 @@ class _LogHomePageState extends State<LogHomePage>
   TabController _tabController;
 
   List<LogModel> _logModels = [];
-  List<LogModel> _normalLogModels = [];
+  List<LogModel> _success_warning_error_logModels = []; // 所有的请求结果(包含成功、警告、失败)
   List<LogModel> _warningLogModels = [];
   List<LogModel> _errorLogModels = [];
+
+  static String pageKey(LogType logType) {
+    return 'apiLogPageKey_${logType.toString()}';
+  }
 
   // 3 覆盖重写 initState，实例化 _tabController
   @override
@@ -50,7 +55,7 @@ class _LogHomePageState extends State<LogHomePage>
     // TODO: implement initState
     super.initState();
 
-    _tabController = new TabController(length: 3, vsync: this);
+    _tabController = new TabController(length: 4, vsync: this);
 
     _tabController.addListener(() {
       print(_tabController.index);
@@ -64,15 +69,19 @@ class _LogHomePageState extends State<LogHomePage>
     int allCount = _logModels.length;
     _errorLogModels = [];
     _warningLogModels = [];
-    _normalLogModels = [];
+    _success_warning_error_logModels = [];
     for (var i = 0; i < allCount; i++) {
       LogModel logModel = _logModels[i];
       if (logModel.logLevel == LogLevel.error) {
         _errorLogModels.add(logModel);
+        _success_warning_error_logModels.add(logModel);
       } else if (logModel.logLevel == LogLevel.warning) {
         _warningLogModels.add(logModel);
+        _success_warning_error_logModels.add(logModel);
+      } else if (logModel.logLevel == LogLevel.success) {
+        _success_warning_error_logModels.add(logModel);
       } else {
-        _normalLogModels.add(logModel);
+        // normal(目前用于请求开始)
       }
     }
 
@@ -161,6 +170,7 @@ class _LogHomePageState extends State<LogHomePage>
       // isScrollable: true,
       tabs: [
         tab('全部(${_logModels.length})'),
+        tab('结果(${_success_warning_error_logModels.length})'),
         tab('警告(${_warningLogModels.length})'),
         tab('错误(${_errorLogModels.length})'),
       ],
@@ -186,6 +196,7 @@ class _LogHomePageState extends State<LogHomePage>
     LogType logType,
   }) {
     return LogList(
+      // key: pageKey(logType),
       color: Color(0xFFF2F2F2),
       logModels: logModels,
       clickLogCellCallback: widget.clickLogCellCallback,
@@ -203,6 +214,8 @@ class _LogHomePageState extends State<LogHomePage>
       controller: _tabController, // 4 需要配置 controller！！！
       children: [
         page(_logModels, logType: LogType.all),
+        page(_success_warning_error_logModels,
+            logType: LogType.success_warning_error),
         page(_warningLogModels, logType: LogType.warning),
         page(_errorLogModels, logType: LogType.error),
       ],

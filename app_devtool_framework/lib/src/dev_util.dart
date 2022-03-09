@@ -8,7 +8,6 @@ import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
-import './userInfoManager.dart';
 import './dev_page.dart';
 
 class DevUtil {
@@ -163,16 +162,14 @@ class DevUtil {
           ? () {
               // 测试请求
               // requestCount = 0;
-              // NetworkKit
-              //     .post(
+              // NetworkKit.post(
               //   'login/doLogin',
               //   params: {
               //     "clientId": "clientApp",
               //     "clientSecret": "123123",
               //   },
               //   cacheLevel: NetworkCacheLevel.one,
-              // )
-              //     .then((value) {
+              // ).then((value) {
               //   requestCount++;
               //   debugPrint('测试网络请求的缓存功能:$requestCount');
               // });
@@ -248,7 +245,7 @@ class DevUtil {
     NetworkPageDataManager().updateNetworkPageSelectedData(bNetworkModel);
 
     /// ②修改网络环境_SDK数据
-    if (shouldExit == true && UserInfoManager.isLoginState() == true) {
+    if (shouldExit == true && 'UserInfoManager.isLoginState()' == true) {
       /*
       UserInfoManager.instance.userLoginOut().then((value) {
         eventBus.fire(LogoutSuccessEvent());
@@ -295,13 +292,7 @@ class DevUtil {
   }) {
     return EnvironmentUtil.goChangeApiMock(
       context,
-      onPressTestApiCallback: showTestApiWidget
-          ? () {
-              // 我的收货地址
-              // Api.getAddressList(
-              //     {"accountId": UserInfoManager.instance.userModel.id});
-            }
-          : null,
+      onPressTestApiCallback: showTestApiWidget ? () {} : null,
       // navbarActions: [
       //   CQTSThemeBGButton(
       //     title: '添加',

@@ -5,11 +5,11 @@
     "brances": [
         {
             "name": "master",
-            "des": "主分支"
+            "des": "线上功能(主分支)"
         },
         {
             "name": "development",
-            "des": "开发稳定分支"
+            "des": "线上功能(开发稳定分支)"
         },
         {
             "name": "dev_all",
@@ -21,15 +21,15 @@
         },
         {
             "name": "dev_hunderd_wishes",
-            "des": "百愿清单"
+            "des": "线上+百愿清单"
         },
         {
-            "name": "dev_home",
-            "des": "首页改版+主题颜色修改"
+            "name": "dev_space",
+            "des": "线上+个人空间"
         },
         {
-            "name": "order",
-            "des": "物流"
+            "name": "dev_wish",
+            "des": "线上+愿望单"
         }
     ]
 }

@@ -2,7 +2,83 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class TolerantNetworkImage extends StatelessWidget {
+/// [图片处理方式:快速缩略模板](https://cloud.tencent.com/document/product/460/6929)
+enum ImageDealType {
+  default2, // 默认等比限定缩略图的宽高最小值
+  origin, // 原图
+}
+
+class TolerantNetworkImage extends BaseTolerantNetworkImage {
+  TolerantNetworkImage({
+    ImageDealType imageDealType,
+    double width,
+    double height,
+    String imageUrl,
+    BoxFit fit,
+    PlaceholderWidgetBuilder placeholder,
+    LoadingErrorWidgetBuilder errorWidget,
+    Duration placeholderFadeInDuration,
+    Duration fadeOutDuration,
+    Duration fadeInDuration = Duration.zero,
+    ProgressIndicatorBuilder progressIndicatorBuilder,
+    Key key,
+  }) : super(
+          key: key,
+          width: width,
+          height: height,
+          imageUrl: newImageUrl(
+            imageUrl,
+            imageDealType ?? ImageDealType.default2,
+            width: width,
+            height: height,
+          ),
+          fit: fit,
+          placeholder: placeholder,
+          errorWidget: errorWidget,
+          placeholderFadeInDuration: placeholderFadeInDuration,
+          fadeOutDuration: fadeOutDuration,
+          fadeInDuration: fadeInDuration,
+          progressIndicatorBuilder: progressIndicatorBuilder,
+        );
+}
+
+String newImageUrl(
+  String imageUrl,
+  ImageDealType imageDealType, {
+  double width,
+  double height,
+}) {
+  // https://bojuehui-1302324914.cos.ap-guangzhou.myqcloud.com
+  if (imageDealType == ImageDealType.origin) {
+    return imageUrl;
+  }
+
+  int index = imageUrl.indexOf('.myqcloud.com');
+  bool isCloudImage = index != -1;
+
+  String newImageUrl = imageUrl;
+  if (isCloudImage) {
+    String thumbnail = '';
+    if (width != null && width > 0) {
+      thumbnail = '/w/${width * 2}';
+    }
+
+    if (height != null && height > 0) {
+      thumbnail = '/h/${height * 2}';
+    }
+
+    if (thumbnail.isNotEmpty) {
+      thumbnail = '/1$thumbnail';
+    }
+
+    String webP = 'format/webp';
+    newImageUrl = imageUrl + "?imageView2/$webP" + thumbnail;
+  }
+
+  return newImageUrl;
+}
+
+class BaseTolerantNetworkImage extends StatelessWidget {
   final double width;
   final double height;
 
@@ -25,16 +101,16 @@ class TolerantNetworkImage extends StatelessWidget {
   /// Widget displayed while the target [imageUrl] is loading.
   final ProgressIndicatorBuilder progressIndicatorBuilder;
 
-  TolerantNetworkImage({
+  BaseTolerantNetworkImage({
     this.width,
     this.height,
     this.imageUrl,
     this.fit = BoxFit.cover,
     this.placeholder,
     this.errorWidget,
-    this.placeholderFadeInDuration = Duration.zero,
-    this.fadeOutDuration = Duration.zero,
-    this.fadeInDuration = Duration.zero,
+    this.placeholderFadeInDuration,
+    this.fadeOutDuration,
+    this.fadeInDuration,
     this.progressIndicatorBuilder,
     Key key,
   }) : super(key: key);
@@ -61,9 +137,9 @@ class TolerantNetworkImage extends StatelessWidget {
             return Container();
           }
         },
-        placeholderFadeInDuration: placeholderFadeInDuration,
-        fadeOutDuration: fadeOutDuration,
-        fadeInDuration: fadeInDuration,
+        placeholderFadeInDuration: placeholderFadeInDuration ?? Duration.zero,
+        fadeOutDuration: fadeOutDuration ?? Duration.zero,
+        fadeInDuration: fadeInDuration ?? Duration.zero,
         progressIndicatorBuilder: (context, url, progress) {
           if (this.progressIndicatorBuilder != null) {
             return this.progressIndicatorBuilder(context, url, progress);

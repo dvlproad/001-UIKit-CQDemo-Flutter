@@ -49,7 +49,7 @@ class _LogListState extends State<LogList> {
   void initState() {
     super.initState();
 
-    _logModels = widget.logModels ?? [];
+    // _logModels = widget.logModels ?? [];
 
     ///WidgetsBinding.instance.addPostFrameCallback 这个作用是界面绘制完成的监听回调  必须在绘制完成后添加OverlayEntry
     WidgetsBinding.instance.addPostFrameCallback(
@@ -74,10 +74,16 @@ class _LogListState extends State<LogList> {
     );
   }
 
+  void updateLogModels(List logModels) {
+    _logModels = logModels ?? [];
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // print(
     //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
+    _logModels = widget.logModels ?? []; // 写在这里用来临时修复外部传进来的数据改变的情况
 
     return Container(
       color: widget.color,

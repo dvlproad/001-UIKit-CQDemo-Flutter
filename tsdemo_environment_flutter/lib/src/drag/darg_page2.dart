@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-
-import '../dev_util.dart';
+import 'package:app_devtool_framework/app_devtool_framework.dart';
 
 class DraggablePage2 extends StatefulWidget {
   @override

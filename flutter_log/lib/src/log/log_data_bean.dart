@@ -1,8 +1,8 @@
 enum LogLevel {
-  normal, // 正常信息
-  success, // 成功信息(目前用于请求成功)
-  warning, // 警告信息
-  error, // 错误日志
+  normal, // 正常信息(目前用于请求开始)
+  success, // 成功信息(目前用于请求结束：成功)
+  warning, // 警告信息(目前用于请求结束：报错)
+  error, // 错误日志(目前用于请求结束：失败)
 }
 
 class LogModel {
