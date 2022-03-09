@@ -4,12 +4,10 @@ import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 import 'package:flutter_images_picker/flutter_images_picker.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-typedef CQImageOrPhotoModelsChangeBlock = void Function(
-    List<dynamic> imageOrPhotoModels); // 当前选中的相册信息
-
 class CQImageDeleteAddPickList extends StatefulWidget {
   final List<dynamic> imageOrPhotoModels; // 数据类型 只能为 AssetEntity、String、File
-  final CQImageOrPhotoModelsChangeBlock imageOrPhotoModelsChangeBlock;
+  final void Function(List<dynamic> imageOrPhotoModels)
+      imageOrPhotoModelsChangeBlock; // 当前选中的相册信息
 
   CQImageDeleteAddPickList({
     Key key,
@@ -54,55 +52,38 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
   void _addevent() {
     ActionSheetUtil.chooseItem(
       context,
-      title: '更换头像',
+      title: '选择图片',
       itemTitles: ['拍照上传', '从相册选择'],
       onConfirm: (int selectedIndex) {
         dealAvatar(selectedIndex);
       },
     );
-    /*
-    PhotoPickUtil().pickAssetOrTakePhoto(
-      type: PickType.onlyImage,
-      pathList: null,
-      hasSelectedCount: _imageOrPhotoModels.length,
-      context: context,
-      // loadingDelegate: this,
-      takePhotoCallBack: (String path) {
-        _imageOrPhotoModels.add(path);
-
-        if (widget.imageOrPhotoModelsChangeBlock != null) {
-          // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
-          widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
-        }
-      },
-      pickerImagesCallBack:
-          (List<AssetEntity> assetEntitys, List<Uint8List> assetThumbDatas) {
-        if (assetEntitys == null || assetEntitys.isEmpty) {
-          return;
-        }
-
-        _imageOrPhotoModels.addAll(assetEntitys);
-
-        if (widget.imageOrPhotoModelsChangeBlock != null) {
-          // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
-          widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
-        }
-      },
-    );
-    */
   }
 
   void dealAvatar(int selectedIndex) async {
-    PhotoPickUtil.pickPhoto(
-      imagePickerCallBack: (path) {
-        _imageOrPhotoModels.add(path);
+    if (selectedIndex == 0) {
+      PhotoTakeUtil.takePhoto(
+        imagePickerCallBack: (path) {
+          _imageOrPhotoModels.add(path);
 
-        if (widget.imageOrPhotoModelsChangeBlock != null) {
-          // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
-          widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
-        }
-      },
-    );
+          if (widget.imageOrPhotoModelsChangeBlock != null) {
+            // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
+            widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
+          }
+        },
+      );
+    } else {
+      PhotoPickUtil.pickPhoto(
+        imagePickerCallBack: (path) {
+          _imageOrPhotoModels.add(path);
+
+          if (widget.imageOrPhotoModelsChangeBlock != null) {
+            // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
+            widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
+          }
+        },
+      );
+    }
   }
 
   /// 获取 files
