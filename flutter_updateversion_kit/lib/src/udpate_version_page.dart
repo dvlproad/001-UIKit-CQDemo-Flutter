@@ -150,7 +150,12 @@ class _UpdateVersionPageState extends State<UpdateVersionPage> {
           padding: EdgeInsets.all(10),
           sliver: SliverList(
             delegate: SliverChildListDelegate(
-                <Widget>[_versionIcon(), _versionTitle(), _versionContent()]),
+                <Widget>[
+                _versionIcon(),
+                Material(child: _versionTitle()),
+                Material(child: _versionContent()),
+              ],
+            ),
           ),
         )
       ],

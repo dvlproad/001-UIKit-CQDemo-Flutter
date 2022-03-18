@@ -16,7 +16,16 @@ class ApplicationDraggableManager {
 
   // 弹出只是一个悬浮按钮的视图
   static ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
-  static String floatingToolText; // 悬浮按钮上的文本
+  static String floatingToolTextDefaultEnv; // 悬浮按钮上的文本:此包的默认环境
+  static String _currentEnvName; // 悬浮按钮上的文本:此包的当前环境
+  static void updateDevToolFloatingIconOverlayEntry(String currentEnvName) {
+    //print('尝试刷新 overlay 的 chid 视图....');
+    _currentEnvName = currentEnvName;
+    if (overlayEntry != null) {
+      overlayEntry.markNeedsBuild();
+    }
+  }
+
   static Future showEasyOverlayEntry({
     double left,
     double top,
@@ -26,7 +35,8 @@ class ApplicationDraggableManager {
     Widget overlayChildWidget = ClipRRect(
       borderRadius: const BorderRadius.all(Radius.circular(22)),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: GestureDetector(
+      child: Material(
+          child: GestureDetector(
         child: Container(
           // color: Colors.red,
           decoration: BoxDecoration(
@@ -42,20 +52,34 @@ class ApplicationDraggableManager {
           ),
           width: 44,
           height: 44,
-          child: Center(
-            child: Text(
-              floatingToolText ?? '',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
+          child: Column(
+            children: [
+              Center(
+                child: Text(
+                  floatingToolTextDefaultEnv ?? '',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
               ),
-            ),
+              Center(
+                child: Text(
+                  _currentEnvName ?? '',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         onTap: onTap,
         onLongPress: onLongPress,
-      ),
+      )),
     );
 
     ApplicationDraggableManager.addOverlayEntry(

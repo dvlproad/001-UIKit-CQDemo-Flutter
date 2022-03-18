@@ -1,8 +1,10 @@
 {
     "version": "1.0.0",
-    "time": "unknow time",
-    "brance": "unknow brance",
-    "brances": [
+    "package_create_time": "package unknow time",
+    "package_from_brance": "package unknow brance",
+    "package_default_env": "package unknow env",
+    "brances_record_time": "03.18",
+    "nocode_brances": [
         {
             "name": "master",
             "des": "线上功能(主分支)"
@@ -13,23 +15,60 @@
         },
         {
             "name": "dev_all",
-            "des": "线上+修复+目前所有开发中需求"
+            "des": "线上+修复+百愿清单+个人空间"
         },
+        {
+            "name": "dev_will_publish",
+            "des": "线上功能+百愿清单"
+        }
+    ],
+    "feature_brances": [
         {
             "name": "dev_1.0.0_fix",
             "des": "线上版问题修复或优化"
         },
         {
-            "name": "dev_hunderd_wishes",
+            "name": "dev_hundred_wishes_new",
+            "create_time": "03.01",
             "des": "线上+百愿清单"
         },
         {
             "name": "dev_space",
+            "create_time": "03.02",
             "des": "线上+个人空间"
         },
         {
-            "name": "dev_wish",
-            "des": "线上+愿望单"
+            "name": "dev_order_type",
+            "create_time": "03.14",
+            "des": "线上+订单地址填写+订单列表类型显示"
+        }
+    ],
+    "history_record_time": "03.18",
+    "history_versions": [
+        {
+            "version": "1.03.17",
+            "online_time": "03.17",
+            "des": "愿望单模板+AA11合并"
+        },
+        {
+            "version": "1.03.10",
+            "online_time": "03.10",
+            "des": "愿望单隐私+新商品结构"
+        },
+        {
+            "version": "1.03.04",
+            "online_time": "03.04",
+            "des": "首页改版+主题修改"
+        },
+        {
+            "version": "1.02.26",
+            "online_time": "02.26",
+            "des": "新版愿望单"
+        },
+        {
+            "version": "1.02.24",
+            "online_time": "02.24",
+            "des": "大转盘+猜愿望"
         }
     ]
 }
