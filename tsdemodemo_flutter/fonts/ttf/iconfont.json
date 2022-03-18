@@ -1,0 +1,37 @@
+{
+  "id": "3258178",
+  "name": "Beyond",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "28345736",
+      "name": "智能客服中心",
+      "font_class": "zhinengkefuzhongxin",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "28345735",
+      "name": "点赞无颜色",
+      "font_class": "dianzan1",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "28345733",
+      "name": "dianzan",
+      "font_class": "dianzan",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "28345209",
+      "name": "zhuanban",
+      "font_class": "zhuanban",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    }
+  ]
+}

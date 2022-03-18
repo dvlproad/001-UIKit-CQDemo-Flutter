@@ -103,6 +103,10 @@ dependencies:
   flutter_updateversion_kit:
     path: ../flutter_updateversion_kit/
 
+  event_bus: any
+  flutter_cache_kit:
+    path: ../flutter_cache_kit/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -156,6 +160,10 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+  fonts:
+    - family: IconFont
+      fonts:
+        - asset: fonts/ttf/iconfont.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

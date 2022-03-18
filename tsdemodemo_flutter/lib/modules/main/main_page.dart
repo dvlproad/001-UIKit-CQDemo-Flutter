@@ -11,6 +11,8 @@ import 'package:tsdemo_baseui/src/baseui_routes.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
+import './temp_test_page.dart';
+
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
 
@@ -56,6 +58,17 @@ class _MyHomePageState extends State<MyHomePage> {
             gestureHomeButton(),
             imagesbrowserHomeButton(),
             photoAlbumHomeButton(),
+            CQTSThemeBGButton(
+              bgColorType: CQTSThemeBGType.pink,
+              title: "未整合的本地测试",
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return const TempTestPage();
+                  },
+                ));
+              },
+            ),
           ],
         ),
       ),
