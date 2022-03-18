@@ -72,20 +72,19 @@ class PackageEnvironmentUtil {
     }
 
     String defaultEnvId = defaultNetworkModel.envId;
-    String defaultEnvDes = defaultNetworkModel.name;
 
     String currentEnvId = currentEnvNetworkModel.envId;
 
     if (currentEnvId != defaultEnvId) {
-      String title = '是否恢复默认环境';
+      String title = '是否恢复默认的【${defaultNetworkModel.name}】';
       String message =
-          '您当前${packageBean.des}不是默认的【$defaultEnvDes】，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
+          '您当前${packageBean.des}不是默认环境，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
       AlertUtil.showCancelOKAlert(
         context: currentContext,
         title: title,
         message: message,
-        cancelTitle: '继续当前',
-        okTitle: '恢复默认',
+        cancelTitle: '继续${currentEnvNetworkModel.shortName}',
+        okTitle: '恢复${defaultNetworkModel.shortName}',
         okHandle: () {
           _reset(defaultNetworkModel, context: currentContext);
         },
@@ -122,7 +121,6 @@ class PackageEnvironmentUtil {
     }
 
     String defaultEnvId = defaultNetworkModel.envId;
-    String defaultEnvDes = defaultNetworkModel.name;
 
     String currentEnvId = currentEnvNetworkModel.envId;
 
@@ -130,13 +128,14 @@ class PackageEnvironmentUtil {
     String message;
     List<String> buttonTitles = ['取消', '继续切换'];
     if (currentEnvId != defaultEnvId) {
-      title = '是否恢复默认环境';
+      title = '是否恢复默认的【${defaultNetworkModel.name}】';
       message =
-          '您当前${packageBean.des}不是默认的【$defaultEnvDes】，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
-      buttonTitles.add('恢复默认');
+          '您当前${packageBean.des}不是默认环境，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
+      buttonTitles.add('恢复${defaultNetworkModel.shortName}');
     } else {
       title = '不建议切换环境';
-      message = '您当前${packageBean.des}已是默认的【$defaultEnvDes】，不建议切换，以免影响使用！';
+      message =
+          '您当前${packageBean.des}已是默认的【${defaultNetworkModel.shortName}】，不建议切换，以免影响使用！';
     }
 
     AlertUtil.showFlexWidthButtonsAlert(

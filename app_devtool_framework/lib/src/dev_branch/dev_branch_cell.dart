@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
+    show BJHTitleTextValueCell, TableViewCellArrowImageType;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
+import './dev_branch_bean.dart';
 
-import './init/main_diff_util.dart';
+class DevBranchCell extends StatefulWidget {
+  final DevBranchBean devBranchBean;
 
-class PackageInfoCell extends StatefulWidget {
-  final BranchPackageInfo packageInfo;
-
-  const PackageInfoCell({
+  const DevBranchCell({
     Key key,
-    this.packageInfo,
+    this.devBranchBean,
   }) : super(key: key);
 
   @override
-  _PackageInfoCellState createState() => _PackageInfoCellState();
+  _DevBranchCellState createState() => _DevBranchCellState();
 }
 
-class _PackageInfoCellState extends State<PackageInfoCell> {
+class _DevBranchCellState extends State<DevBranchCell> {
+  DevBranchBean _devBranchBean;
+
   @override
   void dispose() {
     super.dispose();
@@ -28,32 +28,12 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
   @override
   void initState() {
     super.initState();
+
+    _devBranchBean = widget.devBranchBean;
   }
 
   @override
   Widget build(BuildContext context) {
-    BranchPackageInfo packageInfo = widget.packageInfo;
-    packageInfo ??= BranchPackageInfo.nullPackageInfo;
-
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    String branceName = packageInfo.buildBranceName;
-    String buildCreateTime = packageInfo.buildCreateTime;
-
-    String packageType = MainDiffUtil.diffPackageBean().des;
-    String versionName = "$packageType：V$version($buildNumber)";
-    // String versionName = "测试包：V1.02.25(22221010)";
-
-    // return BJHTitleTextValueCell(
-    //   title: "app信息",
-    //   textValue: versionName,
-    //   textValueFontSize: 12,
-    //   onTap: () {
-    //     Clipboard.setData(ClipboardData(text: versionName));
-    //     ToastUtil.showMessage('app信息拷贝成功');
-    //   },
-    // );
-
     return GestureDetector(
       child: Container(
         color: Colors.white,
@@ -61,7 +41,7 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
           children: [
             BJHTitleTextValueCell(
               height: 40,
-              title: "app信息",
+              title: _devBranchBean.name,
               textValue: '',
               arrowImageType: TableViewCellArrowImageType.none,
             ),
@@ -79,31 +59,16 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
                       child: Column(
                         children: [
                           cellWidget(
-                            title: "①包与版本",
-                            textValue: versionName,
+                            title: "创建时间",
+                            textValue: _devBranchBean.createTime,
                             textValueFontSize: 12,
                           ),
                           cellWidget(
-                            title: "②最佳环境",
-                            textValue:
-                                MainDiffUtil.diffPackageBean().bestNetworkDes,
+                            title: "分支功能",
+                            textValue: _devBranchBean.des,
                             textValueFontSize: 12,
                           ),
-                          cellWidget(
-                            title: "③生成时间",
-                            textValue: buildCreateTime,
-                            textValueFontSize: 12,
-                          ),
-                          cellWidget(
-                            title: "④来源分支",
-                            textValue: branceName,
-                            textValueFontSize: 12,
-                          ),
-                          cellWidget(
-                            title: "⑤功能涵盖",
-                            textValue: packageInfo.buildBranceFeature,
-                            textValueFontSize: 12,
-                          ),
+                          Container(height: 1, color: Colors.black),
                         ],
                       ),
                     ),
@@ -115,15 +80,12 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
           ],
         ),
       ),
-      onTap: throttle(() async {
-        String packageTypeDes = MainDiffUtil.diffPackageBean().des;
-        String fullPackageDes = '';
-        fullPackageDes += "$packageTypeDes：";
-        fullPackageDes += "${packageInfo.fullPackageDes()}";
+      onTap: () {
+        String fullVersionDes = _devBranchBean.toString();
 
-        Clipboard.setData(ClipboardData(text: fullPackageDes));
-        ToastUtil.showMessage('app信息拷贝成功');
-      }),
+        Clipboard.setData(ClipboardData(text: fullVersionDes));
+        ToastUtil.showMessage('版本信息拷贝成功');
+      },
       onLongPress: () {},
     );
   }

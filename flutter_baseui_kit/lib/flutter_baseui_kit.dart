@@ -10,3 +10,5 @@ export './cq-uikit/button/buttontheme.dart'
 export './cq-uikit/cell/cell.dart';
 
 export './cq-uikit/tableview/section_table_view_method2.dart';
+
+export './opt/click_optimization.dart';

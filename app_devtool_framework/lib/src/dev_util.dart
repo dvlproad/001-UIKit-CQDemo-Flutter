@@ -26,12 +26,13 @@ class DevUtil {
   static init({
     GlobalKey navigatorKey,
     ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
-    String floatingToolText, // 悬浮按钮上的文本
+    String floatingToolTextDefaultEnv, // 悬浮按钮上的文本:此包的默认环境
   }) {
     DevUtil.navigatorKey = navigatorKey;
     ApplicationDraggableManager.floatingToolImageProvider =
         floatingToolImageProvider;
-    ApplicationDraggableManager.floatingToolText = floatingToolText;
+    ApplicationDraggableManager.floatingToolTextDefaultEnv =
+        floatingToolTextDefaultEnv;
   }
 
   static bool isDevPageShowing =

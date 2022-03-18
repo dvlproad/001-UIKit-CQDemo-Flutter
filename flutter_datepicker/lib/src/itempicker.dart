@@ -211,7 +211,7 @@ class CJStateTextButton extends StatelessWidget {
         splashColor: Colors.transparent,
         color: _currentBackgroundColor,
         textColor: Color(0xFF222222),
-        highlightColor: Color(0xFFCD3F49).withOpacity(0.12),
+        highlightColor: Color(0xFFFF7F00).withOpacity(0.12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(_cornerRadius),
           side: BorderSide(

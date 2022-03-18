@@ -4,6 +4,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:app_devtool_framework/app_devtool_framework.dart';
+import 'package:app_devtool_framework/src/dev_util.dart';
 
 import './devtool_routes.dart';
 

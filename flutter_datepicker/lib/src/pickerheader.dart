@@ -70,7 +70,7 @@ class _PickerHeaderState extends State<PickerHeader> {
         child: Text(
           widget.confirmText,
           style: TextStyle(
-            color: Color(0xFFCD3F49),
+            color: Color(0xFFFF7F00),
             fontFamily: 'PingFang SC',
             fontSize: 15.0,
             fontWeight: FontWeight.w500,

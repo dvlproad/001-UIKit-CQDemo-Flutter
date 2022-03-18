@@ -26,13 +26,18 @@ class DevToolInit {
     _initView(globalKey, packageType);
   }
 
-  static _init(PackageType packageType) {
+  static _init(PackageType packageType) async {
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
+
     // 网络环境相关
-    _initNetwork(packageType); // TODO:请求已开始，但网络环境、代理环境等还没配置
+    String apiToken = 'await UserInfoManager.instance.getToken()';
+    _initNetwork(packageType, packageInfo.version, apiToken);
 
     // 如何输出 log 的设置
+    String packageDescribe =
+        '【${MainDiffUtil.diffPackageBean().des}_${packageInfo.fullPackageDescribe}】';
     LogUtil.init(
-      packageDescribe: MainDiffUtil.diffPackageBean().des,
+      packageDescribe: packageDescribe,
       printToConsoleBlock: (logLevel, {Map extraLogInfo}) {
         return true;
       },
@@ -68,8 +73,9 @@ class DevToolInit {
     // 开发工具弹窗
     bool shouldShowDevTool = false;
     ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
-    String floatingToolText =
-        MainDiffUtil.diffPackageBean().des.substring(0, 1); // 悬浮按钮上的文本
+
+    String floatingToolTextDefaultEnv =
+        MainDiffUtil.diffPackageBean().des.substring(0, 1); // 悬浮按钮上的文本:此包的默认环境
     if (packageType == PackageType.develop1 ||
         packageType == PackageType.develop2 ||
         packageType == PackageType.preproduct) {
@@ -78,7 +84,7 @@ class DevToolInit {
     DevUtil.init(
       navigatorKey: globalKey,
       floatingToolImageProvider: floatingToolImageProvider,
-      floatingToolText: floatingToolText,
+      floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
     );
     if (shouldShowDevTool) {
       Future.delayed(const Duration(milliseconds: 3000), () {
@@ -108,20 +114,25 @@ class DevToolInit {
   }
 
   // 配置网络
-  static _initNetwork(PackageType packageType) async {
+  static _initNetwork(
+    PackageType packageType,
+    String version,
+    String apiToken,
+  ) async {
     _initApiErrorRobots();
 
     // network:api host
     await _initNetworkEnvironmentManager(packageType);
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
+    ApplicationDraggableManager.updateDevToolFloatingIconOverlayEntry(
+        selectedNetworkModel.shortName); // 添加当前环境标识
     String baseUrl = selectedNetworkModel.apiHost;
     // network:api token
-    String token = 'await UserInfoManager.instance.getToken()';
+    String token = apiToken;
     // network:api commonParams
-    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     Map<String, dynamic> commonParams = {
-      'version': packageInfo.version,
+      'version': version,
     };
     NetworkKit.start(
       baseUrl: baseUrl,

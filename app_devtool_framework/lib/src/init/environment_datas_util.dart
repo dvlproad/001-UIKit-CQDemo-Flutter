@@ -57,6 +57,7 @@ class TSEnvironmentDataUtil {
   static TSEnvNetworkModel get networkModel_mock {
     TSEnvNetworkModel dataModel = TSEnvNetworkModel();
     dataModel.envId = mockNetworkId;
+    dataModel.shortName = "mock";
     dataModel.name = "模拟的测试环境(mock)";
     dataModel.apiHost = apiHost_mock;
     dataModel.webHost = "http://dev.h5.xxx.com/";
@@ -72,6 +73,7 @@ class TSEnvironmentDataUtil {
   static TSEnvNetworkModel get networkModel_dev1 {
     TSEnvNetworkModel dataModel = TSEnvNetworkModel();
     dataModel.envId = developNetworkId1;
+    dataModel.shortName = "dev1";
     dataModel.name = "开发环境1(develop1)";
     dataModel.apiHost = apiHost_dev1;
     dataModel.webHost = "http://dev.h5.xxx.com/";
@@ -88,6 +90,7 @@ class TSEnvironmentDataUtil {
   static TSEnvNetworkModel get networkModel_dev2 {
     TSEnvNetworkModel dataModel = TSEnvNetworkModel();
     dataModel.envId = developNetworkId2;
+    dataModel.shortName = "dev2";
     dataModel.name = "开发环境2(develop2)";
     dataModel.apiHost = apiHost_dev2;
     dataModel.webHost = "http://dev2.h5.xxx.com/";
@@ -104,6 +107,7 @@ class TSEnvironmentDataUtil {
   static TSEnvNetworkModel get networkModel_preProduct {
     TSEnvNetworkModel dataModel = TSEnvNetworkModel();
     dataModel.envId = preproductNetworkId;
+    dataModel.shortName = "tke";
     dataModel.name = "tke环境(tke)";
     dataModel.apiHost = apiHost_preProduct;
     dataModel.webHost = "http://test.h5.xxx.com/";
@@ -119,6 +123,7 @@ class TSEnvironmentDataUtil {
   static TSEnvNetworkModel get networkModel_product {
     TSEnvNetworkModel dataModel = TSEnvNetworkModel();
     dataModel.envId = productNetworkId;
+    dataModel.shortName = "生产";
     dataModel.name = "生产环境(product)";
     dataModel.apiHost = apiHost_product;
     dataModel.webHost = "http://h5.xxx.com/";
@@ -135,6 +140,7 @@ class TSEnvironmentDataUtil {
     {
       TSEnvNetworkModel dataModel = TSEnvNetworkModel();
       dataModel.envId = ipNetworkId;
+      dataModel.shortName = "ip";
       dataModel.name = "指定IP测试环境(ip)";
       dataModel.apiHost = "http://192.168.72.69:8888/hapi/";
       dataModel.webHost = "http://dev2.h5.xxx.com/";

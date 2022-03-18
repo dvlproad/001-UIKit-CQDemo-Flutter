@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
@@ -17,6 +17,8 @@ import './package_info_cell.dart';
 import './dev_util.dart';
 import './dev_notifier.dart';
 import './init/main_diff_util.dart';
+import './history_version/history_version_page.dart';
+import './dev_branch/dev_branch_page.dart';
 
 class DevPage extends StatefulWidget {
   static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮
@@ -35,17 +37,26 @@ class _DevPageState extends State<DevPage> {
 
   CommonModel _commonModel = CommonModel();
 
+  String _historyRecordTime;
+  List<HistoryVersionBean> _historyVersionBeans;
+
+  String _brancesRecordTime;
+  List<DevBranchBean> _devBranchBeans;
+
   @override
   void dispose() {
-    super.dispose();
     DevUtil.isDevPageShowing = false;
 
     LoadingUtil.dismissInContext(context);
+
+    super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+
+    packageInfo = BranchPackageInfo.nullPackageInfo;
 
     DevUtil.isDevPageShowing = true;
     _getVersion();
@@ -55,6 +66,25 @@ class _DevPageState extends State<DevPage> {
   // 获取版本号
   _getVersion() async {
     packageInfo = await BranchPackageInfo.fromPlatform();
+
+    _historyRecordTime = packageInfo.historyRecordTime;
+    _historyVersionBeans = packageInfo.historyVersionMaps?.map((json) {
+      return HistoryVersionBean.fromJson(json);
+    }).toList();
+
+    _brancesRecordTime = packageInfo.brancesRecordTime;
+    List<DevBranchBean> featureBranchBeans =
+        packageInfo.featureBranchMaps?.map((json) {
+      return DevBranchBean.fromJson(json);
+    }).toList();
+    List<DevBranchBean> nocodeBranceBeans =
+        packageInfo.nocodeBranceMaps?.map((json) {
+      return DevBranchBean.fromJson(json);
+    }).toList();
+
+    _devBranchBeans = [];
+    _devBranchBeans.addAll(nocodeBranceBeans);
+    _devBranchBeans.addAll(featureBranchBeans);
 
     setState(() {});
   }
@@ -122,6 +152,9 @@ class _DevPageState extends State<DevPage> {
             _devtool_checkVersion_cell(context),
             _devtool_cancelNewVersionsPage_cell(),
             Container(height: 20),
+            _devBranch_cell(),
+            _historyVersion_cell(),
+            Container(height: 20),
             _app_downloadpage_cell(),
             //_devtool_historyPackage_cell(),
             Container(height: 20),
@@ -134,7 +167,7 @@ class _DevPageState extends State<DevPage> {
             _devtool_apimock_cell(context, showTestApiWidget: true),
             Container(height: 20),
             _devtool_logSwtich_cell(),
-            // _devtool_logTest_cell(),
+            _devtool_logTest_cell(),
           ],
         ),
       ),
@@ -204,6 +237,36 @@ class _DevPageState extends State<DevPage> {
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: downloadUrl));
         ToastUtil.showMessage('app下载页地址拷贝成功');
+      },
+    );
+  }
+
+  Widget _devBranch_cell() {
+    return BJHTitleTextValueCell(
+      title: "当前【开发中】的需求记录",
+      textValue: '截止${packageInfo.brancesRecordTime}',
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return DevBranchPage(
+            brancesRecordTime: _brancesRecordTime,
+            devBranchBeans: _devBranchBeans,
+          );
+        }));
+      },
+    );
+  }
+
+  Widget _historyVersion_cell() {
+    return BJHTitleTextValueCell(
+      title: "当前【已上线】的版本记录",
+      textValue: '截止${packageInfo.historyRecordTime}',
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return HistoryVersionPage(
+            historyRecordTime: _historyRecordTime,
+            historyVersionBeans: _historyVersionBeans,
+          );
+        }));
       },
     );
   }
@@ -425,6 +488,9 @@ class _DevPageState extends State<DevPage> {
   }
 
   Widget _devtool_logTest_cell() {
+    if (!_isDebug()) {
+      return Container();
+    }
     return BJHTitleTextValueCell(
       title: "测试日志上报到企业微信",
       textValue: '',
@@ -439,5 +505,13 @@ class _DevPageState extends State<DevPage> {
         LogUtil.apiError(apiFullUrl, apiMessage);
       },
     );
+  }
+
+  /// 判断是否为Debug模式
+  static bool _isDebug() {
+    bool inDebug = false;
+    assert(inDebug =
+        true); // 根据模式的介绍，可以知道Release模式关闭了所有的断言，assert的代码在打包时不会打包到二进制包中。因此我们可以借助断言，写出只在Debug模式下生效的代码
+    return inDebug;
   }
 }

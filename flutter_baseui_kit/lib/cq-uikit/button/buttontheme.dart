@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 final Map theme = {
   "pink": {
-    "themeColor": Color(0xFFCD3F49), // 粉红色 pink
+    "themeColor": Color(0xFFFF7F00), // 金黄色golden 粉红色pink
     "themeOppositeColor": Colors.white,
   },
   "purple": {

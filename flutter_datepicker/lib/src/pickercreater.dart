@@ -88,7 +88,7 @@ class PickerCreaterUtil {
         fontWeight: FontWeight.w500,
       ),
       confirmTextStyle: TextStyle(
-        color: Color(0xFFCD3F49),
+        color: Color(0xFFFF7F00),
         fontFamily: 'PingFang SC',
         fontSize: 15.0,
         fontWeight: FontWeight.w500,
@@ -98,7 +98,7 @@ class PickerCreaterUtil {
       height: 260, // 216
       backgroundColor: Colors.transparent,
       selectionOverlay: Container(
-        color: Color(0xFFCD3F49).withOpacity(0.12),
+        color: Color(0xFFFF7F00).withOpacity(0.12),
         margin: EdgeInsets.only(left: 0, right: 0),
       ),
       selectedTextStyle: TextStyle(

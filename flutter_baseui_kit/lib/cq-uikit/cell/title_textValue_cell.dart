@@ -65,7 +65,7 @@ class BJHTitleTextValueCell extends StatelessWidget {
     }
 
     Color textColor =
-        this.textThemeIsRed == true ? Color(0xffCD3F49) : Color(0xff999999);
+        this.textThemeIsRed == true ? Color(0xFFFF7F00) : Color(0xff999999);
     if (_textValueWidget(textColor) != null) {
       widgets.add(_textValueWidget(textColor));
     }
@@ -83,7 +83,7 @@ class BJHTitleTextValueCell extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(radius.w_cj)),
         border: Border.all(
-          color: const Color(0xffCD3F49),
+          color: const Color(0xFFFF7F00),
           width: radius.w_cj,
           style: BorderStyle.solid,
         ),
