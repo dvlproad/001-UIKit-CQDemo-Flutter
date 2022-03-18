@@ -12,7 +12,7 @@ class UserBaseBean {
   });
 
   UserBaseBean.fromJson(Map<String, dynamic> json) {
-    if (json["userId"] is String) uid = json["userId"];
+    if (json["uid"] is String) uid = json["uid"];
     if (json["accessToken"] is String) authToken = json["accessToken"];
     if (json["avatar"] is String) avatar = json["avatar"];
     if (json["sex"] is int) sex = json["sex"];
@@ -20,7 +20,7 @@ class UserBaseBean {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data["userId"] = uid;
+    data["uid"] = uid;
     data["accessToken"] = authToken;
     data["avatar"] = avatar;
 

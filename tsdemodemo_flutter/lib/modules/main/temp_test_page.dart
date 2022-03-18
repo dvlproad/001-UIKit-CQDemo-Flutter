@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemodemo_flutter/modules/main/IconFont.dart';
+import 'package:tsdemodemo_flutter/modules/user_manager/user_detail_bean.dart';
 
 class TempTestPage extends StatelessWidget {
-  const TempTestPage({Key key}) : super(key: key);
+   TempTestPage({Key key}) : super(key: key);
+
+  UserDetailBean _user;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +27,25 @@ class TempTestPage extends StatelessWidget {
           const Icon(IconFont.zhuanban, color: Colors.pink),
           CQTSThemeBGButton(
             bgColorType: CQTSThemeBGType.pink,
-            title: '读取json',
+            title: '读取 user_detail.json，并map转model',
             onPressed: () {
-              rootBundle.loadString("lib/user_manager/user_detail.json").then(
+              rootBundle
+                  .loadString("lib/modules/user_manager/user_detail.json")
+                  .then(
                 (value) {
                   Map<String, dynamic> data = json.decode(value);
+                  _user = UserDetailBean.fromJson(data);
+                  debugPrint("user=${_user.toString()}");
                 },
               );
+            },
+          ),
+          CQTSThemeBGButton(
+            bgColorType: CQTSThemeBGType.pink,
+            title: '获取userMap，通过 model 转 map',
+            onPressed: () {
+              Map<String, dynamic> userJson = _user.toJson();
+              debugPrint("userJson=${userJson.toString()}");
             },
           ),
         ],

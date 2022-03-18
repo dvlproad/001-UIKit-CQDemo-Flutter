@@ -4,7 +4,7 @@ class UserDetailBean extends UserBaseBean {
   String detailAddress;
 
   UserDetailBean({
-    String detailAddress,
+    this.detailAddress,
     String uid,
     String authToken,
     String avatar,
@@ -14,12 +14,14 @@ class UserDetailBean extends UserBaseBean {
           authToken: authToken,
           avatar: avatar,
           sex: sex,
-        ) {
-    this.detailAddress = detailAddress;
-  }
+        );
 
   UserDetailBean.fromJson(Map<String, dynamic> json) {
-    UserBaseBean.fromJson(json);
+    UserBaseBean baseBean = UserBaseBean.fromJson(json);
+    uid = baseBean.uid;
+    authToken = baseBean.authToken;
+    avatar = baseBean.avatar;
+    sex = baseBean.sex;
 
     detailAddress = json["detailAddress"];
   }
@@ -27,7 +29,12 @@ class UserDetailBean extends UserBaseBean {
   @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = super.toJson();
-    data["detailAddress"] = this.detailAddress;
+    data["detailAddress"] = detailAddress;
     return data;
+  }
+
+  @override
+  String toString() {
+    return '{"uid": $uid,"authToken": $authToken,"avatar": $avatar,"sex": $sex,"detailAddress": $detailAddress}';
   }
 }
