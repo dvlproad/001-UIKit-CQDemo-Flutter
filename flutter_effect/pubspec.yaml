@@ -17,6 +17,7 @@ dependencies:
   flutter_easyloading: any # 为了弹出自定义的loading组件
   
   flutter_easyrefresh: any
+  pull_to_refresh: any
 
   flutter_baseui_kit:     # 为了引入 ThemeBorderButton
     path: ../flutter_baseui_kit/  

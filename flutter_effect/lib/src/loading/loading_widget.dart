@@ -20,7 +20,7 @@ class LoadingWidget extends StatelessWidget {
   // 动画加载方法1：使用 gif 加载动画
   Widget get _loadingWidget_gif {
     return Image.asset(
-      'assets/loading_gif/loading_bj2.gif',
+      'assets/loading_gif/loading_center.gif',
       package: 'flutter_effect',
       width: width ?? 100,
       height: height ?? 100,

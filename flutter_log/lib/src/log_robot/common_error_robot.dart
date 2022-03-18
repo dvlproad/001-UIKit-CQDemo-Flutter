@@ -18,18 +18,6 @@ class CommonErrorRobot {
           'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e3c3f7f1-5d03-42c5-8c4a-a3d25d7a8587'; // 单个人测试用的
     }
 
-    String platformName = "";
-    String appKey = "";
-    if (Platform.isIOS) {
-      platformName = 'iOS';
-    } else if (Platform.isAndroid) {
-      platformName = 'Android';
-    }
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String appBundleID = packageInfo.packageName;
-    String appVersion = packageInfo.version;
-    String buildBuildVersion = packageInfo.buildNumber;
-
     String fullMessage = '';
     // 标题 title（可为null，不是null时候，只是为了对错误内容 customMessage 起强调中庸）
     if (title != null && title.isNotEmpty) {
@@ -37,10 +25,8 @@ class CommonErrorRobot {
     }
     // 包、平台及版本等先关信息
     String packageDescribe =
-        CommonErrorRobot.packageDescribe; // 包的描述(生产、测试、开发包)
-    String fullPackageDescribe =
-        '【${packageDescribe}_${platformName}_V$appVersion($buildBuildVersion)】';
-    fullMessage += '$fullPackageDescribe\n';
+        CommonErrorRobot.packageDescribe; // 包、平台、分支及版本等相关信息
+    fullMessage += '$packageDescribe\n';
     // 错误内容 customMessage
     fullMessage += '$customMessage';
 

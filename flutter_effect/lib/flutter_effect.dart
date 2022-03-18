@@ -5,6 +5,7 @@ export './src/theme/theme.dart';
 
 // refresh
 export './src/refresh/refresh_header.dart';
+export './src/refresh/refresh_header_gif.dart';
 export './src/refresh/refresh_footer.dart';
 
 // pagetype_nodata:无数据视图组件

@@ -57,14 +57,15 @@ String newImageUrl(
   bool isCloudImage = index != -1;
 
   String newImageUrl = imageUrl;
+  int multiple = 3;
   if (isCloudImage) {
     String thumbnail = '';
     if (width != null && width > 0) {
-      thumbnail = '/w/${width * 2}';
+      thumbnail = '/w/${width * multiple}';
     }
 
     if (height != null && height > 0) {
-      thumbnail = '/h/${height * 2}';
+      thumbnail = '/h/${height * multiple}';
     }
 
     if (thumbnail.isNotEmpty) {
