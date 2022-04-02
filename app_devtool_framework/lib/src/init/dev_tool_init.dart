@@ -37,9 +37,9 @@ class DevToolInit {
       // 其他情况不用延迟
       _init(
         packageType,
-        userApiToken: userApiToken,
-        userDescribeBlock: userDescribeBlock,
-        userNeedReloginHandle: userNeedReloginHandle,
+        currentUserApiToken: userApiToken,
+        packageUserDescribeBlock: userDescribeBlock,
+        userReloginHandle: userNeedReloginHandle,
       );
     });
     _initView(
@@ -51,19 +51,37 @@ class DevToolInit {
 
   static _init(
     PackageType packageType, {
-    String userApiToken,
-    String Function() userDescribeBlock,
-    @required void Function() userNeedReloginHandle, // 需要重新登录时候，执行的操作
+    String currentUserApiToken,
+    String Function() packageUserDescribeBlock,
+    @required void Function() userReloginHandle, // 需要重新登录时候，执行的操作
   }) async {
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
 
     // 网络环境相关
-    _initNetwork(packageType, packageInfo.version, userApiToken,
-        needReloginHandle: userNeedReloginHandle);
+    String packageVersion = packageInfo.version;
+    _initNetwork(
+      packageType,
+      packageVersion: packageVersion,
+      currentUserApiToken: currentUserApiToken,
+      needReloginHandle: userReloginHandle,
+    );
 
-    // 如何输出 log 的设置
+    // log 设置
     String packageDescribe =
         '【${MainDiffUtil.diffPackageBean().des}_${packageInfo.fullPackageDescribe}】';
+    _initLog(
+      packageType,
+      packageDescribe: packageDescribe,
+      userDescribeBlock: packageUserDescribeBlock,
+    );
+  }
+
+  // 如何输出 log 的设置
+  static _initLog(
+    PackageType packageType, {
+    String packageDescribe,
+    String Function() userDescribeBlock,
+  }) async {
     LogInit.init(
       packageDescribe: packageDescribe,
       userDescribeBlock: userDescribeBlock,
@@ -74,6 +92,7 @@ class DevToolInit {
         return EnvInit.isProduct;
       },
     );
+    LogInit.initApiErrorRobots();
   }
 
   static _initView(
@@ -146,13 +165,11 @@ class DevToolInit {
 
   // 配置网络
   static _initNetwork(
-    PackageType packageType,
-    String version,
-    String apiToken, {
+    PackageType packageType, {
+    @required String packageVersion,
+    @required String currentUserApiToken,
     @required void Function() needReloginHandle, // 需要重新登录时候，执行的操作
   }) async {
-    LogInit.initApiErrorRobots();
-
     // network:api host
     await EnvInit.initNetworkEnvironmentManager(packageType);
     TSEnvNetworkModel selectedNetworkModel =
@@ -161,10 +178,10 @@ class DevToolInit {
         selectedNetworkModel.shortName); // 添加当前环境标识
     String baseUrl = selectedNetworkModel.apiHost;
     // network:api token
-    String token = apiToken;
+    String token = currentUserApiToken;
     // network:api commonParams
     Map<String, dynamic> commonParams = {
-      'version': version,
+      'version': packageVersion,
     };
     NetworkKit.start(
       baseUrl: baseUrl,

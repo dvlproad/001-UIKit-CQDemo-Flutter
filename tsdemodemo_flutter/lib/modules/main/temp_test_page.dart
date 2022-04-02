@@ -6,7 +6,7 @@ import 'package:tsdemodemo_flutter/modules/main/IconFont.dart';
 import 'package:tsdemodemo_flutter/modules/user_manager/user_detail_bean.dart';
 
 class TempTestPage extends StatelessWidget {
-   TempTestPage({Key key}) : super(key: key);
+  TempTestPage({Key key}) : super(key: key);
 
   UserDetailBean _user;
 
@@ -44,8 +44,12 @@ class TempTestPage extends StatelessWidget {
             bgColorType: CQTSThemeBGType.pink,
             title: '获取userMap，通过 model 转 map',
             onPressed: () {
-              Map<String, dynamic> userJson = _user.toJson();
-              debugPrint("userJson=${userJson.toString()}");
+              if (_user == null) {
+                CJTSToastUtil.showMessage("请先读取 user_detail.json");
+              } else {
+                Map<String, dynamic> userJson = _user.toJson();
+                debugPrint("userJson=${userJson.toString()}");
+              }
             },
           ),
         ],

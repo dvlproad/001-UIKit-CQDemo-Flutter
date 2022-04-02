@@ -81,7 +81,6 @@ class DioLogInterceptor extends Interceptor {
     errorStr += bodyString;
 
     errorStr += "- ERRORTYPE: ${err.type}\n"; // 错误类型
-    print('╔ ${err.type.toString()}');
     if (err.response != null && err.response.data != null) {
       errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
     } else {

@@ -17,9 +17,7 @@ class _DraggablePage2State extends State<DraggablePage2> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) {
         // 需要在 main.dart 中设置 ApplicationDraggableManager.globalKey = xx; 和 navigatorKey: ApplicationDraggableManager.globalKey,
-        DevUtil.showDevFloatingWidget(
-          showTestApiWidget: true,
-        );
+        DevUtil.showDevFloatingWidget();
 
         ///MediaQuery.of(context).size.width  屏幕宽度
         ///MediaQuery.of(context).size.height 屏幕高度

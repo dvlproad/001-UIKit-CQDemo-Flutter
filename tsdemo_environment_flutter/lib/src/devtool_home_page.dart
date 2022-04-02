@@ -49,15 +49,14 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
           {
             'title': "Environment(环境)",
             'actionBlock': () {
-              DevUtil.goChangeEnvironmentNetwork(context,
-                  showTestApiWidget: true);
+              DevUtil.goChangeEnvironmentNetwork(context);
             },
           },
           {
             'title': "ApiMock(模拟)",
             // 'nextPageName': DevToolRouters.apiMockPage,
             'actionBlock': () {
-              DevUtil.goChangeApiMock(context, showTestApiWidget: true);
+              DevUtil.goChangeApiMock(context);
             },
           },
           {
@@ -99,9 +98,7 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
           {
             'title': "显示开工工具的悬浮按钮",
             'actionBlock': () {
-              DevUtil.showDevFloatingWidget(
-                showTestApiWidget: true,
-              );
+              DevUtil.showDevFloatingWidget();
             },
           },
         ]

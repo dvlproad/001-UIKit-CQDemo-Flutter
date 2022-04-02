@@ -24,12 +24,17 @@ class CommonErrorRobot {
     if (title != null && title.isNotEmpty) {
       fullMessage += '$title\n';
     }
-    // 包、平台及版本等先关信息
+
     String packageDescribe =
-        CommonErrorRobot.packageDescribe; // 包、平台、分支及版本等相关信息
-    String userDescribe = CommonErrorRobot.userDescribeBlock(); // 当前使用该包的用户信息
+        CommonErrorRobot.packageDescribe ?? "未知包"; // 包、平台、分支及版本等相关信息
     fullMessage += '$packageDescribe';
-    fullMessage += '\n$userDescribe';
+
+    if (CommonErrorRobot.userDescribeBlock != null) {
+      String userDescribe =
+          CommonErrorRobot.userDescribeBlock() ?? ""; // 当前使用该包的用户信息
+      fullMessage += '\n$userDescribe';
+    }
+
     // 错误内容 customMessage
     fullMessage += '\n$customMessage';
 

@@ -17,7 +17,7 @@ class LogInit {
       packageDescribe: packageDescribe,
       userDescribeBlock: userDescribeBlock,
       printToConsoleBlock: (logLevel, {Map extraLogInfo}) {
-        return false;
+        return true;
       },
       showToPageBlock: (logLevel, {Map extraLogInfo}) {
         return true;
@@ -45,7 +45,7 @@ class LogInit {
               // debug 且有代理的时候，如果发生错误，是否通知到企业微信
               shouldPostApiError = false;
             } else {
-              shouldPostApiError = true;
+              shouldPostApiError = false;
             }
           } else {
             shouldPostApiError = true;

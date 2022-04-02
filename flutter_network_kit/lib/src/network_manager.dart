@@ -62,7 +62,7 @@ class NetworkKit {
     @required String token,
     bool allowMock, // 是否允许 mock api
     String mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
-    @required void Function() needReloginHandle, // 需要重新登录时候，执行的操作
+    @required void Function() needReloginHandle, // 401等需要重新登录时候，执行的操作
   }) {
     _needReloginHandle = needReloginHandle;
 

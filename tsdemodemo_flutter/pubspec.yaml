@@ -50,6 +50,11 @@ dependencies:
     # path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
     path: ../flutter_demo_kit/
 
+  flutter_network_kit:
+    path: ../flutter_network_kit/
+  flutter_network:
+    path: ../flutter_network/
+
   tsdemo_baseui:
     path: ../tsdemo_baseui/
   flutter_baseui_kit:
@@ -65,6 +70,8 @@ dependencies:
     path: ../tsdemo_effect/
   flutter_effect:
     path: ../flutter_effect/
+  flutter_effect_kit:
+    path: ../flutter_effect_kit/
 
   flutter_images_action_list:
     path: ../flutter_images_action_list/
