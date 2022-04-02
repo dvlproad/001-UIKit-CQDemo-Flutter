@@ -7,6 +7,8 @@ export './cq-uikit/button/statetextbutton.dart';
 export './cq-uikit/button/buttontheme.dart'
     show ThemeBGType, ButtonBoldTextStyle, ButtonMediumTextStyle;
 
+export './cq-uikit/button/imagebutton.dart';
+
 export './cq-uikit/cell/cell.dart';
 
 export './cq-uikit/tableview/section_table_view_method2.dart';
