@@ -21,7 +21,7 @@ class LoadingWidget extends StatelessWidget {
   Widget get _loadingWidget_gif {
     return Image.asset(
       'assets/loading_gif/loading_center.gif',
-      package: 'flutter_effect',
+      package: 'flutter_effect_kit',
       width: width ?? 100,
       height: height ?? 100,
     );
@@ -50,7 +50,7 @@ class LoadingWidget extends StatelessWidget {
       child: Lottie.asset(
         'assets/loading_json/footer.json',
         // 'assets/loading_json/undefined_ske.json',
-        package: 'flutter_effect',
+        package: 'flutter_effect_kit',
         fit: BoxFit.fill,
         alignment: Alignment.bottomCenter,
         repeat: true,

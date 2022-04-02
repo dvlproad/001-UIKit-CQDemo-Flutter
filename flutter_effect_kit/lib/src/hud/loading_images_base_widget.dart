@@ -70,7 +70,7 @@ class _FrameAnimationImageWidgetState extends State<FrameAnimationImageWidget>
       if (i != ix) {
         Image image = Image.asset(
           widget._assetList[i],
-          package: 'flutter_effect',
+          package: 'flutter_effect_kit',
           width: 0,
           height: 0,
         );
@@ -80,7 +80,7 @@ class _FrameAnimationImageWidgetState extends State<FrameAnimationImageWidget>
 
     images.add(Image.asset(
       widget._assetList[ix],
-      package: 'flutter_effect',
+      package: 'flutter_effect_kit',
       width: widget.width,
       height: widget.height,
     ));

@@ -1,11 +1,12 @@
+import 'dart:ui';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
+import 'package:flutter_effect_kit/flutter_effect_kit.dart'
+    show StateLoadingWidget;
 
 import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
-
-import '../loading/state_loading_widget.dart';
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends StatefulWidget {
@@ -167,6 +168,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
               Expanded(
                 child: _contentWidget(context),
               ),
+              // Container(
+              //   height: mediaQuery.size.height - contentWidgetTopDistance - 10,
+              //   color: Colors.green,
+              //   // child: _contentWidget(context),
+              // ),
             ],
           ),
           // appbar 使用 Positioned 包起来,以避免当 _contentWidget 从 appbar的顶部绘制时候，会遮挡住或被遮挡住
@@ -244,6 +250,9 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
 
   Widget buildSuccessWidget(BuildContext context) {
     print('请在子类中重写此方法,不需要调用super.');
+    // MediaQueryData mediaQuery = MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    // MediaQueryData mediaQuery = MediaQuery.of(context);
+    // double _height = mediaQuery.size.height;
     return null;
   }
 

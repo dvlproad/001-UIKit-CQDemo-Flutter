@@ -1,35 +1,28 @@
-name: flutter_effect
+name: flutter_effect_kit
 description: A new Flutter package project.
 version: 0.0.1
-author:
 homepage:
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cached_network_image: any
-  
+  # hud
+  lottie: any
+  flutter_easyloading: any # 为了弹出自定义的loading组件
+
+  # refresh
   flutter_easyrefresh: any
   pull_to_refresh: any
-
-  flutter_baseui_kit:     # 为了引入 ThemeBorderButton
-    path: ../flutter_baseui_kit/ 
-
-  flutter_overlay_kit:
-    path: ../flutter_overlay_kit/
-
-  flutter_effect_kit:
-    path: ../flutter_effect_kit/
-  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -42,9 +35,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-  - assets/
-  - assets/appbar/
-  - assets/empty/
+    - assets/loading_gif/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

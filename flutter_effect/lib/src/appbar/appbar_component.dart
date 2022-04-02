@@ -8,6 +8,7 @@ import '../../flutter_effect_adapt.dart';
 enum AppBarTextColorType {
   default_black, // 默认(黑色)
   white, // 白色
+  theme, // 主题色
 }
 
 // 左侧返回视图
@@ -31,13 +32,15 @@ class AppBarTitleWidget extends StatelessWidget {
     Color textColor = Color(0xFF222222);
     if (textColorType == AppBarTextColorType.white) {
       textColor = Colors.white;
+    } else if (textColorType == AppBarTextColorType.theme) {
+      textColor = Color(0xFFFF7F00);
     }
     return TextButton(
       child: Text(
         this.text ?? '',
         style: TextStyle(
           color: textColor,
-          fontSize: 15,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -126,6 +129,8 @@ class AppBarActionWidget extends StatelessWidget {
     Color textColor = Color(0xFF222222);
     if (textColorType == AppBarTextColorType.white) {
       textColor = Colors.white;
+    } else if (textColorType == AppBarTextColorType.theme) {
+      textColor = Color(0xFFFF7F00);
     }
 
     if (this.text != null) {

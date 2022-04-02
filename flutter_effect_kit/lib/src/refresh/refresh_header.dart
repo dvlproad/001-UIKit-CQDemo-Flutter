@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import '../loading/loading_widget.dart';
+import '../hud/loading_widget.dart';
 
 class RefreshHeader extends Header {
   /// Key
@@ -283,7 +283,7 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
                         offstage: _isLoading,
                         child: Image.asset(
                           "assets/loading/loading_0.png",
-                          package: 'flutter_effect',
+                          package: 'flutter_effect_kit',
                           width: 40,
                           height: 40,
                         ),
@@ -301,7 +301,7 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
                         offstage: _isLoading,
                         child: Image.asset(
                           "assets/loading/loading_0.png",
-                          package: 'flutter_effect',
+                          package: 'flutter_effect_kit',
                           width: 40,
                           height: 40,
                         ),
