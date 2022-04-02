@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'dart:io';
 
@@ -94,11 +95,13 @@ class NetworkUtil {
     Options options,
     CancelToken cancelToken,
   }) async {
-    while (NetworkManager().hasStart == false) {
-      print('NetworkManager:初始化未完成，等待中...');
-      // sleep(Duration(milliseconds: 3500));
-      await Future.delayed(Duration(milliseconds: 500));
-    }
+    await NetworkManager().initCompleter.future;
+
+    // while (NetworkManager().hasStart == false) {
+    //   print('NetworkManager:初始化未完成，等待中...');
+    //   // sleep(Duration(milliseconds: 3500));
+    //   await Future.delayed(Duration(milliseconds: 500));
+    // }
     //print('NetworkManager:初始化已完成，开始进行请求');
 
     if (cancelToken == null) {
@@ -196,6 +199,12 @@ class NetworkUtil {
         if (e is DioError) {
           DioError err = e;
           fullUrl = UrlUtil.fullUrlFromDioError(err);
+
+          String baseUrl = err.requestOptions.baseUrl;
+          if (baseUrl.isEmpty) {
+            print(
+                "NetworkError:请求完整路径$fullUrl失败，原因未完成baseUrl设置,请检查是否忘了执行NetworkManager.start的初始化调用.(附未设置baseUrl时候,任何dio拦截器都走不到");
+          }
           if (err.message.isNotEmpty) {
             errorMessage = err.message;
             if (err.type == DioErrorType.connectTimeout) {

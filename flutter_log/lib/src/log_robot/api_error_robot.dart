@@ -15,7 +15,10 @@ class ApiErrorRobot {
     String errorMessage, {
     String serviceValidProxyIp, // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，这里会传null)
   }) async {
-    int count = apiErrorRobots.length;
+    int count = apiErrorRobots?.length ?? 0;
+    if (count == 0) {
+      return Future.value(false);
+    }
     List<String> robotUrls = [];
     for (var i = 0; i < count; i++) {
       RobotBean robotBean = apiErrorRobots[i];

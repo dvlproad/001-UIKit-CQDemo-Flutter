@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 
@@ -14,6 +15,7 @@ class NetworkManager {
 
   Dio serviceDio;
   bool hasStart = false;
+  Completer initCompleter = Completer<String>();
 
   // 单例
   factory NetworkManager() => _getInstance();
@@ -91,6 +93,8 @@ class NetworkManager {
     dio.interceptors..addAll(lastInterceptors);
 
     NetworkManager.instance.hasStart = true;
+    NetworkManager.instance.initCompleter
+        .complete('NetworkManager:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
     print('NetworkManager:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
   }
 
