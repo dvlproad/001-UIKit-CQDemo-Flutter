@@ -1,5 +1,5 @@
-#sh build_ios.sh dev_1.0.0_fix 开发
-#sh build_ios.sh dev_all 测试
+#sh build_ios.sh dev_1.0.0_fix 开发 YES
+#sh build_ios.sh dev_all 测试 YES
 
 BRANCH=$1
 ENV=$2
@@ -45,5 +45,7 @@ cd $WORKSPACE/wish/ios
 python $WORKSPACE/bulidScript/build_upload.py 'Runner' 'Runner' 'Release' 'iphoneos'
 python $WORKSPACE/bulidScript/build_upload_ipa.py 'wish' $PYGERKEY
 
+cd $WORKSPACE/bulidScript
+sh noti_new_package.sh iOS $BRANCH $TARGETENVTYPE 更新说明略
 
 echo 打包完成

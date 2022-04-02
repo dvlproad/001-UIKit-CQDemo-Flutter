@@ -51,4 +51,8 @@ cd $WORKSPACE/wish/
 
 python $WORKSPACE/bulidScript/build_upload_apk.py $PYGERKEY
 
+
+cd $WORKSPACE/bulidScript
+sh noti_new_package.sh Android $BRANCH $TARGETENVTYPE 更新说明略
+
 echo 打包完成

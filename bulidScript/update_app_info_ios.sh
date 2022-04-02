@@ -1,11 +1,12 @@
-#sh update_app_info_ios.sh $TARGETENVTYPE ../wish/ios
+#sh update_app_info_ios.sh $TARGETENVTYPE $FlutterIOSProjectHOME
+#sh update_app_info_ios.sh develop1 ../wish/ios
 
 TARGETENVTYPE=$1
 FlutterIOSProjectHOME=$2
 echo "TARGETENVTYPE=$TARGETENVTYPE"
 
 VERSION="1."$(date "+%m.%d") # 1.02.21
-BUILD=$(date "+%H%M") # 1506
+BUILD=$(date "+%m%d%H%M") # 02211506
 echo "------VERSION:${VERSION}"
 echo "------BUILD:${BUILD}"
 
