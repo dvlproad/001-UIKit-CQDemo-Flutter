@@ -19,6 +19,7 @@ class ApiErrorRobot {
     if (count == 0) {
       return Future.value(false);
     }
+
     List<String> robotUrls = [];
     for (var i = 0; i < count; i++) {
       RobotBean robotBean = apiErrorRobots[i];

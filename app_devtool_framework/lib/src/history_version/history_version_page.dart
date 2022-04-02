@@ -44,7 +44,7 @@ class _HistoryVersionPageState extends State<HistoryVersionPage> {
       body: Column(
         children: [
           Text(
-            '截止时间:$_historyRecordTime',
+            '记录时间:$_historyRecordTime',
             textAlign: TextAlign.start,
             style: TextStyle(color: Colors.red),
           ),

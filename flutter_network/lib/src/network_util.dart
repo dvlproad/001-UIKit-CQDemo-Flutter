@@ -1,14 +1,16 @@
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'dart:io';
+import 'dart:convert' show json;
+import 'dart:convert' as convert;
+
+import 'package:dio/dio.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import './interceptor/url_util.dart';
 
 import './network_client.dart';
 import './sp_util.dart';
 import './lang_util.dart';
-
-import 'dart:convert' as convert;
 
 import './network_client.dart';
 import './mock_analy_util.dart';
@@ -22,6 +24,8 @@ class ResponseModel {
   bool isCache;
 
   ResponseModel({this.statusCode, this.message, this.result, this.isCache});
+
+  bool get isSuccess => statusCode == 0;
 }
 
 enum RequestMethod {
@@ -30,6 +34,7 @@ enum RequestMethod {
 }
 
 class NetworkUtil {
+  static String localApiHost = "local_api_json_file";
   static void postUrl<T>(
     url, {
     Map<String, dynamic> customParams,
@@ -96,13 +101,17 @@ class NetworkUtil {
     CancelToken cancelToken,
   }) async {
     await NetworkManager().initCompleter.future;
-
     // while (NetworkManager().hasStart == false) {
     //   print('NetworkManager:初始化未完成，等待中...');
     //   // sleep(Duration(milliseconds: 3500));
     //   await Future.delayed(Duration(milliseconds: 500));
     // }
     //print('NetworkManager:初始化已完成，开始进行请求');
+
+    if (url.startsWith(localApiHost)) {
+      String loaclFilePath = url.substring(localApiHost.length);
+      return _requestLocalFilePath(loaclFilePath);
+    }
 
     if (cancelToken == null) {
       cancelToken = CancelToken();
@@ -205,6 +214,7 @@ class NetworkUtil {
             print(
                 "NetworkError:请求完整路径$fullUrl失败，原因未完成baseUrl设置,请检查是否忘了执行NetworkManager.start的初始化调用.(附未设置baseUrl时候,任何dio拦截器都走不到");
           }
+
           if (err.message.isNotEmpty) {
             errorMessage = err.message;
             if (err.type == DioErrorType.connectTimeout) {
@@ -217,13 +227,47 @@ class NetworkUtil {
       }
 
       String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
+      return _errorResponseModel(message);
+    }
+  }
+
+  // 网络请求的最底层方法
+  static Future<ResponseModel> _requestLocalFilePath(
+      String localFilePath) async {
+    try {
+      String localFileName = localFilePath.splitMapJoin(
+        "/",
+        onMatch: (Match match) {
+          return ":";
+        },
+      );
+      localFilePath = "asset/data/$localFileName.json";
+
+      String responseString = await rootBundle.loadString(localFilePath);
+      Map<String, dynamic> responseMap = json.decode(responseString);
+
+      var errorCode = responseMap['code'];
+      var msg = responseMap['msg'];
+      dynamic result = responseMap["data"];
       ResponseModel responseModel = ResponseModel(
-        statusCode: -1,
-        message: message,
-        result: null,
+        statusCode: errorCode,
+        message: msg,
+        result: result,
       );
       return responseModel;
+    } catch (e) {
+      String message = '请求$localFilePath的时候，发生网络错误,未设置json文件${e.message}';
+      return _errorResponseModel(message);
     }
+  }
+
+  static ResponseModel _errorResponseModel(String message) {
+    ResponseModel responseModel = ResponseModel(
+      statusCode: -1,
+      message: message,
+      result: null,
+    );
+    return responseModel;
   }
 
   Future<T> updateFile<T>(

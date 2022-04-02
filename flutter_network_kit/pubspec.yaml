@@ -15,6 +15,11 @@ dependencies:
     path: ../flutter_network/
   flutter_environment:
     path: ../flutter_environment/ # 为了引入 ApiManager
+
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
+  flutter_effect_kit:
+    path: ../flutter_effect_kit/  # 为了引入 LoadingUtil
     
   dio_http_cache: any
 

@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
+// import 'package:flutter/src/foundation/print.dart';
 
 import './interceptor/interceptor_request.dart';
 import './interceptor/interceptor_response.dart';
@@ -23,7 +25,7 @@ class NetworkManager {
 
   static NetworkManager _instance;
   NetworkManager._internal() {
-    print('这个单例里的初始化方法只会执行一次');
+    //debugPrint('这个单例里的初始化方法只会执行一次');
 
     _init();
   }

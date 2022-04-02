@@ -131,9 +131,12 @@ class ApplicationDraggableManager {
     );
 
     /// 赋值方便移除
-    ApplicationDraggableManager.overlayEntry = overlayEntry;
-    ApplicationDraggableManager.globalKey.currentState.overlay
-        .insert(overlayEntry);
-    ApplicationDraggableManager.overlayEntryIsShow = true;
+
+    if (ApplicationDraggableManager.globalKey.currentState != null) {
+      ApplicationDraggableManager.globalKey.currentState.overlay
+          .insert(overlayEntry);
+      ApplicationDraggableManager.overlayEntryIsShow = true;
+      ApplicationDraggableManager.overlayEntry = overlayEntry;
+    }
   }
 }

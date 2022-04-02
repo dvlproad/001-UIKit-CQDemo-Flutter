@@ -5,6 +5,7 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
@@ -141,13 +142,10 @@ class _DevPageState extends State<DevPage> {
         color: const Color(0xfff0f0f0),
         child: ListView(
           children: [
-            _devtool_floating_cell(true),
+            _devtool_floating_cell(),
 
-            Container(height: 20),
-            // // header 的 增删该
-            // _devtool_changeheader_cell(),
-            // _devtool_removeheaderKey_cell(),
             // 版本信息
+            Container(height: 20),
             _devtool_appinfo_cell(),
             _devtool_checkVersion_cell(context),
             _devtool_cancelNewVersionsPage_cell(),
@@ -157,14 +155,21 @@ class _DevPageState extends State<DevPage> {
             Container(height: 20),
             _app_downloadpage_cell(),
             //_devtool_historyPackage_cell(),
+            // 网络环境相关
             Container(height: 20),
             Consumer<EnvironmentChangeNotifier>(
               builder: (context, environmentChangeNotifier, child) {
-                return _devtool_env_cell(context, showTestApiWidget: true);
+                return _devtool_env_cell(context);
               },
             ),
-            _devtool_proxy_cell(context, showTestApiWidget: true),
-            _devtool_apimock_cell(context, showTestApiWidget: true),
+            _devtool_proxy_cell(context),
+            _devtool_apimock_cell(context),
+            // 网络库测试相关
+            _devtool_changeheader_cell(), // 网络库:header 的 增删该
+            _devtool_removeheaderKey_cell(), // 网络库:header 的 增删该
+            _apicache_cell(context),
+            _apiretry_cell(context),
+            // 日志相关
             Container(height: 20),
             _devtool_logSwtich_cell(),
             _devtool_logTest_cell(),
@@ -174,7 +179,7 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_floating_cell(bool showTestApiWidget) {
+  Widget _devtool_floating_cell() {
     return BJHTitleSwitchValueCell(
       title: "显示开发工具的悬浮按钮",
       boolValue: devSwtichValue,
@@ -183,9 +188,7 @@ class _DevPageState extends State<DevPage> {
           devSwtichValue = bSwtichValue;
 
           if (bSwtichValue == true) {
-            DevUtil.showDevFloatingWidget(
-              showTestApiWidget: showTestApiWidget,
-            );
+            DevUtil.showDevFloatingWidget();
           } else {
             DevUtil.hideDevFloatingWidget();
           }
@@ -244,7 +247,7 @@ class _DevPageState extends State<DevPage> {
   Widget _devBranch_cell() {
     return BJHTitleTextValueCell(
       title: "当前【开发中】的需求记录",
-      textValue: '截止${packageInfo.brancesRecordTime}',
+      textValue: '记于${packageInfo.brancesRecordTime}',
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return DevBranchPage(
@@ -259,7 +262,7 @@ class _DevPageState extends State<DevPage> {
   Widget _historyVersion_cell() {
     return BJHTitleTextValueCell(
       title: "当前【已上线】的版本记录",
-      textValue: '截止${packageInfo.historyRecordTime}',
+      textValue: '记于${packageInfo.historyRecordTime}',
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return HistoryVersionPage(
@@ -324,32 +327,7 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_changeheader_cell() {
-    return BJHTitleTextValueCell(
-      title: "添加/修改header",
-      textValue: '',
-      onTap: () {
-        NetworkManager.addOrUpdateToken('12345');
-        ToastUtil.showMessage('添加/修改header成功');
-      },
-    );
-  }
-
-  Widget _devtool_removeheaderKey_cell() {
-    return BJHTitleTextValueCell(
-      title: "删除header",
-      textValue: '',
-      onTap: () {
-        NetworkManager.removeToken();
-        ToastUtil.showMessage('删除header成功');
-      },
-    );
-  }
-
-  Widget _devtool_env_cell(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  Widget _devtool_env_cell(BuildContext context) {
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
     if (selectedNetworkModel == null) {
@@ -363,10 +341,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () {
         PackageEnvironmentUtil.checkShouldResetNetwork(
           goChangeHandle: () {
-            DevUtil.goChangeEnvironmentNetwork(
-              context,
-              showTestApiWidget: showTestApiWidget,
-            ).then((value) {
+            DevUtil.goChangeEnvironmentNetwork(context).then((value) {
               setState(() {});
             });
           },
@@ -412,10 +387,7 @@ class _DevPageState extends State<DevPage> {
   }
   */
 
-  Widget _devtool_proxy_cell(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  Widget _devtool_proxy_cell(BuildContext context) {
     TSEnvProxyModel selectedProxyModel =
         ProxyPageDataManager().selectedProxyModel;
     if (selectedProxyModel == null) {
@@ -429,10 +401,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () {
         PackageEnvironmentUtil.checkProxyAllowForPackage(
           goChangeHandle: () {
-            DevUtil.goChangeEnvironmentProxy(
-              context,
-              showTestApiWidget: showTestApiWidget,
-            ).then((value) {
+            DevUtil.goChangeEnvironmentProxy(context).then((value) {
               setState(() {});
             });
           },
@@ -441,10 +410,7 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_apimock_cell(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  Widget _devtool_apimock_cell(BuildContext context) {
     int mockCount = ApiManager.mockCount();
     String mockCountString = '已mock:$mockCount个';
     return BJHTitleTextValueCell(
@@ -455,16 +421,91 @@ class _DevPageState extends State<DevPage> {
         PackageType packageType = packageBean.packageType;
         if (packageType == PackageType.develop1 ||
             packageType == PackageType.develop2) {
-          DevUtil.goChangeApiMock(
-            context,
-            showTestApiWidget: showTestApiWidget,
-          ).then((value) {
+          DevUtil.goChangeApiMock(context).then((value) {
             setState(() {});
           });
         } else {
           String message = "您当前包为${packageBean.des}，不支持Mock";
           ToastUtil.showMsg(message, context);
         }
+      },
+    );
+  }
+
+  /// 网络库测试相关
+  Widget _devtool_changeheader_cell() {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return BJHTitleTextValueCell(
+      title: "添加/修改header",
+      textValue: '',
+      onTap: () {
+        NetworkManager.addOrUpdateToken('12345');
+        ToastUtil.showMessage('添加/修改header成功');
+      },
+    );
+  }
+
+  Widget _devtool_removeheaderKey_cell() {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return BJHTitleTextValueCell(
+      title: "删除header",
+      textValue: '',
+      onTap: () {
+        NetworkManager.removeToken();
+        ToastUtil.showMessage('删除header成功');
+      },
+    );
+  }
+
+  Widget _apicache_cell(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return BJHTitleTextValueCell(
+      title: "网络库：测试请求的缓存功能",
+      textValue: '',
+      onTap: () {
+        NetworkKit.post(
+          'login/doLogin',
+          params: {
+            "clientId": "clientApp",
+            "clientSecret": "123123",
+          },
+          cacheLevel: NetworkCacheLevel.one,
+        ).then((ResponseModel responseModel) {
+          String message = responseModel.isCache ? "是缓存数据" : "是网络数据";
+          debugPrint('测试网络请求的缓存功能:$message');
+        });
+      },
+    );
+  }
+
+  Widget _apiretry_cell(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return BJHTitleTextValueCell(
+      title: "网络库：测试请求的重试功能",
+      textValue: '',
+      onTap: () {
+        int requestCount = 0;
+        NetworkKit.postWithCallback(
+          'login/doLogin',
+          params: {
+            "clientId": "clientApp",
+            "clientSecret": "123123",
+            'retryCount': 3,
+          },
+          cacheLevel: NetworkCacheLevel.none,
+          completeCallBack: (resultData) {
+            requestCount++;
+            debugPrint('测试网络请求的重试功能:当前重试次数$requestCount');
+          },
+        );
       },
     );
   }

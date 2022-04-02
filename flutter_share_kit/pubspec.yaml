@@ -11,6 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  fluwx: any
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/
+  app_global_config:
+    path: ../app_global_config/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

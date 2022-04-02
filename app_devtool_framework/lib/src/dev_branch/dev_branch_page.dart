@@ -49,7 +49,7 @@ class _DevBranchPageState extends State<DevBranchPage> {
       body: Column(
         children: [
           Text(
-            '截止时间:$_brancesRecordTime',
+            '记录时间:$_brancesRecordTime',
             textAlign: TextAlign.start,
             style: TextStyle(color: Colors.red),
           ),

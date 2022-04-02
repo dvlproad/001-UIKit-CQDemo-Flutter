@@ -11,6 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_baseui_kit:
+    path: ../flutter_baseui_kit/
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/
+  flutter_updateversion_kit:
+    path: ../flutter_updateversion_kit/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

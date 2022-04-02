@@ -126,7 +126,9 @@ class PackageEnvironmentUtil {
 
     String title;
     String message;
-    List<String> buttonTitles = ['取消', '继续切换'];
+    List<String> buttonTitles = [];
+    buttonTitles.add('继续${currentEnvNetworkModel.shortName}');
+    buttonTitles.add('其他环境');
     if (currentEnvId != defaultEnvId) {
       title = '是否恢复默认的【${defaultNetworkModel.name}】';
       message =

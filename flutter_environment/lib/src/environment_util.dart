@@ -85,23 +85,16 @@ class EnvironmentUtil {
 
 // api 模拟
 extension ApiSimulateExtension on String {
-  String addSimulateApiHost(
-    String simulateApiHost, {
-    List<String> allMockApiHosts, // 允许 mock api 的 host
+  // 获取新的api地址
+  String newApi({
+    String newApiHost,
+    List<String> shouldChangeApiHosts, // 允许 mock api 的 host
   }) {
     String apiPath; //api path
     bool hasHttpPrefix = this.startsWith(RegExp(r'https?:'));
     if (hasHttpPrefix) {
-      bool getShortPathSuccess = false;
-      for (String checkApiHost in allMockApiHosts) {
-        if (this.startsWith(checkApiHost)) {
-          apiPath = this.substring(checkApiHost.length);
-          getShortPathSuccess = true;
-          break;
-        }
-      }
-
-      if (getShortPathSuccess == false) {
+      apiPath = this.removeStartSpecialString(shouldChangeApiHosts);
+      if (apiPath == this) {
         print('获取api path失败$this, 无法mock, 仍然是请求原地址');
         return this;
       }
@@ -109,23 +102,47 @@ extension ApiSimulateExtension on String {
       apiPath = this;
     }
 
-    String noslashApiHost; // 没带斜杠的 api host
-    if (simulateApiHost.endsWith('/')) {
-      noslashApiHost = simulateApiHost.substring(0, simulateApiHost.length - 1);
-    } else {
-      noslashApiHost = simulateApiHost;
-    }
-
-    String hasslashPath; // 带有斜杠的api path
-    if (this.startsWith('/')) {
-      hasslashPath = apiPath;
-    } else {
-      hasslashPath = '/' + apiPath;
-    }
-
-    String newApi = noslashApiHost + hasslashPath;
-
+    String newApi = newApiHost.env_appendPathString(this);
     //print('mock newApi = ${newApi}');
     return newApi;
+  }
+
+  // 如果头部满足是startSpecialStrings中的一种，则去除（用于去除host头部后，来获得path)
+  String removeStartSpecialString(
+    List<String> startSpecialStrings,
+  ) {
+    if (startSpecialStrings == null || startSpecialStrings.isEmpty) {
+      throw Exception('startSpecialStrings为空，还调用此方法的话，那真是多此一举');
+    }
+
+    String remainString;
+    for (String startSpecialString in startSpecialStrings) {
+      if (this.startsWith(startSpecialString)) {
+        remainString = this.substring(startSpecialString.length);
+        break;
+      }
+    }
+
+    return remainString;
+  }
+
+  // 拼接两个字符串为一个新的path(会自动增加连接的斜杠/)
+  String env_appendPathString(String appendPath) {
+    String noslashThis; // 没带斜杠的 api host
+    if (this.endsWith('/')) {
+      noslashThis = this.substring(0, this.length - 1);
+    } else {
+      noslashThis = this;
+    }
+
+    String hasslashAppendPath; // 带有斜杠的 appendPath
+    if (appendPath.startsWith('/')) {
+      hasslashAppendPath = appendPath;
+    } else {
+      hasslashAppendPath = '/' + appendPath;
+    }
+
+    String newPath = noslashThis + hasslashAppendPath;
+    return newPath;
   }
 }

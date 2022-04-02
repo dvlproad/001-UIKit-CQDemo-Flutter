@@ -1,14 +1,21 @@
 import 'dart:io';
+import 'package:meta/meta.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_network/flutter_network.dart';
-import 'package:flutter_network_kit/flutter_network_kit.dart';
+
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import './dev_page.dart';
+
+/// 测试API的场景类型
+enum TestApiScene {
+  changeNetworkEnv,
+  changeProxyEnv,
+  changeShouldMock,
+}
 
 class DevUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
@@ -23,16 +30,33 @@ class DevUtil {
     CheckVersionUtil.navigatorKey = globalKey; // ③检查更新需要
   }
 
+  static void Function(TSEnvNetworkModel bNetworkModel) _updateNetworkCallback;
+  static void Function()
+      _logoutHandleWhenExitAppByChangeNetwork; // 尝试退出登录,仅在切换环境需要退出登录的时候调用
+  static void Function(TSEnvProxyModel bProxyModel) _updateProxyCallback;
+  static void Function(TestApiScene testApiScene) _onPressTestApiCallback;
+
   static init({
-    GlobalKey navigatorKey,
-    ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
-    String floatingToolTextDefaultEnv, // 悬浮按钮上的文本:此包的默认环境
+    @required GlobalKey navigatorKey,
+    @required ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
+    @required String floatingToolTextDefaultEnv, // 悬浮按钮上的文本:此包的默认环境
+    @required
+        void Function(TSEnvNetworkModel bNetworkModel) updateNetworkCallback,
+    @required void Function() logoutHandleWhenExitAppByChangeNetwork,
+    @required Function(TSEnvProxyModel bProxyModel) updateProxyCallback,
+    void Function(TestApiScene testApiScene) onPressTestApiCallback,
   }) {
     DevUtil.navigatorKey = navigatorKey;
     ApplicationDraggableManager.floatingToolImageProvider =
         floatingToolImageProvider;
     ApplicationDraggableManager.floatingToolTextDefaultEnv =
         floatingToolTextDefaultEnv;
+
+    _updateNetworkCallback = updateNetworkCallback;
+    _logoutHandleWhenExitAppByChangeNetwork =
+        logoutHandleWhenExitAppByChangeNetwork;
+    _updateProxyCallback = updateProxyCallback;
+    _onPressTestApiCallback = onPressTestApiCallback;
   }
 
   static bool isDevPageShowing =
@@ -52,7 +76,6 @@ class DevUtil {
   static void showDevFloatingWidget({
     double left = 80,
     double top = 180,
-    bool showTestApiWidget,
   }) {
     if (navigatorKey == null) {
       throw Exception(
@@ -152,75 +175,28 @@ class DevUtil {
     );
   }
 
-  static int requestCount = 0;
-  static Future goChangeEnvironmentNetwork(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  static Future goChangeEnvironmentNetwork(BuildContext context) {
     return EnvironmentUtil.goChangeEnvironmentNetwork(
       context,
-      onPressTestApiCallback: showTestApiWidget
-          ? () {
-              // 测试请求
-              // requestCount = 0;
-              // NetworkKit.post(
-              //   'login/doLogin',
-              //   params: {
-              //     "clientId": "clientApp",
-              //     "clientSecret": "123123",
-              //   },
-              //   cacheLevel: NetworkCacheLevel.one,
-              // ).then((value) {
-              //   requestCount++;
-              //   debugPrint('测试网络请求的缓存功能:$requestCount');
-              // });
-
-              // 测试网络请求的缓存功能
-              requestCount = 0;
-              NetworkKit.postWithCallback(
-                'login/doLogin',
-                params: {
-                  "clientId": "clientApp",
-                  "clientSecret": "123123",
-                  'retryCount': 3,
-                },
-                cacheLevel: NetworkCacheLevel.none,
-                completeCallBack: (resultData) {
-                  requestCount++;
-                  debugPrint('测试网络请求的缓存功能:$requestCount');
-                },
-              );
-            }
-          : null,
+      onPressTestApiCallback: () {
+        if (_onPressTestApiCallback != null) {
+          _onPressTestApiCallback(TestApiScene.changeNetworkEnv);
+        }
+      },
       updateNetworkCallback: (bNetworkModel, {shouldExit}) {
         changeEnv(bNetworkModel, shouldExit, context: context);
       },
     );
   }
 
-  static Future goChangeEnvironmentProxy(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  static Future goChangeEnvironmentProxy(BuildContext context) {
     return EnvironmentUtil.goChangeEnvironmentProxy(
       context,
-      onPressTestApiCallback: showTestApiWidget
-          ? () {
-              // 测试请求
-              requestCount = 0;
-              NetworkKit.post(
-                'login/doLogin',
-                params: {
-                  "clientId": "clientApp",
-                  "clientSecret": "123123",
-                },
-                cacheLevel: NetworkCacheLevel.one,
-              ).then((value) {
-                requestCount++;
-                debugPrint('测试网络请求的缓存功能:$requestCount');
-              });
-            }
-          : null,
+      onPressTestApiCallback: () {
+        if (_onPressTestApiCallback != null) {
+          _onPressTestApiCallback(TestApiScene.changeProxyEnv);
+        }
+      },
       updateProxyCallback: (TSEnvProxyModel bProxyModel) {
         changeProxyTo(bProxyModel);
       },
@@ -237,7 +213,7 @@ class DevUtil {
     ProxyPageDataManager().updateProxyPageSelectedData(proxyModel);
 
     /// ②修改代理环境_SDK数据
-    changeAllProxy(proxyModel.proxyIp);
+    _updateProxyCallback(proxyModel);
   }
 
   static void changeEnv(TSEnvNetworkModel bNetworkModel, bool shouldExit,
@@ -246,22 +222,16 @@ class DevUtil {
     NetworkPageDataManager().updateNetworkPageSelectedData(bNetworkModel);
 
     /// ②修改网络环境_SDK数据
-    if (shouldExit == true && 'UserInfoManager.isLoginState()' == true) {
-      /*
-      UserInfoManager.instance.userLoginOut().then((value) {
-        eventBus.fire(LogoutSuccessEvent());
-      });
-      */
-    }
-
-    changeHost(
-      apiHost: bNetworkModel.apiHost,
-      webHost: bNetworkModel.webHost,
-      gameHost: bNetworkModel.gameHost,
-    );
+    _updateNetworkCallback(bNetworkModel);
 
     /// ③修改网络环境_更改完数据后，是否退出应用
     if (shouldExit == true) {
+      if (_logoutHandleWhenExitAppByChangeNetwork != null) {
+        _logoutHandleWhenExitAppByChangeNetwork();
+      } else {
+        throw Exception("切换环境，需要退出app，但你没尝试优先退出登录");
+      }
+
       // Future.delayed(const Duration(milliseconds: 500), () {
       LoadingUtil.showDongingTextInContext(
         context,
@@ -277,34 +247,14 @@ class DevUtil {
     }
   }
 
-  static changeHost({String apiHost, String webHost, String gameHost}) {
-    if (apiHost != null) {
-      NetworkManager.changeOptions(baseUrl: apiHost);
-    }
-  }
-
-  static bool changeAllProxy(String proxyIp) {
-    return NetworkManager.changeProxy(proxyIp);
-  }
-
-  static Future goChangeApiMock(
-    BuildContext context, {
-    bool showTestApiWidget,
-  }) {
+  static Future goChangeApiMock(BuildContext context) {
     return EnvironmentUtil.goChangeApiMock(
       context,
-      onPressTestApiCallback: showTestApiWidget ? () {} : null,
-      // navbarActions: [
-      //   CQTSThemeBGButton(
-      //     title: '添加',
-      //     onPressed: () {
-      //       ApiManager.tryAddApi(
-      //           cqtsRandomString(0, 10, CQRipeStringType.english));
-      //       print('添加后的api个数:${ApiManager().apiModels.length}');
-      //       Navigator.pop(context);
-      //     },
-      //   ),
-      // ],
+      onPressTestApiCallback: () {
+        if (_onPressTestApiCallback != null) {
+          _onPressTestApiCallback(TestApiScene.changeShouldMock);
+        }
+      },
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:package_info/package_info.dart';
 
 class CommonErrorRobot {
   static String packageDescribe = ''; // 包的描述(生产、测试、开发包)
+  static String Function() userDescribeBlock; // 当前使用该包的用户信息
 
   /// 通用异常上报:企业微信
   static Future<bool> postError(
@@ -26,9 +27,11 @@ class CommonErrorRobot {
     // 包、平台及版本等先关信息
     String packageDescribe =
         CommonErrorRobot.packageDescribe; // 包、平台、分支及版本等相关信息
-    fullMessage += '$packageDescribe\n';
+    String userDescribe = CommonErrorRobot.userDescribeBlock(); // 当前使用该包的用户信息
+    fullMessage += '$packageDescribe';
+    fullMessage += '\n$userDescribe';
     // 错误内容 customMessage
-    fullMessage += '$customMessage';
+    fullMessage += '\n$customMessage';
 
     Map<String, dynamic> customParams = {
       "msgtype": "text", // 消息类型，此时固定为text

@@ -40,6 +40,7 @@ class LogUtil {
     return _shouldPostToWechat;
   }
 
+  // 局部变量
   static bool Function(LogLevel logLevel, {Map extraLogInfo})
       _printToConsoleBlock;
   static bool Function(LogLevel logLevel, {Map extraLogInfo}) _showToPageBlock;
@@ -48,6 +49,7 @@ class LogUtil {
 
   static void init({
     String packageDescribe, // 包的描述(生产、测试、开发包)
+    String Function() userDescribeBlock, // 当前使用该包的用户信息
     bool Function(LogLevel logLevel, {Map extraLogInfo}) printToConsoleBlock,
     bool Function(LogLevel logLevel, {Map extraLogInfo}) showToPageBlock,
     bool Function(LogLevel logLevel, {Map extraLogInfo}) postToWechatBlock,
@@ -55,6 +57,7 @@ class LogUtil {
   }) {
     _packageDescribe = packageDescribe;
     CommonErrorRobot.packageDescribe = packageDescribe;
+    CommonErrorRobot.userDescribeBlock = userDescribeBlock;
 
     _printToConsoleBlock = printToConsoleBlock;
     _showToPageBlock = showToPageBlock;

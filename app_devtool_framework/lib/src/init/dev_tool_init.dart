@@ -2,9 +2,9 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import '../dev_util.dart';
@@ -13,63 +13,74 @@ import './package_environment_util.dart';
 import './main_diff_util.dart';
 export './main_diff_util.dart' show PackageType;
 
+import './log_init.dart';
+import './env_init.dart';
+
 class DevToolInit {
-  static initWithGlobalKey(GlobalKey globalKey, PackageType packageType) {
+  // static String apiHost;
+  static String webHost;
+  static String gameHost;
+
+  static initWithGlobalKey(
+    @required GlobalKey globalKey,
+    PackageType packageType, {
+    @required void Function() logoutHandleWhenExitAppByChangeNetwork,
+    String userApiToken,
+    String Function() userDescribeBlock,
+    @required void Function() userNeedReloginHandle, // 需要重新登录时候，执行的操作
+  }) {
     // 设置打包环境
     MainDiffUtil.packageType = packageType;
 
     Future.delayed(const Duration(milliseconds: 000), () {
       // 这里的适当延迟，只是为了修复 main() 的第一方法就执行这里的init方法，导致内部执行到 SharedPreferences prefs = await SharedPreferences.getInstance(); 的时候会发生错误
       // 其他情况不用延迟
-      _init(packageType);
+      _init(
+        packageType,
+        userApiToken: userApiToken,
+        userDescribeBlock: userDescribeBlock,
+        userNeedReloginHandle: userNeedReloginHandle,
+      );
     });
-    _initView(globalKey, packageType);
+    _initView(
+      globalKey,
+      packageType,
+      tryLogoutHandle: logoutHandleWhenExitAppByChangeNetwork,
+    );
   }
 
-  static _init(PackageType packageType) async {
+  static _init(
+    PackageType packageType, {
+    String userApiToken,
+    String Function() userDescribeBlock,
+    @required void Function() userNeedReloginHandle, // 需要重新登录时候，执行的操作
+  }) async {
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
 
     // 网络环境相关
-    String apiToken = 'await UserInfoManager.instance.getToken()';
-    _initNetwork(packageType, packageInfo.version, apiToken);
+    _initNetwork(packageType, packageInfo.version, userApiToken,
+        needReloginHandle: userNeedReloginHandle);
 
     // 如何输出 log 的设置
     String packageDescribe =
         '【${MainDiffUtil.diffPackageBean().des}_${packageInfo.fullPackageDescribe}】';
-    LogUtil.init(
+    LogInit.init(
       packageDescribe: packageDescribe,
-      printToConsoleBlock: (logLevel, {Map extraLogInfo}) {
-        return true;
+      userDescribeBlock: userDescribeBlock,
+      isProductPackageBlock: () {
+        return packageType == PackageType.product;
       },
-      showToPageBlock: (logLevel, {Map extraLogInfo}) {
-        return true;
-      },
-      postToWechatBlock: (logLevel, {Map extraLogInfo}) {
-        bool shouldPostApiError = false; // 是否应该上报到企业微信
-        // String serviceValidProxyIp = NetworkManager.serviceValidProxyIp;
-        bool hasProxy = false;
-        if (extraLogInfo != null) {
-          hasProxy = extraLogInfo['hasProxy'] ?? false;
-        }
-        if (logLevel == LogLevel.error) {
-          ComplieMode complieMode = ComplieModeUtil.getCompileMode();
-          if (complieMode == ComplieMode.debug) {
-            if (hasProxy) {
-              // debug 且有代理的时候，如果发生错误，是否通知到企业微信
-              shouldPostApiError = false;
-            } else {
-              shouldPostApiError = true;
-            }
-          } else {
-            shouldPostApiError = true;
-          }
-        }
-        return shouldPostApiError;
+      isProductNetworkBlock: () {
+        return EnvInit.isProduct;
       },
     );
   }
 
-  static _initView(GlobalKey globalKey, PackageType packageType) {
+  static _initView(
+    GlobalKey globalKey,
+    PackageType packageType, {
+    @required void Function() tryLogoutHandle, // 尝试退出登录,仅在切换环境需要退出登录的时候调用
+  }) {
     // 开发工具弹窗
     bool shouldShowDevTool = false;
     ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
@@ -85,12 +96,32 @@ class DevToolInit {
       navigatorKey: globalKey,
       floatingToolImageProvider: floatingToolImageProvider,
       floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
+      updateNetworkCallback: (bNetworkModel) {
+        NetworkManager.changeOptions(baseUrl: bNetworkModel.apiHost);
+        //apiHost = bNetworkModel.apiHost;
+        webHost = bNetworkModel.webHost;
+        gameHost = bNetworkModel.gameHost;
+      },
+      logoutHandleWhenExitAppByChangeNetwork: tryLogoutHandle,
+      updateProxyCallback: (bProxyModel) {
+        NetworkManager.changeProxy(bProxyModel.proxyIp);
+      },
+      onPressTestApiCallback: (TestApiScene testApiScene) {
+        // 测试环境改变之后，网络请求是否生效
+        NetworkKit.post(
+          'login/doLogin',
+          params: {
+            "clientId": "clientApp",
+            "clientSecret": "123123",
+          },
+        ).then((value) {
+          debugPrint('测试的网络请求结束');
+        });
+      },
     );
     if (shouldShowDevTool) {
       Future.delayed(const Duration(milliseconds: 3000), () {
-        DevUtil.showDevFloatingWidget(
-          showTestApiWidget: false,
-        );
+        DevUtil.showDevFloatingWidget();
       });
     }
 
@@ -117,12 +148,13 @@ class DevToolInit {
   static _initNetwork(
     PackageType packageType,
     String version,
-    String apiToken,
-  ) async {
-    _initApiErrorRobots();
+    String apiToken, {
+    @required void Function() needReloginHandle, // 需要重新登录时候，执行的操作
+  }) async {
+    LogInit.initApiErrorRobots();
 
     // network:api host
-    await _initNetworkEnvironmentManager(packageType);
+    await EnvInit.initNetworkEnvironmentManager(packageType);
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
     ApplicationDraggableManager.updateDevToolFloatingIconOverlayEntry(
@@ -140,18 +172,17 @@ class DevToolInit {
       commonParams: commonParams,
       allowMock: true,
       mockApiHost: TSEnvironmentDataUtil.apiHost_mock,
+      needReloginHandle: needReloginHandle,
     );
     // network:webHost+gameHost
-    DevUtil.changeHost(
-      webHost: selectedNetworkModel.webHost,
-      gameHost: selectedNetworkModel.gameHost,
-    );
+    webHost = selectedNetworkModel.webHost;
+    gameHost = selectedNetworkModel.gameHost;
 
     // proxy:
-    await _initProxyEnvironmentManager(packageType);
+    await EnvInit.initProxyEnvironmentManager(packageType);
     TSEnvProxyModel selectedProxyModel =
         ProxyPageDataManager().selectedProxyModel;
-    DevUtil.changeAllProxy(selectedProxyModel.proxyIp);
+    NetworkManager.changeProxy(selectedProxyModel.proxyIp);
 
     // check network+proxy+mock
     Future.delayed(const Duration(milliseconds: 2000)).then((value) {
@@ -159,115 +190,6 @@ class DevToolInit {
     });
   }
 
-  static _initApiErrorRobots() {
-    String myRobotUrl =
-        'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e3c3f7f1-5d03-42c5-8c4a-a3d25d7a8587'; // 单个人测试用的
-    String apiErrorRobotUrl_dev2 =
-        'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=de1d8e9d-2d28-4f58-8e66-5fd71fa3d170'; // api异常监控-dev2专属
-    String apiErrorRobotUrl_dev1 =
-        'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=f49ee9a3-8199-4c1a-9d5c-23c95aa7a3ba'; // api异常监控-dev1专属
-    String apiErrorRobotUrl_tke =
-        'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=fb5d5015-87b3-4f6a-8e06-04cbef1c3893'; // api异常监控-tke专属
-    String apiErrorRobotUrl_product =
-        'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=7f3cc810-5a60-46ed-a752-1105d38aae54'; // api异常监控-生产专属
-
-    RobotBean robotBean_mock = RobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_mock,
-      pushToWechatRobots: [
-        myRobotUrl,
-      ],
-    );
-    RobotBean robotBean_dev1 = RobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_dev1,
-      pushToWechatRobots: [
-        apiErrorRobotUrl_dev1,
-      ],
-    );
-    RobotBean robotBean_dev2 = RobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_dev2,
-      pushToWechatRobots: [
-        apiErrorRobotUrl_dev2,
-      ],
-    );
-
-    RobotBean robotBean_preproduct = RobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_preProduct,
-      pushToWechatRobots: [
-        apiErrorRobotUrl_tke,
-      ],
-    );
-    RobotBean robotBean_product = RobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_product,
-      pushToWechatRobots: [
-        apiErrorRobotUrl_product,
-      ],
-    );
-
-    ApiErrorRobot.apiErrorRobots = [
-      robotBean_mock,
-      robotBean_dev1,
-      robotBean_dev2,
-      robotBean_preproduct,
-      robotBean_product,
-    ];
-  }
-
-  /************************* environment 环境设置 *************************/
-  // network
-  static Future _initNetworkEnvironmentManager(PackageType packageType) async {
-    _initEnvShouldExitWhenChangeNetworkEnv();
-
-    String defaultNetworkId_whenNull;
-    bool canUseCacheNetwork;
-    if (packageType == PackageType.develop1) {
-      defaultNetworkId_whenNull = TSEnvironmentDataUtil.developNetworkId1;
-      canUseCacheNetwork = true;
-    } else if (packageType == PackageType.develop2) {
-      defaultNetworkId_whenNull = TSEnvironmentDataUtil.developNetworkId2;
-      canUseCacheNetwork = true;
-    } else if (packageType == PackageType.preproduct) {
-      defaultNetworkId_whenNull = TSEnvironmentDataUtil.preproductNetworkId;
-      canUseCacheNetwork = true;
-    } else {
-      defaultNetworkId_whenNull = TSEnvironmentDataUtil.productNetworkId;
-      canUseCacheNetwork = false;
-    }
-    await NetworkPageDataManager().getCurrentNetworkIdAndModels(
-      networkModels_whenNull: TSEnvironmentDataUtil.getEnvNetworkModels(),
-      defaultNetworkId: defaultNetworkId_whenNull,
-      canUseCacheNetwork: canUseCacheNetwork,
-    );
-  }
-
-  // proxy
-  static Future _initProxyEnvironmentManager(PackageType packageType) async {
-    bool canUseCacheProxy = false;
-    if (packageType == PackageType.develop1) {
-      canUseCacheProxy = true;
-    } else if (packageType == PackageType.develop2) {
-      canUseCacheProxy = true;
-    } else if (packageType == PackageType.preproduct) {
-      canUseCacheProxy = true;
-    } else {
-      canUseCacheProxy = false;
-    }
-    await ProxyPageDataManager().getCurrentProxyIdAndModels(
-      TSEnvironmentDataUtil.getEnvProxyModels(),
-      TSEnvironmentDataUtil.noneProxykId,
-      canUseCacheProxy,
-    );
-  }
-
-  /// 切换环境的时候要否应该退出 app
-  static Future _initEnvShouldExitWhenChangeNetworkEnv() {
-    EnvironmentUtil.shouldExitWhenChangeNetworkEnv = (
-      TSEnvNetworkModel fromNetworkEnvModel,
-      TSEnvNetworkModel toNetworkEnvModel,
-    ) {
-      if (toNetworkEnvModel.envId == TSEnvironmentDataUtil.mockNetworkId) {
-        return false;
-      }
-      return true;
-    };
-  }
+  // 是否是生产环境
+  static bool get isProduct => EnvInit.isProduct;
 }
