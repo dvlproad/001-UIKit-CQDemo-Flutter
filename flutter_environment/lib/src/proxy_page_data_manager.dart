@@ -44,7 +44,7 @@ class ProxyPageDataManager {
   }
 
   // proxy:获取当前的环境id或环境数据(已选中的要标记check出来)
-  Future getCurrentProxyIdAndModels(
+  Future<Null> getCurrentProxyIdAndModels(
     @required List<TSEnvProxyModel> proxyModels_whenNull,
     @required String defaultProxykId,
     @required bool canUseCacheProxy, // false 则强制使用默认环境

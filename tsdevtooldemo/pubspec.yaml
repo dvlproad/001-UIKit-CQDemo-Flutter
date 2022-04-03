@@ -1,4 +1,4 @@
-name: tsenvironmentdemo
+name: tsdevtooldemo
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -30,18 +30,21 @@ dependencies:
   flutter:
     sdk: flutter
 
-  app_environment:
-    path: ../app_environment/
-
-  provider: any #4.1.3
   flutter_demo_kit:
     path: ../flutter_demo_kit/
+  
+  provider: any #4.1.3
+  tsdemo_environment_flutter:
+    path: ../tsdemo_environment_flutter/
   flutter_environment:
     path: ../flutter_environment/
+  flutter_log:
+    path: ../flutter_log/
+  cj_monitor_flutter:
+    # path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
+    path: ../cj_monitor_flutter/
   flutter_updateversion_kit:
     path: ../flutter_updateversion_kit/
-  flutter_effect_kit:
-    path: ../flutter_effect_kit/
     
 
 

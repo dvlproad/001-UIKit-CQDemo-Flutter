@@ -35,7 +35,7 @@ class NetworkPageDataManager {
   }
 
   // network:获取当前的环境id或环境数据(已选中的要标记check出来)
-  Future getCurrentNetworkIdAndModels({
+  Future<Null> getCurrentNetworkIdAndModels({
     @required List<TSEnvNetworkModel> networkModels_whenNull,
     @required String defaultNetworkId,
     @required bool canUseCacheNetwork, // false 则强制使用默认环境
