@@ -12,12 +12,12 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:flutter_updateversion_kit/src/check_version_common_util.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import './init/package_environment_util.dart';
+
+import 'package:app_environment/app_environment.dart';
 
 import './package_info_cell.dart';
 import './dev_util.dart';
 import './dev_notifier.dart';
-import './init/main_diff_util.dart';
 import './history_version/history_version_page.dart';
 import './dev_branch/dev_branch_page.dart';
 
@@ -157,13 +157,7 @@ class _DevPageState extends State<DevPage> {
             //_devtool_historyPackage_cell(),
             // 网络环境相关
             Container(height: 20),
-            Consumer<EnvironmentChangeNotifier>(
-              builder: (context, environmentChangeNotifier, child) {
-                return _devtool_env_cell(context);
-              },
-            ),
-            _devtool_proxy_cell(context),
-            _devtool_apimock_cell(context),
+            EnvWidget(),
             // 网络库测试相关
             _devtool_changeheader_cell(), // 网络库:header 的 增删该
             _devtool_removeheaderKey_cell(), // 网络库:header 的 增删该
@@ -341,7 +335,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () {
         PackageEnvironmentUtil.checkShouldResetNetwork(
           goChangeHandle: () {
-            DevUtil.goChangeEnvironmentNetwork(context).then((value) {
+            EnvUtil.goChangeEnvironmentNetwork(context).then((value) {
               setState(() {});
             });
           },
@@ -401,7 +395,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () {
         PackageEnvironmentUtil.checkProxyAllowForPackage(
           goChangeHandle: () {
-            DevUtil.goChangeEnvironmentProxy(context).then((value) {
+            EnvUtil.goChangeEnvironmentProxy(context).then((value) {
               setState(() {});
             });
           },
@@ -421,7 +415,7 @@ class _DevPageState extends State<DevPage> {
         PackageType packageType = packageBean.packageType;
         if (packageType == PackageType.develop1 ||
             packageType == PackageType.develop2) {
-          DevUtil.goChangeApiMock(context).then((value) {
+          EnvUtil.goChangeApiMock(context).then((value) {
             setState(() {});
           });
         } else {

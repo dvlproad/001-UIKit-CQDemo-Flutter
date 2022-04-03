@@ -84,7 +84,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     double leftRightPadding = this.leftRightPadding ?? 40.w_cj;
 
     return Container(
-      height: this.height ?? 88.w_cj,
+      height: this.height ?? 88.h_cj,
       padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
       color: Colors.white,
       child: Row(

@@ -7,7 +7,7 @@ export './main_diff_util.dart' show PackageType;
 class EnvInit {
   /************************* environment 环境设置 *************************/
   // network
-  static Future<TSEnvNetworkModel> initNetworkEnvironmentManager(
+  static Future<Null> initNetworkEnvironmentManager(
       PackageType packageType) async {
     _initEnvShouldExitWhenChangeNetworkEnv();
 
@@ -34,7 +34,7 @@ class EnvInit {
   }
 
   // proxy
-  static Future<TSEnvProxyModel> initProxyEnvironmentManager(
+  static Future<Null> initProxyEnvironmentManager(
       PackageType packageType) async {
     bool canUseCacheProxy = false;
     if (packageType == PackageType.develop1) {

@@ -7,14 +7,12 @@ import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
+import 'package:app_environment/app_environment.dart';
+import 'package:app_environment/src/init/env_init.dart' show EnvInit;
+
 import '../dev_util.dart';
-import './environment_datas_util.dart';
-import './package_environment_util.dart';
-import './main_diff_util.dart';
-export './main_diff_util.dart' show PackageType;
 
 import './log_init.dart';
-import './env_init.dart';
 
 class DevToolInit {
   // static String apiHost;
@@ -37,25 +35,53 @@ class DevToolInit {
       // 其他情况不用延迟
       _init(
         packageType,
+        globalKey: globalKey,
+        tryLogoutHandle: logoutHandleWhenExitAppByChangeNetwork,
         currentUserApiToken: userApiToken,
         packageUserDescribeBlock: userDescribeBlock,
         userReloginHandle: userNeedReloginHandle,
       );
     });
-    _initView(
-      globalKey,
-      packageType,
-      tryLogoutHandle: logoutHandleWhenExitAppByChangeNetwork,
-    );
+    _initView(globalKey, packageType);
   }
 
   static _init(
     PackageType packageType, {
+    @required GlobalKey globalKey,
+    @required void Function() tryLogoutHandle, // 尝试退出登录,仅在切换环境需要退出登录的时候调用
     String currentUserApiToken,
     String Function() packageUserDescribeBlock,
     @required void Function() userReloginHandle, // 需要重新登录时候，执行的操作
   }) async {
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
+
+    // 环境初始化
+    EnvUtil.init(
+      packageType: packageType,
+      navigatorKey: globalKey,
+      updateNetworkCallback: (bNetworkModel) {
+        NetworkManager.changeOptions(baseUrl: bNetworkModel.apiHost);
+        //apiHost = bNetworkModel.apiHost;
+        webHost = bNetworkModel.webHost;
+        gameHost = bNetworkModel.gameHost;
+      },
+      logoutHandleWhenExitAppByChangeNetwork: tryLogoutHandle,
+      updateProxyCallback: (bProxyModel) {
+        NetworkManager.changeProxy(bProxyModel.proxyIp);
+      },
+      onPressTestApiCallback: (TestApiScene testApiScene) {
+        // 测试环境改变之后，网络请求是否生效
+        NetworkKit.post(
+          'login/doLogin',
+          params: {
+            "clientId": "clientApp",
+            "clientSecret": "123123",
+          },
+        ).then((value) {
+          debugPrint('测试的网络请求结束');
+        });
+      },
+    );
 
     // 网络环境相关
     String packageVersion = packageInfo.version;
@@ -97,9 +123,8 @@ class DevToolInit {
 
   static _initView(
     GlobalKey globalKey,
-    PackageType packageType, {
-    @required void Function() tryLogoutHandle, // 尝试退出登录,仅在切换环境需要退出登录的时候调用
-  }) {
+    PackageType packageType,
+  ) {
     // 开发工具弹窗
     bool shouldShowDevTool = false;
     ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
@@ -115,29 +140,8 @@ class DevToolInit {
       navigatorKey: globalKey,
       floatingToolImageProvider: floatingToolImageProvider,
       floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
-      updateNetworkCallback: (bNetworkModel) {
-        NetworkManager.changeOptions(baseUrl: bNetworkModel.apiHost);
-        //apiHost = bNetworkModel.apiHost;
-        webHost = bNetworkModel.webHost;
-        gameHost = bNetworkModel.gameHost;
-      },
-      logoutHandleWhenExitAppByChangeNetwork: tryLogoutHandle,
-      updateProxyCallback: (bProxyModel) {
-        NetworkManager.changeProxy(bProxyModel.proxyIp);
-      },
-      onPressTestApiCallback: (TestApiScene testApiScene) {
-        // 测试环境改变之后，网络请求是否生效
-        NetworkKit.post(
-          'login/doLogin',
-          params: {
-            "clientId": "clientApp",
-            "clientSecret": "123123",
-          },
-        ).then((value) {
-          debugPrint('测试的网络请求结束');
-        });
-      },
     );
+
     if (shouldShowDevTool) {
       Future.delayed(const Duration(milliseconds: 3000), () {
         DevUtil.showDevFloatingWidget();

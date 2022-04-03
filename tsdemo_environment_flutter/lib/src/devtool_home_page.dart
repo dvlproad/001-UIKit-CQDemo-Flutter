@@ -5,6 +5,7 @@ import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:app_devtool_framework/app_devtool_framework.dart';
 import 'package:app_devtool_framework/src/dev_util.dart';
+import 'package:app_environment/app_environment.dart';
 
 import './devtool_routes.dart';
 
@@ -49,14 +50,14 @@ class _CJTSTableHomeBasePageState extends CJTSBasePageState<TSDevToolHomePage> {
           {
             'title': "Environment(环境)",
             'actionBlock': () {
-              DevUtil.goChangeEnvironmentNetwork(context);
+              EnvUtil.goChangeEnvironmentNetwork(context);
             },
           },
           {
             'title': "ApiMock(模拟)",
             // 'nextPageName': DevToolRouters.apiMockPage,
             'actionBlock': () {
-              DevUtil.goChangeApiMock(context);
+              EnvUtil.goChangeApiMock(context);
             },
           },
           {

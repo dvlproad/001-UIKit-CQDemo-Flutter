@@ -9,26 +9,22 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:provider/provider.dart';
 import './init/package_environment_util.dart';
 
-import './dev_util.dart';
-import './dev_notifier.dart';
+import './env_util.dart';
+import './env_notifier.dart';
 import './init/main_diff_util.dart';
 
-class DevPage extends StatefulWidget {
-  static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮
-
-  const DevPage({Key key}) : super(key: key);
+class EnvWidget extends StatefulWidget {
+  const EnvWidget({Key key}) : super(key: key);
 
   @override
-  _DevPageState createState() => _DevPageState();
+  _EnvWidgetState createState() => _EnvWidgetState();
 }
 
-class _DevPageState extends State<DevPage> {
+class _EnvWidgetState extends State<EnvWidget> {
   BranchPackageInfo packageInfo;
 
   @override
   void dispose() {
-    LoadingUtil.dismissInContext(context);
-
     super.dispose();
   }
 
@@ -48,7 +44,7 @@ class _DevPageState extends State<DevPage> {
     setState(() {});
   }
 
-  DevChangeNotifier _devChangeNotifier = DevChangeNotifier();
+  EnvChangeNotifier _devChangeNotifier = EnvChangeNotifier();
 
   EnvironmentChangeNotifier _environmentChangeNotifier =
       EnvironmentChangeNotifier();
@@ -65,14 +61,14 @@ class _DevPageState extends State<DevPage> {
     // );
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<DevChangeNotifier>.value(
+        ChangeNotifierProvider<EnvChangeNotifier>.value(
           value: _devChangeNotifier,
         ),
         ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
           value: _environmentChangeNotifier,
         ),
       ],
-      child: Consumer2<DevChangeNotifier, EnvironmentChangeNotifier>(
+      child: Consumer2<EnvChangeNotifier, EnvironmentChangeNotifier>(
         builder: (context, devChangeNotifier, environmentChangeNotifier, _) {
           return _buildPageWidget(context);
         },
@@ -80,26 +76,22 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
+  static double envCellHeight = 44.0;
   Widget _buildPageWidget(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('环境工具'),
-        actions: DevPage.navbarActions,
-      ),
-      body: Container(
-        color: const Color(0xfff0f0f0),
-        child: ListView(
-          children: [
-            // 网络环境相关
-            Consumer<EnvironmentChangeNotifier>(
-              builder: (context, environmentChangeNotifier, child) {
-                return _devtool_env_cell(context);
-              },
-            ),
-            _devtool_proxy_cell(context),
-            _devtool_apimock_cell(context),
-          ],
-        ),
+    return Container(
+      color: const Color(0xfff0f0f0),
+      height: 3 * envCellHeight,
+      child: ListView(
+        children: [
+          // 网络环境相关
+          Consumer<EnvironmentChangeNotifier>(
+            builder: (context, environmentChangeNotifier, child) {
+              return _devtool_env_cell(context);
+            },
+          ),
+          _devtool_proxy_cell(context),
+          _devtool_apimock_cell(context),
+        ],
       ),
     );
   }
@@ -114,6 +106,7 @@ class _DevPageState extends State<DevPage> {
     }
     String envName = selectedNetworkModel.name;
     return BJHTitleTextValueCell(
+      height: envCellHeight,
       title: "切换环境",
       textValue: envName,
       onTap: () {
@@ -176,6 +169,7 @@ class _DevPageState extends State<DevPage> {
     }
     String proxyName = selectedProxyModel.name;
     return BJHTitleTextValueCell(
+      height: envCellHeight,
       title: "添加代理",
       textValue: proxyName,
       onTap: () {
@@ -194,6 +188,7 @@ class _DevPageState extends State<DevPage> {
     int mockCount = ApiManager.mockCount();
     String mockCountString = '已mock:$mockCount个';
     return BJHTitleTextValueCell(
+      height: envCellHeight,
       title: "Mock工具",
       textValue: mockCountString,
       onTap: () {

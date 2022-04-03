@@ -2,8 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_log/flutter_log.dart';
-
-import './environment_datas_util.dart';
+import 'package:app_environment/app_environment.dart';
 
 class LogInit {
   static init({
