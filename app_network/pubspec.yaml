@@ -1,4 +1,4 @@
-name: app_global_config
+name: app_network
 description: A new Flutter package project.
 version: 0.0.1
 homepage:
@@ -11,8 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  app_network:
-    path: ../app_network/
+  flutter_network_kit:
+    path: ../flutter_network_kit/
+  flutter_environment:
+    path: ../flutter_environment/ # 为了引入 ApiManager
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
 
 dev_dependencies:
   flutter_test:

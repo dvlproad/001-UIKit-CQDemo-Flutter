@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  app_network:
+    path: ../app_network/
+  app_environment:
+    path: ../app_environment/
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
   flutter_overlay_kit:

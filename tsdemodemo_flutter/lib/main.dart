@@ -1,4 +1,4 @@
-import 'package:flutter_network_kit/flutter_network_kit.dart';
+import 'package:app_network/app_network.dart';
 
 import 'package:flutter/material.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
@@ -21,7 +21,7 @@ void main() {
   MainInit.initWithGlobalKey(globalKey, PackageType.develop1);
 
   Future.delayed(Duration(milliseconds: 0)).then((value) {
-    NetworkKit.post('abc');
+    AppNetworkKit.post('abc');
   });
 
   runApp(MyApp());

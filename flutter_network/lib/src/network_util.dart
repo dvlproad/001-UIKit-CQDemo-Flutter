@@ -6,6 +6,7 @@ import 'dart:convert' as convert;
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+import './network_bean.dart';
 import './interceptor/url_util.dart';
 
 import './network_client.dart';
@@ -16,22 +17,6 @@ import './network_client.dart';
 import './mock_analy_util.dart';
 
 typedef T JsonParse<T>(dynamic data);
-
-class ResponseModel {
-  int statusCode;
-  String message;
-  dynamic result;
-  bool isCache;
-
-  ResponseModel({this.statusCode, this.message, this.result, this.isCache});
-
-  bool get isSuccess => statusCode == 0;
-}
-
-enum RequestMethod {
-  post,
-  get,
-}
 
 class NetworkUtil {
   static String localApiHost = "local_api_json_file";

@@ -1,6 +1,8 @@
 library flutter_network;
 
-export './src/network_util.dart';
+export './src/network_bean.dart';
+export './src/network_util.dart'
+    show NetworkUtil; // 为了使用 NetworkUtil.localApiHost
 export './src/network_client.dart';
 
 export './src/network_change_util.dart';

@@ -50,6 +50,12 @@ dependencies:
     # path: /Users/lichaoqian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_demo_kit
     path: ../flutter_demo_kit/
 
+  app_devtool_framework:
+    path: ../app_devtool_framework/
+  app_network:
+    path: ../app_network/
+  app_environment:
+    path: ../app_environment/
   flutter_network_kit:
     path: ../flutter_network_kit/
   flutter_network:

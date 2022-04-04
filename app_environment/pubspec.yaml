@@ -12,8 +12,6 @@ dependencies:
     sdk: flutter
 
   provider: any #4.1.3
-  flutter_demo_kit:
-    path: ../flutter_demo_kit/
   flutter_environment:
     path: ../flutter_environment/
   flutter_updateversion_kit:

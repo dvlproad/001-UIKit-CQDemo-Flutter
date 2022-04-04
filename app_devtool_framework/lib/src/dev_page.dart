@@ -4,8 +4,7 @@ import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_network/flutter_network.dart';
-import 'package:flutter_network_kit/flutter_network_kit.dart';
+import 'package:app_network/app_network.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_log/flutter_log.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
@@ -463,7 +462,7 @@ class _DevPageState extends State<DevPage> {
       title: "网络库：测试请求的缓存功能",
       textValue: '',
       onTap: () {
-        NetworkKit.post(
+        AppNetworkKit.post(
           'login/doLogin',
           params: {
             "clientId": "clientApp",
@@ -487,7 +486,7 @@ class _DevPageState extends State<DevPage> {
       textValue: '',
       onTap: () {
         int requestCount = 0;
-        NetworkKit.postWithCallback(
+        AppNetworkKit.postWithCallback(
           'login/doLogin',
           params: {
             "clientId": "clientApp",

@@ -2,7 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_network/flutter_network.dart';
+import 'package:app_network/app_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
@@ -71,7 +71,7 @@ class DevToolInit {
       },
       onPressTestApiCallback: (TestApiScene testApiScene) {
         // 测试环境改变之后，网络请求是否生效
-        NetworkKit.post(
+        AppNetworkKit.post(
           'login/doLogin',
           params: {
             "clientId": "clientApp",
@@ -187,7 +187,7 @@ class DevToolInit {
     Map<String, dynamic> commonParams = {
       'version': packageVersion,
     };
-    NetworkKit.start(
+    AppNetworkKit.start(
       baseUrl: baseUrl,
       token: token,
       commonParams: commonParams,
