@@ -1,22 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import './image_or_photo_grid_cell.dart';
 
 class CQImagesPreSufBadgeList extends StatefulWidget {
-  final List<dynamic> imageOrPhotoModels;
+  final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
   final int maxAddCount;
   final Widget prefixWidget;
   final Widget suffixWidget;
-  final Widget Function(dynamic imageOrPhotoModel) badgeWidgetSetupBlock;
+  final Widget Function({BuildContext context, int imageIndex})
+      imageItemBuilder;
 
   CQImagesPreSufBadgeList({
     Key key,
-    @required this.imageOrPhotoModels,
+    @required this.imageCount,
     this.maxAddCount = 100000,
     this.prefixWidget, // 可以为'添加'按钮
     this.suffixWidget, // 可以为'添加'按钮
-    this.badgeWidgetSetupBlock, // 可以返回为'删除'按钮 或者 '选中'按钮等任意
-  }) : super(key: key);
+
+    @required this.imageItemBuilder,
+  })  : assert(imageItemBuilder != null),
+        super(key: key);
 
   @override
   _CQImagesPreSufBadgeListState createState() =>
@@ -35,12 +37,10 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
     bool allowAddPrefixWidget = false;
     bool allowAddSuffixWidget = false;
 
-    List<dynamic> _imageOrPhotoModels = widget.imageOrPhotoModels ?? [];
-    if (_imageOrPhotoModels.length > maxShowCount) {
-      _imageOrPhotoModels = _imageOrPhotoModels.sublist(0, widget.maxAddCount);
-    }
+    int imageCount = widget.imageCount;
 
-    int itemCount = _imageOrPhotoModels.length;
+    // 计算 itemCount (包括 prefixWidget\suffixWidget\imageWidget)
+    int itemCount = imageCount;
     if (widget.prefixWidget != null && itemCount < maxShowCount) {
       allowAddPrefixWidget = true;
       itemCount++;
@@ -54,14 +54,14 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
       color: Colors.transparent,
       child: GridView.builder(
         shrinkWrap: true, //该属性表示是否根据子组件的总长度来设置ListView的长度，默认值为false
-        physics: NeverScrollableScrollPhysics(), // 不响应用户的滚动
-        itemCount: itemCount,
+        physics: const NeverScrollableScrollPhysics(), // 不响应用户的滚动
         padding: EdgeInsets.fromLTRB(10, 10, 80, 10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
         ),
+        itemCount: itemCount,
         itemBuilder: (context, index) {
           if (allowAddPrefixWidget == true && index == 0) {
             return widget.prefixWidget;
@@ -75,34 +75,12 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
             imageOrPhotoModelIndex = index - 1;
           }
 
-          dynamic imageOrPhotoModel =
-              _imageOrPhotoModels[imageOrPhotoModelIndex];
-          return _photoAlbumGridCell(
-            imageOrPhotoModel: imageOrPhotoModel,
-            imageOrPhotoModelIndex: index,
+          return widget.imageItemBuilder(
+            context: context,
+            imageIndex: imageOrPhotoModelIndex,
           );
         },
       ),
-    );
-  }
-
-  /// 相册 cell
-  Widget _photoAlbumGridCell({
-    @required dynamic imageOrPhotoModel,
-    @required int imageOrPhotoModelIndex,
-  }) {
-    return Stack(
-      children: [
-        CQImageOrPhotoGridCell(
-          imageOrPhotoModel: imageOrPhotoModel,
-          index: imageOrPhotoModelIndex,
-          onPressed: () {
-            print('点击$imageOrPhotoModelIndex');
-          },
-        ),
-        if (widget.badgeWidgetSetupBlock != null)
-          widget.badgeWidgetSetupBlock(imageOrPhotoModel)
-      ],
     );
   }
 }

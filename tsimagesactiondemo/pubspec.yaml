@@ -32,8 +32,15 @@ dependencies:
 
   flutter_demo_kit:
     path: ../flutter_demo_kit/
+  app_images_action:
+    path: ../app_images_action/
+  app_images_action_image_pickers:
+    path: ../app_images_action_image_pickers/
   tsdemo_images_action:
     path: ../tsdemo_images_action/
+  # 图片列表
+  flutter_images_action_list:
+    path: ../flutter_images_action_list/
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

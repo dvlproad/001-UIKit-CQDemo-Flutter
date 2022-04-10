@@ -1,3 +1,4 @@
+import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,14 +41,37 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
   /// 导航栏
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('图片添加'),
+      title: const Text('Images AddDelete(图片添加)'),
     );
   }
 
   /// contentWidget
   Widget contentWidget() {
     return CQImagesAddDeleteList(
-      imageOrPhotoModels: _imageOrPhotoModels,
+      imageCount: _imageOrPhotoModels.length,
+      itemImageContentBuilder: ({context, imageIndex}) {
+        dynamic photoAlbumPath = _imageOrPhotoModels[imageIndex];
+
+        ImageProvider imageProvider;
+        if (photoAlbumPath.startsWith(RegExp(r'https?:'))) {
+          // Image image = Image.network(photoAlbumPath);
+          imageProvider = NetworkImage(photoAlbumPath);
+        } else {
+          Image image = Image.file(File(photoAlbumPath));
+          imageProvider = image.image;
+          // imageProvider = AssetImage(photoAlbumPath);
+        }
+
+        String message = '';
+        return CQImageBaseGridCell(
+          imageProvider: imageProvider,
+          message: message,
+          index: imageIndex,
+          onPressed: () {
+            print('点击$imageIndex');
+          },
+        );
+      },
       onPressedAdd: () {
         debugPrint('点击添加');
         // _imageOrPhotoModels.add('lib/commonui/cq-uikit/images/pic_搜索为空页面.png');

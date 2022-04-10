@@ -1,11 +1,14 @@
 import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
-import 'package:flutter_images_picker/flutter_images_picker.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:image_pickers/image_pickers.dart';
+
+import './widget/image_or_photo_grid_cell.dart';
 
 class CQImageDeleteAddPickList extends StatefulWidget {
   final List<dynamic> imageOrPhotoModels; // 数据类型 只能为 AssetEntity、String、File
+  // final Widget Function(dynamic imageOrPhotoModel) badgeWidgetSetupBlock; // 可以返回为'删除'按钮 或者 '选中'按钮等任意
   final void Function(List<dynamic> imageOrPhotoModels)
       imageOrPhotoModelsChangeBlock; // 当前选中的相册信息
 
@@ -44,7 +47,31 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
   @override
   Widget build(BuildContext context) {
     return CQImagesAddDeleteList(
-      imageOrPhotoModels: _imageOrPhotoModels,
+      imageCount: _imageOrPhotoModels.length,
+      itemImageContentBuilder: ({context, imageIndex}) {
+        dynamic imageOrPhotoModel = _imageOrPhotoModels[imageIndex];
+
+        List<Media> medias = [];
+        for (var item in _imageOrPhotoModels) {
+          Media media = item;
+          medias.add(media);
+        }
+
+        return CQImageOrPhotoGridCell(
+          imageOrPhotoModel: imageOrPhotoModel,
+          index: imageIndex,
+          onPressed: () {
+            print('点击$imageIndex');
+            // _focusNode.unfocus();
+            ImagePickers.previewImagesByMedia(medias, imageIndex);
+          },
+        );
+      },
+      onPressedDelete: (imageIndex) {
+        dynamic imageOrPhotoModel = _imageOrPhotoModels[imageIndex];
+        _imageOrPhotoModels.remove(imageOrPhotoModel);
+        setState(() {});
+      },
       onPressedAdd: this._addevent,
     );
   }
@@ -61,29 +88,51 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
   }
 
   void dealAvatar(int selectedIndex) async {
-    if (selectedIndex == 0) {
-      PhotoTakeUtil.takePhoto(
-        imagePickerCallBack: (path) {
-          _imageOrPhotoModels.add(path);
+    // if (selectedIndex == 0) {
+    //   PhotoTakeUtil.takePhoto(
+    //     imagePickerCallBack: (path) {
+    //       _imageOrPhotoModels.add(path);
 
-          if (widget.imageOrPhotoModelsChangeBlock != null) {
-            // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
-            widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
-          }
-        },
-      );
-    } else {
-      PhotoPickUtil.pickPhoto(
-        imagePickerCallBack: (path) {
-          _imageOrPhotoModels.add(path);
+    //       if (widget.imageOrPhotoModelsChangeBlock != null) {
+    //         // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
+    //         widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
+    //       }
+    //     },
+    //   );
+    // } else {
+    int selectCount = 9 - _imageOrPhotoModels.length;
+    _pickPhoto(
+      selectCount: selectCount,
+      imagePickerCallBack: (List<Media> bMediaList) {
+        _imageOrPhotoModels.addAll(bMediaList);
 
-          if (widget.imageOrPhotoModelsChangeBlock != null) {
-            // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
-            widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
-          }
-        },
-      );
-    }
+        if (widget.imageOrPhotoModelsChangeBlock != null) {
+          // print('当前最新的图片数目为${_imageOrPhotoModels.length}');
+          widget.imageOrPhotoModelsChangeBlock(_imageOrPhotoModels);
+        }
+
+        setState(() {});
+      },
+    );
+    // }
+  }
+
+  _pickPhoto({
+    @required int selectCount,
+    @required void Function(List<Media> bMediaList) imagePickerCallBack,
+  }) async {
+    // 图片
+    List<Media> mediaList = await ImagePickers.pickerPaths(
+      galleryMode: GalleryMode.image,
+      selectCount: selectCount,
+      showGif: false,
+      showCamera: true,
+      compressSize: 500,
+      uiConfig: UIConfig(uiThemeColor: Color(0xFFFF7F00)),
+      cropConfig: CropConfig(enableCrop: true, width: 1, height: 1),
+    );
+
+    imagePickerCallBack(mediaList);
   }
 
   /// 获取 files

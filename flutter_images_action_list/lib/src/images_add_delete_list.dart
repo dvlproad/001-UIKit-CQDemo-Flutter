@@ -3,12 +3,17 @@ import './components/images_presuf_badge_list.dart';
 import './components/bg_border_widget.dart';
 
 class CQImagesAddDeleteList extends StatefulWidget {
-  final List<dynamic> imageOrPhotoModels; // 数据类型 只能为 AssetEntity、String、File
+  final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
+  final Widget Function({BuildContext context, int imageIndex})
+      itemImageContentBuilder; // imageCell 上 content 的视图
+  final void Function(int imageIndex) onPressedDelete; // "删除"按钮的点击事件
   final VoidCallback onPressedAdd; // "添加"按钮的点击事件
 
   CQImagesAddDeleteList({
     Key key,
-    this.imageOrPhotoModels,
+    @required this.imageCount,
+    @required this.itemImageContentBuilder,
+    @required this.onPressedDelete,
     @required this.onPressedAdd,
   }) : super(key: key);
 
@@ -18,8 +23,6 @@ class CQImagesAddDeleteList extends StatefulWidget {
 }
 
 class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
-  List<dynamic> _imageOrPhotoModels;
-
   @override
   void dispose() {
     super.dispose();
@@ -28,32 +31,50 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   @override
   void initState() {
     super.initState();
-    _imageOrPhotoModels = widget.imageOrPhotoModels ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
     return CQImagesPreSufBadgeList(
       maxAddCount: 9,
-      imageOrPhotoModels: _imageOrPhotoModels,
+      imageCount: widget.imageCount,
       suffixWidget: _addCell(),
-      badgeWidgetSetupBlock: (imageOrPhotoModel) {
-        return Positioned(
+      imageItemBuilder: ({context, imageIndex}) {
+        return _photoAlbumGridCell(context: context, imageIndex: imageIndex);
+      },
+    );
+  }
+
+  /// 相册 cell
+  Widget _photoAlbumGridCell({
+    @required BuildContext context,
+    @required int imageIndex,
+  }) {
+    return Stack(
+      children: [
+        widget.itemImageContentBuilder(
+          context: context,
+          imageIndex: imageIndex,
+        ),
+        Positioned(
           right: 0,
           top: 0,
-          child: GestureDetector(
-            onTap: () {
-              widget.imageOrPhotoModels.remove(imageOrPhotoModel);
-              setState(() {});
-            },
-            child: Icon(
-              Icons.close,
-              size: 30,
-              color: Colors.white,
-            ),
-          ),
-        );
+          child: _deleteIcon(imageIndex),
+        ),
+      ],
+    );
+  }
+
+  Widget _deleteIcon(int imageIndex) {
+    return GestureDetector(
+      onTap: () {
+        widget.onPressedDelete(imageIndex);
       },
+      child: Icon(
+        Icons.close,
+        size: 30,
+        color: Colors.white,
+      ),
     );
   }
 

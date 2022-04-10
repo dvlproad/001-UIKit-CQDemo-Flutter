@@ -34,7 +34,7 @@ class _TSPhotoAlbumSelectPageState extends State<TSPhotoAlbumSelectPage> {
   /// 导航栏
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: const Text('相册'),
+      title: const Text('PhotoAlbum Select(相册选择)'),
     );
   }
 
