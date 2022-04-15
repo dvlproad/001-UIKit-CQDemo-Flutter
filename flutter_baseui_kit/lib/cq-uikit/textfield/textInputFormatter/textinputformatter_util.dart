@@ -26,7 +26,7 @@ class TextInputFormatterUtil {
   /// 手机号文本限制
   static List<TextInputFormatter> phoneInputFormatters() {
     return <TextInputFormatter>[
-      WhitelistingTextInputFormatter.digitsOnly, //只允许输入数字
+      FilteringTextInputFormatter.digitsOnly, //只允许输入数字
       LengthLimitingTextInputFormatter(11), //限制最多15位字符
     ];
   }
