@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-16 04:33:23
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-16 05:24:36
+ * @Description: 文本框输入限制
+ */
 import 'package:flutter/services.dart';
 
 // WhitelistingTextInputFormatter(RegExp("[a-zA-Z]")),//只允许输入字母
@@ -6,7 +13,7 @@ import 'package:flutter/services.dart';
 // WhitelistingTextInputFormatter(RegExp(
 //       "[a-zA-Z ]|[\u4e00-\u9fa5]|[0-9]")), //只能输入汉字或者字母或数字
 
-class CQTextInputFormatterUtil {
+class TextInputFormatterUtil {
   /// 用户名文本限制
   static List<TextInputFormatter> usernameInputFormatters() {
     return <TextInputFormatter>[

@@ -12,15 +12,14 @@ dependencies:
   flutter:
     sdk: flutter
 
-  photo: any #^0.5.0-dev.3
-    # path: ./vendors/photo-0.5.0-dev.3/
+  photo_manager: any
 
   #提供图像查看和手势缩放操作功能。
   # zoomable_image: ^1.3.1
   #Flutter图像展示控件，可以左右划动切换上一张下一张图像，还结合了zoomable_image可以点击后缩放查看。支持Asset和网络图像。
   # image_carousel: ^0.4.1
   # [extended_image](https://github.com/fluttercandies/extended_image)
-  extended_image: ^5.1.3
+  extended_image: any #^5.1.3
 
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/

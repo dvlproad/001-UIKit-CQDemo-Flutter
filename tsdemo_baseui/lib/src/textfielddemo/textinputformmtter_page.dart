@@ -82,7 +82,7 @@ class _TSTextInputFormmaterPageState extends State<TSTextInputFormmaterPage> {
       placeholder: '只允许字符+数字',
       value: '',
       keyboardType: TextInputType.text,
-      inputFormatters: CQTextInputFormatterUtil.usernameInputFormatters(),
+      inputFormatters: TextInputFormatterUtil.usernameInputFormatters(),
     );
   }
 
@@ -93,7 +93,7 @@ class _TSTextInputFormmaterPageState extends State<TSTextInputFormmaterPage> {
       placeholder: '只允许数字',
       value: '',
       keyboardType: TextInputType.text,
-      inputFormatters: CQTextInputFormatterUtil.phoneInputFormatters(),
+      inputFormatters: TextInputFormatterUtil.phoneInputFormatters(),
     );
   }
 
@@ -104,7 +104,7 @@ class _TSTextInputFormmaterPageState extends State<TSTextInputFormmaterPage> {
       placeholder: '限制最多15位字符',
       value: '',
       keyboardType: TextInputType.number,
-      inputFormatters: CQTextInputFormatterUtil.nicknameInputFormatters(),
+      inputFormatters: TextInputFormatterUtil.nicknameInputFormatters(),
     );
   }
 }
