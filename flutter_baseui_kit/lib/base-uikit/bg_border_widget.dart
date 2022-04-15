@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 /// 可定制背景颜色、圆角、弧度的 Widget
 class CJBGBorderWidget extends StatelessWidget {
+  final double width;
   final double height; // 文本框的高度
   final Color backgroundColor; // 文本框的背景颜色
   final double cornerRadius; // 边的圆角
@@ -11,9 +12,11 @@ class CJBGBorderWidget extends StatelessWidget {
 
   final Widget child; // 控件视图
   final VoidCallback onPressed; // 控件视图的点击事件
+  final HitTestBehavior behavior;
 
   CJBGBorderWidget({
     Key key,
+    this.width,
     this.height = 44,
     this.backgroundColor,
     this.cornerRadius = 0,
@@ -21,12 +24,14 @@ class CJBGBorderWidget extends StatelessWidget {
     this.borderColor,
     @required this.child,
     this.onPressed,
+    this.behavior,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: this.onPressed,
+      onTap: behavior == HitTestBehavior.translucent ? null : this.onPressed,
+      behavior: behavior,
       child: _containerWidget(),
     );
   }
@@ -40,16 +45,19 @@ class CJBGBorderWidget extends StatelessWidget {
     Color borderColor =
         this.borderColor != null ? this.borderColor : Colors.transparent;
     return Container(
+      width: width,
       height: height,
       // color: backgroundColor, // color 和 decoration 不能同时存在，至少一个要为空
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(cornerRadius),
-        border: Border.all(
-          color: borderColor,
-          width: borderWidth,
-          style: BorderStyle.solid,
-        ),
+        border: borderWidth == 0
+            ? null
+            : Border.all(
+                color: borderColor,
+                width: borderWidth,
+                style: BorderStyle.solid,
+              ),
       ),
       child: this.child,
     );

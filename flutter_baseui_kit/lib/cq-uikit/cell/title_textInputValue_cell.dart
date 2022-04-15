@@ -12,7 +12,7 @@ class BJHTitleTextInputValueCell extends StatelessWidget {
 
   BJHTitleTextInputValueCell({
     Key key,
-    this.title,
+    @required this.title,
     this.textInputValue,
     this.controller,
     this.onTap,
@@ -22,10 +22,12 @@ class BJHTitleTextInputValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidget: _textInputValueWidget(),
+      valueWidgetBuilder: (BuildContext bContext) => _textInputValueWidget(),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
       clickCellCallback: (section, row, {bIsLongPress}) {
-        this.onTap();
+        if (this.onTap != null) {
+          this.onTap();
+        }
       },
     );
   }

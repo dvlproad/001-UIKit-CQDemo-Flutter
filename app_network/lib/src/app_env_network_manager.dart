@@ -133,8 +133,11 @@ class AppNetworkKit {
         if (responseModel.statusCode == 0) {
           completeCallBack(responseModel);
         } else {
-          int retryCount = params['retryCount'];
-          if (retryCount != null && retryCount > 1) {
+          int retryCount = 0;
+          if (params != null) {
+            retryCount = params['retryCount'] ?? 0;
+          }
+          if (retryCount > 1) {
             retryCount--;
             params['retryCount'] = retryCount;
             if (cacheLevel == NetworkCacheLevel.one ||

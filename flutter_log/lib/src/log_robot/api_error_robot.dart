@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-13 00:17:19
+ * @LastEditTime: 2022-04-13 01:14:06
+ * @LastEditors: dvlproad
+ * @Description: 网络异常上报机器人
+ */
 import './common_error_robot.dart';
 import './api_error_people_util.dart';
 import './robot_bean.dart';
@@ -14,6 +21,7 @@ class ApiErrorRobot {
     String fullErrorApi,
     String errorMessage, {
     String serviceValidProxyIp, // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，这里会传null)
+    bool isCacheApiLog, // 是否是缓存请求的日志
   }) async {
     int count = apiErrorRobots?.length ?? 0;
     if (count == 0) {

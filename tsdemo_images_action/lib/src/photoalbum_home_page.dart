@@ -87,9 +87,9 @@ class _CJTSTableHomeBasePageState
                     backgroundColor: Colors.black,
                     appBar: AppBar(
                         title: const Text('Images AddDelete(图片添加+Pick)')),
-                    body: AppImagesActionImagePickers.CQImageDeleteAddPickList(
-                      imageOrPhotoModels: _imageOrPhotoModels,
-                      imageOrPhotoModelsChangeBlock: (imageOrPhotoModels) {
+                    body: AppImagesActionImagePickers.ImageAddDeletePickList(
+                      imageChooseModels: _imageOrPhotoModels,
+                      imageChooseModelsChangeBlock: (imageOrPhotoModels) {
                         _imageOrPhotoModels = imageOrPhotoModels;
                       },
                     ),

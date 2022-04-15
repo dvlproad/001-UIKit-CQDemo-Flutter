@@ -102,11 +102,17 @@ class NetworkManager {
 
   // 以下代码为 NetworkManager 的 ChangeUtil
   /************************* token 设置 *************************/
-  /// 添加/修改token(登录成功后调用)
+  /// 添加/修改/删除token(登录成功/退出成功后调用)
   static void addOrUpdateToken(String token) {
     Dio dio = NetworkManager.instance.serviceDio;
-    Map<String, dynamic> requestHeaders = {'Authorization': token};
-    DioChangeUtil.changeHeaders(dio, headers: requestHeaders);
+
+    String tokenKey = 'Authorization';
+    if (token == null || token.isEmpty) {
+      DioChangeUtil.removeHeadersKey(dio, tokenKey);
+    } else {
+      Map<String, dynamic> requestHeaders = {tokenKey: token};
+      DioChangeUtil.changeHeaders(dio, headers: requestHeaders);
+    }
   }
 
   /// 删除token(退出成功后调用)

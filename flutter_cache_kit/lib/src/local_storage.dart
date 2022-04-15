@@ -56,8 +56,7 @@ class LocalStorage {
 
   static Future<bool> save(String key, value) async {
     if (prefs == null) {
-      print('Error:请先执行await LocalStorage.init();');
-      return null;
+      showShouldInit();
     }
 
     if (value is String) {
@@ -72,14 +71,13 @@ class LocalStorage {
       return prefs.setStringList(key, value);
     } else {
       Type type = value.runtimeType;
-      print('此类型${type.toString()}无法保存错误，请尝试使用saveCustomBean');
+      throw Exception('此类型${type.toString()}无法保存错误，请尝试使用saveCustomBean');
     }
   }
 
   static get<T>(String key) {
     if (prefs == null) {
-      print('Error:请先执行await LocalStorage.init();');
-      return;
+      showShouldInit();
     }
 
     if (T is String) {
@@ -119,8 +117,7 @@ class LocalStorage {
     Map Function(dynamic bItem) itemToJson,
   }) async {
     if (prefs == null) {
-      print('Error:请先执行await LocalStorage.init();');
-      return null;
+      showShouldInit();
     }
 
     if (value is List) {
@@ -144,9 +141,11 @@ class LocalStorage {
     String key, {
     T Function(Map bMap) fromJson,
   }) {
+    if (fromJson == null) {
+      throw Exception("请设置fromJson");
+    }
     if (prefs == null) {
-      print('Error:请先执行await LocalStorage.init();');
-      return;
+      showShouldInit();
     }
 
     String mapString = prefs.getString(key);
@@ -162,8 +161,7 @@ class LocalStorage {
 
   static getCustomBeans<T>(String key, {T Function(Map bMap) fromJson}) {
     if (prefs == null) {
-      print('Error:请先执行await LocalStorage.init();');
-      return;
+      showShouldInit();
     }
 
     List mapStrings = prefs.getStringList(key);
@@ -178,5 +176,9 @@ class LocalStorage {
       customBeans.add(customBean);
     }
     return customBeans;
+  }
+
+  static void showShouldInit() {
+    throw Exception('Error:请先执行await LocalStorage.init();');
   }
 }

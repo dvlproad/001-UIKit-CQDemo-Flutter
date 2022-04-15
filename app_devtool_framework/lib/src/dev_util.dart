@@ -18,7 +18,6 @@ class DevUtil {
   static GlobalKey get navigatorKey => _navigatorKey;
   static set navigatorKey(GlobalKey globalKey) {
     _navigatorKey = globalKey; // ①悬浮按钮的显示功能需要
-    ApplicationDraggableManager.globalKey = globalKey; // ①悬浮按钮的拖动功能需要
     ApplicationLogViewManager.globalKey = globalKey; // ②日志系统需要
     CheckVersionUtil.navigatorKey = globalKey; // ③检查更新需要
   }
@@ -27,12 +26,49 @@ class DevUtil {
     @required GlobalKey navigatorKey,
     @required ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
     @required String floatingToolTextDefaultEnv, // 悬浮按钮上的文本:此包的默认环境
+    void Function() onFloatingToolDoubleTap, // 悬浮按钮的双击事件
   }) {
     DevUtil.navigatorKey = navigatorKey;
-    ApplicationDraggableManager.floatingToolImageProvider =
-        floatingToolImageProvider;
-    ApplicationDraggableManager.floatingToolTextDefaultEnv =
-        floatingToolTextDefaultEnv;
+
+    ApplicationDraggableManager.init(
+      navigatorKey: navigatorKey, // ①悬浮按钮的拖动功能需要
+      floatingToolImageProvider: floatingToolImageProvider,
+      floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
+      onTap: () {
+        if (navigatorKey == null) {
+          throw Exception(
+              "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
+        }
+        BuildContext context =
+            navigatorKey.currentContext; // 点击的时候才去获取 context，避免未取到
+
+        if (DevUtil.isDevPageShowing == true) {
+          debugPrint('当前已是开发工具页面,无需重复跳转');
+          return;
+        }
+
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              // DevPage 中
+              // ①悬浮按钮的显示功能:需要 DevUtil.navigatorKey = GlobalKey<NavigatorState>();
+              // ①悬浮按钮的拖动功能:需要 ApplicationDraggableManager.globalKey = GlobalKey<NavigatorState>();
+              // ②日志系统:需要 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();
+              // ③检查更新:需要 CheckVersionUtil.navigatorKey = GlobalKey<NavigatorState>();
+              return const DevPage();
+            },
+          ),
+        );
+      },
+      onLongPress: () {
+        if (DevLogUtil.isLogShowing == false) {
+          DevLogUtil.showLogView();
+        } else {
+          DevLogUtil.dismissLogView();
+        }
+      },
+      onDoubleTap: onFloatingToolDoubleTap,
+    );
   }
 
   static bool isDevPageShowing =
@@ -53,12 +89,6 @@ class DevUtil {
     double left = 80,
     double top = 180,
   }) {
-    if (navigatorKey == null) {
-      throw Exception(
-          "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
-    }
-    BuildContext context = navigatorKey.currentContext;
-
     /*
     Widget cell({String title, void Function() onPressed}) {
       return Container(
@@ -122,32 +152,6 @@ class DevUtil {
     ApplicationDraggableManager.showEasyOverlayEntry(
       left: left,
       top: top,
-      onTap: () {
-        if (DevUtil.isDevPageShowing == true) {
-          debugPrint('当前已是开发工具页面,无需重复跳转');
-          return;
-        }
-
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              // DevPage 中
-              // ①悬浮按钮的显示功能:需要 DevUtil.navigatorKey = GlobalKey<NavigatorState>();
-              // ①悬浮按钮的拖动功能:需要 ApplicationDraggableManager.globalKey = GlobalKey<NavigatorState>();
-              // ②日志系统:需要 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();
-              // ③检查更新:需要 CheckVersionUtil.navigatorKey = GlobalKey<NavigatorState>();
-              return const DevPage();
-            },
-          ),
-        );
-      },
-      onLongPress: () {
-        if (DevLogUtil.isLogShowing == false) {
-          DevLogUtil.showLogView();
-        } else {
-          DevLogUtil.dismissLogView();
-        }
-      },
     );
   }
 }

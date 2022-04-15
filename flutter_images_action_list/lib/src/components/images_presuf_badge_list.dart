@@ -8,6 +8,7 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
   final Widget suffixWidget;
   final Widget Function({BuildContext context, int imageIndex})
       imageItemBuilder;
+  final SliverGridDelegate customGridDelegate;
 
   CQImagesPreSufBadgeList({
     Key key,
@@ -15,6 +16,7 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     this.maxAddCount = 100000,
     this.prefixWidget, // 可以为'添加'按钮
     this.suffixWidget, // 可以为'添加'按钮
+    this.customGridDelegate, // null时候,默认3列，间隔10
 
     @required this.imageItemBuilder,
   })  : assert(imageItemBuilder != null),
@@ -55,12 +57,13 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
       child: GridView.builder(
         shrinkWrap: true, //该属性表示是否根据子组件的总长度来设置ListView的长度，默认值为false
         physics: const NeverScrollableScrollPhysics(), // 不响应用户的滚动
-        padding: EdgeInsets.fromLTRB(10, 10, 80, 10),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-        ),
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        gridDelegate: widget.customGridDelegate ??
+            SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+            ),
         itemCount: itemCount,
         itemBuilder: (context, index) {
           if (allowAddPrefixWidget == true && index == 0) {

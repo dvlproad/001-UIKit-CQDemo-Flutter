@@ -71,7 +71,7 @@ class CJStateTextButton extends StatelessWidget {
     this.width,
     this.height,
     @required this.childBuider,
-    @required this.onPressed,
+    this.onPressed, // null时候会自动透传事件
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
     this.selected = false,
@@ -88,7 +88,6 @@ class CJStateTextButton extends StatelessWidget {
     this.selectedBackgroundHighlightColor,
     this.highlightOpacity,
   })  : assert(childBuider != null),
-        assert(onPressed != null),
         super(key: key);
 
   @override

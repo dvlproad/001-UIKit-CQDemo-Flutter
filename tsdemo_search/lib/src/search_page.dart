@@ -4,9 +4,7 @@ import 'package:lpinyin/lpinyin.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewCell.dart';
 import 'package:flutter_demo_kit/tableview/CJTSTableViewHeader.dart';
-// import 'package:flutter_demo_kit/tableview/CJTSSectionTableView.dart';
-// import 'package:tsdemodemo_flutter/commonui/cq-list/section_table_view_method2.dart';
-import './section_table_view_method2.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
 import 'package:flutter_search/flutter_search.dart';

@@ -46,7 +46,7 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
         ThemeBorderButton(
           width: 100,
           height: buttonHeight,
-          borderColorType: ThemeBGType.pink,
+          borderColorType: ThemeBGType.theme,
           title: this.cancelTitle,
           titleStyle: ButtonBoldTextStyle(fontSize: 15.0),
           cornerRadius: 20,
@@ -56,7 +56,7 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
         ThemeBGButton(
           width: 100,
           height: buttonHeight,
-          bgColorType: ThemeBGType.pink,
+          bgColorType: ThemeBGType.theme,
           title: this.okTitle,
           titleStyle: ButtonBoldTextStyle(fontSize: 15.0),
           cornerRadius: 20,

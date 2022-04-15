@@ -116,34 +116,52 @@ class LogUtil {
     Map extraLogInfo, // 执行api时候的代理等其他信息
     String tag,
   }) {
+    String serviceValidProxyIp = '';
+    bool isCacheApiLog = false;
+    if (extraLogInfo != null) {
+      serviceValidProxyIp = extraLogInfo['serviceValidProxyIp'] ?? '';
+      isCacheApiLog = extraLogInfo['isCacheApiLog'] ?? false;
+    }
+
     if (shouldShowToConsole(logLevel, extraLogInfo)) {
+      String consoleLogMessage;
+      if (isCacheApiLog == true) {
+        consoleLogMessage = "======此次api请求会去取缓存数据，而不是实际请求======\n$apiMessage";
+      } else {
+        consoleLogMessage = apiMessage;
+      }
       PrintConsoleLogUtil.printConsoleLog(
         tag,
         _desForLogLevel(logLevel),
-        apiMessage,
+        consoleLogMessage,
       );
     }
 
     if (shouldShowToPage(logLevel, extraLogInfo)) {
+      String pageLogMessage;
+      if (isCacheApiLog == true) {
+        pageLogMessage = "======此次api结果为缓存数据，而不是后台实际结果======\n$apiMessage";
+      } else {
+        pageLogMessage = apiMessage;
+      }
       DevLogUtil.addLogModel(
         logLevel: logLevel,
         logTitle: '',
-        logText: apiMessage,
+        logText: pageLogMessage,
         logInfo: extraLogInfo,
       );
     }
 
     if (shouldPostToWechat(logLevel, extraLogInfo)) {
-      String serviceValidProxyIp = '';
-      if (extraLogInfo != null) {
-        serviceValidProxyIp = extraLogInfo['serviceValidProxyIp'] ?? '';
+      if (isCacheApiLog == true) {
+        return; // api请求缓存数据过程中的日志 即使错误页不需要上包
       }
-
       if (apiFullUrl != null) {
         ApiErrorRobot.postApiError(
           apiFullUrl,
           apiMessage,
           serviceValidProxyIp: serviceValidProxyIp,
+          isCacheApiLog: isCacheApiLog,
         );
       }
     }

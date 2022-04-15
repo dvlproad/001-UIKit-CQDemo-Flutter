@@ -26,6 +26,7 @@ class DevToolInit {
     String userApiToken,
     String Function() userDescribeBlock,
     @required void Function() userNeedReloginHandle, // 需要重新登录时候，执行的操作
+    void Function() onFloatingToolDoubleTap,
   }) {
     // 设置打包环境
     MainDiffUtil.packageType = packageType;
@@ -42,7 +43,11 @@ class DevToolInit {
         userReloginHandle: userNeedReloginHandle,
       );
     });
-    _initView(globalKey, packageType);
+    _initView(
+      globalKey,
+      packageType,
+      onFloatingToolDoubleTap: onFloatingToolDoubleTap,
+    );
   }
 
   static _init(
@@ -123,8 +128,9 @@ class DevToolInit {
 
   static _initView(
     GlobalKey globalKey,
-    PackageType packageType,
-  ) {
+    PackageType packageType, {
+    void Function() onFloatingToolDoubleTap,
+  }) {
     // 开发工具弹窗
     bool shouldShowDevTool = false;
     ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
@@ -140,6 +146,7 @@ class DevToolInit {
       navigatorKey: globalKey,
       floatingToolImageProvider: floatingToolImageProvider,
       floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
+      onFloatingToolDoubleTap: onFloatingToolDoubleTap,
     );
 
     if (shouldShowDevTool) {

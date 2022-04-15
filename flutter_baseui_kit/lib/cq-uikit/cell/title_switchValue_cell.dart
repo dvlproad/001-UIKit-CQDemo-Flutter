@@ -21,7 +21,7 @@ class BJHTitleSwitchValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidget: _switchValueWidget(),
+      valueWidgetBuilder: (BuildContext context) => _switchValueWidget(),
       arrowImageType: TableViewCellArrowImageType.none,
     );
   }

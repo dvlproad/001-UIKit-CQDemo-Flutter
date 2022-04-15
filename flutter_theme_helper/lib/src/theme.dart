@@ -1,4 +1,12 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 19:20:38
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-15 21:57:39
+ * @Description: 主题
+ */
 import 'package:flutter/material.dart';
+
 // import 'dart:ui';
 // 按钮主题使用 buttontheme
 
@@ -26,6 +34,7 @@ class RegularTextStyle extends TextStyle {
           fontWeight: FontWeight.w400,
           color: color,
           height: height,
+          // backgroundColor: Colors.red,
         );
 }
 

@@ -13,10 +13,19 @@ enum TableViewCellArrowImageType {
 
 class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   final double height; // cell 的高度
-  final double leftRightPadding; // cell 内容的左右间距
+  final double leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
+  final Color color;
 
+  // 左侧-图片
+  final ImageProvider imageProvider; // 图片(默认null时候，imageWith大于0时候才有效)
+  final double imageWith; // 图片宽高(默认null，非大于0时候，图片没位置)
+  final double imageTitleSpace; // 图片与标题间距(图片存在时候才有效)
+  // 左侧-文本
   final String title; // 主文本
-  final Widget valueWidget; // 值视图（此值为空时候，视图会自动隐藏）
+  // 右侧-值视图
+  final Widget Function(BuildContext context)
+      valueWidgetBuilder; // 值视图（此值为空时候，视图会自动隐藏）
+  // 右侧-箭头
   final TableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
 
   final int section;
@@ -27,8 +36,12 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     Key key,
     this.height,
     this.leftRightPadding,
-    this.title,
-    this.valueWidget,
+    this.color,
+    this.imageProvider,
+    this.imageWith,
+    this.imageTitleSpace,
+    @required this.title,
+    this.valueWidgetBuilder,
     this.arrowImageType = TableViewCellArrowImageType.none,
     this.section,
     this.row,
@@ -37,12 +50,12 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return cellWidget();
+    return cellWidget(context);
   }
 
-  Widget cellWidget() {
+  Widget cellWidget(BuildContext context) {
     return GestureDetector(
-      child: _cellContainer(),
+      child: _cellContainer(context),
       onTap: () {
         _onTapCell(isLongPress: false);
       },
@@ -62,36 +75,60 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     }
   }
 
-  Widget _cellContainer() {
+  Widget get _leftRowWidget {
+    List<Widget> leftRowWidgets = [];
+
+    // 添加valueWidget到rowWidgets中
+    // 判断是否添加图片，存在则添加到rowWidgets中
+    if (imageWith != null && imageWith > 0 && imageProvider != null) {
+      Image image = Image(
+        image: imageProvider,
+        width: imageWith,
+        height: imageWith,
+      );
+      leftRowWidgets.add(image);
+      leftRowWidgets.add(Container(width: imageTitleSpace ?? 0));
+    }
+
+    leftRowWidgets.add(_mainText());
+
+    return Row(children: leftRowWidgets);
+  }
+
+  Widget _rightRowWidget(BuildContext context) {
     List<Widget> rightRowWidgets = [];
 
     // 添加valueWidget到rowWidgets中
-    if (null != this.valueWidget) {
-      rightRowWidgets.add(SizedBox(width: 10.w_cj));
-      rightRowWidgets.add(this.valueWidget);
+
+    if (null != this.valueWidgetBuilder) {
+      Widget valueWidget = this.valueWidgetBuilder(context);
+      rightRowWidgets.add(SizedBox(width: 5.w_pt_cj));
+      rightRowWidgets.add(valueWidget);
     }
 
     // 判断是否添加箭头，存在则添加到rowWidgets中
     if (this.arrowImageType != TableViewCellArrowImageType.none) {
-      rightRowWidgets.add(SizedBox(width: 30.w_cj));
+      rightRowWidgets.add(SizedBox(width: 15.w_pt_cj));
       rightRowWidgets.add(_arrowImage());
     }
     if (rightRowWidgets.length == 0) {
       rightRowWidgets.add(Container());
     }
-    Widget rightRowWidget = Row(children: rightRowWidgets);
+    return Row(children: rightRowWidgets);
+  }
 
-    double leftRightPadding = this.leftRightPadding ?? 40.w_cj;
+  Widget _cellContainer(BuildContext context) {
+    double leftRightPadding = this.leftRightPadding ?? 20.w_pt_cj;
 
     return Container(
-      height: this.height ?? 88.h_cj,
+      height: this.height ?? 44.w_pt_cj,
       padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
-      color: Colors.white,
+      color: this.color ?? Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _mainText(),
+          _leftRowWidget,
           // Expanded(
           //   child: Container(
           //     color: Colors.orange,
@@ -109,7 +146,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
           //     ),
           //   ),
           // ),
-          rightRowWidget,
+          _rightRowWidget(context),
         ],
       ),
     );
@@ -125,9 +162,11 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: Color(0xff222222),
-          fontSize: 30.w_cj,
-          fontWeight: FontWeight.bold,
+          fontFamily: 'PingFang SC',
+          color: Color(0xff333333),
+          fontSize: 16.f_pt_cj,
+          fontWeight: FontWeight.w500,
+          height: 1,
         ),
       ),
     );
@@ -141,8 +180,8 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
       child: Image(
         image:
             AssetImage('assets/arrow_right.png', package: 'flutter_baseui_kit'),
-        width: 17.w_cj,
-        height: 32.h_cj,
+        width: 8.w_pt_cj,
+        height: 16.h_pt_cj,
       ),
     );
   }

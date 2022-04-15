@@ -4,17 +4,19 @@ import 'dart:convert' show json;
 import 'dart:convert' as convert;
 
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 import './network_bean.dart';
-import './interceptor/url_util.dart';
+import './url/url_util.dart';
 
 import './network_client.dart';
 import './sp_util.dart';
 import './lang_util.dart';
 
 import './network_client.dart';
-import './mock_analy_util.dart';
+import './mock/mock_analy_util.dart';
+import './mock/local_mock_util.dart';
+
+import './interceptor/interceptor_log.dart';
 
 typedef T JsonParse<T>(dynamic data);
 
@@ -95,7 +97,7 @@ class NetworkUtil {
 
     if (url.startsWith(localApiHost)) {
       String loaclFilePath = url.substring(localApiHost.length);
-      return _requestLocalFilePath(loaclFilePath);
+      return LocalMockUtil.requestLocalFilePath(loaclFilePath);
     }
 
     if (cancelToken == null) {
@@ -130,15 +132,9 @@ class NetworkUtil {
         );
       }
 
-      // String fromCacheValue = response.headers.map.values.last[0];
-      // bool isFromCache = fromCacheValue == 'from_cache';
-
       bool isFromCache = false;
-      List<String> cacheHeaders =
-          response.headers.map['dio_cache_header_key_data_source'];
-      if (cacheHeaders != null && cacheHeaders.isNotEmpty) {
-        String fromCacheValue = cacheHeaders[0];
-        isFromCache = fromCacheValue == 'from_cache';
+      if (DioLogInterceptor.isCacheResponseCheckFunction != null) {
+        isFromCache = DioLogInterceptor.isCacheResponseCheckFunction(response);
       }
 
       if (response.statusCode == 200) {
@@ -212,47 +208,8 @@ class NetworkUtil {
       }
 
       String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
-      return _errorResponseModel(message);
+      return ResponseModel.errorResponseModel(message);
     }
-  }
-
-  // 网络请求的最底层方法
-  static Future<ResponseModel> _requestLocalFilePath(
-      String localFilePath) async {
-    try {
-      String localFileName = localFilePath.splitMapJoin(
-        "/",
-        onMatch: (Match match) {
-          return ":";
-        },
-      );
-      localFilePath = "asset/data/$localFileName.json";
-
-      String responseString = await rootBundle.loadString(localFilePath);
-      Map<String, dynamic> responseMap = json.decode(responseString);
-
-      var errorCode = responseMap['code'];
-      var msg = responseMap['msg'];
-      dynamic result = responseMap["data"];
-      ResponseModel responseModel = ResponseModel(
-        statusCode: errorCode,
-        message: msg,
-        result: result,
-      );
-      return responseModel;
-    } catch (e) {
-      String message = '请求$localFilePath的时候，发生网络错误,未设置json文件${e.message}';
-      return _errorResponseModel(message);
-    }
-  }
-
-  static ResponseModel _errorResponseModel(String message) {
-    ResponseModel responseModel = ResponseModel(
-      statusCode: -1,
-      message: message,
-      result: null,
-    );
-    return responseModel;
   }
 
   Future<T> updateFile<T>(

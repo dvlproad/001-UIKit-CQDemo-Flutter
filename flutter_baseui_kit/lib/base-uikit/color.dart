@@ -21,11 +21,11 @@ class CJColor {
       colorStr = '0xff' + colorStr;
     }
 // colorString为8位，如0x000000
-    if(colorStr.startsWith('0x') && colorStr.length == 8) {
+    if (colorStr.startsWith('0x') && colorStr.length == 8) {
       colorStr = colorStr.replaceRange(0, 2, '0xff');
     }
 // colorString为7位，如#000000
-    if(colorStr.startsWith('#') && colorStr.length == 7) {
+    if (colorStr.startsWith('#') && colorStr.length == 7) {
       colorStr = colorStr.replaceRange(0, 1, '0xff');
     }
 // 先分别获取色值的RGB通道
@@ -36,8 +36,31 @@ class CJColor {
 // 通过fromRGBO返回带透明度和RGB值的颜色
     return Color.fromRGBO(red, green, blue, alpha);
   }
+
+  static Color colorFromHexString(String hexString, {double alpha = 1.0}) {
+    int hex = _hexToInt(hexString);
+    return Color(hex);
+  }
+
+  static int _hexToInt(String hex) {
+    int val = 0;
+    int len = hex.length;
+    for (int i = 0; i < len; i++) {
+      int hexDigit = hex.codeUnitAt(i);
+      if (hexDigit >= 48 && hexDigit <= 57) {
+        val += (hexDigit - 48) * (1 << (4 * (len - 1 - i)));
+      } else if (hexDigit >= 65 && hexDigit <= 70) {
+        // A..F
+        val += (hexDigit - 55) * (1 << (4 * (len - 1 - i)));
+      } else if (hexDigit >= 97 && hexDigit <= 102) {
+        // a..f
+        val += (hexDigit - 87) * (1 << (4 * (len - 1 - i)));
+      } else {
+        val = 255; // 兼容模拟的异常数据
+        continue;
+        // throw new FormatException("Invalid hexadecimal value");
+      }
+    }
+    return val;
+  }
 }
-
-
-
-

@@ -45,64 +45,77 @@ class PygerUtil {
 
     Dio dio = Dio();
 
-    Response response = await dio.post(
-      url,
-      data: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
-
-    Map responseObject = response.data;
-    if (responseObject['code'] != 0) {
-      String errorMessage = responseObject['message'];
-      print('蒲公英请求失败:errorMessage=$errorMessage');
-      return null;
-    }
-
-    Map result = responseObject['data'];
-    //print('蒲公英请求结果:result=${result.toString()}');
-    // bool hasNew = result['buildHaveNewVersion']; //是否有新版本，发现build设置四位数以上时候，此值不准确，所以不适用
-
-    {
-      // 新版本 version_buildId
-      String buildVersion = result['buildVersion']; // 版本号, 默认为1.0
-      String buildNumber = result['buildVersionNo']; // 上传包的版本编号，默认为1 (即编译的版本号)
-      String buildBuildVersion =
-          result['buildBuildVersion']; // 蒲公英生成的用于区分历史版本的build号
-      bool buildHaveNewVersion = result['buildHaveNewVersion'];
-
-      //应用更新说明
-      BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
-      String currentVersion =
-          "您当前的版本为${packageInfo.version}(${packageInfo.buildNumber})";
-      String newVersion = '检查到有新版本$buildVersion($buildNumber)';
-      String updteDescription = result['buildUpdateDescription'];
-      if (updteDescription.isEmpty) {
-        updteDescription = '更新说明略';
-      }
-      // String updateContent = '$currentVersion\n$newVersion\n$updteDescription';
-      List<String> lineStrings = [currentVersion, newVersion, updteDescription];
-      String updateContent = _getNewLineString(lineStrings);
-
-      //应用安装地址
-      String downloadURL = result['downloadURL'];
-
-      // 是否需要强制更新
-      bool needForceUpdate = result['needForceUpdate'];
-
-      // print(
-      //     '版本:$buildVersion\_$buildNumber已更新\n更新内容:updteContent\n下载地址:$downloadURL');
-
-      VersionPygerBean bean = VersionPygerBean.fromParams(
-        forceUpdate: needForceUpdate,
-        version: buildVersion,
-        buildNumber: buildNumber,
-        buildNumberInPyger: buildBuildVersion,
-        buildHaveNewVersion: buildHaveNewVersion,
-        updateLog: updateContent,
-        downloadUrl: downloadURL,
+    try {
+      Response response = await dio.post(
+        url,
+        data: customParams,
+        options: options,
+        cancelToken: cancelToken,
       );
-      return bean;
+
+      Map responseObject = response.data;
+      if (responseObject['code'] != 0) {
+        String errorMessage = responseObject['message'];
+        print('蒲公英请求失败:errorMessage=$errorMessage');
+        return null;
+      }
+
+      Map result = responseObject['data'];
+      //print('蒲公英请求结果:result=${result.toString()}');
+      // bool hasNew = result['buildHaveNewVersion']; //是否有新版本，发现build设置四位数以上时候，此值不准确，所以不适用
+
+      {
+        // 新版本 version_buildId
+        String buildVersion = result['buildVersion']; // 版本号, 默认为1.0
+        String buildNumber =
+            result['buildVersionNo']; // 上传包的版本编号，默认为1 (即编译的版本号)
+        String buildBuildVersion =
+            result['buildBuildVersion']; // 蒲公英生成的用于区分历史版本的build号
+        bool buildHaveNewVersion = result['buildHaveNewVersion'];
+
+        //应用更新说明
+        BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
+        String currentVersion =
+            "您当前的版本为${packageInfo.version}(${packageInfo.buildNumber})";
+        String newVersion = '检查到有新版本$buildVersion($buildNumber)';
+        String updteDescription = result['buildUpdateDescription'];
+        if (updteDescription.isEmpty) {
+          updteDescription = '更新说明略';
+        }
+        // String updateContent = '$currentVersion\n$newVersion\n$updteDescription';
+        List<String> lineStrings = [
+          currentVersion,
+          newVersion,
+          updteDescription
+        ];
+        String updateContent = _getNewLineString(lineStrings);
+
+        //应用安装地址
+        String downloadURL = result['downloadURL'];
+
+        // 是否需要强制更新
+        bool needForceUpdate = result['needForceUpdate'];
+
+        // print(
+        //     '版本:$buildVersion\_$buildNumber已更新\n更新内容:updteContent\n下载地址:$downloadURL');
+
+        VersionPygerBean bean = VersionPygerBean.fromParams(
+          forceUpdate: needForceUpdate,
+          version: buildVersion,
+          buildNumber: buildNumber,
+          buildNumberInPyger: buildBuildVersion,
+          buildHaveNewVersion: buildHaveNewVersion,
+          updateLog: updateContent,
+          downloadUrl: downloadURL,
+        );
+        return bean;
+      }
+    } catch (e) {
+      String errorMessage = e.toString();
+
+      String message = '请求$url的时候，发生网络错误:$errorMessage';
+      // throw Exception(message);
+      return null;
     }
   }
 
@@ -167,29 +180,36 @@ class PygerUtil {
 
     Dio dio = Dio();
 
-    Response response = await dio.post(
-      url,
-      data: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
+    try {
+      Response response = await dio.post(
+        url,
+        data: customParams,
+        options: options,
+        cancelToken: cancelToken,
+      );
 
-    Map responseObject = response.data;
-    if (responseObject['code'] != 0) {
-      String errorMessage = responseObject['message'];
-      print('蒲公英请求失败:errorMessage=$errorMessage');
+      Map responseObject = response.data;
+      if (responseObject['code'] != 0) {
+        String errorMessage = responseObject['message'];
+        print('蒲公英请求失败:errorMessage=$errorMessage');
+        return null;
+      }
+
+      Map result = responseObject['data'];
+      print('蒲公英请求结果:result=${result.toString()}');
+
+      // VersionPygerBean bean = VersionPygerBean.fromParams(
+      //   version: buildVersion,
+      //   buildNumber: buildNumber,
+      //   updateLog: updteContent,
+      //   downloadUrl: downloadURL,
+      // );
       return null;
+    } catch (e) {
+      String errorMessage = e.toString();
+
+      String message = '请求$url的时候，发生网络错误:$errorMessage';
+      throw Exception(message);
     }
-
-    Map result = responseObject['data'];
-    print('蒲公英请求结果:result=${result.toString()}');
-
-    // VersionPygerBean bean = VersionPygerBean.fromParams(
-    //   version: buildVersion,
-    //   buildNumber: buildNumber,
-    //   updateLog: updteContent,
-    //   downloadUrl: downloadURL,
-    // );
-    return null;
   }
 }

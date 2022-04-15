@@ -97,6 +97,8 @@ class CheckVersionUtil {
             PygerUtil.cancelShowVersion(bean);
           },
         );
+      }).catchError((onError) {
+        print('获取蒲公英上的版本失败');
       });
     } else {
       return CheckVersionSystemUtil.getVersion().then((VersionBean bean) async {

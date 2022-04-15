@@ -1,7 +1,11 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2021-04-12 23:04:04
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-14 12:41:29
+ * @Description: 页面框架
+ */
 library flutter_effect;
-
-// theme
-export './src/theme/theme.dart';
 
 // pagetype_nodata:无数据视图组件
 export './src/pagetype_nodata/empty_imageBGForText_widget.dart';

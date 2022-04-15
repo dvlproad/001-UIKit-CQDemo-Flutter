@@ -1,4 +1,11 @@
-// loading 单例形式的弹出方法
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-13 10:17:11
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-13 16:26:54
+ * @Description: loading 单例形式的弹出方法
+ * @FilePath: /wish/Users/qian/Project/Bojue/mobile_flutter_wish/flutter_effect_kit/lib/src/hud/loading_util.dart
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -67,8 +74,12 @@ class LoadingUtil {
     return LoadingWidget(width: loadingWidth, height: loadingHeight);
   }
 
+  static int _minLoadingMilliseconds; // 最少展示多长时间
+  static DateTime _startLoadingDateTime;
+
   /// 在 context 中展示 loading ，(一定记得在 dispose 方法中调用 LoadingUtil.dismissInContext(context);)
-  static showInContext(BuildContext context) {
+  static showInContext(BuildContext context, {int minLoadingMilliseconds}) {
+    // print('==============showInContext');
     double loadingWidth = 49;
     double loadingHeight = 20;
     Widget child = LoadingWidget(width: loadingWidth, height: loadingHeight);
@@ -76,11 +87,45 @@ class LoadingUtil {
         _getCenterOverlayInContext(context, child, loadingWidth, loadingHeight);
 
     Overlay.of(context).insert(pageOverlayEntry);
+    if (minLoadingMilliseconds != null) {
+      _minLoadingMilliseconds = minLoadingMilliseconds;
+      _startLoadingDateTime = DateTime.now();
+    }
   }
 
   /// 在 context 中关闭 loading ，(一定记得在 dispose 方法中调用 LoadingUtil.dismissInContext(context);)
   static dismissInContext(BuildContext context) {
-    pageOverlayEntry?.remove();
+    if (_minLoadingMilliseconds == null) {
+      _dismissInContext(context);
+      return;
+    }
+
+    Duration difference = DateTime.now().difference(_startLoadingDateTime);
+    bool canFinishLoad = difference.inMilliseconds >= _minLoadingMilliseconds;
+    if (canFinishLoad == false) {
+      int remainLoadingMilliseconds =
+          _minLoadingMilliseconds - difference.inMilliseconds;
+      Future.delayed(Duration(milliseconds: remainLoadingMilliseconds))
+          .then((value) {
+        _minLoadingMilliseconds = null;
+        _startLoadingDateTime = null;
+        _dismissInContext(context);
+        return;
+      });
+    } else {
+      _minLoadingMilliseconds = null;
+      _startLoadingDateTime = null;
+      _dismissInContext(context);
+    }
+  }
+
+  static _dismissInContext(BuildContext context) {
+    // print('==============dismissInContext');
+    if (pageOverlayEntry != null) {
+      pageOverlayEntry.remove();
+      pageOverlayEntry =
+          null; // 防止如请求失败重试或先请求缓存再请求实际这种api接口，一个入口有多次回调，导致此处多次调用引起崩溃
+    }
   }
 
   static showDongingTextInContext(

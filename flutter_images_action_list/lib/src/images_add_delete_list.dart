@@ -3,17 +3,21 @@ import './components/images_presuf_badge_list.dart';
 import './components/bg_border_widget.dart';
 
 class CQImagesAddDeleteList extends StatefulWidget {
+  final int maxAddCount; // 默认null,null时候默认9个
   final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
   final Widget Function({BuildContext context, int imageIndex})
       itemImageContentBuilder; // imageCell 上 content 的视图
   final void Function(int imageIndex) onPressedDelete; // "删除"按钮的点击事件
+  final Widget Function() addCellBuilder; // 默认null，null时候使用默认样式
   final VoidCallback onPressedAdd; // "添加"按钮的点击事件
 
   CQImagesAddDeleteList({
     Key key,
+    this.maxAddCount,
     @required this.imageCount,
     @required this.itemImageContentBuilder,
     @required this.onPressedDelete,
+    this.addCellBuilder,
     @required this.onPressedAdd,
   }) : super(key: key);
 
@@ -36,7 +40,12 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   @override
   Widget build(BuildContext context) {
     return CQImagesPreSufBadgeList(
-      maxAddCount: 9,
+      customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
+      ),
+      maxAddCount: widget.maxAddCount ?? 9,
       imageCount: widget.imageCount,
       suffixWidget: _addCell(),
       imageItemBuilder: ({context, imageIndex}) {
@@ -66,20 +75,44 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   }
 
   Widget _deleteIcon(int imageIndex) {
+    double imageWith = 24;
     return GestureDetector(
       onTap: () {
         widget.onPressedDelete(imageIndex);
       },
-      child: Icon(
-        Icons.close,
-        size: 30,
-        color: Colors.white,
+      // child: Icon(
+      //   Icons.close,
+      //   size: 30,
+      //   color: Colors.white,
+      // ),
+      child: Container(
+        // color: Colors.red,
+        width: imageWith + 4,
+        height: imageWith + 4,
+        child: Center(
+          child: Image(
+            image: AssetImage(
+              'assets/icon_delete.png',
+              package: 'flutter_images_action_list',
+            ),
+            width: imageWith,
+            height: imageWith,
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
     );
   }
 
   /// 添加图片的 cell
   Widget _addCell() {
+    if (widget.addCellBuilder != null) {
+      return GestureDetector(
+        child: widget.addCellBuilder(),
+        onTap: widget.onPressedAdd,
+      );
+    }
+
     return CJBGImageWidget(
       backgroundImage: AssetImage(
         'assets/icon_images_add.png',

@@ -20,7 +20,7 @@ class BJHTitleImageValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidget: _imageValueWidget(),
+      valueWidgetBuilder: (BuildContext bContext) => _imageValueWidget(),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
       clickCellCallback: (section, row, {bIsLongPress}) {
         this.onTap();

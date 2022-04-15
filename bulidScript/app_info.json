@@ -4,7 +4,7 @@
     "package_create_time": "package unknow time",
     "package_from_brance": "package unknow brance",
     "package_default_env": "package unknow env",
-    "brances_record_time": "03.29",
+    "brances_record_time": "04.07",
     "nocode_brances": [
         {
             "name": "master",
@@ -16,7 +16,7 @@
         },
         {
             "name": "dev_all",
-            "des": "线上+修复+订单地址填写+订单列表类型显示"
+            "des": "线上+修复+愿望单大改版"
         },
         {
             "name": "dev_will_publish",
@@ -25,9 +25,14 @@
     ],
     "feature_brances": [
         {
-            "name": "dev_gift_give",
-            "create_time": "03.29",
+            "name": "dev_wish_3.0",
+            "create_time": "04.06",
             "des": "线上+新增愿望单推荐"
+        },
+        {
+            "name": "dev_create_wish",
+            "create_time": "03.29",
+            "des": "线上+创建愿望单(模板标签改版需求+创建改版)"
         },
         {
             "name": "dev_search",
@@ -42,15 +47,30 @@
             "name": "dev_hundred_wishes_new",
             "create_time": "03.01",
             "des": "线上+百愿清单"
-        },
-        {
-            "name": "dev_order_type",
-            "create_time": "03.14",
-            "des": "线上+订单地址填写+订单列表类型显示"
         }
     ],
-    "history_record_time": "03.25",
+    "history_record_time": "04.07",
     "history_versions": [
+        {
+            "version": "1.04.07",
+            "online_time": "04.07",
+            "des": "订单新增统计+支付切通联"
+        },
+        {
+            "version": "1.04.02",
+            "online_time": "04.02",
+            "des": "会员改版"
+        },
+        {
+            "version": "1.04.01",
+            "online_time": "04.01",
+            "des": "找人送礼改版，及新增推荐愿望单需求、商品详情分享优化"
+        },
+        {
+            "version": "1.03.29",
+            "online_time": "03.29",
+            "des": "订单地址填写+订单列表类型显示"
+        },
         {
             "version": "1.03.24",
             "online_time": "03.24",

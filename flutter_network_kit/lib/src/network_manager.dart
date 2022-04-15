@@ -5,13 +5,8 @@ import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 
-/// 网络缓存
-enum NetworkCacheLevel {
-  none, // 不需要缓存
-  one,
-  forceRefreshAndCacheOne, // 强制刷新本次，并且缓存本次的数据以备下次使用
-
-}
+import './cache/cache_helper.dart';
+export './cache/cache_helper.dart' show NetworkCacheLevel;
 
 class NetworkKit {
   static DioCacheManager _manager;
@@ -48,28 +43,50 @@ class NetworkKit {
   }) {
     _checkResponseModelHandel = checkResponseModelHandel;
 
-    DioLogInterceptor.logApiInfoAction = (
-      String fullUrl,
-      String logString, {
-      ApiProcessType apiProcessType, // api 请求的阶段类型
-      ApiLogLevel apiLogLevel, // api 日志信息类型
-    }) {
-      String serviceValidProxyIp = NetworkManager.serviceValidProxyIp;
-      Map extraApiLogInfo = {
-        "hasProxy": serviceValidProxyIp != null,
-      };
-      if (apiLogLevel == ApiLogLevel.error) {
-        LogUtil.apiError(fullUrl, logString, extraLogInfo: extraApiLogInfo);
-      } else if (apiLogLevel == ApiLogLevel.warning) {
-        LogUtil.apiWarning(fullUrl, logString, extraLogInfo: extraApiLogInfo);
-      } else {
-        if (apiProcessType == ApiProcessType.response) {
-          LogUtil.apiSuccess(fullUrl, logString, extraLogInfo: extraApiLogInfo);
-        } else {
-          LogUtil.apiNormal(fullUrl, logString, extraLogInfo: extraApiLogInfo);
+    DioLogInterceptor.initDioLogInterceptor(
+      logApiInfoAction: (
+        String fullUrl,
+        String logString, {
+        ApiProcessType apiProcessType, // api 请求的阶段类型
+        ApiLogLevel apiLogLevel, // api 日志信息类型
+        bool isCacheApiLog, // 是否是缓存请求的日志
+      }) {
+        String serviceValidProxyIp = NetworkManager.serviceValidProxyIp;
+        Map extraApiLogInfo = {
+          "hasProxy": serviceValidProxyIp != null,
+        };
+        if (isCacheApiLog != null) {
+          extraApiLogInfo.addAll({
+            "isCacheApiLog": isCacheApiLog,
+          });
         }
-      }
-    };
+        if (apiLogLevel == ApiLogLevel.error) {
+          LogUtil.apiError(fullUrl, logString, extraLogInfo: extraApiLogInfo);
+        } else if (apiLogLevel == ApiLogLevel.warning) {
+          LogUtil.apiWarning(fullUrl, logString, extraLogInfo: extraApiLogInfo);
+        } else {
+          if (apiProcessType == ApiProcessType.response) {
+            LogUtil.apiSuccess(fullUrl, logString,
+                extraLogInfo: extraApiLogInfo);
+          } else {
+            LogUtil.apiNormal(fullUrl, logString,
+                extraLogInfo: extraApiLogInfo);
+          }
+        }
+      },
+      isCacheRequestCheckBlock: (options) {
+        bool isRequestCache = CacheHelper.isCacheRequest(options);
+        return isRequestCache;
+      },
+      isCacheErrorCheckBlock: (err) {
+        bool isFromCache = CacheHelper.isCacheError(err);
+        return isFromCache;
+      },
+      isCacheResponseCheckBlock: (response) {
+        bool isFromCache = CacheHelper.isCacheResponse(response);
+        return isFromCache;
+      },
+    );
 
     List<Interceptor> extraInterceptors = [
       getCacheManager(baseUrl: baseUrl).interceptor,
@@ -111,7 +128,7 @@ class NetworkKit {
     return NetworkUtil.getRequestUrl(
       api,
       customParams: customParams,
-      options: _dioOptions(cacheLevel),
+      options: CacheHelper.buildOptions(cacheLevel),
     ).then((ResponseModel responseModel) {
       if (withLoading == true) {
         LoadingUtil.dismiss();
@@ -211,7 +228,7 @@ class NetworkKit {
     return NetworkUtil.postRequestUrl(
       api,
       customParams: customParams,
-      options: _dioOptions(cacheLevel),
+      options: CacheHelper.buildOptions(cacheLevel),
     ).then((ResponseModel responseModel) {
       if (withLoading == true) {
         LoadingUtil.dismiss();
@@ -222,29 +239,6 @@ class NetworkKit {
         showToastForNoNetwork: showToastForNoNetwork,
       );
     });
-  }
-
-  static Options _dioOptions(NetworkCacheLevel cacheLevel) {
-    Options dioOptions = null;
-    if (cacheLevel == NetworkCacheLevel.one) {
-      dioOptions = buildCacheOptions(
-        Duration(days: 0, hours: 1),
-        // options: Options(
-        //   contentType: "application/x-www-form-urlencoded",
-        // ),
-        forceRefresh: false,
-      );
-    } else if (cacheLevel == NetworkCacheLevel.forceRefreshAndCacheOne) {
-      dioOptions = buildCacheOptions(
-        Duration(days: 0, hours: 1),
-        // options: Options(
-        //   contentType: "application/x-www-form-urlencoded",
-        // ),
-        forceRefresh: true,
-      );
-    }
-
-    return dioOptions;
   }
 
   Future retryWhenError(DioError err) async {

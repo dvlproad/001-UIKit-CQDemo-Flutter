@@ -45,7 +45,6 @@ class ShareUtil {
 
   /// 分享商品详情
   static shareGoodsDetail({
-    @required String h5BgImageUrl,
     @required String h5Title,
     @required String goodsID,
     @required String goodsName,
@@ -60,7 +59,7 @@ class ShareUtil {
     ShareConfig config = GlobalConfig.goodsDetailShareConfig;
 
     String webPage = GlobalConfig.goodsDetailFullShareUrl(
-      h5BgImageUrl: h5BgImageUrl,
+      h5BgImageUrl: config.h5BgImageUrl,
       h5Title: h5Title,
       goodsID: goodsID,
     );

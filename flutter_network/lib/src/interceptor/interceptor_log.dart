@@ -1,8 +1,9 @@
 import 'dart:convert' as convert;
+import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_log/flutter_log.dart';
-import './url_util.dart';
-import '../mock_analy_util.dart';
+import '../url/url_util.dart';
+import '../mock/mock_analy_util.dart';
 
 /// api 日志信息类型
 enum ApiLogLevel {
@@ -25,20 +26,50 @@ class DioLogInterceptor extends Interceptor {
     String logString, {
     ApiProcessType apiProcessType, // api 请求的阶段类型
     ApiLogLevel apiLogLevel, // api 日志信息类型
-  }) logApiInfoAction; // 打印请求各阶段出现的不同等级的日志信息
+    bool isCacheApiLog, // 是否是缓存请求的日志
+  }) _logApiInfoAction; // 打印请求各阶段出现的不同等级的日志信息
+
+  static bool Function(RequestOptions options) _isCacheRequestCheckBlock;
+  static bool Function(DioError err) _isCacheErrorCheckBlock;
+  static bool Function(Response response) isCacheResponseCheckFunction;
+
+  static void initDioLogInterceptor({
+    @required
+        void Function(
+      String fullUrl, // 完整的url路径
+      String logString, {
+      ApiProcessType apiProcessType, // api 请求的阶段类型
+      ApiLogLevel apiLogLevel, // api 日志信息类型
+      bool isCacheApiLog, // 是否是缓存请求的日志
+    })
+            logApiInfoAction, // 打印请求各阶段出现的不同等级的日志信息
+
+    bool Function(RequestOptions options) isCacheRequestCheckBlock,
+    bool Function(DioError err) isCacheErrorCheckBlock,
+    bool Function(Response response) isCacheResponseCheckBlock,
+  }) {
+    _logApiInfoAction = logApiInfoAction;
+
+    _isCacheRequestCheckBlock = isCacheRequestCheckBlock;
+    _isCacheErrorCheckBlock = isCacheErrorCheckBlock;
+    isCacheResponseCheckFunction = isCacheResponseCheckBlock;
+  }
 
   void logApi(
     String fullUrl, // 完整的url路径
     String logString, // api 日志信息
     ApiProcessType apiProcessType, // api 请求的阶段类型
     ApiLogLevel apiLogLevel, // api 日志信息类型
-  ) {
-    if (DioLogInterceptor.logApiInfoAction != null) {
-      DioLogInterceptor.logApiInfoAction(
+    {
+    bool isFromCache, // 是否是缓存数据
+  }) {
+    if (DioLogInterceptor._logApiInfoAction != null) {
+      DioLogInterceptor._logApiInfoAction(
         fullUrl,
         logString,
         apiProcessType: apiProcessType,
         apiLogLevel: apiLogLevel,
+        isCacheApiLog: isFromCache,
       );
     }
   }
@@ -57,7 +88,18 @@ class DioLogInterceptor extends Interceptor {
 
     //requestStr = data.toString();
     // requestStr = "请求开始的信息：" + requestStr;
-    logApi(url, requestStr, ApiProcessType.request, ApiLogLevel.normal);
+
+    bool isFromCache = null;
+    if (null != DioLogInterceptor._isCacheRequestCheckBlock) {
+      isFromCache = DioLogInterceptor._isCacheRequestCheckBlock(options);
+    }
+    logApi(
+      url,
+      requestStr,
+      ApiProcessType.request,
+      ApiLogLevel.normal,
+      isFromCache: isFromCache,
+    );
 
     handler.next(options);
   }
@@ -92,7 +134,18 @@ class DioLogInterceptor extends Interceptor {
     logHeaderString += "============== Error ==============\n";
 
     errorStr = logHeaderString + errorStr;
-    logApi(url, errorStr, ApiProcessType.error, ApiLogLevel.error);
+
+    bool isFromCache = null;
+    if (null != DioLogInterceptor._isCacheErrorCheckBlock) {
+      isFromCache = DioLogInterceptor._isCacheErrorCheckBlock(err);
+    }
+    logApi(
+      url,
+      errorStr,
+      ApiProcessType.error,
+      ApiLogLevel.error,
+      isFromCache: isFromCache,
+    );
 
     handler.next(err);
   }
@@ -177,7 +230,18 @@ class DioLogInterceptor extends Interceptor {
     }
 
     responseStr = logHeaderString + responseStr;
-    logApi(url, responseStr, ApiProcessType.response, apiLogLevel);
+
+    bool isFromCache = null;
+    if (null != DioLogInterceptor.isCacheResponseCheckFunction) {
+      isFromCache = DioLogInterceptor.isCacheResponseCheckFunction(response);
+    }
+    logApi(
+      url,
+      responseStr,
+      ApiProcessType.response,
+      apiLogLevel,
+      isFromCache: isFromCache,
+    );
 
     handler.next(response);
   }

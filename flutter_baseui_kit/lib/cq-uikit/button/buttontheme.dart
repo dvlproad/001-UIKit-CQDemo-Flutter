@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 // import 'dart:ui';
 
 final Map theme = {
-  "pink": {
-    "themeColor": Color(0xFFFF7F00), // 金黄色golden 粉红色pink
+  "theme": {
+    "themeColor": Color(0xFFFF7F00), // 金黄色golden
     "themeOppositeColor": Colors.white,
+  },
+  "pink": {
+    "themeColor": Color(0xFFFFC5BF), // 粉红色pink
+    "themeOppositeColor": Colors.black,
   },
   "purple": {
     "themeColor": Colors.purple, // 紫色 purple
@@ -30,6 +34,7 @@ final Map theme = {
 
 // 颜色分类
 enum ThemeBGType {
+  theme,
   pink,
   purple,
   blue,
@@ -39,12 +44,12 @@ enum ThemeBGType {
 }
 
 Color themeColor(ThemeBGType type) {
-  type = type ?? ThemeBGType.pink;
+  type = type ?? ThemeBGType.theme;
   return theme[type.toString().split('.').last]['themeColor'];
 }
 
 Color themeOppositeColor(ThemeBGType type) {
-  type = type ?? ThemeBGType.pink;
+  type = type ?? ThemeBGType.theme;
   return theme[type.toString().split('.').last]['themeOppositeColor'];
 }
 
@@ -72,6 +77,27 @@ class ButtonThemeUtil {
       fontWeight: FontWeight.w500,
     );
   }
+}
+
+// Regular 的文本样式
+class ButtonRegularTextStyle extends TextStyle {
+  final double fontSize;
+  // final Color color;
+  final double height;
+
+  ButtonRegularTextStyle({
+    @required this.fontSize,
+    // this.color,
+    this.height,
+  })  : assert(fontSize != null),
+        // assert(color != null),
+        super(
+          fontFamily: 'PingFang SC',
+          fontSize: fontSize,
+          fontWeight: FontWeight.w400,
+          // color: color,
+          height: height,
+        );
 }
 
 // bold 的文本样式

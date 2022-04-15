@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../base-uikit/bg_border_widget.dart';
 
 /// 底层按钮(已配置 Normal 和 Selected 风格的主题色按钮)
 class CJStateButton extends StatelessWidget {
@@ -27,7 +28,7 @@ class CJStateButton extends StatelessWidget {
     this.width,
     this.height,
     @required this.child,
-    @required this.onPressed,
+    this.onPressed, // 不是必传(为了使其null时候，能够自动透传点击事件)
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
     this.selected = false,
@@ -43,8 +44,7 @@ class CJStateButton extends StatelessWidget {
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
     this.selectedBackgroundHighlightColor,
     this.highlightOpacity,
-  })  : assert(onPressed != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class CJStateButton extends StatelessWidget {
 
     Color _currentBorderColor;
     double _currentBorderWidth;
-    double _cornerRadius = this.cornerRadius;
+    double _cornerRadius = this.cornerRadius ?? 0.0;
 
     double _highlightOpacity = 1.0; // 默认为1.0,即没直接设置高亮颜色的时候，高亮为原色
     if (this.highlightOpacity != null) {
@@ -93,14 +93,6 @@ class CJStateButton extends StatelessWidget {
       _currentBorderWidth = normalBorderWidth;
     }
 
-    VoidCallback _onPressed;
-    if (this.enable) {
-      _onPressed =
-          this.onPressed ?? () {}; // 这里是用 onPressed 的是否为空，来内部设置 enable 属性的
-    } else {
-      _onPressed = null; // 这里是用 onPressed 的是否为空，来内部设置 enable 属性的
-    }
-
     BorderSide borderSide = BorderSide(
       width: _currentBorderWidth,
       color: _currentBorderWidth == 0
@@ -126,6 +118,12 @@ class CJStateButton extends StatelessWidget {
         _currentBackgroundHighlightColor =
             _currentBackgroundColor.withOpacity(_highlightOpacity);
       }
+    }
+
+    /*
+    VoidCallback _onPressed = this.onPressed;
+    if (this.enable == false) {
+      _onPressed = () {}; // 不能点击的时候，如果还是this.onPressed，则也会自行该操作
     }
 
     ButtonStyle buttonStyle = ButtonStyle(
@@ -181,50 +179,40 @@ class CJStateButton extends StatelessWidget {
       height: this.height,
       child: TextButton(
         child: this.child,
-        onPressed: _onPressed,
+        onPressed: _onPressed, // 必传，但null时候会自动透传
         style: buttonStyle,
       ),
     );
-    //*/
+    */
 
-    return Container(
+    VoidCallback _onPressed = this.onPressed;
+    if (this.enable == false) {
+      _onPressed = () {}; // 不能点击的时候，如果还是this.onPressed，则也会自行该操作
+    }
+
+    return CJBGBorderWidget(
       width: this.width,
       height: this.height,
-      child: FlatButton(
-        child: this.child,
-        onPressed: _onPressed,
-        splashColor: Colors.transparent,
-        color: _currentBackgroundColor,
-        textColor: _currentTextColor,
-        highlightColor: _currentBackgroundHighlightColor,
-        disabledColor: _currentBackgroundColor,
-        disabledTextColor: _currentTextColor,
-        shape: shapeBorder,
+      backgroundColor: _currentBackgroundColor,
+      borderColor: _currentBorderColor,
+      borderWidth: _currentBorderWidth,
+      cornerRadius: _cornerRadius,
+      onPressed: _onPressed, // 非必传,null时候要且会自动结合behavior属性实现透传
+      behavior: _onPressed == null
+          ? HitTestBehavior.translucent
+          : HitTestBehavior.deferToChild,
+      child: DefaultTextStyle(
+        style: TextStyle(
+          color: _currentTextColor,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            child,
+          ],
+        ),
       ),
     );
-
-    // return CJBGBorderWidget(
-    //   // height: this.height,
-    //   backgroundColor: _currentBackgroundColor,
-    //   borderColor: _currentBorderColor,
-    //   borderWidth: _currentBorderWidth,
-    //   cornerRadius: _cornerRadius,
-    //   onPressed: _onPressed,
-    //   child: Row(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     mainAxisAlignment: MainAxisAlignment.center,
-    //     children: <Widget>[
-    //       Text(
-    //         _currentTitle,
-    //         textAlign: TextAlign.left,
-    //         overflow: TextOverflow.ellipsis,
-    //         style: TextStyle(
-    //           color: _currentTextColor,
-    //           fontSize: 8.0,
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
   }
 }

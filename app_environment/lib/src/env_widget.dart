@@ -82,6 +82,7 @@ class _EnvWidgetState extends State<EnvWidget> {
       color: const Color(0xfff0f0f0),
       height: 3 * envCellHeight,
       child: ListView(
+        physics: NeverScrollableScrollPhysics(),
         children: [
           // 网络环境相关
           Consumer<EnvironmentChangeNotifier>(

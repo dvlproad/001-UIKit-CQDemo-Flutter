@@ -8,6 +8,9 @@ import 'package:flutter_effect_kit/flutter_effect_kit.dart'
 import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
+// import '../pagetype_error/state_error_widget.dart';
+// import '../pagetype_nodata/nodata_widget.dart';
+
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends StatefulWidget {
   BJHBasePage({
@@ -80,6 +83,11 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     // );
   }
 
+  /// 设置指定的 widgetType 离屏幕顶部的距离(默认是直接距离 appBar 的高度 Height)
+  double contentWidgetTop(WidgetType widgetType, double appBarHeight) {
+    return appBarHeight;
+  }
+
   // appBar(非Scaffold中):appBarWidget 只要非null，则有 stautsBarHeight + 44 的高度
   // appBar不能设置在success中，只能设置在appBar()或此处appBarWidget(BuildContext context)的原因是:
   // 原因是在有背景图存在的情况下，其他buildErrorWidget(BuildContext context)返回的视图为了能够显示背景图会设置成透明色，
@@ -89,6 +97,22 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   // 所以appBar不能设置在success中，只能设置在appBar()或此处appBarWidget(BuildContext context)
   Widget appBarWidget(BuildContext context) {
     return null;
+  }
+
+  /// 设置指定的 widgetType 离屏幕底部的距离(默认是直接距离 creenBottom 的高度 Height)
+  double contentWidgetBottom(WidgetType widgetType, double screenBottomHeight) {
+    return 0; // 默认0
+  }
+
+  // 底部吸附视图
+  Widget bottomAdsorbWidget(BuildContext context, double screenBottomHeight) {
+    return null;
+    // return Container(
+    //   height: screenBottomHeight + 100,
+    //   color: Colors.green,
+    //   padding: EdgeInsets.only(bottom: screenBottomHeight),
+    //   child: Container(height: 100, color: Colors.cyan.withOpacity(0.3)),
+    // );
   }
 
   /// 是否不添加 Scaffold 层
@@ -146,9 +170,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
     double appBarHeight =
         appBarWidget(context) != null ? stautsBarHeight + 44 : 0;
-
-    double contentWidgetTopDistance =
-        contentWidgetTop(_currentWidgetType, appBarHeight);
+    double screenBottomHeight = mediaQuery.padding.bottom;
 
     assert(backgroundWidget(context) != null);
 
@@ -164,12 +186,19 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
           // appBarWidget(context) ?? Container(height: 0),
           Column(
             children: [
-              Container(height: contentWidgetTopDistance),
+              Container(
+                height: contentWidgetTop(_currentWidgetType, appBarHeight),
+              ),
               Expanded(
                 child: _contentWidget(context),
               ),
+              Container(
+                height:
+                    contentWidgetBottom(_currentWidgetType, screenBottomHeight),
+              ),
+
               // Container(
-              //   height: mediaQuery.size.height - contentWidgetTopDistance - 10,
+              //   height: mediaQuery.size.height - contentWidgetTop(_currentWidgetType, appBarHeight) - 10,
               //   color: Colors.green,
               //   // child: _contentWidget(context),
               // ),
@@ -182,6 +211,14 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
             right: 0,
             child: appBarWidget(context) ?? Container(height: 0),
           ),
+          // bottomAdsorbWidget 吸附底部的视图
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: bottomAdsorbWidget(context, screenBottomHeight) ??
+                Container(height: 0),
+          ),
         ],
       ),
     );
@@ -189,12 +226,25 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
 
   /// 内容视图
   Widget _contentWidget(BuildContext context) {
+    Widget _errorWidget = buildErrorWidget(context);
+    if (_currentWidgetType == WidgetType.ErrorNetwork && _errorWidget == null) {
+      print(
+          "Error:你想要展示无网络状态页，但未设置，所以请重写 Widget buildErrorWidget(BuildContext context)");
+    }
+
+    Widget _nodataWidget = buildNodataWidget(context);
+    if (_currentWidgetType == WidgetType.SuccessNoData &&
+        _nodataWidget == null) {
+      print(
+          "Error:你想要展示无数据状态页，但未设置，所以请重写 Widget buildNodataWidget(BuildContext context)");
+    }
+
     return PageTypeLoadStateWidget(
       widgetType: _currentWidgetType,
       initWidget: _initWidget,
       successWidget: buildSuccessWidget(context),
-      nodataWidget: buildNodataWidget(context),
-      errorWidget: buildErrorWidget(context),
+      nodataWidget: _nodataWidget,
+      errorWidget: _errorWidget,
       showSelfLoading: _showSelfLoading,
       selfLoadingWidget: buildSelfLoadingWidgetWidget(context),
     );
@@ -225,10 +275,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
       return;
     }
 
-    bool needSetState = true;
-    if (needUpdateUI != null) {
-      needSetState = needUpdateUI;
-    }
+    bool needSetState = needUpdateUI ?? true;
     if (needSetState && mounted) {
       setState(() {});
     }
@@ -237,11 +284,6 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   /// 获取当前状态(如网络异常时候，存在在导航栏上的右边的那些视图是要禁止点击的)
   WidgetType getCurrentWidgetType() {
     return _currentWidgetType;
-  }
-
-  /// 设置指定的 widgetType 离屏幕顶部的距离(默认是直接距离 appBar 的高度 Height)
-  double contentWidgetTop(WidgetType widgetType, double appBarHeight) {
-    return appBarHeight;
   }
 
   Widget buildInitWidget(BuildContext context) {
@@ -258,10 +300,14 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
 
   Widget buildNodataWidget(BuildContext context) {
     return null;
+    // return StateNodataWidget();
   }
 
   Widget buildErrorWidget(BuildContext context) {
     return null;
+    // return StateErrorWidget(errorRetry: () {
+    //   print("刷新了");
+    // });
   }
 
   Widget buildSelfLoadingWidgetWidget(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_environment/flutter_environment.dart';
@@ -142,6 +143,7 @@ class _DevPageState extends State<DevPage> {
         child: ListView(
           children: [
             _devtool_floating_cell(),
+            _permission_cell(),
 
             // 版本信息
             Container(height: 20),
@@ -192,6 +194,16 @@ class _DevPageState extends State<DevPage> {
 
   Widget _devtool_appinfo_cell() {
     return PackageInfoCell(packageInfo: packageInfo);
+  }
+
+  Widget _permission_cell() {
+    return BJHTitleTextValueCell(
+      title: "打开app设置",
+      textValue: '',
+      onTap: () {
+        openAppSettings();
+      },
+    );
   }
 
   Widget _app_downloadpage_cell() {
@@ -320,29 +332,6 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_env_cell(BuildContext context) {
-    TSEnvNetworkModel selectedNetworkModel =
-        NetworkPageDataManager().selectedNetworkModel;
-    if (selectedNetworkModel == null) {
-      throw Exception(
-          '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
-    }
-    String envName = selectedNetworkModel.name;
-    return BJHTitleTextValueCell(
-      title: "切换环境",
-      textValue: envName,
-      onTap: () {
-        PackageEnvironmentUtil.checkShouldResetNetwork(
-          goChangeHandle: () {
-            EnvUtil.goChangeEnvironmentNetwork(context).then((value) {
-              setState(() {});
-            });
-          },
-        );
-      },
-    );
-  }
-
   /*
   void _showPasswordAlert(
     BuildContext context, {
@@ -379,51 +368,6 @@ class _DevPageState extends State<DevPage> {
     ).show(context);
   }
   */
-
-  Widget _devtool_proxy_cell(BuildContext context) {
-    TSEnvProxyModel selectedProxyModel =
-        ProxyPageDataManager().selectedProxyModel;
-    if (selectedProxyModel == null) {
-      throw Exception(
-          '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
-    }
-    String proxyName = selectedProxyModel.name;
-    return BJHTitleTextValueCell(
-      title: "添加代理",
-      textValue: proxyName,
-      onTap: () {
-        PackageEnvironmentUtil.checkProxyAllowForPackage(
-          goChangeHandle: () {
-            EnvUtil.goChangeEnvironmentProxy(context).then((value) {
-              setState(() {});
-            });
-          },
-        );
-      },
-    );
-  }
-
-  Widget _devtool_apimock_cell(BuildContext context) {
-    int mockCount = ApiManager.mockCount();
-    String mockCountString = '已mock:$mockCount个';
-    return BJHTitleTextValueCell(
-      title: "Mock工具",
-      textValue: mockCountString,
-      onTap: () {
-        DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
-        PackageType packageType = packageBean.packageType;
-        if (packageType == PackageType.develop1 ||
-            packageType == PackageType.develop2) {
-          EnvUtil.goChangeApiMock(context).then((value) {
-            setState(() {});
-          });
-        } else {
-          String message = "您当前包为${packageBean.des}，不支持Mock";
-          ToastUtil.showMsg(message, context);
-        }
-      },
-    );
-  }
 
   /// 网络库测试相关
   Widget _devtool_changeheader_cell() {

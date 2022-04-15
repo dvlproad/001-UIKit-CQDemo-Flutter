@@ -3,13 +3,62 @@ import '../../base-uikit/button/textbutton.dart';
 import './button_child_widget.dart';
 import './buttontheme.dart';
 
+class RowPaddingButton extends StatelessWidget {
+  double leftRightPadding;
+  double height;
+  double cornerRadius;
+  ThemeBGType bgColorType;
+  String title;
+  TextStyle titleStyle;
+  void Function() onPressed;
+
+  RowPaddingButton({
+    Key key,
+    this.leftRightPadding,
+    this.height,
+    this.cornerRadius,
+    this.bgColorType,
+    @required this.title,
+    this.titleStyle,
+    @required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      padding: EdgeInsets.only(
+        left: leftRightPadding ?? 0,
+        right: leftRightPadding ?? 0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: ThemeBGButton(
+              height: height,
+              cornerRadius: cornerRadius,
+              bgColorType: bgColorType,
+              title: title,
+              titleStyle: titleStyle,
+              onPressed: onPressed,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 /// 以主题色为背景的按钮
 class ThemeBGButton extends CJStateTextButton {
   ThemeBGButton({
     Key key,
     double width,
     double height,
-    @required ThemeBGType bgColorType,
+    ThemeBGType bgColorType,
+    Color bgColor, // 不设置 bgColor 的时候要设置 bgColorType
+    Color textColor, // 不设置 textColor 的时候要设置 bgColorType
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     @required String title,
     TextStyle titleStyle,
@@ -17,9 +66,10 @@ class ThemeBGButton extends CJStateTextButton {
     double imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double cornerRadius = 5.0,
     bool enable = true,
-    @required VoidCallback onPressed,
+    VoidCallback onPressed, // null时候会自动透传事件
   })  : assert(title != null),
-        assert(onPressed != null),
+        assert(bgColorType != null || bgColor != null),
+        assert(bgColorType != null || textColor != null),
         super(
           key: key,
           width: width,
@@ -36,10 +86,12 @@ class ThemeBGButton extends CJStateTextButton {
           selected: false,
           onPressed: onPressed,
           cornerRadius: cornerRadius,
-          normalBGColor: themeColor(bgColorType),
-          normalTextColor: themeOppositeColor(bgColorType),
+          normalBGColor: bgColor != null ? bgColor : themeColor(bgColorType),
+          normalTextColor:
+              textColor != null ? textColor : themeOppositeColor(bgColorType),
           normalBorderWidth: 0.0,
-          normalBorderColor: themeOppositeColor(bgColorType),
+          normalBorderColor:
+              textColor != null ? textColor : themeOppositeColor(bgColorType),
           // normalHighlightColor: Colors.yellow,
           highlightOpacity: needHighlight ? 0.7 : 1.0,
         );

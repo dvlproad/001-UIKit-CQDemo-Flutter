@@ -11,9 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # bruno: any
-
   flutter_picker: any
+  flutter_pickers: any
   date_format: any
   flutter_screenutil: any
 
