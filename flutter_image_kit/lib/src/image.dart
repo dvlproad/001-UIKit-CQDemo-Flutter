@@ -58,7 +58,7 @@ String newImageUrl(
     return imageUrl;
   }
 
-  int index = imageUrl.indexOf('.xihuanwu.com');
+  int index = imageUrl.indexOf('.xxx.com');
   bool isCloudImage = index != -1;
 
   String newImageUrl = imageUrl;

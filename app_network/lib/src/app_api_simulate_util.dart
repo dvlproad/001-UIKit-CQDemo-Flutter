@@ -5,7 +5,7 @@ import 'package:flutter_environment/flutter_environment.dart';
 extension SimulateExtension on String {
   String toSimulateApi() {
     String simulateApiHost = ApiManager.instance.mockApiHost;
-    List<String> allMockApiHosts = ["http://dev.api.xihuanwu.com/hapi/"];
+    List<String> allMockApiHosts = ["http://dev.api.xxx.com/hapi/"];
     String newApi = this.newApi(
       newApiHost: simulateApiHost,
       shouldChangeApiHosts: allMockApiHosts,
@@ -17,7 +17,7 @@ extension SimulateExtension on String {
 
   String toLocalApi() {
     String localApiHost = NetworkUtil.localApiHost;
-    List<String> allMockApiHosts = ["http://dev.api.xihuanwu.com/hapi/"];
+    List<String> allMockApiHosts = ["http://dev.api.xxx.com/hapi/"];
     String newApi = this.newApi(
       newApiHost: localApiHost,
       shouldChangeApiHosts: allMockApiHosts,

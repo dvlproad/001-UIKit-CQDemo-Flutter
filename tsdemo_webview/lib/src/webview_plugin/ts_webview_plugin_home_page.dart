@@ -79,7 +79,7 @@ class _TSWebViewPluginHomePageState extends State<TSWebViewPluginHomePage> {
                 builder: (context) => WebViewPage(
                   // Url: 'https://www.baidu.com',
                   Url:
-                      'http://dev.game.h5.xihuanwu.com/id=1470575934695165952&top=20.0&bottom=0.0', // 需要先支持http
+                      'http://dev.game.h5.xxx.com/id=1470575934695165952&top=20.0&bottom=0.0', // 需要先支持http
                 ),
               );
               Navigator.push(context, route);

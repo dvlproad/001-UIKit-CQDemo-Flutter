@@ -66,7 +66,7 @@ class _TSWebViewFlutterHomePageState extends State<TSWebViewFlutterHomePage> {
                 builder: (context) => BaseWebPage(
                   // Url: 'https://www.baidu.com',
                   Url:
-                      'http://dev.game.h5.xihuanwu.com/id=1470575934695165952&top=20.0&bottom=0.0',
+                      'http://dev.game.h5.xxx.com/id=1470575934695165952&top=20.0&bottom=0.0',
                 ),
               );
               Navigator.push(context, route);

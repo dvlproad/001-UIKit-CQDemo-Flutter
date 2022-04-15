@@ -10,7 +10,7 @@ class ShareUtil {
   //   String webUrl,
   //   Map<String, dynamic> params,
   // }) {
-  //   webUrl ??= 'http://dev.h5.xihuanwu.com/#/pages-h5/share/share';
+  //   webUrl ??= 'http://dev.h5.xxx.com/#/pages-h5/share/share';
 
   //   if (!webUrl.contains("?")) {
   //     webUrl += "?";

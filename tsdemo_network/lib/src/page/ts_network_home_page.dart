@@ -24,7 +24,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   void initState() {
     super.initState();
 
-    String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
+    String baseUrl = "http://dev.api.xxx.com/hapi/";
 
     LogUtil.init(isDebug: true);
     // NetworkManager();
@@ -54,7 +54,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
             ListTile(
               title: Text('切换环境:real'),
               onTap: () {
-                String baseUrl = "http://dev.api.xihuanwu.com/hapi/";
+                String baseUrl = "http://dev.api.xxx.com/hapi/";
                 NetworkChangeUtil.changeOptions(
                   baseUrl: baseUrl,
                 );

@@ -17,14 +17,8 @@ shareUrl:		分享的h5地址
 	"msg": "获取全局配置成功",
 	"data": {
 		"shareConfig": {
-			"wishDetail": {
-				"h5Title": "快来看看我的愿望单",
-				"h5BgImageUrl": "https://bojuehui-1302324914.cos.ap-guangzhou.myqcloud.com/image/wish/share.png",
-				"shareDescription": "我种草了好多愿望，快来帮我实现吧！",
-				"shareUrl": "http://dev.h5.xihuanwu.com/#/pages-h5/share/share"
-			},
 			"goodsDetail": {
-				"shareUrl": "http://dev.h5.xihuanwu.com/#/pages-h5/share/share"
+				"shareUrl": "http://dev.h5.xxx.com/#/pages-h5/share/share"
 			},
 			"orderAddrDetail": {
 				"h5Title": "你有一份好礼待领取",
@@ -32,7 +26,7 @@ shareUrl:		分享的h5地址
 				"shareTitle": "你有一份好礼待领取",
 				"shareDescription": "完善地址，好礼即将送达至您的手中",
 				"shareThumbnailUrl": "https://bojuehui-1302324914.cos.ap-guangzhou.myqcloud.com/image/share/orderShare%403x.png",
-				"shareUrl": "http://dev.h5.xihuanwu.com/#/pages-h5/share/share"
+				"shareUrl": "http://dev.h5.xxx.com/#/pages-h5/share/share"
 			}
 		}
 	}
