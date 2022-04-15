@@ -109,20 +109,25 @@ class AppNetworkKit {
         return;
       }
 
+      // 不是真正的网络请求返回的Response\Error结果(如是取缓存的结果时候)
+      bool noRealRequest = cacheLevel == NetworkCacheLevel.one;
       if (responseModel.isCache == true) {
         completeCallBack(responseModel);
 
         //print('底层网络库:这是缓存数据');
 
+        NetworkCacheLevel newCacheLevel;
         if (cacheLevel == NetworkCacheLevel.one) {
-          cacheLevel = NetworkCacheLevel.forceRefreshAndCacheOne;
+          newCacheLevel = NetworkCacheLevel.forceRefreshAndCacheOne;
+        } else {
+          print('Error：判断出错啦，此结果不是缓存数据，却走到了isCache==true');
         }
 
         postWithCallback(
           api,
           params: params,
           withLoading: withLoading,
-          cacheLevel: cacheLevel,
+          cacheLevel: newCacheLevel,
           showToastForNoNetwork: showToastForNoNetwork ?? false,
           completeCallBack: completeCallBack,
         );

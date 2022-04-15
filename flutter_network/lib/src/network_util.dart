@@ -181,6 +181,7 @@ class NetworkUtil {
       }
     } catch (e) {
       String errorMessage = e.toString();
+      bool isFromCache = null;
 
       String fullUrl;
       if (url.startsWith(RegExp(r'https?:'))) {
@@ -188,6 +189,10 @@ class NetworkUtil {
       } else {
         if (e is DioError) {
           DioError err = e;
+          if (null != DioLogInterceptor.isCacheErrorCheckFunction) {
+            isFromCache = DioLogInterceptor.isCacheErrorCheckFunction(err);
+          }
+
           fullUrl = UrlUtil.fullUrlFromDioError(err);
 
           String baseUrl = err.requestOptions.baseUrl;
@@ -208,7 +213,10 @@ class NetworkUtil {
       }
 
       String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
-      return ResponseModel.errorResponseModel(message);
+      return ResponseModel.errorResponseModel(
+        message,
+        isCache: isFromCache,
+      );
     }
   }
 

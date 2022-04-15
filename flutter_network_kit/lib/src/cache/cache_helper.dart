@@ -1,8 +1,8 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2022-04-13 03:10:01
- * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2022-04-16 02:47:50
+ * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
 import 'package:dio/dio.dart';
@@ -12,9 +12,9 @@ const DIO_CACHE_KEY_CACHE_LEVEL = "dio_cache_cache_level";
 
 /// 网络缓存
 enum NetworkCacheLevel {
-  none, // 不需要缓存
-  one,
-  forceRefreshAndCacheOne, // 强制刷新本次，并且缓存本次的数据以备下次使用
+  none, // 不需要缓存（接下来的request时候不取缓存，也不会对其response结果进行缓存来备下次使用）
+  one, // 先取缓存，有结果再缓存一次(接下来的request时候先取缓存，同时会对其response结果进行缓存以备下次使用)
+  forceRefreshAndCacheOne, // 强制刷新本次即接下来的request时候不取缓存，但会对其response结果进行缓存以备下次使用
 
 }
 
@@ -57,9 +57,16 @@ class CacheHelper {
   }
 
   static bool isCacheError(DioError err) {
-    bool isFromCache =
-        err.requestOptions.extra[DIO_CACHE_KEY_TRY_CACHE] ?? false;
-    // bool isFromCache = _isCacheHeaders(err.response.headers);
+    // bool isFromCache2 =
+    //     err.requestOptions.extra[DIO_CACHE_KEY_TRY_CACHE] ?? false; // 此判断条件经测试不准
+    // bool isFromCache2 = _isCacheHeaders(err.response.headers);
+    NetworkCacheLevel networkCacheLevel =
+        err.requestOptions.extra[DIO_CACHE_KEY_CACHE_LEVEL] ??
+            NetworkCacheLevel.none;
+    bool noRealRequest = networkCacheLevel ==
+        NetworkCacheLevel.one; // 不是真正的网络请求返回的Error结果(如是取缓存的结果时候)
+    bool isFromCache = noRealRequest;
+
     return isFromCache;
   }
 

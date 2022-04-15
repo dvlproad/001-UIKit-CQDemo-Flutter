@@ -1,10 +1,24 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-16 04:27:21
+ * @Description: 底层企业微信机器人
+ */
 import 'dart:io' show Platform;
 import 'package:dio/dio.dart';
 import 'package:package_info/package_info.dart';
 
 class CommonErrorRobot {
-  static String packageDescribe = ''; // 包的描述(生产、测试、开发包)
-  static String Function() userDescribeBlock; // 当前使用该包的用户信息
+  static String _packageDescribe = ''; // 包的描述(生产、测试、开发包)
+  static String Function() _userDescribeBlock; // 当前使用该包的用户信息
+  static void init({
+    String packageDescribe, // 包的描述(生产、测试、开发包)
+    String Function() userDescribeBlock, // 当前使用该包的用户信息
+  }) {
+    _packageDescribe = packageDescribe ?? "未知包"; // 包、平台、分支及版本等相关信息
+    _userDescribeBlock = userDescribeBlock;
+  }
 
   /// 通用异常上报:企业微信
   static Future<bool> postError(
@@ -25,13 +39,10 @@ class CommonErrorRobot {
       fullMessage += '$title\n';
     }
 
-    String packageDescribe =
-        CommonErrorRobot.packageDescribe ?? "未知包"; // 包、平台、分支及版本等相关信息
-    fullMessage += '$packageDescribe';
+    fullMessage += '$_packageDescribe';
 
-    if (CommonErrorRobot.userDescribeBlock != null) {
-      String userDescribe =
-          CommonErrorRobot.userDescribeBlock() ?? ""; // 当前使用该包的用户信息
+    if (_userDescribeBlock != null) {
+      String userDescribe = _userDescribeBlock() ?? ""; // 当前使用该包的用户信息
       fullMessage += '\n$userDescribe';
     }
 

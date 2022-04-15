@@ -1,14 +1,14 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-04-13 00:17:19
- * @LastEditTime: 2022-04-13 01:14:06
+ * @LastEditTime: 2022-04-16 04:09:11
  * @LastEditors: dvlproad
  * @Description: 网络异常上报机器人
  */
-import './common_error_robot.dart';
-import './api_error_people_util.dart';
 import './robot_bean.dart';
-export './robot_bean.dart';
+import './api_error_bean.dart';
+import './api_error_people_util.dart';
+import '../log_robot/common_error_robot.dart';
 
 class ApiErrorRobot {
   static List<RobotBean> apiErrorRobots;

@@ -1,37 +1,4 @@
-// 人
-class ApiPeopleBean {
-  String pid;
-
-  ApiPeopleBean({
-    this.pid,
-  });
-}
-
-// 问题(含 描述、api人、app人)
-class ApiErrorDesBean {
-  final String des;
-  final List<String> apiApiPeoples;
-  final List<ApiPeopleBean> appApiPeoples;
-
-  ApiErrorDesBean({
-    this.des,
-    this.apiApiPeoples,
-    this.appApiPeoples,
-  });
-
-  List<String> allPids() {
-    List<String> mentioned_list = [];
-    for (String apiApiPeople in apiApiPeoples ?? []) {
-      mentioned_list.add(apiApiPeople);
-    }
-
-    for (ApiPeopleBean appApiPeople in appApiPeoples ?? []) {
-      mentioned_list.add(appApiPeople.pid);
-    }
-    // mentioned_list = ['lichaoqian'];
-    return mentioned_list;
-  }
-}
+import './api_error_bean.dart';
 
 class ApiErrorPeopleUtil {
   static ApiPeopleBean qian = ApiPeopleBean(pid: 'lichaoqian');
@@ -40,6 +7,7 @@ class ApiErrorPeopleUtil {
   static ApiPeopleBean xuejingpeng = ApiPeopleBean(pid: 'xuejingpeng');
   static ApiPeopleBean xuyuecheng = ApiPeopleBean(pid: 'xuyuecheng');
 
+  /// 根据api找到对应的人
   static ApiErrorDesBean apiErrorMentionedBeans(String fullErrorApi) {
     int index = fullErrorApi.indexOf('/hapi/');
     if (index == -1) {

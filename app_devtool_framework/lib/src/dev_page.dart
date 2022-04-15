@@ -480,7 +480,7 @@ class _DevPageState extends State<DevPage> {
         String apiFullUrl =
             "http://121.41.91.92:3000/mock/28/hapi/test_test_test/";
         String apiMessage = '我只是测试的api的上报信息';
-        LogUtil.apiError(apiFullUrl, apiMessage);
+        LogApiUtil.apiError(apiFullUrl, apiMessage);
       },
     );
   }

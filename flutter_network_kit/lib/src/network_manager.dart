@@ -51,25 +51,33 @@ class NetworkKit {
         ApiLogLevel apiLogLevel, // api 日志信息类型
         bool isCacheApiLog, // 是否是缓存请求的日志
       }) {
+        Map extraApiLogInfo = {};
+        if (apiProcessType != null) {
+          extraApiLogInfo.addAll({
+            "extra_apiProcessType": apiProcessType,
+          });
+        }
         String serviceValidProxyIp = NetworkManager.serviceValidProxyIp;
-        Map extraApiLogInfo = {
+        extraApiLogInfo.addAll({
           "hasProxy": serviceValidProxyIp != null,
-        };
+        });
         if (isCacheApiLog != null) {
           extraApiLogInfo.addAll({
             "isCacheApiLog": isCacheApiLog,
           });
         }
         if (apiLogLevel == ApiLogLevel.error) {
-          LogUtil.apiError(fullUrl, logString, extraLogInfo: extraApiLogInfo);
+          LogApiUtil.apiError(fullUrl, logString,
+              extraLogInfo: extraApiLogInfo);
         } else if (apiLogLevel == ApiLogLevel.warning) {
-          LogUtil.apiWarning(fullUrl, logString, extraLogInfo: extraApiLogInfo);
+          LogApiUtil.apiWarning(fullUrl, logString,
+              extraLogInfo: extraApiLogInfo);
         } else {
           if (apiProcessType == ApiProcessType.response) {
-            LogUtil.apiSuccess(fullUrl, logString,
+            LogApiUtil.apiSuccess(fullUrl, logString,
                 extraLogInfo: extraApiLogInfo);
           } else {
-            LogUtil.apiNormal(fullUrl, logString,
+            LogApiUtil.apiNormal(fullUrl, logString,
                 extraLogInfo: extraApiLogInfo);
           }
         }

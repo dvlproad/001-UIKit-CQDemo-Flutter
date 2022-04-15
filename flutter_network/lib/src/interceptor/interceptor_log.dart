@@ -30,7 +30,7 @@ class DioLogInterceptor extends Interceptor {
   }) _logApiInfoAction; // 打印请求各阶段出现的不同等级的日志信息
 
   static bool Function(RequestOptions options) _isCacheRequestCheckBlock;
-  static bool Function(DioError err) _isCacheErrorCheckBlock;
+  static bool Function(DioError err) isCacheErrorCheckFunction;
   static bool Function(Response response) isCacheResponseCheckFunction;
 
   static void initDioLogInterceptor({
@@ -51,7 +51,7 @@ class DioLogInterceptor extends Interceptor {
     _logApiInfoAction = logApiInfoAction;
 
     _isCacheRequestCheckBlock = isCacheRequestCheckBlock;
-    _isCacheErrorCheckBlock = isCacheErrorCheckBlock;
+    isCacheErrorCheckFunction = isCacheErrorCheckBlock;
     isCacheResponseCheckFunction = isCacheResponseCheckBlock;
   }
 
@@ -136,8 +136,8 @@ class DioLogInterceptor extends Interceptor {
     errorStr = logHeaderString + errorStr;
 
     bool isFromCache = null;
-    if (null != DioLogInterceptor._isCacheErrorCheckBlock) {
-      isFromCache = DioLogInterceptor._isCacheErrorCheckBlock(err);
+    if (null != DioLogInterceptor.isCacheErrorCheckFunction) {
+      isFromCache = DioLogInterceptor.isCacheErrorCheckFunction(err);
     }
     logApi(
       url,

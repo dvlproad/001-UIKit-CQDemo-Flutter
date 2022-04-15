@@ -1,9 +1,18 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-16 04:43:12
+ * @Description: 日志
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './popup_logview_manager.dart';
 import './log_data_bean.dart';
 export './log_data_bean.dart' show LogLevel;
+
+import './dev_log_toast_util.dart';
 
 class DevLogUtil {
   static List<LogModel> logModels = [];
@@ -78,22 +87,5 @@ class DevLogUtil {
   static clearLogs() {
     logModels.clear();
     ApplicationLogViewManager.updateLogOverlayEntry();
-  }
-}
-
-class CJTSToastUtil {
-  static showMessage(String message) {
-    if (message != null && message is String && message.isNotEmpty) {
-      print(message);
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    }
   }
 }
