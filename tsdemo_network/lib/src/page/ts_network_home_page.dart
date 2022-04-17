@@ -6,7 +6,8 @@ import 'package:flutter_network/src/interceptor/interceptor_request.dart';
 import 'package:flutter_network/src/interceptor/interceptor_response.dart';
 import 'package:flutter_network/src/interceptor/interceptor_error.dart';
 import 'package:flutter_network/src/interceptor/interceptor_log.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_network/src/mock/local_mock_util.dart';
+import 'package:flutter_log/src/print_console_log_util.dart';
 import 'package:dio/dio.dart';
 
 class TSNetworkHomePage extends StatefulWidget {
@@ -26,16 +27,19 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
 
     String baseUrl = "http://dev.api.xxx.com/hapi/";
 
-    LogUtil.init(isDebug: true);
-    // NetworkManager();
     NetworkManager.start(
       baseUrl: baseUrl,
+      connectTimeout: 2000,
       interceptors: [
         // RequestInterceptor(),
         // ResponseInterceptor(),
         // ErrorInterceptor(),
         DioLogInterceptor(),
       ],
+      logApiInfoAction: (fullUrl, logString,
+          {apiLogLevel, apiProcessType, isCacheApiLog}) {
+        PrintConsoleLogUtil.printConsoleLog(null, null, logString);
+      },
     );
   }
 
@@ -55,7 +59,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               title: Text('切换环境:real'),
               onTap: () {
                 String baseUrl = "http://dev.api.xxx.com/hapi/";
-                NetworkChangeUtil.changeOptions(
+                NetworkManager.changeOptions(
                   baseUrl: baseUrl,
                 );
               },
@@ -64,7 +68,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               title: Text('切换环境:mock'),
               onTap: () {
                 String baseUrl = "http://121.41.91.92:3000/mock/28/api/bjh/";
-                NetworkChangeUtil.changeOptions(
+                NetworkManager.changeOptions(
                   baseUrl: baseUrl,
                 );
               },
@@ -72,13 +76,13 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
             ListTile(
               title: Text('切换代理:none'),
               onTap: () {
-                NetworkChangeUtil.changeProxy(null);
+                NetworkManager.changeProxy(null);
               },
             ),
             ListTile(
               title: Text('切换代理:mac'),
               onTap: () {
-                NetworkChangeUtil.changeProxy('192.168.72.55:8888');
+                NetworkManager.changeProxy('192.168.72.55:8888');
               },
             ),
           ],
@@ -97,7 +101,10 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   }
 
   requestData(String id, String message) async {
-    String url = '/account/wallet/wishStar/page';
+    LocalMockUtil.localApiDirBlock = (String apiPath) {
+      return "packages/tsdemo_network/assets/data/";
+    };
+    String url = LocalMockUtil.localApiHost + '/account/wallet/wishStar/page';
     Map<String, dynamic> customParams = {"accountId": id, "message": message};
 
     ResponseModel responseModel1 = await NetworkUtil.postRequestUrl(
@@ -105,16 +112,14 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
       customParams: customParams,
       cancelToken: cancelToken,
     );
-    print(
-        '请求结果1:responseModel=$responseModel1,result=${responseModel1.result}');
+    // print('请求结果1:\nresponseModel=$responseModel1,result=${responseModel1.result}');
 
     NetworkUtil.postRequestUrl(
       url,
       customParams: customParams,
       cancelToken: cancelToken,
     ).then((ResponseModel responseModel) {
-      print(
-          '请求结果2:responseModel=$responseModel,result=${responseModel.result}');
+      // print('请求结果2:\nresponseModel=$responseModel,result=${responseModel.result}');
     });
 
     NetworkUtil.postUrl(
@@ -122,10 +127,12 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
       customParams: customParams,
       cancelToken: cancelToken,
       onSuccess: (result) {
-        print('请求结果3:result=$result');
+        // print('请求结果3:\nresult=$result');
+        // String logString = result.toString();
+        // PrintConsoleLogUtil.printConsoleLog(null, null, "请求结果3:\n$logString");
       },
       onFailure: (failureMessage) {
-        print('请求结果3:failureMessage=$failureMessage');
+        // print('请求结果3:\nfailureMessage=$failureMessage');
       },
     );
   }

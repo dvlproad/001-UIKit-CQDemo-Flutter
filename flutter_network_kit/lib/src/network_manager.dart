@@ -40,10 +40,30 @@ class NetworkKit {
             checkResponseModelHandel,
     bool allowMock, // 是否允许 mock api
     String mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
+    String Function(String apiPath) localApiDirBlock, // 本地网络所在的目录,需要本地模拟时候才需要设置
   }) {
     _checkResponseModelHandel = checkResponseModelHandel;
 
-    DioLogInterceptor.initDioLogInterceptor(
+    List<Interceptor> extraInterceptors = [
+      getCacheManager(baseUrl: baseUrl).interceptor,
+    ];
+
+    Map<String, dynamic> headers;
+    if (token != null && token.isNotEmpty) {
+      headers = {'Authorization': token};
+    }
+    if (commonParams != null) {
+      if (headers == null) {
+        headers = commonParams;
+      } else {
+        headers.addAll(commonParams);
+      }
+    }
+    NetworkManager.start(
+      baseUrl: baseUrl,
+      headers: headers,
+      connectTimeout: 15000,
+      interceptors: extraInterceptors,
       logApiInfoAction: (
         String fullUrl,
         String logString, {
@@ -94,28 +114,7 @@ class NetworkKit {
         bool isFromCache = CacheHelper.isCacheResponse(response);
         return isFromCache;
       },
-    );
-
-    List<Interceptor> extraInterceptors = [
-      getCacheManager(baseUrl: baseUrl).interceptor,
-    ];
-
-    Map<String, dynamic> headers;
-    if (token != null && token.isNotEmpty) {
-      headers = {'Authorization': token};
-    }
-    if (commonParams != null) {
-      if (headers == null) {
-        headers = commonParams;
-      } else {
-        headers.addAll(commonParams);
-      }
-    }
-    NetworkManager.start(
-      baseUrl: baseUrl,
-      headers: headers,
-      connectTimeout: 15000,
-      interceptors: extraInterceptors,
+      localApiDirBlock: localApiDirBlock,
     );
   }
 

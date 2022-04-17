@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 // import 'package:flutter/src/foundation/print.dart';
@@ -8,6 +9,9 @@ import './interceptor/interceptor_request.dart';
 import './interceptor/interceptor_response.dart';
 import './interceptor/interceptor_error.dart';
 import './interceptor/interceptor_log.dart';
+import './log/dio_log_util.dart';
+import './cache/dio_cache_util.dart';
+import './mock/local_mock_util.dart';
 
 import './network_change_util.dart';
 
@@ -62,7 +66,28 @@ class NetworkManager {
     Map<String, dynamic> headers,
     List<Interceptor> interceptors,
     bool nouseDefalutInterceptors = false,
+    @required
+        void Function(
+      String fullUrl, // 完整的url路径
+      String logString, {
+      ApiProcessType apiProcessType, // api 请求的阶段类型
+      ApiLogLevel apiLogLevel, // api 日志信息类型
+      bool isCacheApiLog, // 是否是缓存请求的日志
+    })
+            logApiInfoAction, // 打印请求各阶段出现的不同等级的日志信息
+    String Function(String apiPath) localApiDirBlock, // 本地网络所在的目录,需要本地模拟时候才需要设置
+    bool Function(RequestOptions options) isCacheRequestCheckBlock,
+    bool Function(DioError err) isCacheErrorCheckBlock,
+    bool Function(Response response) isCacheResponseCheckBlock,
   }) {
+    DioLogUtil.initDioLogUtil(logApiInfoAction: logApiInfoAction);
+    DioCacheUtil.initDioLogUtil(
+      isCacheRequestCheckBlock: isCacheRequestCheckBlock,
+      isCacheErrorCheckBlock: isCacheErrorCheckBlock,
+      isCacheResponseCheckBlock: isCacheResponseCheckBlock,
+    );
+    LocalMockUtil.localApiDirBlock = localApiDirBlock;
+
     if (NetworkManager.instance.hasStart == true) {
       //print('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
       return;

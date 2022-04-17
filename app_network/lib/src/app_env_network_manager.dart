@@ -28,6 +28,9 @@ class AppNetworkKit {
       },
       allowMock: allowMock,
       mockApiHost: mockApiHost,
+      localApiDirBlock: (apiPath) {
+        return "asset/data";
+      },
     );
 
     // 是否允许 mock api 及 允许 mock api 的情况下，mock 到哪个地址

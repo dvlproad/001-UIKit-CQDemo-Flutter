@@ -1,0 +1,57 @@
+{
+    "code": 0,
+    "msg": "成功",
+    "data": {
+        "total": 299500,
+        "jrnList": [{
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-22 22:44:38"
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-22 22:44:28"
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-22 20:28:23"
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-21 18:06:52"
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-18 12:46:40"
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022 -02 - 11 11: 01: 10 "
+        }, {
+            "itemName": "大转盘抽奖",
+            "useBalance": 100,
+            "direct": "OUT",
+            "scene": "CONSUME_LOTTERY",
+            "remark": null,
+            "gmtCreate": "2022-02-09 17:28:43"
+        }]
+    }
+}

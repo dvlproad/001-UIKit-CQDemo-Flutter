@@ -1,5 +1,10 @@
-/// 自定义类的话，请重写 toString() 方法即可
-
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-17 23:13:28
+ * @Description: 旧的类扩展转字符串方法（如果不是Object，而是自定义类的话，要转sting，请自己重写 toString() 方法即可）
+ */
 class LogStringUtil {
   static String stringFromMap(Map map, {int indentation = 2}) {
     return map.mapToStructureString();

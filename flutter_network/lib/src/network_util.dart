@@ -17,11 +17,12 @@ import './mock/mock_analy_util.dart';
 import './mock/local_mock_util.dart';
 
 import './interceptor/interceptor_log.dart';
+import './log/dio_log_util.dart';
+import './cache/dio_cache_util.dart';
 
 typedef T JsonParse<T>(dynamic data);
 
 class NetworkUtil {
-  static String localApiHost = "local_api_json_file";
   static void postUrl<T>(
     url, {
     Map<String, dynamic> customParams,
@@ -95,8 +96,8 @@ class NetworkUtil {
     // }
     //print('NetworkManager:初始化已完成，开始进行请求');
 
-    if (url.startsWith(localApiHost)) {
-      String loaclFilePath = url.substring(localApiHost.length);
+    if (url.startsWith(LocalMockUtil.localApiHost)) {
+      String loaclFilePath = url.substring(LocalMockUtil.localApiHost.length);
       return LocalMockUtil.requestLocalFilePath(loaclFilePath);
     }
 
@@ -133,8 +134,8 @@ class NetworkUtil {
       }
 
       bool isFromCache = false;
-      if (DioLogInterceptor.isCacheResponseCheckFunction != null) {
-        isFromCache = DioLogInterceptor.isCacheResponseCheckFunction(response);
+      if (DioCacheUtil.isCacheResponseCheckFunction != null) {
+        isFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
       }
 
       if (response.statusCode == 200) {
@@ -189,8 +190,8 @@ class NetworkUtil {
       } else {
         if (e is DioError) {
           DioError err = e;
-          if (null != DioLogInterceptor.isCacheErrorCheckFunction) {
-            isFromCache = DioLogInterceptor.isCacheErrorCheckFunction(err);
+          if (null != DioCacheUtil.isCacheErrorCheckFunction) {
+            isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
           }
 
           fullUrl = UrlUtil.fullUrlFromDioError(err);
