@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-15 00:33:56
+ * @LastEditTime: 2022-04-19 18:00:00
  * @Description: 位置工具类
  */
 import 'dart:async';
@@ -47,8 +47,12 @@ class LocationUtil {
           return LocationChoosePage(
             callBack: (BMFPoiInfo data) {
               if (data == null) {
+                if (chooseCompleteBlock != null) {
+                  chooseCompleteBlock(bLocationBean: null);
+                }
                 return;
               }
+
               double latitude = 0.0;
               double longitude = 0.0;
 
