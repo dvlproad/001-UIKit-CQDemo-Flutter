@@ -129,7 +129,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   Widget backgroundWidget(BuildContext context) {
     // 设置背景色
     return Container(
-      color: backgroundColor() ?? Color(0xFFF0F0F0),
+      color: backgroundColor() ?? Color(0xFFF7F7F7),
     );
 
     // eg1:设置铺满的背景图片

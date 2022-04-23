@@ -9,6 +9,8 @@ export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
 class BJHTitleTextValueCell extends StatelessWidget {
   final double height; // cell 的高度
   final double leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
+  final double leftMaxWidth;
+  final double rightMaxWidth;
 
   // 左侧-图片
   final ImageProvider imageProvider; // 图片(默认null时候，imageWith大于0时候才有效)
@@ -34,6 +36,8 @@ class BJHTitleTextValueCell extends StatelessWidget {
     Key key,
     this.height,
     this.leftRightPadding,
+    this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
+    this.rightMaxWidth, // 限制右侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
     this.imageProvider,
     this.imageWith,
     this.imageTitleSpace,
@@ -47,18 +51,22 @@ class BJHTitleTextValueCell extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.arrowImageType,
-  }) : super(key: key);
+  }) : //assert(leftMaxWidth > 0 || rightMaxWidth > 0),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       height: this.height,
       leftRightPadding: this.leftRightPadding,
+      leftMaxWidth: this.leftMaxWidth,
+      rightMaxWidth: this.rightMaxWidth,
       imageProvider: this.imageProvider,
       imageWith: this.imageWith,
       imageTitleSpace: this.imageTitleSpace,
       title: this.title,
-      valueWidgetBuilder: (BuildContext bContext) => _valueWidget(),
+      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) =>
+          _valueWidget(bContext, canExpanded: canExpanded),
       arrowImageType: arrowImageType ?? TableViewCellArrowImageType.arrowRight,
       clickCellCallback: (section, row, {bIsLongPress}) {
         if (bIsLongPress == true) {
@@ -74,7 +82,7 @@ class BJHTitleTextValueCell extends StatelessWidget {
     );
   }
 
-  Widget _valueWidget() {
+  Widget _valueWidget(BuildContext bContext, {bool canExpanded}) {
     List<Widget> widgets = [];
 
     if (this.addDotForValue == true) {
@@ -83,7 +91,11 @@ class BJHTitleTextValueCell extends StatelessWidget {
     }
 
     if (_textValueWidget() != null) {
-      widgets.add(_textValueWidget());
+      if (canExpanded == true) {
+        widgets.add(Expanded(child: _textValueWidget()));
+      } else {
+        widgets.add(_textValueWidget());
+      }
     }
 
     return Row(

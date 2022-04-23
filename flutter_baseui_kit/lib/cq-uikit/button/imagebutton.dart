@@ -5,25 +5,19 @@ import '../../flutter_baseui_kit_adapt.dart';
 class LeftImageButton extends StatelessWidget {
   String buttonText;
   int maxLines;
-  ImageProvider buttonImageProvider;
+  Image buttonImageView;
   GestureTapCallback onTap;
 
   LeftImageButton({
     Key key,
     this.buttonText,
-    this.buttonImageProvider,
+    this.buttonImageView,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Image image = Image(
-      image: buttonImageProvider,
-      width: 22.w_pt_cj,
-      height: 17.h_pt_cj,
-    );
-
-    image.image.resolve(new ImageConfiguration()).addListener(
+    buttonImageView.image.resolve(new ImageConfiguration()).addListener(
       new ImageStreamListener(
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
@@ -32,14 +26,14 @@ class LeftImageButton extends StatelessWidget {
         },
       ),
     );
-    return LeftImageTextButton(
+    return LeftImageTextDeleteButton(
       key: key,
       onTap: onTap,
       bgColor: Colors.white,
       cornerRadius: 24.w_pt_cj,
       height: 50.h_pt_cj,
       iconHeight: 22.w_pt_cj,
-      imageView: image,
+      imageView: buttonImageView,
       iconTitleSpace: 5.w_pt_cj,
       textLabel: Text(
         buttonText,
@@ -55,7 +49,7 @@ class LeftImageButton extends StatelessWidget {
 }
 
 // 左图片+右文字的按钮视图:icon和文字保持一定上下间距，一起居中(常见于等)
-class LeftImageTextButton extends StatelessWidget {
+class LeftImageTextDeleteButton extends StatelessWidget {
   double width;
   double height;
   EdgeInsetsGeometry padding; // 图片与边缘一般都有一定距离
@@ -74,7 +68,7 @@ class LeftImageTextButton extends StatelessWidget {
   Widget Function() customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
   GestureTapCallback onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
 
-  LeftImageTextButton({
+  LeftImageTextDeleteButton({
     Key key,
     this.width,
     this.height,

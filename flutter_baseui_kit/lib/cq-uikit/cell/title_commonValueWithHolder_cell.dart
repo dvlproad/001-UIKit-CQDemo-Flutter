@@ -25,7 +25,7 @@ class BJHTitleCommonValueWithHolderTableViewCell
     // 左侧-文本
     String title, // 主文本
     // 右侧-值视图
-    Widget Function(BuildContext context)
+    Widget Function(BuildContext context, {bool canExpanded})
         valueWidgetBuilder, // 值视图（此值为空时候，视图会自动隐藏）
     String
         valuePlaceHodler, // 值文本占位符(默认null，不显示)，且此值必须当 valueWidgetBuilder 为null才显示
@@ -46,7 +46,7 @@ class BJHTitleCommonValueWithHolderTableViewCell
           imageWith: imageWith ?? 22.w_pt_cj,
           imageTitleSpace: imageTitleSpace ?? 10.w_pt_cj,
           title: title,
-          valueWidgetBuilder: (BuildContext bContext) {
+          valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) {
             bool existTextValuePlaceHodler =
                 valuePlaceHodler != null && valuePlaceHodler.isNotEmpty;
 

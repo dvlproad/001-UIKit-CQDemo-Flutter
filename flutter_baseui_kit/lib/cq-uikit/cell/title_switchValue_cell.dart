@@ -1,4 +1,10 @@
-// 包含标题文本title，值开关boolValue、箭头类型固定为向右 的视图
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-19 15:57:02
+ * @Description: 包含标题文本title，值开关boolValue、箭头类型固定为向右 的视图
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -21,7 +27,8 @@ class BJHTitleSwitchValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidgetBuilder: (BuildContext context) => _switchValueWidget(),
+      valueWidgetBuilder: (BuildContext context, {bool canExpanded}) =>
+          _switchValueWidget(),
       arrowImageType: TableViewCellArrowImageType.none,
     );
   }

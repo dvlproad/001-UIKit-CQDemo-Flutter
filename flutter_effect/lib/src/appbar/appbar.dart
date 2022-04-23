@@ -22,11 +22,15 @@ class QuickAppBar extends CommonAppBar {
   }) : super(
           key: key,
           backgroundColor: backgroundColor,
-          title: ToolBarTitleWidget(text: title, textColorType: textColorType),
+          title: ToolBarTitleWidget(
+            text: title,
+            textColorType: textColorType,
+          ),
           leading: ToolBarBackWidget(
             width: leadingTextWidth,
             text: leadingText,
             textColorType: textColorType,
+            appbarBackgroundColor: backgroundColor,
             onPressed: () {
               FocusScope.of(context).requestFocus(FocusNode()); // 默认返回时候,关闭键盘
               if (customOnPressedBack == null) {

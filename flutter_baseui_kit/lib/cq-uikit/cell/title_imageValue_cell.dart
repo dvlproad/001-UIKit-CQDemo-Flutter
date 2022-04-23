@@ -20,7 +20,8 @@ class BJHTitleImageValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidgetBuilder: (BuildContext bContext) => _imageValueWidget(),
+      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) =>
+          _imageValueWidget(bContext, canExpanded: canExpanded),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
       clickCellCallback: (section, row, {bIsLongPress}) {
         this.onTap();
@@ -29,7 +30,7 @@ class BJHTitleImageValueCell extends StatelessWidget {
   }
 
   // 图片视图
-  Widget _imageValueWidget() {
+  Widget _imageValueWidget(BuildContext bContext, {bool canExpanded}) {
     if (null == this.imageValue || this.imageValue.length == 0) {
       return null;
     }

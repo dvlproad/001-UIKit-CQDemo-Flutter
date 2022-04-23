@@ -15,6 +15,7 @@ class ToolBarActionWidget extends StatelessWidget {
   // final ThemeBGType textColorType;
 
   final ImageProvider image;
+  final double imageWidth;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
   final bool needUpdateImageColor; // 是否需要根据 textColorType 来自动更新图片的颜色(默认false)
@@ -27,6 +28,7 @@ class ToolBarActionWidget extends StatelessWidget {
     this.text,
     this.textColor,
     this.image,
+    this.imageWidth, // 为其点击区域增加到width大小
     this.needUpdateImageColor = false,
     @required this.onPressed,
   }) : super(key: key);
@@ -50,14 +52,14 @@ class ToolBarActionWidget extends StatelessWidget {
         bgColor: bgColor,
         textColor: textColor,
         height: 32,
-        width: width ?? 67,
+        width: width ?? 67.w_pt_cj,
         cornerRadius: 16,
         title: this.text,
         titleStyle: TextStyle(
           color: textColor,
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-          height: 1,
+          fontSize: 14.f_pt_cj,
+          fontWeight: FontWeight.w500,
+          // height: 1,
         ),
         enable: true,
         onPressed: this.onPressed,
@@ -89,15 +91,15 @@ class ToolBarActionWidget extends StatelessWidget {
       // [Flutter Image 参数详解](https://blog.csdn.net/chenlove1/article/details/84111554)
       //BoxFit.cover:以原图填满Image为目的，如果原图size大于Image的size，按比例缩小，居中显示在Image上。如果原图size小于Image的size，则按比例拉升原图的宽和高，填充Image居中显示。
       return IconButton(
-        iconSize: 36.w_pt_cj,
+        iconSize: width ?? 36.w_pt_cj,
         icon: Image(
           image: this.image ??
               AssetImage(
                 'assets/appbar/navback.png',
-                package: 'flutter_effect',
+                package: 'flutter_baseui_kit',
               ),
-          // width: 36.w_pt_cj,
-          // height: 36.h_pt_cj,
+          width: imageWidth ?? 22.w_pt_cj,
+          height: imageWidth ?? 22.h_pt_cj,
           fit: BoxFit.cover,
           color: imageColor,
         ),

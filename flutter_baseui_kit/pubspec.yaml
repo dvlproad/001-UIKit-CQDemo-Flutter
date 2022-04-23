@@ -36,6 +36,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/
+    - assets/appbar/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

@@ -27,17 +27,7 @@ class QuickToolBar extends CommonToolBar {
           backgroundColor: backgroundColor,
           title: ToolBarTitleWidget(text: title, textColorType: textColorType),
           automaticallyImplyLeading: false,
-          actions: [
-            ToolBarActionWidget(
-              image: AssetImage(
-                'assets/appbar/icon_close.png',
-                package: 'flutter_effect',
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          actions: actions,
         );
 }
 
