@@ -16,7 +16,7 @@ class LogInit {
       packageDescribe: packageDescribe,
       userDescribeBlock: userDescribeBlock,
       printToConsoleBlock: (logLevel, {Map extraLogInfo}) {
-        return true;
+        return false;
       },
       showToPageBlock: (logLevel, {Map extraLogInfo}) {
         return true;

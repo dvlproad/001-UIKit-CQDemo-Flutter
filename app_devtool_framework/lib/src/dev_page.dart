@@ -232,9 +232,10 @@ class _DevPageState extends State<DevPage> {
     String downloadUrl = diffPackageBean.downloadUrl;
     return BJHTitleTextValueCell(
       height: 40,
+      leftMaxWidth: 80,
       title: "${diffPackageBean.des}：",
       textValue: downloadUrl,
-      textValueFontSize: 12,
+      textValueFontSize: 13,
       onTap: () async {
         if (await canLaunch(downloadUrl)) {
           await launch(downloadUrl);

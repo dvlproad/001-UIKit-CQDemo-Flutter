@@ -35,18 +35,18 @@ class MainDiffUtil {
     packageType: PackageType.develop1,
     des: '开发包',
     bestNetworkDes: TSEnvironmentDataUtil.networkModel_dev1.name,
-    downloadUrl: 'https://www.pgyer.com/kKTt',
-    pygerAppKeyAndroid: '0ff51c2519a23078fac1f8e8ea1bbdef',
-    pygerAppKeyIOS: '3aa46e5f75c648922bb2450ac2da7909',
+    downloadUrl: 'https://www.pgyer.com/Jzqc',
+    pygerAppKeyAndroid: '251b74df1a3bd5fe7395fba154938aa1',
+    pygerAppKeyIOS: '0b534e9b77ec8708318a99b6061749de',
   );
 
   static DiffPackageBean _diffPackageBean_preproduct = DiffPackageBean(
     packageType: PackageType.preproduct,
     des: '测试包',
     bestNetworkDes: TSEnvironmentDataUtil.networkModel_preProduct.name,
-    downloadUrl: 'https://www.pgyer.com/Jzqc',
-    pygerAppKeyAndroid: '251b74df1a3bd5fe7395fba154938aa1',
-    pygerAppKeyIOS: '0b534e9b77ec8708318a99b6061749de',
+    downloadUrl: 'https://www.pgyer.com/bjtkewish',
+    pygerAppKeyAndroid: '0ff51c2519a23078fac1f8e8ea1bbdef',
+    pygerAppKeyIOS: '3aa46e5f75c648922bb2450ac2da7909',
   );
 
   static DiffPackageBean _diffPackageBean_product = DiffPackageBean(

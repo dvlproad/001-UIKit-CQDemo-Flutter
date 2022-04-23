@@ -41,7 +41,7 @@ class BaseTagWidget extends StatelessWidget {
     if (showDeleteIcon == true) {
       textLabel = contentWidgetWhenShowDelete;
     }
-    return LeftImageTextButton(
+    return LeftImageTextDeleteButton(
       key: key,
       onTap: onTap,
       bgColor: backgroundColor ?? Colors.blue,

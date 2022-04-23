@@ -20,7 +20,7 @@ myRobotUrl='https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e3c3f7f1-5d03-4
 
 # 新包提醒
 newPackageRobotUrl='https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=2a1672b4-fbb5-4b60-8ba2-4a37e053e05a'
-
+#newPackageRobotUrl=$myRobotUrl
 
 
 
@@ -38,27 +38,32 @@ declare -a MentionedList
 if [ $TARGETENVTYPE == "develop1" ] ; then
     NewPackageVersionDes='开发包'
     ROBOTURL=$newPackageRobotUrl
-    appDownloadUrl='https://www.pgyer.com/kKTt'
+    appDownloadUrl='https://www.pgyer.com/Jzqc'
+    LastNotificationText=""
 elif [ $TARGETENVTYPE == "develop2" ] ; then
     NewPackageVersionDes='开发包'
     ROBOTURL=$newPackageRobotUrl
-    appDownloadUrl='https://www.pgyer.com/kKTt'
+    appDownloadUrl='https://www.pgyer.com/Jzqc'
+    LastNotificationText=""
 elif [ $TARGETENVTYPE == "preproduct" ] ; then
     NewPackageVersionDes='测试包'
     ROBOTURL=$newPackageRobotUrl
-    appDownloadUrl='https://www.pgyer.com/Jzqc'
+    appDownloadUrl='https://www.pgyer.com/bjtkewish'
     MentionedList[0]="@all"
+    LastNotificationText=""
 else
     NewPackageVersionDes='生产包'
     ROBOTURL=$newPackageRobotUrl
     appDownloadUrl='https://www.pgyer.com/app_bj'
     MentionedList[0]="@all"
+    LastNotificationText="💐💐💐💐💐💐💐💐💐💐\n"
 fi
 echo "MentionedList=${MentionedList}"
 
 NewPackageVersionDes="${NewPackageVersionDes}_${PlatformType}V${packageVersion}(${packageCreateTime})"
 
-LastNotificationText="恭喜💐：${BRANCH}\n${NewPackageVersionDes}打包成功。\n下载地址：${appDownloadUrl}。\n更新内容如下：\n${CHANGELOG}"
+
+LastNotificationText+="恭喜💐：${BRANCH}\n${NewPackageVersionDes}打包成功。\n下载地址：${appDownloadUrl}。\n更新内容如下：\n${CHANGELOG}"
 LastNotificationText+="\n\n赶紧下载来看看有没有自己的问题吧🏃🏻‍♀️🏃🏻‍♀️🏃🏻‍♀️"
 echo "LastNotificationText=$LastNotificationText"
 

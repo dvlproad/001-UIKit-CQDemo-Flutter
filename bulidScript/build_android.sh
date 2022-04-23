@@ -12,12 +12,12 @@ echo "WORKSPACE=$WORKSPACE"
 if [ $ENV == "开发" ] ; then
     echo "这个是【开发】包"
      TARGETENVTYPE='develop1'
-    PYGERKEY='a6f5a92ffe5f43677c5580de3e1e0d99'
+    PYGERKEY='bb691894f9477b9421b4fe98cccb58fb'
     
 elif [ $ENV == "测试" ] ; then
     echo "这个是【测试】包"
     TARGETENVTYPE='preproduct'
-    PYGERKEY='bb691894f9477b9421b4fe98cccb58fb'
+    PYGERKEY='a6f5a92ffe5f43677c5580de3e1e0d99'
 else
     echo "这个是【生产】包"
     TARGETENVTYPE='product'

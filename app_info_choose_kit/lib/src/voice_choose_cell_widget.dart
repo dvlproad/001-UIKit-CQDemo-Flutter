@@ -46,7 +46,7 @@ class _VoiceChoooseCellWidgetState extends State<VoiceChoooseCellWidget> {
         "assets/icon_voice_record.png",
         package: 'app_info_choose_kit',
       ),
-      valueWidgetBuilder: (BuildContext bContext) {
+      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) {
         if (hasContent == false) {
           return null;
         }

@@ -26,7 +26,7 @@ class PickUtil {
       showGif: false,
       showCamera: showCamera ?? true,
       compressSize: 500,
-      uiConfig: UIConfig(uiThemeColor: Color(0xFFFF7F00)),
+      uiConfig: UIConfig(uiThemeColor: Color(0xFFffffff)),
       cropConfig: CropConfig(enableCrop: true, width: 1, height: 1),
     );
 

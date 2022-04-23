@@ -3,6 +3,11 @@ import './components/images_presuf_badge_list.dart';
 import './components/bg_border_widget.dart';
 
 class CQImagesAddDeleteList extends StatefulWidget {
+  final double width;
+  final double height;
+  final bool dragEnable;
+  final void Function(int oldIndex, int newIndex) dragCompleteBlock;
+
   final int maxAddCount; // 默认null,null时候默认9个
   final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
   final Widget Function({BuildContext context, int imageIndex})
@@ -13,6 +18,10 @@ class CQImagesAddDeleteList extends StatefulWidget {
 
   CQImagesAddDeleteList({
     Key key,
+    this.width,
+    this.height,
+    this.dragEnable, // 是否可以拖动
+    this.dragCompleteBlock,
     this.maxAddCount,
     @required this.imageCount,
     @required this.itemImageContentBuilder,
@@ -40,11 +49,13 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   @override
   Widget build(BuildContext context) {
     return CQImagesPreSufBadgeList(
-      customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        mainAxisSpacing: 6,
-        crossAxisSpacing: 6,
-      ),
+      width: widget.width,
+      height: widget.height,
+      dragEnable: widget.dragEnable,
+      dragCompleteBlock: widget.dragCompleteBlock,
+      cellWidthFromPerRowMaxShowCount: 4,
+      columnSpacing: 6,
+      rowSpacing: 6,
       maxAddCount: widget.maxAddCount ?? 9,
       imageCount: widget.imageCount,
       suffixWidget: _addCell(),

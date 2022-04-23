@@ -13,12 +13,12 @@ echo "WORKSPACE=$WORKSPACE"
 if [ $ENV == "开发" ] ; then
     echo "这个是【开发】包"
     TARGETENVTYPE='develop1'
-    PYGERKEY='a6f5a92ffe5f43677c5580de3e1e0d99'
+    PYGERKEY='bb691894f9477b9421b4fe98cccb58fb'
     
 elif [ $ENV == "测试" ] ; then
     echo "这个是【测试】包"
     TARGETENVTYPE='preproduct'
-    PYGERKEY='bb691894f9477b9421b4fe98cccb58fb'
+    PYGERKEY='a6f5a92ffe5f43677c5580de3e1e0d99'
 else
     echo "这个是【生产】包"
     TARGETENVTYPE='product'
@@ -43,7 +43,13 @@ export LANG=en_US.UTF-8
 
 cd $WORKSPACE/wish/ios
 python $WORKSPACE/bulidScript/build_upload.py 'Runner' 'Runner' 'Release' 'iphoneos'
+
+# 上传
 python $WORKSPACE/bulidScript/build_upload_ipa.py 'wish' $PYGERKEY
+#cd $WORKSPACE/bulidScript
+#ipa_file_path=$WORKSPACE/wish/ios/outputs/IPA/wish.ipa
+#update_description="这是更新说明"
+#sh s3_uploadipa_pgyer_app1.sh -f $ipa_file_path -k $PYGERKEY -e $TARGETENVTYPE -b $BRANCH -t yes -d $update_description
 
 cd $WORKSPACE/bulidScript
 sh noti_new_package.sh iOS $BRANCH $TARGETENVTYPE 更新说明略
