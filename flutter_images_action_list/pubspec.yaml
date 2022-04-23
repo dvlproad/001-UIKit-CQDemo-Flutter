@@ -12,6 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_staggered_grid_view: any
+  reorderables: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

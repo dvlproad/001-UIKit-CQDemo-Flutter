@@ -15,17 +15,30 @@ export './images_add_cell.dart' show AddCellType;
 import './preview_util.dart';
 import './pick_util.dart';
 
-class ImageAddDeletePickList<T extends ImageChooseBean> extends StatefulWidget {
-  final List imageChooseModels;
+import 'package:wish/http/Network/UploadApi.dart'; // TODO:临时处理
+
+class ImageAddDeletePickList extends StatefulWidget {
+  final double width;
+  final double height;
+  final bool dragEnable;
+  final void Function(int oldIndex, int newIndex) dragCompleteBlock;
+
+  final List<AppImageChooseBean> imageChooseModels;
   // final Widget Function(dynamic imageChooseModel) badgeWidgetSetupBlock; // 可以返回为'删除'按钮 或者 '选中'按钮等任意
-  final void Function(List imageChooseModels)
+  final void Function(List<AppImageChooseBean> imageChooseModels)
       imageChooseModelsChangeBlock; // 当前选中的相册信息
-  final void Function(List imageChooseModels, int imageIndex) onPressedImage;
+  final void Function(
+          List<AppImageChooseBean> imageChooseModels, int imageIndex)
+      onPressedImage;
 
   final AddCellType addCellType;
 
   ImageAddDeletePickList({
     Key key,
+    this.width,
+    this.height,
+    this.dragEnable, // 是否可以拖动
+    this.dragCompleteBlock,
     this.imageChooseModels,
     @required this.imageChooseModelsChangeBlock,
     this.onPressedImage, // 自定义点击图片的事件(默认是浏览)
@@ -36,9 +49,8 @@ class ImageAddDeletePickList<T extends ImageChooseBean> extends StatefulWidget {
   _ImageAddDeletePickListState createState() => _ImageAddDeletePickListState();
 }
 
-class _ImageAddDeletePickListState<T extends ImageChooseBean>
-    extends State<ImageAddDeletePickList> {
-  List _imageChooseModels;
+class _ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
+  List<AppImageChooseBean> _imageChooseModels;
 
   @override
   void dispose() {
@@ -48,15 +60,28 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
   @override
   void initState() {
     super.initState();
-    _imageChooseModels = widget.imageChooseModels ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
+    _imageChooseModels = widget.imageChooseModels ?? [];
+    // print("list === path111====================");
+    // int count = _imageChooseModels.length ?? 0;
+    // for (var i = 0; i < count; i++) {
+    //   AppImageChooseBean item = _imageChooseModels[i];
+
+    //   String path = item.localPath;
+    //   print("list path111=$i:$path");
+    // }
     return CQImagesAddDeleteList(
+      width: widget.width,
+      height: widget.height,
+      dragEnable: widget.dragEnable,
+      dragCompleteBlock: widget.dragCompleteBlock,
       imageCount: _imageChooseModels.length,
       itemImageContentBuilder: ({context, imageIndex}) {
-        T imageChooseModel = _imageChooseModels[imageIndex];
+        AppImageChooseBean imageChooseModel = _imageChooseModels[imageIndex];
+        // print("list path111=$imageIndex:${imageChooseModel.localPath}");
 
         return CQImageOrPhotoGridCell(
           imageChooseModel: imageChooseModel,
@@ -74,7 +99,7 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
         );
       },
       onPressedDelete: (imageIndex) {
-        T imageChooseModel = _imageChooseModels[imageIndex];
+        AppImageChooseBean imageChooseModel = _imageChooseModels[imageIndex];
         _imageChooseModels.remove(imageChooseModel);
 
         setState(() {});
@@ -120,32 +145,49 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
     PickUtil.pickPhoto(
       selectCount: selectCount,
       imagePickerCallBack: (bAddedImageChooseModels) {
-        _imageChooseModels.addAll(bAddedImageChooseModels);
+        List<AppImageChooseBean> addImageBeans = [];
+        for (var item in bAddedImageChooseModels) {
+          AppImageChooseBean bean = AppImageChooseBean(
+            localPath: item.localPath,
+            networkUrl: item.networkUrl,
+            width: item.width,
+            height: item.height,
+          );
+          // T bean = T();
+          // bean.localPath = item.localPath;
+          // bean.networkUrl = item.networkUrl;
+          // bean.width = item.width;
+          // bean.height = item.height;
+          addImageBeans.add(bean);
+        }
 
-        _dealAddedImageChooseModels(_imageChooseModels);
+        _imageChooseModels.addAll(addImageBeans);
+        setState(() {
+          _dealAddedImageChooseModels(_imageChooseModels);
+        });
 
         if (widget.imageChooseModelsChangeBlock != null) {
           // print('当前最新的图片数目为${_imageChooseModels.length}');
           widget.imageChooseModelsChangeBlock(_imageChooseModels);
         }
-
-        setState(() {});
       },
     );
     // }
   }
 
-  Future<bool> _dealAddedImageChooseModels(List addedImageChooseModels) async {
+  Future<bool> _dealAddedImageChooseModels(
+      List<AppImageChooseBean> addedImageChooseModels) async {
+    _log('获取所选择的所有图片的宽高开始...');
     int count = addedImageChooseModels.length ?? 0;
 
     List<Future<Map<String, dynamic>>> futures = [];
     for (var i = 0; i < count; i++) {
-      T addedImageChooseModel = addedImageChooseModels[i];
+      AppImageChooseBean addedImageChooseModel = addedImageChooseModels[i];
 
       String imageFileLocalPath = addedImageChooseModel.localPath;
       Image image = Image.file(File(imageFileLocalPath));
-      // debugPrint(
-      //     '$imageFileLocalPath 图片的宽高如下:\nimageWidth111=${image.width}, imageHeight=${image.height}');
+      debugPrint(
+          '$imageFileLocalPath 图片的宽高如下:\nimageWidth111=${image.width}, imageHeight=${image.height}');
 
       ImageProvider imageProvider = image.image;
 
@@ -166,18 +208,20 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
     // 并发
     return Future.wait(futures).then((List<Map<String, dynamic>> results) {
       for (var i = 0; i < count; i++) {
-        T addedImageChooseModel = addedImageChooseModels[i];
+        AppImageChooseBean addedImageChooseModel = addedImageChooseModels[i];
         String imageFileLocalPath = addedImageChooseModel.localPath;
 
         Map<String, dynamic> imageWidthHeight = results[i];
         int imageWidth = imageWidthHeight['width'];
         int imageHeight = imageWidthHeight['height'];
-        // debugPrint(
-        //     '$imageFileLocalPath 图片的宽高如下:\nimageWidth222=$imageWidth, imageHeight=$imageHeight');
+        debugPrint(
+            '$imageFileLocalPath 图片的宽高如下:\nimageWidth222=$imageWidth, imageHeight=$imageHeight');
 
         addedImageChooseModel.width = imageWidth;
         addedImageChooseModel.height = imageHeight;
       }
+
+      _log('获取所选择的所有图片的宽高结束...');
 
       return true;
     });
@@ -192,7 +236,7 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          // print('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          print('imageWidth=$imageWidth, imageHeight=$imageHeight');
 
           Map<String, dynamic> imageWithHeight = {
             "width": imageWidth,
@@ -204,5 +248,10 @@ class _ImageAddDeletePickListState<T extends ImageChooseBean>
     );
 
     return completer.future;
+  }
+
+  _log(String message) {
+    // String dateTimeString = DateTime.now().toString().substring(0, 19);
+    // print('$dateTimeString:$message');
   }
 }
