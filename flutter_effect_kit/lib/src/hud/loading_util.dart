@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 10:17:11
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-13 16:26:54
+ * @LastEditTime: 2022-04-21 16:19:23
  * @Description: loading 单例形式的弹出方法
  * @FilePath: /wish/Users/qian/Project/Bojue/mobile_flutter_wish/flutter_effect_kit/lib/src/hud/loading_util.dart
  */
@@ -11,7 +11,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './loading_widget.dart';
 
-OverlayEntry pageOverlayEntry;
 OverlayEntry doingTextOverlayEntry;
 
 class LoadingUtil {
@@ -77,16 +76,26 @@ class LoadingUtil {
   static int _minLoadingMilliseconds; // 最少展示多长时间
   static DateTime _startLoadingDateTime;
 
+  static Map<String, OverlayEntry> contextOverlayMap = {};
+
   /// 在 context 中展示 loading ，(一定记得在 dispose 方法中调用 LoadingUtil.dismissInContext(context);)
   static showInContext(BuildContext context, {int minLoadingMilliseconds}) {
-    // print('==============showInContext');
+    String contextKey = context.hashCode.toString();
+    // print('==============showInContext:$contextKey');
+    OverlayEntry pageOverlayEntry = contextOverlayMap[contextKey];
+    if (pageOverlayEntry != null) {
+      return; // 显示中
+    }
+
     double loadingWidth = 49;
     double loadingHeight = 20;
     Widget child = LoadingWidget(width: loadingWidth, height: loadingHeight);
+
     pageOverlayEntry =
         _getCenterOverlayInContext(context, child, loadingWidth, loadingHeight);
 
     Overlay.of(context).insert(pageOverlayEntry);
+    contextOverlayMap[contextKey] = pageOverlayEntry;
     if (minLoadingMilliseconds != null) {
       _minLoadingMilliseconds = minLoadingMilliseconds;
       _startLoadingDateTime = DateTime.now();
@@ -120,11 +129,17 @@ class LoadingUtil {
   }
 
   static _dismissInContext(BuildContext context) {
-    // print('==============dismissInContext');
+    String contextKey = context.hashCode.toString();
+    // print('==============dismissInContext:$contextKey');
+    OverlayEntry pageOverlayEntry = contextOverlayMap[contextKey];
+    if (pageOverlayEntry == null) {
+      return; // 已删除
+    }
+
     if (pageOverlayEntry != null) {
       pageOverlayEntry.remove();
-      pageOverlayEntry =
-          null; // 防止如请求失败重试或先请求缓存再请求实际这种api接口，一个入口有多次回调，导致此处多次调用引起崩溃
+
+      contextOverlayMap.remove(contextKey);
     }
   }
 
@@ -165,7 +180,11 @@ class LoadingUtil {
   }
 
   static dismissDongingTextInContext(BuildContext context) {
-    doingTextOverlayEntry?.remove();
+    if (doingTextOverlayEntry != null) {
+      doingTextOverlayEntry.remove();
+      doingTextOverlayEntry =
+          null; // 防止如请求失败重试或先请求缓存再请求实际这种api接口，一个入口有多次回调，导致此处多次调用引起崩溃
+    }
   }
 
   /// 获取要显示在 context 中心的完整视图
