@@ -8,6 +8,9 @@ import 'package:tsdemo_images_browser/src/imagesbrowser_routes.dart';
 import 'package:tsdemo_environment_flutter/src/devtool_routes.dart';
 import 'package:tsdemo_images_action/src/photoalbum_routes.dart';
 import 'package:tsdemo_baseui/src/baseui_routes.dart';
+import 'package:tsdemodemo_flutter/modules/tap_status/tap_status_list_normal_page.dart';
+import 'package:tsdemodemo_flutter/modules/tap_status/tap_status_list_section_page.dart';
+import 'package:tsdemodemo_flutter/modules/tap_status/tap_status_normal_page.dart';
 import 'package:tsdemodemo_flutter/modules/util/util_routes.dart';
 import 'package:tsdemodemo_flutter/router/router.dart';
 
@@ -58,17 +61,20 @@ class _MyHomePageState extends State<MyHomePage> {
             gestureHomeButton(),
             imagesbrowserHomeButton(),
             photoAlbumHomeButton(),
-            CQTSThemeBGButton(
-              bgColorType: CQTSThemeBGType.pink,
-              title: "未整合的本地测试",
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return TempTestPage();
-                  },
-                ));
-              },
+            buttonPage(
+              title: '测试点击状态栏(Normal)',
+              page: const TapStatusNormalPage(),
             ),
+            buttonPage(
+              title: '测试点击状态栏(ListNormal)',
+              page: const TapStatusListNormalPage(),
+            ),
+            buttonPage(
+              title: '测试点击状态栏(ListSection)',
+              page: const TapStatusListSectionPage(),
+            ),
+            buttonPage(title: '未整合的本地测试', page: TempTestPage()),
+            Container(height: 500, color: Colors.pink),
           ],
         ),
       ),
@@ -193,6 +199,21 @@ class _MyHomePageState extends State<MyHomePage> {
       title: "相册 photoAlbum",
       onPressed: () {
         Navigator.pushNamed(context, PhotoAlbumRouters.photoAlbumHomePage);
+      },
+    );
+  }
+
+  // 进入相册测试主页的按钮
+  Widget buttonPage({String title, Widget page}) {
+    return CQTSThemeBGButton(
+      bgColorType: CQTSThemeBGType.pink,
+      title: title,
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return page;
+          },
+        ));
       },
     );
   }

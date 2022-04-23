@@ -1,6 +1,7 @@
 import 'package:app_network/app_network.dart';
 
 import 'package:flutter/material.dart';
+import 'package:tsdemo_baseui/tsdemo_baseui.dart';
 import 'package:tsdemodemo_flutter/modules/architecture/arc_routes.dart';
 import 'package:tsdemodemo_flutter/modules/demo/demo_routes.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
@@ -122,6 +123,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // home: TSBaseUIHomePage(),
       // home: GuideOverlayTestHomePage(), // 首页
       // initialRoute: Routers.guideHomePage, // 设置首页
 //      initialRoute: OverlayViewRouters.textInputAlertViewPage, // 设置首页
