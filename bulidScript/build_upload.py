@@ -30,7 +30,9 @@ class iOSBuilder(object):
                    ' -configuration ' + CONFIGURATION + \
                    ' -scheme ' + SCHEME + \
                    ' -sdk ' + SDK + \
-                   ' archive -archivePath ' + archive_path
+                   ' archive -archivePath ' + archive_path + \
+                   ' -allowProvisioningUpdates ' + \
+                   ' -allowProvisioningDeviceRegistration '
         print("build archive ============= {}".format(cmdbuild))
         # Execute the build command
         os.system(cmdbuild)
