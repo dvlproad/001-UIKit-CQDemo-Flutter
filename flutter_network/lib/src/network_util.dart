@@ -20,6 +20,8 @@ import './interceptor/interceptor_log.dart';
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
 
+import './trace/trace_util.dart';
+
 typedef T JsonParse<T>(dynamic data);
 
 class NetworkUtil {
@@ -114,8 +116,12 @@ class NetworkUtil {
         customParams['sessionID'] = sessionID;
       }
 
+      // 添加公共参数 trace_id
+      customParams['trace_id'] = TraceUtil.traceId();
+
       Dio dio = NetworkManager.instance.serviceDio;
 
+      DioLogUtil.debugApiWithLog(url, "请求开始...");
       Response response;
       if (requestMethod == RequestMethod.post) {
         response = await dio.post(
@@ -132,6 +138,7 @@ class NetworkUtil {
           cancelToken: cancelToken,
         );
       }
+      DioLogUtil.debugApiWithLog(url, "请求结束...");
 
       bool isFromCache = false;
       if (DioCacheUtil.isCacheResponseCheckFunction != null) {
@@ -139,6 +146,7 @@ class NetworkUtil {
       }
 
       if (response.statusCode == 200) {
+        DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
         dynamic responseObject;
         if (response.data is String) {
           // 后台把data按字符串返回的时候
@@ -158,6 +166,7 @@ class NetworkUtil {
         } else {
           responseMap = responseObject;
         }
+        DioLogUtil.debugApiWithLog(url, "请求后解析结束...");
 
         var errorCode = responseMap['code'];
         var msg = responseMap['msg'];

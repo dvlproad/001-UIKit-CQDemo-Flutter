@@ -69,4 +69,13 @@ class DioLogUtil {
       print("Error：网络api日志输出接口未定义，请先调用 DioLogUtil.initDioLogUtil 来实现");
     }
   }
+
+  /// 临时打印
+  static void debugApiWithLog(String url, String message) {
+    String debugApi = 'user/account/get_city';
+    if (url.contains(debugApi)) {
+      String dateTimeString = DateTime.now().toString().substring(0, 19);
+      print('这是要调试的接口$debugApi:$dateTimeString:$message');
+    }
+  }
 }

@@ -50,9 +50,10 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
       actions: [
         ToolBarActionWidget(
           image: AssetImage(
-            'assets/icon_delete.png.png',
+            'assets/icon_close.png',
             package: 'flutter_overlay_kit',
           ),
+          imageWidth: 17.w_pt_cj,
           onPressed: () {
             Navigator.pop(context);
           },

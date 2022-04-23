@@ -1,7 +1,7 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2022-04-16 02:47:50
+ * @LastEditTime: 2022-04-18 18:21:00
  * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
@@ -72,7 +72,14 @@ class CacheHelper {
 
   static bool isCacheResponse(Response response) {
     // bool isFromCache = response.requestOptions.extra[DIO_CACHE_KEY_TRY_CACHE] ?? false; // 此判断条件经测试不准
-    bool isFromCache = _isCacheHeaders(response.headers);
+    // bool isFromCache = _isCacheHeaders(response.headers); // 不准
+    NetworkCacheLevel networkCacheLevel =
+        response.requestOptions.extra[DIO_CACHE_KEY_CACHE_LEVEL] ??
+            NetworkCacheLevel.none;
+    bool noRealRequest = networkCacheLevel ==
+        NetworkCacheLevel.one; // 不是真正的网络请求返回的Error结果(如是取缓存的结果时候)
+
+    bool isFromCache = noRealRequest;
     return isFromCache;
   }
 

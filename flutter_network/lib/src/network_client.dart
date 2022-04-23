@@ -23,6 +23,9 @@ class NetworkManager {
   bool hasStart = false;
   Completer initCompleter = Completer<String>();
 
+  static String _baseUrl;
+  static get baseUrl => _baseUrl;
+
   // 单例
   factory NetworkManager() => _getInstance();
   static NetworkManager get instance => _getInstance();
@@ -101,6 +104,7 @@ class NetworkManager {
       receiveTimeout: receiveTimeout,
       headers: headers,
     );
+    _baseUrl = baseUrl;
 
     List<Interceptor> lastInterceptors = [];
     if (nouseDefalutInterceptors == null || nouseDefalutInterceptors == false) {
@@ -152,6 +156,7 @@ class NetworkManager {
   static void changeOptions({
     String baseUrl,
   }) {
+    _baseUrl = baseUrl;
     Dio dio = NetworkManager.instance.serviceDio;
     DioChangeUtil.changeOptions(dio, baseUrl: baseUrl);
   }

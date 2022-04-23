@@ -2,11 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-16 04:41:45
+ * @LastEditTime: 2022-04-18 01:16:52
  * @Description: 日志类
  */
 import './log/dev_log_util.dart';
-import './print_console_log_util.dart';
+import './string_format_util/formatter_object_util.dart';
+
+import './log_console/print_console_log_util.dart';
 import './apilog/api_error_robot.dart';
 
 import './log_robot/common_error_robot.dart';
@@ -74,6 +76,12 @@ class LogUtil {
     String levelString = logLevel.toString().split('.').last;
     return '  $levelString  ';
   }
+
+  // /// 控制台打印
+  // static consologObject(Object object) {
+  //   String consologMessage = FormatterUtil.convert(object, 0, isObject: true);
+  //   PrintConsoleLogUtil.printConsoleLog(null, null, consologMessage);
+  // }
 
   /// 通用异常上报:企业微信
   static Future<bool> postError(

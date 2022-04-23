@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-18 00:19:10
+ * @LastEditTime: 2022-04-18 01:15:06
  * @Description: 本地接口模拟工具
  */
 import 'dart:convert' show json;
@@ -12,7 +12,7 @@ import '../url/appendPathExtension.dart';
 import '../interceptor/interceptor_log.dart';
 import '../log/dio_log_util.dart';
 import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
-import 'package:flutter_log/src/string_format_util/long_string_print_util.dart';
+import 'package:flutter_log/src/log_console/long_string_print_util.dart';
 
 class LocalMockUtil {
   static String localApiHost = "local_api_json_file";

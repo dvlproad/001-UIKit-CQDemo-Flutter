@@ -1,7 +1,7 @@
 import 'dart:convert' as convert;
 import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
 import '../log/dio_log_util.dart';
 import '../url/url_util.dart';
 import '../mock/mock_analy_util.dart';
@@ -16,7 +16,11 @@ class DioLogInterceptor extends Interceptor {
     String requestStr = "======== REQUEST(请求开始的信息) ========\n";
     requestStr += "- URL:\n${url}\n";
     requestStr += "- METHOD: ${options.method}\n";
-    requestStr += "- HEADER:\n${options.headers.mapToStructureString()}\n";
+
+    Map<String, dynamic> headersMap = options.headers;
+    String headersMapString =
+        FormatterUtil.convert(headersMap, 0, isObject: true);
+    requestStr += "- HEADER:\n$headersMapString\n";
 
     String bodyString = _getBodyString(options);
     requestStr += bodyString;
@@ -50,8 +54,11 @@ class DioLogInterceptor extends Interceptor {
     ''';
 
     if (err != null && err.response != null && err.response.headers != null) {
-      errorStr +=
-          "- HEADER:\n${err.response.headers.map.mapToStructureString()}\n";
+      Map<String, List<String>> headersMap = err.response.headers.map;
+      String headersMapString =
+          FormatterUtil.convert(headersMap, 0, isObject: true);
+
+      errorStr += "- HEADER:\n$headersMapString\n";
     }
 
     String bodyString = _getBodyString(err.requestOptions);
@@ -108,7 +115,19 @@ class DioLogInterceptor extends Interceptor {
     responseStr += "- STATUS: ${response.statusCode}\n";
 
     if (response.data != null) {
-      responseStr += "- RESPONSE:\n ${_parseResponse(response)}";
+      dynamic responseObject;
+      if (response.data is String) {
+        // 后台把data按字符串返回的时候
+        responseObject = convert.jsonDecode(response.data);
+      } else {
+        //String dataString = response.data.toString();
+        String dataJsonString = convert.jsonEncode(response.data);
+        responseObject = convert.jsonDecode(dataJsonString);
+      }
+
+      String responseString =
+          FormatterUtil.convert(responseObject, 0, isObject: true);
+      responseStr += "- RESPONSE:\n $responseString";
     }
     responseStr = printWrapped(responseStr);
 
@@ -186,12 +205,16 @@ class DioLogInterceptor extends Interceptor {
     final data = options.data;
     if (data != null) {
       if (data is Map) {
-        bodyString += "- BODY:\n${data.mapToStructureString()}\n";
+        String dataString = FormatterUtil.convert(data, 0, isObject: true);
+        bodyString += "- BODY:\n$dataString\n";
       } else if (data is FormData) {
         final formDataMap = Map()
           ..addEntries(data.fields)
           ..addEntries(data.files);
-        bodyString += "- BODY:\n${formDataMap.mapToStructureString()}\n";
+
+        String formDataString =
+            FormatterUtil.convert(formDataMap, 0, isObject: true);
+        bodyString += "- BODY:\n$formDataString\n";
       } else {
         bodyString += "- BODY:\n${data.toString()}\n";
       }
@@ -212,16 +235,8 @@ class DioLogInterceptor extends Interceptor {
   }
 
   String _parseResponse(Response response) {
-    String responseStr = "";
     var data = response.data;
-    if (data is Map) {
-      responseStr += data.mapToStructureString();
-    } else if (data is List) {
-      responseStr += data.listToStructureString();
-    } else {
-      responseStr += data.toString();
-    }
-
+    String responseStr = FormatterUtil.convert(data, 0, isObject: true);
     return responseStr;
   }
 }
