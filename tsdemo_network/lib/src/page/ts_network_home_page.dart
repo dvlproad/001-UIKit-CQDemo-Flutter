@@ -6,6 +6,7 @@ import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_network/src/mock/local_mock_util.dart';
 import 'package:flutter_log/src/log_console/print_console_log_util.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_environment/flutter_environment.dart';
 
 class TSNetworkHomePage extends StatefulWidget {
   @override
@@ -46,7 +47,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               onTap: () {
                 String baseUrl = "http://dev.api.xxx.com/hapi/";
                 AppNetworkKit.changeOptions(
-                  baseUrl: baseUrl,
+                  TSEnvNetworkModel(apiHost: baseUrl),
                 );
               },
             ),
@@ -55,7 +56,7 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
               onTap: () {
                 String baseUrl = "http://121.41.91.92:3000/mock/28/api/bjh/";
                 AppNetworkKit.changeOptions(
-                  baseUrl: baseUrl,
+                  TSEnvNetworkModel(apiHost: baseUrl),
                 );
               },
             ),
