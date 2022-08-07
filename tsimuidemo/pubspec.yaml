@@ -36,6 +36,13 @@ dependencies:
   flutter_plugin_record: any
 
 
+  flutter_baidu_mapapi_map: ^3.1.0+1
+  flutter_baidu_mapapi_base: ^3.1.0
+  flutter_baidu_mapapi_search: ^3.1.0
+  flutter_baidu_mapapi_utils: ^3.1.0+1
+  tim_ui_kit_lbs_plugin: ^1.0.7
+
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

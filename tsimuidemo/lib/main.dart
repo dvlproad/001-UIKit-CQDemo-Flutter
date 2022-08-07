@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import './tim_uikit_send_sound_message.dart';
+import 'package:tsimuidemo/tim_uikit_plugin_util.dart';
+import 'package:tsimuidemo/tim_uikit_send_sound_page.dart';
+import './config.dart';
 
 void main() {
+  PluginUtil.initMap(IMDemoConfig.baiduMapIOSAppKey);
+
   runApp(const MyApp());
 }
 
@@ -61,29 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) {
-          return Container(
-            color: Colors.green,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(height: 100, color: Colors.red),
-                SendSoundMessage(
-                  conversationID: "",
-                  conversationType: 1,
-                  onDownBottom: () {
-                    print('object');
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
+        context, MaterialPageRoute(builder: (context) => SendSoundPage()));
+    // PluginUtil.onTapLocation(context);
   }
 
   @override
