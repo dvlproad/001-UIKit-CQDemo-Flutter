@@ -43,12 +43,12 @@ enum ThemeBGType {
   transparent_whiteText, //透明背景，白色字的按钮
 }
 
-Color themeColor(ThemeBGType type) {
+Color themeColor(ThemeBGType? type) {
   type = type ?? ThemeBGType.theme;
   return theme[type.toString().split('.').last]['themeColor'];
 }
 
-Color themeOppositeColor(ThemeBGType type) {
+Color themeOppositeColor(ThemeBGType? type) {
   type = type ?? ThemeBGType.theme;
   return theme[type.toString().split('.').last]['themeOppositeColor'];
 }
@@ -83,10 +83,10 @@ class ButtonThemeUtil {
 class ButtonRegularTextStyle extends TextStyle {
   final double fontSize;
   // final Color color;
-  final double height;
+  final double? height;
 
   ButtonRegularTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     // this.color,
     this.height,
   })  : assert(fontSize != null),
@@ -106,7 +106,7 @@ class ButtonBoldTextStyle extends TextStyle {
   // final Color color;
 
   ButtonBoldTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     // this.color,
   })  : assert(fontSize != null),
         // assert(color != null),
@@ -124,7 +124,7 @@ class ButtonMediumTextStyle extends TextStyle {
   // final Color color;
 
   ButtonMediumTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     // this.color,
   })  : assert(fontSize != null),
         // assert(color != null),

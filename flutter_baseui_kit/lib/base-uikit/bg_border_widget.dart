@@ -3,26 +3,26 @@ import 'package:flutter/material.dart';
 
 /// 可定制背景颜色、圆角、弧度的 Widget
 class CJBGBorderWidget extends StatelessWidget {
-  final double width;
-  final double height; // 文本框的高度
-  final Color backgroundColor; // 文本框的背景颜色
-  final double cornerRadius; // 边的圆角
-  final double borderWidth; // 边宽
-  final Color borderColor; // 边的颜色
+  final double? width;
+  final double? height; // 文本框的高度
+  final Color? backgroundColor; // 文本框的背景颜色
+  final double? cornerRadius; // 边的圆角
+  final double? borderWidth; // 边宽
+  final Color? borderColor; // 边的颜色
 
   final Widget child; // 控件视图
-  final VoidCallback onPressed; // 控件视图的点击事件
-  final HitTestBehavior behavior;
+  final VoidCallback? onPressed; // 控件视图的点击事件
+  final HitTestBehavior? behavior;
 
   CJBGBorderWidget({
-    Key key,
+    Key? key,
     this.width,
     this.height = 44,
     this.backgroundColor,
     this.cornerRadius = 0,
     this.borderWidth = 0,
     this.borderColor,
-    @required this.child,
+    required this.child,
     this.onPressed,
     this.behavior,
   }) : super(key: key);
@@ -39,11 +39,11 @@ class CJBGBorderWidget extends StatelessWidget {
   Widget _containerWidget() {
     double height = this.height ?? 0;
     Color backgroundColor =
-        this.backgroundColor != null ? this.backgroundColor : Colors.white;
-    double cornerRadius = this.cornerRadius != null ? this.cornerRadius : 0;
-    double borderWidth = this.borderWidth != null ? this.borderWidth : 0;
+        this.backgroundColor != null ? this.backgroundColor! : Colors.white;
+    double cornerRadius = this.cornerRadius != null ? this.cornerRadius! : 0;
+    double borderWidth = this.borderWidth != null ? this.borderWidth! : 0;
     Color borderColor =
-        this.borderColor != null ? this.borderColor : Colors.transparent;
+        this.borderColor != null ? this.borderColor! : Colors.transparent;
     return Container(
       width: width,
       height: height,
@@ -66,26 +66,26 @@ class CJBGBorderWidget extends StatelessWidget {
 
 /// 可定制背景图片、圆角、弧度的 Widget
 class CJBGImageWidget extends StatelessWidget {
-  final double height; // 文本框的高度
+  final double? height; // 文本框的高度
   final ImageProvider backgroundImage; // 背景图
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
 
-  final double cornerRadius; // 边的圆角
-  final double borderWidth; // 边宽
-  final Color borderColor; // 边的颜色
+  final double? cornerRadius; // 边的圆角
+  final double? borderWidth; // 边宽
+  final Color? borderColor; // 边的颜色
 
   final Widget child; // 控件视图
-  final VoidCallback onPressed; // 控件视图的点击事件
+  final VoidCallback? onPressed; // 控件视图的点击事件
 
   CJBGImageWidget({
-    Key key,
+    Key? key,
     this.height = 44,
-    @required this.backgroundImage,
+    required this.backgroundImage,
     this.cornerRadius = 0,
     this.borderWidth = 0,
     this.borderColor,
-    @required this.child,
+    required this.child,
     this.onPressed,
   }) : super(key: key);
 
@@ -99,7 +99,7 @@ class CJBGImageWidget extends StatelessWidget {
 
   Widget _containerWidget() {
     return ClipRRect(
-      borderRadius: BorderRadius.all(Radius.circular(cornerRadius)),
+      borderRadius: BorderRadius.all(Radius.circular(cornerRadius ?? 0)),
       clipBehavior: Clip.antiAliasWithSaveLayer,
       child: GestureDetector(
         onTap: onPressed,

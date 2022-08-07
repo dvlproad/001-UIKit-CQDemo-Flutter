@@ -1,9 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-08-07 16:54:38
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 18:30:53
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CQEmojiLengthLimitingTextInputFormatter
     extends LengthLimitingTextInputFormatter {
-  CQEmojiLengthLimitingTextInputFormatter(int maxLength) : super(maxLength);
+  CQEmojiLengthLimitingTextInputFormatter(int? maxLength) : super(maxLength);
 
   @override
   TextEditingValue formatEditUpdate(
@@ -11,7 +18,7 @@ class CQEmojiLengthLimitingTextInputFormatter
     TextEditingValue newValue,
   ) {
     // 没有限制，则使用最新值
-    if (maxLength == null || maxLength <= 0) {
+    if (maxLength == null || maxLength! <= 0) {
       return newValue;
     }
 
@@ -23,7 +30,7 @@ class CQEmojiLengthLimitingTextInputFormatter
     }
 
     // 是添加文本操作，但新文本仍不会没超过限制
-    if (newValueLength <= maxLength) {
+    if (newValueLength <= maxLength!) {
       return newValue;
     }
 

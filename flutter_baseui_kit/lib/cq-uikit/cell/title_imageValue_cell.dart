@@ -1,17 +1,25 @@
-// 包含标题文本title，值图片imageValue、箭头类型固定为向右 的视图
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-05 15:12:50
+ * @Description: 包含标题文本title，值图片imageValue、箭头类型固定为向右 的视图
+ */
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
 
 class BJHTitleImageValueCell extends StatelessWidget {
+  final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
   final String title; // 标题
-  final String imageValue; // 值图片（此值为空时候，视图会自动隐藏）
-  void Function() onTap; // 点击事件
+  final String? imageValue; // 值图片（此值为空时候，视图会自动隐藏）
+  void Function()? onTap; // 点击事件
 
   BJHTitleImageValueCell({
-    Key key,
-    this.title,
+    Key? key,
+    this.leftRightPadding,
+    required this.title,
     this.imageValue,
     this.onTap,
   }) : super(key: key);
@@ -19,19 +27,22 @@ class BJHTitleImageValueCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
+      leftRightPadding: this.leftRightPadding ?? 20.w_pt_cj,
       title: this.title,
-      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) =>
+      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded = false}) =>
           _imageValueWidget(bContext, canExpanded: canExpanded),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
-      clickCellCallback: (section, row, {bIsLongPress}) {
-        this.onTap();
+      onTapCell: ({row, section}) {
+        if (this.onTap != null) {
+          this.onTap!();
+        }
       },
     );
   }
 
   // 图片视图
-  Widget _imageValueWidget(BuildContext bContext, {bool canExpanded}) {
-    if (null == this.imageValue || this.imageValue.length == 0) {
+  Widget? _imageValueWidget(BuildContext bContext, {bool canExpanded = false}) {
+    if (null == this.imageValue || this.imageValue!.isEmpty) {
       return null;
     }
 
@@ -44,7 +55,7 @@ class BJHTitleImageValueCell extends StatelessWidget {
       //     width: AdaptCJHelper.setWidth(34), height: AdaptCJHelper.setWidth(34)),
       child: RoundImage(
         size: 34,
-        networkSrc: this.imageValue,
+        networkSrc: this.imageValue!,
       ),
     );
   }
@@ -56,8 +67,8 @@ class RoundImage extends StatelessWidget {
   final String networkSrc;
 
   const RoundImage({
-    Key key,
-    this.size,
+    Key? key,
+    required this.size,
     this.networkSrc =
         'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg',
   }) : super(key: key);

@@ -4,34 +4,36 @@ import '../../base-uikit/textfield/textfield_container.dart';
 
 /// 文本框(常用于：登录用户名、密码文本框，在原本基础上增加了 图片 选中状态的判断)
 class IconTextField extends StatefulWidget {
-  final String text;
-  final String placeholder;
+  final String? text;
+  final String? placeholder;
 
   /// prefix icon
-  final bool Function(String currentText) prefixIconSelectedCallback;
+  final bool Function(String currentText)? prefixIconSelectedCallback;
   final String prefixIconNormalImageName;
   final String prefixIconSelectedImageName;
-  final String package;
+  final String? package;
 
-  final bool autofocus;
-  final bool obscureText;
-  final TextInputType keyboardType;
-  final TextEditingController controller;
-  final bool showClear;
-  final TextInputAction textInputAction;
-  final FocusNode focusNode;
-  final ValueChanged<String> onSubmitted;
+  final TextStyle? style;
+  final bool? autofocus;
+  final bool? obscureText;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
+  final bool? showClear;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onSubmitted;
 
   IconTextField({
-    Key key,
+    Key? key,
     this.text,
     this.placeholder,
 
     /// prefix icon
     this.prefixIconSelectedCallback,
-    this.prefixIconNormalImageName,
-    this.prefixIconSelectedImageName,
+    required this.prefixIconNormalImageName,
+    required this.prefixIconSelectedImageName,
     this.package,
+    this.style,
     this.autofocus = false,
     this.obscureText = false,
     this.keyboardType,
@@ -51,9 +53,9 @@ class IconTextField extends StatefulWidget {
 }
 
 class IconTextFieldState extends State<IconTextField> {
-  bool _prefixIconSelected;
-  String _text;
-  TextEditingController _controller;
+  late bool _prefixIconSelected;
+  late String _text;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -64,7 +66,7 @@ class IconTextFieldState extends State<IconTextField> {
 
     _prefixIconSelected = false;
     if (widget.prefixIconSelectedCallback != null) {
-      _prefixIconSelected = widget.prefixIconSelectedCallback(_text);
+      _prefixIconSelected = widget.prefixIconSelectedCallback!(_text);
     }
   }
 
@@ -86,11 +88,12 @@ class IconTextFieldState extends State<IconTextField> {
     return CJClearButtonTextField(
       placeholder: widget.placeholder,
       text: widget.text,
-      // textInputAction: TextInputAction.search,
+      style: widget.style,
+      textInputAction: widget.textInputAction,
       controller: _controller,
       onChanged: (String string) {
         if (widget.prefixIconSelectedCallback != null) {
-          _prefixIconSelected = widget.prefixIconSelectedCallback(string);
+          _prefixIconSelected = widget.prefixIconSelectedCallback!(string);
         }
         setState(() {});
       },

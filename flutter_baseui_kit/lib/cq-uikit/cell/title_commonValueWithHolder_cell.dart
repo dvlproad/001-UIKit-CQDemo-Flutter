@@ -6,58 +6,63 @@ import './title_commonValue_cell.dart';
 export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
 // import '../text/text.dart';
 
-class BJHTitleCommonValueWithHolderTableViewCell
+class ImageTitleCommonValueWithHolderTableViewCell
     extends BJHTitleCommonValueTableViewCell {
-  String valuePlaceHodler; // 值文本占位符(默认null，不显示)
-  Color valuePlaceHodlerColor; // 值文本占位符文字颜色
-  double valuePlaceHodlerFontSize; // 值文本的字体大小(默认30)
+  String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
+  TextStyle? valuePlaceHodlerTextStyle; // 值文本的style(默认字体大小16)
 
-  BJHTitleCommonValueWithHolderTableViewCell({
-    Key key,
-    double height, // cell 的高度
-    double leftRightPadding, // cell 内容的左右间距(未设置时候，默认20)
-    Color color,
+  ImageTitleCommonValueWithHolderTableViewCell({
+    Key? key,
+    double? height, // cell 的高度
+    double? leftRightPadding, // cell 内容的左右间距(未设置时候，默认20)
+    Color? color,
+    double? leftMaxWidth,
+    double? rightMaxWidth,
+    double? leftRightSpacing,
 
     // 左侧-图片
-    ImageProvider imageProvider, // 图片(默认null时候，imageWith大于0时候才有效)
-    double imageWith, // 图片宽高(默认null，非大于0时候，图片没位置)
-    double imageTitleSpace, // 图片与标题间距(图片存在时候才有效)
+    ImageProvider? imageProvider, // 图片(默认null时候，imageWith大于0时候才有效)
+    double? imageWith, // 图片宽高(默认null，非大于0时候，图片没位置)
+    double? imageTitleSpace, // 图片与标题间距(图片存在时候才有效)
     // 左侧-文本
-    String title, // 主文本
+    required String title, // 主文本
     // 右侧-值视图
-    Widget Function(BuildContext context, {bool canExpanded})
+    required Widget? Function(BuildContext context, {required bool canExpanded})
         valueWidgetBuilder, // 值视图（此值为空时候，视图会自动隐藏）
-    String
+    String?
         valuePlaceHodler, // 值文本占位符(默认null，不显示)，且此值必须当 valueWidgetBuilder 为null才显示
-    Color valuePlaceHodlerColor, // 值文本占位符文字颜色
-    double valuePlaceHodlerFontSize, // 值文本的字体大小(默认30)
+    TextStyle? valuePlaceHodlerTextStyle, // 值文本的style(默认字体大小16)
     // 右侧-箭头
-    TableViewCellArrowImageType arrowImageType, // 箭头类型(默认none)
+    TableViewCellArrowImageType? arrowImageType, // 箭头类型(默认none)
 
-    int section,
-    int row,
-    ClickCellCallback clickCellCallback, // cell 的点击
+    int? section,
+    int? row,
+    ClickCellCallback? onTapCell, // cell 的点击
+    ClickCellCallback? onDoubleTapCell, // cell 的双击
+    ClickCellCallback? onLongPressCell, // cell 的长按
   }) : super(
           key: key,
           height: height,
-          leftRightPadding: leftRightPadding ?? 0,
+          leftRightPadding: leftRightPadding,
           color: color,
+          leftMaxWidth: leftMaxWidth,
+          rightMaxWidth: rightMaxWidth,
+          leftRightSpacing: leftRightSpacing,
           imageProvider: imageProvider,
           imageWith: imageWith ?? 22.w_pt_cj,
           imageTitleSpace: imageTitleSpace ?? 10.w_pt_cj,
           title: title,
-          valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) {
+          valueWidgetBuilder: (BuildContext bContext,
+              {required bool canExpanded}) {
             bool existTextValuePlaceHodler =
                 valuePlaceHodler != null && valuePlaceHodler.isNotEmpty;
 
-            Widget valueWidget = valueWidgetBuilder(bContext);
+            Widget? valueWidget =
+                valueWidgetBuilder(bContext, canExpanded: canExpanded);
             if (valueWidget == null && existTextValuePlaceHodler == true) {
-              return BJHTitleCommonValueWithHolderTableViewCell
-                  .valuePlaceHodlerWidget(
+              return HolderTableViewCellHolderWidget(
                 valuePlaceHodler: valuePlaceHodler,
-                valuePlaceHodlerColor:
-                    valuePlaceHodlerColor ?? const Color(0xFFC1C1C1),
-                valuePlaceHodlerFontSize: valuePlaceHodlerFontSize,
+                valuePlaceHodlerTextStyle: valuePlaceHodlerTextStyle,
               );
             } else {
               return valueWidget;
@@ -66,21 +71,39 @@ class BJHTitleCommonValueWithHolderTableViewCell
           arrowImageType: arrowImageType,
           section: section,
           row: row,
-          clickCellCallback: clickCellCallback,
+          onTapCell: onTapCell,
+          onDoubleTapCell: onDoubleTapCell,
+          onLongPressCell: onLongPressCell,
         );
+}
 
-  // 占位文本
-  static Widget valuePlaceHodlerWidget({
-    String valuePlaceHodler, // 值文本占位符(默认null，不显示)
-    Color valuePlaceHodlerColor, // 值文本占位符文字颜色
-    double valuePlaceHodlerFontSize, // 值文本的字体大小(默认30)
-  }) {
+class HolderTableViewCellHolderWidget extends StatelessWidget {
+  String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
+  TextStyle? valuePlaceHodlerTextStyle;
+
+  HolderTableViewCellHolderWidget({
+    Key? key,
+    this.valuePlaceHodler,
+    this.valuePlaceHodlerTextStyle,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     String showText;
     Color showTextColor = Color(0xff999999);
 
     if (valuePlaceHodler != null) {
-      showText = valuePlaceHodler;
-      showTextColor = valuePlaceHodlerColor ?? Color(0xC1C1C1);
+      showText = valuePlaceHodler!;
+
+      if (valuePlaceHodlerTextStyle == null) {
+        valuePlaceHodlerTextStyle = TextStyle(
+          color: const Color(0xFFC1C1C1),
+          fontFamily: 'PingFang SC',
+          fontSize: 16.f_pt_cj,
+          fontWeight: FontWeight.w400,
+          //height: 1,
+        );
+      }
     } else {
       showText = "";
     }
@@ -94,13 +117,7 @@ class BJHTitleCommonValueWithHolderTableViewCell
         textAlign: TextAlign.right,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: showTextColor,
-          fontFamily: 'PingFang SC',
-          fontSize: valuePlaceHodlerFontSize ?? 16.f_pt_cj,
-          fontWeight: FontWeight.w500,
-          height: 1,
-        ),
+        style: valuePlaceHodlerTextStyle,
       ),
     );
   }

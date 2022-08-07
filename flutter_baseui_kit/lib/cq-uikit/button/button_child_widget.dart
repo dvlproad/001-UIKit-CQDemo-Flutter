@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-20 16:35:46
+ * @LastEditTime: 2022-07-05 14:58:46
  * @Description: button 中 childWidget 的创建
  */
 import 'package:flutter/material.dart';
@@ -12,13 +12,13 @@ import './imagebutton.dart';
 
 class ButtonChildWidget extends StatelessWidget {
   final String title;
-  final TextStyle titleStyle;
-  final Image imageWidget; // 图片
-  final double imageTitleGap; // 图片和文字之间的距离(imageWidget存在的时候才有效)
+  final TextStyle? titleStyle;
+  final Image? imageWidget; // 图片
+  final double? imageTitleGap; // 图片和文字之间的距离(imageWidget存在的时候才有效)
 
   const ButtonChildWidget({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.titleStyle,
     this.imageWidget,
     this.imageTitleGap,
@@ -70,7 +70,7 @@ class ButtonChildWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          this.imageWidget,
+          this.imageWidget!,
           SizedBox(width: this.imageTitleGap ?? 5),
           _childWidget_onlyText,
         ],

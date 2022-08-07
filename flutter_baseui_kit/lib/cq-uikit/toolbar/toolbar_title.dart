@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 12:43:00
+ * @LastEditTime: 2022-07-05 14:20:38
  * @Description: 
  */
 // appbar 上 左侧返回视图 + 中间标题视图 + 右侧按钮视图
@@ -14,15 +14,15 @@ import '../../flutter_baseui_kit_adapt.dart';
 
 // 左侧返回视图
 class ToolBarTitleWidget extends StatelessWidget {
-  final String text;
-  final AppBarTextColorType textColorType;
-  final double width;
+  final String? text;
+  final AppBarTextColorType? textColorType;
+  final double? width;
 
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   const ToolBarTitleWidget({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.textColorType = AppBarTextColorType.default_black,
     this.width,
     this.onPressed,

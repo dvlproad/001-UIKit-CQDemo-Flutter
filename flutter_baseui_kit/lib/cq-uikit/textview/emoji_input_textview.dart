@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-08-07 16:54:38
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 18:26:15
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../cq-uikit/textview/emoji_lengthLimiting_textInputFormatter.dart';
@@ -15,14 +22,14 @@ class CQEmojiInputTextView extends CQInputTextView {
   // final TextChangeCallback textChangeCallback;
 
   CQEmojiInputTextView({
-    Key key,
-    String text,
-    String placeholder,
-    int maxLength,
-    int maxLines,
-    double minHeight,
-    double maxHeight,
-    @required TextChangeCallback textChangeCallback,
+    Key? key,
+    String? text,
+    String? placeholder,
+    int? maxLength,
+    int? maxLines,
+    double? minHeight,
+    double? maxHeight,
+    required TextChangeCallback textChangeCallback,
   }) : super(
           key: key,
           text: text,

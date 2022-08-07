@@ -1,31 +1,36 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// 文本框(默认包含 clearButton 的文本框)
 class CJClearButtonTextField extends StatefulWidget {
-  final String text;
-  final Color textColor;
-  final String placeholder;
-  final Color placeholderColor;
+  final String? text;
+  final TextStyle? style;
+  final Color? textColor;
+  final String? placeholder;
+  final Color? placeholderColor;
 
-  final bool allowShowClear; // 是否允许有删除键(默认false)
+  final bool? allowShowClear; // 是否允许有删除键(默认false)
 
-  final bool obscureText;
-  final TextInputType keyboardType;
-  final TextEditingController controller;
-  final TextInputAction textInputAction;
-  final FocusNode focusNode;
-  final ValueChanged<String> onChanged;
-  final ValueChanged<String> onSubmitted;
+  final bool? obscureText;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputType? keyboardType;
+  final TextEditingController? controller;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
 
   CJClearButtonTextField({
-    Key key,
+    Key? key,
     this.text = '',
+    this.style,
     this.textColor = Colors.black,
     this.placeholder = '请输入',
     this.placeholderColor,
     this.allowShowClear = false,
     this.obscureText,
+    this.inputFormatters,
     this.keyboardType,
     this.controller,
     this.textInputAction,
@@ -41,14 +46,14 @@ class CJClearButtonTextField extends StatefulWidget {
 }
 
 class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
-  Color _textColor;
+  Color? _textColor;
   // bool _isFirstResponse; // 是否是第一响应者，即是否有焦点
   bool _allowShowClear = false;
   bool _curShowClear = false;
   bool _oldShowClear = false;
 
-  String _text;
-  TextEditingController _controller;
+  late String _text;
+  late TextEditingController _controller;
 
   @override
   void initState() {
@@ -60,7 +65,7 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
     _text = widget.text ?? "";
     _controller = widget.controller ?? TextEditingController();
 
-    _allowShowClear = widget.allowShowClear;
+    _allowShowClear = widget.allowShowClear ?? false;
     _oldShowClear = _text.isNotEmpty;
     _curShowClear = _text.isNotEmpty;
     _controller.text = _text;
@@ -94,14 +99,14 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
     }
 
     if (widget.onChanged != null) {
-      widget.onChanged(_text);
+      widget.onChanged!(_text);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // return Text('吃啥');
-    Widget suffixIcon;
+    Widget? suffixIcon;
     if (_allowShowClear == true && _curShowClear == true) {
       suffixIcon = IconButton(
         icon: new Icon(Icons.clear, color: _textColor, size: 14),
@@ -116,10 +121,11 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
       child: TextField(
         autofocus: false,
         obscureText: false,
-        style: TextStyle(color: _textColor, fontSize: 17.0),
+        style: widget.style ?? TextStyle(color: _textColor, fontSize: 17.0),
         textAlign: TextAlign.left,
         textAlignVertical: TextAlignVertical.center,
         // cursorColor: _textColor,
+        inputFormatters: widget.inputFormatters,
         cursorWidth: 1,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(bottom: 12),
@@ -143,7 +149,7 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
         onSubmitted: (String currentText) {
           // _isFirstResponse = false;
           if (widget.onSubmitted != null) {
-            widget.onSubmitted(currentText);
+            widget.onSubmitted!(currentText);
           }
         },
       ),

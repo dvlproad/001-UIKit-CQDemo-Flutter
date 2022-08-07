@@ -2,22 +2,23 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:41:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-15 19:05:56
+ * @LastEditTime: 2022-07-05 14:47:27
  * @Description: 吸底视图
  */
 import 'dart:ui' show window;
 import 'package:flutter/material.dart';
+import '../../flutter_baseui_kit_adapt.dart';
 
 class AbsorbBottomContainer extends StatelessWidget {
-  final Color color;
+  final Color? color;
   final double height;
-  final Widget child;
-  final EdgeInsetsGeometry childPadding;
+  final Widget? child;
+  final EdgeInsetsGeometry? childPadding;
 
   AbsorbBottomContainer({
-    Key key,
+    Key? key,
     this.color,
-    this.height, // 此高度为扣除底部screenBottomHeight后的高度
+    required this.height, // 此高度为扣除底部screenBottomHeight后的高度
     this.child, // child会从bottom布局
     this.childPadding,
   }) : super(key: key);
@@ -28,10 +29,14 @@ class AbsorbBottomContainer extends StatelessWidget {
     double _width = mediaQuery.size.width;
     double _height = mediaQuery.size.height;
     double screenBottomHeight = mediaQuery.padding.bottom;
+    if (screenBottomHeight == 0) {
+      print("///TODO:疑难杂症:这里为什么有时候会等于0，常见于点击搜索后，弹窗键盘,回来发现");
+      screenBottomHeight = AdaptCJHelper.screenBottomHeight;
+    }
 
     return Container(
       width: _width,
-      height: height + screenBottomHeight,
+      height: height + mediaQuery.padding.bottom,
       decoration: BoxDecoration(
         color: color ?? Colors.white,
         borderRadius: BorderRadius.only(

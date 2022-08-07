@@ -1,35 +1,44 @@
 import 'package:flutter/material.dart';
+import './skeleton.dart.dart';
 
 class LazyText extends StatelessWidget {
-  String data;
-  TextStyle style;
-  int maxLines;
-  TextAlign textAlign;
-  TextOverflow overflow;
-  double lazyWidth;
-  double lazyHeight;
+  String? data;
+  TextStyle? style;
+  int? maxLines;
+  TextAlign? textAlign;
+  TextOverflow? overflow;
+  double? lazyWidth;
+  double? lazyHeight;
 
   LazyText(
     this.data, {
+    Key? key,
     this.textAlign = TextAlign.left,
     this.style,
     this.maxLines,
     this.overflow,
-    @required this.lazyWidth,
-    @required this.lazyHeight,
-    Key key,
+    required this.lazyWidth,
+    required this.lazyHeight,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor;
+    Color? backgroundColor;
     if (data == null) {
       backgroundColor = const Color(0xFFF0F0F0);
+
+      return Skeleton(
+        width: lazyWidth ?? 10,
+        height: lazyHeight ?? 10,
+        cornerRadius: 4,
+      );
+      /*
       return Container(
-        height: lazyWidth ?? 10,
-        width: lazyHeight ?? 10,
+        width: lazyWidth ?? 10,
+        height: lazyHeight ?? 10,
         color: const Color(0xFFF0F0F0),
       );
+      */
     }
 
     return DefaultTextStyle(
@@ -51,22 +60,22 @@ class LazyText extends StatelessWidget {
 }
 
 class TolerantText extends StatelessWidget {
-  double height;
-  String data;
-  TextStyle style;
-  int maxLines;
-  TextAlign textAlign;
-  TextOverflow overflow;
+  double? height;
+  String? data;
+  TextStyle? style;
+  int? maxLines;
+  TextAlign? textAlign;
+  TextOverflow? overflow;
   // Color backgroundColor; // 文本框背景色(请在 style 中设置)
 
   TolerantText(
     this.data, {
+    Key? key,
     this.height,
     this.textAlign,
     this.style,
     this.maxLines,
     this.overflow,
-    Key key,
   }) : super(key: key);
 
   @override
@@ -75,7 +84,7 @@ class TolerantText extends StatelessWidget {
       textAlign = TextAlign.left;
     }
 
-    CrossAxisAlignment crossAxisAlignment;
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
     if (textAlign == TextAlign.left) {
       crossAxisAlignment = CrossAxisAlignment.start;
     }

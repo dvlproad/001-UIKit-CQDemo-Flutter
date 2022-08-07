@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-19 16:00:31
+ * @LastEditTime: 2022-07-07 13:48:06
  * @Description: 包含标题文本title，值输入框textInputValue(文本前可设置是否添加点来突出)、箭头类型固定为向右 的视图
  */
 import 'package:flutter/material.dart';
@@ -12,13 +12,13 @@ import './title_commonValue_cell.dart';
 
 class BJHTitleTextInputValueCell extends StatelessWidget {
   final String title; // 标题
-  final String textInputValue; // 值文本（此值为空时候，视图会自动隐藏）
-  final TextEditingController controller;
-  void Function() onTap; // 点击事件
+  final String? textInputValue; // 值文本（此值为空时候，视图会自动隐藏）
+  final TextEditingController? controller;
+  final void Function()? onTap; // 点击事件
 
   BJHTitleTextInputValueCell({
-    Key key,
-    @required this.title,
+    Key? key,
+    required this.title,
     this.textInputValue,
     this.controller,
     this.onTap,
@@ -28,18 +28,22 @@ class BJHTitleTextInputValueCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return BJHTitleCommonValueTableViewCell(
       title: this.title,
-      valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) =>
+      valueWidgetBuilder: (BuildContext bContext,
+              {required bool canExpanded}) =>
           _textInputValueWidget(bContext, canExpanded: canExpanded),
       arrowImageType: TableViewCellArrowImageType.arrowRight,
-      clickCellCallback: (section, row, {bIsLongPress}) {
+      onTapCell: ({int? section, int? row}) {
         if (this.onTap != null) {
-          this.onTap();
+          this.onTap!();
         }
       },
     );
   }
 
-  Widget _textInputValueWidget(BuildContext bContext, {bool canExpanded}) {
+  Widget? _textInputValueWidget(
+    BuildContext bContext, {
+    bool canExpanded = false,
+  }) {
     return Row(
       children: [_textField()],
     );

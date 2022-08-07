@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-19 21:55:04
+ * @LastEditTime: 2022-07-05 14:46:54
  * @Description: toolbar上的左侧返回视图(如果返回视图是图片，则会根据title颜色和导航栏背景色来共同决定是什么图片)
  */
 import 'dart:ui';
@@ -13,69 +13,52 @@ import './toolbar_enum.dart';
 
 import '../../flutter_baseui_kit_adapt.dart';
 
-class ToolBarBackWidget extends StatelessWidget {
-  final double width;
-  final String text;
-  final AppBarTextColorType textColorType; // 导航栏标题颜色能影响到返回按钮的颜色
-  final Color appbarBackgroundColor;
-  final VoidCallback
-      onPressed; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
+enum QuickToolBarImageType {
+  white,
+  white_bgClear,
+  black,
+  black_bgClear,
+}
 
-  const ToolBarBackWidget({
-    Key key,
+class QuickToolBarImageActionWidget extends StatelessWidget {
+  final double? width;
+  final QuickToolBarImageType? imageType;
+  final VoidCallback? onPressed;
+
+  const QuickToolBarImageActionWidget({
+    Key? key,
     this.width,
-    this.text,
-    this.textColorType = AppBarTextColorType.default_black,
-    this.appbarBackgroundColor,
+    this.imageType,
     @required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ImageProvider image = null;
-    Color textColor;
-    if (this.text == null) {
-      if (textColorType == AppBarTextColorType.white) {
-        if (appbarBackgroundColor == Colors.transparent) {
-          image = AssetImage(
-            'assets/appbar/nav_back_black_clear.png',
-            package: 'flutter_baseui_kit',
-          );
-        } else {
-          image = AssetImage(
-            'assets/appbar/nav_back_white.png',
-            package: 'flutter_baseui_kit',
-          );
-        }
-      } else {
-        if (appbarBackgroundColor == Colors.transparent) {
-          image = AssetImage(
-            'assets/appbar/nav_back_black_clear.png',
-            package: 'flutter_baseui_kit',
-          );
-        } else {
-          image = AssetImage(
-            'assets/appbar/nav_back_black.png',
-            package: 'flutter_baseui_kit',
-          );
-        }
-      }
-      // lastWidth = 10;
+    String imageName;
+    Color? imageColor;
+    if (imageType == QuickToolBarImageType.white_bgClear) {
+      imageName = 'assets/appbar/nav_back_white_clear.png';
+    } else if (imageType == QuickToolBarImageType.white) {
+      imageName = 'assets/appbar/nav_back_white.png';
+    } else if (imageType == QuickToolBarImageType.black_bgClear) {
+      imageName = 'assets/appbar/nav_back_black_clear.png';
     } else {
-      if (textColorType == AppBarTextColorType.white) {
-        textColor = Colors.white;
-      } else {
-        textColor = Color(0xFF222222);
-      }
+      imageName = 'assets/appbar/nav_back_black.png';
     }
 
-    return ToolBarActionWidget(
+    return ToolBarImageActionWidget(
       width: width,
-      text: this.text,
-      textColor: textColor,
-      bgColor: Colors.transparent,
-      image: image,
-      needUpdateImageColor: false,
+      color: Colors.transparent,
+      image: Image(
+        image: AssetImage(
+          imageName,
+          package: 'flutter_baseui_kit',
+        ),
+        fit: BoxFit.cover,
+        color: imageColor,
+        width: 22.w_pt_cj,
+        height: 22.h_pt_cj,
+      ),
       onPressed: this.onPressed,
     );
   }

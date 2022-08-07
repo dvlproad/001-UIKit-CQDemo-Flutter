@@ -5,7 +5,7 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -19,6 +19,8 @@ dependencies:
   # flutter_page_indicator: ^0.3.0
   # [分页指示器](https://pub.flutter-io.cn/packages/smooth_page_indicator)
   smooth_page_indicator: any # ^0.2.0
+
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

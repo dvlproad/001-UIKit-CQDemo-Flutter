@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FlutterAutoText extends StatefulWidget {
   /// 要显示的文字
-  final String text;
+  final String? text;
 
   ///指定text的父容器的宽度
   ///必须制定宽度
@@ -10,27 +10,27 @@ class FlutterAutoText extends StatefulWidget {
 
   ///最小的字体大小
   ///默认最小是6
-  final double minTextSize;
+  final double? minTextSize;
 
   ///正常的字体大小
   ///默认值是14
-  final double textSize;
+  final double? textSize;
 
   /// 正常的字体大小
   /// 默认值是14
-  final Color textColor;
+  final Color? textColor;
 
   /// 字体的样式
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   FlutterAutoText({
-    Key key,
+    Key? key,
     String text,
     this.textStyle,
-    @required this.width,
+    required this.width,
     double minTextSize,
     this.textColor,
-    double textSize,
+    double? textSize,
   })  : this.minTextSize = minTextSize ?? 6,
         this.textSize = textSize != null
             ? textSize

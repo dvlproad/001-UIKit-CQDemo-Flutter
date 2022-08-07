@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 18:35:44
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:tsdemo_baseui/tsdemo_baseui.dart';
 import './piechart/PieChartPage.dart';
@@ -16,7 +23,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: PieChartPage(),
+      home: TSBaseUIHomePage(),
+      // home: PieChartPage(),
       routes: BaseUIKitRouters.routes,
     );
   }

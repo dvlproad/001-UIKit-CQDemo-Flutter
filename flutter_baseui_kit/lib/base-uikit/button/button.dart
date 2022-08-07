@@ -3,38 +3,38 @@ import '../../base-uikit/bg_border_widget.dart';
 
 /// 底层按钮(已配置 Normal 和 Selected 风格的主题色按钮)
 class CJStateButton extends StatelessWidget {
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final Widget child;
-  final VoidCallback onPressed;
-  final bool enable;
+  final VoidCallback? onPressed;
+  final bool? enable;
   final double disableOpacity;
-  final bool selected;
+  final bool? selected;
   final double cornerRadius;
   final Color normalBGColor;
   final Color normalTextColor;
-  final Color normalBorderColor;
+  final Color? normalBorderColor;
   final double normalBorderWidth;
-  final Color normalBackgroundHighlightColor;
-  final Color selectedBGColor;
-  final Color selectedTextColor;
-  final Color selectedBorderColor;
+  final Color? normalBackgroundHighlightColor;
+  final Color? selectedBGColor;
+  final Color? selectedTextColor;
+  final Color? selectedBorderColor;
   final double selectedBorderWidth;
-  final Color selectedBackgroundHighlightColor;
-  final double highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
+  final Color? selectedBackgroundHighlightColor;
+  final double? highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
 
   CJStateButton({
-    Key key,
+    Key? key,
     this.width,
     this.height,
-    @required this.child,
+    required this.child,
     this.onPressed, // 不是必传(为了使其null时候，能够自动透传点击事件)
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
     this.selected = false,
     this.cornerRadius = 5.0,
-    this.normalBGColor,
-    this.normalTextColor,
+    required this.normalBGColor,
+    required this.normalTextColor,
     this.normalBorderColor,
     this.normalBorderWidth = 0.0,
     this.normalBackgroundHighlightColor,
@@ -50,34 +50,34 @@ class CJStateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     Color _currentTextColor;
     Color _currentBackgroundColor;
-    Color _currentBackgroundHighlightColor;
+    Color? _currentBackgroundHighlightColor;
 
     Color _currentBorderColor;
     double _currentBorderWidth;
-    double _cornerRadius = this.cornerRadius ?? 0.0;
+    double _cornerRadius = this.cornerRadius;
 
     double _highlightOpacity = 1.0; // 默认为1.0,即没直接设置高亮颜色的时候，高亮为原色
     if (this.highlightOpacity != null) {
-      _highlightOpacity = this.highlightOpacity;
+      _highlightOpacity = this.highlightOpacity!;
     }
 
-    if (selected) {
-      if (enable) {
-        _currentTextColor = selectedTextColor;
-        _currentBackgroundColor = selectedBGColor;
+    if (selected == true) {
+      if (enable == true) {
+        _currentTextColor = selectedTextColor!;
+        _currentBackgroundColor = selectedBGColor!;
         _currentBorderColor = selectedBorderColor ?? Colors.transparent;
         _currentBackgroundHighlightColor = selectedBackgroundHighlightColor;
       } else {
-        _currentTextColor = selectedTextColor?.withOpacity(disableOpacity);
-        _currentBackgroundColor = selectedBGColor?.withOpacity(disableOpacity);
+        _currentTextColor = selectedTextColor!.withOpacity(disableOpacity);
+        _currentBackgroundColor = selectedBGColor!.withOpacity(disableOpacity);
         _currentBorderColor = selectedBorderColor != null
-            ? selectedBorderColor.withOpacity(disableOpacity)
+            ? selectedBorderColor!.withOpacity(disableOpacity)
             : Colors.transparent;
       }
 
       _currentBorderWidth = selectedBorderWidth;
     } else {
-      if (enable) {
+      if (enable == true) {
         _currentTextColor = normalTextColor;
         _currentBackgroundColor = normalBGColor;
         _currentBorderColor = normalBorderColor ?? Colors.transparent;
@@ -86,7 +86,7 @@ class CJStateButton extends StatelessWidget {
         _currentTextColor = normalTextColor.withOpacity(disableOpacity);
         _currentBackgroundColor = normalBGColor.withOpacity(disableOpacity);
         _currentBorderColor = normalBorderColor != null
-            ? normalBorderColor.withOpacity(disableOpacity)
+            ? normalBorderColor!.withOpacity(disableOpacity)
             : Colors.transparent;
       }
 
@@ -185,7 +185,7 @@ class CJStateButton extends StatelessWidget {
     );
     */
 
-    VoidCallback _onPressed = this.onPressed;
+    VoidCallback? _onPressed = this.onPressed;
     if (this.enable == false) {
       _onPressed = () {}; // 不能点击的时候，如果还是this.onPressed，则也会自行该操作
     }

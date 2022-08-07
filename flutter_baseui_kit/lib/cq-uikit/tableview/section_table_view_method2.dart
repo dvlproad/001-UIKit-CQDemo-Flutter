@@ -24,18 +24,18 @@ class CreateSectionTableView2 extends StatefulWidget {
   final CellAtIndexPathCallBack cellAtIndexPath;
 
   //section header & divider
-  final SectionHeaderCallBack headerInSection;
-  final Widget divider;
+  final SectionHeaderCallBack? headerInSection;
+  final Widget? divider;
 
   // controller
-  ScrollController controller;
+  ScrollController? controller;
   bool reverse;
 
   CreateSectionTableView2({
-    Key key,
-    @required this.sectionCount,
-    @required this.numOfRowInSection,
-    @required this.cellAtIndexPath,
+    Key? key,
+    required this.sectionCount,
+    required this.numOfRowInSection,
+    required this.cellAtIndexPath,
     this.headerInSection,
     this.divider,
     this.controller,
@@ -48,11 +48,11 @@ class CreateSectionTableView2 extends StatefulWidget {
 
 class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
   List<IndexPath> indexToIndexPathSearch = [];
-  Map<String, double> indexPathToOffsetSearch;
+  // Map<String, double> indexPathToOffsetSearch;
 
   final listViewKey = GlobalKey();
 
-  bool showDivider;
+  // bool showDivider;
 
   @override
   void initState() {
@@ -109,13 +109,13 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
     IndexPath indexPath = indexToIndexPathSearch[index];
     //section header
     if (indexPath.section >= 0 && indexPath.row < 0) {
-      return widget.headerInSection(indexPath.section);
+      return widget.headerInSection!(indexPath.section);
     }
 
     Widget cell = widget.cellAtIndexPath(indexPath.section, indexPath.row);
     if (widget.divider != null) {
       return Column(
-        children: <Widget>[cell, widget.divider],
+        children: <Widget>[cell, widget.divider!],
         mainAxisSize: MainAxisSize.min,
       );
     } else {

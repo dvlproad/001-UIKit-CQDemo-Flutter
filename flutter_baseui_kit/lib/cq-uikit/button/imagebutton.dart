@@ -4,14 +4,14 @@ import '../../flutter_baseui_kit_adapt.dart';
 /// 图片在左，文字在右的按钮
 class LeftImageButton extends StatelessWidget {
   String buttonText;
-  int maxLines;
+  int? maxLines;
   Image buttonImageView;
-  GestureTapCallback onTap;
+  GestureTapCallback? onTap;
 
   LeftImageButton({
-    Key key,
-    this.buttonText,
-    this.buttonImageView,
+    Key? key,
+    required this.buttonText,
+    required this.buttonImageView,
     this.onTap,
   }) : super(key: key);
 
@@ -50,26 +50,26 @@ class LeftImageButton extends StatelessWidget {
 
 // 左图片+右文字的按钮视图:icon和文字保持一定上下间距，一起居中(常见于等)
 class LeftImageTextDeleteButton extends StatelessWidget {
-  double width;
-  double height;
-  EdgeInsetsGeometry padding; // 图片与边缘一般都有一定距离
-  Color bgColor;
-  double cornerRadius;
-  double iconHeight; // icon的高度(宽度等于高度)
-  double iconTitleSpace; // icon与文字之间的间距
-  double titleHeight; // 文字高度
-  double clickHandle; // 点击视图的事件
+  double? width;
+  double? height;
+  EdgeInsetsGeometry? padding; // 图片与边缘一般都有一定距离
+  Color? bgColor;
+  double? cornerRadius;
+  double? iconHeight; // icon的高度(宽度等于高度)
+  double? iconTitleSpace; // icon与文字之间的间距
+  double? titleHeight; // 文字高度
+  double? clickHandle; // 点击视图的事件
 
-  Image imageView;
-  Widget textLabel;
-  GestureTapCallback onTap;
+  Image? imageView;
+  Widget? textLabel;
+  GestureTapCallback? onTap;
 
-  bool showDeleteIcon; // 是否显示删除按钮
-  Widget Function() customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
-  GestureTapCallback onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
+  bool? showDeleteIcon; // 是否显示删除按钮
+  Widget Function()? customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
+  GestureTapCallback? onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
 
   LeftImageTextDeleteButton({
-    Key key,
+    Key? key,
     this.width,
     this.height,
     this.padding,
@@ -109,7 +109,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
     if (showDeleteIcon == true) {
       Widget deleteWidget;
       if (customDeleteIconBuilder != null) {
-        deleteWidget = customDeleteIconBuilder();
+        deleteWidget = customDeleteIconBuilder!();
       } else {
         deleteWidget = Image.asset(
           "assets/icon_delete.png",
@@ -150,27 +150,33 @@ class LeftImageTextDeleteButton extends StatelessWidget {
 }
 
 class TopImageButton extends StatelessWidget {
-  double width;
-  double height;
-  Image icon;
+  double? width;
+  double? height;
+  Image? icon;
   String title;
-  Color titleColor;
-  GestureTapCallback onTap;
+  Color? titleColor;
+  GestureTapCallback? onTap;
+  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
 
   TopImageButton({
-    Key key,
+    Key? key,
     this.width,
     this.height,
     this.icon,
-    this.title,
+    required this.title,
     this.titleColor,
     this.onTap,
+    this.onDoubleTap,
+    this.onLongPress,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TopImageTextButton(
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
+      onLongPress: onLongPress,
       width: this.width ?? 60.w_pt_cj,
       height: this.height ?? 60.h_pt_cj,
       iconTitleSpace: 2.h_pt_cj,
@@ -185,20 +191,20 @@ class TopImageButton extends StatelessWidget {
 
 class MenuImageTextButton extends StatelessWidget {
   double width;
-  double height;
-  Color color;
+  double? height;
+  Color? color;
   String imgUrl;
   String title;
-  int badgeCount;
-  GestureTapCallback onTap;
+  int? badgeCount;
+  GestureTapCallback? onTap;
 
   MenuImageTextButton({
-    Key key,
-    this.width,
+    Key? key,
+    required this.width,
     this.height,
     this.color,
-    this.imgUrl,
-    this.title,
+    required this.imgUrl,
+    required this.title,
     this.badgeCount,
     this.onTap,
   }) : super(key: key);
@@ -207,19 +213,15 @@ class MenuImageTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // double _width = MediaQuery.of(context).size.width;
 
-    double titleHeight = 12.h_pt_cj;
-    double iconTitleSpace = 8.h_pt_cj;
-    double iconHeight = 24.h_pt_cj;
-
     String badgeCountString = "";
     double badgeWidgetWidth = 0;
-    if (badgeCount != null && badgeCount > 0) {
-      if (badgeCount > 99) {
+    if (badgeCount != null && badgeCount! > 0) {
+      if (badgeCount! > 99) {
         badgeCountString = "99+";
         badgeWidgetWidth = 20.w_pt_cj;
       } else {
         badgeCountString = "$badgeCount";
-        if (badgeCount > 10) {
+        if (badgeCount! > 10) {
           badgeWidgetWidth = 20.w_pt_cj;
         } else {
           badgeWidgetWidth = 20.w_pt_cj;
@@ -242,61 +244,79 @@ class MenuImageTextButton extends StatelessWidget {
       height: this.height,
       child: Stack(
         children: [
-          TopImageTextButton(
-            onTap: onTap,
-            // width: this.width ?? 120.w_cj,
-            // height: this.height ?? 120.h_cj,
-            // color: Colors.green,
-            titleHeight: titleHeight,
-            iconTitleSpace: iconTitleSpace,
-            iconHeight: iconHeight,
-            imageView: Image.asset(
-              imgUrl,
-              width: iconHeight,
-              fit: BoxFit.fitWidth,
-            ),
-            textLabel: Text(
-              title,
-              style: TextStyle(
-                fontSize: titleHeight,
-                color: const Color(0xff222222),
-                fontWeight: FontWeight.bold,
-                height: 1,
-              ),
-            ),
-          ),
+          buttonView(),
           Positioned(
             top: badgePositionedTop,
             right: badgePositionedRight,
-            child: Container(
-              height: 10.h_pt_cj,
-              width: badgeWidgetWidth,
-              // constraints: BoxConstraints(maxWidth: 0),
-              decoration: BoxDecoration(
-                color: Color(0xFFFF7F00),
-                // borderRadius: BorderRadius.only(
-                //   topLeft: Radius.circular(15),
-                //   topRight: Radius.circular(10),
-                // ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(badgeWidgetWidth / 2),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  badgeCountString,
-                  textAlign: TextAlign.end,
-                  style: TextStyle(
-                    fontSize: 8.f_pt_cj,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    height: 1,
-                  ),
-                ),
-              ),
+            child: badgeView(
+              badgeWidgetWidth: badgeWidgetWidth,
+              badgeCountString: badgeCountString,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget buttonView() {
+    // double titleHeight = 15.h_pt_cj;
+    double iconTitleSpace = 8.h_pt_cj;
+    double iconHeight = 24.h_pt_cj;
+
+    return TopImageTextButton(
+      onTap: onTap,
+      // width: this.width ?? 120.w_cj,
+      // height: this.height ?? 120.h_cj,
+      // color: Colors.green,
+      // titleHeight: titleHeight,
+      iconTitleSpace: iconTitleSpace,
+      iconHeight: iconHeight,
+      imageView: Image.asset(
+        imgUrl,
+        width: iconHeight,
+        fit: BoxFit.fitWidth,
+      ),
+      textLabel: Text(
+        title,
+        style: TextStyle(
+          fontSize: 12.h_pt_cj,
+          color: const Color(0xff222222),
+          fontWeight: FontWeight.bold,
+          // height: 1.2,
+        ),
+      ),
+    );
+  }
+
+  Widget badgeView({
+    required double badgeWidgetWidth,
+    required String badgeCountString,
+  }) {
+    return Container(
+      height: 10.h_pt_cj,
+      width: badgeWidgetWidth,
+      // constraints: BoxConstraints(maxWidth: 0),
+      decoration: BoxDecoration(
+        color: Color(0xFFFF7F00),
+        // borderRadius: BorderRadius.only(
+        //   topLeft: Radius.circular(15),
+        //   topRight: Radius.circular(10),
+        // ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(badgeWidgetWidth / 2),
+        ),
+      ),
+      child: Center(
+        child: Text(
+          badgeCountString,
+          textAlign: TextAlign.end,
+          style: TextStyle(
+            fontSize: 8.f_pt_cj,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            // height: 1,
+          ),
+        ),
       ),
     );
   }
@@ -304,21 +324,23 @@ class MenuImageTextButton extends StatelessWidget {
 
 // 上图片+下文字的按钮视图:icon和文字保持一定上下间距，一起居中(常见于第三方登录icon设置等)
 class TopImageTextButton extends StatelessWidget {
-  double width;
-  double height;
-  Color color;
-  double iconHeight; // icon的高度(宽度等于高度)
-  double iconLeftRightSpace; // icon与左/右两边的距离
-  double iconTitleSpace; // icon与文字之间的间距
-  double titleHeight; // 文字高度
-  double clickHandle; // 点击视图的事件
+  double? width;
+  double? height;
+  Color? color;
+  double? iconHeight; // icon的高度(宽度等于高度)
+  double? iconLeftRightSpace; // icon与左/右两边的距离
+  double? iconTitleSpace; // icon与文字之间的间距
+  double? titleHeight; // 文字高度
+  double? clickHandle; // 点击视图的事件
 
-  Image imageView;
-  Widget textLabel;
-  GestureTapCallback onTap;
+  Image? imageView;
+  Widget? textLabel;
+  GestureTapCallback? onTap;
+  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
 
   TopImageTextButton({
-    Key key,
+    Key? key,
     this.width,
     this.height,
     this.color,
@@ -330,6 +352,8 @@ class TopImageTextButton extends StatelessWidget {
     this.imageView,
     this.textLabel,
     this.onTap,
+    this.onDoubleTap,
+    this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -372,6 +396,8 @@ class TopImageTextButton extends StatelessWidget {
     );
     return InkWell(
       onTap: onTap,
+      onDoubleTap: onDoubleTap,
+      onLongPress: onLongPress,
       child: Container(
         width: width,
         height: height,

@@ -6,19 +6,19 @@ import 'package:flutter/widgets.dart';
 typedef TextChangeCallback = void Function(String text);
 
 class CQInputTextView extends StatefulWidget {
-  final String text;
-  final String placeholder;
-  final int maxLength;
-  final int Function(String) maxLengthAlgorithm;
-  final List<TextInputFormatter> inputFormatters;
-  final int maxLines;
-  final double minHeight; // 文本框的最小高度
-  final double maxHeight; // 文本框的最大高度
+  final String? text;
+  final String? placeholder;
+  final int? maxLength;
+  final int Function(String)? maxLengthAlgorithm;
+  final List<TextInputFormatter>? inputFormatters;
+  final int? maxLines;
+  final double? minHeight; // 文本框的最小高度
+  final double? maxHeight; // 文本框的最大高度
   final TextChangeCallback textChangeCallback;
   final bool autofocus;
 
   CQInputTextView({
-    Key key,
+    Key? key,
     this.text,
     this.placeholder,
     this.maxLength,
@@ -27,7 +27,7 @@ class CQInputTextView extends StatefulWidget {
     this.maxLines,
     this.minHeight,
     this.maxHeight,
-    @required this.textChangeCallback,
+    required this.textChangeCallback,
     this.autofocus = false, // 如朋友圈文本页面需要直接弹出键盘
   }) : super(key: key);
 
@@ -74,9 +74,9 @@ class _CQInputTextViewState extends State<CQInputTextView> {
       if (widget.maxLengthAlgorithm != null) {
         // showTextLength = _inputTextViewController.text.runes.length;
         showTextLength =
-            widget.maxLengthAlgorithm(_inputTextViewController.text);
-        if (showTextLength > widget.maxLength) {
-          showTextLength = widget.maxLength;
+            widget.maxLengthAlgorithm!(_inputTextViewController.text);
+        if (showTextLength > widget.maxLength!) {
+          showTextLength = widget.maxLength!;
         }
       }
 
@@ -89,7 +89,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
 
   List<TextInputFormatter> _inputFormatters() {
     if (widget.inputFormatters != null) {
-      return widget.inputFormatters;
+      return widget.inputFormatters!;
     } else {
       return <TextInputFormatter>[
         LengthLimitingTextInputFormatter(widget.maxLength), //限制最多 maxLength 位字符
@@ -138,7 +138,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
       // fit :用来决定没有Positioned方式时候子Widget的大小，
       // StackFit.loose 指的是子Widget 多大就多大;
       // StackFit.expand 使子Widget的大小和父组件一样大
-      overflow: Overflow.clip,
+      // overflow: Overflow.clip,
       // overflow :指子Widget 超出Stack时候如何显示
       // 默认值是Overflow.clip，子Widget超出Stack会被截断;
       // Overflow.visible 子Widget超出Stack部分还会显示的
@@ -169,8 +169,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
         Positioned(
           bottom: 0,
           right: 0,
-          child:
-              Text(countText ?? '', style: TextStyle(color: Color(0xFF7E7E7E))),
+          child: Text(countText, style: TextStyle(color: Color(0xFF7E7E7E))),
         )
       ],
     );

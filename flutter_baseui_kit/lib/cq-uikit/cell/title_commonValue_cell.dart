@@ -2,8 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
-typedef ClickCellCallback = void Function(int section, int row,
-    {bool bIsLongPress});
+typedef ClickCellCallback = void Function({int? section, int? row});
 
 enum TableViewCellArrowImageType {
   none, // 无箭头
@@ -12,45 +11,51 @@ enum TableViewCellArrowImageType {
 }
 
 class BJHTitleCommonValueTableViewCell extends StatelessWidget {
-  final double height; // cell 的高度
-  final double leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
-  final Color color;
+  final double? height;
+  final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
+  final Color? color;
 
-  final double leftMaxWidth;
-  final double rightMaxWidth;
+  final double? leftMaxWidth;
+  final double? rightMaxWidth;
+  final double? leftRightSpacing;
 
   // 左侧-图片
-  final ImageProvider imageProvider; // 图片(默认null时候，imageWith大于0时候才有效)
-  final double imageWith; // 图片宽高(默认null，非大于0时候，图片没位置)
-  final double imageTitleSpace; // 图片与标题间距(图片存在时候才有效)
+  final ImageProvider? imageProvider; // 图片(默认null时候，imageWith大于0时候才有效)
+  final double? imageWith; // 图片宽高(默认null，非大于0时候，图片没位置)
+  final double? imageTitleSpace; // 图片与标题间距(图片存在时候才有效)
   // 左侧-文本
   final String title; // 主文本
   // 右侧-值视图
-  final Widget Function(BuildContext context, {bool canExpanded})
+  final Widget? Function(BuildContext context, {required bool canExpanded})
       valueWidgetBuilder; // 值视图（此值为空时候，视图会自动隐藏）
   // 右侧-箭头
-  final TableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
+  final TableViewCellArrowImageType? arrowImageType; // 箭头类型(默认none)
 
-  final int section;
-  final int row;
-  final ClickCellCallback clickCellCallback; // cell 的点击
+  final int? section;
+  final int? row;
+  final ClickCellCallback? onTapCell; // cell 的点击
+  final ClickCellCallback? onDoubleTapCell; // cell 的双击
+  final ClickCellCallback? onLongPressCell; // cell 的长按
 
   const BJHTitleCommonValueTableViewCell({
-    Key key,
-    this.height,
+    Key? key,
+    this.height, // cell 的高度(内部已限制最小高度为44)
     this.leftRightPadding,
     this.color,
-    this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
-    this.rightMaxWidth, // 限制右侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
+    this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边)
+    this.rightMaxWidth, // 限制右侧的最大宽度(左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边)
+    this.leftRightSpacing, // 左右两侧视图的间距(默认未未设置时候为0)
     this.imageProvider,
     this.imageWith,
     this.imageTitleSpace,
-    @required this.title,
-    this.valueWidgetBuilder,
+    required this.title,
+    required this.valueWidgetBuilder,
     this.arrowImageType = TableViewCellArrowImageType.none,
     this.section,
     this.row,
-    this.clickCellCallback,
+    this.onTapCell,
+    this.onDoubleTapCell,
+    this.onLongPressCell,
   }) : //assert(leftMaxWidth > 0 || rightMaxWidth > 0),
         super(key: key);
 
@@ -63,32 +68,31 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     return GestureDetector(
       child: _cellContainer(context),
       onTap: () {
-        _onTapCell(isLongPress: false);
+        if (null != this.onTapCell) {
+          this.onTapCell!(section: this.section, row: this.row);
+        }
       },
       onLongPress: () {
-        _onTapCell(isLongPress: true);
+        if (null != this.onLongPressCell) {
+          this.onLongPressCell!(section: this.section, row: this.row);
+        }
+      },
+      onDoubleTap: () {
+        if (null != this.onDoubleTapCell) {
+          this.onDoubleTapCell!(section: this.section, row: this.row);
+        }
       },
     );
   }
 
-  void _onTapCell({bool isLongPress}) {
-    if (null != this.clickCellCallback) {
-      this.clickCellCallback(
-        this.section,
-        this.row,
-        bIsLongPress: isLongPress,
-      );
-    }
-  }
-
-  Widget _leftWidget(BuildContext context, {bool canExpanded}) {
+  Widget _leftWidget(BuildContext context, {bool canExpanded = false}) {
     List<Widget> leftRowWidgets = [];
 
     // 添加valueWidget到rowWidgets中
     // 判断是否添加图片，存在则添加到rowWidgets中
-    if (imageWith != null && imageWith > 0 && imageProvider != null) {
+    if (imageWith != null && imageWith! > 0 && imageProvider != null) {
       Image image = Image(
-        image: imageProvider,
+        image: imageProvider!,
         width: imageWith,
         height: imageWith,
       );
@@ -102,17 +106,25 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
       leftRowWidgets.add(_mainText());
     }
 
-    return Row(children: leftRowWidgets);
+    return Container(
+      // color: Colors.green,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: leftRowWidgets,
+      ),
+    );
   }
 
-  Widget _rightWidget(BuildContext context, {bool canExpanded}) {
+  Widget _rightWidget(BuildContext context, {bool canExpanded = false}) {
     List<Widget> rightRowWidgets = [];
 
     // 添加valueWidget到rowWidgets中
 
-    if (null != this.valueWidgetBuilder) {
+    if (null != this.valueWidgetBuilder &&
+        this.valueWidgetBuilder(context, canExpanded: canExpanded) != null) {
       Widget valueWidget =
-          this.valueWidgetBuilder(context, canExpanded: canExpanded);
+          this.valueWidgetBuilder(context, canExpanded: canExpanded)!;
       rightRowWidgets.add(SizedBox(width: 5.w_pt_cj));
       if (canExpanded == true) {
         rightRowWidgets.add(Expanded(child: valueWidget));
@@ -148,87 +160,58 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     if (rightRowWidgets.length == 0) {
       rightRowWidgets.add(Container());
     }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: rightRowWidgets,
+    return Container(
+      // color: Colors.blue,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: rightRowWidgets,
+      ),
     );
   }
 
   Widget _cellContainer(BuildContext context) {
-    double leftRightPadding = this.leftRightPadding ?? 20.w_pt_cj;
+    double leftRightPadding = this.leftRightPadding ?? 0.w_pt_cj;
 
-    if (leftMaxWidth != null && leftMaxWidth > 0) {
-      return Container(
-        height: this.height ?? 44.w_pt_cj,
-        padding:
-            EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
-        color: this.color ?? Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: leftMaxWidth,
-              child: _leftWidget(context, canExpanded: true),
-            ),
-            // Expanded(
-            //   child: Container(
-            //     color: Colors.orange,
-            //     child: Row(
-            //       children: [
-            //         Expanded(
-            //           child: Row(
-            //             children: [
-            //               Expanded(child: Text('砥砺奋进代理费林德洛夫冻死了发动机')),
-            //               Text('1'),
-            //             ],
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-            Expanded(child: _rightWidget(context, canExpanded: true)),
-            // _rightWidget(context),
-          ],
+    List<Widget> children = [];
+    if (leftMaxWidth != null && leftMaxWidth! > 0) {
+      children = [
+        Container(
+          width: leftMaxWidth,
+          child: _leftWidget(context, canExpanded: true),
         ),
-      );
-    } else if (rightMaxWidth != null && rightMaxWidth > 0) {
-      return Container(
-        height: this.height ?? 44.w_pt_cj,
-        padding:
-            EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
-        color: this.color ?? Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(child: _leftWidget(context, canExpanded: true)),
-            Container(
-              width: rightMaxWidth,
-              child: _rightWidget(context, canExpanded: true),
-            ),
-          ],
+        Container(width: leftRightSpacing ?? 0),
+        Expanded(child: _rightWidget(context, canExpanded: true)),
+      ];
+    } else if (rightMaxWidth != null && rightMaxWidth! > 0) {
+      children = [
+        Expanded(child: _leftWidget(context, canExpanded: true)),
+        Container(width: leftRightSpacing ?? 0),
+        Container(
+          width: rightMaxWidth,
+          child: _rightWidget(context, canExpanded: true),
         ),
-      );
+      ];
     } else {
-      // 左右两侧都未设置最大宽度时候，请自己保证两边不会重叠
-      return Container(
-        height: this.height ?? 44.w_pt_cj,
-        padding:
-            EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
-        color: this.color ?? Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _leftWidget(context, canExpanded: false),
-            _rightWidget(context, canExpanded: false),
-          ],
-        ),
-      );
+      // 左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边
+      children = [
+        _leftWidget(context, canExpanded: false),
+        Container(width: leftRightSpacing ?? 0),
+        Expanded(child: _rightWidget(context, canExpanded: true)),
+      ];
     }
+
+    return Container(
+      height: this.height,
+      constraints: BoxConstraints(minHeight: 44.h_pt_cj),
+      padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
+      color: this.color ?? Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: children,
+      ),
+    );
   }
 
   // 主文本
@@ -237,7 +220,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.title ?? '',
+        this.title,
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
@@ -245,7 +228,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
           color: Color(0xff333333),
           fontSize: 16.f_pt_cj,
           fontWeight: FontWeight.w500,
-          height: 1,
+          // height: 1,
         ),
       ),
     );
