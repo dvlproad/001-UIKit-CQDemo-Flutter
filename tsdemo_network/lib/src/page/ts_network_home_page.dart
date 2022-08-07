@@ -4,7 +4,7 @@ import 'package:app_network/app_network.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_network/src/mock/local_mock_util.dart';
-import 'package:flutter_log/src/log_console/print_console_log_util.dart';
+import 'package:flutter_log/flutter_log.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
@@ -23,10 +23,34 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   void initState() {
     super.initState();
 
+    // network:api host
     String baseUrl = "http://dev.api.xxx.com/hapi/";
+    // network:api token
+    String token = '';
+    // network:api commonParams
+    Map<String, dynamic> commonHeaderParams = {};
+
+    Map<String, dynamic> monitorCommonBodyParams = {};
+    Map<String, dynamic> monitorPublicParamsMap = {};
+    String monitorPublicParamsString =
+        FormatterUtil.convert(monitorPublicParamsMap, 0);
+    monitorCommonBodyParams.addAll({
+      "DataHubId": 'id',
+      "Public": 'monitorPublicParamsString',
+    });
 
     AppNetworkKit.start(
+      commonHeaderParams: commonHeaderParams,
       baseUrl: baseUrl,
+      monitorBaseUrl: "selectedNetworkModel.monitorApiHost",
+      token: token,
+      commonBodyParams: {},
+      monitorCommonBodyParams: monitorCommonBodyParams,
+      allowMock: true,
+      mockApiHost: "TSEnvironmentDataUtil.apiHost_mock",
+      needReloginHandle: () {
+        //
+      },
     );
   }
 
