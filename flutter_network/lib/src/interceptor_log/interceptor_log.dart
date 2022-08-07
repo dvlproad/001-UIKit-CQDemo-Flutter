@@ -65,10 +65,29 @@ class DioLogInterceptor extends Interceptor {
     errorStr += bodyString;
 
     errorStr += "- ERRORTYPE: ${err.type}\n"; // 错误类型
-    if (err.response != null && err.response.data != null) {
-      errorStr += "- ERROR:\n${_parseResponse(err.response)}\n";
+
+    bool isResponseDataNull = false;
+    if (err.response == null) {
+      isResponseDataNull = true;
     } else {
+      var data = err.response.data;
+      if (data == null) {
+        isResponseDataNull = true;
+      } else {
+        if (data is String) {
+          isResponseDataNull = (data as String).isEmpty;
+        } else {
+          isResponseDataNull = false;
+        }
+      }
+    }
+
+    if (isResponseDataNull == true) {
       errorStr += "- MSG: ${err.message}\n";
+    } else {
+      var data = err.response.data;
+      String responseStr = FormatterUtil.convert(data, 0, isObject: true);
+      errorStr += "- ERROR:\n${responseStr}\n";
     }
 
     String logHeaderString = ''; // 日志头
@@ -232,11 +251,5 @@ class DioLogInterceptor extends Interceptor {
     });
 
     return allString;
-  }
-
-  String _parseResponse(Response response) {
-    var data = response.data;
-    String responseStr = FormatterUtil.convert(data, 0, isObject: true);
-    return responseStr;
   }
 }

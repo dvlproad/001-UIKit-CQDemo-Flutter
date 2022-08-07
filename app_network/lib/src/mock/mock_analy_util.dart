@@ -1,8 +1,25 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-06-14 11:31:20
+ * @Description: 网络请求模拟工具类
+ */
+
+/// 环境模拟类型：用来判断是否是模拟的环境
+enum EnvironmentMockType {
+  none, // 不是模拟环境
+  mockWish,
+}
+
 class MockAnalyUtil {
   /// 判断是否是 mock 环境
-  static bool isMockEnvironment(String url) {
-    bool isMockEnvironment = url.startsWith('http://121.41.91.92:3000/mock/');
-    return isMockEnvironment;
+  static EnvironmentMockType envMockType(String url) {
+    if (url.startsWith('http://121.41.91.92:3000/mock/3/api/beyond/')) {
+      return EnvironmentMockType.mockWish;
+    }
+
+    return EnvironmentMockType.none;
   }
 
   /// 获取 mock 环境下的 responseMap
@@ -27,7 +44,8 @@ class MockAnalyUtil {
           responseMap['msg'] = '请求成功';
           responseMap["data"] = responseObject;
         } else {
-          if (url.startsWith('http://121.41.91.92:3000/mock/3/api/beyond/')) {
+          EnvironmentMockType evnMockType = envMockType(url);
+          if (evnMockType == EnvironmentMockType.mockWish) {
             responseMap['code'] = responseObject["code"];
             responseMap['msg'] = responseObject["msg"];
             responseMap["data"] = responseObject["result"];

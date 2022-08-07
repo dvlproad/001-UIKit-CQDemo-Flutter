@@ -1,9 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-14 03:08:07
+ * @Description: 
+ */
 import 'package:dio/dio.dart';
 import 'package:dio/adapter.dart';
 
 class DioChangeUtil {
   /// 修改 baseUrl
-  static void changeOptions(Dio dio, {String baseUrl}) {
+  static void changeOptions(Dio dio, {required String baseUrl}) {
     if (baseUrl.endsWith('/') == false) {
       baseUrl = '$baseUrl/';
     }
@@ -13,12 +20,11 @@ class DioChangeUtil {
     );
   }
 
-  static void changeHeaders(Dio dio, {Map<String, dynamic> headers}) {
-    // Options options = Options(headers: headers);
-    // dio.options = options;
-    dio.options = dio.options.copyWith(
-      headers: headers,
-    );
+  static void changeHeaders(Dio dio, {required Map<String, dynamic> headers}) {
+    // print("dio.options.headers111=${dio.options.headers}");
+    // addAll 才是正确的，不要用 dio.options.copyWith(header:xxx);
+    dio.options.headers.addAll(headers);
+    // print("dio.options.headers222=${dio.options.headers}");
   }
 
   static void removeHeadersKey(Dio dio, String removeKey) {
@@ -27,7 +33,7 @@ class DioChangeUtil {
 
   // 修改代理 proxy
   // 修改代理 proxy(返回代理设置成功与否，当传入的ip地址格式不正确等则无法成功设置代理)
-  static bool changeProxy(Dio dio, {String proxyIp}) {
+  static bool changeProxy(Dio dio, {required String proxyIp}) {
     bool canUpdate = canUpdateProxy(proxyIp); // 无代理的话，一定是null
     if (canUpdate == false) {
       return false;

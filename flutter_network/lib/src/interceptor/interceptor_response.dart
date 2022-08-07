@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'dart:convert' as convert;
-import 'ResultData.dart';
 
 class ResponseInterceptor extends Interceptor {
   @override

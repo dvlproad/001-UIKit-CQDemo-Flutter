@@ -1,6 +1,6 @@
 import 'package:package_info/package_info.dart';
 
-String _version;
+String _version = '';
 
 class DeviceInfo {
   static Future<String> version() async {

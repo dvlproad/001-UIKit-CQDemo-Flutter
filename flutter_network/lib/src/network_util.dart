@@ -3,104 +3,47 @@ import 'dart:io';
 import 'dart:convert' show json;
 import 'dart:convert' as convert;
 
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 
+import './bean/net_options.dart';
+import './bean/err_options.dart';
+import './bean/net_options_convert_util.dart';
 import './network_bean.dart';
 import './url/url_util.dart';
 
-import './network_client.dart';
-import './sp_util.dart';
-import './lang_util.dart';
-
-import './network_client.dart';
-import './mock/mock_analy_util.dart';
+import './base_network_client.dart';
 import './mock/local_mock_util.dart';
 
-import './interceptor/interceptor_log.dart';
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
-
-import './trace/trace_util.dart';
 
 typedef T JsonParse<T>(dynamic data);
 
 class NetworkUtil {
-  static void postUrl<T>(
-    url, {
-    Map<String, dynamic> customParams,
-    cancelToken,
-    Options options,
-    void Function(dynamic resultMap) onSuccess,
-    void Function(String failureMessage) onFailure,
-  }) {
-    postRequestUrl(
-      url,
-      customParams: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    ).then((ResponseModel responseModel) {
-      int errorCode = responseModel.statusCode;
-      if (errorCode == 0) {
-        if (onSuccess != null) {
-          onSuccess(responseModel.result);
-        }
-      } else {
-        if (onFailure != null) {
-          onFailure(responseModel.message);
-        }
-      }
-    });
-  }
-
-  static Future<ResponseModel> postRequestUrl(
-    String url, {
-    Map<String, dynamic> customParams,
-    Options options,
-    cancelToken,
-  }) async {
-    return _requestUrl(
-      url,
-      requestMethod: RequestMethod.post,
-      customParams: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  static Future<ResponseModel> getRequestUrl(
-    url, {
-    Map<String, dynamic> customParams,
-    Options options,
-    cancelToken,
-  }) async {
-    return _requestUrl(
-      url,
-      requestMethod: RequestMethod.get,
-      customParams: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
   // 网络请求的最底层方法
-  static Future<ResponseModel> _requestUrl(
+  static Future<ResponseModel> requestUrl(
+    Dio dio,
     String url, {
-    RequestMethod requestMethod,
-    Map<String, dynamic> customParams,
-    Options options,
-    CancelToken cancelToken,
+    RequestMethod? requestMethod,
+    Map<String, dynamic>? customParams,
+    Options? options,
+    CancelToken? cancelToken,
+    required CJNetworkClientGetSuccessResponseModelBlock
+        getSuccessResponseModelBlock,
+    required CJNetworkClientGetFailureResponseModelBlock
+        getFailureResponseModelBlock,
+    required CJNetworkClientGetDioErrorResponseModelBlock
+        getDioErrorResponseModelBlock,
   }) async {
-    await NetworkManager().initCompleter.future;
-    // while (NetworkManager().hasStart == false) {
-    //   print('NetworkManager:初始化未完成，等待中...');
-    //   // sleep(Duration(milliseconds: 3500));
-    //   await Future.delayed(Duration(milliseconds: 500));
-    // }
-    //print('NetworkManager:初始化已完成，开始进行请求');
+    assert(getSuccessResponseModelBlock != null);
 
     if (url.startsWith(LocalMockUtil.localApiHost)) {
       String loaclFilePath = url.substring(LocalMockUtil.localApiHost.length);
-      return LocalMockUtil.requestLocalFilePath(loaclFilePath);
+      return LocalMockUtil.requestLocalFilePath(
+        loaclFilePath,
+        getSuccessResponseModelBlock: getSuccessResponseModelBlock,
+      );
     }
 
     if (cancelToken == null) {
@@ -111,15 +54,6 @@ class NetworkUtil {
       if (customParams == null) {
         customParams = {};
       }
-      String sessionID = await SpUtil().getAccountSessionID();
-      if (sessionID != null && sessionID.length > 0) {
-        customParams['sessionID'] = sessionID;
-      }
-
-      // 添加公共参数 trace_id
-      customParams['trace_id'] = TraceUtil.traceId();
-
-      Dio dio = NetworkManager.instance.serviceDio;
 
       DioLogUtil.debugApiWithLog(url, "请求开始...");
       Response response;
@@ -127,14 +61,24 @@ class NetworkUtil {
         response = await dio.post(
           url,
           data: customParams,
-          options: options,
+          options: options ??
+              Options(
+                receiveTimeout: dio.options.receiveTimeout,
+                contentType: dio.options.contentType,
+                headers: dio.options.headers,
+              ),
           cancelToken: cancelToken,
         );
       } else {
         response = await dio.get(
           url,
           queryParameters: customParams,
-          options: options,
+          options: options ??
+              Options(
+                receiveTimeout: dio.options.receiveTimeout,
+                contentType: dio.options.contentType,
+                headers: dio.options.headers,
+              ),
           cancelToken: cancelToken,
         );
       }
@@ -145,96 +89,67 @@ class NetworkUtil {
         isFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
       }
 
+      DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
+      late ResponseModel responseModel;
       if (response.statusCode == 200) {
-        DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
-        dynamic responseObject;
-        if (response.data is String) {
-          // 后台把data按字符串返回的时候
-          responseObject = convert.jsonDecode(response.data);
-        } else {
-          //String dataString = response.data.toString();
-          String dataJsonString = convert.jsonEncode(response.data);
-          responseObject = convert.jsonDecode(dataJsonString);
-        }
-
-        Map<String, dynamic> responseMap;
-
-        bool isMockEnvironment = MockAnalyUtil.isMockEnvironment(url);
-        if (isMockEnvironment == true) {
-          // 是模拟的环境，不是本项目
-          responseMap = MockAnalyUtil.responseMapFromMock(responseObject, url);
-        } else {
-          responseMap = responseObject;
-        }
-        DioLogUtil.debugApiWithLog(url, "请求后解析结束...");
-
-        var errorCode = responseMap['code'];
-        var msg = responseMap['msg'];
-        dynamic result = responseMap["data"];
-        ResponseModel responseModel = ResponseModel(
-          statusCode: errorCode,
-          message: msg,
-          result: result,
-          isCache: isFromCache,
-        );
-        return responseModel;
+        responseModel =
+            getSuccessResponseModelBlock(url, response.data, isFromCache);
       } else {
-        String errorMessage = '后端接口出现异常';
-        String message = '请求$url的时候，发生网络错误:$errorMessage';
-        ResponseModel responseModel = ResponseModel(
-          statusCode: -500,
-          message: message,
-          result: null,
-          isCache: isFromCache,
-        );
-        return responseModel;
+        responseModel = getFailureResponseModelBlock(
+            url, response.statusCode, response.data, isFromCache);
       }
+      DioLogUtil.debugApiWithLog(url, "请求后解析结束...");
+      return responseModel;
     } catch (e) {
-      String errorMessage = e.toString();
-      bool isFromCache = null;
+      if (e is DioError == false) {
+        String fullUrl = url;
+        String errorMessage = e.toString();
+        String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
 
+        return ResponseModel.tryCatchErrorResponseModel(
+          message,
+          isCache: null,
+        );
+      }
+
+      DioError err = e as DioError;
+      ErrOptions newErrorModel = NetworkModelConvertUtil.newError(err);
+
+      // ①.fullUrl
       String fullUrl;
       if (url.startsWith(RegExp(r'https?:'))) {
         fullUrl = url;
       } else {
-        if (e is DioError) {
-          DioError err = e;
-          if (null != DioCacheUtil.isCacheErrorCheckFunction) {
-            isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
-          }
-
-          fullUrl = UrlUtil.fullUrlFromDioError(err);
-
-          String baseUrl = err.requestOptions.baseUrl;
-          if (baseUrl.isEmpty) {
-            print(
-                "NetworkError:请求完整路径$fullUrl失败，原因未完成baseUrl设置,请检查是否忘了执行NetworkManager.start的初始化调用.(附未设置baseUrl时候,任何dio拦截器都走不到");
-          }
-
-          if (err.message.isNotEmpty) {
-            errorMessage = err.message;
-            if (err.type == DioErrorType.connectTimeout) {
-              // errorMessage = '请求超时';
-            }
-          }
-        } else {
-          fullUrl = url;
-        }
+        fullUrl = UrlUtil.fullUrlFromDioError(err);
+      }
+      String baseUrl = err.requestOptions.baseUrl;
+      if (baseUrl.isEmpty) {
+        debugPrint(
+            "NetworkError:请求完整路径$fullUrl失败，原因未完成baseUrl设置,请检查是否忘了执行NetworkManager.start的初始化调用.(附未设置baseUrl时候,任何dio拦截器都走不到");
       }
 
-      String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
-      return ResponseModel.errorResponseModel(
-        message,
-        isCache: isFromCache,
-      );
+      // ②.isFromCache
+      bool? isFromCache = null;
+      if (null != DioCacheUtil.isCacheErrorCheckFunction) {
+        isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
+      }
+
+      ResponseModel responseModel =
+          getDioErrorResponseModelBlock(fullUrl, newErrorModel, isFromCache);
+      return responseModel;
     }
   }
 
   Future<T> updateFile<T>(
-      url, String fileName, File file, Map<String, dynamic> formData,
-      {cancelToken,
-      ProgressCallback onSendProgress,
-      JsonParse<T> jsonParse}) async {
+    Dio dio,
+    String url,
+    String fileName,
+    File file,
+    Map<String, dynamic> formData, {
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    JsonParse<T>? jsonParse,
+  }) async {
     if (cancelToken == null) {
       cancelToken = CancelToken();
     }
@@ -245,14 +160,8 @@ class NetworkUtil {
             await MultipartFile.fromFile(file.path, filename: fileName);
       }
 
-      String sessionID = await SpUtil().getAccountSessionID();
-      if (sessionID != null && sessionID.length > 0) {
-        formData['sessionID'] = sessionID;
-      }
-
       FormData data = FormData.fromMap(formData);
 
-      Dio dio = NetworkManager.instance.serviceDio;
       Response response = await dio.post(
         url,
         data: data,
@@ -287,21 +196,20 @@ class NetworkUtil {
     }
   }
 
-  Future<T> updateMultiFile<T>(url, Map<String, dynamic> formData,
-      {List<File> files,
-      cancelToken,
-      ProgressCallback onSendProgress,
-      JsonParse<T> jsonParse}) async {
+  Future<T> updateMultiFile<T>(
+    Dio dio,
+    String url,
+    Map<String, dynamic> formData, {
+    List<File>? files,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    JsonParse<T>? jsonParse,
+  }) async {
     if (cancelToken == null) {
       cancelToken = CancelToken();
     }
 
     try {
-      String sessionID = await SpUtil().getAccountSessionID();
-      if (sessionID != null && sessionID.length > 0) {
-        formData['sessionID'] = sessionID;
-      }
-
       FormData data = FormData.fromMap(formData);
       if (files != null) {
         // List<MultipartFile> list = [];
@@ -317,7 +225,6 @@ class NetworkUtil {
         }
       }
 
-      Dio dio = NetworkManager.instance.serviceDio;
       Response response = await dio.post(
         url,
         data: data,

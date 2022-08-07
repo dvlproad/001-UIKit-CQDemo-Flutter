@@ -11,8 +11,9 @@ import 'package:flutter/foundation.dart';
 class TraceUtil {
   static String traceId() {
     String timeStamp = DateTime.now().microsecondsSinceEpoch.toString();
+    String timeString = DateTime.now().toString().substring(0, 19);
     String randomString = TraceUtil.generateRandomString(10);
-    String traceId = "$timeStamp/_$randomString";
+    String traceId = "$timeStamp/$timeString/_$randomString";
     return traceId;
   }
 

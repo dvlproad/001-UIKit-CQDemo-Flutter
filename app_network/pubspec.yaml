@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -17,6 +17,8 @@ dependencies:
     path: ../flutter_environment/ # 为了引入 ApiManager
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
+
+  tencent_cos: ^1.0.6
 
 dev_dependencies:
   flutter_test:

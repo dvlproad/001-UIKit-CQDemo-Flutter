@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
   package_info: any
 
+  app_network:
+    path: ../app_network/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
