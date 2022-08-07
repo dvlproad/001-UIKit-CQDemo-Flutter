@@ -15,8 +15,8 @@ import './log_data_bean.dart';
 export './log_data_bean.dart';
 
 class LogList extends StatefulWidget {
-  final Color color;
-  final List logModels;
+  final Color? color;
+  final List<LogModel> logModels;
   final ClickApiLogCellCallback clickLogCellCallback; // apimockCell 的点击
 
   final void Function(List<LogModel> bLogModels)
@@ -24,12 +24,12 @@ class LogList extends StatefulWidget {
   final void Function() onPressedClear; // 点击清空按钮的事件
 
   LogList({
-    Key key,
+    Key? key,
     this.color,
-    @required this.logModels,
-    @required this.clickLogCellCallback,
-    @required this.onPressedCopyAll,
-    @required this.onPressedClear,
+    required this.logModels,
+    required this.clickLogCellCallback,
+    required this.onPressedCopyAll,
+    required this.onPressedClear,
   }) : super(key: key);
 
   @override
@@ -48,6 +48,8 @@ class _LogListState extends State<LogList> {
   @override
   void initState() {
     super.initState();
+
+    print("_LogListState initState");
 
     // _logModels = widget.logModels ?? [];
 
@@ -74,8 +76,8 @@ class _LogListState extends State<LogList> {
     );
   }
 
-  void updateLogModels(List logModels) {
-    _logModels = logModels ?? [];
+  void updateLogModels(List<LogModel> logModels) {
+    _logModels = logModels;
     setState(() {});
   }
 
@@ -83,18 +85,18 @@ class _LogListState extends State<LogList> {
   Widget build(BuildContext context) {
     // print(
     //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
-    _logModels = widget.logModels ?? []; // 写在这里用来临时修复外部传进来的数据改变的情况
+    _logModels = widget.logModels; // 写在这里用来临时修复外部传进来的数据改变的情况
 
     return Container(
       color: widget.color,
       child: ChangeNotifierProvider<ApiLogChangeNotifier>.value(
         value: _environmentChangeNotifier,
-        child: _pageWidget(),
+        child: _pageWidget(context),
       ),
     );
   }
 
-  Widget _pageWidget() {
+  Widget _pageWidget(BuildContext context) {
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     EdgeInsets padding = mediaQuery.padding;
@@ -141,7 +143,7 @@ class _LogListState extends State<LogList> {
           Consumer<ApiLogChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
-                child: _searchResultWidget(),
+                child: _searchResultWidget(context),
               );
             },
           ),
@@ -151,7 +153,10 @@ class _LogListState extends State<LogList> {
     );
   }
 
-  Widget _buildButton(String text, {void Function() onPressed}) {
+  Widget _buildButton(
+    String text, {
+    required void Function() onPressed,
+  }) {
     return TextButton(
       child: Container(
         color: Colors.pink,
@@ -172,7 +177,7 @@ class _LogListState extends State<LogList> {
     );
   }
 
-  Widget _searchResultWidget() {
+  Widget _searchResultWidget(BuildContext context) {
     int sectionCount = 1;
 
     int numOfRowInSection(section) {
@@ -193,15 +198,26 @@ class _LogListState extends State<LogList> {
       cellAtIndexPath: (section, row) {
         LogModel logModel = _logModels[row];
         return ApiLogTableViewCell(
+          maxLines: 5,
           apiLogModel: logModel,
           section: section,
           row: row,
-          clickApiLogCellCallback: (int section, int row, LogModel bApiModel) {
+          clickApiLogCellCallback: ({
+            required BuildContext context,
+            int? section,
+            int? row,
+            required LogModel bLogModel,
+          }) {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 
             if (widget.clickLogCellCallback != null) {
-              widget.clickLogCellCallback(section, row, bApiModel);
+              widget.clickLogCellCallback(
+                context: context,
+                section: section,
+                row: row,
+                bLogModel: bLogModel,
+              );
             }
           },
         );

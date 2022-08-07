@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-18 01:14:14
+ * @LastEditTime: 2022-07-10 22:19:54
  * @Description: 长字符串在控制台的输出(使其不会被截端)
  */
 import 'package:flutter/cupertino.dart';
@@ -11,13 +11,15 @@ class LongStringPrintUtil {
   static var _separator = "=";
   static var _split =
       "$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator$_separator";
-  static var _title = "Dvlproad-Log";
+  static String _title = "Dvlproad-Log";
   static int _limitLength = 800;
   static String _startLine = "$_split$_title$_split";
   static String _endLine = "$_split$_separator$_separator$_separator$_split";
 
-  static void init({String title, int limitLength}) {
-    _title = title;
+  static void init({String? title, int? limitLength}) {
+    if (title != null) {
+      _title = title;
+    }
     _limitLength = limitLength ??= _limitLength;
     _startLine = "$_split$_title$_split";
     var endLineStr = StringBuffer();

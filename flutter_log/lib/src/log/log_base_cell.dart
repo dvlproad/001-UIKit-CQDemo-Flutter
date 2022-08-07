@@ -2,36 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './expandable_text.dart';
 
-typedef ClickEnvBaseCellCallback = void Function(
-  int section,
-  int row,
-  String mainTitle,
-  List<String> subTitles,
-  bool check,
-);
+typedef ClickEnvBaseCellCallback = void Function({
+  int? section,
+  int? row,
+  required String mainTitle,
+  List<String>? subTitles,
+  bool? check,
+});
 
 class LogBaseTableViewCell extends StatelessWidget {
   final int maxLines;
 
   final String mainTitle;
-  final List<String> subTitles;
-  final Color subTitleColor;
+  final TextStyle? mainTitleStyle;
+  final List<String>? subTitles;
+  final Color? subTitleColor;
   final bool check;
 
-  final int section;
-  final int row;
+  final int? section;
+  final int? row;
   final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 网络 networkCell 的点击
+  final void Function()? onLongPress;
 
   LogBaseTableViewCell({
-    Key key,
+    Key? key,
     this.maxLines = 20,
-    @required this.mainTitle,
-    @required this.subTitles,
+    required this.mainTitle,
+    this.mainTitleStyle,
+    required this.subTitles,
     this.subTitleColor,
-    this.check,
+    this.check = false,
     this.section,
     this.row,
-    @required this.clickEnvBaseCellCallback,
+    required this.clickEnvBaseCellCallback,
+    this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -58,19 +62,18 @@ class LogBaseTableViewCell extends StatelessWidget {
     return GestureDetector(
       child: _cellContainer(),
       onTap: _onTapCell,
+      onLongPress: onLongPress,
     );
   }
 
   void _onTapCell() {
-    if (null != this.clickEnvBaseCellCallback) {
-      this.clickEnvBaseCellCallback(
-        this.section,
-        this.row,
-        this.mainTitle,
-        this.subTitles,
-        this.check,
-      );
-    }
+    this.clickEnvBaseCellCallback(
+      section: this.section,
+      row: this.row,
+      mainTitle: this.mainTitle,
+      subTitles: this.subTitles,
+      check: this.check,
+    );
   }
 
   Widget _cellContainer() {
@@ -81,7 +84,7 @@ class LogBaseTableViewCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(child: _rowLeftWidget),
-          _rowRightWidget != null ? _rowRightWidget : Container()
+          _rowRightWidget, // 右箭头
         ],
       ),
     );
@@ -95,20 +98,21 @@ class LogBaseTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.mainTitle ?? '',
+        this.mainTitle,
         textAlign: TextAlign.left,
         // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16.0,
-        ),
+        style: this.mainTitleStyle ??
+            TextStyle(
+              color: Colors.black,
+              fontSize: 16.0,
+            ),
       ),
     );
     columnWidgets.add(mainTextWidget);
 
     // 判断是否添加其他文本
-    for (String subTitle in this.subTitles) {
-      if (subTitle != null && subTitle.isNotEmpty) {
+    for (String subTitle in this.subTitles ?? []) {
+      if (subTitle.isNotEmpty) {
         Widget subTextWidget = Container(
           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           color: Colors.transparent,
@@ -123,7 +127,7 @@ class LogBaseTableViewCell extends StatelessWidget {
           // ),
           child: ExpandableText(
             //当文案过长时，可以设置展开和收起
-            text: subTitle ?? '',
+            text: subTitle,
             textStyle: TextStyle(color: this.subTitleColor ?? Colors.black),
             maxLines: this.maxLines,
             onExpanded: (bool isExpanded) {
@@ -152,7 +156,7 @@ class LogBaseTableViewCell extends StatelessWidget {
   Widget get _rowRightWidget {
     // 判断是否添加箭头
     if (this.check == false) {
-      return null;
+      return Container();
     }
 
     Widget arrowImageWidget = Container(

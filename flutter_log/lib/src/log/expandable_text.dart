@@ -30,20 +30,20 @@ class ExpandableText extends StatefulWidget {
   final String text;
 
   ///显示的最多行数
-  final int maxLines;
+  final int? maxLines;
 
   /// 文本的样式
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   /// 展开或者收起的时候的回调
-  final TextExpandedCallback onExpanded;
+  final TextExpandedCallback? onExpanded;
 
   /// 更多按钮渐变色的初始色 默认白色
-  final Color color;
+  final Color? color;
 
   const ExpandableText(
-      {Key key,
-      @required this.text,
+      {Key? key,
+      required this.text,
       this.maxLines = 1000000,
       this.textStyle,
       this.onExpanded,
@@ -54,7 +54,7 @@ class ExpandableText extends StatefulWidget {
 }
 
 class _ExpandableTextState extends State<ExpandableText> {
-  bool _expanded;
+  late bool _expanded;
 
   @override
   void initState() {
@@ -129,7 +129,7 @@ class _ExpandableTextState extends State<ExpandableText> {
         setState(() {
           _expanded = true;
           if (null != widget.onExpanded) {
-            widget.onExpanded(_expanded);
+            widget.onExpanded!(_expanded);
           }
         });
       },
@@ -166,7 +166,7 @@ class _ExpandableTextState extends State<ExpandableText> {
             setState(() {
               _expanded = false;
               if (null != widget.onExpanded) {
-                widget.onExpanded(_expanded);
+                widget.onExpanded!(_expanded);
               }
             });
           });

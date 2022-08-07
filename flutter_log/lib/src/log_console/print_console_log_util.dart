@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-18 01:13:25
+ * @LastEditTime: 2022-07-10 21:05:16
  * @Description: 控制台日志的打印工具(已考虑太长本来会截端的问题)
  */
 import './long_string_print_util.dart';
@@ -15,7 +15,7 @@ class PrintConsoleLogUtil {
 
   static const String _TAG_DEFAULT = "###qianqianqian###\n";
   static bool _hasInit = false;
-  static void printConsoleLog(String tag, String stag, Object object) {
+  static void printConsoleLog(Object object, {String? tag, String? stag}) {
     if (_hasInit != true) {
       // 参数可选 isDebug默认true limitLength默认800
       LongStringPrintUtil.init(title: "", limitLength: 800);

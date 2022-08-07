@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-10 20:55:42
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 
 class TSTabBarBaePage extends StatefulWidget {
@@ -8,8 +15,8 @@ class TSTabBarBaePage extends StatefulWidget {
   TSTabBarBaePage({
     Key key,
     this.title,
-    @required this.tabs,
-    @required this.tabPages,
+    required this.tabs,
+    required this.tabPages,
   }) : super(key: key);
 
   @override

@@ -1,10 +1,20 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-10 22:14:26
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EnvironmentTableViewHeader extends StatefulWidget {
   final String title;
 
-  EnvironmentTableViewHeader({Key key, this.title}) : super(key: key);
+  EnvironmentTableViewHeader({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -53,7 +63,7 @@ class _EnvironmentTableViewHeaderState
       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
       color: Colors.transparent,
       child: Text(
-        widget.title ?? '',
+        widget.title,
         textAlign: TextAlign.left,
         style: TextStyle(
           color: Colors.red,
