@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-22 15:05:47
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-22 17:26:32
+ * @LastEditTime: 2022-08-04 14:36:35
  * @Description: 列表 增加 maxAddCount 设置
  */
 import 'package:flutter/foundation.dart';
@@ -11,41 +11,48 @@ import './fix_grid_view.dart';
 
 class CQImagesPreSufBadgeList extends StatefulWidget {
   final double width;
-  final double height;
+  final double? height;
+  final Color? color;
   final bool dragEnable;
-  final void Function(int oldIndex, int newIndex) dragCompleteBlock;
+  final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
 
   final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
   final int maxAddCount;
-  final Widget prefixWidget;
-  final Widget suffixWidget;
-  final Widget Function({BuildContext context, int imageIndex})
-      imageItemBuilder;
+  final Widget? prefixWidget;
+  final Widget? suffixWidget;
 
-  final double columnSpacing;
-  final double rowSpacing;
+  final Widget Function({
+    required BuildContext context,
+    required int imageIndex,
+    required double itemWidth,
+    required double itemHeight,
+  }) imageItemBuilder;
+
+  final double? columnSpacing;
+  final double? rowSpacing;
 
   /**< 通过每行可显示的最多列数来设置每个cell的宽度*/
-  final int cellWidthFromPerRowMaxShowCount;
+  final int? cellWidthFromPerRowMaxShowCount;
 
-  /**< 宽高比（默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5） */
-  final double widthHeightRatio;
+  /**< 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5) */
+  final double? itemWidthHeightRatio;
 
   CQImagesPreSufBadgeList({
-    Key key,
-    this.width,
+    Key? key,
+    required this.width,
     this.height,
-    this.dragEnable, // 是否可以拖动
+    this.color,
+    this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
-    @required this.imageCount,
+    required this.imageCount,
     this.maxAddCount = 100000,
     this.prefixWidget, // 可以为'添加'按钮
     this.suffixWidget, // 可以为'添加'按钮
     this.columnSpacing, //水平列间距
     this.rowSpacing, // 竖直行间距
     this.cellWidthFromPerRowMaxShowCount,
-    this.widthHeightRatio,
-    @required this.imageItemBuilder,
+    this.itemWidthHeightRatio,
+    required this.imageItemBuilder,
   })  : assert(imageItemBuilder != null),
         super(key: key);
 
@@ -70,12 +77,12 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
 
     // 计算 itemCount (包括 prefixWidget\suffixWidget\imageWidget)
     int itemCount = imageCount;
-    Widget prefixWidget = widget.prefixWidget;
+    Widget? prefixWidget = widget.prefixWidget;
     if (prefixWidget != null && itemCount >= maxShowCount) {
       prefixWidget = null;
     }
 
-    Widget suffixWidget = widget.suffixWidget;
+    Widget? suffixWidget = widget.suffixWidget;
     if (suffixWidget != null && itemCount >= maxShowCount) {
       suffixWidget = null;
     }
@@ -83,12 +90,19 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
     return FixGridView(
       width: widget.width,
       height: widget.height,
+      color: widget.color,
       dragEnable: widget.dragEnable,
       dragCompleteBlock: widget.dragCompleteBlock,
       itemCount: itemCount,
-      itemBuilder: ({context, index}) {
+      itemWidthHeightRatio: widget.itemWidthHeightRatio,
+      itemBuilder: ({
+        required BuildContext context,
+        required int index,
+        required double itemHeight,
+        required double itemWidth,
+      }) {
         if (allowAddPrefixWidget == true && index == 0) {
-          return widget.prefixWidget;
+          return widget.prefixWidget!;
         }
 
         int imageOrPhotoModelIndex = index;
@@ -99,6 +113,8 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
         return widget.imageItemBuilder(
           context: context,
           imageIndex: imageOrPhotoModelIndex,
+          itemWidth: itemWidth,
+          itemHeight: itemHeight,
         );
       },
       suffixWidget: suffixWidget,

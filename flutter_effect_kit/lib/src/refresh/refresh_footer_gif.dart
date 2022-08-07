@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-06 10:09:31
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-13 23:16:25
+ * @LastEditTime: 2022-07-22 16:35:59
  * @Description: 上拉加载视图
  */
 import 'package:flutter/cupertino.dart';
@@ -13,8 +13,8 @@ class RefreshFooterGif extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomFooter(
-      builder: (BuildContext context, LoadStatus mode) {
-        Widget body;
+      builder: (BuildContext context, LoadStatus? mode) {
+        late Widget body;
         if (mode == LoadStatus.idle) {
           body = Text("上拉加载");
         } else if (mode == LoadStatus.loading) {

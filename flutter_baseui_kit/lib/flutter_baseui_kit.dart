@@ -2,10 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-05-13 19:54:45
+ * @LastEditTime: 2022-08-08 01:41:51
  * @Description: 基础UI库
  */
 library flutter_baseui_kit;
+
+export './base-uikit/bg_border_widget.dart';
+export './base-uikit/button/imagebutton.dart';
 
 // text
 export './cq-uikit/text/tolerant_text.dart';
@@ -34,6 +37,7 @@ export './cq-uikit/cell/cell.dart';
 
 // tableview
 export './cq-uikit/tableview/section_table_view_method2.dart';
+export './cq-uikit/tableview/index_path.dart';
 
 // toolbar
 export './cq-uikit/toolbar/toolbar.dart';

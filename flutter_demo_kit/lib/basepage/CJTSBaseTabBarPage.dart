@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 18:30:40
+ * @Description: 
+ */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +65,7 @@ abstract class CJTSBaseTabBarPageState<V extends CJTSBaseTabBarPage>
     for (var tabbarModel in _tabbarModels) {
       BottomNavigationBarItem item = BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        title: Text(tabbarModel['title']),
+        label: tabbarModel['title'],
       );
       items.add(item);
     }

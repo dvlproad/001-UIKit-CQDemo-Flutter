@@ -5,7 +5,7 @@ import './loading_widget.dart'; // 使用 images
 
 class StateLoadingWidget extends StatefulWidget {
   StateLoadingWidget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

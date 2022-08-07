@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-08 01:27:33
+ * @Description: 
+ */
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -23,7 +30,7 @@ class PhotoAlbumNotifier with ChangeNotifier {
     _assets.clear();
     // _assets.addAll(assets);
     for (final asset in assets) {
-      final thumb = await asset.thumbData;
+      final thumb = await asset.thumbnailData;
       _assets.add(
         CQPhotoAlbumAssetEntity(asset, thumb),
       );
@@ -33,7 +40,7 @@ class PhotoAlbumNotifier with ChangeNotifier {
   Future<void> moreList(List<AssetEntity> assets) async {
     // _assets.addAll(assets);
     for (final asset in assets) {
-      final thumb = await asset.thumbData;
+      final thumb = await asset.thumbnailData;
       _assets.add(
         CQPhotoAlbumAssetEntity(asset, thumb),
       );
@@ -54,7 +61,10 @@ class PhotoAlbumNotifier with ChangeNotifier {
       return Future.value(state);
     } else {
       final allAssetsPath = assetPath.firstWhere((list) => list.isAll);
-      final assetList = await allAssetsPath.getAssetListPaged(page, _pageSize);
+      final assetList = await allAssetsPath.getAssetListPaged(
+        page: page,
+        size: _pageSize,
+      );
 
       if (Platform.isIOS) {
         assetList.first.file

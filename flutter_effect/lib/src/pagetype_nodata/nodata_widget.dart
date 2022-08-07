@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 11:13:29
+ * @LastEditTime: 2022-05-13 13:12:03
  * @Description: 
  */
 import 'package:flutter/cupertino.dart';
@@ -63,7 +63,7 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
     if (widget.needAppBar) {
       Widget appBar = CommonAppBar(
         title: ToolBarTitleWidget(text: '数据异常'),
-        leading: ToolBarBackWidget(onPressed: widget.onNavBackTap),
+        leading: QuickToolBarImageActionWidget(onPressed: widget.onNavBackTap),
       );
       columnWidgets.add(appBar);
     }

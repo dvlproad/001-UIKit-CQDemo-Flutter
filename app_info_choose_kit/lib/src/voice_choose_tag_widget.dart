@@ -9,10 +9,13 @@ class VoiceChoooseTagWidget extends StatefulWidget {
   final VoiceBean voiceBean;
   final void Function(VoiceBean bVoiceBean) valueChangeBlock;
 
+  final bool showIconExistContent;
+
   VoiceChoooseTagWidget({
     Key key,
     @required this.voiceBean,
     @required this.valueChangeBlock,
+    this.showIconExistContent = true,
   }) : super(key: key);
 
   @override
@@ -34,7 +37,7 @@ class _VoiceChoooseViewState extends State<VoiceChoooseTagWidget> {
     return Image.asset(
       "assets/icon_voice_yinbo.png",
       package: 'app_info_choose_kit',
-      height: 15.w_pt_cj,
+      height: 15.h_pt_cj,
       fit: BoxFit.cover,
     );
   }
@@ -53,7 +56,7 @@ class _VoiceChoooseViewState extends State<VoiceChoooseTagWidget> {
     }
 
     return BaseTagWidget(
-      backgroundColor: Color(0xFFFF7F00).withOpacity(0.3),
+      backgroundColor: Color(0xFFFF7F00).withOpacity(0.2),
       buttonText: buttonText,
       buttonImageProvider: AssetImage(
         buttonImageName,
@@ -100,7 +103,8 @@ class _VoiceChoooseViewState extends State<VoiceChoooseTagWidget> {
           }
         }
       },
-      showDeleteIcon: !hasContent ? false : true,
+      showDeleteIcon:
+          (hasContent && widget.showIconExistContent) ? true : false,
       customDeleteIconBuilder: () {
         return Image.asset(
           "assets/icon_delete_voice.png",

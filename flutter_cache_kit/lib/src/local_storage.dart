@@ -1,15 +1,8 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
-  LocalStorage._();
-
-  static SharedPreferences prefs;
-
-  static init() async {
-    prefs = await SharedPreferences.getInstance();
-  }
-
   /*
   // 工厂模式
   factory LocalStorage() => _getInstance();
@@ -47,17 +40,17 @@ class LocalStorage {
 
   // 清空所有 key
   static Future<bool> cleanAll() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.clear();
   }
 
   static Future<bool> remove(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.remove(key);
   }
 
   static Future<bool> save(String key, value) async {
-    if (prefs == null) {
-      showShouldInit();
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (value is String) {
       return prefs.setString(key, value);
@@ -67,38 +60,118 @@ class LocalStorage {
       return prefs.setDouble(key, value);
     } else if (value is bool) {
       return prefs.setBool(key, value);
-    } else if (value is List) {
-      return prefs.setStringList(key, value);
+    } else if (value is Map) {
+      return _saveMapOrMaps(key, value);
+    } else if (value is List<String>) {
+      if (value.first is String) {
+        return prefs.setStringList(key, value);
+      } else if (value.first is Map) {
+        return _saveMapOrMaps(key, value);
+      } else {
+        Type type = value.first.runtimeType;
+        throw Exception(
+            'SharedPreferences缓存列表的时候，列表里的数据只能是String。当前类型${type.toString()}无法保存，请尝试使用saveCustomBean');
+      }
     } else {
       Type type = value.runtimeType;
       throw Exception('此类型${type.toString()}无法保存错误，请尝试使用saveCustomBean');
     }
   }
 
-  static get<T>(String key) {
-    if (prefs == null) {
-      showShouldInit();
-    }
+  /*
+  static Future<String?> getString(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(key);
+  }
 
-    if (T is String) {
-      return prefs.getString(key) as T;
-    } else if (T is int) {
-      return prefs.getInt(key) as T;
-    } else if (T is double) {
-      return prefs.getDouble(key) as T;
-    } else if (T is bool) {
-      return prefs.getBool(key) as T;
+  static Future<int?> getInt(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(key);
+  }
+
+  static Future<double?> getDouble(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble(key);
+  }
+
+  static Future<bool?> getBool(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(key);
+  }
+  */
+  static Future<T?> get<T>(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String typeString = T.runtimeType.toString();
+    if (T == String) {
+      return prefs.getString(key) as T?;
+    } else if (T == int) {
+      return prefs.getInt(key) as T?;
+    } else if (T == double) {
+      return prefs.getDouble(key) as T?;
+    } else if (T == bool) {
+      return prefs.getBool(key) as T?;
     } else if (T is List<String>) {
-      return prefs.getStringList(key) as T;
+      return prefs.getStringList(key) as T?;
+    } else if (T is Map) {
+      String? mapString = prefs.getString(key);
+      if (mapString == null) {
+        return null;
+      }
+      Map<String, dynamic> map = json.decode(mapString);
+      return map as T;
+      // } else if (T is List<Map<String, dynamic>>) {
+    } else if (T is List<Map> || T is List<List>) {
+      return getObjects(key) as T;
+    } else {
+      return prefs.get(key) as T;
+      String typeString = T.runtimeType.toString();
+      throw Exception('此类型${typeString}无法保存错误，请尝试使用saveCustomBean');
     }
-    return prefs.get(key);
+    // else {
+    //   return prefs.get(key);
+    // }
+  }
+
+  static Future<bool> saveStrings(String key, List<String> value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setStringList(key, value);
+  }
+
+  static Future<List<String>?> getStrings(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? strings = prefs.getStringList(key);
+    return strings;
+  }
+
+  static Future<bool> saveObjects(String key, List value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String objectString = json.encode(value);
+    return prefs.setString(key, objectString);
+  }
+
+  static Future<List?> getObjects(String key) async {
+    // List<Map<String, dynamic>> maps = [];
+    // for (String mapString in mapStrings) {
+    //   Map<String, dynamic> map = json.decode(mapString);
+    //   maps.add(map);
+    // }
+    // return maps as T;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? listString = prefs.getString(key);
+    if (listString == null) {
+      return null;
+    }
+    List list = json.decode(listString);
+    return list;
   }
 
   // 保存自定义类
   static Future<bool> saveCustomBean<T>(
     String key,
     value, {
-    Map Function(dynamic bItem) valueToJson,
+    required Map<String, dynamic> Function(dynamic bItem) valueToJson,
   }) async {
     return _saveCustom(key, value, itemToJson: valueToJson);
   }
@@ -106,7 +179,7 @@ class LocalStorage {
   static Future<bool> saveCustomBeans(
     String key,
     value, {
-    Map Function(dynamic bItem) itemToJson,
+    required Map<String, dynamic> Function(dynamic bItem) itemToJson,
   }) async {
     return _saveCustom(key, value, itemToJson: itemToJson);
   }
@@ -114,71 +187,94 @@ class LocalStorage {
   static Future<bool> _saveCustom(
     String key,
     value, {
-    Map Function(dynamic bItem) itemToJson,
+    required Map<String, dynamic> Function(dynamic bItem) itemToJson,
   }) async {
-    if (prefs == null) {
-      showShouldInit();
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
     if (value is List) {
       List<String> strings = [];
       for (var item in value) {
         Map map = itemToJson(item);
-        String mapString = json.encode(map);
-        strings.add(mapString);
+        try {
+          String mapString = json.encode(map);
+          strings.add(mapString);
+        } catch (err) {
+          return false; // save failure
+        }
       }
       return prefs.setStringList(key, strings);
     } else {
-      Map map = itemToJson(value);
+      Map<String, dynamic> map = itemToJson(value);
       String mapString = json.encode(map);
 
       return prefs.setString(key, mapString);
     }
   }
 
+  static Future<bool> _saveMapOrMaps(String key, value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (value is List<Map>) {
+      List<String> strings = [];
+      for (Map item in value) {
+        Map map = item;
+        try {
+          String mapString = json.encode(map);
+          strings.add(mapString);
+        } catch (err) {
+          return false; // save failure
+        }
+      }
+      return prefs.setStringList(key, strings);
+    } else if (value is Map<String, dynamic>) {
+      Map<String, dynamic> map = value;
+      String mapString = json.encode(map);
+
+      return prefs.setString(key, mapString);
+    } else {
+      Type type = value.runtimeType;
+      throw Exception('此类型${type.toString()}无法保存错误，请尝试使用saveCustomBean');
+    }
+  }
+
   // 获取自定义类
-  static getCustomBean<T>(
+  static Future<T?> getCustomBean<T>(
     String key, {
-    T Function(Map bMap) fromJson,
-  }) {
+    required T Function(Map<String, dynamic> bMap) fromJson,
+  }) async {
     if (fromJson == null) {
       throw Exception("请设置fromJson");
     }
-    if (prefs == null) {
-      showShouldInit();
-    }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String mapString = prefs.getString(key);
+    String? mapString = prefs.getString(key);
     if (mapString == null) {
       return null;
     }
 
-    Map map = json.decode(mapString);
+    Map<String, dynamic> map = json.decode(mapString);
     T customBean = fromJson(map);
 
     return customBean;
   }
 
-  static getCustomBeans<T>(String key, {T Function(Map bMap) fromJson}) {
-    if (prefs == null) {
-      showShouldInit();
-    }
+  static Future<List<T>?> getCustomBeans<T>(
+    String key, {
+    required T Function(Map<String, dynamic> bMap) fromJson,
+  }) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    List mapStrings = prefs.getStringList(key);
+    List<String>? mapStrings = prefs.getStringList(key);
     if (mapStrings == null) {
       return null;
     }
 
     List<T> customBeans = [];
     for (String mapString in mapStrings) {
-      Map map = json.decode(mapString);
+      Map<String, dynamic> map = json.decode(mapString);
       T customBean = fromJson(map);
       customBeans.add(customBean);
     }
     return customBeans;
-  }
-
-  static void showShouldInit() {
-    throw Exception('Error:请先执行await LocalStorage.init();');
   }
 }

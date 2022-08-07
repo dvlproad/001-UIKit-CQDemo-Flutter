@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-08 01:24:54
+ * @Description: 
+ */
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -51,7 +58,7 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
       AssetEntity assetEntity = imageOrPhotoModel;
 
       return FutureBuilder<Uint8List>(
-        future: assetEntity.thumbData,
+        future: assetEntity.thumbnailData,
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             // photoAlbumAssetFile = await photoAlbumAsset.file;
@@ -65,7 +72,7 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
               imageProvider: imageProvider,
               message: message,
               index: this.index,
-              onPressed: this.onPressed,
+              onTap: this.onPressed,
             );
           } else {
             return Container();
@@ -81,7 +88,7 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
         imageProvider: imageProvider,
         message: message,
         index: this.index,
-        onPressed: this.onPressed,
+        onTap: this.onPressed,
       );
     } else {
       return Container(

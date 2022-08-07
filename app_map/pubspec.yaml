@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -13,12 +13,27 @@ dependencies:
 
   #百度定位
   flutter_bmflocation: any #^2.0.0-nullsafety.0
+  # flutter_bmflocation: ^3.1.0+1
   permission_handler: any #^8.1.2
 
   #百度地图
-  flutter_baidu_mapapi_map: any #^3.0.0+1
-  flutter_baidu_mapapi_utils: any #^3.0.0
-  flutter_baidu_mapapi_search: any #^3.0.0
+  # any
+  # flutter_baidu_mapapi_map: any
+  # flutter_baidu_mapapi_utils: any
+  # flutter_baidu_mapapi_search: any
+  # 3.0
+  # flutter_baidu_mapapi_map: ^3.0.0+1
+  # flutter_baidu_mapapi_utils: ^3.0.0
+  # flutter_baidu_mapapi_search: ^3.0.0
+  # 3.1
+  flutter_baidu_mapapi_map: ^3.1.0+1
+  flutter_baidu_mapapi_search: ^3.1.0
+  flutter_baidu_mapapi_utils: ^3.1.0+1
+
+  # tim
+  # tim_ui_kit_lbs_plugin: ^1.1.2
+  tim_ui_kit_lbs_plugin:
+    path: ../tim_ui_kit_lbs_plugin-1.1.2/ # 自己支持3.0
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -13,10 +13,8 @@ dependencies:
 
   flutter_screenutil: any
   provider: any
-  flutter_network:
-    path: ../flutter_network/
-  flutter_overlay_kit:
-    path: ../flutter_overlay_kit/
+  app_network:
+    path: ../app_network/
   flutter_html: any
   url_launcher: any
   path_provider: any

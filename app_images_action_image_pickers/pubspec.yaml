@@ -4,8 +4,8 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: '>=3.0.0'
 
 dependencies:
   flutter:
@@ -14,9 +14,19 @@ dependencies:
   # 图片列表
   flutter_images_action_list:
     path: ../flutter_images_action_list/
+
+  # app_info_choose_kit:
+  #   path: ../app_info_choose_kit/
   
   # 图片选择
-  image_pickers: any
+#  image_pickers: any
+  # wechat_assets_picker: any
+  wechat_assets_picker: ^7.3.1 # 7.3.0(5.13)
+  wechat_camera_picker: ^3.2.0+1 # 3.2.0+1(5.13)
+  # 图片压缩
+  flutter_image_compress: any
+  # video_compress: any
+  video_thumbnail: any # ^0.5.2
     
   # 为了使用 actionSheet
   flutter_overlay_kit:

@@ -4,18 +4,18 @@ import 'package:lottie/lottie.dart';
 
 /// 质感设计FooterRefreshFooter
 class RefreshFooter extends Footer {
-  final Key key;
-  final double displacement;
+  final Key? key;
+  final double? displacement;
 
   /// 颜色
-  final Animation<Color> valueColor;
+  final Animation<Color>? valueColor;
 
   /// 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   final LinkFooterNotifier linkNotifier = LinkFooterNotifier();
 
-  final Widget noMoreWidget;
+  final Widget? noMoreWidget;
 
   RefreshFooter({
     this.noMoreWidget,
@@ -51,7 +51,7 @@ class RefreshFooter extends Footer {
       double loadIndicatorExtent,
       AxisDirection axisDirection,
       bool float,
-      Duration completeDuration,
+      Duration? completeDuration,
       bool enableInfiniteLoad,
       bool success,
       bool noMore) {
@@ -80,21 +80,21 @@ class RefreshFooter extends Footer {
 
 /// 质感设计Footer组件
 class RefreshFooterWidget extends StatefulWidget {
-  final double displacement;
+  final double? displacement;
   // 颜色
-  final Animation<Color> valueColor;
+  final Animation<Color>? valueColor;
   // 背景颜色
-  final Color backgroundColor;
+  final Color? backgroundColor;
   final LinkFooterNotifier linkNotifier;
 
-  final Widget noMoreWidget;
+  final Widget? noMoreWidget;
 
   const RefreshFooterWidget({
-    Key key,
+    Key? key,
     this.displacement,
     this.valueColor,
     this.backgroundColor,
-    this.linkNotifier,
+    required this.linkNotifier,
     this.noMoreWidget,
   }) : super(key: key);
 

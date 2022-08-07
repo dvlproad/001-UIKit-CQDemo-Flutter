@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-05-13 13:12:10
+ * @Description: 错误视图
+ */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了引入 ThemeBorderButton
@@ -20,7 +27,7 @@ class StateErrorWidget extends StatefulWidget {
     this.onNavBackTap, //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
     this.color, // 背景颜色
     this.image, // 默认值:AssetImage('assets/empty/no_network.png',package: 'flutter_effect',)
-    this.errorRetry, // 错误事件处理
+    @required this.errorRetry, // 错误事件处理
   }) : super(key: key);
 
   @override
@@ -40,7 +47,7 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
     if (widget.needAppBar) {
       Widget appBar = CommonAppBar(
         title: ToolBarTitleWidget(text: '数据异常'),
-        leading: ToolBarBackWidget(onPressed: widget.onNavBackTap),
+        leading: QuickToolBarImageActionWidget(onPressed: widget.onNavBackTap),
       );
       columnWidgets.add(appBar);
     }

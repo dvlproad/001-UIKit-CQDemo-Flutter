@@ -33,7 +33,7 @@ dependencies:
   flutter_photoalbum:
     path: ../flutter_photoalbum/
 
-  photo_manager: 0.5.3+1
+  photo_manager: any
 
 dev_dependencies:
   flutter_test:

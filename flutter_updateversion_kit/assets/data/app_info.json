@@ -1,0 +1,42 @@
+{
+    "version": "package unknow version",
+    "buildNumber": "package unknow buildNumber",
+    "package_create_time": "package unknow time",
+    "package_from_brance": "package unknow brance",
+    "package_default_env": "package unknow env",
+    "brances_record_time": "04.07",
+    "nocode_brances": [
+        {
+            "name": "master",
+            "des": "线上功能(主分支)"
+        },
+        {
+            "name": "development",
+            "des": "线上功能(开发稳定分支)"
+        },
+        {
+            "name": "dev_all",
+            "des": "线上+修复+所有开发中的功能"
+        },
+        {
+            "name": "dev_will_publish",
+            "des": "线上+修复+所有待上线功能"
+        }
+    ],
+    "feature_brances": [
+        {
+            "name": "dev_1.0.0_fix",
+            "create_time": "04.06",
+            "des": "一堆优化"
+        }
+    ],
+    "history_record_time": "04.07",
+    "history_versions": [
+        
+        {
+            "version": "1.06.05",
+            "online_time": "06.05",
+            "des": "一堆优化"
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
-    show BJHTitleTextValueCell, TableViewCellArrowImageType;
+    show ImageTitleTextValueCell, TableViewCellArrowImageType;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './history_version_bean.dart';
 
@@ -39,7 +39,7 @@ class _HistoryVerisonCellState extends State<HistoryVerisonCell> {
         color: Colors.white,
         child: Column(
           children: [
-            BJHTitleTextValueCell(
+            ImageTitleTextValueCell(
               height: 40,
               title: _historyVersionBean.version,
               textValue: '',
@@ -98,7 +98,7 @@ class _HistoryVerisonCellState extends State<HistoryVerisonCell> {
     if (textValue == null || textValue.isEmpty) {
       textValue = '未标明';
     }
-    // return BJHTitleTextValueCell(
+    // return ImageTitleTextValueCell(
     //   title: title,
     //   textValue: textValue,
     //   textValueFontSize: textValueFontSize ?? 12,

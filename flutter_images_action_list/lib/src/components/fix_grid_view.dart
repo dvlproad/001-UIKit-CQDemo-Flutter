@@ -7,35 +7,45 @@ import './images_presuf_badge_base_list.dart';
 
 class FixGridView extends StatefulWidget {
   final double width;
-  final double height;
+  final double? height; // 未设置时候将自动适应高度
+  final Color? color;
   final bool dragEnable;
-  final void Function(int oldIndex, int newIndex) dragCompleteBlock;
+  final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
   final int itemCount;
-  final Widget Function({BuildContext context, int index}) itemBuilder;
-  final Widget prefixWidget;
-  final Widget suffixWidget;
+  final Widget Function({
+    required BuildContext context,
+    required int index,
+    required double itemWidth,
+    required double itemHeight,
+  }) itemBuilder;
+  // final double itemDraggableFeedbackCornerRadius;
 
-  final double columnSpacing;
-  final double rowSpacing;
+  final Widget? prefixWidget;
+  final Widget? suffixWidget;
+
+  final double? columnSpacing;
+  final double? rowSpacing;
 
   /**< 通过每行可显示的最多列数来设置每个cell的宽度*/
-  final int cellWidthFromPerRowMaxShowCount;
+  final int? cellWidthFromPerRowMaxShowCount;
 
-  /**< 宽高比（默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5） */
-  final double widthHeightRatio;
+  /**< 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5) */
+  final double? itemWidthHeightRatio;
 
   FixGridView({
-    Key key,
-    this.width,
+    Key? key,
+    required this.width,
     this.height,
-    this.dragEnable, // 是否可以拖动
+    this.color,
+    this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
     this.columnSpacing, //水平列间距
     this.rowSpacing, // 竖直行间距
     this.cellWidthFromPerRowMaxShowCount,
-    this.widthHeightRatio,
-    @required this.itemCount,
-    @required this.itemBuilder,
+    this.itemWidthHeightRatio,
+    // this.itemDraggableFeedbackCornerRadius,
+    required this.itemCount,
+    required this.itemBuilder,
     this.prefixWidget,
     this.suffixWidget,
   })  : assert(itemBuilder != null),
@@ -56,24 +66,12 @@ class FixGridViewState extends State<FixGridView> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
   }
 
-  void _onReorder(int oldIndex, int newIndex) {
-    if (widget.dragCompleteBlock != null) {
-      widget.dragCompleteBlock(oldIndex, newIndex);
-    }
-    // setState(() {
-    //   Widget row = _widgets.removeAt(oldIndex);
-    //   _widgets.insert(newIndex, row);
-
-    //   _isUpdateByDragAction = true;
-    // });
-  }
-
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery.of(context).size.width;
     // double height = MediaQuery.of(context).size.height;
     double width = widget.width;
-    double height = widget.height;
+    double? height = widget.height;
 
     double mainSpacing = widget.columnSpacing ?? 10;
     double crossSpacing = widget.rowSpacing ?? 10;
@@ -83,8 +81,8 @@ class FixGridViewState extends State<FixGridView> {
     double itemWidth = itemsWidth / columnCount;
     itemWidth = itemWidth.truncateToDouble(); //3.0 //向下取整(返回double)
 
-    double widthHeightRatio = widget.widthHeightRatio ?? 1.0;
-    double itemHeight = itemWidth / widthHeightRatio;
+    double itemWidthHeightRatio = widget.itemWidthHeightRatio ?? 1.0;
+    double itemHeight = itemWidth / itemWidthHeightRatio;
     itemHeight = itemHeight.truncateToDouble(); //3.0 //向下取整(返回double)
 
     if (_isUpdateByDragAction != true) {
@@ -101,7 +99,12 @@ class FixGridViewState extends State<FixGridView> {
           width: itemWidth,
           height: itemHeight,
           // child: Center(child: Text("第$index个")),
-          child: widget.itemBuilder(context: context, index: index),
+          child: widget.itemBuilder(
+            context: context,
+            index: index,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+          ),
         );
         _widgets.add(itemWidget);
       }
@@ -115,8 +118,57 @@ class FixGridViewState extends State<FixGridView> {
         spacing: mainSpacing,
         runSpacing: crossSpacing,
         padding: const EdgeInsets.all(0),
+        direction: Axis.horizontal,
         children: _widgets,
-        onReorder: _onReorder,
+        enableReorder: widget.dragEnable,
+        // buildItemsContainer:
+        //     (BuildContext context, Axis direction, List<Widget> children) {
+        //   // return ListView.builder(
+        //   //   itemCount: children.length,
+        //   //   itemBuilder: (BuildContext context, int index) {
+        //   //     return children[index];
+        //   //   },
+        //   // );
+        //   return ImagesPreSufBadgeBaseList(
+        //     color: widget.color,
+        //     height: widget.height,
+        //     customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //       crossAxisCount: columnCount,
+        //       mainAxisSpacing: mainSpacing,
+        //       crossAxisSpacing: crossSpacing,
+        //     ),
+        //     imageCount: children.length - 1,
+        //     imageItemBuilder: ({context, imageIndex}) {
+        //       return widget.itemBuilder(context: context, index: imageIndex);
+        //     },
+        //     suffixWidget: children.last,
+        //   );
+        // },
+        buildDraggableFeedback:
+            (BuildContext context, BoxConstraints constraints, Widget child) {
+          // double itemCornerRadius = widget.itemDraggableFeedbackCornerRadius ?? 0;
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.transparent, // 设成透明，省去设置圆角
+              // borderRadius: BorderRadius.only(
+              //   topLeft: Radius.circular(itemCornerRadius),
+              //   topRight: Radius.circular(itemCornerRadius),
+              // ),
+            ),
+            child: child,
+          );
+        },
+        onReorder: (int oldIndex, int newIndex) {
+          if (widget.dragCompleteBlock != null) {
+            widget.dragCompleteBlock!(oldIndex, newIndex);
+          }
+          // setState(() {
+          //   Widget row = _widgets.removeAt(oldIndex);
+          //   _widgets.insert(newIndex, row);
+
+          //   _isUpdateByDragAction = true;
+          // });
+        },
         onNoReorder: (int index) {
           //this callback is optional
           debugPrint(
@@ -174,19 +226,28 @@ class FixGridViewState extends State<FixGridView> {
       );
 
       return Container(
-        // color: Colors.green,
+        color: widget.color,
+        height: widget.height,
         child: column,
       );
     } else {
       return ImagesPreSufBadgeBaseList(
+        color: widget.color,
+        height: widget.height,
         customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columnCount,
           mainAxisSpacing: mainSpacing,
           crossAxisSpacing: crossSpacing,
         ),
         imageCount: widget.itemCount,
-        imageItemBuilder: ({context, imageIndex}) {
-          return widget.itemBuilder(context: context, index: imageIndex);
+        imageItemBuilder: (
+            {required BuildContext context, required int imageIndex}) {
+          return widget.itemBuilder(
+            context: context,
+            index: imageIndex,
+            itemWidth: itemWidth,
+            itemHeight: itemHeight,
+          );
         },
         suffixWidget: widget.suffixWidget,
       );

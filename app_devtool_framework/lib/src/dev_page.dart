@@ -2,24 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_effect/flutter_effect.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-import 'package:app_network/app_network.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
-import 'package:flutter_updateversion_kit/src/check_version_common_util.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-
+import 'package:dio/dio.dart' show Dio, Options, Response;
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_effect/flutter_effect.dart';
+import 'package:app_network/app_network.dart';
+import 'package:app_log/app_log.dart';
 import 'package:app_environment/app_environment.dart';
+import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 
-import './package_info_cell.dart';
+import './dev_environment_change_notifiter.dart';
+
+import './widget/package_info_cell.dart';
+
+import './widget/app_dir_size_widget.dart';
+import './widget/shared_preferences_page.dart';
+
 import './dev_util.dart';
 import './dev_notifier.dart';
 import './history_version/history_version_page.dart';
 import './dev_branch/dev_branch_page.dart';
+import './apns_util.dart';
 
 class DevPage extends StatefulWidget {
   static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮
@@ -34,9 +38,6 @@ class _DevPageState extends State<DevPage> {
   bool devSwtichValue = DevUtil.isDevFloatingWidgetShowing();
 
   BranchPackageInfo packageInfo;
-  List<String> _cancelShowVersions;
-
-  CommonModel _commonModel = CommonModel();
 
   String _historyRecordTime;
   List<HistoryVersionBean> _historyVersionBeans;
@@ -61,7 +62,6 @@ class _DevPageState extends State<DevPage> {
 
     DevUtil.isDevPageShowing = true;
     _getVersion();
-    _getCancelShowVersions();
   }
 
   // 获取版本号
@@ -90,20 +90,10 @@ class _DevPageState extends State<DevPage> {
     setState(() {});
   }
 
-  // 获取被跳过的版本个数
-  _getCancelShowVersions() {
-    CheckVersionCommonUtil.getCancelShowVersion()
-        .then((List<String> bCancelShowVersions) {
-      setState(() {
-        _cancelShowVersions = bCancelShowVersions;
-      });
-    });
-  }
-
   DevChangeNotifier _devChangeNotifier = DevChangeNotifier();
 
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
+  DevEnvironmentChangeNotifier _environmentChangeNotifier =
+      DevEnvironmentChangeNotifier();
 
   @override
   Widget build(BuildContext context) {
@@ -120,11 +110,11 @@ class _DevPageState extends State<DevPage> {
         ChangeNotifierProvider<DevChangeNotifier>.value(
           value: _devChangeNotifier,
         ),
-        ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+        ChangeNotifierProvider<DevEnvironmentChangeNotifier>.value(
           value: _environmentChangeNotifier,
         ),
       ],
-      child: Consumer2<DevChangeNotifier, EnvironmentChangeNotifier>(
+      child: Consumer2<DevChangeNotifier, DevEnvironmentChangeNotifier>(
         builder: (context, devChangeNotifier, environmentChangeNotifier, _) {
           return _buildPageWidget(context);
         },
@@ -145,32 +135,61 @@ class _DevPageState extends State<DevPage> {
             _devtool_floating_cell(),
             _permission_cell(),
 
-            // 版本信息
+            // 版本信息+检查更新
             Container(height: 20),
             _devtool_appinfo_cell(),
             _devtool_checkVersion_cell(context),
-            _devtool_cancelNewVersionsPage_cell(),
+            CanceledVersionWidget(),
+            // 文件大小
             Container(height: 20),
-            _devBranch_cell(),
-            _historyVersion_cell(),
+            AppDirSizeWidget(),
+            // deviceToken
+            _rennderItemPage(title: '清理缓存', page: SharedPreferencesPage()),
             Container(height: 20),
-            _app_downloadpage_cell(),
-            //_devtool_historyPackage_cell(),
+            _deviceToken_cell(),
+
+            // app 下载页
+            Container(height: 20),
+            AppDownloadWidget(),
+
             // 网络环境相关
             Container(height: 20),
             EnvWidget(),
             // 网络库测试相关
             _devtool_changeheader_cell(), // 网络库:header 的 增删该
             _devtool_removeheaderKey_cell(), // 网络库:header 的 增删该
-            _apicache_cell(context),
+            _apilog_get_cell(context),
+            _apicache_businessFailure_cell(context),
+            _apicache_businessSuccess_cell(context),
             _apiretry_cell(context),
+            _api_buriedpoint_cell(context),
+            _api_buriedpoint_cell2(context),
+            // 需求分支+线上版本记录
+            Container(height: 20),
+            _devBranch_cell(),
+            _historyVersion_cell(),
             // 日志相关
             Container(height: 20),
             _devtool_logSwtich_cell(),
             _devtool_logTest_cell(),
+            Container(height: 40),
           ],
         ),
       ),
+    );
+  }
+
+  _rennderItemPage({@required String title, @required Widget page}) {
+    return ImageTitleTextValueCell(
+      title: title,
+      textValue: '',
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return page;
+          },
+        ));
+      },
     );
   }
 
@@ -192,12 +211,8 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_appinfo_cell() {
-    return PackageInfoCell(packageInfo: packageInfo);
-  }
-
   Widget _permission_cell() {
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "打开app设置",
       textValue: '',
       onTap: () {
@@ -206,52 +221,30 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _app_downloadpage_cell() {
-    return Container(
-      color: const Color(0xfff0f0f0),
-      child: Column(
-        children: [
-          BJHTitleTextValueCell(
-            height: 40,
-            title: "app下载页",
-            textValue: '',
-            arrowImageType: TableViewCellArrowImageType.none,
-          ),
-          _devtool_app_downloadpage_cell(PackageType.develop1),
-          _devtool_app_downloadpage_cell(PackageType.preproduct),
-          _devtool_app_downloadpage_cell(PackageType.product),
-        ],
-      ),
-    );
+  // app 信息
+  Widget _devtool_appinfo_cell() {
+    return PackageInfoCell(packageInfo: packageInfo);
   }
 
-  Widget _devtool_app_downloadpage_cell(PackageType packageType) {
-    DiffPackageBean diffPackageBean =
-        MainDiffUtil.diffPackageBeanByType(packageType);
-
-    String downloadUrl = diffPackageBean.downloadUrl;
-    return BJHTitleTextValueCell(
-      height: 40,
-      leftMaxWidth: 80,
-      title: "${diffPackageBean.des}：",
-      textValue: downloadUrl,
-      textValueFontSize: 13,
-      onTap: () async {
-        if (await canLaunch(downloadUrl)) {
-          await launch(downloadUrl);
-        } else {
-          throw 'cloud not launcher url';
-        }
-      },
-      onLongPress: () {
-        Clipboard.setData(ClipboardData(text: downloadUrl));
-        ToastUtil.showMessage('app下载页地址拷贝成功');
+  // deviceToken
+  Widget _deviceToken_cell() {
+    String deviceToken = APNSUtil.deviceToken ?? '空(若非模拟器,则为注册失败)';
+    return ImageTitleTextValueCell(
+      leftMaxWidth: 100,
+      title: "deviceToken",
+      textValue: deviceToken,
+      textValueFontSize: 12,
+      textValueMaxLines: 2,
+      onTap: () {
+        Clipboard.setData(ClipboardData(text: deviceToken));
+        ToastUtil.showMessage('app deviceToken 拷贝成功');
       },
     );
   }
 
+  // 需求分支记录
   Widget _devBranch_cell() {
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "当前【开发中】的需求记录",
       textValue: '记于${packageInfo.brancesRecordTime}',
       onTap: () {
@@ -265,8 +258,9 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
+  // 线上版本记录
   Widget _historyVersion_cell() {
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "当前【已上线】的版本记录",
       textValue: '记于${packageInfo.historyRecordTime}',
       onTap: () {
@@ -280,41 +274,8 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  Widget _devtool_historyPackage_cell() {
-    return BJHTitleTextValueCell(
-      title: "app打包记录",
-      textValue: '',
-      onTap: () {
-        LoadingUtil.show();
-        PygerUtil.getPgyerHistoryVersions().then((value) {
-          LoadingUtil.dismiss();
-        }).catchError((onError) {
-          LoadingUtil.dismiss();
-        });
-      },
-    );
-  }
-
-  Widget _devtool_cancelNewVersionsPage_cell() {
-    return BJHTitleTextValueCell(
-      title: "不再提示更新的版本",
-      textValue: '已跳过:${_cancelShowVersions?.length}个',
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CancelVersionPage(),
-          ),
-        ).then((value) {
-          // setState(() {});
-          _getCancelShowVersions();
-        });
-      },
-    );
-  }
-
   Widget _devtool_checkVersion_cell(BuildContext context) {
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "检查更新",
       textValue: '',
       onTap: () {
@@ -375,11 +336,11 @@ class _DevPageState extends State<DevPage> {
     if (!_isDebug()) {
       return Container();
     }
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "添加/修改header",
-      textValue: '',
+      textValue: '12345',
       onTap: () {
-        NetworkManager.addOrUpdateToken('12345');
+        AppNetworkManager().addOrUpdateToken('12345');
         ToastUtil.showMessage('添加/修改header成功');
       },
     );
@@ -389,35 +350,105 @@ class _DevPageState extends State<DevPage> {
     if (!_isDebug()) {
       return Container();
     }
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "删除header",
       textValue: '',
       onTap: () {
-        NetworkManager.removeToken();
+        AppNetworkManager().removeToken();
         ToastUtil.showMessage('删除header成功');
       },
     );
   }
 
-  Widget _apicache_cell(BuildContext context) {
+  Widget _apicache_businessFailure_cell(BuildContext context) {
     if (!_isDebug()) {
       return Container();
     }
-    return BJHTitleTextValueCell(
-      title: "网络库：测试请求的缓存功能",
+    return ImageTitleTextValueCell(
+      title: "网络库：测试请求的缓存功能(失败不缓存)",
       textValue: '',
       onTap: () {
-        AppNetworkKit.post(
+        AppNetworkKit.postWithCallback(
           'login/doLogin',
           params: {
             "clientId": "clientApp",
             "clientSecret": "123123",
           },
-          cacheLevel: NetworkCacheLevel.one,
-        ).then((ResponseModel responseModel) {
-          String message = responseModel.isCache ? "是缓存数据" : "是网络数据";
-          debugPrint('测试网络请求的缓存功能:$message');
-        });
+          cacheLevel: AppNetworkCacheLevel.one,
+          completeCallBack: (ResponseModel responseModel) {
+            String message = responseModel.isCache == true ? "是缓存数据" : "是网络数据";
+            debugPrint('测试网络请求的缓存功能:$message');
+          },
+        );
+
+        // AppNetworkManager().postRich(
+        //   'login/doLogin',
+        //   params: {
+        //     "clientId": "clientApp",
+        //     "clientSecret": "123123",
+        //   },
+        //   cacheLevel: AppNetworkCacheLevel.one,
+        // )
+        //     .then((ResponseModel responseModel) {
+        //   String message = responseModel.isCache == true ? "是缓存数据" : "是网络数据";
+        //   debugPrint('测试网络请求的缓存功能:$message');
+        // });
+      },
+    );
+  }
+
+  Widget _apicache_businessSuccess_cell(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return ImageTitleTextValueCell(
+      title: "网络库：测试请求的缓存功能(成功才缓存)",
+      textValue: '',
+      onTap: () {
+        AppNetworkKit.postWithCallback(
+          'user/account/getTelCaptcha',
+          params: {
+            "smsPhoneNumber": '18012345678',
+            "captchaType": "LOGIN",
+          },
+          cacheLevel: AppNetworkCacheLevel.one,
+          completeCallBack: (ResponseModel responseModel) {
+            String message = responseModel.isCache == true ? "是缓存数据" : "是网络数据";
+            debugPrint('测试网络请求的缓存功能:$message');
+          },
+        );
+        // AppNetworkManager().cache_post(
+        //   'user/account/getTelCaptcha',
+        //   params: {
+        //     "smsPhoneNumber": '18012345678',
+        //     "captchaType": "LOGIN",
+        //   },
+        //   cacheLevel: AppNetworkCacheLevel.one,
+        // )
+        //     .then((ResponseModel responseModel) {
+        //   String message = responseModel.isCache == true ? "是缓存数据" : "是网络数据";
+        //   debugPrint('测试网络请求的缓存功能:$message');
+        // });
+      },
+    );
+  }
+
+  Widget _apilog_get_cell(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return ImageTitleTextValueCell(
+      title: "网络库：测试GET请求日志参数",
+      textValue: '',
+      onTap: () {
+        AppNetworkKit.get(
+          'config/check-version',
+          params: {
+            'version': '1.0.0', // 以防后台不从header中取
+            'buildNumber': '1', // 以防后台不从header中取
+            'platform': 'iOS', // 以防后台不从header中取
+          },
+        );
       },
     );
   }
@@ -426,7 +457,7 @@ class _DevPageState extends State<DevPage> {
     if (!_isDebug()) {
       return Container();
     }
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "网络库：测试请求的重试功能",
       textValue: '',
       onTap: () {
@@ -436,14 +467,108 @@ class _DevPageState extends State<DevPage> {
           params: {
             "clientId": "clientApp",
             "clientSecret": "123123",
-            'retryCount': 3,
           },
-          cacheLevel: NetworkCacheLevel.none,
+          retryCount: 3,
+          cacheLevel: AppNetworkCacheLevel.none,
           completeCallBack: (resultData) {
             requestCount++;
             debugPrint('测试网络请求的重试功能:当前重试次数$requestCount');
           },
         );
+        // int requestCount = 0;
+        // AppNetworkManager().cache_post(
+        //   'login/doLogin',
+        //   params: {
+        //     "clientId": "clientApp",
+        //     "clientSecret": "123123",
+        //   },
+        //   retryCount: 3,
+        //   cacheLevel: AppNetworkCacheLevel.none,
+        // )
+        //     .then((ResponseModel responseModel) {
+        //   requestCount++;
+        //   debugPrint('测试网络请求的重试功能:当前重试次数$requestCount');
+        // });
+      },
+    );
+  }
+
+  String get buriedpoint_messsageParam {
+    // String messsageParam_demo = "[{\"Key\":\"\",\"Body\":{\"lib\":\"MiniProgram_app\"}},{\"Body\":{\"lib\":\"MiniProgram_app\"}}]";
+    List<Map> messageMaps = [
+      {
+        // "Key": "",
+        "Body": {
+          "lib": "MiniProgram_app",
+          "lib_method": "code",
+        },
+      },
+      {
+        // "Key": "",
+        "Body": {
+          "lib": "MiniProgram_app",
+          "lib_method": "code",
+        }
+      },
+    ];
+    String messageParam = FormatterUtil.convert(messageMaps, 0);
+    return messageParam;
+  }
+
+  Widget _api_buriedpoint_cell(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return ImageTitleTextValueCell(
+      title: "网络库：测试埋点请求接口--底层网络库",
+      textValue: '',
+      onTap: () async {
+        String buriedpoint_url = 'http://test.api.xihuanwu.com/bi/sendMessage';
+        Map<String, dynamic> buriedpoint_customParams = {
+          "DataHubId": "datahub-y32g29n6",
+          // "Message": "[{\"Key\":\"\",\"Body\":{\"lib\":\"MiniProgram_app\"}},{\"Body\":{\"lib\":\"MiniProgram_app\"}}]",
+          "Message": buriedpoint_messsageParam,
+        };
+
+        Options options = Options(
+          contentType: "application/x-www-form-urlencoded",
+        );
+
+        CancelToken cancelToken = CancelToken();
+        Dio dio = Dio();
+        try {
+          Response response = await dio.post(
+            buriedpoint_url,
+            data: buriedpoint_customParams,
+            options: options,
+            cancelToken: cancelToken,
+          );
+
+          Map responseObject = response.data;
+          print("埋点请求测试结果:${responseObject.toString()}");
+        } catch (e) {
+          String errorMessage = e.toString();
+
+          String message = '请求${buriedpoint_url}的时候，发生网络错误:$errorMessage';
+          // throw Exception(message);
+          return null;
+        }
+      },
+    );
+  }
+
+  Widget _api_buriedpoint_cell2(BuildContext context) {
+    if (!_isDebug()) {
+      return Container();
+    }
+    return ImageTitleTextValueCell(
+      title: "网络库：测试埋点请求接口--二次封装库",
+      textValue: '',
+      onTap: () async {
+        AppNetworkKit.postMonitorMessage(buriedpoint_messsageParam)
+            .then((ResponseModel responseModel) {
+          print("埋点请求测试结果:${responseModel.toString()}");
+        });
       },
     );
   }
@@ -470,18 +595,15 @@ class _DevPageState extends State<DevPage> {
     if (!_isDebug()) {
       return Container();
     }
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       title: "测试日志上报到企业微信",
       textValue: '',
       onTap: () {
-        // String title = '我只是个测试标题';
-        // String customMessage = '我只是测试信息';
-        // LogUtil.postError(null, title, customMessage, ['lichaoqian']);
-
-        String apiFullUrl =
-            "http://121.41.91.92:3000/mock/28/hapi/test_test_test/";
-        String apiMessage = '我只是测试的api的上报信息';
-        LogApiUtil.apiError(apiFullUrl, apiMessage);
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return LogTestPage();
+          },
+        ));
       },
     );
   }

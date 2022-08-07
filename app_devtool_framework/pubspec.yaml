@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  package_info_plus: any
+  device_info_plus: any
+  flutter_native_timezone: ^2.0.0
+
   app_network:
     path: ../app_network/
   app_environment:
@@ -19,8 +23,17 @@ dependencies:
     path: ../flutter_baseui_kit/
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/
+  app_updateversion_kit:
+    path: ../app_updateversion_kit/
   flutter_updateversion_kit:
     path: ../flutter_updateversion_kit/
+  
+  path_provider: any
+
+  app_log:
+    path: ../app_log/
+
+  event_bus: any
 
 dev_dependencies:
   flutter_test:

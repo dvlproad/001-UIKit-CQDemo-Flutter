@@ -1,15 +1,16 @@
-#sh add_extra_app_info.sh $BRANCH
-#sh add_extra_app_info.sh dev_all
+#!/bin/bash
+#sh add_extra_app_info.sh $BRANCH $VERSION $BUILD
+#sh add_extra_app_info.sh dev_all 1.0.0 7251247
 
 # 包来源分支
 FullBranceName=$1
+VERSION=$2
+BUILD=$3
 ShortBranceName=${FullBranceName##*/}
 echo "ShortBranceName=$ShortBranceName"
 sed -i '' "s/package unknow brance/${ShortBranceName}/g" app_info.json
 
 # 版本号version+build/VersionCode
-VERSION="1."$(date "+%m.%d") # 1.02.21
-BUILD=$(date "+%m%d%H%M") # 02211506
 echo "------VERSION:${VERSION}"
 echo "------BUILD:${BUILD}"
 sed -i '' "s/package unknow version/${VERSION}/g" app_info.json

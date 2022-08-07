@@ -1,12 +1,20 @@
-#sh update_app_info_ios.sh $TARGETENVTYPE $FlutterIOSProjectHOME
-#sh update_app_info_ios.sh develop1 ../wish/ios
+#!/bin/bash
+#sh update_app_info_ios.sh $TARGETENVTYPE $PackageTargetType $FlutterIOSProjectHOME
+#sh update_app_info_ios.sh develop1 pgyer ../wish/ios
 
 TARGETENVTYPE=$1
-FlutterIOSProjectHOME=$2
+PackageTargetType=$2
+FlutterIOSProjectHOME=$3
 echo "TARGETENVTYPE=$TARGETENVTYPE"
+echo "PackageTargetType=$PackageTargetType"
 
-VERSION="1."$(date "+%m.%d") # 1.02.21
+if [ $PackageTargetType == "pgyer" ] ; then
+    VERSION="1."$(date "+%m.%d") # 1.02.21
+else
+    VERSION="1.0.0"
+fi
 BUILD=$(date "+%m%d%H%M") # 02211506
+BUILD=$(echo $BUILD | sed -r 's/0*([0-9])/\1/') # 去除字符串前所有的0
 echo "------VERSION:${VERSION}"
 echo "------BUILD:${BUILD}"
 

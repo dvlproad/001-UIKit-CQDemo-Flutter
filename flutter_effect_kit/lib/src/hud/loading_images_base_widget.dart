@@ -1,14 +1,20 @@
-// 一帧一帧图片组成的动画组件
+/*
+ * @Author: dvlproad
+ * @Date: 2022-07-22 14:50:46
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-22 16:22:07
+ * @Description: 一帧一帧图片组成的动画组件
+ */
 import 'package:flutter/material.dart';
 
 class FrameAnimationImageWidget extends StatefulWidget {
   final List<String> _assetList;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final int interval;
 
   FrameAnimationImageWidget(this._assetList,
-      {this.width, this.height, this.interval = 200});
+      {this.width, this.height, this.interval = 200,});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,8 +25,8 @@ class FrameAnimationImageWidget extends StatefulWidget {
 class _FrameAnimationImageWidgetState extends State<FrameAnimationImageWidget>
     with SingleTickerProviderStateMixin {
   /// 动画控制
-  Animation<double> _animation;
-  AnimationController _controller;
+  late Animation<double> _animation;
+ late AnimationController _controller;
   int interval = 200;
 
   @override

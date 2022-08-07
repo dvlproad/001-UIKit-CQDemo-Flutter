@@ -19,18 +19,19 @@ import 'package:tsdemodemo_flutter/modules/main/main_page.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  MainInit.initWithGlobalKey(globalKey, PackageType.develop1);
+  WidgetsFlutterBinding.ensureInitialized(); //必须要添加这个进行初始化 否则下面会错误
 
-  Future.delayed(Duration(milliseconds: 0)).then((value) {
+  MainInit.initWithGlobalKey(
+      globalKey, PackageType.develop1, PackageTargetType.pgyer);
+
+  Future.delayed(const Duration(milliseconds: 0)).then((value) {
     AppNetworkKit.post('abc');
   });
 
   runApp(MyApp());
 }
 
-// class MyApp extends StatelessWidget {
-//   // This widget is the root of your application.
-
+// This widget is the root of your application.
 class MyApp extends StatefulWidget {
   MyApp({Key key}) : super(key: key);
 

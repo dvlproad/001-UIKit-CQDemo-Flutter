@@ -49,7 +49,12 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
   Widget contentWidget() {
     return CQImagesAddDeleteList(
       imageCount: _imageOrPhotoModels.length,
-      itemImageContentBuilder: ({context, imageIndex}) {
+      itemImageContentBuilder: ({
+        @required BuildContext context,
+        @required int imageIndex,
+        @required double itemHeight,
+        @required double itemWidth,
+      }) {
         dynamic photoAlbumPath = _imageOrPhotoModels[imageIndex];
 
         ImageProvider imageProvider;
@@ -67,7 +72,7 @@ class _TSPhotoAlbumAddDeletePageState extends State<TSPhotoAlbumAddDeletePage> {
           imageProvider: imageProvider,
           message: message,
           index: imageIndex,
-          onPressed: () {
+          onTap: () {
             print('点击$imageIndex');
           },
         );

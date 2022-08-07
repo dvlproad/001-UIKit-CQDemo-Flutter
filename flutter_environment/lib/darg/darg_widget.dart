@@ -7,11 +7,11 @@ class DraggableFloatingActionButton extends StatefulWidget {
   final VoidCallback onPressed;
 
   DraggableFloatingActionButton({
-    Key key,
-    @required this.parentKey,
-    @required this.child,
-    @required this.initialOffset,
-    @required this.onPressed,
+    Key? key,
+    required this.parentKey,
+    required this.child,
+    required this.initialOffset,
+    required this.onPressed,
   })  : assert(parentKey != null),
         super(key: key);
 
@@ -24,21 +24,21 @@ class _DraggableFloatingActionButtonState
   final GlobalKey _key = GlobalKey();
 
   bool _isDragging = false;
-  Offset _offset;
-  Offset _minOffset;
-  Offset _maxOffset;
+  late Offset _offset;
+  Offset _minOffset = Offset(0, 0);
+  Offset _maxOffset = Offset(0, 0);
 
   @override
   void initState() {
     super.initState();
     _offset = widget.initialOffset;
 
-    WidgetsBinding.instance?.addPostFrameCallback(_setBoundary);
+    WidgetsBinding.instance.addPostFrameCallback(_setBoundary);
   }
 
   void _setBoundary(_) {
     final RenderBox parentRenderBox =
-        widget.parentKey?.currentContext?.findRenderObject() as RenderBox;
+        widget.parentKey.currentContext?.findRenderObject() as RenderBox;
     final RenderBox renderBox =
         _key.currentContext?.findRenderObject() as RenderBox;
 

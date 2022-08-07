@@ -17,3 +17,6 @@ export './src/refresh/refresh_header.dart';
 export './src/refresh/refresh_header_gif.dart';
 export './src/refresh/refresh_footer.dart';
 export './src/refresh/refresh_footer_gif.dart';
+
+// animation
+export './src/animation/animated_opacity_container.dart';

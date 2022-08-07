@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:app_images_action/app_images_action.dart'
     as AppImagesActionImagePicker;
-import 'package:app_images_action_image_pickers/app_images_action_image_pickers.dart'
-    as AppImagesActionImagePickers;
+import 'package:app_images_action_image_pickers/app_images_action_image_pickers.dart';
 import './photoalbum_adddelete_page.dart';
 import './photoalbum_selected_page.dart';
 
@@ -87,10 +86,12 @@ class _CJTSTableHomeBasePageState
                     backgroundColor: Colors.black,
                     appBar: AppBar(
                         title: const Text('Images AddDelete(图片添加+Pick)')),
-                    body: AppImagesActionImagePickers.ImageAddDeletePickList(
+                    body: ImageAddDeletePickList(
                       imageChooseModels: _imageOrPhotoModels,
-                      imageChooseModelsChangeBlock: (imageOrPhotoModels) {
-                        _imageOrPhotoModels = imageOrPhotoModels;
+                      imageChooseModelsChangeBlock:
+                          (List<AppImageChooseBean> imageChooseModels,
+                              PickPhotoAllowType bNewPickPhotoAllowType) {
+                        _imageOrPhotoModels = imageChooseModels;
                       },
                     ),
                   ),

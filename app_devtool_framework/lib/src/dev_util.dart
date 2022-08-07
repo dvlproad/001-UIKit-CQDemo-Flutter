@@ -6,8 +6,6 @@ import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_log/flutter_log.dart';
 
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
-
 import './dev_page.dart';
 
 class DevUtil {
@@ -19,21 +17,28 @@ class DevUtil {
   static set navigatorKey(GlobalKey globalKey) {
     _navigatorKey = globalKey; // ①悬浮按钮的显示功能需要
     ApplicationLogViewManager.globalKey = globalKey; // ②日志系统需要
-    CheckVersionUtil.navigatorKey = globalKey; // ③检查更新需要
   }
 
   static init({
     @required GlobalKey navigatorKey,
     @required ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
-    @required String floatingToolTextDefaultEnv, // 悬浮按钮上的文本:此包的默认环境
-    void Function() onFloatingToolDoubleTap, // 悬浮按钮的双击事件
+    @required String floatingToolTextNetworkNameOrigin, // 悬浮按钮上的文本:此包的默认网络环境
+    @required String floatingToolTextNetworkNameCurrent, // 悬浮按钮上的文本:此包的当前网络环境
+    @required String floatingToolTextTargetNameOrigin, // 悬浮按钮上的文本:此包的默认发布网站
+    @required String floatingToolTextTargetNameCurrent, // 悬浮按钮上的文本:此包的当前发布网站
+    void Function(BuildContext bContext) onFloatingToolDoubleTap, // 悬浮按钮的双击事件
+    @required bool overlayEntryShouldShowIfNil,
   }) {
     DevUtil.navigatorKey = navigatorKey;
 
     ApplicationDraggableManager.init(
       navigatorKey: navigatorKey, // ①悬浮按钮的拖动功能需要
       floatingToolImageProvider: floatingToolImageProvider,
-      floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
+      floatingToolTextNetworkNameOrigin: floatingToolTextNetworkNameOrigin,
+      floatingToolTextTargetNameCurrent: floatingToolTextTargetNameCurrent,
+      floatingToolTextTargetNameOrigin: floatingToolTextTargetNameOrigin,
+      floatingToolTextNetworkNameCurrent: floatingToolTextNetworkNameCurrent,
+      overlayEntryShouldShowIfNil: overlayEntryShouldShowIfNil,
       onTap: () {
         if (navigatorKey == null) {
           throw Exception(
@@ -67,8 +72,19 @@ class DevUtil {
           DevLogUtil.dismissLogView();
         }
       },
-      onDoubleTap: onFloatingToolDoubleTap,
-    );
+      onDoubleTap: () {
+        if (onFloatingToolDoubleTap != null) {
+          onFloatingToolDoubleTap(navigatorKey.currentContext);
+        }
+      },
+    ).then((value) {
+      bool shouldShowDevTool = ApplicationDraggableManager.overlayEntryIsShow;
+      if (shouldShowDevTool) {
+        Future.delayed(const Duration(milliseconds: 3000), () {
+          DevUtil.showDevFloatingWidget();
+        });
+      }
+    });
   }
 
   static bool isDevPageShowing =
@@ -85,10 +101,7 @@ class DevUtil {
   }
 
   // 显示开发工具的悬浮按钮
-  static void showDevFloatingWidget({
-    double left = 80,
-    double top = 180,
-  }) {
+  static void showDevFloatingWidget() {
     /*
     Widget cell({String title, void Function() onPressed}) {
       return Container(
@@ -150,8 +163,8 @@ class DevUtil {
     */
 
     ApplicationDraggableManager.showEasyOverlayEntry(
-      left: left,
-      top: top,
+      left: 80,
+      top: 180,
     );
   }
 }

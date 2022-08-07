@@ -1,5 +1,5 @@
 import 'package:event_bus/event_bus.dart';
-import 'package:flutter_network/flutter_network.dart';
+import 'package:app_network/app_network.dart';
 import 'package:flutter_cache_kit/flutter_cache_kit.dart';
 
 import './user_detail_bean.dart';
@@ -23,8 +23,8 @@ class UserManager {
   }
 
   // 获取缓存数据
-  void _getCache() {
-    _userModel = LocalStorage.getCustomBean(
+  void _getCache() async {
+    _userModel = await LocalStorage.getCustomBean(
       "user_cache_key",
       fromJson: (bMap) {
         return UserDetailBean.fromJson(bMap);
@@ -150,7 +150,7 @@ class UserManager {
     String newToken = newUserModel?.authToken;
     String oldToken = oldUserModel?.authToken;
     if (newToken != oldToken) {
-      NetworkManager.addOrUpdateToken(newToken);
+      AppNetworkManager().addOrUpdateToken(newToken);
 
       if (oldToken != null && newToken == null) {
         loginState = UserLoginState.tokenOverdue;

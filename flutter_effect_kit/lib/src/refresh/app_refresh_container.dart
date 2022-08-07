@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 00:41:56
+ * @LastEditTime: 2022-07-22 16:48:55
  * @Description: 可对child进行下拉刷新/上拉加载的视图
  */
 import 'package:flutter/cupertino.dart';
@@ -16,7 +16,7 @@ class AppRefreshContainer extends StatelessWidget {
   ///
   /// notice that: If child is  extends ScrollView,It will help you get the internal slivers and add footer and header in it.
   /// else it will put child into SliverToBoxAdapter and add footer and header
-  final Widget child;
+  final Widget? child;
 
   // This bool will affect whether or not to have the function of drop-up load.
   final bool enablePullUp;
@@ -28,23 +28,23 @@ class AppRefreshContainer extends StatelessWidget {
   ///
   /// when the callback is happening,you should use [RefreshController]
   /// to end refreshing state,else it will keep refreshing state
-  final VoidCallback onRefresh;
+  final VoidCallback? onRefresh;
 
   /// callback when footer loading more data
   ///
   /// when the callback is happening,you should use [RefreshController]
   /// to end loading state,else it will keep loading state
-  final VoidCallback onLoading;
+  final VoidCallback? onLoading;
 
   /// Controll inner state
   final AppRefreshController controller;
 
   AppRefreshContainer({
-    Key key,
+    Key? key,
     this.child,
-    this.enablePullDown,
-    this.enablePullUp,
-    this.controller,
+    this.enablePullDown = true,
+    this.enablePullUp = false,
+    required this.controller,
     this.onRefresh,
     this.onLoading,
   }) : super(key: key);
@@ -67,7 +67,7 @@ class AppRefreshContainer extends StatelessWidget {
 }
 
 class AppRefreshController {
-  RefreshController _refreshController;
+  late RefreshController _refreshController;
 
   /// initialRefresh:When SmartRefresher is init,it will call requestRefresh at once
   ///
@@ -96,5 +96,14 @@ class AppRefreshController {
       return;
     }
     _refreshController.loadComplete();
+  }
+
+  /// load more success without error,but no data returned
+  void loadNoData() {
+    if (_refreshController == null) {
+      print('Error:友情提示请先执行初始化动作');
+      return;
+    }
+    _refreshController.loadNoData();
   }
 }

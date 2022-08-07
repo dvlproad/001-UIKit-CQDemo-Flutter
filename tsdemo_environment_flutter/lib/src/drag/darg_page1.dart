@@ -29,7 +29,7 @@ class DraggablePage1 extends StatelessWidget {
               ),
               initialOffset: const Offset(120, 70),
               // parentKey: _parentKey,
-              parentKey: ApplicationDraggableManager.globalKey ?? _parentKey,
+              // parentKey: ApplicationDraggableManager.globalKey ?? _parentKey,
               onPressed: () {},
             ),
           ],

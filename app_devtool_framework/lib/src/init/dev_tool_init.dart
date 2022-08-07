@@ -3,55 +3,87 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 
 import 'package:app_network/app_network.dart';
-import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
-
+import 'package:app_log/app_log.dart';
+import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 import 'package:app_environment/app_environment.dart';
-import 'package:app_environment/src/init/env_init.dart' show EnvInit;
 
 import '../dev_util.dart';
+import '../apns_util.dart';
 
-import './log_init.dart';
+import '../eventbus/dev_tool_eventbus.dart';
+
+import './dev_common_params.dart';
 
 class DevToolInit {
   // static String apiHost;
   static String webHost;
   static String gameHost;
 
-  static initWithGlobalKey(
+  static Future initWithGlobalKey(
     @required GlobalKey globalKey,
-    PackageType packageType, {
+    PackageType originPackageType,
+    PackageTargetType originPackageTargetType, {
     @required void Function() logoutHandleWhenExitAppByChangeNetwork,
     String userApiToken,
     String Function() userDescribeBlock,
     @required void Function() userNeedReloginHandle, // 需要重新登录时候，执行的操作
-    void Function() onFloatingToolDoubleTap,
-  }) {
+    void Function(BuildContext bContext) onFloatingToolDoubleTap,
+  }) async {
     // 设置打包环境
-    MainDiffUtil.packageType = packageType;
+    MainDiffUtil.init(
+      m_packageEnvType: originPackageType,
+      m_packageTargetType: originPackageTargetType,
+    );
 
-    Future.delayed(const Duration(milliseconds: 000), () {
-      // 这里的适当延迟，只是为了修复 main() 的第一方法就执行这里的init方法，导致内部执行到 SharedPreferences prefs = await SharedPreferences.getInstance(); 的时候会发生错误
-      // 其他情况不用延迟
-      _init(
-        packageType,
-        globalKey: globalKey,
-        tryLogoutHandle: logoutHandleWhenExitAppByChangeNetwork,
-        currentUserApiToken: userApiToken,
-        packageUserDescribeBlock: userDescribeBlock,
-        userReloginHandle: userNeedReloginHandle,
-      );
-    });
-    _initView(
+    await _initNetworkAndProxy(
+      originPackageType,
+      originPackageTargetType,
+      globalKey: globalKey,
+      tryLogoutHandle: logoutHandleWhenExitAppByChangeNetwork,
+      currentUserApiToken: userApiToken,
+      packageUserDescribeBlock: userDescribeBlock,
+      userReloginHandle: userNeedReloginHandle,
+    );
+
+    await PackageTargetEnvUtil.initPackageTargetManager(
+        originPackageType, originPackageTargetType);
+
+    PackageTargetModel selectedPackageTargetModel =
+        PackageTargetPageDataManager().selectedPackageTargetModel;
+    PackageTargetType selectedPackageTargetType =
+        selectedPackageTargetModel.type;
+
+    TSEnvNetworkModel selectedNetworkModel =
+        NetworkPageDataManager().selectedNetworkModel;
+
+    // log 设置(含如何输出等)
+    BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
+    String packageDescribe =
+        '【${MainDiffUtil.diffPackageBean().des}_${packageInfo.fullPackageDescribe}】';
+    AppLogUtil.init(
+      originPackageType: originPackageType,
+      originPackageTargetType: originPackageTargetType,
+      packageDescribe: packageDescribe,
+      userDescribeBlock: userDescribeBlock,
+    );
+
+    _initDebugTool(
       globalKey,
-      packageType,
+      originEnvNetworkType: originPackageType,
+      currentEnvNetworkModel: selectedNetworkModel,
+      originPackageTargetType: originPackageTargetType,
+      currentPackageTargetType: selectedPackageTargetType,
       onFloatingToolDoubleTap: onFloatingToolDoubleTap,
     );
+    // }
+
+    // 检查更新
+    _initCheckVersion(originPackageType, selectedPackageTargetType, globalKey);
   }
 
-  static _init(
-    PackageType packageType, {
+  static _initNetworkAndProxy(
+    PackageType originPackageType,
+    PackageTargetType packageTargetType, {
     @required GlobalKey globalKey,
     @required void Function() tryLogoutHandle, // 尝试退出登录,仅在切换环境需要退出登录的时候调用
     String currentUserApiToken,
@@ -61,18 +93,47 @@ class DevToolInit {
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
 
     // 环境初始化
-    EnvUtil.init(
-      packageType: packageType,
+    // 设置打包环境
+    MainDiffUtil.packageType = originPackageType;
+
+    // network:api host
+    await EnvManagerUtil.initNetworkEnvironmentManager(originPackageType);
+    await NetworkPageDataManager().initCompleter.future;
+    TSEnvNetworkModel selectedNetworkModel =
+        NetworkPageDataManager().selectedNetworkModel;
+    PackageType currentPackageType = EnvManagerUtil.currentPackageType;
+
+    // proxy:
+    await EnvManagerUtil.initProxyEnvironmentManager(originPackageType);
+    await ProxyPageDataManager().initCompleter.future;
+    TSEnvProxyModel selectedProxyModel =
+        ProxyPageDataManager().selectedProxyModel;
+
+    hasInitCompleter_Env = true;
+    devtoolEventBus.fire(DevtoolEnvironmentInitCompleteEvent());
+
+    String packageVersion = packageInfo.version;
+    await _initNetwork(
+      originPackageType,
+      selectedNetworkModel: selectedNetworkModel,
+      selectedProxyModel: selectedProxyModel,
+      packageVersion: packageVersion,
+      currentUserApiToken: currentUserApiToken,
+      needReloginHandle: userReloginHandle,
+    );
+
+    // 网络环境相关：环境切换界面
+    EnvPageUtil.initWithPage(
       navigatorKey: globalKey,
       updateNetworkCallback: (bNetworkModel) {
-        NetworkManager.changeOptions(baseUrl: bNetworkModel.apiHost);
+        AppNetworkKit.changeOptions(bNetworkModel);
         //apiHost = bNetworkModel.apiHost;
         webHost = bNetworkModel.webHost;
         gameHost = bNetworkModel.gameHost;
       },
       logoutHandleWhenExitAppByChangeNetwork: tryLogoutHandle,
       updateProxyCallback: (bProxyModel) {
-        NetworkManager.changeProxy(bProxyModel.proxyIp);
+        AppNetworkKit.changeProxy(bProxyModel.proxyIp);
       },
       onPressTestApiCallback: (TestApiScene testApiScene) {
         // 测试环境改变之后，网络请求是否生效
@@ -87,117 +148,117 @@ class DevToolInit {
         });
       },
     );
-
-    // 网络环境相关
-    String packageVersion = packageInfo.version;
-    _initNetwork(
-      packageType,
-      packageVersion: packageVersion,
-      currentUserApiToken: currentUserApiToken,
-      needReloginHandle: userReloginHandle,
-    );
-
-    // log 设置
-    String packageDescribe =
-        '【${MainDiffUtil.diffPackageBean().des}_${packageInfo.fullPackageDescribe}】';
-    _initLog(
-      packageType,
-      packageDescribe: packageDescribe,
-      userDescribeBlock: packageUserDescribeBlock,
-    );
   }
 
-  // 如何输出 log 的设置
-  static _initLog(
-    PackageType packageType, {
-    String packageDescribe,
-    String Function() userDescribeBlock,
-  }) async {
-    LogInit.init(
-      packageDescribe: packageDescribe,
-      userDescribeBlock: userDescribeBlock,
-      isProductPackageBlock: () {
-        return packageType == PackageType.product;
-      },
-      isProductNetworkBlock: () {
-        return EnvInit.isProduct;
-      },
-    );
-    LogInit.initApiErrorRobots();
-  }
-
-  static _initView(
-    GlobalKey globalKey,
-    PackageType packageType, {
-    void Function() onFloatingToolDoubleTap,
+  static _initDebugTool(
+    GlobalKey globalKey, {
+    @required PackageType originEnvNetworkType,
+    @required TSEnvNetworkModel currentEnvNetworkModel,
+    @required PackageTargetType originPackageTargetType,
+    @required PackageTargetType currentPackageTargetType,
+    void Function(BuildContext bContext) onFloatingToolDoubleTap,
   }) {
     // 开发工具弹窗
     bool shouldShowDevTool = false;
-    ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
-
-    String floatingToolTextDefaultEnv =
-        MainDiffUtil.diffPackageBean().des.substring(0, 1); // 悬浮按钮上的文本:此包的默认环境
-    if (packageType == PackageType.develop1 ||
-        packageType == PackageType.develop2 ||
-        packageType == PackageType.preproduct) {
+    if (originEnvNetworkType == PackageType.develop1 ||
+        originEnvNetworkType == PackageType.develop2 ||
+        originEnvNetworkType == PackageType.preproduct) {
       shouldShowDevTool = true;
     }
+    ImageProvider floatingToolImageProvider; // 悬浮按钮上的图片
+    String floatingToolTextNetworkNameOrigin =
+        MainDiffUtil.diffPackageBean().des.substring(0, 1); // 悬浮按钮上的文本:此包的默认环境
+
+    String floatingToolTextTargetNameOrigin = '';
+    if (originPackageTargetType == PackageTargetType.formal) {
+      floatingToolTextTargetNameOrigin = '外';
+    } else if (originPackageTargetType == PackageTargetType.pgyer) {
+      floatingToolTextTargetNameOrigin = '内';
+    }
+
+    String floatingToolTextTargetNameCurrent = '';
+    if (currentPackageTargetType == PackageTargetType.formal) {
+      floatingToolTextTargetNameCurrent = '外';
+    } else if (currentPackageTargetType == PackageTargetType.pgyer) {
+      floatingToolTextTargetNameCurrent = '内';
+    }
+
     DevUtil.init(
       navigatorKey: globalKey,
       floatingToolImageProvider: floatingToolImageProvider,
-      floatingToolTextDefaultEnv: floatingToolTextDefaultEnv,
+      floatingToolTextNetworkNameOrigin: floatingToolTextNetworkNameOrigin,
+      floatingToolTextNetworkNameCurrent: currentEnvNetworkModel.shortName,
+      floatingToolTextTargetNameOrigin: floatingToolTextTargetNameOrigin,
+      floatingToolTextTargetNameCurrent: floatingToolTextTargetNameCurrent,
       onFloatingToolDoubleTap: onFloatingToolDoubleTap,
+      overlayEntryShouldShowIfNil: shouldShowDevTool,
     );
+  }
 
-    if (shouldShowDevTool) {
-      Future.delayed(const Duration(milliseconds: 3000), () {
-        DevUtil.showDevFloatingWidget();
-      });
+  static _initCheckVersion(
+    PackageType originPackageType,
+    PackageTargetType selectedPackageTargetType,
+    GlobalKey<State<StatefulWidget>> globalKey,
+  ) async {
+    if (selectedPackageTargetType == PackageTargetType.pgyer) {
+      UpdateAppType pgyerAppType;
+      if (originPackageType == PackageType.develop1) {
+        pgyerAppType = UpdateAppType.develop1;
+      } else if (originPackageType == PackageType.develop2) {
+        pgyerAppType = UpdateAppType.develop2;
+      } else if (originPackageType == PackageType.preproduct) {
+        pgyerAppType = UpdateAppType.preproduct;
+      } else if (originPackageType == PackageType.product) {
+        pgyerAppType = UpdateAppType.product;
+      } else {
+        pgyerAppType = UpdateAppType.product;
+      }
+      CheckVersionUtil.initPyger(pgyerAppType, globalKey);
+    } else {
+      CheckVersionUtil.initSytem(globalKey);
     }
 
-    // 检查更新
-    CheckVersionUtil.init(
-      isPyger: true,
-      pygerAppKeyGetBlock: () {
-        if (Platform.isAndroid) {
-          return MainDiffUtil.diffPackageBean().pygerAppKeyAndroid;
-        } else {
-          return MainDiffUtil.diffPackageBean().pygerAppKeyIOS;
-        }
-      },
-      downloadUrlGetBlock: () {
-        return MainDiffUtil.diffPackageBean().downloadUrl;
-      },
-    );
     Future.delayed(const Duration(milliseconds: 1000), () {
       CheckVersionUtil.checkVersion();
     });
   }
 
   // 配置网络
+  static bool hasInitCompleter_Env = false;
   static _initNetwork(
-    PackageType packageType, {
+    PackageType originPackageType, {
+    @required TSEnvNetworkModel selectedNetworkModel,
+    @required TSEnvProxyModel selectedProxyModel,
     @required String packageVersion,
     @required String currentUserApiToken,
     @required void Function() needReloginHandle, // 需要重新登录时候，执行的操作
   }) async {
     // network:api host
-    await EnvInit.initNetworkEnvironmentManager(packageType);
-    TSEnvNetworkModel selectedNetworkModel =
-        NetworkPageDataManager().selectedNetworkModel;
-    ApplicationDraggableManager.updateDevToolFloatingIconOverlayEntry(
-        selectedNetworkModel.shortName); // 添加当前环境标识
     String baseUrl = selectedNetworkModel.apiHost;
     // network:api token
     String token = currentUserApiToken;
     // network:api commonParams
-    Map<String, dynamic> commonParams = {
-      'version': packageVersion,
-    };
+
+    Map<String, dynamic> commonHeaderParams =
+        await CommonParamsHelper.commonHeaderParams();
+
+    Map<String, dynamic> monitorCommonBodyParams = {};
+    Map<String, dynamic> monitorPublicParamsMap =
+        await CommonParamsHelper.fixedCommonParams();
+    String monitorPublicParamsString =
+        FormatterUtil.convert(monitorPublicParamsMap, 0);
+    monitorCommonBodyParams.addAll({
+      "DataHubId": selectedNetworkModel.monitorDataHubId,
+      "Public": monitorPublicParamsString,
+    });
+
     AppNetworkKit.start(
+      commonHeaderParams: commonHeaderParams,
       baseUrl: baseUrl,
+      monitorBaseUrl: selectedNetworkModel.monitorApiHost,
       token: token,
-      commonParams: commonParams,
+      commonBodyParams: {},
+      monitorCommonBodyParams: monitorCommonBodyParams,
       allowMock: true,
       mockApiHost: TSEnvironmentDataUtil.apiHost_mock,
       needReloginHandle: needReloginHandle,
@@ -207,10 +268,7 @@ class DevToolInit {
     gameHost = selectedNetworkModel.gameHost;
 
     // proxy:
-    await EnvInit.initProxyEnvironmentManager(packageType);
-    TSEnvProxyModel selectedProxyModel =
-        ProxyPageDataManager().selectedProxyModel;
-    NetworkManager.changeProxy(selectedProxyModel.proxyIp);
+    AppNetworkKit.changeProxy(selectedProxyModel.proxyIp);
 
     // check network+proxy+mock
     Future.delayed(const Duration(milliseconds: 2000)).then((value) {
@@ -218,6 +276,21 @@ class DevToolInit {
     });
   }
 
-  // 是否是生产环境
-  static bool get isProduct => EnvInit.isProduct;
+  // 是否是生产网络环境
+  static bool get isProductNetwork {
+    if (!hasInitCompleter_Env) {
+      throw Exception("Error:网络库环境初始化未完成，无法正确获取网络环境，请确保执行完了 _initNetwork");
+    }
+    return EnvManagerUtil.isProductNetwork;
+  }
+
+  // 是否是生产包
+  static bool get isProductPackage {
+    return EnvManagerUtil.isProductPackage;
+  }
+
+  // 是否是蒲公英上的包
+  static bool get isPackageTargetPgyer {
+    return EnvManagerUtil.isPackageTargetPgyer;
+  }
 }

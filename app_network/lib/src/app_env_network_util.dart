@@ -107,7 +107,6 @@ class AppNetworkKit {
   static Future<ResponseModel> post(
     String api, {
     Map<String, dynamic>? params,
-    CancelToken? cancelToken,
     bool withLoading = false,
     bool showToastForNoNetwork = false, // 网络开小差的时候，是否显示toast(默认不toast)
   }) async {
@@ -116,7 +115,6 @@ class AppNetworkKit {
     return AppNetworkManager().post(
       api,
       customParams: params,
-      cancelToken: cancelToken,
       withLoading: withLoading,
       showToastForNoNetwork: showToastForNoNetwork,
     );

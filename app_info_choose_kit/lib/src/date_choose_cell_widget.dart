@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:43:36
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-15 17:29:40
+ * @LastEditTime: 2022-07-02 10:56:32
  * @Description: 日期选择的Cell
  */
 import 'package:flutter/material.dart';
@@ -59,7 +59,7 @@ class _ActionDateChooseCellWidgetState
     _minDateString = widget.minDateString;
     _maxDateString = widget.maxDateString;
 
-    return ImageTitleTextValueCell(
+    return AppImageTitleTextValueCell(
       title: widget.title ?? '',
       imageProvider: AssetImage(
         'assets/icon_date.png',
@@ -68,6 +68,8 @@ class _ActionDateChooseCellWidgetState
       textValue: _realChooseDateString ?? '',
       textValuePlaceHodler: '点击选择',
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+
         String dateString;
         if (_realChooseDateString == null || _realChooseDateString.isEmpty) {
           if (widget.recommendDateString != null &&

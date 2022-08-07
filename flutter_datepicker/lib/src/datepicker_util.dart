@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:flutter_pickers/style/picker_style.dart';
 
 // flutter_pickers
 import 'package:flutter_pickers/pickers.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_pickers/time_picker/model/suffix.dart';
 import 'package:date_format/date_format.dart';
 import './showModal_util.dart';
 import './pickercreater.dart';
-// import 'package:bruno/bruno.dart';
 
 import './model/date_choose_bean.dart';
 export './model/date_choose_bean.dart';
@@ -51,26 +51,6 @@ class DatePickerUtil {
       DateTime yyyyMMddDate = DateTime.parse(selectedyyyyMMddDateString);
       selectedyyyyMMddDate = yyyyMMddDate;
     }
-
-    /*
-    BrnDatePicker.showDatePicker(context,
-        maxDateTime: DateTime.parse('2021-12-31 23:59:59'),
-        minDateTime: DateTime.parse('2020-01-15 00:00:00'),
-        initialDateTime: DateTime.parse('2020-01-01 18:26:59'),
-        pickerMode: BrnDateTimePickerMode.date,
-        minuteDivider: 30,
-        pickerTitleConfig: BrnPickerTitleConfig.Default,
-        dateFormat: 'yyyy-MMMM-dd', onConfirm: (dateTime, list) {
-      BrnToast.show("onConfirm:  $dateTime   $list", context);
-    }, onClose: () {
-      print("onClose");
-    }, onCancel: () {
-      print("onCancel");
-    }, onChange: (dateTime, list) {
-      print("onChange:  $dateTime    $list");
-    });
-    return
-    */
 
     DatePickerUtil.chooseDate(
       context,
@@ -141,6 +121,21 @@ class DatePickerUtil {
 
     Pickers.showDatePicker(
       context,
+      pickerStyle: PickerStyle(
+        title: Container(
+          alignment: Alignment.center,
+          // padding: EdgeInsets.only(left: 10),
+          child: Text(
+            '请填写真实生日',
+            style: TextStyle(
+              fontFamily: 'PingFang SC',
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
       mode: dateMode,
       selectDate: selectedyyyyMMddDate == null
           ? null

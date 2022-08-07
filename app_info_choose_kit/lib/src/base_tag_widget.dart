@@ -1,8 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-05-13 19:39:03
+ * @Description: tag 视图的基类
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import '../app_info_choose_kit_adapt.dart';
 
 class BaseTagWidget extends StatelessWidget {
+  final double width;
   final Color backgroundColor;
 
   ImageProvider buttonImageProvider;
@@ -17,6 +25,7 @@ class BaseTagWidget extends StatelessWidget {
 
   BaseTagWidget({
     Key key,
+    this.width,
     this.backgroundColor,
     this.buttonImageProvider,
     this.buttonText,
@@ -29,6 +38,7 @@ class BaseTagWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /*
     Widget textLabel = Text(
       buttonText,
       maxLines: 1,
@@ -41,6 +51,9 @@ class BaseTagWidget extends StatelessWidget {
     if (showDeleteIcon == true) {
       textLabel = contentWidgetWhenShowDelete;
     }
+    */
+
+    Widget textLabel = contentWidgetWhenShowDelete;
     return LeftImageTextDeleteButton(
       key: key,
       onTap: onTap,

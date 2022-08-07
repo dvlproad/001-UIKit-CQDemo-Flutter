@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-07 19:53:15
+ * @LastEditTime: 2022-07-19 14:16:50
  * @Description: 设备自身ip、代理等信息
  */
 
@@ -21,7 +21,7 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './device_info_util.dart';
 
-// import 'package:app_devtool_framework/src/init/dev_common_params.dart';
+import 'package:app_devtool_framework/src/init/dev_common_params.dart';
 
 class DeviceInfoPage extends StatefulWidget {
   const DeviceInfoPage({Key? key}) : super(key: key);
@@ -61,9 +61,9 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   }
 
   getFix() async {
-    // _monitorPublicParamsMap = await CommonParamsHelper.fixedCommonParams(
-    //     // packageVersion: packageVersion,
-    //     );
+    _monitorPublicParamsMap = await CommonParamsHelper.fixedCommonParams(
+        // packageVersion: packageVersion,
+        );
     setState(() {});
   }
 

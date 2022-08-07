@@ -4,7 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
@@ -16,8 +16,12 @@ dependencies:
   flutter_easyloading: any # 为了弹出自定义的loading组件
 
   # refresh
-  flutter_easyrefresh: any
   pull_to_refresh: any
+  flutter_easyrefresh: any
+  # pull_to_refresh:
+  #   path: ../pull_to_refresh-2.0.0/ # 自己支持3.0
+  # flutter_easyrefresh:
+  #   path: ../flutter_easyrefresh-2.2.1/ # 自己支持3.0
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +39,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
+    - assets/
     - assets/loading_gif/
   #
   # For details regarding assets in packages, see

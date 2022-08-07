@@ -1,23 +1,38 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-04 13:36:13
+ * @Description: 图片集合视图单元的基类
+ */
 import 'package:flutter/material.dart';
 import './bg_border_widget.dart';
 
 class CQImageBaseGridCell extends StatelessWidget {
-  final ImageProvider imageProvider;
-  final Widget customImageWidget;
-  final double cornerRadius;
-  final String message; // 相册的辅助信息，如视频 video 长度等，可为 null
+  final double? width;
+  final double? height;
+  final ImageProvider? imageProvider;
+  final Widget? customImageWidget;
+  final double? cornerRadius;
+  final String? message; // 相册的辅助信息，如视频 video 长度等，可为 null
 
   final int index;
-  final VoidCallback onPressed;
+  final void Function()? onTap;
+  final void Function()? onDoubleTap;
+  final void Function()? onLongPress;
 
   const CQImageBaseGridCell({
-    Key key,
+    Key? key,
+    this.width,
+    this.height,
     this.imageProvider,
     this.customImageWidget,
     this.cornerRadius,
     this.message,
-    @required this.index,
-    this.onPressed,
+    required this.index,
+    this.onTap,
+    this.onDoubleTap,
+    this.onLongPress,
   })  : assert(imageProvider != null || customImageWidget != null),
         super(key: key);
 
@@ -25,20 +40,30 @@ class CQImageBaseGridCell extends StatelessWidget {
   Widget build(BuildContext context) {
     if (customImageWidget != null) {
       return ClipRRect(
-        borderRadius: BorderRadius.all(Radius.circular(this.cornerRadius ?? 8)),
+        borderRadius: BorderRadius.all(Radius.circular(this.cornerRadius ?? 0)),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: GestureDetector(
-          onTap: this.onPressed,
+          onTap: this.onTap,
+          onDoubleTap: this.onDoubleTap,
+          onLongPress: this.onLongPress,
           child: Container(
-            color: Colors.red,
-            constraints: BoxConstraints(
-              minWidth: double.infinity,
-              minHeight: double.infinity,
-            ),
+            width: width,
+            height: height,
+            // color: Colors.red,
+            // decoration: BoxDecoration(
+            //   image: DecorationImage(
+            //     image: Image.file(File(imagePath)).image,
+            //     fit: BoxFit.cover,
+            //   ),
+            // ),
+            // constraints: BoxConstraints(
+            //   minWidth: double.infinity,
+            //   minHeight: double.infinity,
+            // ),
             child: Stack(
               children: [
-                customImageWidget,
-                if (this.message != null && this.message.isNotEmpty)
+                customImageWidget!,
+                if (this.message != null && this.message!.isNotEmpty)
                   Positioned(
                     right: 5,
                     top: 5,
@@ -52,12 +77,14 @@ class CQImageBaseGridCell extends StatelessWidget {
     }
 
     return CJBGImageWidget(
-      onPressed: this.onPressed,
-      backgroundImage: this.imageProvider,
+      onTap: this.onTap,
+      onDoubleTap: this.onDoubleTap,
+      onLongPress: this.onLongPress,
+      backgroundImage: this.imageProvider!,
       cornerRadius: 10,
       child: Stack(
         children: [
-          if (this.message != null && this.message.isNotEmpty)
+          if (this.message != null && this.message!.isNotEmpty)
             Positioned(
               right: 5,
               top: 5,

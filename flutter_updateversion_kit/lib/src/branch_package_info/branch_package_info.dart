@@ -31,19 +31,19 @@ class BranchPackageInfo {
   final List historyVersionMaps; // 线上版本记录数组
 
   BranchPackageInfo({
-    this.appName,
-    this.packageName,
-    this.version,
-    this.buildNumber,
-    this.buildCreateTime,
-    this.brancesRecordTime,
-    this.buildBranceName,
-    this.buildBranceFeature,
-    this.buildDefaultEnv,
-    this.featureBranchMaps,
-    this.nocodeBranceMaps,
-    this.historyRecordTime,
-    this.historyVersionMaps,
+    required this.appName,
+    required this.packageName,
+    required this.version,
+    required this.buildNumber,
+    required this.buildCreateTime,
+    required this.brancesRecordTime,
+    required this.buildBranceName,
+    required this.buildBranceFeature,
+    required this.buildDefaultEnv,
+    required this.featureBranchMaps,
+    required this.nocodeBranceMaps,
+    required this.historyRecordTime,
+    required this.historyVersionMaps,
   });
 
   static BranchPackageInfo nullPackageInfo = BranchPackageInfo(
@@ -103,13 +103,11 @@ class BranchPackageInfo {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     // version:1.02.25/development_1.0.0_fix_abcdef
     // iOS bulidNumber:1022 \ Android versionCode:11021022
-    // 此包的版本及来源分支：
-    List<String> versionComponents = packageInfo.version.split('/');
-    String realVersion = versionComponents[0];
+    // 此包的版本：
+    String realVersion = packageInfo.version;
     String buildDefaultEnv = '';
     // 此包的来源分支
-    String fromBranceName =
-        versionComponents.length > 1 ? versionComponents[1] : '';
+    String fromBranceName = 'unkonw';
 
     String branceFeature = '';
     // DefaultAssetBundle.of();
@@ -135,7 +133,7 @@ class BranchPackageInfo {
         fromBranceName = data['package_from_brance'];
         // 所有分支信息
         brancesRecordTime = data['brances_record_time'];
-        Map<String, dynamic> currentBranceMap;
+        Map<String, dynamic>? currentBranceMap;
         featureBrances = data['feature_brances'];
         nocodeBrances = data['nocode_brances'];
         if (currentBranceMap == null) {
@@ -183,7 +181,7 @@ class BranchPackageInfo {
         bulidMonth = bulidMMdd.substring(0, 2);
         bulidDay = bulidMMdd.substring(2, 4);
       } else {
-        List<String> realVersionComponents = realVersion.split('.');
+        List<String> realVersionComponents = packageInfo.version.split('.');
         bulidMonth = realVersionComponents[1];
         bulidDay = realVersionComponents[2];
       }
@@ -200,7 +198,7 @@ class BranchPackageInfo {
     return BranchPackageInfo(
       appName: packageInfo.appName,
       packageName: packageInfo.packageName,
-      version: realVersion,
+      version: packageInfo.version,
       buildNumber: packageInfo.buildNumber,
       buildBranceName: fromBranceName,
       buildCreateTime: buildCreateTime,

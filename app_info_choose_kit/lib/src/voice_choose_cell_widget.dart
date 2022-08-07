@@ -10,13 +10,17 @@ import './voice_util.dart';
 import './voice_choose_tag_widget.dart';
 
 class VoiceChoooseCellWidget extends StatefulWidget {
+  final double leftRightPadding;
   final VoiceBean voiceBean;
   final void Function(VoiceBean bVoiceBean) valueChangeBlock;
+  final bool showIconExistContent;
 
   VoiceChoooseCellWidget({
     Key key,
+    this.leftRightPadding,
     @required this.voiceBean,
     @required this.valueChangeBlock,
+    this.showIconExistContent = true,
   }) : super(key: key);
 
   @override
@@ -39,7 +43,8 @@ class _VoiceChoooseCellWidgetState extends State<VoiceChoooseCellWidget> {
   Widget build(BuildContext context) {
     bool hasContent = _voiceBean != null;
 
-    return BJHTitleCommonValueWithHolderTableViewCell(
+    return ImageTitleCommonValueWithHolderTableViewCell(
+      leftRightPadding: widget.leftRightPadding,
       height: 52.h_pt_cj,
       title: "语音",
       imageProvider: AssetImage(
@@ -50,20 +55,32 @@ class _VoiceChoooseCellWidgetState extends State<VoiceChoooseCellWidget> {
         if (hasContent == false) {
           return null;
         }
-        return VoiceChoooseTagWidget(
-          voiceBean: _voiceBean,
-          valueChangeBlock: (bVoiceBean) {
-            _voiceBean = bVoiceBean;
-            if (widget.valueChangeBlock != null) {
-              widget.valueChangeBlock(_voiceBean);
-            }
+        // 包一层Row，防止被里面的视图被拉伸
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            VoiceChoooseTagWidget(
+              showIconExistContent: widget.showIconExistContent,
+              voiceBean: _voiceBean,
+              valueChangeBlock: (bVoiceBean) {
+                _voiceBean = bVoiceBean;
+                if (widget.valueChangeBlock != null) {
+                  widget.valueChangeBlock(_voiceBean);
+                }
 
-            // setState(() {});
-          },
+                // setState(() {});
+              },
+            )
+          ],
         );
       },
       valuePlaceHodler: '点击录制',
-      clickCellCallback: (section, row, {bIsLongPress}) async {
+      onTapCell: ({int section, int row}) async {
+        bool hasContent = _voiceBean != null;
+        if (hasContent) {
+          return;
+        }
         await VoiceUtil.addVoice(
           context,
           valueChangeBlock: (bVoiceBean) {
@@ -77,6 +94,9 @@ class _VoiceChoooseCellWidgetState extends State<VoiceChoooseCellWidget> {
         );
         print("add Voice");
       },
+      arrowImageType: _voiceBean != null
+          ? TableViewCellArrowImageType.none
+          : TableViewCellArrowImageType.arrowRight,
     );
   }
 

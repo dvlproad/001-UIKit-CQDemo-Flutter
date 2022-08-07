@@ -25,8 +25,6 @@ class EnvWidget extends StatefulWidget {
 
 class _EnvWidgetState extends State<EnvWidget> {
   BranchPackageInfo packageInfo;
-  PackageTargetModel _packageTargetModel;
-  TSEnvNetworkModel _selectedNetworkModel;
 
   @override
   void dispose() {
@@ -45,10 +43,6 @@ class _EnvWidgetState extends State<EnvWidget> {
   // 获取版本号
   _getVersion() async {
     packageInfo = await BranchPackageInfo.fromPlatform();
-
-    _selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
-    _packageTargetModel =
-        PackageTargetPageDataManager().selectedPackageTargetModel;
 
     setState(() {});
   }
@@ -108,7 +102,9 @@ class _EnvWidgetState extends State<EnvWidget> {
   }
 
   Widget _devtool_env_cell(BuildContext context) {
-    if (_selectedNetworkModel == null) {
+    TSEnvNetworkModel selectedNetworkModel =
+        NetworkPageDataManager().selectedNetworkModel;
+    if (selectedNetworkModel == null) {
       return Container();
       throw Exception(
           '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
@@ -116,8 +112,8 @@ class _EnvWidgetState extends State<EnvWidget> {
     return ImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换环境",
-      textValue: _selectedNetworkModel.name,
-      textSubValue: _selectedNetworkModel.apiHost,
+      textValue: selectedNetworkModel.name,
+      textSubValue: selectedNetworkModel.apiHost,
       onTap: () {
         PackageEnvironmentUtil.checkShouldResetNetwork(
           goChangeHandle: () {
@@ -132,10 +128,13 @@ class _EnvWidgetState extends State<EnvWidget> {
 
   /// 更换包的上传位置(内测pgyer、公测testFlight)
   Widget _change_packageUploadTarget_cell(BuildContext context) {
+    PackageTargetModel packageTargetModel =
+        PackageTargetPageDataManager().selectedPackageTargetModel;
+
     return ImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换内外测",
-      textValue: _packageTargetModel?.name ?? '',
+      textValue: packageTargetModel.name,
       textSubValue: '公测与蒲公英版本检测调用方法不一样而已',
       onTap: () {
         AlertUtil.showCancelOKAlert(

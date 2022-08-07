@@ -5,14 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart'
     show StateLoadingWidget;
 
+import './lifecycle_base_page.dart';
 import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
 // import '../pagetype_error/state_error_widget.dart';
 // import '../pagetype_nodata/nodata_widget.dart';
 
+import 'package:flutter_error_catch/flutter_error_catch.dart';
+
 //class BJHBasePage extends StatefulWidget {
-abstract class BJHBasePage extends StatefulWidget {
+abstract class BJHBasePage extends LifeCyclePage {
   BJHBasePage({
     Key key,
   }) : super(key: key);
@@ -27,8 +30,8 @@ abstract class BJHBasePage extends StatefulWidget {
 }
 
 //class BJHBasePageState extends State<BJHBasePage> {
-abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
-    with AutomaticKeepAliveClientMixin {
+abstract class BJHBasePageState<V extends BJHBasePage>
+    extends LifeCycleBasePageState<V> with AutomaticKeepAliveClientMixin {
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
@@ -45,6 +48,25 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void viewDidAppear(AppearBecause appearBecause) {
+    String routeClassString = widget.runtimeType.toString();
+
+    String currentRoutePath;
+    ModalRoute route = ModalRoute.of(context);
+    if (route != null) {
+      currentRoutePath = route.settings.name;
+    }
+
+    AppCatchError.currentPageClassString = routeClassString;
+    AppCatchError.currentPageRoutePath = currentRoutePath;
   }
 
   @override
@@ -68,8 +90,23 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
             resizeToAvoidBottomInset: resizeToAvoidBottomInset(),
             backgroundColor: Colors.transparent,
             appBar: appBar(),
-            body: _bodyWidget(context),
+            body: shouldCustomOnPressed != true
+                ? _bodyWidget(context)
+                : WillPopScope(
+                    onWillPop: () => customOnPressedBack(),
+                    child: _bodyWidget(context),
+                  ),
           );
+  }
+
+  /// 是否要自定义导航栏上返回按钮的事件(自定义的话会自动失去侧滑返回)
+  bool get shouldCustomOnPressed {
+    return false;
+  }
+
+  /// 自定义导航栏上返回按钮的事件(只有当 shouldCustomOnPressed 为true的时候才会调用到此方法)，返回值为是否可以退出当前页面(默认true可以)
+  Future<bool> customOnPressedBack() async {
+    return true;
   }
 
   // 是否允许键盘弹起改变布局
@@ -104,7 +141,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     return 0; // 默认0
   }
 
-  // 底部吸附视图
+  /// 底部吸附视图
   Widget bottomAdsorbWidget(BuildContext context, double screenBottomHeight) {
     return null;
     // return Container(
@@ -120,22 +157,17 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
     return false;
   }
 
-  // 背景色（如果通过 backgroundWidget 设置背景视图，则此方法会失效）
-  Color backgroundColor() {
-    return Color(0xFFF0F0F0);
-  }
-
   // 背景视图(常用来设置背景图片)
   Widget backgroundWidget(BuildContext context) {
     // 设置背景色
     return Container(
-      color: backgroundColor() ?? Color(0xFFF7F7F7),
+      color: Color(0xFFF7F7F7),
     );
 
     // eg1:设置铺满的背景图片
     // return Container(
     //   alignment: Alignment.topCenter,
-    //   //color: Colors.yellow,
+    //   color: const Color(0xFFF7F7F7),
     //   constraints: const BoxConstraints(
     //     minWidth: double.infinity,
     //     minHeight: double.infinity,
@@ -282,7 +314,7 @@ abstract class BJHBasePageState<V extends BJHBasePage> extends State<V>
   }
 
   /// 获取当前状态(如网络异常时候，存在在导航栏上的右边的那些视图是要禁止点击的)
-  WidgetType getCurrentWidgetType() {
+  WidgetType get currentWidgetType {
     return _currentWidgetType;
   }
 

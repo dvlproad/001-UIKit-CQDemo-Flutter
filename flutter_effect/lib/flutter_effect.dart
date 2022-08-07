@@ -2,10 +2,13 @@
  * @Author: dvlproad
  * @Date: 2021-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 12:41:29
+ * @LastEditTime: 2022-05-13 16:03:56
  * @Description: 页面框架
  */
 library flutter_effect;
+
+export './src/util/stack_trace_util.dart';
+export './src/basepage_extends/lifecycle_base_page.dart';
 
 // pagetype_nodata:无数据视图组件
 export './src/pagetype_nodata/empty_imageBGForText_widget.dart';

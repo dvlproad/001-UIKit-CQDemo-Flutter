@@ -4,10 +4,10 @@ import '../hud/loading_widget.dart';
 
 class RefreshHeader extends Header {
   /// Key
-  final Key key;
+  final Key? key;
 
   /// 方位
-  final AlignmentGeometry alignment;
+  final AlignmentGeometry? alignment;
 
   /// 背景颜色
   final Color bgColor;
@@ -15,44 +15,38 @@ class RefreshHeader extends Header {
   RefreshHeader({
     extent = 60.0,
     triggerDistance = 70.0,
-    float = false,
+    bool float = false,
     completeDuration = const Duration(seconds: 1),
     enableInfiniteRefresh = false,
     enableHapticFeedback = true,
     this.key,
-    this.alignment,
+    this.alignment, //= AxisDirection.down,
     this.bgColor = Colors.transparent,
   }) : super(
           extent: extent,
           triggerDistance: triggerDistance,
           float: float,
           completeDuration: float
-              ? completeDuration == null
-                  ? Duration(
-                      milliseconds: 400,
-                    )
-                  : completeDuration +
-                      Duration(
-                        milliseconds: 400,
-                      )
-              : completeDuration,
+              ? completeDuration + Duration(milliseconds: 400)
+              : completeDuration + Duration(milliseconds: 0),
           enableInfiniteRefresh: enableInfiniteRefresh,
           enableHapticFeedback: enableHapticFeedback,
         );
 
   @override
   Widget contentBuilder(
-      BuildContext context,
-      RefreshMode refreshState,
-      double pulledExtent,
-      double refreshTriggerPullDistance,
-      double refreshIndicatorExtent,
-      AxisDirection axisDirection,
-      bool float,
-      Duration completeDuration,
-      bool enableInfiniteRefresh,
-      bool success,
-      bool noMore) {
+    BuildContext context,
+    RefreshMode refreshState,
+    double pulledExtent,
+    double refreshTriggerPullDistance,
+    double refreshIndicatorExtent,
+    AxisDirection axisDirection,
+    bool float,
+    Duration? completeDuration,
+    bool enableInfiniteRefresh,
+    bool success,
+    bool noMore,
+  ) {
     return RefreshHeaderWidget(
       key: key,
       classicalHeader: this,
@@ -62,7 +56,7 @@ class RefreshHeader extends Header {
       refreshIndicatorExtent: refreshIndicatorExtent,
       axisDirection: axisDirection,
       float: float,
-      completeDuration: completeDuration,
+      completeDuration: completeDuration ?? const Duration(seconds: 1),
       enableInfiniteRefresh: enableInfiniteRefresh,
       success: success,
       noMore: noMore,
@@ -73,27 +67,27 @@ class RefreshHeader extends Header {
 /// 经典Header组件
 class RefreshHeaderWidget extends StatefulWidget {
   final RefreshHeader classicalHeader;
-  final RefreshMode refreshState;
+  final RefreshMode? refreshState;
   final double pulledExtent;
   final double refreshTriggerPullDistance;
   final double refreshIndicatorExtent;
-  final AxisDirection axisDirection;
+  final AxisDirection? axisDirection;
   final bool float;
   final Duration completeDuration;
-  final bool enableInfiniteRefresh;
-  final bool success;
-  final bool noMore;
+  final bool? enableInfiniteRefresh;
+  final bool? success;
+  final bool? noMore;
 
   RefreshHeaderWidget(
-      {Key key,
+      {Key? key,
       this.refreshState,
-      this.classicalHeader,
-      this.pulledExtent,
-      this.refreshTriggerPullDistance,
-      this.refreshIndicatorExtent,
+      required this.classicalHeader,
+      this.pulledExtent = 0.0,
+      this.refreshTriggerPullDistance = 0.0,
+      this.refreshIndicatorExtent = 0.0,
       this.axisDirection,
-      this.float,
-      this.completeDuration,
+      this.float = false,
+      required this.completeDuration,
       this.enableInfiniteRefresh,
       this.success,
       this.noMore})
@@ -139,11 +133,11 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
     }
   }
 
-  AnimationController _floatBackController;
-  Animation<double> _floatBackAnimation;
+  late AnimationController _floatBackController;
+  late Animation<double> _floatBackAnimation;
 
   // 浮动时,收起距离
-  double _floatBackDistance;
+  double? _floatBackDistance;
 
   @override
   void initState() {
@@ -202,37 +196,38 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
               : isReverse
                   ? _floatBackDistance == null
                       ? 0.0
-                      : (widget.refreshIndicatorExtent - _floatBackDistance)
+                      : (widget.refreshIndicatorExtent - _floatBackDistance!)
                   : null,
           bottom: !isVertical
               ? 0.0
               : !isReverse
                   ? _floatBackDistance == null
                       ? 0.0
-                      : (widget.refreshIndicatorExtent - _floatBackDistance)
+                      : (widget.refreshIndicatorExtent - _floatBackDistance!)
                   : null,
           left: isVertical
               ? 0.0
               : isReverse
                   ? _floatBackDistance == null
                       ? 0.0
-                      : (widget.refreshIndicatorExtent - _floatBackDistance)
+                      : (widget.refreshIndicatorExtent - _floatBackDistance!)
                   : null,
           right: isVertical
               ? 0.0
               : !isReverse
                   ? _floatBackDistance == null
                       ? 0.0
-                      : (widget.refreshIndicatorExtent - _floatBackDistance)
+                      : (widget.refreshIndicatorExtent - _floatBackDistance!)
                   : null,
           child: Container(
-            alignment: widget.classicalHeader.alignment ?? isVertical
-                ? isReverse
-                    ? Alignment.topCenter
-                    : Alignment.bottomCenter
-                : !isReverse
-                    ? Alignment.centerRight
-                    : Alignment.centerLeft,
+            alignment:
+                (widget.classicalHeader.alignment == null ? isVertical : true)
+                    ? isReverse
+                        ? Alignment.topCenter
+                        : Alignment.bottomCenter
+                    : !isReverse
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
             width: isVertical
                 ? double.infinity
                 : _floatBackDistance == null

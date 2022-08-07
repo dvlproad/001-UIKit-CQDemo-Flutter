@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
-    show BJHTitleTextValueCell, TableViewCellArrowImageType;
+    show ImageTitleTextValueCell, TableViewCellArrowImageType;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './dev_branch_bean.dart';
 
@@ -39,7 +39,7 @@ class _DevBranchCellState extends State<DevBranchCell> {
         color: Colors.white,
         child: Column(
           children: [
-            BJHTitleTextValueCell(
+            ImageTitleTextValueCell(
               height: 40,
               title: _devBranchBean.name,
               textValue: '',
@@ -98,7 +98,7 @@ class _DevBranchCellState extends State<DevBranchCell> {
     if (textValue == null || textValue.isEmpty) {
       textValue = '未标明';
     }
-    // return BJHTitleTextValueCell(
+    // return ImageTitleTextValueCell(
     //   title: title,
     //   textValue: textValue,
     //   textValueFontSize: textValueFontSize ?? 12,

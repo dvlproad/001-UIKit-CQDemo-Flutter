@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-27 16:50:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-04-27 18:27:42
+ * @Description: 位置选择tag视图
+ */
 import 'package:flutter/material.dart';
 import 'package:app_map/app_map.dart';
 
@@ -6,6 +13,7 @@ import './base_tag_widget.dart';
 
 class LocationChooseTagWidget extends StatefulWidget {
   LocationBean locationBean;
+
   LocationChooseTagWidget({
     Key key,
     this.locationBean,

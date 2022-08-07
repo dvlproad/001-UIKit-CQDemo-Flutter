@@ -1,5 +1,12 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-07-07 18:51:21
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-08 14:10:40
+ * @Description: 
+ */
 class VersionManager {
-  bool _firstShow;
+  bool _firstShow = false;
 
   static final VersionManager _instance = VersionManager._internal();
   factory VersionManager() => _instance;

@@ -48,7 +48,12 @@ class _CQImageDeleteAddPickListState extends State<CQImageDeleteAddPickList> {
   Widget build(BuildContext context) {
     return CQImagesAddDeleteList(
       imageCount: _imageOrPhotoModels.length,
-      itemImageContentBuilder: ({context, imageIndex}) {
+      itemImageContentBuilder: ({
+        @required BuildContext context,
+        @required int imageIndex,
+        @required double itemWidth,
+        @required double itemHeight,
+      }) {
         dynamic imageOrPhotoModel = _imageOrPhotoModels[imageIndex];
 
         return CQImageOrPhotoGridCell(

@@ -13,9 +13,8 @@ dependencies:
     sdk: flutter
 
   cached_network_image: any
-  
-  flutter_easyrefresh: any
-  pull_to_refresh: any
+  flutter_error_catch:
+    path: ../flutter_error_catch/
 
   flutter_baseui_kit:     # 为了引入 ThemeBorderButton
     path: ../flutter_baseui_kit/ 
