@@ -9,15 +9,15 @@ import './components/alert_container.dart';
  * '我知道了' AlertView
  */
 class IKnowTextInputAlertView extends StatelessWidget {
-  final String title;
-  final String placeholder;
-  final String inputText;
+  final String? title;
+  final String? placeholder;
+  final String? inputText;
 
   final String iKnowTitle;
-  final Function iKnowHandle;
+  final Function? iKnowHandle;
 
   IKnowTextInputAlertView({
-    Key key,
+    Key? key,
     this.title,
     this.placeholder,
     this.inputText,
@@ -38,7 +38,7 @@ class IKnowTextInputAlertView extends StatelessWidget {
         iKnowHandle: () {
           // print("点击Alert按钮:'我知道了'");
           if (this.iKnowHandle != null) {
-            this.iKnowHandle();
+            this.iKnowHandle!();
           }
         },
       ),
@@ -50,18 +50,18 @@ class IKnowTextInputAlertView extends StatelessWidget {
  * '取消' + '确定' AlertView
  */
 class CancelOKTextInputAlertView extends StatelessWidget {
-  final String title;
-  final String placeholder;
-  final String inputText;
+  final String? title;
+  final String? placeholder;
+  final String? inputText;
 
   final String cancelTitle;
-  final Function cancelHandle;
+  final Function? cancelHandle;
 
   final String okTitle;
-  final Function okHandle;
+  final Function? okHandle;
 
   CancelOKTextInputAlertView({
-    Key key,
+    Key? key,
     this.title,
     this.placeholder,
     this.inputText,
@@ -84,14 +84,14 @@ class CancelOKTextInputAlertView extends StatelessWidget {
         cancelHandle: () {
           // print("点击Alert按钮:'取消'");
           if (this.cancelHandle != null) {
-            this.cancelHandle();
+            this.cancelHandle!();
           }
         },
         okTitle: this.okTitle,
         okHandle: () {
           // print("点击Alert按钮:'确认'");
           if (this.okHandle != null) {
-            this.okHandle();
+            this.okHandle!();
           }
         },
       ),
@@ -101,15 +101,15 @@ class CancelOKTextInputAlertView extends StatelessWidget {
 
 /* Alert 的 title 和 textInput 样式视图 */
 class AlertTitleTextInputWidget extends StatelessWidget {
-  final String title;
-  final String placeholder;
-  final String inputText;
+  final String? title;
+  final String? placeholder;
+  final String? inputText;
 
   const AlertTitleTextInputWidget({
-    Key key,
-    this.title = '',
-    this.placeholder = '',
-    this.inputText = '',
+    Key? key,
+    this.title,
+    this.placeholder,
+    this.inputText,
   }) : super(key: key);
 
   @override
@@ -130,7 +130,7 @@ class AlertTitleTextInputWidget extends StatelessWidget {
 
   Widget _titleWidget() {
     return Text(
-      this.title,
+      this.title ?? '',
       style: TextStyle(
         fontSize: 18,
         color: Colors.black,

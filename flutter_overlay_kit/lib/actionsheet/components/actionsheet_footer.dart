@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class PickerFooter extends StatefulWidget {
-  final String cancelText;
-  final void Function() onCancel;
+  final String? cancelText;
+  final void Function()? onCancel;
 
   PickerFooter({
-    Key key,
+    Key? key,
     this.cancelText,
     this.onCancel,
   }) : super(key: key);

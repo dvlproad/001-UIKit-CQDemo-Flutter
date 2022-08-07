@@ -1,24 +1,35 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-07-25 19:38:18
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-04 01:24:31
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_baseui_kit/base-uikit/button/textbutton.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import './bottomwidget.dart';
 import './components/actionsheet_item.dart';
 
 class ActionSheetWidget extends StatefulWidget {
-  final String title;
-  final void Function() onCancel;
+  final String? title;
+  final TextStyle? titleTextStyle;
+  final void Function()? onCancel;
   final void Function(int selectedIndex) onConfirm;
 
   final List<String> itemTitles;
   final int currentSelectedIndex;
-  final void Function(int selectedIndex) onItemTap;
+  final void Function(int selectedIndex)? onItemTap;
 
   ActionSheetWidget({
-    Key key,
+    Key? key,
     this.title,
+    this.titleTextStyle,
     this.onCancel,
-    @required this.onConfirm,
-    @required this.itemTitles,
+    required this.onConfirm,
+    required this.itemTitles,
     this.onItemTap,
     this.currentSelectedIndex = 0,
   }) : super(key: key);
@@ -31,12 +42,12 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
   double itemExtent = 40;
   double extralHeight = 30; // 为了让滚轮能显示，额外自己添加的高度
 
-  int _selectedIndex;
+  late int _selectedIndex;
   @override
   void initState() {
     super.initState();
 
-    _selectedIndex = widget.currentSelectedIndex ?? 0;
+    _selectedIndex = widget.currentSelectedIndex;
   }
 
   @override
@@ -45,6 +56,7 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
 
     return BottomWidget(
       title: widget.title,
+      titleTextStyle: widget.titleTextStyle,
       middleContentWidget: _itemsWidget_useList,
       middleContentWidgetHeight: itemWidgetsHeight,
       onCancel: widget.onCancel,
@@ -63,18 +75,24 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
       itemCount: widget.itemTitles.length,
       itemExtent: itemExtent,
       itemBuilder: (BuildContext context, int index) {
-        return _createItem(index);
+        return _renderItem(index);
       },
     );
   }
 
-  Widget _createItem(int index) {
+  Widget _renderItem(int index) {
     String title = widget.itemTitles[index];
-    return CJStateTextButton(
-      normalTitle: title ?? "",
+    return ThemeStateButton(
+      normalTitle: title,
+      normalBGColorType: ThemeBGType.white,
+      titleStyle: TextStyle(
+        fontFamily: 'PingFang SC',
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
+      ),
       onPressed: () {
         if (widget.onItemTap != null) {
-          widget.onItemTap(index);
+          widget.onItemTap!(index);
         }
       },
     );

@@ -1,14 +1,20 @@
-/*  基础的 MessageAlert 部分 */
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-04 01:03:14
+ * @Description: 基础的 MessageAlert 部分
+ */
 import 'package:flutter/material.dart';
 
 class CQAlertContainer extends StatelessWidget {
   final Widget contentWidget;
-  final double buttonsWidgetHeight;
-  final Widget buttonsWidget;
+  final double? buttonsWidgetHeight;
+  final Widget? buttonsWidget;
 
   CQAlertContainer({
-    Key key,
-    this.contentWidget,
+    Key? key,
+    required this.contentWidget,
     this.buttonsWidgetHeight,
     this.buttonsWidget,
   });

@@ -5,19 +5,21 @@ import './components/flex_width_buttons.dart';
 import './components/alert_container.dart';
 
 class CJBaseMessageAlertView extends StatelessWidget {
-  final String title;
-  final String message;
+  final String? title;
+  final String? message;
+  final TextAlign? messageAlign;
   final bool isCloseButton; // button按钮是否是紧密的，如果是的话底部间隔是0
 
   CJBaseMessageAlertView({
-    Key key,
+    Key? key,
     this.title,
     this.message,
+    this.messageAlign,
     this.isCloseButton = false,
   });
 
   Widget renderButtons() {
-    return null;
+    return Container();
   }
 
   @override
@@ -55,7 +57,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       }
     }
 
-    Widget alertTitleComponent = null;
+    Widget? alertTitleComponent = null;
     if (this.title != null) {
       alertTitleComponent = Container(
         margin: EdgeInsets.only(top: alertMarginVerticals[titleVerticalIndex]),
@@ -72,7 +74,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       );
     }
 
-    Widget alertMessageComponent = null;
+    Widget? alertMessageComponent = null;
     if (this.message != null) {
       alertMessageComponent = Container(
         margin:
@@ -80,6 +82,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
         padding: EdgeInsets.only(left: 20, right: 20),
         child: Text(
           this.message ?? '',
+          textAlign: messageAlign,
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey[600],
@@ -125,15 +128,17 @@ class IKnowMessageAlertView extends CJBaseMessageAlertView {
   final Function iKnowHandle;
 
   IKnowMessageAlertView({
-    Key key,
-    String title,
-    String message,
+    Key? key,
+    String? title,
+    String? message,
+    TextAlign? messageAlign,
     this.iKnowTitle = '我知道了',
-    this.iKnowHandle,
+    required this.iKnowHandle,
   }) : super(
           key: key,
           title: title,
           message: message,
+          messageAlign: messageAlign,
         );
 
   @override
@@ -155,23 +160,26 @@ class IKnowMessageAlertView extends CJBaseMessageAlertView {
  */
 class CancelOKMessageAlertView extends CJBaseMessageAlertView {
   final String cancelTitle;
-  final Function cancelHandle;
+  final Function? cancelHandle;
 
   final String okTitle;
-  final Function okHandle;
+  final Function? okHandle;
 
   CancelOKMessageAlertView({
-    Key key,
-    String title,
-    String message,
+    Key? key,
+    String? title,
+    String? message,
+    TextAlign? messageAlign,
     this.cancelTitle = '取消',
     this.cancelHandle,
     this.okTitle = '确认',
     this.okHandle,
-  }) : super(
+  })  : assert(title != null || message != null), // 不同同时为空
+        super(
           key: key,
           title: title,
           message: message,
+          messageAlign: messageAlign,
         );
 
   @override
@@ -181,14 +189,14 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
       cancelHandle: () {
         // print("点击Alert按钮:'取消'");
         if (this.cancelHandle != null) {
-          this.cancelHandle();
+          this.cancelHandle!();
         }
       },
       okTitle: this.okTitle,
       okHandle: () {
         // print("点击Alert按钮:'确认'");
         if (this.okHandle != null) {
-          this.okHandle();
+          this.okHandle!();
         }
       },
     );
@@ -203,15 +211,17 @@ class FlexWidthButtonsMessageAlertView extends CJBaseMessageAlertView {
   final void Function(int buttonIndex) onPressedButton;
 
   FlexWidthButtonsMessageAlertView({
-    Key key,
-    String title,
-    String message,
-    this.buttonTitles,
-    this.onPressedButton,
+    Key? key,
+    String? title,
+    String? message,
+    TextAlign? messageAlign,
+    required this.buttonTitles,
+    required this.onPressedButton,
   }) : super(
           key: key,
           title: title,
           message: message,
+          messageAlign: messageAlign,
           isCloseButton: true,
         );
 

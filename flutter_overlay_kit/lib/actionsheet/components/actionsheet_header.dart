@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class PickerHeader extends StatefulWidget {
-  final double height;
-  final String title;
+  final double? height;
+  final String? title;
+  final TextStyle? titleTextStyle;
   final String cancelText;
   final String confirmText;
-  final void Function() onCancel;
-  final void Function() onConfirm;
+  final void Function()? onCancel;
+  final void Function()? onConfirm;
 
   PickerHeader({
-    Key key,
+    Key? key,
     this.height,
     this.title,
+    this.titleTextStyle,
     this.cancelText = '取消',
     this.confirmText = '确定',
     this.onCancel,
@@ -85,12 +87,13 @@ class _PickerHeaderState extends State<PickerHeader> {
       child: Center(
         child: Text(
           widget.title ?? '',
-          style: TextStyle(
-            color: Color(0xFF222222),
-            fontFamily: 'PingFang SC',
-            fontSize: 15.0,
-            fontWeight: FontWeight.bold,
-          ),
+          style: widget.titleTextStyle ??
+              TextStyle(
+                color: Color(0xFF222222),
+                fontFamily: 'PingFang SC',
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+              ),
         ),
       ),
     );

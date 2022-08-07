@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
  */
 class AlertCancelOKCloseButtons extends StatelessWidget {
   final String cancelTitle;
-  final Function cancelHandle;
+  final Function? cancelHandle;
   // final Void Function(Void) cancelHandle;
 
   final String okTitle;
-  final Function okHandle;
+  final Function? okHandle;
 
   AlertCancelOKCloseButtons({
-    Key key,
+    Key? key,
     this.cancelTitle = '取消',
     this.cancelHandle,
     this.okTitle = '确认',
@@ -41,7 +41,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
             // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
             onPressed: () {
               if (this.cancelHandle != null) {
-                this.cancelHandle();
+                this.cancelHandle!();
               }
             },
             child: Text(
@@ -64,7 +64,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
             onPressed: () {
               Future.delayed(Duration(milliseconds: 100), () {
                 if (this.okHandle != null) {
-                  this.okHandle();
+                  this.okHandle!();
                 }
               });
             },
@@ -88,9 +88,9 @@ class AlertIKnowCloseButton extends StatelessWidget {
   final Function iKnowHandle;
 
   AlertIKnowCloseButton({
-    Key key,
+    Key? key,
     this.iKnowTitle = '我知道了',
-    this.iKnowHandle,
+    required this.iKnowHandle,
   }) : super(key: key);
 
   @override

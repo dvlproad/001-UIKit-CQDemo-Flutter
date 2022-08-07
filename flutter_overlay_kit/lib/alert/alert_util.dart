@@ -1,16 +1,26 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-07-25 19:38:18
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-04 01:11:32
+ * @Description: Alert弹窗工具类
+ */
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import './message_alert_view.dart';
 
 class AlertUtil {
   // 我知道了
-  static showIKnowAlert(
-    @required BuildContext context, {
-    String title,
-    String message,
-    void Function() iKnowHandle,
+  static Future showIKnowAlert(
+    BuildContext context, {
+    bool barrierDismissible = false,
+    String? title,
+    String? message,
+    void Function()? iKnowHandle,
   }) {
-    showAlert(
+    return showAlert(
       context,
+      barrierDismissible: barrierDismissible,
       alertViewBulider: (context) {
         return IKnowMessageAlertView(
           title: title,
@@ -27,32 +37,60 @@ class AlertUtil {
     );
   }
 
-  // 取消 + 确定
-  static showCancelOKAlert({
-    @required BuildContext context,
-    String title,
-    String message,
-    String cancelTitle,
-    Function() cancelHandle,
-    String okTitle,
-    @required Function() okHandle,
+  // 可点击背景关闭
+  static Future showTwoActionAlert({
+    required BuildContext context,
+    String? title,
+    String? message,
+    String? cancelTitle,
+    Function()? cancelHandle,
+    String? okTitle,
+    required Function() okHandle,
   }) {
-    showAlert(
+    return showCancelOKAlert(
+      context: context,
+      barrierDismissible: true,
+      title: title,
+      message: message,
+      cancelTitle: cancelTitle,
+      cancelHandle: cancelHandle,
+      okTitle: okTitle,
+      okHandle: okHandle,
+    );
+  }
+
+  // 取消 + 确定
+  static Future showCancelOKAlert({
+    required BuildContext context,
+    bool barrierDismissible = false,
+    String? title,
+    String? message,
+    TextAlign? messageAlign,
+    String? cancelTitle,
+    Function()? cancelHandle,
+    String? okTitle,
+    required Function() okHandle,
+  }) {
+    return showAlert(
       context,
+      barrierDismissible: barrierDismissible,
       alertViewBulider: (context) {
         return CancelOKMessageAlertView(
           title: title,
           message: message,
+          messageAlign: messageAlign,
           cancelTitle: cancelTitle ?? "取消",
           cancelHandle: () {
-            Navigator.pop(context);
+            Navigator.of(context).pop();
+            // Navigator.pop(context);
             if (cancelHandle != null) {
               cancelHandle();
             }
           },
           okTitle: okTitle ?? "确定",
           okHandle: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            Navigator.of(context).pop();
             if (okHandle != null) {
               okHandle();
             }
@@ -63,15 +101,17 @@ class AlertUtil {
   }
 
   // '等宽均分的 Buttons' AlertView
-  static showFlexWidthButtonsAlert({
-    @required BuildContext context,
-    String title,
-    String message,
-    List<String> buttonTitles,
-    void Function(int buttonIndex) onPressedButton,
+  static Future showFlexWidthButtonsAlert({
+    required BuildContext context,
+    bool barrierDismissible = false,
+    String? title,
+    String? message,
+    required List<String> buttonTitles,
+    required void Function(int buttonIndex) onPressedButton,
   }) {
-    showAlert(
+    return showAlert(
       context,
+      barrierDismissible: barrierDismissible,
       alertViewBulider: (context) {
         return FlexWidthButtonsMessageAlertView(
           title: title,
@@ -83,13 +123,14 @@ class AlertUtil {
     );
   }
 
-  static void showAlert(
-    @required BuildContext context, {
-    @required Widget Function(BuildContext context) alertViewBulider,
+  static Future showAlert(
+    BuildContext context, {
+    bool barrierDismissible = false,
+    required Widget Function(BuildContext context) alertViewBulider,
   }) {
-    showDialog(
+    return showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: barrierDismissible,
       builder: (_) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -5,22 +5,22 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
  * 有间隔的'取消'+'确定' Buttons
  */
 class AlertdCancelOKSpacedButtons extends StatelessWidget {
-  final height;
+  final double? height;
 
   final String cancelTitle;
-  final Function cancelHandle;
+  final void Function() cancelHandle;
   // final Void Function(Void) cancelHandle;
 
   final String okTitle;
-  final Function okHandle;
+  final void Function() okHandle;
 
   AlertdCancelOKSpacedButtons({
-    Key key,
+    Key? key,
     this.height,
     this.cancelTitle = '取消',
-    this.cancelHandle,
+    required this.cancelHandle,
     this.okTitle = '确认',
-    this.okHandle,
+    required this.okHandle,
   }) : super(key: key);
 
   @override
@@ -82,9 +82,9 @@ class AlertIKnowSpacedButton extends StatelessWidget {
   final Function iKnowHandle;
 
   AlertIKnowSpacedButton({
-    Key key,
+    Key? key,
     this.iKnowTitle = '我知道了',
-    this.iKnowHandle,
+    required this.iKnowHandle,
   }) : super(key: key);
 
   @override

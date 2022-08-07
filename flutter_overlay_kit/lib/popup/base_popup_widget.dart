@@ -6,17 +6,17 @@ import '../flutter_overlay_kit_adapt.dart';
 class BasePopupWidget extends StatefulWidget {
   static double toolbarHeight = 40.h_pt_cj;
 
-  double height;
+  double? height;
 
-  String title;
+  String? title;
   Widget Function(BuildContext bContext) customViewBuilder;
-  Widget Function(BuildContext bContext) bottomButtonBuilder;
+  Widget Function(BuildContext bContext)? bottomButtonBuilder;
 
   BasePopupWidget({
-    Key key,
+    Key? key,
     this.height,
-    @required this.title,
-    @required this.customViewBuilder, // 由 Expanded 包裹，如果高度不够，会自动被拉伸
+    this.title,
+    required this.customViewBuilder, // 由 Expanded 包裹，如果高度不够，会自动被拉伸
     this.bottomButtonBuilder,
   })  : assert(customViewBuilder != null),
         super(key: key);
@@ -48,12 +48,15 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
       automaticallyImplyLeading: false,
       title: widget.title ?? '',
       actions: [
-        ToolBarActionWidget(
-          image: AssetImage(
-            'assets/icon_close.png',
-            package: 'flutter_overlay_kit',
+        ToolBarImageActionWidget(
+          image: Image(
+            image: AssetImage(
+              'assets/icon_close.png',
+              package: 'flutter_overlay_kit',
+            ),
+            width: 17.w_pt_cj,
+            fit: BoxFit.cover,
           ),
-          imageWidth: 17.w_pt_cj,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -81,7 +84,7 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
           Expanded(child: widget.customViewBuilder(context)),
           widget.bottomButtonBuilder == null
               ? Container()
-              : widget.bottomButtonBuilder(context),
+              : widget.bottomButtonBuilder!(context),
         ],
       ),
     );
@@ -93,9 +96,9 @@ class BottomPopupButton extends StatelessWidget {
   void Function() onPressedButton;
 
   BottomPopupButton({
-    Key key,
-    @required this.buttonText, // 为默认值null时候，不占位置
-    @required this.onPressedButton,
+    Key? key,
+    required this.buttonText, // 为默认值null时候，不占位置
+    required this.onPressedButton,
   }) : super(key: key);
 
   @override

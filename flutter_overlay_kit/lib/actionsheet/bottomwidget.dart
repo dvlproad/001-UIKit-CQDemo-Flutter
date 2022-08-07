@@ -6,20 +6,22 @@ import './components/actionsheet_header.dart';
 import './components/actionsheet_footer.dart';
 
 class BottomWidget extends StatefulWidget {
-  final String title;
-  final void Function() onCancel;
-  final void Function() onConfirm; // 需要确认操作(需要时候，取消按钮和确认按钮都在顶部；不需要时候，取消按钮在底部)
+  final String? title;
+  final TextStyle? titleTextStyle;
+  final void Function()? onCancel;
+  final void Function()? onConfirm; // 需要确认操作(需要时候，取消按钮和确认按钮都在顶部；不需要时候，取消按钮在底部)
 
   final Widget middleContentWidget;
   final double middleContentWidgetHeight;
 
   BottomWidget({
-    Key key,
+    Key? key,
     this.title,
+    this.titleTextStyle,
     this.onCancel,
     this.onConfirm,
-    @required this.middleContentWidget,
-    @required this.middleContentWidgetHeight,
+    required this.middleContentWidget,
+    required this.middleContentWidgetHeight,
   }) : super(key: key);
 
   @override
@@ -47,12 +49,13 @@ class _BottomWidgetState extends State<BottomWidget> {
     Widget headerWidget = PickerHeader(
       height: headerHeight,
       title: widget.title,
+      titleTextStyle: widget.titleTextStyle,
       cancelText: needConfirmAction ? '取消' : '',
       confirmText: needConfirmAction ? '确定' : '',
       onCancel: widget.onCancel,
       onConfirm: () {
         if (widget.onConfirm != null) {
-          widget.onConfirm();
+          widget.onConfirm!();
         }
       },
     );
@@ -73,7 +76,7 @@ class _BottomWidgetState extends State<BottomWidget> {
         cancelText: '取消',
         onCancel: () {
           if (widget.onCancel != null) {
-            widget.onCancel();
+            widget.onCancel!();
           }
         },
       );

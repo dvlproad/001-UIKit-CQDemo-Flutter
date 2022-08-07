@@ -1,10 +1,18 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-04 00:51:59
+ * @Description: Toast工具类
+ */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastUtil {
   static showMessage(String message) {
     if (message != null && message is String && message.isNotEmpty) {
-      print(message);
+      debugPrint(message);
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
@@ -23,7 +31,7 @@ class ToastUtil {
   }
 
   // 开发中
-  static showDoing({String message}) {
+  static showDoing({String? message}) {
     String lastMessage = '开发中';
     if (message != null) {
       lastMessage = '$lastMessage:$message';
@@ -32,7 +40,7 @@ class ToastUtil {
   }
 
   // 需要产品补充完善需求
-  static showNeedProduct({String message}) {
+  static showNeedProduct({String? message}) {
     String lastMessage = '需要产品补充完善需求';
     if (message != null) {
       lastMessage = '$lastMessage:$message';
@@ -41,7 +49,7 @@ class ToastUtil {
   }
 
   // 需要H5补充url
-  static showNeedH5({String message}) {
+  static showNeedH5({String? message}) {
     String lastMessage = '需要H5补充url';
     if (message != null) {
       lastMessage = '$lastMessage:$message';
