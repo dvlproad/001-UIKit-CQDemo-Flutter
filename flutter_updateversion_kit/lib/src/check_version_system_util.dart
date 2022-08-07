@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 22:41:38
+ * @Description: 
+ */
 import 'package:dio/dio.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'dart:io' show Platform;
@@ -27,8 +34,10 @@ class CheckVersionSystemUtil {
     String appBundleID = packageInfo.packageName;
     String appVersion = packageInfo.version;
     // String channel = await UmengAnalyticsPlugin.getChannel();
-    return await NetworkUtil.getRequestUrl(
+    return await NetworkUtil.requestUrl(
+      Dio(),
       'http://121.41.91.92:3000/mock/28/check_version',
+      requestMethod: RequestMethod.get,
       customParams: {
         "version": appVersion,
         "bundleID": appBundleID,
