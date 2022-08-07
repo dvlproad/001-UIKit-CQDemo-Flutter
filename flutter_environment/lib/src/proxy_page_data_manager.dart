@@ -1,4 +1,5 @@
 // 创建一个单例的Manager类
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import './proxy_page_data_cache.dart';
@@ -6,16 +7,23 @@ import './proxy_page_data_bean.dart';
 export './proxy_page_data_bean.dart';
 
 class ProxyPageDataManager {
-  List<TSEnvProxyModel> _proxyModels;
-  TSEnvProxyModel _selectedProxyModel;
+  bool hasInitCompleter = false;
+  Completer initCompleter = Completer<String>();
 
-  List<TSEnvProxyModel> get proxyModels => _proxyModels;
-  TSEnvProxyModel get selectedProxyModel => _selectedProxyModel;
+  List<TSEnvProxyModel>? _proxyModels;
+  TSEnvProxyModel? _selectedProxyModel;
+
+  Future<List<TSEnvProxyModel>> get proxyModels async {
+    await _getCache();
+    return _proxyModels!;
+  }
+
+  TSEnvProxyModel? get selectedProxyModel => _selectedProxyModel;
 
   // 工厂模式
   factory ProxyPageDataManager() => _getInstance();
   static ProxyPageDataManager get instance => _getInstance();
-  static ProxyPageDataManager _instance;
+  static ProxyPageDataManager? _instance;
   ProxyPageDataManager._internal() {
     // 初始化
     init();
@@ -26,9 +34,9 @@ class ProxyPageDataManager {
   }
 
   // 获取缓存数据
-  void _getCache() async {
-    if (_proxyModels == null || _proxyModels.isEmpty) {
-      _proxyModels = await EnvironmentSharedPreferenceUtil().getProxyList();
+  Future _getCache() async {
+    if (_proxyModels == null || _proxyModels!.isEmpty) {
+      _proxyModels = await ProxyPageDataCacheUtil.getProxyList();
     }
 
     if (_proxyModels == null) {
@@ -40,27 +48,28 @@ class ProxyPageDataManager {
     if (_instance == null) {
       _instance = new ProxyPageDataManager._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   // proxy:获取当前的环境id或环境数据(已选中的要标记check出来)
   Future<Null> getCurrentProxyIdAndModels(
-    @required List<TSEnvProxyModel> proxyModels_whenNull,
-    @required String defaultProxykId,
-    @required bool canUseCacheProxy, // false 则强制使用默认环境
+    List<TSEnvProxyModel> proxyModels_whenNull,
+    String defaultProxykId,
+    bool canUseCacheProxy, // false 则强制使用默认环境
   ) async {
     // 设置 "供切换的"和"默认的" 代理环境
-    List<TSEnvProxyModel> proxyModels = ProxyPageDataManager().proxyModels;
-    if (proxyModels == null || proxyModels?.length == 0) {
-      proxyModels = await EnvironmentSharedPreferenceUtil().getProxyList();
-      if (proxyModels == null || proxyModels?.length == 0) {
+    List<TSEnvProxyModel> proxyModels =
+        await ProxyPageDataManager().proxyModels;
+    if (proxyModels == null || proxyModels.length == 0) {
+      proxyModels = await ProxyPageDataCacheUtil.getProxyList();
+      if (proxyModels == null || proxyModels.length == 0) {
         proxyModels = proxyModels_whenNull;
       }
     }
 
-    String currentProxyId;
+    String? currentProxyId;
     if (canUseCacheProxy == true) {
-      currentProxyId = await EnvironmentSharedPreferenceUtil().getProxykId();
+      currentProxyId = await ProxyPageDataCacheUtil.getProxykId();
 
       if (currentProxyId == null) {
         currentProxyId = defaultProxykId;
@@ -79,7 +88,7 @@ class ProxyPageDataManager {
     }
 
     // 根据 selectedProxyId 获取到 _selectedProxyModel，同时对 ProxyModel 进行是否 check 的标记
-    TSEnvProxyModel selectedProxyModel;
+    late TSEnvProxyModel selectedProxyModel;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
       if (proxyModel.proxyId == currentProxyId) {
@@ -93,20 +102,25 @@ class ProxyPageDataManager {
     _selectedProxyModel = selectedProxyModel;
     _proxyModels = proxyModels;
 
-    EnvironmentSharedPreferenceUtil().setProxykId(currentProxyId);
-    EnvironmentSharedPreferenceUtil().setProxyList(proxyModels);
+    ProxyPageDataCacheUtil.setProxykId(currentProxyId);
+    ProxyPageDataCacheUtil.setProxyList(proxyModels);
+
+    initCompleter.complete('ProxyPageDataManager:初始化完成，此时才可以进行实际代理环境获取');
+    print('ProxyPageDataManager:初始化完成，此时才可以进行实际代理环境获取');
+    hasInitCompleter = true;
   }
 
   // 环境:添加自定义的网络代理，并是否直接选中新添加的
-  TSEnvProxyModel addOrUpdateCustomEnvProxyIp({
-    String proxyName,
-    String proxyIp,
+  void addOrUpdateCustomEnvProxyIp({
+    required String proxyName,
+    String? proxyIp,
     bool selectedNew = true,
   }) {
-    TSEnvProxyModel newProxyModel = TSEnvProxyModel();
-    newProxyModel.proxyId = "proxykId_custom";
-    newProxyModel.name = proxyName;
-    newProxyModel.proxyIp = proxyIp;
+    TSEnvProxyModel newProxyModel = TSEnvProxyModel(
+      proxyId: "proxykId_custom",
+      name: proxyName,
+      proxyIp: proxyIp,
+    );
 
     addOrUpdateEnvProxyModel(
       newProxyModel: newProxyModel,
@@ -116,10 +130,10 @@ class ProxyPageDataManager {
 
   // 环境:修改或新增网络代理，并是否直接选中新添加的
   TSEnvProxyModel addOrUpdateEnvProxyModel({
-    TSEnvProxyModel newProxyModel,
+    required TSEnvProxyModel newProxyModel,
     bool selectedNew = true,
   }) {
-    List<TSEnvProxyModel> proxyModels = _proxyModels;
+    List<TSEnvProxyModel> proxyModels = _proxyModels ?? [];
 
     int proxyIpIndex = -1;
     proxyIpIndex = proxyModels
@@ -131,19 +145,35 @@ class ProxyPageDataManager {
     } else {
       proxyModels.add(newProxyModel);
     }
-    EnvironmentSharedPreferenceUtil().setProxyList(proxyModels);
+    ProxyPageDataCacheUtil.setProxyList(proxyModels);
 
     if (selectedNew) {
       newProxyModel.check = true;
-      updateProxyPageSelectedData(newProxyModel);
+      _updateProxyPageSelectedData(newProxyModel);
     }
 
     return newProxyModel;
   }
 
   /// 修改代理环境_页面数据
-  updateProxyPageSelectedData(TSEnvProxyModel selectedProxyModel) {
+  _updateProxyPageSelectedData(
+    TSEnvProxyModel selectedProxyModel, {
+    bool selectedNew = true,
+  }) {
+    if (selectedNew) {
+      for (TSEnvProxyModel item in _proxyModels ?? []) {
+        if (item.proxyId == selectedProxyModel.proxyId) {
+          item.check = true;
+        } else {
+          item.check = false;
+        }
+      }
+
+      ProxyPageDataCacheUtil.setProxykId(selectedProxyModel.proxyId);
+    } else {
+      selectedProxyModel.check = false;
+    }
+
     _selectedProxyModel = selectedProxyModel;
-    EnvironmentSharedPreferenceUtil().setProxykId(selectedProxyModel.proxyId);
   }
 }

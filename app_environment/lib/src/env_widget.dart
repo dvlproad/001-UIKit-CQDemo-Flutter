@@ -8,8 +8,11 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:provider/provider.dart';
 import './init/package_environment_util.dart';
+import './init/packageType_env_util.dart';
+import './init/packageType_page_data_manager.dart';
+import './init/packageType_page_data_bean.dart';
 
-import './env_util.dart';
+import './env_page_util.dart';
 import './env_notifier.dart';
 import './init/main_diff_util.dart';
 
@@ -22,6 +25,8 @@ class EnvWidget extends StatefulWidget {
 
 class _EnvWidgetState extends State<EnvWidget> {
   BranchPackageInfo packageInfo;
+  PackageTargetModel _packageTargetModel;
+  TSEnvNetworkModel _selectedNetworkModel;
 
   @override
   void dispose() {
@@ -41,13 +46,17 @@ class _EnvWidgetState extends State<EnvWidget> {
   _getVersion() async {
     packageInfo = await BranchPackageInfo.fromPlatform();
 
+    _selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
+    _packageTargetModel =
+        PackageTargetPageDataManager().selectedPackageTargetModel;
+
     setState(() {});
   }
 
   EnvChangeNotifier _devChangeNotifier = EnvChangeNotifier();
 
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
+  NetworkEnvironmentChangeNotifier _environmentChangeNotifier =
+      NetworkEnvironmentChangeNotifier();
 
   @override
   Widget build(BuildContext context) {
@@ -64,11 +73,11 @@ class _EnvWidgetState extends State<EnvWidget> {
         ChangeNotifierProvider<EnvChangeNotifier>.value(
           value: _devChangeNotifier,
         ),
-        ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+        ChangeNotifierProvider<NetworkEnvironmentChangeNotifier>.value(
           value: _environmentChangeNotifier,
         ),
       ],
-      child: Consumer2<EnvChangeNotifier, EnvironmentChangeNotifier>(
+      child: Consumer2<EnvChangeNotifier, NetworkEnvironmentChangeNotifier>(
         builder: (context, devChangeNotifier, environmentChangeNotifier, _) {
           return _buildPageWidget(context);
         },
@@ -85,11 +94,12 @@ class _EnvWidgetState extends State<EnvWidget> {
         physics: NeverScrollableScrollPhysics(),
         children: [
           // 网络环境相关
-          Consumer<EnvironmentChangeNotifier>(
+          Consumer<NetworkEnvironmentChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return _devtool_env_cell(context);
             },
           ),
+          _change_packageUploadTarget_cell(context),
           _devtool_proxy_cell(context),
           _devtool_apimock_cell(context),
         ],
@@ -98,24 +108,53 @@ class _EnvWidgetState extends State<EnvWidget> {
   }
 
   Widget _devtool_env_cell(BuildContext context) {
-    TSEnvNetworkModel selectedNetworkModel =
-        NetworkPageDataManager().selectedNetworkModel;
-    if (selectedNetworkModel == null) {
+    if (_selectedNetworkModel == null) {
       return Container();
       throw Exception(
           '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
     }
-    String envName = selectedNetworkModel.name;
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换环境",
-      textValue: envName,
+      textValue: _selectedNetworkModel.name,
+      textSubValue: _selectedNetworkModel.apiHost,
       onTap: () {
         PackageEnvironmentUtil.checkShouldResetNetwork(
           goChangeHandle: () {
-            EnvUtil.goChangeEnvironmentNetwork(context).then((value) {
+            EnvPageUtil.goChangeEnvironmentNetwork(context).then((value) {
               setState(() {});
             });
+          },
+        );
+      },
+    );
+  }
+
+  /// 更换包的上传位置(内测pgyer、公测testFlight)
+  Widget _change_packageUploadTarget_cell(BuildContext context) {
+    return ImageTitleTextValueCell(
+      height: envCellHeight,
+      title: "切换内外测",
+      textValue: _packageTargetModel?.name ?? '',
+      textSubValue: '公测与蒲公英版本检测调用方法不一样而已',
+      onTap: () {
+        AlertUtil.showCancelOKAlert(
+          context: context,
+          barrierDismissible: true,
+          title: '切换内外测',
+          cancelTitle: '内测包',
+          cancelHandle: () {
+            PackageTargetEnvUtil.changePackageTarget(
+              PackageTargetModel.pgyerTargetModel,
+              context: context,
+            );
+          },
+          okTitle: '外测包',
+          okHandle: () {
+            PackageTargetEnvUtil.changePackageTarget(
+              PackageTargetModel.formalTargetModel,
+              context: context,
+            );
           },
         );
       },
@@ -168,19 +207,27 @@ class _EnvWidgetState extends State<EnvWidget> {
       throw Exception(
           '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
     }
-    String proxyName = selectedProxyModel.name;
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       height: envCellHeight,
+      leftMaxWidth: 80,
       title: "添加代理",
-      textValue: proxyName,
+      textValue: selectedProxyModel.name,
+      textSubValue: selectedProxyModel.proxyIp,
       onTap: () {
         PackageEnvironmentUtil.checkProxyAllowForPackage(
           goChangeHandle: () {
-            EnvUtil.goChangeEnvironmentProxy(context).then((value) {
+            EnvPageUtil.goChangeEnvironmentProxy(context).then((value) {
               setState(() {});
             });
           },
         );
+      },
+      onLongPress: () async {
+        bool proxyHappenChange =
+            await EnvironmentUtil.changeToNoneProxy_ifNoneTryToPhone();
+        if (proxyHappenChange) {
+          setState(() {});
+        }
       },
     );
   }
@@ -188,7 +235,7 @@ class _EnvWidgetState extends State<EnvWidget> {
   Widget _devtool_apimock_cell(BuildContext context) {
     int mockCount = ApiManager.mockCount();
     String mockCountString = '已mock:$mockCount个';
-    return BJHTitleTextValueCell(
+    return ImageTitleTextValueCell(
       height: envCellHeight,
       title: "Mock工具",
       textValue: mockCountString,
@@ -197,7 +244,7 @@ class _EnvWidgetState extends State<EnvWidget> {
         PackageType packageType = packageBean.packageType;
         if (packageType == PackageType.develop1 ||
             packageType == PackageType.develop2) {
-          EnvUtil.goChangeApiMock(context).then((value) {
+          EnvPageUtil.goChangeApiMock(context).then((value) {
             setState(() {});
           });
         } else {

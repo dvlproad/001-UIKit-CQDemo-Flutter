@@ -12,7 +12,7 @@ import './environment_change_notifiter.dart';
 import './network_page_data_bean.dart';
 
 class NetworkList extends StatefulWidget {
-  final String networkTitle;
+  final String? networkTitle;
   final List<TSEnvNetworkModel> networkModels;
 
   final TSEnvNetworkModel selectedNetworkModel;
@@ -21,11 +21,11 @@ class NetworkList extends StatefulWidget {
       clickEnvNetworkCellCallback; // 网络 networkCell 的点击
 
   NetworkList({
-    Key key,
+    Key? key,
     this.networkTitle,
-    @required this.networkModels,
-    @required this.selectedNetworkModel,
-    @required this.clickEnvNetworkCellCallback,
+    required this.networkModels,
+    required this.selectedNetworkModel,
+    required this.clickEnvNetworkCellCallback,
   }) : super(key: key);
 
   @override
@@ -35,11 +35,11 @@ class NetworkList extends StatefulWidget {
 }
 
 class _NetworkListState extends State<NetworkList> {
-  List<TSEnvNetworkModel> _networkModels;
+  late List<TSEnvNetworkModel> _networkModels;
 
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
-  TSEnvNetworkModel _oldSelectedNetworkModel;
+  NetworkEnvironmentChangeNotifier _environmentChangeNotifier =
+      NetworkEnvironmentChangeNotifier();
+  late TSEnvNetworkModel _oldSelectedNetworkModel;
 
   @override
   void initState() {
@@ -49,13 +49,11 @@ class _NetworkListState extends State<NetworkList> {
   }
 
   void getData() {
-    _networkModels = widget.networkModels ?? [];
-
+    _networkModels = widget.networkModels;
     _oldSelectedNetworkModel = widget.selectedNetworkModel;
 
-    List<TSEnvNetworkModel> networkModels = _networkModels;
-    for (int i = 0; i < networkModels.length; i++) {
-      TSEnvNetworkModel networkModel = networkModels[i];
+    for (int i = 0; i < _networkModels.length; i++) {
+      TSEnvNetworkModel networkModel = _networkModels[i];
       if (networkModel.envId == _oldSelectedNetworkModel.envId) {
         networkModel.check = true;
         _oldSelectedNetworkModel = networkModel;
@@ -68,7 +66,7 @@ class _NetworkListState extends State<NetworkList> {
   @override
   Widget build(BuildContext context) {
     getData();
-    return ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+    return ChangeNotifierProvider<NetworkEnvironmentChangeNotifier>.value(
       value: _environmentChangeNotifier,
       child: _pageWidget(),
     );
@@ -84,7 +82,7 @@ class _NetworkListState extends State<NetworkList> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
-          Consumer<EnvironmentChangeNotifier>(
+          Consumer<NetworkEnvironmentChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
@@ -97,17 +95,17 @@ class _NetworkListState extends State<NetworkList> {
   }
 
   Widget _searchResultWidget() {
-    // EnvironmentChangeNotifier notifier =
-    //     Provider.of<EnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
-    EnvironmentChangeNotifier notifier =
+    // NetworkEnvironmentChangeNotifier notifier =
+    //     Provider.of<NetworkEnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
+    NetworkEnvironmentChangeNotifier notifier =
         _environmentChangeNotifier; // 在本组件中，使用此取法
-    print('envName = ${notifier.networkModel?.name}');
+    print('envName = ${notifier.networkModel.name}');
 
     int sectionCount = 1;
 
     int numOfRowInSection(section) {
       if (section == 0) {
-        List dataModels = _networkModels;
+        List<TSEnvNetworkModel> dataModels = _networkModels;
         return dataModels.length;
       }
       return 0;
@@ -121,6 +119,8 @@ class _NetworkListState extends State<NetworkList> {
       headerInSection: (section) {
         if (section == 0) {
           return EnvironmentTableViewHeader(title: widget.networkTitle ?? '');
+        } else {
+          return Container();
         }
       },
       cellAtIndexPath: (section, row) {
@@ -132,8 +132,12 @@ class _NetworkListState extends State<NetworkList> {
             envModel: dataModel,
             section: section,
             row: row,
-            clickEnvNetworkCellCallback:
-                (int section, int row, TSEnvNetworkModel bNetworkModel) {
+            clickEnvNetworkCellCallback: ({
+              int? section,
+              int? row,
+              required TSEnvNetworkModel bNetworkModel,
+              bool? isLongPress,
+            }) {
               // print('点击切换 Network 环境');
               if (bNetworkModel == _oldSelectedNetworkModel) {
                 return;
@@ -143,10 +147,17 @@ class _NetworkListState extends State<NetworkList> {
               // notifier.searchTextChange(bNetworkModel.envId);
 
               if (widget.clickEnvNetworkCellCallback != null) {
-                widget.clickEnvNetworkCellCallback(section, row, bNetworkModel);
+                widget.clickEnvNetworkCellCallback(
+                  section: section,
+                  row: row,
+                  bNetworkModel: bNetworkModel,
+                  isLongPress: isLongPress,
+                );
               }
             },
           );
+        } else {
+          return Container();
         }
       },
       divider: Container(color: Colors.green, height: 1.0),

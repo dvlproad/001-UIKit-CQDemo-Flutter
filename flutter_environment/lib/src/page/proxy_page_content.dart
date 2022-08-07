@@ -7,8 +7,6 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './actionsheet_footer.dart';
 import './environment_add_util.dart';
 
-import '../network_page_data_manager.dart';
-import '../network_page_data_bean.dart';
 import '../proxy_page_data_manager.dart';
 import '../proxy_page_data_bean.dart';
 
@@ -22,19 +20,15 @@ import '../environment_util.dart';
 
 class ProxyPageContent extends StatefulWidget {
   final String currentApiHost;
-  final Function() onPressTestApiCallback;
-  final Function(
-    TSEnvNetworkModel bNetworkModel, {
-    bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
-  }) updateNetworkCallback;
+  final Function()? onPressTestApiCallback;
+
   final Function(TSEnvProxyModel bProxyModel) updateProxyCallback;
 
   ProxyPageContent({
-    Key key,
-    @required this.currentApiHost, // 当前api请求域名
+    Key? key,
+    required this.currentApiHost, // 当前api请求域名
     this.onPressTestApiCallback, // 为空时候，不显示视图
-    @required this.updateNetworkCallback,
-    @required this.updateProxyCallback,
+    required this.updateProxyCallback,
   }) : super(key: key);
 
   @override
@@ -44,32 +38,26 @@ class ProxyPageContent extends StatefulWidget {
 }
 
 class _ProxyPageContentState extends State<ProxyPageContent> {
-  String networkTitle = "网络环境";
-  List<TSEnvNetworkModel> _networkModels;
-
   String proxyTitle = "网络代理(点击可切换,长按可修改)";
-  List<TSEnvProxyModel> _proxyModels;
+  List<TSEnvProxyModel>? _proxyModels;
+  TSEnvProxyModel? _selectedProxyModel;
 
-  TSEnvNetworkModel _selectedNetworkModel;
-  TSEnvProxyModel _selectedProxyModel;
-
-  String _currentApiHost;
+  late String _currentApiHost;
 
   @override
   void initState() {
     super.initState();
 
-    if (NetworkPageDataManager().networkModels == null ||
-        NetworkPageDataManager().networkModels.isEmpty) {
-      print(
-          'error:请在 main_init.dart 中 执行 EnvironmentUtil.completeEnvInternal_whenNull();');
-    }
-    _networkModels = NetworkPageDataManager().networkModels;
-    _proxyModels = ProxyPageDataManager().proxyModels;
-    _selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
+    _currentApiHost = widget.currentApiHost;
+
+    _requesetData();
+  }
+
+  _requesetData() async {
+    _proxyModels = await ProxyPageDataManager().proxyModels;
     _selectedProxyModel = ProxyPageDataManager().selectedProxyModel;
 
-    _currentApiHost = widget.currentApiHost ?? '';
+    setState(() {});
   }
 
   @override
@@ -82,7 +70,7 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
     );
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget _appBar() {
     return AppBar(
       title: Text('添加代理'),
     );
@@ -111,7 +99,7 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
                   cancelText: '测试请求',
                   onCancel: () {
                     print('测试请求');
-                    widget.onPressTestApiCallback();
+                    widget.onPressTestApiCallback!();
                   },
                 ),
           _bottomAddProxyWidget,
@@ -135,7 +123,7 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
       context,
       proxyName: '自定义代理',
       proxyIp: null,
-      addCompleteBlock: ({bProxyName, bProxyIp}) {
+      addCompleteBlock: ({required String bProxyName, String? bProxyIp}) {
         print('proxyIp =$bProxyIp');
         ProxyPageDataManager().addOrUpdateCustomEnvProxyIp(
           proxyName: bProxyName,
@@ -150,7 +138,7 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
   Widget _pageWidget() {
     return ProxyList(
       proxyTitle: proxyTitle,
-      proxyModels: _proxyModels,
+      proxyModels: _proxyModels ?? [],
       selectedProxyModel: _selectedProxyModel,
       clickEnvProxyCellCallback: (section, row, bProxyModel, {isLongPress}) {
         print('点击了${bProxyModel.name}');
@@ -176,8 +164,8 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
       context,
       proxyName: bProxyModel.name,
       proxyIp: bProxyModel.proxyIp,
-      addCompleteBlock: ({bProxyName, bProxyIp}) {
-        print('proxyName=$bProxyName, proxyIp =$bProxyIp');
+      addCompleteBlock: ({required String bProxyName, String? bProxyIp}) {
+        print("proxyName=$bProxyName, proxyIp =${bProxyIp ?? 'null'}");
         bProxyModel.name = bProxyName;
         bProxyModel.proxyIp = bProxyIp;
         ProxyPageDataManager().addOrUpdateEnvProxyModel(
@@ -189,53 +177,9 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
     );
   }
 
-  /// 尝试切换环境
-  void _tryUpdateToNetworkModel(TSEnvNetworkModel bNetworkModel) {
-    String oldNetwork = _selectedNetworkModel.name;
-    String newNetwork = bNetworkModel.name;
-
-    bool shouldExit = true;
-    if (EnvironmentUtil.shouldExitWhenChangeNetworkEnv != null) {
-      shouldExit = EnvironmentUtil.shouldExitWhenChangeNetworkEnv(
-          _selectedNetworkModel, bNetworkModel);
-    }
-    String message;
-    if (shouldExit) {
-      message = '温馨提示:如确认切换,则将自动关闭app.(且如果已登录则重启后需要重新登录)';
-    } else {
-      message = '温馨提示:切换到该环境，您已设置为不退出app也不重新登录';
-    }
-
-    AlertUtil.showCancelOKAlert(
-      context: context,
-      title: '切换到"$newNetwork"',
-      message: message,
-      okHandle: () {
-        _confirmUpdateToNetworkModel(bNetworkModel, shouldExit: shouldExit);
-      },
-    );
-  }
-
-  /// 确认切换环境
-  void _confirmUpdateToNetworkModel(
-    TSEnvNetworkModel bNetworkModel, {
-    bool shouldExit,
-  }) {
-    _selectedNetworkModel = bNetworkModel;
-
-    if (widget.updateNetworkCallback != null) {
-      widget.updateNetworkCallback(
-        bNetworkModel,
-        shouldExit: shouldExit,
-      );
-    }
-
-    setState(() {});
-  }
-
   /// 尝试切换代理
   void _tryUpdateToProxyModel(TSEnvProxyModel bProxyModel) {
-    String oldProxy = _selectedProxyModel.name;
+    String oldProxy = _selectedProxyModel?.name ?? 'null';
     String newProxy = bProxyModel.name;
 
     String message = '';

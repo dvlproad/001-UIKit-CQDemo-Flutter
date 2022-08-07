@@ -4,15 +4,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
 
 class EnvironmentAddProxyPage extends StatefulWidget {
-  final String proxyName;
-  final String oldProxyIp;
-  final Function({String bProxyName, String bProxyIp}) callBack;
+  final String? proxyName;
+  final String? oldProxyIp;
+  final Function({required String bProxyName, String? bProxyIp}) callBack;
 
   EnvironmentAddProxyPage({
-    Key key,
+    Key? key,
     this.proxyName,
     this.oldProxyIp,
-    this.callBack,
+    required this.callBack,
   }) : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class _EnvironmentAddProxyPageState extends State<EnvironmentAddProxyPage> {
   // 控制文本框焦点
   FocusNode usernameFocusNode = new FocusNode();
   FocusNode phoneFocusNode = new FocusNode();
-  FocusScopeNode currentFocusNode;
+  FocusScopeNode? currentFocusNode;
 
   @override
   void initState() {
@@ -44,8 +44,8 @@ class _EnvironmentAddProxyPageState extends State<EnvironmentAddProxyPage> {
 
     proxyName = widget.proxyName ?? '';
 
-    if (widget.oldProxyIp != null && widget.oldProxyIp.isNotEmpty) {
-      List<String> proxyComponents = widget.oldProxyIp.split(':');
+    if (widget.oldProxyIp != null && widget.oldProxyIp!.isNotEmpty) {
+      List<String> proxyComponents = widget.oldProxyIp!.split(':');
       userName = proxyComponents[0];
       phone = proxyComponents[1];
     } else {

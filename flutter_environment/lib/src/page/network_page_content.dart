@@ -19,18 +19,18 @@ export '../environment_change_notifiter.dart';
 import '../environment_util.dart';
 
 class NetworkPageContent extends StatefulWidget {
-  final String currentProxyIp;
-  final Function() onPressTestApiCallback;
+  final String? currentProxyIp;
+  final Function()? onPressTestApiCallback;
   final Function(
     TSEnvNetworkModel bNetworkModel, {
     bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
   }) updateNetworkCallback;
 
   NetworkPageContent({
-    Key key,
+    Key? key,
     this.currentProxyIp,
     this.onPressTestApiCallback, // 为空时候，不显示视图
-    @required this.updateNetworkCallback,
+    required this.updateNetworkCallback,
   }) : super(key: key);
 
   @override
@@ -41,9 +41,9 @@ class NetworkPageContent extends StatefulWidget {
 
 class _NetworkPageContentState extends State<NetworkPageContent> {
   String networkTitle = "网络环境";
-  List<TSEnvNetworkModel> _networkModels;
-  TSEnvNetworkModel _selectedNetworkModel;
-  String _currentProxyIp;
+  late List<TSEnvNetworkModel> _networkModels;
+  late TSEnvNetworkModel _selectedNetworkModel;
+  String? _currentProxyIp;
 
   @override
   void initState() {
@@ -70,7 +70,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
     );
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget _appBar() {
     return AppBar(
       title: Text('切换环境'),
     );
@@ -99,7 +99,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
                   cancelText: '测试请求',
                   onCancel: () {
                     print('测试请求');
-                    widget.onPressTestApiCallback();
+                    widget.onPressTestApiCallback!();
                   },
                 ),
           _bottomAddProxyWidget,
@@ -122,8 +122,12 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
       networkTitle: networkTitle,
       networkModels: _networkModels,
       selectedNetworkModel: _selectedNetworkModel,
-      clickEnvNetworkCellCallback: (section, row, bNetworkModel,
-          {isLongPress}) {
+      clickEnvNetworkCellCallback: ({
+        int? section,
+        int? row,
+        required bNetworkModel,
+        bool? isLongPress,
+      }) {
         print('点击了${bNetworkModel.name}');
 
         if (isLongPress == true) {
@@ -141,7 +145,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
 
     bool shouldExit = true;
     if (EnvironmentUtil.shouldExitWhenChangeNetworkEnv != null) {
-      shouldExit = EnvironmentUtil.shouldExitWhenChangeNetworkEnv(
+      shouldExit = EnvironmentUtil.shouldExitWhenChangeNetworkEnv!(
           _selectedNetworkModel, bNetworkModel);
     }
     String message;
@@ -164,7 +168,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
   /// 确认切换环境
   void _confirmUpdateToNetworkModel(
     TSEnvNetworkModel bNetworkModel, {
-    bool shouldExit,
+    bool shouldExit = true,
   }) {
     _selectedNetworkModel = bNetworkModel;
 

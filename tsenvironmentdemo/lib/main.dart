@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-08-07 22:59:18
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:app_environment/app_environment.dart';
@@ -5,17 +12,22 @@ import 'package:app_environment/app_environment.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  Future.delayed(const Duration(milliseconds: 0)).then((value) {
-    initEnv();
-  });
+  initEnv(PackageType.develop1);
 
   runApp(MyApp());
 }
 
-void initEnv() async {
-  // 环境工具
-  await EnvUtil.init(
-    packageType: PackageType.develop1,
+void initEnv(PackageType originPackageType) async {
+  // network:api host
+  await EnvManagerUtil.initNetworkEnvironmentManager(originPackageType);
+  await NetworkPageDataManager().initCompleter.future;
+
+  // proxy:
+  await EnvManagerUtil.initProxyEnvironmentManager(originPackageType);
+  await ProxyPageDataManager().initCompleter.future;
+
+  // 网络环境相关：环境切换界面
+  EnvPageUtil.initWithPage(
     navigatorKey: globalKey,
     updateNetworkCallback: (bNetworkModel) {
       CJTSToastUtil.showMessage("网络环境修改回调:${bNetworkModel.apiHost}");
@@ -45,8 +57,11 @@ void initEnv() async {
 
   // 是否允许 mock api 及 允许 mock api 的情况下，mock 到哪个地址
   String mockApiHost = TSEnvironmentDataUtil.apiHost_mock;
-  ApiManager.updateCanMock(true);
-  ApiManager.configMockApiHost(mockApiHost);
+
+  ApiManager().setup(
+    allowMock: true,
+    mockApiHost: mockApiHost,
+  );
   if (mockApiHost == null) {
     throw Exception('允许 mock api 的情况下，要 mock 到地址 mockApiHost 不能为空');
   } else {

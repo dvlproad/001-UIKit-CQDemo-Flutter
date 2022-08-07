@@ -4,11 +4,11 @@ import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
 
 class EnvironmentAddNetworkPage extends StatefulWidget {
-  final String oldProxyIp;
-  final Function(String bProxyIp) callBack;
+  final String? oldProxyIp;
+  final Function(String bProxyIp)? callBack;
 
   EnvironmentAddNetworkPage({
-    Key key,
+    Key? key,
     this.oldProxyIp,
     this.callBack,
   }) : super(key: key);
@@ -32,14 +32,14 @@ class _EnvironmentAddNetworkPageState extends State<EnvironmentAddNetworkPage> {
   // 控制文本框焦点
   FocusNode usernameFocusNode = new FocusNode();
   FocusNode phoneFocusNode = new FocusNode();
-  FocusScopeNode currentFocusNode;
+  FocusScopeNode? currentFocusNode;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.oldProxyIp != null && widget.oldProxyIp.isNotEmpty) {
-      List<String> proxyComponents = widget.oldProxyIp.split(':');
+    if (widget.oldProxyIp != null && widget.oldProxyIp!.isNotEmpty) {
+      List<String> proxyComponents = widget.oldProxyIp!.split(':');
       userName = proxyComponents[0];
       phone = proxyComponents[1];
     } else {
@@ -179,7 +179,7 @@ class _EnvironmentAddNetworkPageState extends State<EnvironmentAddNetworkPage> {
         } else {
           Navigator.pop(context);
           if (widget.callBack != null) {
-            widget.callBack(proxyIp);
+            widget.callBack!(proxyIp);
           }
         }
       },

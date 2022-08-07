@@ -41,13 +41,6 @@ class TSEnvironmentDataUtil {
       dataModel.proxyIp = "192.168.72.200:8888";
       envModels.add(dataModel);
     }
-    {
-      TSEnvProxyModel dataModel = TSEnvProxyModel();
-      dataModel.proxyId = proxykId3;
-      dataModel.name = "跃程的代理";
-      dataModel.proxyIp = "192.168.72.12:8888";
-      envModels.add(dataModel);
-    }
     return envModels;
   }
 
@@ -78,6 +71,8 @@ class TSEnvironmentDataUtil {
     dataModel.apiHost = apiHost_dev1;
     dataModel.webHost = "http://dev.h5.xxx.com/";
     dataModel.gameHost = "http://dev.game.h5.xxx.com/";
+    dataModel.monitorApiHost = 'http://dev.api.xxx.com/';
+    dataModel.monitorDataHubId = "datahub-y32g29n6";
     dataModel.check = true;
     dataModel.imageUrl =
         "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
@@ -95,6 +90,8 @@ class TSEnvironmentDataUtil {
     dataModel.apiHost = apiHost_dev2;
     dataModel.webHost = "http://dev2.h5.xxx.com/";
     dataModel.gameHost = "http://dev2.game.h5.xxx.com/";
+    dataModel.monitorApiHost = 'http://dev2.api.xxx.com/';
+    dataModel.monitorDataHubId = "datahub-y32g29n6";
     dataModel.check = false;
     dataModel.imageUrl =
         "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
@@ -112,6 +109,8 @@ class TSEnvironmentDataUtil {
     dataModel.apiHost = apiHost_preProduct;
     dataModel.webHost = "http://test.h5.xxx.com/";
     dataModel.gameHost = "http://test.game.h5.xxx.com/";
+    dataModel.monitorApiHost = 'http://test.api.xxx.com/';
+    dataModel.monitorDataHubId = "datahub-y32g29n6";
     dataModel.check = false;
     dataModel.imageUrl =
         "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
@@ -128,6 +127,8 @@ class TSEnvironmentDataUtil {
     dataModel.apiHost = apiHost_product;
     dataModel.webHost = "http://h5.xxx.com/";
     dataModel.gameHost = "http://game.h5.xxx.com/";
+    dataModel.monitorApiHost = 'http://test.api.xxx.com/';
+    dataModel.monitorDataHubId = "datahub-y32pp556";
     dataModel.check = false;
     dataModel.imageUrl =
         "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";
@@ -145,6 +146,8 @@ class TSEnvironmentDataUtil {
       dataModel.apiHost = "http://192.168.72.69:8888/hapi/";
       dataModel.webHost = "http://dev2.h5.xxx.com/";
       dataModel.gameHost = "http://dev2.game.h5.xxx.com/";
+      dataModel.monitorApiHost = 'http://192.168.72.69:8888/';
+      dataModel.monitorDataHubId = "datahub-y32g29n6";
       dataModel.check = false;
       dataModel.imageUrl =
           "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=4012764803,2714809145&fm=26&gp=0.jpg";

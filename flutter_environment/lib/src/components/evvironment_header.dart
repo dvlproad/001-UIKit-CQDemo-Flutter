@@ -1,10 +1,17 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 13:04:32
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EnvironmentTableViewHeader extends StatefulWidget {
-  final String title;
+  final String? title;
 
-  EnvironmentTableViewHeader({Key key, this.title}) : super(key: key);
+  EnvironmentTableViewHeader({Key? key, this.title}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

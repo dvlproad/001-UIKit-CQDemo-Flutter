@@ -12,18 +12,18 @@ import './environment_change_notifiter.dart';
 import './proxy_page_data_bean.dart';
 
 class ProxyList extends StatefulWidget {
-  final String proxyTitle;
+  final String? proxyTitle;
   final List<TSEnvProxyModel> proxyModels;
-  final TSEnvProxyModel selectedProxyModel;
+  final TSEnvProxyModel? selectedProxyModel;
 
   final ClickEnvProxyCellCallback clickEnvProxyCellCallback; // 协议 proxyCell 的点击
 
   ProxyList({
-    Key key,
+    Key? key,
     this.proxyTitle,
-    @required this.proxyModels,
-    @required this.selectedProxyModel,
-    @required this.clickEnvProxyCellCallback,
+    required this.proxyModels,
+    this.selectedProxyModel,
+    required this.clickEnvProxyCellCallback,
   }) : super(key: key);
 
   @override
@@ -33,26 +33,24 @@ class ProxyList extends StatefulWidget {
 }
 
 class _ProxyListState extends State<ProxyList> {
-  List<TSEnvProxyModel> _proxyModels;
-  EnvironmentChangeNotifier _environmentChangeNotifier =
-      EnvironmentChangeNotifier();
-  TSEnvProxyModel _oldSelectedProxyModel;
+  late List<TSEnvProxyModel> _proxyModels;
+  ProxyEnvironmentChangeNotifier _environmentChangeNotifier =
+      ProxyEnvironmentChangeNotifier();
+  late TSEnvProxyModel? _oldSelectedProxyModel;
 
   @override
   void initState() {
     super.initState();
-
-    // getData();
   }
 
   void getData() {
-    _proxyModels = widget.proxyModels ?? [];
+    _proxyModels = widget.proxyModels;
     _oldSelectedProxyModel = widget.selectedProxyModel;
 
     List<TSEnvProxyModel> proxyModels = _proxyModels;
     for (int i = 0; i < proxyModels.length; i++) {
       TSEnvProxyModel proxyModel = proxyModels[i];
-      if (proxyModel.proxyId == _oldSelectedProxyModel.proxyId) {
+      if (proxyModel.proxyId == _oldSelectedProxyModel?.proxyId) {
         proxyModel.check = true;
         _oldSelectedProxyModel = proxyModel;
       } else {
@@ -64,7 +62,8 @@ class _ProxyListState extends State<ProxyList> {
   @override
   Widget build(BuildContext context) {
     getData();
-    return ChangeNotifierProvider<EnvironmentChangeNotifier>.value(
+
+    return ChangeNotifierProvider<ProxyEnvironmentChangeNotifier>.value(
       value: _environmentChangeNotifier,
       child: _pageWidget(),
     );
@@ -80,7 +79,7 @@ class _ProxyListState extends State<ProxyList> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
-          Consumer<EnvironmentChangeNotifier>(
+          Consumer<ProxyEnvironmentChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
@@ -93,11 +92,11 @@ class _ProxyListState extends State<ProxyList> {
   }
 
   Widget _searchResultWidget() {
-    // EnvironmentChangeNotifier notifier =
-    //     Provider.of<EnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
-    EnvironmentChangeNotifier notifier =
+    // ProxyEnvironmentChangeNotifier notifier =
+    //     Provider.of<ProxyEnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
+    ProxyEnvironmentChangeNotifier notifier =
         _environmentChangeNotifier; // 在本组件中，使用此取法
-    print('envName = ${notifier.networkModel?.name}');
+    print('envName = ${notifier.networkModel.name}');
 
     int sectionCount = 1;
 
@@ -117,6 +116,8 @@ class _ProxyListState extends State<ProxyList> {
       headerInSection: (section) {
         if (section == 0) {
           return EnvironmentTableViewHeader(title: widget.proxyTitle ?? '');
+        } else {
+          return Container();
         }
       },
       cellAtIndexPath: (section, row) {
@@ -132,7 +133,7 @@ class _ProxyListState extends State<ProxyList> {
               int section,
               int row,
               TSEnvProxyModel bProxyModel, {
-              bool isLongPress,
+              bool? isLongPress,
             }) {
               // print('点击切换 Proxy 环境');
 
@@ -144,6 +145,8 @@ class _ProxyListState extends State<ProxyList> {
               }
             },
           );
+        } else {
+          return Container();
         }
       },
       divider: Container(color: Colors.green, height: 1.0),

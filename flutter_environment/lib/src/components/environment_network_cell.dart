@@ -1,16 +1,23 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 15:24:11
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './environment_base_cell.dart';
 import '../network_page_data_bean.dart';
 
-typedef ClickEnvNetworkCellCallback = void Function(
-  int section,
-  int row,
-  TSEnvNetworkModel bNetworkModel,
-);
+typedef ClickEnvNetworkCellCallback = void Function({
+  int? section,
+  int? row,
+  required TSEnvNetworkModel bNetworkModel,
+  bool? isLongPress,
+});
 
 class EnvNetworkTableViewCell extends StatelessWidget {
-  @required
   final TSEnvNetworkModel envModel; // 环境
 
   final int section;
@@ -19,11 +26,11 @@ class EnvNetworkTableViewCell extends StatelessWidget {
       clickEnvNetworkCellCallback; // 网络 networkCell 的点击
 
   EnvNetworkTableViewCell({
-    Key key,
-    this.envModel,
-    this.section,
-    this.row,
-    this.clickEnvNetworkCellCallback,
+    Key? key,
+    required this.envModel,
+    this.section = 0,
+    this.row = 0,
+    required this.clickEnvNetworkCellCallback,
   }) : super(key: key);
 
   @override
@@ -34,13 +41,20 @@ class EnvNetworkTableViewCell extends StatelessWidget {
       check: envModel.check,
       section: section,
       row: row,
-      clickEnvBaseCellCallback: (section, row, mainTitle, subTitles, check,
-          {bool isLongPress}) {
+      clickEnvBaseCellCallback: (
+        String mainTitle, {
+        required List<String> subTitles,
+        int? section,
+        int? row,
+        bool? check,
+        bool? isLongPress,
+      }) {
         if (null != this.clickEnvNetworkCellCallback) {
           this.clickEnvNetworkCellCallback(
-            this.section,
-            this.row,
-            this.envModel,
+            section: section,
+            row: row,
+            bNetworkModel: this.envModel,
+            isLongPress: isLongPress,
           );
         }
       },

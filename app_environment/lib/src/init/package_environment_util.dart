@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-import '../env_util.dart';
+import '../env_page_util.dart';
 
 import './environment_datas_util.dart';
 import './main_diff_util.dart';
@@ -21,7 +21,7 @@ class PackageEnvironmentUtil {
     // 获取当前包应该的默认网络环境
     DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
     TSEnvNetworkModel defaultNetworkModel =
-        _packageDefaultNetworkModel(packageBean);
+        _packageDefaultNetworkModel(packageBean.packageType);
 
     // 检查当前包的当前网络环境和默认的网络环境是否一样，如果不一样，提示切回默认的环境
     if (goChangeHandle == null) {
@@ -43,10 +43,9 @@ class PackageEnvironmentUtil {
   }
 
   static TSEnvNetworkModel _packageDefaultNetworkModel(
-      DiffPackageBean packageBean) {
+      PackageType packageType) {
     TSEnvNetworkModel defaultNetworkModel;
 
-    PackageType packageType = packageBean.packageType;
     if (packageType == PackageType.develop1) {
       defaultNetworkModel = TSEnvironmentDataUtil.networkModel_dev1;
     } else if (packageType == PackageType.develop2) {
@@ -66,7 +65,7 @@ class PackageEnvironmentUtil {
     TSEnvNetworkModel defaultNetworkModel,
     TSEnvNetworkModel currentEnvNetworkModel,
   ) {
-    BuildContext currentContext = EnvUtil.navigatorKey.currentContext;
+    BuildContext currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {
       throw Exception('界面获取失败，请检查');
     }
@@ -81,6 +80,7 @@ class PackageEnvironmentUtil {
           '您当前${packageBean.des}不是默认环境，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
       AlertUtil.showCancelOKAlert(
         context: currentContext,
+        barrierDismissible: true,
         title: title,
         message: message,
         cancelTitle: '继续${currentEnvNetworkModel.shortName}',
@@ -92,9 +92,12 @@ class PackageEnvironmentUtil {
     }
   }
 
-  static _reset(TSEnvNetworkModel defaultNetworkModel, {BuildContext context}) {
-    EnvUtil.changeEnv(defaultNetworkModel, true, context: context);
-    EnvUtil.changeProxyToNone();
+  static _reset(
+    TSEnvNetworkModel defaultNetworkModel, {
+    @required BuildContext context,
+  }) {
+    EnvPageUtil.changeEnv(defaultNetworkModel, true, context: context);
+    EnvPageUtil.changeProxyToNone();
   }
 
   /// 设置页点击切换环境的时候，检查包的环境
@@ -109,12 +112,12 @@ class PackageEnvironmentUtil {
       throw Exception('进入切换环境的操作不能为空，请检查');
     }
 
-    BuildContext currentContext = EnvUtil.navigatorKey.currentContext;
+    BuildContext currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {
       throw Exception('界面获取失败，请检查');
     }
 
-    if (packageBean.packageType == PackageType.product) {
+    if (packageBean.isProduct) {
       ToastUtil.showMsg(
           '温馨提示：您当前包为${packageBean.des}，不支持切换环境。', currentContext);
       return;
@@ -142,6 +145,7 @@ class PackageEnvironmentUtil {
 
     AlertUtil.showFlexWidthButtonsAlert(
       context: currentContext,
+      barrierDismissible: true,
       title: title,
       message: message,
       buttonTitles: buttonTitles,
@@ -153,7 +157,7 @@ class PackageEnvironmentUtil {
         } else if (buttonIndex == 2) {
           // 恢复默认
           Navigator.pop(currentContext);
-          _reset(defaultNetworkModel);
+          _reset(defaultNetworkModel, context: currentContext);
         } else {
           // 取消
           Navigator.pop(currentContext);
@@ -173,12 +177,12 @@ class PackageEnvironmentUtil {
       throw Exception('进入添加代理的操作不能为空，请检查');
     }
 
-    BuildContext currentContext = EnvUtil.navigatorKey.currentContext;
+    BuildContext currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {
       throw Exception('界面获取失败，请检查');
     }
 
-    if (packageBean.packageType == PackageType.product) {
+    if (packageBean.isProduct) {
       ToastUtil.showMsg(
           '温馨提示：您当前包为${packageBean.des}，不支持添加代理。', currentContext);
       return;

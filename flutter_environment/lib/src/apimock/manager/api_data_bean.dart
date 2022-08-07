@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 14:11:27
+ * @Description: 
+ */
 class ApiModel {
   String name;
   String url;
@@ -5,7 +12,7 @@ class ApiModel {
 
   ApiModel({
     this.name = '',
-    this.url,
+    required this.url,
     this.mock = false,
   });
 

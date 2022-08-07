@@ -5,18 +5,20 @@ import './api_data_bean.dart';
 import './api_cache.dart';
 
 class ApiManager {
-  bool _allowMock;
-  String _mockApiHost;
-  List<ApiModel> _apiModels;
+  bool _allowMock = false;
+  late String _mockApiHost;
+  List<ApiModel>? _apiModels;
 
   bool get allowMock => _allowMock;
   String get mockApiHost => _mockApiHost;
-  List<ApiModel> get apiModels => _apiModels;
+  List<ApiModel> get apiModels {
+    return _apiModels ?? [];
+  }
 
   // 工厂模式
   factory ApiManager() => _getInstance();
   static ApiManager get instance => _getInstance();
-  static ApiManager _instance;
+  static ApiManager? _instance;
   ApiManager._internal() {
     // 初始化
     init();
@@ -26,47 +28,12 @@ class ApiManager {
     _getCache();
   }
 
-  // 获取缓存数据
-  void _getCache() async {
-    if (_apiModels == null || _apiModels.isEmpty) {
-      _apiModels = await ApiSharedPreferenceUtil().getApiList();
-    }
-
-    if (_apiModels == null) {
-      _apiModels = [];
-    }
-  }
-
-  static ApiManager _getInstance() {
-    if (_instance == null) {
-      _instance = new ApiManager._internal();
-    }
-    return _instance;
-  }
-
-  /// 初始化完成后继续完善信息,此方法只为了做测试，开发情况下使用 tryAddApi 来添加 apiModel
-  Future completeApiMock_whenNull({
-    @required List<ApiModel> apiModels_whenNull,
-  }) async {
-    List<ApiModel> apiModels = ApiManager().apiModels;
-    if (apiModels == null || apiModels.isEmpty) {
-      apiModels = await ApiSharedPreferenceUtil().getApiList();
-      if (apiModels == null || apiModels?.length == 0) {
-        apiModels = apiModels_whenNull;
-        ApiSharedPreferenceUtil().setApiList(apiModels);
-      }
-    }
-    _apiModels = apiModels;
-  }
-
-  // 设置 api 要 mock 到的地址
-  static void configMockApiHost(String mockApiHost) {
-    ApiManager.instance._mockApiHost = mockApiHost;
-  }
-
-  // 设置是否允许 mock api
-  static void updateCanMock(bool allow) {
-    ApiManager.instance._allowMock = allow;
+  void setup({
+    bool allowMock = false, // 设置是否允许 mock api
+    required String mockApiHost, // 设置 api 要 mock 到的地址
+  }) {
+    _allowMock = allowMock;
+    _mockApiHost = mockApiHost;
   }
 
   // 获取是否允许 mock api
@@ -75,8 +42,39 @@ class ApiManager {
   //   return allowMock;
   // }
 
+  // 获取缓存数据
+  void _getCache() async {
+    if (_apiModels == null || _apiModels!.isEmpty) {
+      _apiModels = await ApiSharedPreferenceUtil().getApiList();
+    }
+  }
+
+  static ApiManager _getInstance() {
+    if (_instance == null) {
+      _instance = new ApiManager._internal();
+    }
+    return _instance!;
+  }
+
+  /// 初始化完成后继续完善信息,此方法只为了做测试，开发情况下使用 tryAddApi 来添加 apiModel
+  Future completeApiMock_whenNull({
+    required List<ApiModel> apiModels_whenNull,
+  }) async {
+    if (_apiModels == null || _apiModels!.isEmpty) {
+      _apiModels = await ApiSharedPreferenceUtil().getApiList();
+      if (_apiModels!.isEmpty) {
+        _apiModels = apiModels_whenNull;
+        ApiSharedPreferenceUtil().setApiList(_apiModels!);
+      }
+    }
+  }
+
   // 添加api (添加的时候为path统一添加上/，比较的时候也统一添加上/后再和村粗的数组比较相等，兼容path有时候添加上/又去掉)
-  static void tryAddApi(String url, {String name, bool isGet}) {
+  static void tryAddApi(
+    String url, {
+    String? name,
+    bool isGet = false,
+  }) {
     String addUrl;
     bool hasHttpPrefix = url.startsWith(RegExp(r'https?:')) ? true : false;
     if (hasHttpPrefix == false && url.startsWith('/') == false) {
@@ -157,7 +155,7 @@ class ApiManager {
   static int mockCount() {
     int mockCount = 0;
 
-    List<ApiModel> apiModels = ApiManager().apiModels ?? [];
+    List<ApiModel> apiModels = ApiManager().apiModels;
     for (ApiModel apiModel in apiModels) {
       if (apiModel.mock) {
         mockCount++;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './network_page_data_manager.dart';
 import './proxy_page_data_manager.dart';
 import './page/network_page_content.dart';
@@ -8,20 +9,22 @@ import './apimock/manager/api_manager.dart';
 
 import '../darg/draggable_manager.dart';
 
+import './device/device_info_util.dart';
+
 class EnvironmentUtil {
   // 进入切换环境页面
   static Future goChangeEnvironmentNetwork(
     BuildContext context, {
-    Function() onPressTestApiCallback,
-    @required
-        Function(TSEnvNetworkModel bNetworkModel, {bool shouldExit})
-            updateNetworkCallback,
+    Function()? onPressTestApiCallback,
+    required Function(TSEnvNetworkModel bNetworkModel, {bool shouldExit})
+        updateNetworkCallback,
   }) {
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return NetworkPageContent(
-            currentProxyIp: ProxyPageDataManager().selectedProxyModel.proxyIp,
+            currentProxyIp:
+                ProxyPageDataManager().selectedProxyModel?.proxyIp ?? 'null',
             onPressTestApiCallback: onPressTestApiCallback,
             updateNetworkCallback: updateNetworkCallback,
           );
@@ -30,18 +33,47 @@ class EnvironmentUtil {
     );
   }
 
+  /// 切换到无代理，如果已是无代理，则尝试切到手机代理(返回值:表示是否选中的代理有发生改变，决定是否要刷新界面)
+  static Future<bool> changeToNoneProxy_ifNoneTryToPhone() async {
+    String? currentAppProxyIp =
+        ProxyPageDataManager().selectedProxyModel?.proxyIp;
+
+    // 如果app当前有代理，则默认要先切换到无代理
+    if (currentAppProxyIp != null) {
+      ProxyPageDataManager().addOrUpdateEnvProxyModel(
+        newProxyModel: TSEnvProxyModel.noneProxyModel(),
+      );
+      ToastUtil.showMessage("恭喜成功切换到【无代理】上");
+      return true;
+    }
+
+    // 如果app当前无代理，则查看是否有手机代理，有则切，没则不变
+    TSEnvProxyModel phoneProxyModel = await DeviceInfoUtil.getPhoneProxy();
+    if (phoneProxyModel == null) {
+      ToastUtil.showMessage("未检测到您手机有设置代理，无法切换，请检查");
+      return false;
+    }
+
+    ProxyPageDataManager().addOrUpdateEnvProxyModel(
+      newProxyModel: phoneProxyModel,
+    );
+    ToastUtil.showMessage("恭喜成功切换到【手机代理】上");
+    return true;
+  }
+
   // 进入添加代理页面
   static Future goChangeEnvironmentProxy(
     BuildContext context, {
-    Function() onPressTestApiCallback,
-    @required Function(TSEnvProxyModel bProxyModel) updateProxyCallback,
+    Function()? onPressTestApiCallback,
+    required Function(TSEnvProxyModel bProxyModel) updateProxyCallback,
   }) {
+    String currentApiHost =
+        NetworkPageDataManager().selectedNetworkModel.apiHost;
     return Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
           return ProxyPageContent(
-            currentApiHost:
-                NetworkPageDataManager().selectedNetworkModel.apiHost,
+            currentApiHost: currentApiHost,
             onPressTestApiCallback: onPressTestApiCallback,
             updateProxyCallback: updateProxyCallback,
           );
@@ -52,15 +84,15 @@ class EnvironmentUtil {
 
   /// 从from网络环境切换到to网络环境，是否需要自动关闭app.(且如果已登录则重启后需要重新登录)
   static bool Function(TSEnvNetworkModel fromNetworkEnvModel,
-      TSEnvNetworkModel toNetworkEnvModel) shouldExitWhenChangeNetworkEnv;
+      TSEnvNetworkModel toNetworkEnvModel)? shouldExitWhenChangeNetworkEnv;
 
   // 进入切换 Api mock 的页面
   static Future goChangeApiMock(
     BuildContext context, {
-    Function() onPressTestApiCallback,
-    List<Widget> navbarActions,
+    Function()? onPressTestApiCallback,
+    List<Widget>? navbarActions,
   }) {
-    String mockApiHost = ApiManager.instance.mockApiHost;
+    String? mockApiHost = ApiManager.instance.mockApiHost;
     if (mockApiHost == null) {
       throw Exception(
           '请先调用 ApiManager.configMockApiHost(simulateApiHost)设置api要mock到的地址');
@@ -87,8 +119,8 @@ class EnvironmentUtil {
 extension ApiSimulateExtension on String {
   // 获取新的api地址
   String newApi({
-    String newApiHost,
-    List<String> shouldChangeApiHosts, // 允许 mock api 的 host
+    required String newApiHost,
+    required List<String> shouldChangeApiHosts, // 允许 mock api 的 host
   }) {
     String apiPath; //api path
     bool hasHttpPrefix = this.startsWith(RegExp(r'https?:'));
@@ -115,7 +147,7 @@ extension ApiSimulateExtension on String {
       throw Exception('startSpecialStrings为空，还调用此方法的话，那真是多此一举');
     }
 
-    String remainString;
+    String remainString = this;
     for (String startSpecialString in startSpecialStrings) {
       if (this.startsWith(startSpecialString)) {
         remainString = this.substring(startSpecialString.length);

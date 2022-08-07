@@ -8,13 +8,13 @@ import '../apimock/manager/api_data_bean.dart';
 class ApiMockPageContent extends StatefulWidget {
   final String mockApiHost;
   final String normalApiHost;
-  final List<Widget> navbarActions;
-  final Function() onPressTestApiCallback;
+  final List<Widget>? navbarActions;
+  final Function()? onPressTestApiCallback;
 
   ApiMockPageContent({
-    Key key,
-    this.mockApiHost, // mock 后该 api 请求的 host
-    this.normalApiHost, // 正常 api 请求的 host
+    Key? key,
+    required this.mockApiHost, // mock 后该 api 请求的 host
+    required this.normalApiHost, // 正常 api 请求的 host
     this.navbarActions, // 导航栏上右侧的按钮视图及事件
     this.onPressTestApiCallback, // 为空时候，不显示视图
   }) : super(key: key);
@@ -26,7 +26,7 @@ class ApiMockPageContent extends StatefulWidget {
 }
 
 class _ApiMockPageContentState extends State<ApiMockPageContent> {
-  List<ApiModel> _apiModels;
+  late List<ApiModel> _apiModels;
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
     if (!mounted) return;
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget _appBar() {
     return AppBar(
       title: Text('切换Mock'),
       actions: widget.navbarActions,
@@ -78,7 +78,7 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
                   cancelText: '测试请求',
                   onCancel: () {
                     print('测试请求');
-                    widget.onPressTestApiCallback();
+                    widget.onPressTestApiCallback!();
                   },
                 ),
           BottomButtonsWidget(
@@ -103,7 +103,8 @@ class _ApiMockPageContentState extends State<ApiMockPageContent> {
       mockApiHost: widget.mockApiHost,
       normalApiHost: widget.normalApiHost,
       apiMockModels: _apiModels,
-      clickApiMockCellCallback: (section, row, bApiModel) {
+      clickApiMockCellCallback: (
+          {int? section, int? row, required bApiModel, bool? isLongPress}) {
         print('点击了${bApiModel.url}');
 
         ApiManager.changeMockForApiModel(bApiModel);

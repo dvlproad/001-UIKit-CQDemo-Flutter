@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 15:16:50
+ * @Description: 
+ */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,17 +19,17 @@ import './manager/apimock_change_notifiter.dart';
 import './manager/api_data_bean.dart';
 
 class TSApiList extends StatefulWidget {
-  final String mockApiHost;
-  final String normalApiHost;
+  final String? mockApiHost;
+  final String? normalApiHost;
   final List apiMockModels;
   final ClickApiMockCellCallback clickApiMockCellCallback; // apimockCell 的点击
 
   TSApiList({
-    Key key,
+    Key? key,
     this.mockApiHost, // mock 后该 api 请求的 host
     this.normalApiHost, // 正常 api 请求的 host
-    @required this.apiMockModels,
-    @required this.clickApiMockCellCallback,
+    required this.apiMockModels,
+    required this.clickApiMockCellCallback,
   }) : super(key: key);
 
   @override
@@ -127,14 +134,21 @@ class _TSApiListState extends State<TSApiList> {
             apiModel: dataModel,
             section: section,
             row: row,
-            clickApiMockCellCallback:
-                (int section, int row, ApiModel bApiModel) {
+            clickApiMockCellCallback: ({
+              int? section,
+              int? row,
+              required ApiModel bApiModel,
+              bool? isLongPress,
+            }) {
               // print('点击切换 Proxy 环境');
               // setState(() {}); // 请在外部执行
 
-              if (widget.clickApiMockCellCallback != null) {
-                widget.clickApiMockCellCallback(section, row, bApiModel);
-              }
+              widget.clickApiMockCellCallback(
+                section: section,
+                row: row,
+                bApiModel: bApiModel,
+                isLongPress: isLongPress,
+              );
             },
           );
         } else {
@@ -145,14 +159,21 @@ class _TSApiListState extends State<TSApiList> {
             apiModel: dataModel,
             section: section,
             row: row,
-            clickApiMockCellCallback:
-                (int section, int row, ApiModel bApiModel) {
+            clickApiMockCellCallback: ({
+              int? section,
+              int? row,
+              required ApiModel bApiModel,
+              bool? isLongPress,
+            }) {
               // print('点击切换 Proxy 环境');
               // setState(() {}); // 请在外部执行
 
-              if (widget.clickApiMockCellCallback != null) {
-                widget.clickApiMockCellCallback(section, row, bApiModel);
-              }
+              widget.clickApiMockCellCallback(
+                section: section,
+                row: row,
+                bApiModel: bApiModel,
+                isLongPress: isLongPress,
+              );
             },
           );
         }

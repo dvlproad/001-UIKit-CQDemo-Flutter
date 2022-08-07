@@ -1,19 +1,25 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 14:52:18
+ * @Description: 忘记密码页面的文本框(常用于：用户名、手机号、验证码、新密码、确认新密码文本框)
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// 忘记密码页面的文本框(常用于：用户名、手机号、验证码、新密码、确认新密码文本框)
 class TextTextFieldRowWidget extends StatelessWidget {
   final String title;
-  final String placeholder;
-  final String value;
+  final String? placeholder;
+  final String? value;
   final bool autofocus;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> inputFormatters;
-  final TextEditingController controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextEditingController? controller;
 
   TextTextFieldRowWidget({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.placeholder,
     this.value,
     this.autofocus = false,
@@ -26,8 +32,8 @@ class TextTextFieldRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (value != null && value.isNotEmpty) {
-      controller.text = value; // 修复未设置value
+    if (value != null && value!.isNotEmpty && controller != null) {
+      controller!.text = value!; // 修复未设置value
     }
 
     return Container(

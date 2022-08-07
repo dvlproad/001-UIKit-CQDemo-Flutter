@@ -1,12 +1,19 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 13:45:30
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'dart:ui';
 
 class BottomButtonsWidget extends StatefulWidget {
-  final String cancelText;
-  final void Function() onCancel;
+  final String? cancelText;
+  final void Function()? onCancel;
 
   BottomButtonsWidget({
-    Key key,
+    Key? key,
     this.cancelText,
     this.onCancel,
   }) : super(key: key);

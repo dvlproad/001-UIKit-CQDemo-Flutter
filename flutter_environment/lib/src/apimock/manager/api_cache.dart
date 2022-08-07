@@ -1,4 +1,10 @@
-// environment 的本地储存
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 14:03:46
+ * @Description: environment 的本地储存
+ */
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './api_data_bean.dart';
@@ -25,14 +31,14 @@ class ApiSharedPreferenceUtil {
 
   Future<List<ApiModel>> getApiList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    List proxys = prefs.getStringList(ApiMockListKey);
+    List? proxys = prefs.getStringList(ApiMockListKey);
     if (proxys == null) {
-      return null;
+      return [];
     }
 
     List<ApiModel> apiModels = [];
     for (String proxyString in proxys) {
-      Map map = json.decode(proxyString);
+      Map<String, dynamic> map = json.decode(proxyString);
       ApiModel apiModel = ApiModel.fromJson(map);
       apiModels.add(apiModel);
     }

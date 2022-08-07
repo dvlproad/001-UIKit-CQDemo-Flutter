@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-07-19 15:21:22
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import './env_add_proxy_page.dart';
 import './env_add_network_page.dart';
@@ -5,10 +12,11 @@ import './env_add_network_page.dart';
 class EnvironmentAddUtil {
   // 显示添加或修改协议的页面
   static showAddOrUpdateProxyPage(
-    @required BuildContext context, {
-    String proxyName,
-    String proxyIp,
-    @required Function({String bProxyName, String bProxyIp}) addCompleteBlock,
+    BuildContext context, {
+    required String proxyName,
+    String? proxyIp,
+    required Function({required String bProxyName, String? bProxyIp})
+        addCompleteBlock,
   }) {
     showAlert(
       context,
@@ -16,10 +24,8 @@ class EnvironmentAddUtil {
         return EnvironmentAddProxyPage(
           proxyName: proxyName,
           oldProxyIp: proxyIp,
-          callBack: ({bProxyIp, bProxyName}) {
-            if (addCompleteBlock != null) {
-              addCompleteBlock(bProxyName: bProxyName, bProxyIp: bProxyIp);
-            }
+          callBack: ({String? bProxyIp, required String bProxyName}) {
+            addCompleteBlock(bProxyName: bProxyName, bProxyIp: bProxyIp);
           },
         );
       },
@@ -28,9 +34,9 @@ class EnvironmentAddUtil {
 
   // 显示添加或修改网络环境的页面
   static showAddOrUpdateNetworkPage(
-    @required BuildContext context, {
-    String proxyIp,
-    @required Function(String bProxyIp) addCompleteBlock,
+    BuildContext context, {
+    required String proxyIp,
+    required Function(String bProxyIp) addCompleteBlock,
   }) {
     showAlert(
       context,
@@ -38,9 +44,7 @@ class EnvironmentAddUtil {
         return EnvironmentAddNetworkPage(
           oldProxyIp: proxyIp,
           callBack: (bProxyIp) {
-            if (addCompleteBlock != null) {
-              addCompleteBlock(bProxyIp);
-            }
+            addCompleteBlock(bProxyIp);
           },
         );
       },
@@ -48,8 +52,8 @@ class EnvironmentAddUtil {
   }
 
   static void showAlert(
-    @required BuildContext context, {
-    @required Widget Function(BuildContext context) alertViewBulider,
+    BuildContext context, {
+    required Widget Function(BuildContext context) alertViewBulider,
   }) {
     // showDialog(
     //   context: context,

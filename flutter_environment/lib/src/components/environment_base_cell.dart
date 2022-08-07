@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 typedef ClickEnvBaseCellCallback = void Function(
-  int section,
-  int row,
-  String mainTitle,
-  List<String> subTitles,
-  bool check, {
-  bool isLongPress, // 是否是长按
+  String mainTitle, {
+  required List<String> subTitles,
+  int? section,
+  int? row,
+  bool? check,
+  bool? isLongPress, // 是否是长按
 });
 
 class EnvBaseTableViewCell extends StatelessWidget {
@@ -20,13 +20,13 @@ class EnvBaseTableViewCell extends StatelessWidget {
   final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 点击 cell
 
   EnvBaseTableViewCell({
-    Key key,
-    @required this.mainTitle,
-    @required this.subTitles,
-    this.check,
-    this.section,
-    this.row,
-    @required this.clickEnvBaseCellCallback,
+    Key? key,
+    required this.mainTitle,
+    required this.subTitles,
+    this.check = false,
+    this.section = 0,
+    this.row = 0,
+    required this.clickEnvBaseCellCallback,
   }) : super(key: key);
 
   @override
@@ -61,14 +61,14 @@ class EnvBaseTableViewCell extends StatelessWidget {
     );
   }
 
-  void _onTapCell({bool isLongPress}) {
+  void _onTapCell({bool? isLongPress}) {
     if (null != this.clickEnvBaseCellCallback) {
       this.clickEnvBaseCellCallback(
-        this.section,
-        this.row,
         this.mainTitle,
-        this.subTitles,
-        this.check,
+        section: this.section,
+        row: this.row,
+        subTitles: this.subTitles,
+        check: this.check,
         isLongPress: isLongPress,
       );
     }
@@ -82,7 +82,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(child: _rowLeftWidget),
-          _rowRightWidget != null ? _rowRightWidget : Container()
+          _rowRightWidget,
         ],
       ),
     );
@@ -96,7 +96,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.mainTitle ?? '',
+        this.mainTitle,
         textAlign: TextAlign.left,
         // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
         style: TextStyle(
@@ -114,7 +114,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
           color: Colors.transparent,
           child: Text(
-            subTitle ?? '',
+            subTitle,
             textAlign: TextAlign.left,
             // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
             style: TextStyle(
@@ -140,7 +140,7 @@ class EnvBaseTableViewCell extends StatelessWidget {
   Widget get _rowRightWidget {
     // 判断是否添加箭头
     if (this.check == false) {
-      return null;
+      return Container();
     }
 
     Widget arrowImageWidget = Container(
