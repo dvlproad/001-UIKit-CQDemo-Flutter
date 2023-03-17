@@ -9,6 +9,7 @@ import './interceptor/interceptor_request.dart';
 import './interceptor/interceptor_response.dart';
 import './interceptor/interceptor_error.dart';
 import './interceptor_log/dio_interceptor_log.dart';
+import './url/appendPathExtension.dart';
 import './bean/net_options.dart';
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
@@ -49,7 +50,8 @@ class BaseNetworkClient {
 
         String pathPrefix = stringAfterRemovePrefix.substring(host.length);
 
-        path = pathPrefix + api;
+        // 修复之前出现错计算不正确，多了个/导致删除缓存的时候匹配不上，而没删掉
+        path = pathPrefix.appendPathString(api);
       }
     }
 
@@ -64,7 +66,8 @@ class BaseNetworkClient {
 
   late ResponseModel Function(
     ResponseModel responseModel, {
-    bool? showToastForNoNetwork, // 网络开小差的时候，是否显示toast(默认不toast)
+    bool?
+        toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
   }) checkResponseModelFunction;
 
   /// body 中公共但不变的参数
@@ -102,7 +105,8 @@ class BaseNetworkClient {
         getDioErrorResponseModelBlock,
     required ResponseModel Function(
       ResponseModel responseModel, {
-      bool? showToastForNoNetwork, // 网络开小差的时候，是否显示toast(默认不toast)
+      bool?
+          toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
     })
         checkResponseModelHandel,
   }) {
@@ -197,8 +201,9 @@ class BaseNetworkClient {
     required void Function(dynamic resultMap) onSuccess,
     required void Function(String? failureMessage) onFailure,
   }) {
-    base_postRequestUrl(
+    base_requestUrl(
       url,
+      requestMethod: RequestMethod.post,
       customParams: customParams,
       options: options,
       cancelToken: cancelToken,
@@ -216,40 +221,10 @@ class BaseNetworkClient {
     });
   }
 
-  Future<ResponseModel> base_postRequestUrl(
-    String url, {
-    Map<String, dynamic>? customParams,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _requestUrl(
-      url,
-      requestMethod: RequestMethod.post,
-      customParams: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
-  Future<ResponseModel> base_getRequestUrl(
-    String url, {
-    Map<String, dynamic>? customParams,
-    Options? options,
-    CancelToken? cancelToken,
-  }) async {
-    return _requestUrl(
-      url,
-      requestMethod: RequestMethod.get,
-      customParams: customParams,
-      options: options,
-      cancelToken: cancelToken,
-    );
-  }
-
   // 网络请求的最底层方法
-  Future<ResponseModel> _requestUrl(
+  Future<ResponseModel> base_requestUrl(
     String url, {
-    RequestMethod? requestMethod,
+    RequestMethod requestMethod = RequestMethod.post,
     Map<String, dynamic>? customParams,
     Options? options,
     CancelToken? cancelToken,
@@ -285,8 +260,19 @@ class BaseNetworkClient {
 
   // 以下代码为 NetworkClient 的 ChangeUtil
   /************************* token 设置 *************************/
+  /// 获取当前dio的token值(用于该值为空时候，能否进行请求的token白名单)
+  String? getAuthorization() {
+    if (dio == null) {
+      return null;
+    }
+    Map<String, dynamic> requestHeaders = dio!.options.headers;
+    String tokenKey = 'Authorization';
+    String? token = requestHeaders[tokenKey];
+    return token;
+  }
+
   /// 添加/修改/删除token(登录成功/退出成功后调用)
-  void addOrUpdateToken(String token) {
+  void updateToken(String? token) {
     String tokenKey = 'Authorization';
     if (token == null || token.isEmpty) {
       DioChangeUtil.removeHeadersKey(dio!, tokenKey);
@@ -294,12 +280,6 @@ class BaseNetworkClient {
       Map<String, dynamic> requestHeaders = {tokenKey: token};
       DioChangeUtil.changeHeaders(dio!, headers: requestHeaders);
     }
-  }
-
-  /// 删除token(退出成功后调用)
-  void removeToken() {
-    String removeKey = 'Authorization';
-    DioChangeUtil.removeHeadersKey(dio!, removeKey);
   }
 
   /************************* baseUrl 设置 *************************/
@@ -314,7 +294,7 @@ class BaseNetworkClient {
   /************************* proxy 设置 *************************/
   String? serviceValidProxyIp; // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，该值会是null)
   // 修改代理 proxy(返回代理设置成功与否，当传入的不是ip地址格式不正确等则无法成功设置代理)
-  bool changeProxy(String proxyIp) {
+  bool changeProxy(String? proxyIp) {
     bool changeSuccess = DioChangeUtil.changeProxy(dio!, proxyIp: proxyIp);
     if (changeSuccess) {
       serviceValidProxyIp = proxyIp;

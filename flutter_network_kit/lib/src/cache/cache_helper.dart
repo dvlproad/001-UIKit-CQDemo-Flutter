@@ -1,12 +1,14 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2022-07-21 15:28:10
+ * @LastEditTime: 2022-08-11 11:47:10
  * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:flutter_network/src/url/url_util.dart';
 
 const DIO_CACHE_KEY_CACHE_LEVEL = "dio_cache_cache_level";
 
@@ -100,8 +102,10 @@ class CacheHelper {
     //     false; // 需要在 DioCacheManager 中 自己添加 options.headers..addAll({"currentIsRequestCache": true});
     bool isFromCache =
         false; // TODO:暂时无明确方法，可判断该请求最后是请求缓存还是实际接口，干脆不标明接口是请求什么。目前考虑的方式是在 DioCacheManager 中 自己添加 options.headers..addAll({"currentIsRequestCache": true});但无效
-    if (isTryCache == true && isFromCache == false) {
-      print("本来是尝试优先请求缓存的，但最后因为没有缓存数据，变成了直接取请求实际后台接口");
+    if (isTryCache == true) {
+      String fullUrl = UrlUtil.fullUrlFromDioRequestOptions(options);
+      _log(
+          "友情提示:优先尝试请求缓存，但最后是缓存请求还是实际请求，取决于缓存请求的时候 _pullFromCacheBeforeMaxAge 有没有数据，若没有会直接在 _onRequest 中进行实际请求，而不会再开一个请求:$fullUrl");
     }
 
     return isFromCache;
@@ -117,7 +121,8 @@ class CacheHelper {
       isFromCache = _isCacheHeadersMap(err.response!.headers.map);
     }
     if (isTryCache == true && isFromCache == false) {
-      print("本来是尝试优先请求缓存的，但最后因为没有缓存数据，变成了直接取请求实际后台接口");
+      String fullUrl = UrlUtil.fullUrlFromDioError(err);
+      _log("本来是尝试优先请求缓存的，但最后因为没有缓存数据，变成了直接取请求实际后台接口:$fullUrl");
     }
     return isFromCache;
   }
@@ -127,7 +132,9 @@ class CacheHelper {
     bool isFromCache = _isCacheHeadersMap(response.headers
         .map); // 此方法很重要，用于处理避免在尝试请求缓存的时候，因为是第一次或无缓存，导致实际直接请求的是后台接口，如果这个时候你还认为稍后返回的结果是缓存的，那会导致，待会要再重新请求一遍后台接口的错误，导致后台接口请求了两次。
     if (isTryCache == true && isFromCache == false) {
-      print("本来是尝试优先请求缓存的，但最后因为没有缓存数据，变成了直接取请求实际后台接口");
+      String fullUrl =
+          UrlUtil.fullUrlFromDioRequestOptions(response.requestOptions);
+      _log("本来是尝试优先请求缓存的，但最后因为没有缓存数据，变成了直接取请求实际后台接口:$fullUrl");
     }
     return isFromCache;
   }
@@ -156,5 +163,10 @@ class CacheHelper {
     }
 
     return isFromCache;
+  }
+
+  static void _log(String message) {
+    String dateTimeString = DateTime.now().toString().substring(0, 19);
+    debugPrint('$dateTimeString:$message');
   }
 }

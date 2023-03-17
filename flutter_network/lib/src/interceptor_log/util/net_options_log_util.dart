@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 14:03:10
+ * @LastEditTime: 2022-09-06 13:53:56
  * @Description: 请求各过程中的信息获取
  */
 import 'package:meta/meta.dart';
@@ -51,12 +51,18 @@ class ApiInfoGetter {
     Map<String, dynamic> detailLogJsonMap = options.detailLogJsonMap;
 
     // shortMessage
-    String apiShortMessge = '';
-    if (detailLogJsonMap.containsKey('isRealApi')) {
-      apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    Map<String, dynamic> shortLogJsonMap = {};
+    if (detailLogJsonMap['isRealApi'] != null) {
+      shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
     }
-    apiShortMessge += "${options.fullUrl}\n";
-    apiShortMessge += "Request:${options.method}";
+    shortLogJsonMap.addAll({"fullUrl": options.fullUrl});
+    shortLogJsonMap.addAll({"Request": "Request:${options.method}"});
+    // String apiShortMessge = '';
+    // if (detailLogJsonMap.containsKey('isRealApi')) {
+    //   apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    // }
+    // apiShortMessge += "${options.fullUrl}\n";
+    // apiShortMessge += "Request:${options.method}";
 
     DateTime dateTime = options.requestTime;
 
@@ -64,7 +70,7 @@ class ApiInfoGetter {
       apiProcessType: ApiProcessType.request,
       dateTime: dateTime,
       detailLogJsonMap: detailLogJsonMap,
-      shortMessage: apiShortMessge,
+      shortLogJsonMap: shortLogJsonMap,
       apiLogLevel: ApiLogLevel.request,
       isCacheApiLog: options.isRequestCache,
     );
@@ -92,22 +98,33 @@ class ApiInfoGetter {
     }
 
     // shortMessage
-    String apiShortMessge = '';
-    if (detailLogJsonMap.containsKey('isRealApi')) {
-      apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    Map<String, dynamic> shortLogJsonMap = {};
+    if (detailLogJsonMap['isRealApi'] != null) {
+      shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
     }
-    apiShortMessge += "${detailLogJsonMap['URL']}\n";
-    apiShortMessge += "Error:${detailLogJsonMap['ERRORTYPE']}\n";
+    shortLogJsonMap.addAll({"URL": detailLogJsonMap['URL']});
+    shortLogJsonMap.addAll({"ERRORTYPE": detailLogJsonMap['ERRORTYPE']});
     if (err.response != null) {
       int statusCode = err.response!.statusCode ?? HttpStatusCode.Unknow;
-      apiShortMessge += "Response:statusCode:${statusCode}";
+      String responseCodeMessage = "Response:statusCode:${statusCode}";
+      shortLogJsonMap.addAll({"Response": responseCodeMessage});
     }
+    // String apiShortMessge = '';
+    // if (detailLogJsonMap.containsKey('isRealApi')) {
+    //   apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    // }
+    // apiShortMessge += "${detailLogJsonMap['URL']}\n";
+    // apiShortMessge += "Error:${detailLogJsonMap['ERRORTYPE']}\n";
+    // if (err.response != null) {
+    //   int statusCode = err.response!.statusCode ?? HttpStatusCode.Unknow;
+    //   apiShortMessge += "Response:statusCode:${statusCode}";
+    // }
 
     ApiMessageModel apiMessageModel = ApiMessageModel(
       apiProcessType: ApiProcessType.error,
       dateTime: dateTime,
       detailLogJsonMap: detailLogJsonMap,
-      shortMessage: apiShortMessge,
+      shortLogJsonMap: shortLogJsonMap,
       apiLogLevel: apiErroLogLevel,
       isCacheApiLog: err.isErrorFromCache,
       errorType: err.type,
@@ -124,30 +141,50 @@ class ApiInfoGetter {
     // detailLogJsonMap
     Map<String, dynamic> detailLogJsonMap = response.detailLogJsonMap;
 
+    // 真正的 statusCode
+    int statusCode = response.statusCode ?? HttpStatusCode.Unknow;
     ResponseModel responseModel = getSuccessResponseModelBlock(
-        response.fullUrl, response.data, response.isResponseFromCache);
+      response.fullUrl,
+      statusCode,
+      response.data,
+      response.isResponseFromCache,
+    );
 
     // shortMessage
-    int statusCode =
-        response.statusCode ?? HttpStatusCode.Unknow; // 真正的 statusCode
-    int businessCode = responseModel
-        .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
-
     ApiLogLevel apiLogLevel = responseModel.apiLogLevel;
 
-    String apiShortMessge = '';
-    if (detailLogJsonMap.containsKey('isRealApi')) {
-      apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    Map<String, dynamic> shortLogJsonMap = {};
+    if (detailLogJsonMap['isRealApi'] != null) {
+      shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
     }
-    apiShortMessge += "${detailLogJsonMap['URL']}\n";
-    apiShortMessge += "Response:statusCode:${statusCode}_code:${businessCode}";
+    shortLogJsonMap.addAll({"URL": detailLogJsonMap['URL']});
+    String responseCodeMessage = "Response:statusCode:${statusCode}";
+    int businessCode = responseModel
+        .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
+    if (businessCode != null) {
+      responseCodeMessage += "_code:${businessCode}";
+    }
+    shortLogJsonMap.addAll({"Response": responseCodeMessage});
+
+    // String apiShortMessge = '';
+    // if (detailLogJsonMap.containsKey('isRealApi')) {
+    //   apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
+    // }
+    // apiShortMessge += "${detailLogJsonMap['URL']}\n";
+    // apiShortMessge += "Response:statusCode:${statusCode}";
+
+    // int businessCode = responseModel
+    //     .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
+    // if (businessCode != null) {
+    //   apiShortMessge += "_code:${businessCode}";
+    // }
 
     DateTime dateTime = response.responseTime;
     ApiMessageModel apiMessageModel = ApiMessageModel(
       apiProcessType: ApiProcessType.response,
       dateTime: dateTime,
       detailLogJsonMap: detailLogJsonMap,
-      shortMessage: apiShortMessge,
+      shortLogJsonMap: shortLogJsonMap,
       apiLogLevel: apiLogLevel,
       isCacheApiLog: response.isResponseFromCache,
       statusCode: statusCode,

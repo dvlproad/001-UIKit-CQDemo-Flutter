@@ -38,6 +38,11 @@ class UrlUtil {
     return _fullUrl(err.requestOptions.baseUrl, err.requestOptions.path);
   }
 
+  static String fullUrlFromDioResponse(Response response) {
+    return _fullUrl(
+        response.requestOptions.baseUrl, response.requestOptions.path);
+  }
+
   static String fullUrlFromDioRequestOptions(RequestOptions options) {
     return _fullUrl(options.baseUrl, options.path);
   }

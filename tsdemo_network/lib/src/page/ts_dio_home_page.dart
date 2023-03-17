@@ -12,7 +12,7 @@ class TSDioHomePage extends StatefulWidget {
 }
 
 class _TSNetworkHomePageState extends State<TSDioHomePage> {
-  CancelToken cancelToken;
+  CancelToken? cancelToken;
   void dispose() {
     cancelToken?.cancel();
   }
@@ -46,7 +46,7 @@ class _TSNetworkHomePageState extends State<TSDioHomePage> {
   }
 
   ///版本检查:蒲公英
-  Future<Map> checkPgyerVersion() async {
+  Future<Map?> checkPgyerVersion() async {
     String platformName = "";
     if (Platform.isIOS) {
       platformName = 'ios';
@@ -81,6 +81,10 @@ class _TSNetworkHomePageState extends State<TSDioHomePage> {
     );
 
     Map responseObject = response.data;
+    if (responseObject["code"] != 0) {
+      return null;
+    }
+
     Map result = responseObject['data'];
     print('蒲公英请求结果:result=${result.toString()}');
     bool hasNew = result['buildHaveNewVersion']; //是否有新版本

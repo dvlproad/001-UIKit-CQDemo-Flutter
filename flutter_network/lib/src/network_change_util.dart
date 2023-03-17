@@ -33,13 +33,13 @@ class DioChangeUtil {
 
   // 修改代理 proxy
   // 修改代理 proxy(返回代理设置成功与否，当传入的ip地址格式不正确等则无法成功设置代理)
-  static bool changeProxy(Dio dio, {required String proxyIp}) {
+  static bool changeProxy(Dio dio, {String? proxyIp}) {
     bool canUpdate = canUpdateProxy(proxyIp); // 无代理的话，一定是null
     if (canUpdate == false) {
       return false;
     }
 
-    String serviceValidProxyIp = proxyIp;
+    String? serviceValidProxyIp = proxyIp;
     (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
         (client) {
       client.findProxy = (uri) {
@@ -59,7 +59,7 @@ class DioChangeUtil {
   }
 
   // 判断是否能够更新代理（无代理 或 指定ip代理）
-  static bool canUpdateProxy(String ipString) {
+  static bool canUpdateProxy(String? ipString) {
     if (ipString == null) {
       return true; // 设置成”无代理“
     }

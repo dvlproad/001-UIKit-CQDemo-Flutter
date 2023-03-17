@@ -4,7 +4,6 @@ import 'package:app_network/app_network.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_network/src/mock/local_mock_util.dart';
-import 'package:flutter_log/flutter_log.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
@@ -14,7 +13,7 @@ class TSNetworkHomePage extends StatefulWidget {
 }
 
 class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
-  CancelToken cancelToken;
+  CancelToken? cancelToken;
   void dispose() {
     cancelToken?.cancel();
   }
@@ -22,36 +21,6 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
   @override
   void initState() {
     super.initState();
-
-    // network:api host
-    String baseUrl = "http://dev.api.xxx.com/hapi/";
-    // network:api token
-    String token = '';
-    // network:api commonParams
-    Map<String, dynamic> commonHeaderParams = {};
-
-    Map<String, dynamic> monitorCommonBodyParams = {};
-    Map<String, dynamic> monitorPublicParamsMap = {};
-    String monitorPublicParamsString =
-        FormatterUtil.convert(monitorPublicParamsMap, 0);
-    monitorCommonBodyParams.addAll({
-      "DataHubId": 'id',
-      "Public": 'monitorPublicParamsString',
-    });
-
-    AppNetworkKit.start(
-      commonHeaderParams: commonHeaderParams,
-      baseUrl: baseUrl,
-      monitorBaseUrl: "selectedNetworkModel.monitorApiHost",
-      token: token,
-      commonBodyParams: {},
-      monitorCommonBodyParams: monitorCommonBodyParams,
-      allowMock: true,
-      mockApiHost: "TSEnvironmentDataUtil.apiHost_mock",
-      needReloginHandle: () {
-        //
-      },
-    );
   }
 
   @override
@@ -69,19 +38,13 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
             ListTile(
               title: Text('切换环境:real'),
               onTap: () {
-                String baseUrl = "http://dev.api.xxx.com/hapi/";
-                AppNetworkKit.changeOptions(
-                  TSEnvNetworkModel(apiHost: baseUrl),
-                );
+                _onlyChangeApiHost("http://dev.api.xxx.com/hapi/");
               },
             ),
             ListTile(
               title: Text('切换环境:mock'),
               onTap: () {
-                String baseUrl = "http://121.41.91.92:3000/mock/28/api/bjh/";
-                AppNetworkKit.changeOptions(
-                  TSEnvNetworkModel(apiHost: baseUrl),
-                );
+                _onlyChangeApiHost("http://121.41.91.92:3000/mock/28/api/xxx/");
               },
             ),
             ListTile(
@@ -100,6 +63,14 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
         ),
       ),
     );
+  }
+
+  void _onlyChangeApiHost(String newApiHost) {
+    TSEnvNetworkModel selectedNetworkModel =
+        NetworkPageDataManager().selectedNetworkModel;
+    selectedNetworkModel.apiHost = newApiHost;
+
+    AppNetworkKit.changeOptions(selectedNetworkModel);
   }
 
   Widget get _chooseSexRow1 {
@@ -121,14 +92,12 @@ class _TSNetworkHomePageState extends State<TSNetworkHomePage> {
     ResponseModel responseModel1 = await AppNetworkKit.post(
       url,
       params: customParams,
-      cancelToken: cancelToken,
     );
     // print('请求结果1:\nresponseModel=$responseModel1,result=${responseModel1.result}');
 
     AppNetworkKit.post(
       url,
       params: customParams,
-      cancelToken: cancelToken,
     ).then((ResponseModel responseModel) {
       // print('请求结果2:\nresponseModel=$responseModel,result=${responseModel.result}');
     });

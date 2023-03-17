@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-20 00:32:06
+ * @LastEditTime: 2022-08-10 14:56:24
  * @Description: 应用层网络上抽离的管理上传方法的类
  */
 import 'package:flutter/foundation.dart'; // 为了使用 required
@@ -11,12 +11,12 @@ import 'package:flutter_environment/flutter_environment.dart';
 import 'package:tencent_cos/tencent_cos.dart';
 import 'dart:convert';
 
-import './app_env_network_util.dart';
-import './app_response_model_util.dart';
-import './app_api_simulate_util.dart';
+import '../app_network/app_network_manager.dart';
+import '../app_env_network_util.dart';
+import './app_upload_bean.dart';
 
-class AppNetworkKit_UploadUtil {
-  static Future<String?> uploadQCloud(
+extension UploadByFlutter on AppNetworkManager {
+  Future<String?> flutter_uploadQCloud(
     String localPath, {
     bool isImage = true,
   }) async {
@@ -37,7 +37,7 @@ class AppNetworkKit_UploadUtil {
       "allowPrefix": ["wish/*"],
       "bucket": bucket,
       "durationSeconds": 1800,
-      "region": "region"
+      "region": region,
     });
     Map<String, dynamic>? tencent_cos_credentials;
     if (responseModel.isSuccess) {
@@ -66,7 +66,7 @@ class AppNetworkKit_UploadUtil {
     );
   }
 
-  static Future<String?> _uploadQCloud(
+  Future<String?> _flutter_uploadQCloud(
     String localPath,
     Map<String, dynamic> tencent_cos_credentials, {
     required String cosPath,

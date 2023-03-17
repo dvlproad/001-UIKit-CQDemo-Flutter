@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  
+
   flutter_network:
     path: ../flutter_network/
 
@@ -20,9 +22,8 @@ dependencies:
     path: ../flutter_effect_kit/  # 为了引入 LoadingUtil
     
   dio_http_cache: any
-
-  connectivity_plus: any
   event_bus: any
+  connectivity_plus: any
 
 dev_dependencies:
   flutter_test:

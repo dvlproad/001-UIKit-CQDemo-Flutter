@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 14:31:09
+ * @LastEditTime: 2022-08-12 18:34:26
  * @Description: dio模型转为自身模型的转换方法
  */
 
@@ -29,7 +29,7 @@ class NetworkModelConvertUtil {
       method: options.method,
       contentType: options.contentType.toString(),
       params: options.queryParameters,
-      data: options.data,
+      data: options.data, // 参数params放Request模型的位置:GET请求时params中,POST请求时data中
       headers: options.headers,
       isRequestCache: isRequestCache,
     );

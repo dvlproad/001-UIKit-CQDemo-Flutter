@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-14 02:34:16
+ * @LastEditTime: 2022-08-12 18:35:17
  * @Description: 请求Request信息模型
  */
 import 'dart:convert' as convert;
@@ -85,6 +85,7 @@ class ReqOptions {
   }
 
   Map<String, dynamic> get bodyJsonMap {
+    // 参数params放Request模型的位置:GET请求时params中,POST请求时data中
     Map<String, dynamic> bodyJsonMap = {};
     final data = this.data;
     if (data != null) {

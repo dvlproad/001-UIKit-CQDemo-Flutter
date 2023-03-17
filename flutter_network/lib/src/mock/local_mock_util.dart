@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-03 15:08:15
+ * @LastEditTime: 2022-09-06 13:13:34
  * @Description: 本地接口模拟工具
  */
 import 'dart:io' show File;
@@ -95,7 +95,7 @@ class LocalMockUtil {
 
       String fullUrl = reqOptions.fullUrl;
       ResponseModel responseModel =
-          getSuccessResponseModelBlock(fullUrl, responseMap, false);
+          getSuccessResponseModelBlock(fullUrl, 200, responseMap, false);
       // 此类不会走拦截器，也就不会有 headers 等信息
       // String responseLogString =
       //     FormatterUtil.convert(responseMap, 0, isObject: true);

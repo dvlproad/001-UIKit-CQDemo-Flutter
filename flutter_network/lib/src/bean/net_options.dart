@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 13:47:31
+ * @LastEditTime: 2022-09-06 14:11:52
  * @Description: 请求过程的各种数据模型类
  */
 import 'dart:convert' as convert;
@@ -10,7 +10,7 @@ import 'package:flutter/foundation.dart';
 import 'req_options.dart';
 import 'err_options.dart';
 import 'res_options.dart';
-import '../network_bean.dart' show ResponseModel;
+import '../network_bean.dart';
 import '../interceptor_log/util/net_options_log_bean.dart';
 export './err_options.dart' show NetworkErrorType;
 
@@ -21,6 +21,7 @@ enum ApiProcessType {
   response, // 请求成功
 }
 
+// 2022-09-06注:获取responseModel的时候，statusCode设置为必传
 /*
  *  必须实现：将"网络请求成功返回的数据responseObject"转换为"模型"的方法
  *
@@ -31,7 +32,7 @@ enum ApiProcessType {
  *  @return 数据模型
  */
 typedef CJNetworkClientGetSuccessResponseModelBlock = ResponseModel Function(
-    String fullUrl, dynamic responseObject, bool? isCacheData);
+    String fullUrl, int statusCode, dynamic responseObject, bool? isCacheData);
 
 /*
  *  必须实现：将"网络请求失败返回的数据error"转换为"模型"的方法
@@ -43,7 +44,7 @@ typedef CJNetworkClientGetSuccessResponseModelBlock = ResponseModel Function(
  */
 // typedef CJResponseModel * _Nullable (^CJNetworkClientGetFailureResponseModelBlock)(NSError * _Nullable error, NSString * _Nullable errorMessage);
 typedef CJNetworkClientGetFailureResponseModelBlock = ResponseModel Function(
-    String fullUrl, int? statusCode, dynamic responseObject, bool? isCacheData);
+    String fullUrl, int statusCode, dynamic responseObject, bool? isCacheData);
 typedef CJNetworkClientGetDioErrorResponseModelBlock = ResponseModel Function(
     String fullUrl, ErrOptions errorModel, bool? isCacheData);
 
@@ -111,7 +112,11 @@ class NetOptions {
       logHeaderString += "=========== RESPONSE ===========\n"; // 日志头
       ResOptions response = resOptions!;
       ResponseModel responseModel = getSuccessResponseModelBlock(
-          response.fullUrl, response.data, response.isResponseFromCache);
+        response.fullUrl,
+        response.statusCode ?? HttpStatusCode.Unknow,
+        response.data,
+        response.isResponseFromCache,
+      );
 
       // shortMessage
       int? statusCode = response.statusCode; // 真正的 statusCode

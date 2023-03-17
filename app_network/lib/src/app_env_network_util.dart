@@ -1,8 +1,14 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart'; // 为了使用 required
+import 'package:flutter/material.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:tencent_cos/tencent_cos.dart';
-import 'dart:convert';
+
+import 'package:flutter_log/flutter_log.dart';
+import 'package:app_environment/app_environment.dart';
 
 import './app_network/app_network_manager.dart';
 import './app_network/app_network_cache_manager.dart';
@@ -10,51 +16,163 @@ import './trace/trace_util.dart';
 import './monitor_network/monitor_network_manager.dart';
 import './app_response_model_util.dart';
 import './app_api_simulate_util.dart';
+import './dev_common_params.dart';
+
+import 'package:flutter/services.dart' show rootBundle; // 用于使用 rootBundle
 
 class AppNetworkKit {
-  static void start({
-    required Map<String, dynamic> commonHeaderParams,
-    required String baseUrl, // 正常请求的 baseUrl
-    required Map<String, dynamic> commonBodyParams,
-    required String monitorBaseUrl, // 埋点请求的 baseUrl
-    required Map<String, dynamic> monitorCommonBodyParams,
-    required String token,
+  static Future<void> start(
+    PackageNetworkType originPackageNetworkType,
+    PackageTargetType originPackageTargetType, {
+    String? token,
+    required String channelName,
     required void Function() needReloginHandle, // 401等需要重新登录时候，执行的操作
+    List<int>? Function()?
+        forceNoToastStatusCodesGetFunction, // 获取哪些真正的statusCode药强制不弹 toast
+    // 应用层信息的获取
+    required String Function() uidGetBlock,
+  }) async {
+    await EnvManagerUtil.init_target_network_proxy(
+      originPackageTargetType: originPackageTargetType,
+      originPackageNetworkType: originPackageNetworkType,
+    );
 
-    bool allowMock = false, // 是否允许 mock api
-    String? mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
-  }) {
-    NetworkStatusManager(); // 提前开始获取网络类型环境
+    // 环境初始化
+    // network:api host
+    await NetworkPageDataManager().initCompleter.future;
+    TSEnvNetworkModel selectedNetworkModel =
+        NetworkPageDataManager().selectedNetworkModel;
 
-    CheckResponseModelUtil.init(needReloginHandle);
-    AppNetworkManager().cache_start(
-      baseUrl: baseUrl,
-      headerCommonFixParams: commonHeaderParams,
-      headerCommonChangeParamsGetBlock: () {
-        return {
-          'trace_id': TraceUtil.traceId(),
-        };
+    // target:
+    await PackageTargetPageDataManager().initCompleter.future;
+    PackageTargetModel selectedTargetModel =
+        PackageTargetPageDataManager().selectedTargetModel;
+
+    // proxy:
+    await ProxyPageDataManager().initCompleter.future;
+    TSEnvProxyModel selectedProxyModel =
+        ProxyPageDataManager().selectedProxyModel;
+
+    // network:api host
+    _start(
+      appFeatureType: selectedTargetModel.envId,
+      baseUrl: selectedNetworkModel.apiHost,
+      monitorBaseUrl: selectedNetworkModel.monitorApiHost,
+      getMonitorDataHubIdBlock: () {
+        String monitorDataHubId =
+            EnvManagerUtil.packageCurrentNetworkModel.monitorDataHubId;
+        return monitorDataHubId;
       },
-      headerAuthorization: token,
-      bodyCommonFixParams: commonBodyParams,
-      // bodyCommonChangeParamsGetBlock: () {
-      //   return {
-      //     'trace_id': TraceUtil.traceId(),
-      //   };
-      // },
-      commonIgnoreKeysForCache: ['trace_id', 'retryCount'],
-      allowMock: allowMock,
-      mockApiHost: mockApiHost,
-      localApiDirBlock: (apiPath) {
-        return "asset/data";
+      token: token,
+      channelName: channelName,
+      mockApiHost: TSEnvironmentDataUtil.apiHost_mock,
+      needReloginHandle: needReloginHandle,
+      forceNoToastStatusCodesGetFunction: forceNoToastStatusCodesGetFunction,
+      uidGetBlock: uidGetBlock,
+      packageNetworkTypeGetBlock: () {
+        return EnvManagerUtil.packageCurrentNetworkModel.type;
       },
     );
 
-    MonitorNetworkManager().cache_start(
+    // proxy:
+    AppNetworkKit.changeProxy(selectedProxyModel.proxyIp);
+
+    // check network+proxy+mock
+    Future.delayed(const Duration(milliseconds: 2000)).then((value) {
+      PackageCheckUpdateNetworkUtil.checkShouldResetNetwork(); //检查包的环境
+    });
+  }
+
+  // 环境相关：环境切换界面
+  static void initWithPage({
+    required GlobalKey navigatorKey,
+    required void Function() logoutHandleWhenExitAppByChangeNetwork,
+  }) {
+    EnvPageUtil.initWithPage(
+      navigatorKey: navigatorKey,
+      updateNetworkCallback: (TSEnvNetworkModel bNetworkModel) {
+        AppNetworkKit.changeOptions(bNetworkModel);
+      },
+      logoutHandleWhenExitAppByChangeNetwork:
+          logoutHandleWhenExitAppByChangeNetwork,
+      updateProxyCallback: (TSEnvProxyModel bProxyModel) {
+        AppNetworkKit.changeProxy(bProxyModel.proxyIp);
+      },
+      onPressTestApiCallback: (TestApiScene testApiScene) {
+        // 测试环境改变之后，网络请求是否生效
+        AppNetworkKit.post(
+          'login/doLogin',
+          params: {
+            "clientId": "clientApp",
+            "clientSecret": "123123",
+          },
+        ).then((value) {
+          debugPrint('测试的网络请求结束');
+        });
+      },
+    );
+  }
+
+  static void _start({
+    required String appFeatureType,
+    required String baseUrl, // 正常请求的 baseUrl
+    required String monitorBaseUrl, // 埋点请求的 baseUrl
+    required String Function()
+        getMonitorDataHubIdBlock, // 埋点请求的 DataHubId 的获取方法
+    String? token,
+    required void Function() needReloginHandle, // 401等需要重新登录时候，执行的操作
+    List<int>? Function()?
+        forceNoToastStatusCodesGetFunction, // 获取哪些真正的statusCode药强制不弹 toast
+    String? mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
+    // 应用层信息的获取
+    required String Function() uidGetBlock,
+    required String channelName,
+    required PackageNetworkType Function() packageNetworkTypeGetBlock,
+  }) async {
+    NetworkStatusManager(); // 提前开始获取网络类型环境
+
+    Map<String, dynamic> commonHeaderParams =
+        await CommonParamsHelper.commonHeaderParams(
+      appFeatureType: appFeatureType,
+      channel: channelName,
+    );
+    bool allowMock = true;
+
+    CheckResponseModelUtil.init(
+      needReloginHandle: needReloginHandle,
+      forceNoToastStatusCodesGetFunction: forceNoToastStatusCodesGetFunction,
+    );
+
+    Map<String, dynamic> apiCommonBodyParams = {};
+    AppNetworkManager().start(
+      baseUrl: baseUrl,
+      headerCommonFixParams: commonHeaderParams,
+      headerAuthorization: token,
+      // headerAuthorizationWhiteList: await _getHeaderAuthorizationWhiteList(),
+      bodyCommonFixParams: apiCommonBodyParams,
+      allowMock: allowMock,
+      mockApiHost: mockApiHost,
+      uidGetBlock: uidGetBlock,
+    );
+
+    Map<String, dynamic> monitorPublicParamsMap =
+        await CommonParamsHelper.fixedCommonParams();
+    String monitorPublicParamsString =
+        FormatterUtil.convert(monitorPublicParamsMap, 0);
+    Map<String, dynamic> monitorCommonBodyParams = {
+      "Public": monitorPublicParamsString,
+    };
+    MonitorNetworkManager().normal_start(
       baseUrl: monitorBaseUrl,
       headerCommonFixParams: commonHeaderParams,
       headerAuthorization: token,
       bodyCommonFixParams: monitorCommonBodyParams,
+      bodyCommonChangeParamsGetBlock: () {
+        String monitorDataHubId = getMonitorDataHubIdBlock();
+        return {
+          "DataHubId": monitorDataHubId,
+        };
+      },
       allowMock: allowMock,
       mockApiHost: mockApiHost,
       localApiDirBlock: (apiPath) {
@@ -79,7 +197,7 @@ class AppNetworkKit {
   }
 
   /************************* proxy 设置 *************************/
-  static bool changeProxy(String proxyIp) {
+  static bool changeProxy(String? proxyIp) {
     bool changeSuccess = AppNetworkManager().changeProxy(proxyIp);
     bool changeSuccess2 = MonitorNetworkManager().changeProxy(proxyIp);
 
@@ -90,14 +208,19 @@ class AppNetworkKit {
   static Future<ResponseModel> get(
     String api, {
     Map<String, dynamic>? params,
+    int retryCount = 0, // 轮询次数,最后一次不管成功与否都要返回
+    Duration? retryDuration, // 轮询间隔
+    bool Function(ResponseModel responseModel)?
+        retryStopConditionConfigBlock, // 是否请求停止的判断条件(为空时候,默认请求成功即停止)
     bool withLoading = false,
-    bool showToastForNoNetwork = false, // 网络开小差的时候，是否显示toast(默认不toast)
+    bool? showToastForNoNetwork,
   }) async {
-    _tryDealApi(api, isGet: true);
-
     return AppNetworkManager().get(
       api,
       customParams: params,
+      retryCount: retryCount,
+      retryDuration: retryDuration,
+      retryStopConditionConfigBlock: retryStopConditionConfigBlock,
       withLoading: withLoading,
       showToastForNoNetwork: showToastForNoNetwork,
     );
@@ -107,34 +230,40 @@ class AppNetworkKit {
   static Future<ResponseModel> post(
     String api, {
     Map<String, dynamic>? params,
+    int retryCount = 0, // 轮询次数,最后一次不管成功与否都要返回
+    Duration? retryDuration, // 轮询间隔
+    bool Function(ResponseModel responseModel)?
+        retryStopConditionConfigBlock, // 是否请求停止的判断条件(为空时候,默认请求成功即停止)
     bool withLoading = false,
-    bool showToastForNoNetwork = false, // 网络开小差的时候，是否显示toast(默认不toast)
+    bool? showToastForNoNetwork,
   }) async {
-    _tryDealApi(api, isGet: false);
-
     return AppNetworkManager().post(
       api,
       customParams: params,
+      retryCount: retryCount,
+      retryDuration: retryDuration,
+      retryStopConditionConfigBlock: retryStopConditionConfigBlock,
       withLoading: withLoading,
       showToastForNoNetwork: showToastForNoNetwork,
     );
   }
 
-  /// 通用的POST请求(如果设置缓存，可实现如果从缓存中取到数据，仍然能继续执行正常的请求)
-  static void postWithCallback(
+  /// 通用的GET、POST请求(如果设置缓存，可实现如果从缓存中取到数据，仍然能继续执行正常的请求)
+  static void getWithCallback(
     String api, {
     Map<String, dynamic>? params,
+    bool? ifNoAuthorizationForceGiveUpRequest, // 没有 Authorization 的时候是否强制放弃请求
     int retryCount = 0,
     withLoading = false,
     AppNetworkCacheLevel cacheLevel = AppNetworkCacheLevel.none,
-    bool showToastForNoNetwork = false, // 网络开小差的时候，是否显示toast(默认不toast)
+    bool? showToastForNoNetwork,
     required void Function(ResponseModel responseModel) completeCallBack,
   }) async {
-    _tryDealApi(api, isGet: false);
-
-    AppNetworkManager().postWithCallback(
+    AppNetworkManager().requestWithCallback(
       api,
+      requestMethod: RequestMethod.get,
       customParams: params,
+      ifNoAuthorizationForceGiveUpRequest: ifNoAuthorizationForceGiveUpRequest,
       retryCount: retryCount,
       cacheLevel: cacheLevel,
       withLoading: withLoading,
@@ -143,14 +272,48 @@ class AppNetworkKit {
     );
   }
 
-  static _tryDealApi(String api, {required bool isGet}) {
-    if (ApiManager.instance.allowMock == true) {
-      ApiManager.tryAddApi(api, isGet: isGet);
-      bool shouldMock = ApiManager.shouldAfterMockApi(api);
-      if (shouldMock) {
-        api = (api as String).toSimulateApi();
-      }
-    }
+  static void postWithCallback(
+    String api, {
+    Map<String, dynamic>? params,
+    bool? ifNoAuthorizationForceGiveUpRequest, // 没有 Authorization 的时候是否强制放弃请求
+    int retryCount = 0,
+    withLoading = false,
+    AppNetworkCacheLevel cacheLevel = AppNetworkCacheLevel.none,
+    bool? showToastForNoNetwork,
+    required void Function(ResponseModel responseModel) completeCallBack,
+  }) async {
+    AppNetworkManager().requestWithCallback(
+      api,
+      requestMethod: RequestMethod.post,
+      customParams: params,
+      ifNoAuthorizationForceGiveUpRequest: ifNoAuthorizationForceGiveUpRequest,
+      retryCount: retryCount,
+      cacheLevel: cacheLevel,
+      withLoading: withLoading,
+      showToastForNoNetwork: showToastForNoNetwork,
+      completeCallBack: completeCallBack,
+    );
+  }
+
+  /// 列表的请求(未设置会自动补上 pageNum pageSize 参数)
+  static void postListWithCallback(
+    String api, {
+    required Map<String, dynamic> params,
+    int retryCount = 0,
+    AppListCacheLevel listCacheLevel = AppListCacheLevel.one,
+    withLoading = false,
+    bool? showToastForNoNetwork,
+    required void Function(ResponseModel responseModel) completeCallBack,
+  }) async {
+    AppNetworkManager().postListWithCallback(
+      api,
+      customParams: params,
+      retryCount: retryCount,
+      listCacheLevel: listCacheLevel,
+      withLoading: withLoading,
+      showToastForNoNetwork: showToastForNoNetwork,
+      completeCallBack: completeCallBack,
+    );
   }
 
   //*
@@ -192,7 +355,6 @@ class AppNetworkKit {
     String messageParam,
   ) async {
     String api = '/bi/sendMessage';
-    _tryDealApi(api, isGet: false);
 
     Map<String, dynamic> customParams = {
       // "DataHubId": "datahub-y32g29n6", // 已添加到 commonParams 中
@@ -200,11 +362,62 @@ class AppNetworkKit {
       "Message": messageParam,
     };
 
-    return MonitorNetworkManager().post(
+    return MonitorNetworkManager().mock_requestUrl(
       api,
+      requestMethod: RequestMethod.post,
       customParams: customParams,
       withLoading: false,
       showToastForNoNetwork: false,
     );
   }
+
+  /*
+  List<String>? _getHeaderAuthorizationWhiteList() async {
+    return [
+      "config/biz-config",
+      "config/home",
+      "config/getResources",
+
+      "login/device-config", //获取活动落地页
+
+      "login/loginOut", //退出登录
+      "login/doLogin", //用户一键登录
+      "login/checkAuthorizationAccount", //获取当前微信登录用户是否存在手机号
+      "user/account/getTelCaptcha", //用户发送验证码
+      "user/account/get_city", //获取全国地址
+      // 以上是自己整的
+    ];
+
+    // 以下是后台给的
+    List<String>? headerAuthorizationWhiteList;
+    try {
+      // import 'package:flutter/services.dart'; // 用于使用 rootBundle
+      //var value = await rootBundle.loadString("assets/data/app_info.json");
+      var value = await rootBundle
+          .loadString("packages/app_network/assets/data/whitelist.json");
+      if (value != null) {
+        Map<String, dynamic> data =
+            json.decode(value); // import 'dart:convert'; // 用于使用json.decode
+
+        List<String>? monitorHeaderAuthorizationWhiteList =
+            data['monitor_white_list'];
+        if (monitorHeaderAuthorizationWhiteList != null) {
+          headerAuthorizationWhiteList ??= [];
+          headerAuthorizationWhiteList.add(monitorHeaderAuthorizationWhiteList);
+        }
+        List<String>? appHeaderAuthorizationWhiteList = data['app_white_list'];
+        if (monitorHeaderAuthorizationWhiteList != null) {
+          headerAuthorizationWhiteList ??= [];
+          headerAuthorizationWhiteList.add(appHeaderAuthorizationWhiteList);
+        }
+
+        return headerAuthorizationWhiteList;
+      }
+    } catch (e) {
+      if (_isDebug() == false) {
+        print('whitelist.json文件内容获取失败,可能未存在或解析过程出错');
+      }
+    }
+  }
+  */
 }

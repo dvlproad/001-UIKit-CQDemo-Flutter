@@ -32,12 +32,43 @@ enum ApiLogLevel {
   response_success, // 请求成功并业务成功(恭喜)
 }
 
+class ApiLogLevelUtil {
+  static ApiLogLevel getApiLogLevelByStatusCode(
+    int statusCode,
+    String statusMessage,
+  ) {
+    String? errorMessage = statusMessage;
+
+    ApiLogLevel apiLogLevel = ApiLogLevel.response_success;
+    if (statusCode == 200 || statusCode == 0) {
+      apiLogLevel = ApiLogLevel.response_success;
+    } else if (statusCode == 401) {
+      // 401 Unauthorized 当前请求需要用户验证(token不能为空)
+      bool needRelogin = errorMessage == '暂未登录或token已经过期';
+      if (needRelogin) {
+        apiLogLevel = ApiLogLevel.response_warning;
+      } else {
+        apiLogLevel = ApiLogLevel.error_other;
+      }
+    } else if (statusCode == 500 || statusCode == 503 || statusCode == 404) {
+      // 500 Internal Server Error 服务器错误
+      // 401 Unauthorized 当前请求需要用户验证(token不能为空)
+      // 404 Not Found 请求路径不存在
+      apiLogLevel = ApiLogLevel.error_other;
+    } else {
+      apiLogLevel = ApiLogLevel.response_warning;
+    }
+
+    return apiLogLevel;
+  }
+}
+
 class ApiMessageModel {
   DateTime dateTime;
   ApiProcessType apiProcessType;
 
   Map<String, dynamic> detailLogJsonMap;
-  String shortMessage;
+  Map<String, dynamic> shortLogJsonMap;
   ApiLogLevel apiLogLevel;
 
   bool? isCacheApiLog;
@@ -53,7 +84,7 @@ class ApiMessageModel {
     required this.dateTime,
     required this.apiProcessType,
     required this.detailLogJsonMap,
-    required this.shortMessage, // 简略信息(目前只用在页面日志列表的cell里，详情里还是完整信息)
+    required this.shortLogJsonMap, // 简略信息(目前只用在页面日志列表的cell里，详情里还是完整信息)
     required this.apiLogLevel,
     this.errorType, // error 时候才有
     this.statusCode, // response 时候才有
@@ -79,27 +110,5 @@ class ApiMessageModel {
     }
 
     return logHeaderString;
-  }
-
-  String get detailMessage {
-    String detailLogJsonString = getDetailLogJsonString(detailLogJsonMap);
-    String apiDetailMessage = "$logHeaderString\n$detailLogJsonString";
-
-    return apiDetailMessage;
-  }
-
-  static String getDetailLogJsonString(Map<String, dynamic> detailLogJsonMap) {
-    String detailLogJsonString = '';
-
-    // if (detailLogJsonMap["METHOD"] == "GET") {
-    //   // debug;
-    // }
-    for (String key in detailLogJsonMap.keys) {
-      Object keyValue = detailLogJsonMap[key];
-      String keyValueString =
-          FormatterUtil.convert(keyValue, 0, isObject: true);
-      detailLogJsonString += "- $key:\n$keyValueString\n\n";
-    }
-    return detailLogJsonString;
   }
 }

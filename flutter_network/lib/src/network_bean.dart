@@ -41,12 +41,14 @@ class ResponseModel {
   String? message;
   dynamic? result;
   bool? isCache;
+  bool? isSameToBefore; // 网络新数据是否和之前数据一样(重试/缓存)
 
   ResponseModel({
     required this.statusCode,
     this.message,
     this.result,
     this.isCache,
+    this.isSameToBefore,
   });
 
   @override
@@ -59,6 +61,10 @@ class ResponseModel {
     if (isCache != null) {
       responseMap.addAll({"isCache": isCache});
     }
+    if (isSameToBefore != null) {
+      responseMap.addAll({"isSameToBefore": isSameToBefore});
+    }
+
     if (statusCode != null) {
       responseMap.addAll({"statusCode": statusCode});
     }
@@ -69,6 +75,22 @@ class ResponseModel {
       responseMap.addAll({"result": result});
     }
     return responseMap;
+  }
+
+  bool isEqualToResponse(ResponseModel cacheResponseModel) {
+    if (this.statusCode != cacheResponseModel.statusCode) {
+      return false;
+    }
+
+    if (this.message != cacheResponseModel.message) {
+      return false;
+    }
+
+    if (this.result.toString() != cacheResponseModel.result.toString()) {
+      return false;
+    }
+
+    return true;
   }
 
   bool get isSuccess => statusCode == 0;
@@ -96,30 +118,17 @@ class ResponseModel {
     return responseModel;
   }
 
+  // 自定义获取api日志类型
+  ApiLogLevel Function(ResponseModel responseModel)? customGetApiLogLevelBlock;
+
   ApiLogLevel get apiLogLevel {
-    String? errorMessage = message;
-
-    ApiLogLevel apiLogLevel = ApiLogLevel.response_success;
-    if (statusCode == 200 || statusCode == 0) {
-      apiLogLevel = ApiLogLevel.response_success;
-    } else if (statusCode == 401) {
-      // 401 Unauthorized 当前请求需要用户验证(token不能为空)
-      bool needRelogin = errorMessage == '暂未登录或token已经过期';
-      if (needRelogin) {
-        apiLogLevel = ApiLogLevel.response_warning;
-      } else {
-        apiLogLevel = ApiLogLevel.error_other;
-      }
-    } else if (statusCode == 500 || statusCode == 503 || statusCode == 404) {
-      // 500 Internal Server Error 服务器错误
-      // 401 Unauthorized 当前请求需要用户验证(token不能为空)
-      // 404 Not Found 请求路径不存在
-      apiLogLevel = ApiLogLevel.error_other;
-    } else {
-      apiLogLevel = ApiLogLevel.response_warning;
+    if (customGetApiLogLevelBlock != null) {
+      return customGetApiLogLevelBlock!(this);
     }
-
-    return apiLogLevel;
+    return ApiLogLevelUtil.getApiLogLevelByStatusCode(
+      statusCode,
+      message ?? '',
+    );
   }
 }
 

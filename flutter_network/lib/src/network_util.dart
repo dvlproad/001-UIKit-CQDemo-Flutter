@@ -25,7 +25,7 @@ class NetworkUtil {
   static Future<ResponseModel> requestUrl(
     Dio dio,
     String url, {
-    RequestMethod? requestMethod,
+    RequestMethod requestMethod = RequestMethod.post,
     Map<String, dynamic>? customParams,
     Options? options,
     CancelToken? cancelToken,
@@ -91,12 +91,27 @@ class NetworkUtil {
 
       DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
       late ResponseModel responseModel;
+      // ①.fullUrl
+      String fullUrl;
+      if (url.startsWith(RegExp(r'https?:'))) {
+        fullUrl = url;
+      } else {
+        fullUrl = UrlUtil.fullUrlFromDioResponse(response);
+      }
       if (response.statusCode == 200) {
-        responseModel =
-            getSuccessResponseModelBlock(url, response.data, isFromCache);
+        responseModel = getSuccessResponseModelBlock(
+          fullUrl,
+          response.statusCode ?? HttpStatusCode.Unknow,
+          response.data,
+          isFromCache,
+        );
       } else {
         responseModel = getFailureResponseModelBlock(
-            url, response.statusCode, response.data, isFromCache);
+          fullUrl,
+          response.statusCode ?? HttpStatusCode.Unknow,
+          response.data,
+          isFromCache,
+        );
       }
       DioLogUtil.debugApiWithLog(url, "请求后解析结束...");
       return responseModel;

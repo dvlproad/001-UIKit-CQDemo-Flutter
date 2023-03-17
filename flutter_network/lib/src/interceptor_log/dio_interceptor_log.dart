@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-07 19:15:57
+ * @LastEditTime: 2022-07-03 16:50:22
  * @Description: log日志的处理类
  */
 import 'package:dio/dio.dart';
@@ -75,15 +75,17 @@ class DioLogInterceptor implements Interceptor {
         _logApiInfoAction(apiInfo, ApiProcessType.error);
       },
     );
+    /*
     if (errOptions.response != null) {
       logManage.onResponse(
         errOptions.response!,
         getSuccessResponseModelBlock: _getSuccessResponseModelBlock,
         completeBlock: (NetOptions apiInfo) {
-          _logApiInfoAction(apiInfo, ApiProcessType.error);
+          _logApiInfoAction(apiInfo, ApiProcessType.error); // 这里应该采用 ApiProcessType.error,前面却没设置 errOptions,会导致出错
         },
       );
     }
+    */
 
     return handler.next(err);
   }

@@ -11,12 +11,22 @@ dependencies:
   flutter:
     sdk: flutter
 
+  package_info_plus: any
+  device_info_plus: any
+  connectivity_plus: any
+  flutter_native_timezone: any
   flutter_network_kit:
     path: ../flutter_network_kit/
+
+  app_environment:
+    path: ../app_environment/
   flutter_environment:
     path: ../flutter_environment/ # 为了引入 ApiManager
+  
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
+  flutter_image_process:
+    path: ../flutter_image_process/
 
   tencent_cos: ^1.0.6
 
@@ -35,6 +45,8 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/data/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

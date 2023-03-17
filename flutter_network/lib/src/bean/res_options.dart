@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-02 18:08:36
+ * @LastEditTime: 2022-09-06 14:04:30
  * @Description: 网络请求成功返回的数据模型
  */
 import 'dart:convert' as convert;
@@ -87,7 +87,16 @@ class ResOptions {
     if (response.data is String) {
       // 后台把data按字符串返回的时候
       if ((response.data as String).isEmpty) {
-        responseMap = {};
+        String responseDataString = "\'\'"; // 空字符串
+        String errorMessage =
+            "Error:请求${fullUrl}后台response用字符串返回,且值为${responseDataString},该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
+        responseMap = {
+          'data': response.data,
+          'lichaoqian_log': {
+            "code": -1001,
+            "msg": errorMessage,
+          }
+        };
       } else {
         responseMap = convert.jsonDecode(response.data);
       }

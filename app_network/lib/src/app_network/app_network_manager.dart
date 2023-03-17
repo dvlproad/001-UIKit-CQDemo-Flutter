@@ -2,17 +2,28 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 15:09:44
+ * @LastEditTime: 2023-03-17 23:59:28
  * @Description: 正常请求管理中心+埋点请求管理中心
  */
+import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert' show json;
 import 'dart:convert' as convert;
 import 'package:flutter_network_kit/flutter_network_kit.dart';
+import 'package:flutter_environment/flutter_environment.dart';
+import 'package:app_environment/app_environment.dart';
 import '../app_response_model_util.dart';
 import '../mock/mock_analy_util.dart';
+import '../trace/trace_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AppNetworkManager extends CacheNetworkClient {
+import 'package:flutter_image_process/flutter_image_process.dart'
+    show UploadMediaType;
+
+import '../base/mock_network_manager.dart';
+import 'package:path_provider/path_provider.dart';
+
+class AppNetworkManager extends MockNetworkManager {
   static const int CONNECT_TIMEOUT = 3000;
   static const int RECEIVE_TIMEOUT = 5000; // 会影响发视频这种大数据吗
 
@@ -33,6 +44,8 @@ class AppNetworkManager extends CacheNetworkClient {
     _init();
   }
 
+  final uploadIdChannel = const MethodChannel("multipart.uploadId");
+
   _init() {
     if (dio == null) {
       BaseOptions options = BaseOptions(
@@ -43,8 +56,8 @@ class AppNetworkManager extends CacheNetworkClient {
       dio = Dio(options);
 
       normal_setup(
-        getSuccessResponseModelBlock:
-            (String fullUrl, dynamic responseMap, bool? isFromCache) {
+        getSuccessResponseModelBlock: (String fullUrl, int statusCode,
+            dynamic responseMap, bool? isFromCache) {
           return _getResponseModel(
             fullUrl: fullUrl,
             statusCode: 200,
@@ -52,12 +65,12 @@ class AppNetworkManager extends CacheNetworkClient {
             isResponseFromCache: isFromCache,
           );
         },
-        getFailureResponseModelBlock: (String fullUrl, int? statusCode,
+        getFailureResponseModelBlock: (String fullUrl, int statusCode,
             dynamic responseObject, bool? isCacheData) {
           String errorMessage = '后端接口出现异常';
           String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
           ResponseModel responseModel = ResponseModel(
-            statusCode: statusCode ?? HttpStatusCode.Unknow,
+            statusCode: statusCode,
             message: message,
             result: null,
             isCache: isCacheData,
@@ -73,15 +86,194 @@ class AppNetworkManager extends CacheNetworkClient {
             isCacheData,
           );
         },
-        checkResponseModelHandel: (responseModel, {showToastForNoNetwork}) {
+        checkResponseModelHandel: (ResponseModel responseModel,
+            {bool? toastIfMayNeed}) {
           return CheckResponseModelUtil.checkResponseModel(
             responseModel,
-            showToastForNoNetwork: showToastForNoNetwork ?? false,
+            toastIfMayNeed: toastIfMayNeed,
             serviceProxyIp: serviceValidProxyIp,
           );
         },
       );
     }
+
+    uploadIdChannel.setMethodCallHandler((call) async {
+      final preferences = await SharedPreferences.getInstance();
+      final uploadIdStr = preferences.getString("multipart.uploadId") ?? "{}";
+      final Map map = json.decode(uploadIdStr);
+      final path = call.arguments["filePath"] as String;
+      final uploadId = call.arguments["uploadId"] as String;
+      final cos = call.arguments["cos"] as String;
+      String key = path.split("/").last;
+      switch (call.method) {
+        case "save":
+          {
+            map[key] = uploadId;
+            map["cos_$key"] = cos;
+            preferences.setString("multipart.uploadId", json.encode(map));
+            return Future(() => "成功");
+          }
+        case "complete":
+          {
+            map.remove(key);
+            map.remove("cos_$key");
+            map["complete$key"] = true;
+            map["complete_cos$key"] = cos;
+            preferences.setString("multipart.uploadId", json.encode(map));
+            return Future(() => "成功");
+          }
+      }
+      return null;
+    });
+  }
+
+  // late String Function() uidGetFunction;
+
+  late String Function(UploadMediaType mediaType) bucketGetFunction;
+  late String Function() regionGetFunction;
+  late String Function() cosFilePrefixGetFunction;
+  late String Function(
+    String localPath, {
+    UploadMediaType mediaType,
+  }) cosFileRelativePathGetFunction;
+  late String Function(UploadMediaType mediaType)
+      cosFileUrlPrefixGetFunction; // cos文件的网络地址前缀
+
+  void start({
+    required String baseUrl,
+    String?
+        contentType, // "application/json""application/x-www-form-urlencoded"
+    required Map<String, dynamic> headerCommonFixParams, // header 中公共但不变的参数
+    String? headerAuthorization,
+    List<String>?
+        headerAuthorizationWhiteList, // 请求时候，检查到当前headerAuthorization为空,可继续请求的白名单
+    required Map<String, dynamic> bodyCommonFixParams, // body 中公共但不变的参数
+    bool allowMock = false, // 是否允许 mock api
+    String? mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
+    // 应用层信息的获取
+    required String Function() uidGetBlock,
+  }) {
+    // uidGetFunction = uidGetBlock;
+    regionGetFunction = () {
+      TSEnvNetworkModel currentNetworkModel =
+          EnvManagerUtil.packageCurrentNetworkModel;
+      return currentNetworkModel.cosParamModel.region;
+    };
+
+    bucketGetFunction = (UploadMediaType mediaType) {
+      String bucket = "";
+      // 环境
+      TSEnvNetworkModel currentNetworkModel =
+          EnvManagerUtil.packageCurrentNetworkModel;
+      if (mediaType == UploadMediaType.image) {
+        bucket = currentNetworkModel.cosParamModel.bucket_image;
+      } else {
+        bucket = currentNetworkModel.cosParamModel.bucket_other;
+      }
+
+      return bucket;
+    };
+
+    // String Function() regionGetFunction;
+    cosFilePrefixGetFunction = () {
+      TSEnvNetworkModel currentNetworkModel =
+          EnvManagerUtil.packageCurrentNetworkModel;
+      return currentNetworkModel.cosParamModel.cosFilePrefix;
+    };
+    cosFileRelativePathGetFunction = (
+      String localPath, {
+      UploadMediaType mediaType = UploadMediaType.unkonw,
+    }) {
+      String uid = uidGetBlock();
+
+      String fileOriginNameAndExtensionType = localPath.split('/').last;
+
+      // String str = " Hello Word! ";
+      RegExp regExp = RegExp(r"\s+\b|\b\s"); // 去除字符串中的所有空格
+      fileOriginNameAndExtensionType =
+          fileOriginNameAndExtensionType.replaceAll(regExp, "");
+
+      /*
+      String fileExtensionType = fileOriginNameAndExtensionType.split('.').last;
+      String fileOriginName = fileOriginNameAndExtensionType.substring(
+          0, fileOriginNameAndExtensionType.length - fileExtensionType.length);
+      fileOriginNameAndExtensionType = 'test.$fileExtensionType';
+      */
+
+      int nowTime = DateTime.now().microsecondsSinceEpoch;
+      String cosFileName = "${nowTime.toString()}";
+      cosFileName += "_$fileOriginNameAndExtensionType";
+
+      // 头
+      String cosPath = cosFilePrefixGetFunction();
+
+      // 类别
+      if (mediaType == UploadMediaType.image) {
+        // 图片有自己的桶
+      } else {
+        // 视频、音频共用一个桶，需要再区分
+        if (mediaType == UploadMediaType.audio) {
+          cosPath += "/audio";
+        } else if (mediaType == UploadMediaType.video) {
+          cosPath += "/video";
+        } else {
+          cosPath += "/other";
+        }
+      }
+
+      // 用户1级
+      int uidMode = int.parse(uid) % 1000; // 取余数
+      cosPath += "/$uidMode";
+      // 用户2级
+      cosPath += "/$uid";
+
+      // 年月
+      String dirTime = DateTime.now().toString().substring(0, 7);
+      cosPath += "/$dirTime";
+
+      // 文件名
+      cosPath += "/$cosFileName";
+
+      return cosPath;
+    };
+    cosFileUrlPrefixGetFunction = (UploadMediaType mediaType) {
+      TSEnvNetworkModel currentNetworkModel =
+          EnvManagerUtil.packageCurrentNetworkModel;
+      if (mediaType == UploadMediaType.image) {
+        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
+      } else if (mediaType == UploadMediaType.video) {
+        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_video;
+      } else if (mediaType == UploadMediaType.audio) {
+        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_audio;
+      } else {
+        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
+      }
+    };
+
+    cache_start(
+      baseUrl: baseUrl,
+      contentType: contentType,
+      headerCommonFixParams: headerCommonFixParams,
+      headerCommonChangeParamsGetBlock: () {
+        return {
+          'trace_id': TraceUtil.traceId(),
+        };
+      },
+      headerAuthorization: headerAuthorization,
+      headerAuthorizationWhiteList: headerAuthorizationWhiteList,
+      bodyCommonFixParams: bodyCommonFixParams,
+      // bodyCommonChangeParamsGetBlock: () {
+      //   return {
+      //     'trace_id': TraceUtil.traceId(),
+      //   };
+      // },
+      commonIgnoreKeysForCache: ['trace_id', 'retryCount'],
+      allowMock: allowMock,
+      mockApiHost: mockApiHost,
+      localApiDirBlock: (String apiPath) {
+        return "asset/data";
+      },
+    );
   }
 
   ResponseModel _getResponseModel({
@@ -91,26 +283,30 @@ class AppNetworkManager extends CacheNetworkClient {
     bool? isResponseFromCache,
   }) {
     if (responseData == null) {
-      return ResponseModel(
+      ResponseModel responseModel = ResponseModel(
         statusCode: -1,
         message: "responseData == null",
         result: null,
         isCache: isResponseFromCache,
       );
+      return responseModel;
     }
 
     if (responseData is String && (responseData as String).isEmpty) {
       // 后台把data按字符串返回的时候
-      return ResponseModel(
+      String responseDataString = "\'\'"; // 空字符串
+      String errorMessage =
+          "Error:请求${fullUrl}后台response用字符串返回,且值为${responseDataString},该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
+      ResponseModel responseModel = ResponseModel(
         statusCode: statusCode,
         // message: response.m,
         result: {
           "code": -1001,
-          "msg":
-              "Error:后台response用字符串返回,值为${responseData},该字符串却无法转成标准的由code\msg\result组成的map结构(目前发现于503时候)",
+          "msg": errorMessage,
         },
         isCache: isResponseFromCache,
       );
+      return responseModel;
     }
 
     dynamic responseObject;

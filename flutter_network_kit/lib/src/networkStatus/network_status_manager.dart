@@ -3,7 +3,7 @@
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
  * @LastEditTime: 2022-07-07 15:01:55
- * @Description: 
+ * @Description: 网络状态管理
  */
 import 'dart:async' show Completer, StreamSubscription;
 import 'dart:developer' as developer;
@@ -18,6 +18,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import './network_eventbus.dart';
 export './network_eventbus.dart' show NetworkType;
 // export 'package:connectivity_plus/connectivity_plus.dart' show ConnectivityResult;
+
+import 'package:flutter_log/flutter_log.dart';
+import '../log/api_log_util.dart';
 
 class NetworkStatusManager {
   // public method
@@ -79,6 +82,7 @@ class NetworkStatusManager {
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    NetworkType oldConnectionStatus = _connectionStatus;
     if (result == ConnectivityResult.none) {
       _connectionStatus = NetworkType.none;
     } else if (result == ConnectivityResult.bluetooth) {
@@ -92,6 +96,11 @@ class NetworkStatusManager {
     } else {
       _connectionStatus = NetworkType.unknow;
     }
+
+    LogApiUtil.logNetworkStatus(
+      oldConnectionStatus: oldConnectionStatus,
+      curConnectionStatus: _connectionStatus,
+    );
 
     networkEventBus.fire(NetworkTypeChangeEvent(_connectionStatus));
   }
