@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import './full_loading_widget.dart';
+import './loading_widget.dart';
 
 OverlayEntry? doingTextOverlayEntry;
 
@@ -83,6 +84,23 @@ class LoadingUtil {
   }
 
   static dismiss() {
+    EasyLoading.dismiss();
+  }
+
+  static showForVideo(
+      {double width = 40, double height = 40, EasyLoadingMaskType? maskType, bool dismissOnTap = false}) {
+    EasyLoading.show(
+      indicator: LoadingWidget(
+        width: width,
+        height: height,
+        loadingFor: LoadingFor.videoPalyer,
+      ),
+      maskType: maskType,
+      dismissOnTap: dismissOnTap,
+    );
+  }
+
+  static hideForVideo() {
     EasyLoading.dismiss();
   }
 

@@ -25,9 +25,15 @@ enum TestApiScene {
 class EnvPageUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
   static late GlobalKey _navigatorKey;
+  static bool hasInitUI = false;
 
   // 定义 navigatorKey 属性的 get 和 set 方法
-  static GlobalKey get navigatorKey => _navigatorKey;
+  static GlobalKey get navigatorKey {
+    if (hasInitUI != true) {
+      throw Exception("您从未初始化，请先调用 initWithPage ");
+    }
+    return _navigatorKey;
+  }
 
   static late void Function(TSEnvNetworkModel bNetworkModel)
       _updateNetworkCallback;
@@ -45,6 +51,7 @@ class EnvPageUtil {
     void Function(TestApiScene testApiScene)? onPressTestApiCallback,
   }) {
     _navigatorKey = navigatorKey; // ①悬浮按钮的显示功能需要
+    hasInitUI = true;
 
     _updateNetworkCallback = updateNetworkCallback;
     _logoutHandleWhenExitAppByChangeNetwork =

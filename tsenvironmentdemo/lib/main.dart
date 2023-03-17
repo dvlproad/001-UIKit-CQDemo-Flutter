@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 18:27:50
+ * @LastEditTime: 2023-03-18 00:28:48
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -20,19 +20,14 @@ void main() {
 }
 
 void initEnv(PackageNetworkType originPackageNetworkType) async {
-  // network:api host
-  await EnvManagerUtil.initNetworkEnvironmentManager(originPackageNetworkType);
+  EnvManagerUtil.init_target_network_proxy(
+    originPackageTargetType: PackageTargetType.dev,
+    originPackageNetworkType: originPackageNetworkType,
+  );
   await NetworkPageDataManager().initCompleter.future;
 
-  // proxy:
-  await EnvManagerUtil.initProxyEnvironmentManager(originPackageNetworkType);
   await ProxyPageDataManager().initCompleter.future;
 
-  // network:api host
-  await EnvManagerUtil.initPackageTargetManager(
-    originPackageNetworkType,
-    PackageTargetType.dev,
-  );
   await PackageTargetPageDataManager().initCompleter.future;
 
   // 网络环境相关：环境切换界面

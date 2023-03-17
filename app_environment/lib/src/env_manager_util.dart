@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-19 03:38:08
+ * @LastEditTime: 2023-03-18 00:29:29
  * @Description: 环境初始化类
  */
 
@@ -22,26 +22,25 @@ class EnvManagerUtil {
 
   /************************* environment 环境设置 *************************/
   static bool hasInitCompleter_Env = false;
-  static init_target_network_proxy({
+  static Future<void> init_target_network_proxy({
     required PackageTargetType originPackageTargetType,
     required PackageNetworkType originPackageNetworkType,
   }) async {
     // 环境初始化
     // network:api host
-    await EnvManagerUtil.initNetworkEnvironmentManager(
-        originPackageNetworkType);
+    await _initNetworkEnvironmentManager(originPackageNetworkType);
     await NetworkPageDataManager().initCompleter.future;
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
 
     // proxy:
-    await EnvManagerUtil.initProxyEnvironmentManager(originPackageNetworkType);
+    await _initProxyEnvironmentManager(originPackageNetworkType);
     await ProxyPageDataManager().initCompleter.future;
     TSEnvProxyModel selectedProxyModel =
         ProxyPageDataManager().selectedProxyModel;
 
     // target:
-    await EnvManagerUtil.initPackageTargetManager(
+    await _initPackageTargetManager(
         originPackageNetworkType, originPackageTargetType);
     await PackageTargetPageDataManager().initCompleter.future;
     PackageTargetModel selectedTargetModel =
@@ -52,7 +51,7 @@ class EnvManagerUtil {
   }
 
   // network
-  static Future<Null> initNetworkEnvironmentManager(
+  static Future<Null> _initNetworkEnvironmentManager(
       PackageNetworkType packageNetworkType) async {
     _originPackageNetworkType = packageNetworkType;
 
@@ -86,7 +85,7 @@ class EnvManagerUtil {
     );
   }
 
-  static Future<Null> initPackageTargetManager(
+  static Future<Null> _initPackageTargetManager(
     PackageNetworkType packageNetworkType,
     PackageTargetType packageTargetType,
   ) async {
@@ -117,7 +116,7 @@ class EnvManagerUtil {
   }
 
   // proxy
-  static Future<Null> initProxyEnvironmentManager(
+  static Future<Null> _initProxyEnvironmentManager(
       PackageNetworkType packageNetworkType) async {
     bool canUseCacheProxy = false;
     if (packageNetworkType == PackageNetworkType.develop1) {

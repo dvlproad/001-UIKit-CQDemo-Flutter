@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-06 10:09:31
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 00:17:26
+ * @LastEditTime: 2022-08-25 18:24:20
  * @Description: 下拉刷新+上拉加载+hud
  */
 library flutter_effect_kit;
@@ -10,6 +10,9 @@ library flutter_effect_kit;
 // hud
 export './src/hud/state_loading_widget.dart';
 export './src/hud/loading_util.dart';
+
+// progress
+export './src/hud/process_widget.dart';
 
 // refresh
 export './src/refresh/app_refresh_container.dart';

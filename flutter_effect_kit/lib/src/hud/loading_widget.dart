@@ -9,19 +9,34 @@ import 'package:flutter/material.dart';
 import './loading_images_base_widget.dart'; // 使用 images 加载动画
 import 'package:lottie/lottie.dart'; // 使用 json 加载动画
 
+enum LoadingFor {
+  normal,
+  videoPalyer,
+}
+
 class LoadingWidget extends StatelessWidget {
+  final LoadingFor loadingFor;
   final double? width;
   final double? height;
 
   final int? interval;
 
-  LoadingWidget({this.width, this.height, this.interval});
+  LoadingWidget({
+    this.width,
+    this.height,
+    this.interval,
+    this.loadingFor = LoadingFor.normal,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (loadingFor == LoadingFor.videoPalyer) {
+      // return const CircularProgressIndicator(color: Colors.grey);
+      return _loadingWidget_json;
+    }
+
     return _loadingWidget_gif;
     // return _loadingWidget_images;
-    // return _loadingWidget_json;
   }
 
   // 动画加载方法1：使用 gif 加载动画
@@ -53,9 +68,9 @@ class LoadingWidget extends StatelessWidget {
   Widget get _loadingWidget_json {
     return Container(
       // color: Colors.yellow,
-      height: 100,
+      height: height ?? 40,
       child: Lottie.asset(
-        'assets/loading_json/footer.json',
+        'assets/loading_json/loading_center_video.json',
         // 'assets/loading_json/undefined_ske.json',
         package: 'flutter_effect_kit',
         fit: BoxFit.fill,
