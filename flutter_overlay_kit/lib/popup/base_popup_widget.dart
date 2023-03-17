@@ -69,6 +69,7 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(

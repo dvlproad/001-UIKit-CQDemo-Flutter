@@ -2,12 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 01:11:32
+ * @LastEditTime: 2023-03-17 15:14:07
  * @Description: Alert弹窗工具类
  */
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import './message_alert_view.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
 class AlertUtil {
   // 我知道了
@@ -16,8 +18,15 @@ class AlertUtil {
     bool barrierDismissible = false,
     String? title,
     String? message,
+    String? confirmText,
+    TextAlign? messageAlign,
     void Function()? iKnowHandle,
   }) {
+    // double height = MediaQuery.of(context).size.height;
+    // double containerHeight = height ??
+    //     height -
+    //         AdaptCJHelper.stautsBarHeight -
+    //         AdaptCJHelper.screenBottomHeight;
     return showAlert(
       context,
       barrierDismissible: barrierDismissible,
@@ -25,7 +34,8 @@ class AlertUtil {
         return IKnowMessageAlertView(
           title: title,
           message: message,
-          iKnowTitle: "我知道了",
+          messageAlign: messageAlign,
+          iKnowTitle: confirmText ?? "我知道了",
           iKnowHandle: () {
             Navigator.pop(context);
             if (iKnowHandle != null) {
@@ -68,6 +78,7 @@ class AlertUtil {
     TextAlign? messageAlign,
     String? cancelTitle,
     Function()? cancelHandle,
+    Function()? closeHandle,
     String? okTitle,
     required Function() okHandle,
   }) {
@@ -80,19 +91,27 @@ class AlertUtil {
           message: message,
           messageAlign: messageAlign,
           cancelTitle: cancelTitle ?? "取消",
+          cancelStyleType:
+              cancelTitle == null || cancelTitle == '取消' || cancelTitle == '不保留'
+                  ? ThemeStateBGType.theme_gray
+                  : ThemeStateBGType.orange_orange,
           cancelHandle: () {
             Navigator.of(context).pop();
-            // Navigator.pop(context);
             if (cancelHandle != null) {
               cancelHandle();
             }
           },
           okTitle: okTitle ?? "确定",
           okHandle: () {
-            // Navigator.pop(context);
             Navigator.of(context).pop();
             if (okHandle != null) {
               okHandle();
+            }
+          },
+          closeHandle: () {
+            Navigator.of(context).pop();
+            if (closeHandle != null) {
+              closeHandle();
             }
           },
         );

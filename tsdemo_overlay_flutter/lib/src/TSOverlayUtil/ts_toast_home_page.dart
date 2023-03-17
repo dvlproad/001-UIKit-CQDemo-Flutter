@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 14:27:45
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
@@ -8,9 +15,6 @@ class TSToastHomePage extends StatefulWidget {
 }
 
 class _TSToastHomePageState extends State<TSToastHomePage> {
-  int selectedSexIndex1;
-  int selectedSexIndex2;
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 class TSMessageAlertViewPage extends StatelessWidget {
-  TSMessageAlertViewPage({Key key}) : super(key: key);
+  TSMessageAlertViewPage({Key? key}) : super(key: key);
 
   String shortText = '我是简短的文字';
   String longText =
@@ -19,7 +19,7 @@ class TSMessageAlertViewPage extends StatelessWidget {
     );
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget? _appBar() {
     return AppBar(
       title: Text('Alert'),
     );
@@ -31,6 +31,7 @@ class TSMessageAlertViewPage extends StatelessWidget {
         _longTextWidet(context),
         Text("信息弹窗"),
         CQTSThemeBGButton(
+          bgColorType: CQTSThemeBGType.blue,
           title: '测试 showDialog 方法',
           onPressed: () {
             showDialog(

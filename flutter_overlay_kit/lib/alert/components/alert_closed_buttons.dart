@@ -36,8 +36,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: FlatButton(
-            color: Colors.transparent,
+          child: TextButton(
             // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
             onPressed: () {
               if (this.cancelHandle != null) {
@@ -58,7 +57,7 @@ class AlertCancelOKCloseButtons extends StatelessWidget {
         ),
         Expanded(
           flex: 1,
-          child: FlatButton(
+          child: TextButton(
             // color: color,
             // shape: StadiumBorder(),
             onPressed: () {
@@ -109,7 +108,7 @@ class AlertIKnowCloseButton extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        FlatButton(
+        TextButton(
           // color: color,
           // shape: StadiumBorder(),
           onPressed: () {

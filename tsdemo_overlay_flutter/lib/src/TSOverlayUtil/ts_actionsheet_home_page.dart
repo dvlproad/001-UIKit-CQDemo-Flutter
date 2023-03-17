@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 14:24:04
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
@@ -10,8 +17,7 @@ class TSActionSheetHomePage extends StatefulWidget {
 }
 
 class _TSActionSheetHomePageState extends State<TSActionSheetHomePage> {
-  int selectedSexIndex1;
-  int selectedSexIndex2;
+  int? selectedSexIndex1;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -43,7 +49,7 @@ class _TSActionSheetHomePageState extends State<TSActionSheetHomePage> {
           title: '选择照片',
           itemTitles: ['相册', '相机'],
           currentSelectedIndex: selectedSexIndex1,
-          onConfirm: (selectedIndex) {
+          onConfirm: (int selectedIndex) {
             selectedSexIndex1 = selectedIndex;
             List<String> itemTitles = ['相册', '相机'];
             String sexString = itemTitles[selectedIndex];

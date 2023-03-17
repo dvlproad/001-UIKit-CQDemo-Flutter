@@ -1,11 +1,18 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 14:17:01
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './overlay_view_routes.dart';
 
 class TSAlertViewHomePage extends CJTSBasePage {
-  final String title;
+  final String? title;
 
-  TSAlertViewHomePage({Key key, this.title}) : super(key: key);
+  TSAlertViewHomePage({Key? key, this.title}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();

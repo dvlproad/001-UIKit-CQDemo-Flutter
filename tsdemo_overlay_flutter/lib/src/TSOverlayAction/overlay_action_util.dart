@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-OverlayEntry overlayEntry1;
+OverlayEntry? overlayEntry1;
 
 class OverlayActionUtil {
   static OverlayEntry getOverlayEntry1(BuildContext context) {
@@ -26,12 +26,11 @@ class OverlayActionUtil {
                   bottom: 30,
                   child: Container(
                     height: 42,
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         OverlayActionUtil.dismiss();
                       },
                       child: Text('点击隐藏22'),
-                      color: Colors.red,
                     ),
                   ),
                 ),
@@ -97,7 +96,7 @@ class OverlayActionUtil {
 
   static void show(BuildContext context) {
     overlayEntry1 = getOverlayEntry1(context);
-    Overlay.of(context).insert(overlayEntry1);
+    Overlay.of(context).insert(overlayEntry1!);
   }
 
   static void dismiss() {
@@ -146,7 +145,7 @@ class OverlayActionUtil {
           ),
           Padding(
             padding: EdgeInsets.only(top: 15, bottom: 8),
-            child: FlatButton(
+            child: TextButton(
               child: Text('确定'),
               onPressed: () {
                 // 关闭 Dialog

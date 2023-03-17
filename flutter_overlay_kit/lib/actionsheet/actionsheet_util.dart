@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 00:59:12
+ * @LastEditTime: 2023-03-17 14:28:09
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class ActionSheetUtil {
     String? title,
     TextStyle? titleTextStyle,
     required List<String> itemTitles,
-    int currentSelectedIndex = 0,
+    int? currentSelectedIndex,
     required void Function(int selectedIndex) onConfirm,
   }) {
     ShowModalUtil.showInBottom(
@@ -45,7 +45,7 @@ class ActionSheetUtil {
     String? title,
     TextStyle? titleTextStyle,
     required List<String> itemTitles,
-    int currentSelectedIndex = 0,
+    int? currentSelectedIndex,
     void Function()? onCancel,
     required void Function(int selectedIndex) onConfirm,
   }) {

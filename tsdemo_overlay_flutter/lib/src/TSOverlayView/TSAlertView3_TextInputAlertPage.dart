@@ -1,9 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 14:30:21
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_kit/alert/textInput_alert_view.dart';
 
 // ignore: camel_case_types
 class TSAlertView3_TextInputAlertPage extends StatelessWidget {
-  const TSAlertView3_TextInputAlertPage({Key key}) : super(key: key);
+  const TSAlertView3_TextInputAlertPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,7 @@ class TSAlertView3_TextInputAlertPage extends StatelessWidget {
     );
   }
 
-  Widget _appBar() {
+  PreferredSizeWidget? _appBar() {
     return AppBar(
       title: Text('TextInputAlertView'),
     );

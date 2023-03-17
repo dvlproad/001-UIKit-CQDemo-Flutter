@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-12-08 16:46:22
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-12-09 18:45:49
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 
 /*
@@ -53,8 +60,7 @@ class FlexWidthButtons extends StatelessWidget {
   Widget _button(int index) {
     return Expanded(
       flex: 1,
-      child: FlatButton(
-        color: Colors.transparent,
+      child: TextButton(
         // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
           if (this.onPressed != null) {

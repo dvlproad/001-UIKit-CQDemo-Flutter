@@ -9,6 +9,8 @@ import './components/alert_container.dart';
  * '我知道了' AlertView
  */
 class IKnowTextInputAlertView extends StatelessWidget {
+  final double? heiht;
+
   final String? title;
   final String? placeholder;
   final String? inputText;
@@ -18,6 +20,7 @@ class IKnowTextInputAlertView extends StatelessWidget {
 
   IKnowTextInputAlertView({
     Key? key,
+    this.heiht,
     this.title,
     this.placeholder,
     this.inputText,
@@ -28,6 +31,7 @@ class IKnowTextInputAlertView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CQAlertContainer(
+      height: heiht,
       contentWidget: AlertTitleTextInputWidget(
         title: this.title,
         placeholder: this.placeholder,
@@ -50,6 +54,7 @@ class IKnowTextInputAlertView extends StatelessWidget {
  * '取消' + '确定' AlertView
  */
 class CancelOKTextInputAlertView extends StatelessWidget {
+  final double? heiht;
   final String? title;
   final String? placeholder;
   final String? inputText;
@@ -62,6 +67,7 @@ class CancelOKTextInputAlertView extends StatelessWidget {
 
   CancelOKTextInputAlertView({
     Key? key,
+    this.heiht,
     this.title,
     this.placeholder,
     this.inputText,
@@ -74,6 +80,7 @@ class CancelOKTextInputAlertView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CQAlertContainer(
+      height: heiht,
       contentWidget: AlertTitleTextInputWidget(
         title: this.title,
         placeholder: this.placeholder,

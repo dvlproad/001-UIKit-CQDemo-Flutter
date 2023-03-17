@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 01:24:31
+ * @LastEditTime: 2023-03-17 14:28:46
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:flutter_baseui_kit/base-uikit/button/textbutton.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import './bottomwidget.dart';
@@ -20,7 +19,7 @@ class ActionSheetWidget extends StatefulWidget {
   final void Function(int selectedIndex) onConfirm;
 
   final List<String> itemTitles;
-  final int currentSelectedIndex;
+  final int? currentSelectedIndex;
   final void Function(int selectedIndex)? onItemTap;
 
   ActionSheetWidget({
@@ -31,7 +30,7 @@ class ActionSheetWidget extends StatefulWidget {
     required this.onConfirm,
     required this.itemTitles,
     this.onItemTap,
-    this.currentSelectedIndex = 0,
+    this.currentSelectedIndex,
   }) : super(key: key);
 
   @override
@@ -47,7 +46,7 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
   void initState() {
     super.initState();
 
-    _selectedIndex = widget.currentSelectedIndex;
+    _selectedIndex = widget.currentSelectedIndex ?? 0;
   }
 
   @override
@@ -84,7 +83,7 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
     String title = widget.itemTitles[index];
     return ThemeStateButton(
       normalTitle: title,
-      normalBGColorType: ThemeBGType.white,
+      normalBGColorType: ThemeStateBGType.white_black,
       titleStyle: TextStyle(
         fontFamily: 'PingFang SC',
         fontSize: 15,
