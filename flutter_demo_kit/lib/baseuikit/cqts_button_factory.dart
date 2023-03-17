@@ -7,16 +7,16 @@ export './buttontheme.dart' show CQTSThemeBGType;
 /// 以主题色为背景的按钮
 class CQTSThemeBGButton extends CJStateTextButton {
   CQTSThemeBGButton({
-    Key key,
-    double width,
-    double height,
-    @required CQTSThemeBGType bgColorType,
+    Key? key,
+    double? width,
+    double? height,
+    required CQTSThemeBGType bgColorType,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
-    @required String title,
-    TextStyle titleStyle,
+    required String title,
+    TextStyle? titleStyle,
     double cornerRadius = 5.0,
     bool enable = true,
-    @required VoidCallback onPressed,
+    required VoidCallback onPressed,
   })  : assert(title != null),
         assert(onPressed != null),
         super(
@@ -45,16 +45,16 @@ class CQTSThemeBGButton extends CJStateTextButton {
 /// 以主题色为边框的按钮(①红色边框和文字，白色背景、②黑色边框和文字，白色背景)
 class CQTSThemeBorderButton extends CJStateTextButton {
   CQTSThemeBorderButton({
-    Key key,
-    double width,
-    double height,
-    @required CQTSThemeBGType borderColorType,
+    Key? key,
+    double? width,
+    double? height,
+    required CQTSThemeBGType borderColorType,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
-    @required String title,
-    TextStyle titleStyle,
+    required String title,
+    TextStyle? titleStyle,
     double cornerRadius = 5.0,
     bool enable = true,
-    @required VoidCallback onPressed,
+    required VoidCallback onPressed,
   })  : assert(title != null),
         assert(onPressed != null),
         super(
@@ -84,18 +84,18 @@ class CQTSThemeBorderButton extends CJStateTextButton {
 /// 以主题色为背景或边框的按钮(selected 属性的值会影响 ui 样式, 即可通过 selected 属性来自动变更样式)
 class CQTSThemeStateButton extends CJReverseThemeStateTextButton {
   CQTSThemeStateButton({
-    Key key,
-    double width,
-    double height,
-    @required CQTSThemeBGType normalBGColorType,
+    Key? key,
+    double? width,
+    double? height,
+    required CQTSThemeBGType normalBGColorType,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     double cornerRadius = 5.0,
-    @required String normalTitle,
-    String selectedTitle,
-    TextStyle titleStyle,
+    required String normalTitle,
+    String? selectedTitle,
+    TextStyle? titleStyle,
     bool enable = true,
-    @required bool selected = false,
-    @required void Function() onPressed,
+    bool selected = false,
+    required void Function() onPressed,
   })  : assert(normalTitle != null),
         assert(onPressed != null),
         super(

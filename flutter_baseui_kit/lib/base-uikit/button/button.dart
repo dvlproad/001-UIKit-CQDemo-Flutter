@@ -5,6 +5,9 @@ import '../../base-uikit/bg_border_widget.dart';
 class CJStateButton extends StatelessWidget {
   final double? width;
   final double? height;
+  final BoxConstraints? constraints;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
   final Widget child;
   final VoidCallback? onPressed;
   final bool? enable;
@@ -27,6 +30,9 @@ class CJStateButton extends StatelessWidget {
     Key? key,
     this.width,
     this.height,
+    this.constraints,
+    this.margin,
+    this.padding,
     required this.child,
     this.onPressed, // 不是必传(为了使其null时候，能够自动透传点击事件)
     this.enable = true,
@@ -193,6 +199,9 @@ class CJStateButton extends StatelessWidget {
     return CJBGBorderWidget(
       width: this.width,
       height: this.height,
+      constraints: this.constraints,
+      margin: this.margin,
+      padding: this.padding,
       backgroundColor: _currentBackgroundColor,
       borderColor: _currentBorderColor,
       borderWidth: _currentBorderWidth,

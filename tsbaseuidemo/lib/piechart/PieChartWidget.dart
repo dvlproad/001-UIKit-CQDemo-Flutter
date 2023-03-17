@@ -10,16 +10,16 @@ import './ChartUtils.dart';
 
 class PieChartWidget extends StatefulWidget {
   ///比例集合
-  @required
+  required
   List<double> proportions;
 
   ///文案集合
-  @required
+  required
   List<String> contents;
   ui.Image image;
 
   ///颜色集合
-  @required
+  required
   List<Color> colors;
 
   double startTurns = .0;

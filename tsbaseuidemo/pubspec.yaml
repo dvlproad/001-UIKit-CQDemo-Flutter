@@ -33,9 +33,6 @@ dependencies:
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
 
-  flutter_image_kit:
-    path: ../flutter_image_kit/
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

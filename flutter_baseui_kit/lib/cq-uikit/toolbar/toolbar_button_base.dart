@@ -11,6 +11,10 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 import '../../flutter_baseui_kit_adapt.dart';
 
+class ToolBarEnum {
+  static double toolBarActionTextWidth = 67.w_pt_cj;
+}
+
 // tool图片按钮视图
 class ToolBarImageActionWidget extends StatelessWidget {
   final double? width;
@@ -66,23 +70,40 @@ class ToolBarTextActionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // /*
     return ThemeBGButton(
-      width: width ?? 67.w_pt_cj,
+      width: width,
       height: 32.h_pt_cj,
       // bgColorType: ThemeBGType.theme,
       bgColor: color,
       textColor: textColor,
-
       cornerRadius: 16,
       title: this.text,
       titleStyle: TextStyle(
+        fontFamily: 'PingFang SC',
         color: textColor,
-        fontSize: 14.f_pt_cj,
+        fontSize: 13.f_pt_cj,
         fontWeight: FontWeight.w500,
         // height: 1,
       ),
       enable: true,
       onPressed: this.onPressed,
+    );
+    // */
+    return GestureDetector(
+      onTap: this.onPressed,
+      child: Container(
+        color: color,
+        child: Text(
+          text,
+          style: TextStyle(
+            fontFamily: 'PingFang SC',
+            color: const Color(0xff333333),
+            fontSize: 13.w_pt_cj,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
     );
   }
 }

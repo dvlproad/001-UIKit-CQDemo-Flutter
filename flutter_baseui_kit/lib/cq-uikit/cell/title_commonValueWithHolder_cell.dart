@@ -13,7 +13,8 @@ class ImageTitleCommonValueWithHolderTableViewCell
 
   ImageTitleCommonValueWithHolderTableViewCell({
     Key? key,
-    double? height, // cell 的高度
+    double? height, // cell 的高度(内部已限制最小高度为44,要更改请设置 constraints)
+    BoxConstraints? constraints,
     double? leftRightPadding, // cell 内容的左右间距(未设置时候，默认20)
     Color? color,
     double? leftMaxWidth,
@@ -26,6 +27,9 @@ class ImageTitleCommonValueWithHolderTableViewCell
     double? imageTitleSpace, // 图片与标题间距(图片存在时候才有效)
     // 左侧-文本
     required String title, // 主文本
+    String? titlePrompt, // 标题的说明语（此值为空时候，视图会自动隐藏）
+    int? titlePromptMaxLines, // 标题的说明语的最大行数(为null时候，默认1)
+    double? titlePromptFontSize, // 标题的说明语的字体大小(默认30)
     // 右侧-值视图
     required Widget? Function(BuildContext context, {required bool canExpanded})
         valueWidgetBuilder, // 值视图（此值为空时候，视图会自动隐藏）
@@ -43,6 +47,7 @@ class ImageTitleCommonValueWithHolderTableViewCell
   }) : super(
           key: key,
           height: height,
+          constraints: constraints,
           leftRightPadding: leftRightPadding,
           color: color,
           leftMaxWidth: leftMaxWidth,
@@ -52,6 +57,9 @@ class ImageTitleCommonValueWithHolderTableViewCell
           imageWith: imageWith ?? 22.w_pt_cj,
           imageTitleSpace: imageTitleSpace ?? 10.w_pt_cj,
           title: title,
+          titlePrompt: titlePrompt,
+          titlePromptMaxLines: titlePromptMaxLines,
+          titlePromptFontSize: titlePromptFontSize,
           valueWidgetBuilder: (BuildContext bContext,
               {required bool canExpanded}) {
             bool existTextValuePlaceHodler =
@@ -99,7 +107,7 @@ class HolderTableViewCellHolderWidget extends StatelessWidget {
         valuePlaceHodlerTextStyle = TextStyle(
           color: const Color(0xFFC1C1C1),
           fontFamily: 'PingFang SC',
-          fontSize: 16.f_pt_cj,
+          fontSize: fontSize_cellRight_default,
           fontWeight: FontWeight.w400,
           //height: 1,
         );

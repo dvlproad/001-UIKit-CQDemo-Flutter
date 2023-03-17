@@ -115,7 +115,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
         ThemeBGButton(
           width: 300,
           height: 40,
-          bgColorType: ThemeBGType.white,
+          bgColorType: ThemeBGType.grey,
           title: '微信登录',
           titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
           imageWidget: Image(
@@ -129,7 +129,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           onPressed: () {},
         ),
         ThemeBGButton(
-          bgColorType: ThemeBGType.transparent_whiteText,
+          bgColorType: ThemeBGType.blue,
           title: '以主题色(蓝色)为背景的按钮',
           onPressed: () {},
         ),
@@ -143,7 +143,7 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
         ThemeBorderButton(
           width: 300, // 不设置会根据内容自适应
           height: 80, // 不设置会根据内容自适应
-          borderColorType: ThemeBGType.pink,
+          borderColorType: ThemeStateBGType.theme_gray,
           title: '以主题色(红色)为边框的按钮',
           titleStyle: ButtonBoldTextStyle(fontSize: 18.0),
           cornerRadius: 20,
@@ -151,19 +151,19 @@ class _TSThemeButtonPageState extends State<TSThemeButtonPage> {
           onPressed: () {},
         ),
         ThemeBorderButton(
-          borderColorType: ThemeBGType.pink,
+          borderColorType: ThemeStateBGType.theme_white,
           title: '以主题色(红色)为边框的按钮',
           enable: false,
           onPressed: () {},
         ),
         ThemeBorderButton(
-          borderColorType: ThemeBGType.black,
+          borderColorType: ThemeStateBGType.black_white,
           title: '以主题色(黑色)为边框的按钮',
           enable: true,
           onPressed: () {},
         ),
         ThemeBorderButton(
-          borderColorType: ThemeBGType.black,
+          borderColorType: ThemeStateBGType.gary_white,
           title: '以主题色(黑色)为边框的按钮',
           enable: false,
           onPressed: () {},

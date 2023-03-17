@@ -1,10 +1,20 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 12:00:06
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class CJTSTableViewHeader extends StatefulWidget {
   final String title;
 
-  CJTSTableViewHeader({Key key, this.title}) : super(key: key);
+  CJTSTableViewHeader({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {

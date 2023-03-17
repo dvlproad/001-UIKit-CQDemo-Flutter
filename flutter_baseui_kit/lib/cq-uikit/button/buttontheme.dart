@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 // import 'dart:ui';
 
+final Color appThemeColor = Color(0xFFE67D4F);
+
 final Map theme = {
   "theme": {
-    "themeColor": Color(0xFFFF7F00), // 金黄色golden
+    "themeColor": appThemeColor, // 金黄色golden
     "themeOppositeColor": Colors.white,
   },
   "pink": {
@@ -18,17 +20,9 @@ final Map theme = {
     "themeColor": Colors.blue, // 蓝色 blue
     "themeOppositeColor": Colors.white,
   },
-  "black": {
-    "themeColor": Color(0xFF222222), // 黑色 black,
+  "grey": {
+    "themeColor": Color(0xff8b8b8b),
     "themeOppositeColor": Colors.white,
-  },
-  "white": {
-    "themeColor": Colors.white, // 白色 white,
-    "themeOppositeColor": Color(0xFF222222),
-  },
-  "transparent_whiteText": {
-    "themeColor": Colors.transparent, // 透明色 transparent,
-    "themeOppositeColor": Color(0xFF222222),
   },
 };
 
@@ -38,9 +32,7 @@ enum ThemeBGType {
   pink,
   purple,
   blue,
-  black,
-  white,
-  transparent_whiteText, //透明背景，白色字的按钮
+  grey, //灰色背景白色字
 }
 
 Color themeColor(ThemeBGType? type) {
@@ -51,6 +43,177 @@ Color themeColor(ThemeBGType? type) {
 Color themeOppositeColor(ThemeBGType? type) {
   type = type ?? ThemeBGType.theme;
   return theme[type.toString().split('.').last]['themeOppositeColor'];
+}
+
+// 状态颜色分类
+enum ThemeStateBGType {
+  theme_white,
+  theme_gray,
+  orange_orange,
+  white_black,
+  black_white,
+  transparent_whiteText, //透明背景，白色字的按钮
+  gary_white,
+}
+
+final Map stateTheme = {
+  "theme_white": {
+    "themeColor": appThemeColor, // 金黄色golden
+    "themeOppositeColor": Colors.white,
+  },
+  "theme_gray": {
+    "themeColor": Color(0xFFB8B8B8),
+    "textColor": Color(0xFF8b8b8b),
+    "themeOppositeColor": Colors.white,
+  },
+  "orange_orange": {
+    "themeColor": Color(0xFFF7956A),
+    "textColor": Color(0xFFE67D4F),
+    "themeOppositeColor": Colors.white,
+  },
+  "white_black": {
+    "themeColor": Colors.white, // 白色 white,
+    "themeOppositeColor": Color(0xFF222222),
+  },
+  "black_white": {
+    "themeColor": Color(0xFF222222), // 黑色 black,
+    "themeOppositeColor": Colors.white,
+  },
+  "transparent_whiteText": {
+    "themeColor": Colors.transparent, // 透明色 transparent,
+    "themeOppositeColor": Color(0xFF222222),
+  },
+  "gary_white": {
+    "themeColor": Color(0xFF8b8b8b), // 白色 white,
+    "themeOppositeColor": Colors.white,
+  },
+};
+
+Color stateThemeColor(ThemeStateBGType? type) {
+  type = type ?? ThemeStateBGType.theme_white;
+  return stateTheme[type.toString().split('.').last]['themeColor'];
+}
+
+Color stateTextColor(ThemeStateBGType? type) {
+  type = type ?? ThemeStateBGType.theme_white;
+  return stateTheme[type.toString().split('.').last]['textColor'] ??
+      stateThemeColor(type);
+}
+
+Color stateThemeOppositeColor(ThemeStateBGType? type) {
+  type = type ?? ThemeStateBGType.theme_white;
+  return stateTheme[type.toString().split('.').last]['themeOppositeColor'];
+}
+
+// 状态颜色分类
+enum RichThemeStateBGType {
+  grey_theme,
+  grey_theme_mine_tag_home, //个人主页标签
+  grey_theme_mine_tag_dialog, //个人主页标签-弹出的dialog
+}
+
+final Map richStateTheme = {
+  "grey_theme": {
+    "normalBGColor": Color(0xFFF0F0F0),
+    "normalTextColor": Color(0xFF404040),
+    "normalBorderWidth": 0.0,
+    "normalBorderColor": Color(0xFFF0F0F0),
+    // "normalBackgroundHighlightColor": normalBackgroundHighlightColor,
+
+    "selectedBGColor": Color(0xFFFFF0EA),
+    "selectedTextColor": appThemeColor, // 金黄色golden,
+    "selectedBorderWidth": 1.0,
+    "selectedBorderColor": appThemeColor, // 金黄色golden,
+    // "selectedBackgroundHighlightColor": selectedBackgroundHighlightColor,
+  },
+  "grey_theme_mine_tag_home": {
+    "normalBGColor": Color(0xff494B4E),
+    "normalTextColor": Color(0xFFB8B8B8),
+    "normalBorderWidth": 0.0,
+    "normalBorderColor": Color(0xFFB8B8B8),
+    // "normalBackgroundHighlightColor": normalBackgroundHighlightColor,
+
+    "selectedBGColor": Colors.white,
+    "selectedTextColor": appThemeColor, // 金黄色golden,
+    "selectedBorderWidth": 1.0,
+    "selectedBorderColor": appThemeColor, // 金黄色golden,
+    // "selectedBackgroundHighlightColor": selectedBackgroundHighlightColor,
+  },
+  "grey_theme_mine_tag_dialog": {
+    "normalBGColor": Colors.white,
+    "normalTextColor": Color(0xFF333333),
+    "normalBorderWidth": 0.0,
+    "normalBorderColor": Color(0xFFB8B8B8),
+    // "normalBackgroundHighlightColor": normalBackgroundHighlightColor,
+
+    "selectedBGColor": Colors.white,
+    "selectedTextColor": appThemeColor, // 金黄色golden,
+    "selectedBorderWidth": 1.0,
+    "selectedBorderColor": appThemeColor, // 金黄色golden,
+    // "selectedBackgroundHighlightColor": selectedBackgroundHighlightColor,
+  },
+};
+
+Color richStateTheme_normalBGColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['normalBGColor'];
+}
+
+Color richStateTheme_normalTextColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['normalTextColor'];
+}
+
+double richStateTheme_normalBorderWidth(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['normalBorderWidth'];
+}
+
+Color richStateTheme_normalBorderColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['normalBorderColor'];
+}
+
+Color? richStateTheme_normalBackgroundHighlightColor(
+    RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['normalBackgroundHighlightColor'];
+}
+
+Color richStateTheme_selectedBGColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['selectedBGColor'];
+}
+
+Color richStateTheme_selectedTextColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['selectedTextColor'];
+}
+
+double richStateTheme_selectedBorderWidth(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['selectedBorderWidth'];
+}
+
+Color richStateTheme_selectedBorderColor(RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['selectedBorderColor'];
+}
+
+Color? richStateTheme_selectedBackgroundHighlightColor(
+    RichThemeStateBGType type) {
+  Map<String, dynamic> richStateThemeMap =
+      richStateTheme[type.toString().split('.').last];
+  return richStateThemeMap['selectedBackgroundHighlightColor'];
 }
 
 /*

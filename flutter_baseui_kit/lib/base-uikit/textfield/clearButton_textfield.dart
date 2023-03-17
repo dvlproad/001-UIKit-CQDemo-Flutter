@@ -23,7 +23,7 @@ class CJClearButtonTextField extends StatefulWidget {
 
   CJClearButtonTextField({
     Key? key,
-    this.text,
+    this.text = '',
     this.style,
     this.textColor = Colors.black,
     this.placeholder = '请输入',

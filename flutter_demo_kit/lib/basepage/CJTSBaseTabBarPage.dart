@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-07 18:30:40
+ * @LastEditTime: 2023-03-17 13:55:44
  * @Description: 
  */
 import 'package:flutter/cupertino.dart';
@@ -13,8 +13,8 @@ abstract class CJTSBaseTabBarPage extends StatefulWidget {
   final List<dynamic> tabbarModels;
 
   CJTSBaseTabBarPage({
-    Key key,
-    this.tabbarModels,
+    Key? key,
+    required this.tabbarModels,
   }) : super(key: key);
 
   @override
@@ -22,15 +22,13 @@ abstract class CJTSBaseTabBarPage extends StatefulWidget {
   CJTSBaseTabBarPageState createState() => getState();
 
   ///子类实现
-  CJTSBaseTabBarPageState getState() {
-    print('请在子类中实现');
-  }
+  CJTSBaseTabBarPageState getState();
 }
 
 //class CJTSBaseTabBarPageState extends State<CJTSBaseTabBarPage> {
 abstract class CJTSBaseTabBarPageState<V extends CJTSBaseTabBarPage>
     extends State<V> {
-  List<dynamic> _tabbarModels;
+  late List<dynamic> _tabbarModels;
   int _selectedIndex = 0;
 
   List<dynamic> get tabbarModels {

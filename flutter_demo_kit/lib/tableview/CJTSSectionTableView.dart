@@ -11,9 +11,9 @@ class CJTSSectionTableView extends StatefulWidget {
   final List sectionModels;
 
   CJTSSectionTableView({
-    Key key,
-    this.context,
-    this.sectionModels,
+    Key? key,
+    required this.context,
+    required this.sectionModels,
   }) : super(key: key);
 
   @override
@@ -56,7 +56,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
           detailText: subTitle,
           section: section,
           row: row,
-          clickCellCallback: (section, row) =>
+          clickCellCallback: (int? section, int? row) =>
               {this.__dealDataModel(moduleModel, section, row)},
         );
       },
@@ -71,7 +71,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
     );
   }
 
-  void __dealDataModel(moduleModel, int section, int row) {
+  void __dealDataModel(moduleModel, int? section, int? row) {
     ClickTSItemCallback clickTSItemCallback = moduleModel['actionBlock'];
     // // actionBlock 形如：
     // moduleModel['actionBlock'] = () {

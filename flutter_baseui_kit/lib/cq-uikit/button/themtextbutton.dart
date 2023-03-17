@@ -63,7 +63,7 @@ class ThemeBGButton extends CJStateTextButton {
     required String title,
     TextStyle? titleStyle,
     Image? imageWidget, // 图片
-    double? imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
+    double imageTitleGap = 5, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double? cornerRadius,
     bool enable = true,
     VoidCallback? onPressed, // null时候会自动透传事件
@@ -103,12 +103,13 @@ class ThemeBorderButton extends CJStateTextButton {
     Key? key,
     double? width,
     double? height,
-    required ThemeBGType borderColorType,
+    BoxConstraints? constraints,
+    required ThemeStateBGType borderColorType,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     required String title,
     TextStyle? titleStyle,
     Image? imageWidget, // 图片
-    double? imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
+    double imageTitleGap = 5, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
@@ -118,6 +119,7 @@ class ThemeBorderButton extends CJStateTextButton {
           key: key,
           width: width,
           height: height,
+          constraints: constraints,
           childBuider: (bSelected) {
             return ButtonChildWidget(
               title: title,
@@ -130,10 +132,10 @@ class ThemeBorderButton extends CJStateTextButton {
           selected: false,
           onPressed: onPressed,
           cornerRadius: cornerRadius,
-          normalBGColor: themeOppositeColor(borderColorType),
-          normalTextColor: themeColor(borderColorType),
-          normalBorderWidth: 0.5,
-          normalBorderColor: themeColor(borderColorType),
+          normalBGColor: stateThemeOppositeColor(borderColorType),
+          normalTextColor: stateTextColor(borderColorType),
+          normalBorderWidth: 1,
+          normalBorderColor: stateThemeColor(borderColorType),
           // normalHighlightColor: Colors.pink,
           highlightOpacity: needHighlight ? 0.7 : 1.0,
         );

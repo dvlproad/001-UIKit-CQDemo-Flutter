@@ -117,7 +117,7 @@ class _CommonToolBarState extends State<CommonToolBar> {
         child: Container(
           padding: EdgeInsets.only(right: 0),
           // color: Colors.green,
-          child: Column(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: widget.actions!,

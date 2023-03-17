@@ -30,7 +30,7 @@ class ToolBarTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = Color(0xFF222222);
+    Color textColor = Color(0xFF404040);
     if (textColorType == AppBarTextColorType.white) {
       textColor = Colors.white;
     } else if (textColorType == AppBarTextColorType.theme) {
@@ -42,8 +42,9 @@ class ToolBarTitleWidget extends StatelessWidget {
         this.text ?? '',
         style: TextStyle(
           color: textColor,
-          fontSize: 18.f_pt_cj,
-          fontWeight: FontWeight.w500,
+          fontSize: 16.f_pt_cj,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'PingFang SC',
         ),
       ),
       onPressed: this.onPressed,

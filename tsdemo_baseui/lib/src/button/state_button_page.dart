@@ -58,7 +58,7 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
         ThemeStateButton(
           width: 300, // 不设置会根据内容自适应
           height: 80, // 不设置会根据内容自适应
-          normalBGColorType: ThemeBGType.pink,
+          normalBGColorType: ThemeStateBGType.theme_gray,
           normalTitle: '修改',
           selectedTitle: '提交',
           titleStyle: ButtonBoldTextStyle(fontSize: 25.0),
@@ -70,7 +70,7 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           },
         ),
         ThemeStateButton(
-          normalBGColorType: ThemeBGType.pink,
+          normalBGColorType: ThemeStateBGType.theme_gray,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: false,
@@ -78,7 +78,7 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           onPressed: () {},
         ),
         ThemeStateButton(
-          normalBGColorType: ThemeBGType.pink,
+          normalBGColorType: ThemeStateBGType.theme_gray,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: true,
@@ -88,7 +88,7 @@ class _TSStateButtonPageState extends State<TSStateButtonPage> {
           },
         ),
         ThemeStateButton(
-          normalBGColorType: ThemeBGType.pink,
+          normalBGColorType: ThemeStateBGType.theme_gray,
           normalTitle: '修改',
           selectedTitle: '提交',
           selected: true,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_baseui_kit/cq-uikit/textfield/prefixText_textField.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSTextTextFieldPage extends StatefulWidget {
   TSTextTextFieldPage({Key key, this.title, this.username}) : super(key: key);
@@ -132,19 +132,10 @@ class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
   }
 
   // 提交按钮
-  FlatButton _submitButton() {
-    return FlatButton(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
-        child: Text("提交"),
-      ),
-      color: Color(0xff01adfe),
-      textColor: Colors.white,
-      highlightColor: Color(0xff1393d7),
-      disabledColor: Color(0xffd3d3d5),
-      //colorBrightness: Brightness.dark, //按钮主题，默认是浅色主题
-      //splashColor: Colors.grey, //点击时，水波动画中水波的颜色
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+  Widget _submitButton() {
+    return ThemeBGButton(
+      bgColorType: ThemeBGType.theme,
+      title: "提交",
       onPressed: () {
         String userName = _usernameController.text;
         Runes runes = userName.runes;

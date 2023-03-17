@@ -1,20 +1,25 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 13:56:33
+ * @Description: 
+ */
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 //class CJTSBasePage extends StatefulWidget {
 abstract class CJTSBasePage extends StatefulWidget {
-  final String title;
+  final String? title;
 
-  CJTSBasePage({Key key, this.title}) : super(key: key);
+  CJTSBasePage({Key? key, this.title}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
   CJTSBasePageState createState() => getState();
 
   ///子类实现
-  CJTSBasePageState getState() {
-    print('请在子类中实现');
-  }
+  CJTSBasePageState getState();
 }
 
 //class _CJTSTableHomeBasePageState extends State<CJTSBasePage> {

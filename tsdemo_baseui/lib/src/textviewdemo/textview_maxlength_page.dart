@@ -56,14 +56,14 @@ class _TSTextViewMaxLengthPageState extends State<TSTextViewMaxLengthPage> {
         children: <Widget>[
           SizedBox(height: 4),
           _textView(_currentText),
-          FlatButton(
+          TextButton(
             onPressed: () {
               _currentText = _longNormalTextString();
               setState(() {});
             },
             child: Text('使用正常的文本'),
           ),
-          FlatButton(
+          TextButton(
             onPressed: () {
               _currentText = _longEmojiString();
               setState(() {});

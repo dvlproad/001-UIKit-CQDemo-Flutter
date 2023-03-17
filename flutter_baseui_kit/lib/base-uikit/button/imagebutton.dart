@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-08 01:47:02
+ * @LastEditTime: 2022-07-05 14:17:49
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -18,13 +18,14 @@ class CenterIconButton extends StatelessWidget {
     Key? key,
     required this.assestName,
     required this.iconButtonSize,
-    this.iconImageSize,
+    iconImageSize,
     required this.onPressed,
-  }) : super(key: key);
+  })  : this.iconImageSize = iconImageSize ??
+            iconButtonSize, // iconImageSize 没设置时候，使用 iconButtonSize
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double _iconImageSize = iconImageSize ?? iconButtonSize;
     return Container(
       height: iconButtonSize,
       width: iconButtonSize,
@@ -33,14 +34,14 @@ class CenterIconButton extends StatelessWidget {
         onPressed: this.onPressed,
         padding: EdgeInsets.fromLTRB(
           0,
-          (iconButtonSize - _iconImageSize) / 2,
+          (iconButtonSize - iconImageSize) / 2,
           0,
-          (iconButtonSize - _iconImageSize) / 2,
+          (iconButtonSize - iconImageSize) / 2,
         ),
         child: Image.asset(
           assestName,
-          width: _iconImageSize,
-          height: _iconImageSize,
+          width: iconImageSize,
+          height: iconImageSize,
           fit: BoxFit.fill,
         ),
       ),

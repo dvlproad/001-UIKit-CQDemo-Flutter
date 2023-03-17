@@ -2,13 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-08 01:41:51
+ * @LastEditTime: 2022-11-17 17:37:07
  * @Description: 基础UI库
  */
 library flutter_baseui_kit;
-
-export './base-uikit/bg_border_widget.dart';
-export './base-uikit/button/imagebutton.dart';
 
 // text
 export './cq-uikit/text/tolerant_text.dart';
@@ -19,11 +16,14 @@ export './cq-uikit/button/statetextbutton.dart';
 export './cq-uikit/button/buttontheme.dart'
     show
         ThemeBGType,
+        ThemeStateBGType,
+        RichThemeStateBGType,
         ButtonRegularTextStyle,
         ButtonBoldTextStyle,
         ButtonMediumTextStyle;
 // image button
 export './cq-uikit/button/imagebutton.dart';
+export './cq-uikit/button/button_child_widget.dart' show ButtonImagePosition;
 
 // inkWelll
 export './cq-uikit/button/ink_well.dart';
@@ -37,7 +37,6 @@ export './cq-uikit/cell/cell.dart';
 
 // tableview
 export './cq-uikit/tableview/section_table_view_method2.dart';
-export './cq-uikit/tableview/index_path.dart';
 
 // toolbar
 export './cq-uikit/toolbar/toolbar.dart';

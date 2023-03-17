@@ -8,7 +8,9 @@ export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
 import './title_commonValueWithHolder_cell.dart';
 
 class ImageTitleTextValueCell extends StatelessWidget {
-  final double? height; // cell 的高度
+  final Color? color;
+  final double? height; // cell 的高度(内部已限制最小高度为44,要更改请设置 constraints)
+  final BoxConstraints? constraints;
   final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
   final double? leftMaxWidth;
   final double? rightMaxWidth;
@@ -20,6 +22,10 @@ class ImageTitleTextValueCell extends StatelessWidget {
   final double? imageTitleSpace; // 图片与标题间距(图片存在时候才有效)
   // 左侧-标题
   final String title; // 标题
+  final String? titlePrompt; // 标题的说明语（此值为空时候，视图会自动隐藏）
+  final int? titlePromptMaxLines; // 标题的说明语的最大行数(为null时候，默认1)
+  final double? titlePromptFontSize; // 标题的说明语的字体大小(默认30)
+
   // 右侧-值文本
   final String? textValue; // 值文本（此值为空时候，视图会自动隐藏）
   final int? textValueMaxLines; // 值文本的最大行数(为null时候，默认1)
@@ -39,7 +45,9 @@ class ImageTitleTextValueCell extends StatelessWidget {
 
   ImageTitleTextValueCell({
     Key? key,
+    this.color,
     this.height,
+    this.constraints,
     this.leftRightPadding,
     this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
     this.rightMaxWidth, // 限制右侧的最大宽度(左右两侧都未设置最大宽度时候，请自己保证两边不会重叠)
@@ -48,6 +56,9 @@ class ImageTitleTextValueCell extends StatelessWidget {
     this.imageWith,
     this.imageTitleSpace,
     required this.title,
+    this.titlePrompt,
+    this.titlePromptMaxLines,
+    this.titlePromptFontSize,
     this.textValue,
     this.textValueMaxLines,
     this.textValueFontSize,
@@ -66,7 +77,9 @@ class ImageTitleTextValueCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ImageTitleCommonValueWithHolderTableViewCell(
+      color: this.color,
       height: this.height,
+      constraints: this.constraints,
       leftRightPadding: this.leftRightPadding ?? 20.w_pt_cj,
       leftMaxWidth: this.leftMaxWidth,
       rightMaxWidth: this.rightMaxWidth,
@@ -74,6 +87,9 @@ class ImageTitleTextValueCell extends StatelessWidget {
       imageWith: this.imageWith,
       imageTitleSpace: this.imageTitleSpace,
       title: this.title,
+      titlePrompt: this.titlePrompt,
+      titlePromptMaxLines: this.titlePromptMaxLines,
+      titlePromptFontSize: this.titlePromptFontSize,
       valuePlaceHodler: this.textValuePlaceHodler,
       valueWidgetBuilder: (BuildContext bContext, {bool canExpanded = false}) =>
           _valueWidget(bContext, canExpanded: canExpanded),
@@ -165,7 +181,7 @@ class ImageTitleTextValueCell extends StatelessWidget {
             style: TextStyle(
               color: showTextColor,
               fontFamily: 'PingFang SC',
-              fontSize: this.textValueFontSize ?? 16.f_pt_cj,
+              fontSize: this.textValueFontSize ?? fontSize_cellRight_default,
               fontWeight: FontWeight.w400,
               // height: 1, // 设置height=1的时候，尝试设置backgroundColor很明显能够看出文本被截断了
               // backgroundColor: Colors.red,

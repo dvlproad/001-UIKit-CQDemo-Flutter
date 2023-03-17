@@ -80,7 +80,7 @@ class ButtonBoldTextStyle extends TextStyle {
   // final Color color;
 
   ButtonBoldTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     // this.color,
   })  : assert(fontSize != null),
         // assert(color != null),
@@ -98,7 +98,7 @@ class ButtonMediumTextStyle extends TextStyle {
   // final Color color;
 
   ButtonMediumTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     // this.color,
   })  : assert(fontSize != null),
         // assert(color != null),

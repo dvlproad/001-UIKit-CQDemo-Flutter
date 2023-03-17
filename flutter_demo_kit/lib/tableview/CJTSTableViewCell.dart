@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-typedef ClickCellCallback = void Function(int section, int row);
+typedef ClickCellCallback = void Function(int? section, int? row);
 
 enum CJTSTableViewCellArrowImageType {
   none, // 无箭头
@@ -12,16 +12,16 @@ enum CJTSTableViewCellArrowImageType {
 
 class CJTSTableViewCell extends StatelessWidget {
   final String text; // 主文本
-  final String detailText; // 副文本（此值为空时候，视图会自动隐藏）
+  final String? detailText; // 副文本（此值为空时候，视图会自动隐藏）
   final CJTSTableViewCellArrowImageType arrowImageType; // 箭头类型(默认none)
 
-  final int section;
-  final int row;
-  final ClickCellCallback clickCellCallback; // cell 的点击
+  final int? section;
+  final int? row;
+  final ClickCellCallback? clickCellCallback; // cell 的点击
 
   CJTSTableViewCell({
-    Key key,
-    this.text,
+    Key? key,
+    required this.text,
     this.detailText,
     this.arrowImageType = CJTSTableViewCellArrowImageType.none,
     this.section,
@@ -43,7 +43,7 @@ class CJTSTableViewCell extends StatelessWidget {
 
   void _onTapCell() {
     if (null != this.clickCellCallback) {
-      this.clickCellCallback(this.section, this.row);
+      this.clickCellCallback!(this.section, this.row);
     }
   }
 
@@ -58,7 +58,7 @@ class CJTSTableViewCell extends StatelessWidget {
     );
 
     // 判断是否添加副文本
-    if (null != this.detailText && this.detailText.length > 0) {
+    if (null != this.detailText && this.detailText!.length > 0) {
       rowWidgets.add(_subText());
     }
 

@@ -3,6 +3,8 @@ import '../../flutter_baseui_kit_adapt.dart';
 
 /// 图片在左，文字在右的按钮
 class LeftImageButton extends StatelessWidget {
+  double? width;
+  double? height;
   String buttonText;
   int? maxLines;
   Image buttonImageView;
@@ -10,6 +12,8 @@ class LeftImageButton extends StatelessWidget {
 
   LeftImageButton({
     Key? key,
+    this.width,
+    this.height,
     required this.buttonText,
     required this.buttonImageView,
     this.onTap,
@@ -28,10 +32,11 @@ class LeftImageButton extends StatelessWidget {
     );
     return LeftImageTextDeleteButton(
       key: key,
+      width: width,
+      height: height ?? 50.h_pt_cj,
       onTap: onTap,
       bgColor: Colors.white,
       cornerRadius: 24.w_pt_cj,
-      height: 50.h_pt_cj,
       iconHeight: 22.w_pt_cj,
       imageView: buttonImageView,
       iconTitleSpace: 5.w_pt_cj,
@@ -52,6 +57,7 @@ class LeftImageButton extends StatelessWidget {
 class LeftImageTextDeleteButton extends StatelessWidget {
   double? width;
   double? height;
+  BoxConstraints? constraints;
   EdgeInsetsGeometry? padding; // 图片与边缘一般都有一定距离
   Color? bgColor;
   double? cornerRadius;
@@ -61,6 +67,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
   double? clickHandle; // 点击视图的事件
 
   Image? imageView;
+  bool shouldExpandedTextLabel;
   Widget? textLabel;
   GestureTapCallback? onTap;
 
@@ -72,6 +79,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
     Key? key,
     this.width,
     this.height,
+    this.constraints,
     this.padding,
     this.bgColor,
     this.cornerRadius,
@@ -80,6 +88,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
     this.titleHeight,
     this.clickHandle,
     this.imageView,
+    this.shouldExpandedTextLabel = false,
     this.textLabel,
     this.onTap,
     this.showDeleteIcon,
@@ -98,12 +107,48 @@ class LeftImageTextDeleteButton extends StatelessWidget {
         child: imageView,
       ),
       Container(width: iconTitleSpace),
-      Container(
-        alignment: Alignment.center,
-        height: titleHeight,
-        // color: Colors.blue,
-        child: textLabel,
-      )
+      // LayoutBuilder(
+      //     builder: (BuildContext context, BoxConstraints constraints) {
+      //   double currentMaxWidth = constraints.maxWidth;
+      //   debugPrint("currentMaxWidth = $currentMaxWidth");
+      //   return Container(
+      //     color: Colors.red,
+      //     alignment: Alignment.center,
+      //     height: titleHeight,
+      //     // color: Colors.blue,
+      //     child: textLabel,
+      //   );
+      // }),
+      // Flexible(
+      //   child: Container(
+      //     color: Colors.red,
+      //     alignment: Alignment.center,
+      //     height: titleHeight,
+      //     // color: Colors.blue,
+      //     child: textLabel,
+      //   ),
+      // ),
+      // Container(
+      //   color: Colors.green,
+      //   width: 40.w_pt_cj,
+      // ),
+      shouldExpandedTextLabel
+          ? Expanded(
+              child: Container(
+                // color: Colors.red,
+                alignment: Alignment.center,
+                height: titleHeight,
+                // color: Colors.blue,
+                child: textLabel,
+              ),
+            )
+          : Container(
+              // color: Colors.green,
+              alignment: Alignment.center,
+              height: titleHeight,
+              // color: Colors.blue,
+              child: textLabel,
+            ),
     ];
 
     if (showDeleteIcon == true) {
@@ -114,8 +159,8 @@ class LeftImageTextDeleteButton extends StatelessWidget {
         deleteWidget = Image.asset(
           "assets/icon_delete.png",
           package: 'flutter_baseui_kit',
-          width: 16.w_pt_cj,
-          height: 16.h_pt_cj,
+          width: iconHeight,
+          height: iconHeight,
           fit: BoxFit.cover,
         );
       }
@@ -133,10 +178,16 @@ class LeftImageTextDeleteButton extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
+        constraints: constraints,
         padding: padding,
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(cornerRadius ?? 0),
+          border: Border.all(
+            color: Color(0xFFF0F0F0),
+            width: 1.w_pt_cj,
+            style: BorderStyle.solid,
+          ),
         ),
         alignment: Alignment.center,
         child: Row(
@@ -281,7 +332,7 @@ class MenuImageTextButton extends StatelessWidget {
         style: TextStyle(
           fontSize: 12.h_pt_cj,
           color: const Color(0xff222222),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w500,
           // height: 1.2,
         ),
       ),

@@ -10,8 +10,13 @@ enum TableViewCellArrowImageType {
   arrowTopBottom, // 上下箭头
 }
 
+double fontSize_cellLeft_default = 13.f_pt_cj;
+double fontSize_cellRight_default = 13.f_pt_cj;
+double fontSize_cellRight_textIconSpacing = 5.f_pt_cj; // cell右侧视图中文案与箭头等icon的间距
+
 class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   final double? height;
+  final BoxConstraints? constraints;
   final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
   final Color? color;
 
@@ -25,6 +30,9 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   final double? imageTitleSpace; // 图片与标题间距(图片存在时候才有效)
   // 左侧-文本
   final String title; // 主文本
+  final String? titlePrompt; // 标题的说明语（此值为空时候，视图会自动隐藏）
+  final int? titlePromptMaxLines; // 标题的说明语的最大行数(为null时候，默认1)
+  final double? titlePromptFontSize; // 标题的说明语的字体大小(默认30)
   // 右侧-值视图
   final Widget? Function(BuildContext context, {required bool canExpanded})
       valueWidgetBuilder; // 值视图（此值为空时候，视图会自动隐藏）
@@ -39,7 +47,8 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
   const BJHTitleCommonValueTableViewCell({
     Key? key,
-    this.height, // cell 的高度(内部已限制最小高度为44)
+    this.height, // cell 的高度(内部已限制最小高度为44,要更改请设置 constraints)
+    this.constraints,
     this.leftRightPadding,
     this.color,
     this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边)
@@ -49,6 +58,9 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     this.imageWith,
     this.imageTitleSpace,
     required this.title,
+    this.titlePrompt,
+    this.titlePromptMaxLines,
+    this.titlePromptFontSize,
     required this.valueWidgetBuilder,
     this.arrowImageType = TableViewCellArrowImageType.none,
     this.section,
@@ -95,15 +107,16 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         image: imageProvider!,
         width: imageWith,
         height: imageWith,
+        fit: BoxFit.contain,
       );
       leftRowWidgets.add(image);
       leftRowWidgets.add(Container(width: imageTitleSpace ?? 0));
     }
 
     if (canExpanded == true) {
-      leftRowWidgets.add(Expanded(child: _mainText()));
+      leftRowWidgets.add(Expanded(child: _titleAndTitlePromptWidget()));
     } else {
-      leftRowWidgets.add(_mainText());
+      leftRowWidgets.add(_titleAndTitlePromptWidget());
     }
 
     return Container(
@@ -125,7 +138,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         this.valueWidgetBuilder(context, canExpanded: canExpanded) != null) {
       Widget valueWidget =
           this.valueWidgetBuilder(context, canExpanded: canExpanded)!;
-      rightRowWidgets.add(SizedBox(width: 5.w_pt_cj));
+      rightRowWidgets.add(SizedBox(width: fontSize_cellRight_textIconSpacing));
       if (canExpanded == true) {
         rightRowWidgets.add(Expanded(child: valueWidget));
       } else {
@@ -154,7 +167,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
     // 判断是否添加箭头，存在则添加到rowWidgets中
     if (this.arrowImageType != TableViewCellArrowImageType.none) {
-      rightRowWidgets.add(SizedBox(width: 15.w_pt_cj));
+      rightRowWidgets.add(SizedBox(width: 5.w_pt_cj));
       rightRowWidgets.add(_arrowImage());
     }
     if (rightRowWidgets.length == 0) {
@@ -203,7 +216,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
     return Container(
       height: this.height,
-      constraints: BoxConstraints(minHeight: 44.h_pt_cj),
+      constraints: this.constraints ?? BoxConstraints(minHeight: 44.h_pt_cj),
       padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
       color: this.color ?? Colors.white,
       child: Row(
@@ -214,7 +227,30 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     );
   }
 
-  // 主文本
+  // 主文本及其下方的主文本的副文本
+  Widget _titleAndTitlePromptWidget() {
+    // // 自动缩小字体的组件
+    // return FlutterAutoText(
+    //   text: this.textValue ?? '',
+    // );
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      color: Colors.transparent,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 左边文本的上面主文本
+          _mainText(),
+          // 左边文本的下面副文本
+          _titlePromptWidget(),
+        ],
+      ),
+    );
+  }
+
+  // 标题
   Widget _mainText() {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -225,8 +261,8 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontFamily: 'PingFang SC',
-          color: Color(0xff333333),
-          fontSize: 16.f_pt_cj,
+          color: Color(0xff404040),
+          fontSize: fontSize_cellLeft_default,
           fontWeight: FontWeight.w500,
           // height: 1,
         ),
@@ -234,17 +270,62 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     );
   }
 
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Image(
-        image:
-            AssetImage('assets/arrow_right.png', package: 'flutter_baseui_kit'),
-        width: 8.w_pt_cj,
-        height: 16.h_pt_cj,
+  // 标题的说明语
+  Widget _titlePromptWidget() {
+    if (titlePrompt == null || titlePrompt!.isEmpty) {
+      return Container();
+    }
+
+    // 注意：如果发现此视图超出边界，一般情况是因为未设置 leftMaxWidth, 也未设置 rightMaxWidth,导致在左边不会自动伸缩的情况下，左边右超出长度。解决方法，设置 leftMaxWidth 或 rightMaxWidth 之一即可。
+    return Text(
+      titlePrompt!,
+      textAlign: TextAlign.left,
+      maxLines: titlePromptMaxLines ?? 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        color: Color(0xff404040),
+        fontFamily: 'PingFang SC',
+        fontSize: this.titlePromptFontSize ?? fontSize_cellRight_default,
+        fontWeight: FontWeight.w400,
+        // height: 1,
       ),
     );
+  }
+
+  // 箭头
+  Widget _arrowImage() {
+    return arrwoImageWidget();
+  }
+
+  static Widget arrwoImageWidget({
+    Color bgColor = Colors.transparent,
+    Color? imageColor,
+  }) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      color: bgColor,
+      child: Image(
+        image: AssetImage(
+          'assets/arrow_right.png',
+          package: 'flutter_baseui_kit',
+        ),
+        width: 5.w_pt_cj,
+        height: 18.h_pt_cj,
+        fit: BoxFit.contain,
+        color: imageColor,
+      ),
+    );
+    // return Container(
+    //   // color: Colors.blue,
+    //   child: Image(
+    //     image: const AssetImage(
+    //       'assets/arrow_right.png',
+    //       package: 'flutter_baseui_kit',
+    //     ),
+    //     width: 6.w_bj,
+    //     height: 18.h_bj,
+    //     fit: BoxFit.contain,
+    //   ),
+    // );
   }
 }

@@ -7,6 +7,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
     Key? key,
     double? width,
     double? height,
+    BoxConstraints? constraints,
     double cornerRadius = 5.0,
     required Color themeColor,
     required Color themeOppositeColor,
@@ -25,6 +26,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
           key: key,
           width: width,
           height: height,
+          constraints: constraints,
           childBuider: childBuider,
           enable: enable,
           selected: selected,
@@ -48,6 +50,9 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
 class CJStateTextButton extends StatelessWidget {
   final double? width;
   final double? height;
+  final BoxConstraints? constraints;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
   final Widget Function(bool bSelected) childBuider;
   final VoidCallback? onPressed;
   final bool? enable;
@@ -70,6 +75,9 @@ class CJStateTextButton extends StatelessWidget {
     Key? key,
     this.width,
     this.height,
+    this.constraints,
+    this.margin,
+    this.padding,
     required this.childBuider,
     this.onPressed, // null时候会自动透传事件
     this.enable = true,
@@ -95,6 +103,9 @@ class CJStateTextButton extends StatelessWidget {
     return CJStateButton(
       width: this.width,
       height: this.height,
+      constraints: this.constraints,
+      margin: this.margin,
+      padding: this.padding,
       child: this.childBuider(selected),
       onPressed: this.onPressed,
       enable: this.enable,
