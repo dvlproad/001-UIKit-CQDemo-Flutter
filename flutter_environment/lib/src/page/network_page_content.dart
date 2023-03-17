@@ -23,7 +23,7 @@ class NetworkPageContent extends StatefulWidget {
   final Function()? onPressTestApiCallback;
   final Function(
     TSEnvNetworkModel bNetworkModel, {
-    bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
+    required bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
   }) updateNetworkCallback;
 
   NetworkPageContent({

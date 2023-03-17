@@ -22,8 +22,6 @@ dependencies:
     path: ../flutter_log/
   flutter_effect:
     path: ../flutter_effect/
-  flutter_updateversion_kit:
-    path: ../flutter_updateversion_kit/
   flutter_screenutil: any
 
 dev_dependencies:

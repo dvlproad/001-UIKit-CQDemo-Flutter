@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-07 22:59:18
+ * @LastEditTime: 2023-03-17 18:27:50
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -12,19 +12,28 @@ import 'package:app_environment/app_environment.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  initEnv(PackageType.develop1);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  initEnv(PackageNetworkType.develop1);
 
   runApp(MyApp());
 }
 
-void initEnv(PackageType originPackageType) async {
+void initEnv(PackageNetworkType originPackageNetworkType) async {
   // network:api host
-  await EnvManagerUtil.initNetworkEnvironmentManager(originPackageType);
+  await EnvManagerUtil.initNetworkEnvironmentManager(originPackageNetworkType);
   await NetworkPageDataManager().initCompleter.future;
 
   // proxy:
-  await EnvManagerUtil.initProxyEnvironmentManager(originPackageType);
+  await EnvManagerUtil.initProxyEnvironmentManager(originPackageNetworkType);
   await ProxyPageDataManager().initCompleter.future;
+
+  // network:api host
+  await EnvManagerUtil.initPackageTargetManager(
+    originPackageNetworkType,
+    PackageTargetType.dev,
+  );
+  await PackageTargetPageDataManager().initCompleter.future;
 
   // 网络环境相关：环境切换界面
   EnvPageUtil.initWithPage(

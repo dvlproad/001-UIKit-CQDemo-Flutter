@@ -96,7 +96,7 @@ class _ProxyListState extends State<ProxyList> {
     //     Provider.of<ProxyEnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
     ProxyEnvironmentChangeNotifier notifier =
         _environmentChangeNotifier; // 在本组件中，使用此取法
-    print('envName = ${notifier.networkModel.name}');
+    print('proxy envName = ${notifier.proxyModel.name}');
 
     int sectionCount = 1;
 

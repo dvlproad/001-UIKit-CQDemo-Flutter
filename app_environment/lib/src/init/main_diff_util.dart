@@ -7,18 +7,19 @@
  */
 import 'package:flutter/foundation.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import './environment_datas_util.dart';
-import './packageType_page_data_bean.dart' show PackageTargetType;
+import '../data_manager/packageType_page_data_bean.dart' show PackageTargetType;
 
 class DiffPackageBean {
   PackageType packageType;
   String des;
   String bestNetworkDes;
+  PackageTargetType packageTargetType;
 
   DiffPackageBean({
     @required this.packageType,
     @required this.des,
     @required this.bestNetworkDes,
+    @required this.packageTargetType,
   });
 
   DiffPackageBean.fromJson(dynamic json) {
@@ -36,72 +37,5 @@ class DiffPackageBean {
 
   bool get isProduct {
     return packageType == PackageType.product;
-  }
-}
-
-class MainDiffUtil {
-  static PackageType packageType;
-  static PackageTargetType packageTargetType;
-
-  static init({
-    @required PackageType m_packageEnvType,
-    @required PackageTargetType m_packageTargetType,
-  }) {
-    packageType = m_packageEnvType;
-    packageTargetType = m_packageTargetType;
-  }
-
-  static DiffPackageBean diffPackageBean() {
-    return diffPackageBeanByType(packageType);
-  }
-
-  static List<Map<String, dynamic>> PackageInfoMaps = [
-    {
-      "packageType": PackageType.develop1,
-      "des": '开发包',
-      "bestNetworkDes": TSEnvironmentDataUtil.networkModel_dev1.name,
-    },
-    {
-      "packageType": PackageType.preproduct,
-      "des": '测试包',
-      "bestNetworkDes": TSEnvironmentDataUtil.networkModel_preProduct.name,
-    },
-    {
-      "packageType": PackageType.product,
-      "des": '生产包',
-      "bestNetworkDes": TSEnvironmentDataUtil.networkModel_product.name,
-    },
-  ];
-
-  static DiffPackageBean _diffPackageBean_dev = DiffPackageBean(
-    packageType: PackageType.develop1,
-    des: '开发包',
-    bestNetworkDes: TSEnvironmentDataUtil.networkModel_dev1.name,
-  );
-
-  static DiffPackageBean _diffPackageBean_preproduct = DiffPackageBean(
-    packageType: PackageType.preproduct,
-    des: '测试包',
-    bestNetworkDes: TSEnvironmentDataUtil.networkModel_preProduct.name,
-  );
-
-  static DiffPackageBean _diffPackageBean_product = DiffPackageBean(
-    packageType: PackageType.product,
-    des: '生产包',
-    bestNetworkDes: TSEnvironmentDataUtil.networkModel_product.name,
-  );
-
-  static DiffPackageBean diffPackageBeanByType(PackageType _platformState) {
-    if (_platformState == PackageType.develop1) {
-      return _diffPackageBean_dev;
-    } else if (_platformState == PackageType.develop2) {
-      return _diffPackageBean_dev;
-    } else if (_platformState == PackageType.preproduct) {
-      return _diffPackageBean_preproduct;
-    } else if (_platformState == PackageType.product) {
-      return _diffPackageBean_product;
-    } else {
-      return _diffPackageBean_product;
-    }
   }
 }

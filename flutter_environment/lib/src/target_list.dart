@@ -6,40 +6,40 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
     show CreateSectionTableView2, IndexPath;
 
 import './components/evvironment_header.dart';
-import './components/environment_network_cell.dart';
+import './components/environment_target_cell.dart';
 
 import './environment_change_notifiter.dart';
-import './network_page_data_bean.dart';
+import './data_target/packageType_page_data_bean.dart';
 
-class NetworkList extends StatefulWidget {
+class TargetList extends StatefulWidget {
   final String? networkTitle;
-  final List<TSEnvNetworkModel> networkModels;
+  final List<PackageTargetModel> targetModels;
 
-  final TSEnvNetworkModel selectedNetworkModel;
+  final PackageTargetModel selectedTargetModel;
 
-  final ClickEnvNetworkCellCallback
-      clickEnvNetworkCellCallback; // 网络 networkCell 的点击
+  final ClickEnvTargetCellCallback
+      clickEnvTargetCellCallback; // 网络 networkCell 的点击
 
-  NetworkList({
+  TargetList({
     Key? key,
     this.networkTitle,
-    required this.networkModels,
-    required this.selectedNetworkModel,
-    required this.clickEnvNetworkCellCallback,
+    required this.targetModels,
+    required this.selectedTargetModel,
+    required this.clickEnvTargetCellCallback,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _NetworkListState();
+    return _TargetListState();
   }
 }
 
-class _NetworkListState extends State<NetworkList> {
-  late List<TSEnvNetworkModel> _networkModels;
+class _TargetListState extends State<TargetList> {
+  late List<PackageTargetModel> _targetModels;
 
-  NetworkEnvironmentChangeNotifier _environmentChangeNotifier =
-      NetworkEnvironmentChangeNotifier();
-  late TSEnvNetworkModel _oldSelectedNetworkModel;
+  TargetEnvironmentChangeNotifier _environmentChangeNotifier =
+      TargetEnvironmentChangeNotifier();
+  late PackageTargetModel _oldSelectedTargetModel;
 
   @override
   void initState() {
@@ -49,16 +49,16 @@ class _NetworkListState extends State<NetworkList> {
   }
 
   void getData() {
-    _networkModels = widget.networkModels;
-    _oldSelectedNetworkModel = widget.selectedNetworkModel;
+    _targetModels = widget.targetModels;
+    _oldSelectedTargetModel = widget.selectedTargetModel;
 
-    for (int i = 0; i < _networkModels.length; i++) {
-      TSEnvNetworkModel networkModel = _networkModels[i];
-      if (networkModel.envId == _oldSelectedNetworkModel.envId) {
-        networkModel.check = true;
-        _oldSelectedNetworkModel = networkModel;
+    for (int i = 0; i < _targetModels.length; i++) {
+      PackageTargetModel targetModel = _targetModels[i];
+      if (targetModel.envId == _oldSelectedTargetModel.envId) {
+        targetModel.check = true;
+        _oldSelectedTargetModel = targetModel;
       } else {
-        networkModel.check = false;
+        targetModel.check = false;
       }
     }
   }
@@ -66,7 +66,7 @@ class _NetworkListState extends State<NetworkList> {
   @override
   Widget build(BuildContext context) {
     getData();
-    return ChangeNotifierProvider<NetworkEnvironmentChangeNotifier>.value(
+    return ChangeNotifierProvider<TargetEnvironmentChangeNotifier>.value(
       value: _environmentChangeNotifier,
       child: _pageWidget(),
     );
@@ -82,7 +82,7 @@ class _NetworkListState extends State<NetworkList> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 6),
-          Consumer<NetworkEnvironmentChangeNotifier>(
+          Consumer<TargetEnvironmentChangeNotifier>(
             builder: (context, environmentChangeNotifier, child) {
               return Expanded(
                 child: _searchResultWidget(),
@@ -95,17 +95,17 @@ class _NetworkListState extends State<NetworkList> {
   }
 
   Widget _searchResultWidget() {
-    // NetworkEnvironmentChangeNotifier notifier =
-    //     Provider.of<NetworkEnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
-    NetworkEnvironmentChangeNotifier notifier =
+    // TargetEnvironmentChangeNotifier notifier =
+    //     Provider.of<TargetEnvironmentChangeNotifier>(context); // 在其他组件中，才使用这种取法
+    TargetEnvironmentChangeNotifier notifier =
         _environmentChangeNotifier; // 在本组件中，使用此取法
-    print('network envName = ${notifier.networkModel.name}');
+    print('target envName = ${notifier.targetModel.name}');
 
     int sectionCount = 1;
 
     int numOfRowInSection(section) {
       if (section == 0) {
-        List<TSEnvNetworkModel> dataModels = _networkModels;
+        List<PackageTargetModel> dataModels = _targetModels;
         return dataModels.length;
       }
       return 0;
@@ -125,32 +125,32 @@ class _NetworkListState extends State<NetworkList> {
       },
       cellAtIndexPath: (section, row) {
         if (section == 0) {
-          // Network 环境
-          List<dynamic> dataModels = _networkModels;
-          TSEnvNetworkModel dataModel = dataModels[row] as TSEnvNetworkModel;
-          return EnvNetworkTableViewCell(
+          // Target 环境
+          List<dynamic> dataModels = _targetModels;
+          PackageTargetModel dataModel = dataModels[row] as PackageTargetModel;
+          return EnvTargetTableViewCell(
             envModel: dataModel,
             section: section,
             row: row,
-            clickEnvNetworkCellCallback: ({
+            clickEnvTargetCellCallback: ({
               int? section,
               int? row,
-              required TSEnvNetworkModel bNetworkModel,
+              required PackageTargetModel bTargetModel,
               bool? isLongPress,
             }) {
-              // print('点击切换 Network 环境');
-              if (bNetworkModel == _oldSelectedNetworkModel) {
+              // print('点击切换 Target 环境');
+              if (bTargetModel == _oldSelectedTargetModel) {
                 return;
               }
 
               // setState(() {}); // 请在外部执行
-              // notifier.searchTextChange(bNetworkModel.envId);
+              // notifier.searchTextChange(bTargetModel.envId);
 
-              if (widget.clickEnvNetworkCellCallback != null) {
-                widget.clickEnvNetworkCellCallback(
+              if (widget.clickEnvTargetCellCallback != null) {
+                widget.clickEnvTargetCellCallback(
                   section: section,
                   row: row,
-                  bNetworkModel: bNetworkModel,
+                  bTargetModel: bTargetModel,
                   isLongPress: isLongPress,
                 );
               }

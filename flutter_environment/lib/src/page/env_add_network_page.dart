@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './prefixText_textField.dart';
+import './env_button.dart';
 
 class EnvironmentAddNetworkPage extends StatefulWidget {
   final String? oldProxyIp;
@@ -147,19 +148,9 @@ class _EnvironmentAddNetworkPageState extends State<EnvironmentAddNetworkPage> {
   }
 
   // 提交按钮
-  FlatButton _submitButton() {
-    return FlatButton(
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 15.0),
-        child: Text("提交"),
-      ),
-      color: Color(0xff01adfe),
-      textColor: Colors.white,
-      highlightColor: Color(0xff1393d7),
-      disabledColor: Color(0xffd3d3d5),
-      //colorBrightness: Brightness.dark, //按钮主题，默认是浅色主题
-      //splashColor: Colors.grey, //点击时，水波动画中水波的颜色
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+  TextButton _submitButton() {
+    return EnvButtonFactory.submitButton(
+      buttonText: '提交',
       onPressed: () {
         String userName = _usernameController.text;
         Runes runes = userName.runes;

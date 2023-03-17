@@ -99,70 +99,26 @@ class ApplicationDraggableManager {
             width: 44,
             height: 44,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Row(
-                    children: [
-                      Container(width: 5),
-                      Text(
-                        _floatingToolTextNetworkNameOrigin,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            // color: Colors.green,
-                            child: Text(
-                              _floatingToolTextNetworkNameCurrent,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                targetNetworkWidget(
+                  networkDes: _floatingToolTextNetworkNameOrigin,
+                  targetDes: _floatingToolTextTargetNameOrigin,
+                  networkTextColor: Colors.pink,
+                  targetTextColor: Colors.pink,
                 ),
-                Center(
-                  child: Row(
-                    children: [
-                      Container(width: 5),
-                      Text(
-                        _floatingToolTextTargetNameOrigin,
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Container(
-                            // color: Colors.green,
-                            child: Text(
-                              _floatingToolTextTargetNameCurrent,
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                targetNetworkWidget(
+                  networkDes: _floatingToolTextNetworkNameCurrent,
+                  targetDes: _floatingToolTextTargetNameCurrent,
+                  networkTextColor: _floatingToolTextNetworkNameCurrent !=
+                          _floatingToolTextNetworkNameOrigin
+                      ? Colors.red
+                      : Colors.pink,
+                  targetTextColor: _floatingToolTextTargetNameCurrent !=
+                          _floatingToolTextTargetNameOrigin
+                      ? Colors.red
+                      : Colors.pink,
                 ),
               ],
             ),
@@ -176,6 +132,50 @@ class ApplicationDraggableManager {
       top: top,
       child: overlayChildWidget,
       ifExistUseOld: true,
+    );
+  }
+
+  static Widget targetNetworkWidget({
+    required String targetDes,
+    required String networkDes,
+    required Color targetTextColor,
+    required Color networkTextColor,
+  }) {
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(width: 5),
+          Text(
+            networkDes,
+            style: TextStyle(
+              fontFamily: 'PingFang SC',
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+              color: targetTextColor,
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                // color: Colors.green,
+                child: Text(
+                  targetDes,
+                  style: TextStyle(
+                    fontFamily: 'PingFang SC',
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: networkTextColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

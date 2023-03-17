@@ -4,18 +4,17 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  provider: any #4.1.3
+  provider: any
+  event_bus: any
   flutter_environment:
     path: ../flutter_environment/
-  flutter_updateversion_kit:
-    path: ../flutter_updateversion_kit/
   flutter_effect_kit:
     path: ../flutter_effect_kit/
 

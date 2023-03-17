@@ -2,35 +2,35 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-19 15:24:11
+ * @LastEditTime: 2022-11-23 14:32:02
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import './environment_base_cell.dart';
-import '../network_page_data_bean.dart';
+import '../data_target/packageType_page_data_bean.dart';
 
-typedef ClickEnvNetworkCellCallback = void Function({
+typedef ClickEnvTargetCellCallback = void Function({
   int? section,
   int? row,
-  required TSEnvNetworkModel bNetworkModel,
+  required PackageTargetModel bTargetModel,
   bool? isLongPress,
 });
 
-class EnvNetworkTableViewCell extends StatelessWidget {
-  final TSEnvNetworkModel envModel; // 环境
+class EnvTargetTableViewCell extends StatelessWidget {
+  final PackageTargetModel envModel; // 环境
 
   final int section;
   final int row;
-  final ClickEnvNetworkCellCallback
-      clickEnvNetworkCellCallback; // 网络 networkCell 的点击
+  final ClickEnvTargetCellCallback
+      clickEnvTargetCellCallback; // 网络 networkCell 的点击
 
-  EnvNetworkTableViewCell({
+  EnvTargetTableViewCell({
     Key? key,
     required this.envModel,
     this.section = 0,
     this.row = 0,
-    required this.clickEnvNetworkCellCallback,
+    required this.clickEnvTargetCellCallback,
   }) : super(key: key);
 
   @override
@@ -38,10 +38,8 @@ class EnvNetworkTableViewCell extends StatelessWidget {
     return EnvBaseTableViewCell(
       mainTitle: envModel.name,
       subTitles: [
-        envModel.apiHost,
-        envModel.socketHost,
-        envModel.webHost,
-        envModel.gameHost,
+        envModel.envId,
+        envModel.des,
       ],
       check: envModel.check,
       section: section,
@@ -54,11 +52,11 @@ class EnvNetworkTableViewCell extends StatelessWidget {
         bool? check,
         bool? isLongPress,
       }) {
-        if (null != this.clickEnvNetworkCellCallback) {
-          this.clickEnvNetworkCellCallback(
+        if (null != this.clickEnvTargetCellCallback) {
+          this.clickEnvTargetCellCallback(
             section: section,
             row: row,
-            bNetworkModel: this.envModel,
+            bTargetModel: this.envModel,
             isLongPress: isLongPress,
           );
         }

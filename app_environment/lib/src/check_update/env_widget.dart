@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-10-13 10:53:02
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 18:05:49
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
@@ -6,25 +13,23 @@ import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:provider/provider.dart';
-import './init/package_environment_util.dart';
-import './init/packageType_env_util.dart';
-import './init/packageType_page_data_manager.dart';
-import './init/packageType_page_data_bean.dart';
+import './package_check_update_network_util.dart';
+import './package_check_update_target_util.dart';
+import './package_check_update_proxy_util.dart';
 
 import './env_page_util.dart';
 import './env_notifier.dart';
-import './init/main_diff_util.dart';
+
+import '../env_manager_util.dart';
 
 class EnvWidget extends StatefulWidget {
-  const EnvWidget({Key key}) : super(key: key);
+  const EnvWidget({Key? key}) : super(key: key);
 
   @override
   _EnvWidgetState createState() => _EnvWidgetState();
 }
 
 class _EnvWidgetState extends State<EnvWidget> {
-  BranchPackageInfo packageInfo;
-
   @override
   void dispose() {
     super.dispose();
@@ -34,15 +39,11 @@ class _EnvWidgetState extends State<EnvWidget> {
   void initState() {
     super.initState();
 
-    packageInfo = BranchPackageInfo.nullPackageInfo;
-
     _getVersion();
   }
 
   // 获取版本号
   _getVersion() async {
-    packageInfo = await BranchPackageInfo.fromPlatform();
-
     setState(() {});
   }
 
@@ -100,6 +101,7 @@ class _EnvWidgetState extends State<EnvWidget> {
     );
   }
 
+  // 切换环境
   Widget _devtool_env_cell(BuildContext context) {
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
@@ -114,7 +116,7 @@ class _EnvWidgetState extends State<EnvWidget> {
       textValue: selectedNetworkModel.name,
       textSubValue: selectedNetworkModel.apiHost,
       onTap: () {
-        PackageEnvironmentUtil.checkShouldResetNetwork(
+        PackageCheckUpdateNetworkUtil.checkShouldResetNetwork(
           goChangeHandle: () {
             EnvPageUtil.goChangeEnvironmentNetwork(context).then((value) {
               setState(() {});
@@ -125,34 +127,22 @@ class _EnvWidgetState extends State<EnvWidget> {
     );
   }
 
-  /// 更换包的上传位置(内测pgyer、公测testFlight)
+  /// 更换包的上传位置(内测inner、公测testFlight)
   Widget _change_packageUploadTarget_cell(BuildContext context) {
     PackageTargetModel packageTargetModel =
-        PackageTargetPageDataManager().selectedPackageTargetModel;
+        PackageTargetPageDataManager().selectedTargetModel;
 
     return ImageTitleTextValueCell(
       height: envCellHeight,
-      title: "切换内外测",
+      title: "切换平台",
       textValue: packageTargetModel.name,
-      textSubValue: '公测与蒲公英版本检测调用方法不一样而已',
+      textSubValue: packageTargetModel.des,
       onTap: () {
-        AlertUtil.showCancelOKAlert(
-          context: context,
-          barrierDismissible: true,
-          title: '切换内外测',
-          cancelTitle: '内测包',
-          cancelHandle: () {
-            PackageTargetEnvUtil.changePackageTarget(
-              PackageTargetModel.pgyerTargetModel,
-              context: context,
-            );
-          },
-          okTitle: '外测包',
-          okHandle: () {
-            PackageTargetEnvUtil.changePackageTarget(
-              PackageTargetModel.formalTargetModel,
-              context: context,
-            );
+        PackageCheckUpdateTargetUtil.checkShouldResetTarget(
+          goChangeHandle: () {
+            EnvPageUtil.goChangeEnvironmentTarget(context).then((value) {
+              setState(() {});
+            });
           },
         );
       },
@@ -197,7 +187,7 @@ class _EnvWidgetState extends State<EnvWidget> {
   */
 
   Widget _devtool_proxy_cell(BuildContext context) {
-    TSEnvProxyModel selectedProxyModel =
+    TSEnvProxyModel? selectedProxyModel =
         ProxyPageDataManager().selectedProxyModel;
     if (selectedProxyModel == null) {
       return Container();
@@ -212,7 +202,7 @@ class _EnvWidgetState extends State<EnvWidget> {
       textValue: selectedProxyModel.name,
       textSubValue: selectedProxyModel.proxyIp,
       onTap: () {
-        PackageEnvironmentUtil.checkProxyAllowForPackage(
+        PackageCheckUpdateProxyUtil.checkProxyAllowForPackage(
           goChangeHandle: () {
             EnvPageUtil.goChangeEnvironmentProxy(context).then((value) {
               setState(() {});
@@ -238,15 +228,16 @@ class _EnvWidgetState extends State<EnvWidget> {
       title: "Mock工具",
       textValue: mockCountString,
       onTap: () {
-        DiffPackageBean packageBean = MainDiffUtil.diffPackageBean();
-        PackageType packageType = packageBean.packageType;
-        if (packageType == PackageType.develop1 ||
-            packageType == PackageType.develop2) {
+        PackageNetworkType packageNetworkType =
+            EnvManagerUtil.originPackageNetworkType;
+        if (packageNetworkType == PackageNetworkType.develop1 ||
+            packageNetworkType == PackageNetworkType.develop2) {
           EnvPageUtil.goChangeApiMock(context).then((value) {
             setState(() {});
           });
         } else {
-          String message = "您当前包为${packageBean.des}，不支持Mock";
+          String message =
+              "您当前包为${EnvManagerUtil.packageDefaultNetworkModel.name}，不支持Mock";
           ToastUtil.showMsg(message, context);
         }
       },

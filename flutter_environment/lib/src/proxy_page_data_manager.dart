@@ -11,14 +11,14 @@ class ProxyPageDataManager {
   Completer initCompleter = Completer<String>();
 
   List<TSEnvProxyModel>? _proxyModels;
-  TSEnvProxyModel? _selectedProxyModel;
+  TSEnvProxyModel _selectedProxyModel = TSEnvProxyModel.noneProxyModel();
 
   Future<List<TSEnvProxyModel>> get proxyModels async {
     await _getCache();
     return _proxyModels!;
   }
 
-  TSEnvProxyModel? get selectedProxyModel => _selectedProxyModel;
+  TSEnvProxyModel get selectedProxyModel => _selectedProxyModel;
 
   // 工厂模式
   factory ProxyPageDataManager() => _getInstance();

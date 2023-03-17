@@ -26,26 +26,6 @@ class DeviceInfoUtil {
     return proxyModel;
   }
 
-  /// 获取手机设备自身的ip地址
-  static Future<String?> getPhoneSystemIp() async {
-    NetworkInterface.list(includeLoopback: false, type: InternetAddressType.any)
-        .then((List<NetworkInterface> interfaces) {
-      String? systemIp;
-
-      for (NetworkInterface interface in interfaces) {
-        if (interface.name == 'en0') {
-          for (InternetAddress address in interface.addresses) {
-            systemIp = address.address;
-            break;
-          }
-          break;
-        }
-      }
-
-      return systemIp;
-    });
-  }
-
   /// 获取手机设备自身的所有ip信息
   static Future<String> getPhoneSystemNetworkInterface() async {
     List<NetworkInterface> interfaces = await NetworkInterface.list(
@@ -63,5 +43,43 @@ class DeviceInfoUtil {
     }
 
     return networkInterface;
+  }
+
+  /// 获取手机设备自身的ip地址
+  static Future<Map<String, String>?> getPhoneSystemIpMap() async {
+    List<NetworkInterface> interfaces = await NetworkInterface.list(
+      includeLoopback: false,
+      type: InternetAddressType.any,
+    );
+
+    String? systemIp;
+    for (NetworkInterface interface in interfaces) {
+      if (interface.name == 'en0') {
+        for (InternetAddress address in interface.addresses) {
+          systemIp = address.address;
+          break;
+        }
+        break;
+      }
+    }
+
+    if (systemIp != null) {
+      return {"name": 'en0', "value": systemIp};
+    }
+
+    for (NetworkInterface interface in interfaces) {
+      if (interface.name == 'wlan0') {
+        for (InternetAddress address in interface.addresses) {
+          systemIp = address.address;
+          break;
+        }
+        break;
+      }
+    }
+    if (systemIp != null) {
+      return {"name": 'wlan0', "value": systemIp};
+    }
+
+    return null;
   }
 }

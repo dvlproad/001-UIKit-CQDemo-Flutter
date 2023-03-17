@@ -13,7 +13,10 @@ dependencies:
     sdk: flutter
 
   shared_preferences: any
+
+  connectivity_plus: any
   http_proxy: any
+
   fluttertoast: any
   flutter_network:
     path: ../flutter_network/

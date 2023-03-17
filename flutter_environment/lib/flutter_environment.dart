@@ -7,8 +7,15 @@
  */
 library flutter_environment;
 
+// 网络环境 network
 export 'src/network_page_data_manager.dart';
 export 'src/network_page_data_bean.dart';
+
+// 平台环境
+export 'src/data_target/packageType_page_data_manager.dart';
+export 'src/data_target/packageType_page_data_bean.dart';
+
+// 代理环境 proxy
 export 'src/proxy_page_data_manager.dart';
 export 'src/proxy_page_data_bean.dart';
 export 'src/page/network_page_content.dart';

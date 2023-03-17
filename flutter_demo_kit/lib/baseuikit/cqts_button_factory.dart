@@ -10,7 +10,7 @@ class CQTSThemeBGButton extends CJStateTextButton {
     Key? key,
     double? width,
     double? height,
-    required CQTSThemeBGType bgColorType,
+    CQTSThemeBGType bgColorType = CQTSThemeBGType.blue,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     required String title,
     TextStyle? titleStyle,

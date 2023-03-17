@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+
+// 网络 network
 import './network_page_data_manager.dart';
-import './proxy_page_data_manager.dart';
 import './page/network_page_content.dart';
+
+// 发布平台大类型 target
+import './data_target/packageType_page_data_manager.dart';
+import './page/target_page_content.dart';
+
+// 代理 proxy
+import './proxy_page_data_manager.dart';
 import './page/proxy_page_content.dart';
+
+// 接口模拟 api mock
 import './page/api_mock_page_content.dart';
 import './apimock/manager/api_manager.dart';
 
+// 悬浮按钮
 import '../darg/draggable_manager.dart';
 
 import './device/device_info_util.dart';
@@ -16,7 +27,8 @@ class EnvironmentUtil {
   static Future goChangeEnvironmentNetwork(
     BuildContext context, {
     Function()? onPressTestApiCallback,
-    required Function(TSEnvNetworkModel bNetworkModel, {bool shouldExit})
+    required Function(TSEnvNetworkModel bNetworkModel,
+            {required bool shouldExit})
         updateNetworkCallback,
   }) {
     return Navigator.of(context).push(
@@ -24,9 +36,25 @@ class EnvironmentUtil {
         builder: (context) {
           return NetworkPageContent(
             currentProxyIp:
-                ProxyPageDataManager().selectedProxyModel?.proxyIp ?? 'null',
+                ProxyPageDataManager().selectedProxyModel.proxyIp ?? 'null',
             onPressTestApiCallback: onPressTestApiCallback,
             updateNetworkCallback: updateNetworkCallback,
+          );
+        },
+      ),
+    );
+  }
+
+  // 进入切换发布平台大类型页面
+  static Future goChangeEnvironmentTarget(
+    BuildContext context, {
+    required Function(PackageTargetModel bTargetModel) updateTargetCallback,
+  }) {
+    return Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return TargetPageContent(
+            updateTargetCallback: updateTargetCallback,
           );
         },
       ),
@@ -36,7 +64,7 @@ class EnvironmentUtil {
   /// 切换到无代理，如果已是无代理，则尝试切到手机代理(返回值:表示是否选中的代理有发生改变，决定是否要刷新界面)
   static Future<bool> changeToNoneProxy_ifNoneTryToPhone() async {
     String? currentAppProxyIp =
-        ProxyPageDataManager().selectedProxyModel?.proxyIp;
+        ProxyPageDataManager().selectedProxyModel.proxyIp;
 
     // 如果app当前有代理，则默认要先切换到无代理
     if (currentAppProxyIp != null) {
@@ -85,6 +113,9 @@ class EnvironmentUtil {
   /// 从from网络环境切换到to网络环境，是否需要自动关闭app.(且如果已登录则重启后需要重新登录)
   static bool Function(TSEnvNetworkModel fromNetworkEnvModel,
       TSEnvNetworkModel toNetworkEnvModel)? shouldExitWhenChangeNetworkEnv;
+  static bool Function(
+          PackageTargetModel fromTargetModel, PackageTargetModel toTargetModel)?
+      shouldExitWhenChangeTargetEnv;
 
   // 进入切换 Api mock 的页面
   static Future goChangeApiMock(

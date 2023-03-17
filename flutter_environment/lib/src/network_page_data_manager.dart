@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-20 11:30:12
+ * @LastEditTime: 2022-10-18 18:49:15
  * @Description: 网络环境管理器
  */
 // 创建一个单例的Manager类
@@ -18,16 +18,7 @@ class NetworkPageDataManager {
   Completer initCompleter = Completer<String>();
 
   List<TSEnvNetworkModel> _networkModels = [];
-  TSEnvNetworkModel _selectedNetworkModel = TSEnvNetworkModel(
-    envId: '',
-    name: '',
-    shortName: '',
-    apiHost: '',
-    webHost: '',
-    gameHost: '',
-    monitorApiHost: '',
-    monitorDataHubId: '',
-  );
+  TSEnvNetworkModel _selectedNetworkModel = TSEnvNetworkModel.none();
 
   List<TSEnvNetworkModel> get networkModels => _networkModels;
   TSEnvNetworkModel get selectedNetworkModel {
