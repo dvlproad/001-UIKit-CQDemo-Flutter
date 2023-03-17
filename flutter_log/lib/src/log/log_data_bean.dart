@@ -7,11 +7,18 @@
  */
 
 import 'package:meta/meta.dart';
+import 'package:flutter/material.dart'; // 需要使用颜色 Color
+import '../string_format_util/formatter_object_util.dart';
 
 enum LogObjectType {
-  api, // 网络请求
+  api_app, // app中的网络请求
+  api_cache, // 网络缓存请求
+  api_sdk, // sdk中的网络请求
   dart, // 语法
   widget, // 视图
+  route, // 路由
+  api_buriedPoint, // 埋点
+  monitor_network, // 监控(埋点、网络类型变化等)
   other, // 其他
 }
 
@@ -36,9 +43,9 @@ class LogModel {
 
   DateTime dateTime;
   String? title;
-  String content;
+  Map<dynamic, dynamic> shortMap;
 
-  Map<String, dynamic>? logInfo;
+  Map<dynamic, dynamic>? extraLogInfo;
   dynamic detailLogModel;
 
   LogModel({
@@ -46,31 +53,134 @@ class LogModel {
     required this.logLevel,
     required this.dateTime,
     this.title,
-    required this.content,
-    this.logInfo, // 用来标识处理的log特殊数据
+    required this.shortMap,
+    this.extraLogInfo, // 用来标识处理的log特殊数据
     this.detailLogModel,
   });
 
   @override
-  String toString() => '$title $content';
+  String toString() => '$title $shortMapString';
+
+  String get shortMapString {
+    String shortMapString = '';
+    if (logType == LogObjectType.api_app ||
+        logType == LogObjectType.api_cache ||
+        logType == LogObjectType.api_buriedPoint ||
+        logType == LogObjectType.monitor_network) {
+      shortMapString = _joinLogJsonString(shortMap);
+    } else {
+      shortMapString = _getLogJsonString(shortMap);
+    }
+
+    return shortMapString;
+  }
+
+  String get detailMapString {
+    Map<dynamic, dynamic> detailMap = detailLogModel;
+    String detailMapString = _getLogJsonString(detailMap);
+
+    String detailString = detailMapString;
+    if (logType == LogObjectType.api_app && extraLogInfo != null) {
+      // List<String> robotUrls = ApiPostUtil.getRobotUrlsByApiHost(apiHost);
+      String logFotterMessage = extraLogInfo!["logFotterMessage"] ?? '';
+      detailString += '\n${logFotterMessage}';
+    }
+
+    return detailString;
+  }
+
+  static String _joinLogJsonString(Map<dynamic, dynamic> logJsonMap) {
+    if (logJsonMap.isEmpty) {
+      return '';
+    }
+    String logJsonString = '';
+    for (var key in logJsonMap.keys) {
+      Object keyValue = logJsonMap[key];
+      String keyValueString = keyValue.toString();
+
+      logJsonString += "$keyValueString\n";
+    }
+    logJsonString =
+        logJsonString.substring(0, logJsonString.length - "\n".length);
+    return logJsonString;
+  }
+
+  static String _getLogJsonString(Map<dynamic, dynamic> logJsonMap) {
+    if (logJsonMap.isEmpty) {
+      return '';
+    }
+    String logJsonString = '';
+
+    // if (detailLogJsonMap["METHOD"] == "GET") {
+    //   // debug;
+    // }
+    // int keyCount = logJsonMap.keys.length;
+    // for (var i = 0; i < keyCount; i++) {
+    //   String key = logJsonMap.keys[i];
+    for (var key in logJsonMap.keys) {
+      Object keyValue = logJsonMap[key];
+      String keyValueString =
+          FormatterUtil.convert(keyValue, 0, isObject: true);
+      // if (i > 0) {
+      //   logJsonString += "\n";
+      // }
+      logJsonString += "- $key:\n$keyValueString\n";
+      logJsonString += "\n";
+    }
+    logJsonString =
+        logJsonString.substring(0, logJsonString.length - "\n".length - 1);
+    return logJsonString;
+  }
 
   // json 与 model 转换
-  factory LogModel.fromJson(Map<String, dynamic> json) {
+  factory LogModel.fromJson(Map<dynamic, dynamic> json) {
     return LogModel(
       logType: json['logType'] ?? LogObjectType.other,
       logLevel: json['logLevel'] ?? LogLevel.normal,
       dateTime: DateTime.fromMillisecondsSinceEpoch(json['dateTime']),
       title: json['title'],
-      content: json['content'] ?? '',
-      logInfo: json['logInfo'],
+      shortMap: json['shortMap'] ?? '',
+      extraLogInfo: json['extraLogInfo'],
     );
   }
-  Map<String, dynamic> toJson() {
+  Map<dynamic, dynamic> toJson() {
     return {
       "title": this.title,
-      "content": this.content,
+      "shortMap": this.shortMap,
       "logLevel": this.logLevel,
-      "logInfo": this.logInfo,
+      "extraLogInfo": this.extraLogInfo,
     };
+  }
+
+  // 获取其他值
+  Color get logColor {
+    Color subTitleColor = Colors.black;
+    if (this.logLevel == LogLevel.error) {
+      if (this.logType == LogObjectType.api_cache) {
+        subTitleColor = Colors.red.shade200;
+      } else {
+        subTitleColor = Colors.red;
+      }
+    } else if (this.logLevel == LogLevel.warning) {
+      if (this.logType == LogObjectType.api_cache) {
+        subTitleColor = Colors.orange.shade200;
+      } else {
+        subTitleColor = Colors.orange;
+      }
+    } else if (this.logLevel == LogLevel.success) {
+      if (this.logType == LogObjectType.route) {
+        subTitleColor = Colors.blue;
+      } else if (this.logType == LogObjectType.monitor_network) {
+        subTitleColor = Colors.cyan;
+      } else {
+        if (this.logType == LogObjectType.api_cache) {
+          subTitleColor = Colors.green.shade200;
+        } else {
+          subTitleColor = Colors.green;
+        }
+      }
+    }
+
+    return subTitleColor;
   }
 }

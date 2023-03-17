@@ -48,8 +48,7 @@ class FormatterUtil {
       }
       buffer.write("{");
       if (keyList.isEmpty) {
-        //当map为空，直接返回}
-        buffer.write("}");
+        //当map为空，不用操作，等下回在尾部补充右大括号}
       } else {
         buffer.write("\n");
         for (int i = 0; i < keyList.length; i++) {

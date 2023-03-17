@@ -37,14 +37,7 @@ class ApiLogTableViewCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color subTitleColor = Colors.black;
-    if (apiLogModel.logLevel == LogLevel.error) {
-      subTitleColor = Colors.red;
-    } else if (apiLogModel.logLevel == LogLevel.warning) {
-      subTitleColor = Colors.orange;
-    } else if (apiLogModel.logLevel == LogLevel.success) {
-      subTitleColor = Colors.green;
-    }
+    Color subTitleColor = apiLogModel.logColor;
 
     String mainTitle = '${row + 1}.${apiLogModel.title}';
     return LogBaseTableViewCell(
@@ -54,7 +47,7 @@ class ApiLogTableViewCell extends StatelessWidget {
         color: Colors.grey[850],
         fontSize: 12.0,
       ),
-      subTitles: [apiLogModel.content],
+      subTitles: [apiLogModel.shortMapString],
       subTitleColor: subTitleColor,
       check: false,
       section: section,

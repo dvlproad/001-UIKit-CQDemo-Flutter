@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import './log_list.dart';
 import './log_data_bean.dart';
@@ -38,6 +39,9 @@ class _LogHomePageState extends State<LogHomePage>
   List<LogModel> _success_warning_error_logModels = []; // 所有的请求结果(包含成功、警告、失败)
   List<LogModel> _warningLogModels = [];
   List<LogModel> _errorLogModels = [];
+  List<LogModel> _apiBuriedPointLogModels = []; // 埋点
+  List<LogModel> _routeLogModels = []; // 路由
+  List<LogModel> _monitorLogModels = []; // 监控(网络类型变化等)
 
   static String pageKey(LogCategory logType) {
     return 'apiLogPageKey_${logType.toString()}';
@@ -49,7 +53,7 @@ class _LogHomePageState extends State<LogHomePage>
     // TODO: implement initState
     super.initState();
 
-    _tabController = new TabController(length: 4, vsync: this);
+    _tabController = new TabController(length: 7, vsync: this);
 
     _tabController.addListener(() {
       print(_tabController.index);
@@ -64,18 +68,29 @@ class _LogHomePageState extends State<LogHomePage>
     _errorLogModels = [];
     _warningLogModels = [];
     _success_warning_error_logModels = [];
+    _apiBuriedPointLogModels = [];
+    _routeLogModels = [];
+    _monitorLogModels = [];
     for (var i = 0; i < allCount; i++) {
       LogModel logModel = _logModels[i];
-      if (logModel.logLevel == LogLevel.error) {
-        _errorLogModels.add(logModel);
-        _success_warning_error_logModels.add(logModel);
-      } else if (logModel.logLevel == LogLevel.warning) {
-        _warningLogModels.add(logModel);
-        _success_warning_error_logModels.add(logModel);
-      } else if (logModel.logLevel == LogLevel.success) {
-        _success_warning_error_logModels.add(logModel);
+      if (logModel.logType == LogObjectType.route) {
+        _routeLogModels.add(logModel);
+      } else if (logModel.logType == LogObjectType.monitor_network) {
+        _monitorLogModels.add(logModel);
+      } else if (logModel.logType == LogObjectType.api_buriedPoint) {
+        _apiBuriedPointLogModels.add(logModel);
       } else {
-        // normal(目前用于请求开始)
+        if (logModel.logLevel == LogLevel.error) {
+          _errorLogModels.add(logModel);
+          _success_warning_error_logModels.add(logModel);
+        } else if (logModel.logLevel == LogLevel.warning) {
+          _warningLogModels.add(logModel);
+          _success_warning_error_logModels.add(logModel);
+        } else if (logModel.logLevel == LogLevel.success) {
+          _success_warning_error_logModels.add(logModel);
+        } else {
+          // normal(目前用于请求开始)
+        }
       }
     }
 
@@ -83,7 +98,7 @@ class _LogHomePageState extends State<LogHomePage>
       child: Column(
         children: [
           _headerWidget,
-          Container(height: 30, child: _tabbar),
+          Container(child: _tabbar),
           Expanded(child: Container(child: _tabBarView)),
         ],
       ),
@@ -145,25 +160,39 @@ class _LogHomePageState extends State<LogHomePage>
   TabBar get _tabbar {
     return TabBar(
       controller: _tabController, // 4 需要配置 controller！！！
-      // isScrollable: true,
+      isScrollable: true,
       tabs: [
         tab('全部(${_logModels.length})'),
         tab('结果(${_success_warning_error_logModels.length})'),
         tab('警告(${_warningLogModels.length})'),
         tab('错误(${_errorLogModels.length})'),
+        tab('路由(${_routeLogModels.length})'),
+        tab('埋点(${_apiBuriedPointLogModels.length})'),
+        tab('监控(${_monitorLogModels.length})'), // 监控(网络类型变化等)
       ],
     );
   }
 
   Tab tab(String text) {
+    //创建随机颜色
+    Color randomColor = Color.fromRGBO(
+      Random().nextInt(256),
+      Random().nextInt(256),
+      Random().nextInt(256),
+      1,
+    );
     return Tab(
-      child: Text(
-        text,
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: Colors.pink,
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
+      child: Container(
+        // width: 44,
+        // color: randomColor,
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.pink,
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -175,23 +204,38 @@ class _LogHomePageState extends State<LogHomePage>
       children: [
         page(
           _logModels,
-          logObjectType: LogObjectType.api,
+          logObjectType: LogObjectType.api_app,
           logCategory: LogCategory.all,
         ),
         page(
           _success_warning_error_logModels,
-          logObjectType: LogObjectType.api,
+          logObjectType: LogObjectType.api_app,
           logCategory: LogCategory.success_warning_error,
         ),
         page(
           _warningLogModels,
-          logObjectType: LogObjectType.api,
+          logObjectType: LogObjectType.api_app,
           logCategory: LogCategory.warning,
         ),
         page(
           _errorLogModels,
-          logObjectType: LogObjectType.api,
+          logObjectType: LogObjectType.api_app,
           logCategory: LogCategory.error,
+        ),
+        page(
+          _routeLogModels,
+          logObjectType: LogObjectType.route,
+          logCategory: LogCategory.all,
+        ),
+        page(
+          _apiBuriedPointLogModels,
+          logObjectType: LogObjectType.api_buriedPoint,
+          logCategory: LogCategory.all,
+        ),
+        page(
+          _monitorLogModels,
+          logObjectType: LogObjectType.monitor_network,
+          logCategory: LogCategory.all,
         ),
       ],
     );

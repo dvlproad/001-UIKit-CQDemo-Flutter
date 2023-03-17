@@ -71,31 +71,14 @@ class DevLogUtil {
     );
   }
 
-  static addLogModel({
-    required DateTime dateTime,
-    required LogObjectType logType,
-    required LogLevel logLevel,
-    String? logTitle,
-    required String logText,
-    Map<String, dynamic>? logInfo,
-    dynamic detailLogModel,
-  }) {
-    String dateTimeString = dateTime.toString().substring(5);
+  static addLogModel(LogModel logModel) {
+    String dateTimeString = logModel.dateTime.toString().substring(5);
     String lastTitle = "第${logModels.length + 1}条日志:$dateTimeString";
-
-    if (logTitle != null && logTitle.isNotEmpty) {
-      lastTitle += '\n$logTitle';
+    if (logModel.title != null && logModel.title!.isNotEmpty) {
+      lastTitle += '\n${logModel.title}';
     }
+    logModel.title = lastTitle;
 
-    LogModel logModel = LogModel(
-      dateTime: dateTime,
-      logType: logType,
-      logLevel: logLevel,
-      title: lastTitle,
-      content: logText,
-      logInfo: logInfo,
-      detailLogModel: detailLogModel,
-    );
     logModels.add(logModel);
     ApplicationLogViewManager.updateLogOverlayEntry();
   }

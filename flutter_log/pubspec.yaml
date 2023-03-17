@@ -12,9 +12,10 @@ dependencies:
     sdk: flutter
 
   provider: any
-  flutter_baseui_kit:
-    path: ../flutter_baseui_kit/
   fluttertoast: any
+
+  flutter_baseui_kit: # 目前只在 log_list.dart 中使用
+    path: ../flutter_baseui_kit/
 
 dev_dependencies:
   flutter_test:

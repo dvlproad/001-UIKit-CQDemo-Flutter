@@ -38,12 +38,41 @@ class CommonErrorRobot {
   }
 
   /// 通用异常上报:企业微信
+  static Future<bool> posts({
+    List<String>? robotUrls,
+    RobotPostType postType = RobotPostType.text,
+    List<String>? mentionedList,
+    String? title,
+    required String customMessage,
+  }) async {
+    if (robotUrls == null || robotUrls.length == 0) {
+      String myRobotKey = CommonErrorRobot.myRobotKey; // 单个人测试用的
+      robotUrls = [myRobotKey];
+    }
+
+    bool isPostSuccess = true;
+    for (String robotKey in robotUrls) {
+      if (robotKey.isEmpty) {
+        continue;
+      }
+      isPostSuccess = await post(
+        robotKey: robotKey,
+        postType: postType,
+        title: title,
+        customMessage: customMessage,
+        mentionedList: mentionedList,
+      );
+    }
+
+    return isPostSuccess;
+  }
+
   static Future<bool> post({
     String? robotKey,
-    required RobotPostType postType,
+    RobotPostType postType = RobotPostType.text,
     String? title, // 只是为了对 customMessage 起一个强调作用。(一般此title肯定在customMessage有包含到)
     required String customMessage,
-    required List<String> mentionedList,
+    List<String>? mentionedList,
   }) async {
     robotKey ??= _tolerantRobotKey; // 单个人测试用的
 
@@ -72,7 +101,7 @@ class CommonErrorRobot {
         "msgtype": "markdown", // 消息类型，此时固定为 markdown
         "markdown": {
           "content": content, // markdown内容，最长不超过4096个字节，必须是utf8编码
-          "mentioned_list": mentionedList,
+          "mentioned_list": mentionedList ?? [],
           // "mentioned_mobile_list": buildBuildVersion,
         },
       };
@@ -99,7 +128,7 @@ class CommonErrorRobot {
         "msgtype": "text", // 消息类型，此时固定为 text
         "text": {
           "content": content, // 文本内容，最长不超过2048个字节，必须是utf8编码
-          "mentioned_list": mentionedList,
+          "mentioned_list": mentionedList ?? [],
           // "mentioned_mobile_list": buildBuildVersion,
         },
       };
@@ -181,7 +210,7 @@ class CommonErrorRobot {
                   "goodsId": "1501909871522369536",
                   "skuId": "1501909872537391104",
                   "mainImgUrl":
-                      "http://image.xihuanwu.com/mcms/uploads/1646918150678361.jpg",
+                      "http://image.xxx.com/mcms/uploads/1646918150678361.jpg",
                   "amount": 2,
                   "amountStr": "0.02",
                   "goodsNum": 1
