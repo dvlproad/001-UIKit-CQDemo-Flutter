@@ -66,6 +66,7 @@ class _LogTestPageState extends State<LogTestPage> {
               _robotUrl_cell(),
               _logTitle_cell(),
               _logCustomMessage_cell(),
+              _logRobot_cell(),
               Container(height: 40),
               RowPaddingButton(
                 height: 44,
@@ -134,6 +135,19 @@ class _LogTestPageState extends State<LogTestPage> {
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: _logCustomMessage));
         ToastUtil.showMessage('日志正文拷贝成功');
+      },
+    );
+  }
+
+  Widget _logRobot_cell() {
+    return ImageTitleTextValueCell(
+      title: "日志接收地址",
+      textValue: _logRobotKey,
+      textValueMaxLines: 30,
+      onTap: () {},
+      onLongPress: () {
+        Clipboard.setData(ClipboardData(text: _logRobotKey));
+        ToastUtil.showMessage('日志接收地址拷贝成功');
       },
     );
   }

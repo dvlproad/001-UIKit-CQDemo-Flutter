@@ -14,6 +14,8 @@ import 'package:flutter_network/flutter_network.dart';
 
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 
+import '../app_log_util.dart';
+
 class ApiLogDetailCell extends StatefulWidget {
   final int? maxLines;
 
@@ -56,46 +58,22 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
 
   @override
   Widget build(BuildContext context) {
-    Color subTitleColor = Colors.black;
-    if (apiLogModel.logLevel == LogLevel.error) {
-      subTitleColor = Colors.red;
-    } else if (apiLogModel.logLevel == LogLevel.warning) {
-      subTitleColor = Colors.orange;
-    } else if (apiLogModel.logLevel == LogLevel.success) {
-      subTitleColor = Colors.green;
-    }
+    Color subTitleColor = apiLogModel.logColor;
 
     String mainTitle = apiLogModel.title ?? '';
     String logHeaderTitle = '';
-    late Map<String, dynamic> jsonMap;
-    if (apiLogModel.detailLogModel is NetOptions) {
-      NetOptions apiInfo = apiLogModel.detailLogModel;
 
-      if (apiLogModel.logInfo != null) {
-        Map<String, dynamic> extraLogInfo = apiLogModel.logInfo!; // log 的 额外信息
-        ApiProcessType apiProcessType = extraLogInfo["logApiProcessType"];
-        // 用于区分api日志是要显示哪个阶段(因为已合并成一个模型)
-        ApiMessageModel apiMessageModel =
-            ApiInfoGetter.apiMessageModel(apiInfo, apiProcessType);
-
-        logHeaderTitle = apiMessageModel.logHeaderString;
-        // logHeaderTitle = apiInfo.getLogHeaderString(apiProcessType);
-        // contentText = apiInfo.getDetailLogJsonMap(apiProcessType);
-
-        jsonMap = apiMessageModel.detailLogJsonMap;
-      } else {
-        jsonMap = {
-          "contentText": '无法获取到你想要请求的什么阶段的值',
-        };
+    if (apiLogModel.logType == LogObjectType.api_app ||
+        apiLogModel.logType == LogObjectType.api_buriedPoint) {
+      if (apiLogModel.extraLogInfo != null) {
+        Map<dynamic, dynamic> extraLogInfo =
+            apiLogModel.extraLogInfo!; // log 的 额外信息
+        logHeaderTitle = extraLogInfo["logHeaderTitle"];
       }
-    } else if (apiLogModel.detailLogModel is Map) {
-      jsonMap = apiLogModel.detailLogModel;
-    } else {
-      jsonMap = {
-        "contentText": '此类型的日志详情暂未定义，待补充',
-      };
     }
-    String contentText = ApiMessageModel.getDetailLogJsonString(jsonMap);
+
+    Map<dynamic, dynamic> jsonMap = apiLogModel.detailLogModel;
+    String jsonMapString = apiLogModel.detailMapString;
 
     return Column(
       children: [
@@ -141,7 +119,7 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
             : LogBaseTableViewCell(
                 maxLines: widget.maxLines ?? 18,
                 mainTitle: mainTitle,
-                subTitles: [logHeaderTitle, contentText],
+                subTitles: [logHeaderTitle, jsonMapString],
                 subTitleColor: subTitleColor,
                 check: false,
                 section: widget.section,

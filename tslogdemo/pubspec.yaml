@@ -31,6 +31,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  app_log:
+    path: ../app_log/
+
   flutter_log:
     path: ../flutter_log/
   flutter_environment:

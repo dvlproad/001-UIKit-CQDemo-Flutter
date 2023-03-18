@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'dart:convert' as convert;
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,15 +13,37 @@ import 'package:app_environment/app_environment.dart';
 import './detail/log_detail_widget.dart';
 
 class AppLogUtil {
+  static Completer _initCompleter = Completer<String>();
   static String myRobotKey = 'e3c3f7f1-5d03-42c5-8c4a-a3d25d7a8587'; // 单个人测试用的
 
   static init({
-    required PackageType originPackageType,
+    required PackageNetworkType originPackageNetworkType,
     required PackageTargetType originPackageTargetType,
     required String packageDescribe,
     required String Function() userDescribeBlock,
   }) async {
     // 如何输出 log 的设置
+    LogApiUtil.logMessageBlock = ({
+      required LogObjectType logType,
+      required LogLevel logLevel,
+      String? title,
+      required Map<String, dynamic> shortMap,
+      required Map<String, dynamic> detailMap,
+      Map<String, dynamic>? extraLogInfo, // log 的 额外信息
+      RobotPostType? postType,
+      List<String>? mentionedList,
+    }) {
+      logMessage(
+        logType: logType,
+        logLevel: logLevel,
+        title: title,
+        shortMap: shortMap,
+        detailMap: detailMap,
+        extraLogInfo: extraLogInfo,
+        postType: postType,
+        mentionedList: mentionedList,
+      );
+    };
     LogUtil.init(
       tolerantRobotKey: myRobotKey,
       packageDescribe: packageDescribe,
@@ -34,10 +57,11 @@ class AppLogUtil {
         }
 
         // 2、api不通知，其已自己管理
-        if (logObjectType == LogObjectType.api) {
-          if (extraLogInfo != null &&
-              extraLogInfo['hasProxy'] == true &&
-              logLevel == LogLevel.error) {
+        if (logObjectType == LogObjectType.api_app ||
+            logObjectType == LogObjectType.api_sdk) {
+          bool hasProxy =
+              extraLogInfo != null && extraLogInfo['hasProxy'] == true;
+          if (hasProxy && logLevel == LogLevel.error) {
             return true; // 有代理并错误的情况下，在控制台输出日志
           }
         }
@@ -53,14 +77,15 @@ class AppLogUtil {
         }
 
         // 2、api不通知，其已自己管理
-        if (logObjectType == LogObjectType.api) {
+        if (logObjectType == LogObjectType.api_app ||
+            logObjectType == LogObjectType.api_sdk) {
           return false;
         }
 
         // 3、dart、widget错误非生产才弹出
         if (logObjectType == LogObjectType.dart ||
             logObjectType == LogObjectType.widget) {
-          if (originPackageType != PackageType.product) {
+          if (originPackageNetworkType != PackageNetworkType.product) {
             return true;
           }
 
@@ -75,18 +100,24 @@ class AppLogUtil {
       },
       postToWechatRobotUrlGetBlock: (LogObjectType logObjectType, logLevel,
           {Map<String, dynamic>? extraLogInfo}) {
+        /// TODO:正式上生产的时候就不要上报了
+        PackageTargetType currentTargetType =
+            EnvManagerUtil.packageCurrentTargetModel.type;
+        PackageNetworkType currentNetworkType =
+            EnvManagerUtil.packageCurrentNetworkModel.type;
+
         if (logObjectType == LogObjectType.dart ||
             logObjectType == LogObjectType.widget) {
           return _postToWechatRobotUrl_dart_widget(
-            originPackageType: originPackageType,
+            originPackageNetworkType: originPackageNetworkType,
             originPackageTargetType: originPackageTargetType,
             logObjectType: logObjectType,
             logLevel: logLevel,
             extraLogInfo: extraLogInfo,
           );
-        } else if (logObjectType == LogObjectType.api) {
+        } else if (logObjectType == LogObjectType.api_app) {
           return _postToWechatRobotUrl_api(
-            originPackageType: originPackageType,
+            originPackageNetworkType: originPackageNetworkType,
             originPackageTargetType: originPackageTargetType,
             logObjectType: logObjectType,
             logLevel: logLevel,
@@ -97,21 +128,20 @@ class AppLogUtil {
         return null;
       },
       logDetailPageBuilder: (LogModel logModel) {
-        if (logModel.detailLogModel is NetOptions) {
-          return _apiInfoWidget(logModel);
-        } else if (logModel.detailLogModel is Map) {
-          return _mapWidget(logModel);
+        if (logModel.detailLogModel is Map) {
+          return _mapDetailWidget(logModel);
         } else {
           return Container();
         }
       },
     );
 
+    _initCompleter.complete('log初始化完成，后续 logMessage 才可以正常使用回调判断如何打印log');
     _initApiErrorRobots();
   }
 
   static String? _postToWechatRobotUrl_dart_widget({
-    required PackageType originPackageType,
+    required PackageNetworkType originPackageNetworkType,
     required PackageTargetType originPackageTargetType,
     required LogObjectType logObjectType,
     required LogLevel logLevel,
@@ -119,7 +149,7 @@ class AppLogUtil {
   }) {
     // 2、包不对不通知
     bool isOutProduct = originPackageTargetType == PackageTargetType.formal &&
-        originPackageType == PackageType.product;
+        originPackageNetworkType == PackageNetworkType.product;
     if (isOutProduct) {
       return null; // 外测生产包dart、weiget错误都不上报
     }
@@ -137,7 +167,7 @@ class AppLogUtil {
   }
 
   static String? _postToWechatRobotUrl_api({
-    required PackageType originPackageType,
+    required PackageNetworkType originPackageNetworkType,
     required PackageTargetType originPackageTargetType,
     required LogObjectType logObjectType,
     required LogLevel logLevel,
@@ -160,23 +190,26 @@ class AppLogUtil {
     }
 
     // 2、包不对不通知
-    // bool isOutProduct = originPackageTargetType == PackageTargetType.formal && originPackageType == PackageType.product;
+    // bool isOutProduct = originPackageTargetType == PackageTargetType.formal && originPackageNetworkType == PackageNetworkType.product;
     // if (isOutProduct) {
     //   return null; // 外测生产包都不上报
     // }
-    PackageType currentPackageType = EnvManagerUtil.currentPackageType;
+    PackageNetworkType currentPackageType =
+        EnvManagerUtil.packageCurrentNetworkModel.type;
     // 如果环境是生产环境，但包却不是生产包，则异常先不进行上报
-    if (originPackageType != currentPackageType &&
-        currentPackageType == PackageType.product) {
+    if (originPackageNetworkType != currentPackageType &&
+        currentPackageType == PackageNetworkType.product) {
       return null;
     }
 
     bool hasProxy = false;
+    bool isCacheApiLog = false;
     String? apiHost;
     NetworkErrorType? networkErrorType;
     if (extraLogInfo != null) {
       hasProxy = extraLogInfo['hasProxy'] ?? false;
       apiHost = extraLogInfo["apiHost"];
+      isCacheApiLog = extraLogInfo["isCacheApiLog"] ?? false;
       String? apiErrorTypeString = extraLogInfo["apiErrorType"];
       if (apiErrorTypeString != null) {
         networkErrorType =
@@ -194,6 +227,9 @@ class AppLogUtil {
     }
 
     // 5、可以通知时候，通知到对应的robotKey
+    if (isCacheApiLog) {
+      return null;
+    }
     if (networkErrorType == NetworkErrorType.connectTimeout ||
         networkErrorType == NetworkErrorType.sendTimeout ||
         networkErrorType == NetworkErrorType.receiveTimeout) {
@@ -208,23 +244,7 @@ class AppLogUtil {
     }
   }
 
-  static Widget _apiInfoWidget(LogModel logModel) {
-    /*
-    NetOptions apiInfoModel = logModel.detailLogModel;
-    dynamic responseData = apiInfoModel.resOptions.data;
-
-    dynamic responseObject;
-    if (responseData is String) {
-      // 后台把data按字符串返回的时候
-      responseObject = convert.jsonDecode(responseData);
-    } else {
-      //String dataString = response.data.toString();
-      String dataJsonString = convert.jsonEncode(responseData);
-      responseObject = convert.jsonDecode(dataJsonString);
-    }
-
-    Map responseMap = responseObject;
-    */
+  static Widget _mapDetailWidget(LogModel logModel) {
     return LogDetailWidget(
       apiLogModel: logModel,
       clickApiLogCellCallback: ({
@@ -233,87 +253,14 @@ class AppLogUtil {
         int? row,
         required LogModel bLogModel,
       }) {
-        //print('点击${bApiModel.url},复制到粘贴板成功');
-        // Clipboard.setData(ClipboardData(text: bApiModel.content));
-        // CJTSToastUtil.showMessage('复制当行到粘贴板成功');
+        String detailLogJsonString = bLogModel.detailMapString;
 
-        // Navigator.push 无效
-        // BuildContext context =
-        //     ApplicationLogViewManager.globalKey.currentContext;
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => Container(
-        //       color: Colors.red,
-        //     ),
-        //   ),
-        // );
-
-        // showDialog 无效
-        // showDialog(
-        //   context: context,
-        //   useSafeArea: false,
-        //   builder: (context) {
-        //     return Container(color: Colors.red, height: 200);
-        //   },
-        // );
-
-        // String contentText = bApiModel.content;
-
-        NetOptions apiInfo = bLogModel.detailLogModel;
-
-        if (bLogModel.logInfo != null) {
-          Map<String, dynamic> extraLogInfo = bLogModel.logInfo!; // log 的 额外信息
-          ApiProcessType apiProcessType = extraLogInfo["logApiProcessType"];
-          // 用于区分api日志是要显示哪个阶段(因为已合并成一个模型)
-          ApiMessageModel apiMessageModel =
-              ApiInfoGetter.apiMessageModel(apiInfo, apiProcessType);
-          String contentText = apiMessageModel.detailMessage;
-
-          Clipboard.setData(ClipboardData(text: contentText));
-          ToastUtil.showMessage('复制当行到粘贴板成功');
-        }
-      },
-      onPressedClose: () => ApplicationLogViewManager.dismissLogOverlayEntry(
-          ApplicationLogViewManager.logDetailOverlayKey),
-    );
-  }
-
-  static Widget _mapWidget(LogModel logModel) {
-    return LogDetailWidget(
-      apiLogModel: logModel,
-      clickApiLogCellCallback: ({
-        required BuildContext context,
-        int? section,
-        int? row,
-        required LogModel bLogModel,
-      }) {
-        // String contentText = bApiModel.content;
-
-        String detailLogJsonString = getLogJsonString(bLogModel.detailLogModel);
-        String contentText = detailLogJsonString;
-
-        Clipboard.setData(ClipboardData(text: contentText));
+        Clipboard.setData(ClipboardData(text: detailLogJsonString));
         ToastUtil.showMessage('复制当行到粘贴板成功');
       },
       onPressedClose: () => ApplicationLogViewManager.dismissLogOverlayEntry(
           ApplicationLogViewManager.logDetailOverlayKey),
     );
-  }
-
-  static String getLogJsonString(Map<String, dynamic> logJsonMap) {
-    String logJsonString = '';
-
-    // if (detailLogJsonMap["METHOD"] == "GET") {
-    //   // debug;
-    // }
-    for (String key in logJsonMap.keys) {
-      Object keyValue = logJsonMap[key];
-      String keyValueString =
-          FormatterUtil.convert(keyValue, 0, isObject: true);
-      logJsonString += "- $key:\n$keyValueString\n\n";
-    }
-    return logJsonString;
   }
 
   static void _initApiErrorRobots() {
@@ -346,7 +293,7 @@ class AppLogUtil {
     );
 
     ApiHostRobotBean robotBean_preproduct = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_preProduct,
+      errorApiHost: TSEnvironmentDataUtil.networkModel_preProduct.apiHost,
       pushToWechatRobots: [
         apiErrorRobotKey_tke,
       ],
@@ -381,26 +328,38 @@ class AppLogUtil {
     required LogObjectType logType,
     required LogLevel logLevel,
     String? title,
-    required Map<String, dynamic> shortMap,
-    required Map<String, dynamic> detailMap,
-  }) {
-    DateTime dateTime = DateTime.now();
-    String dateTimeString = dateTime.toString().substring(5, 19);
+    required Map<dynamic, dynamic> shortMap,
+    required Map<dynamic, dynamic> detailMap,
+    Map<String, dynamic>? extraLogInfo, // log 的 额外信息
+    RobotPostType? postType,
+    List<String>? mentionedList, // ['all']
+  }) async {
+    await _initCompleter.future;
 
-    Map<String, dynamic> extraLogInfo = {}; // log 的 额外信息
+    DateTime dateTime = DateTime.now();
+
+    LogModel logModel = LogModel(
+      dateTime: dateTime,
+      logType: logType,
+      logLevel: logLevel,
+      shortMap: shortMap,
+      extraLogInfo: extraLogInfo,
+      detailLogModel: detailMap,
+    );
+
+    // extraLogInfo ??= {};
     // String serviceValidProxyIp = networkClient.serviceValidProxyIp;
     // extraLogInfo.addAll({
     //   "hasProxy": serviceValidProxyIp != null,
     // });
 
-    String shortMessage = getLogJsonString(shortMap);
     bool shouldShowToConsole = LogUtil.shouldPrintToConsoleFunction(
       logType,
       logLevel,
       extraLogInfo: extraLogInfo,
     );
     if (shouldShowToConsole) {
-      String consoleLogMessage = shortMessage;
+      String consoleLogMessage = logModel.shortMapString;
       LogUtil.printConsoleLog(
         consoleLogMessage,
         stag: LogUtil.desForLogLevel(logLevel),
@@ -423,16 +382,7 @@ class AppLogUtil {
     );
     if (shouldShowToPage) {
       // 页面日志列表里的日志，使用简略信息版，点击详情才查看完整信息版
-      String pageLogMessage = shortMessage;
-      DevLogUtil.addLogModel(
-        dateTime: dateTime,
-        logType: logType,
-        logLevel: logLevel,
-        logTitle: '',
-        logText: pageLogMessage,
-        logInfo: extraLogInfo,
-        detailLogModel: detailMap,
-      );
+      DevLogUtil.addLogModel(logModel);
     }
 
     String? postToWechatRobotKey = LogUtil.postToWechatRobotUrlGetFunction(
@@ -441,16 +391,21 @@ class AppLogUtil {
       extraLogInfo: extraLogInfo,
     );
 
-    String customMessage = getLogJsonString(detailMap);
-    bool isLongMessage = customMessage.length > 2000;
     // text.content exceed max length 5120. invalid Request Parameter, hint: [1659003212347280693197827], from ip: 120.42.50.213, more info at https://open.work.weixin.qq.com/devtool/query?e=40058"
     if (postToWechatRobotKey != null && postToWechatRobotKey.isNotEmpty) {
-      CommonErrorRobot.post(
-        robotKey: postToWechatRobotKey,
-        postType: isLongMessage ? RobotPostType.file : RobotPostType.text,
-        title: title ?? 'unkonw title',
+      String customMessage = logModel.detailMapString;
+
+      if (postType == null) {
+        bool isLongMessage = customMessage.length > 2000;
+        postType = isLongMessage ? RobotPostType.file : RobotPostType.text;
+      }
+
+      CommonErrorRobot.posts(
+        robotUrls: [postToWechatRobotKey],
+        postType: postType,
+        mentionedList: mentionedList,
+        title: title,
         customMessage: customMessage,
-        mentionedList: ['all'],
       );
     }
   }
