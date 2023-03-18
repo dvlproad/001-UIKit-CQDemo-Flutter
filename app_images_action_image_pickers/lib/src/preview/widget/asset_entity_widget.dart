@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 14:44:29
+ * @LastEditTime: 2022-08-19 12:37:00
  * @Description: 图片选择器的单元视图
  */
 import 'dart:io';
@@ -21,12 +21,14 @@ class AssetEntityWidget extends StatelessWidget {
   final double? width;
   final double? height;
   final AssetEntity assetEntity;
+  final bool showCenterIconIfVideo;
 
   AssetEntityWidget({
     Key? key,
     this.width,
     this.height,
     required this.assetEntity,
+    this.showCenterIconIfVideo = true, // 是视频文件的时候是否在中间显示icon播放图标
   }) : super(key: key);
 
   @override
@@ -75,13 +77,15 @@ class AssetEntityWidget extends StatelessWidget {
           Positioned.fill(child: _imageAssetWidget(context)),
           ColoredBox(
             color: Theme.of(context).dividerColor.withOpacity(0.3),
-            child: Center(
-              child: Icon(
-                Icons.video_library,
-                color: Colors.white,
-                size: isDisplayingDetail ? 24.0 : 16.0,
-              ),
-            ),
+            child: showCenterIconIfVideo == true
+                ? Center(
+                    child: Icon(
+                      Icons.video_library,
+                      color: Colors.white,
+                      size: isDisplayingDetail ? 24.0 : 16.0,
+                    ),
+                  )
+                : Container(),
           ),
         ],
       ),

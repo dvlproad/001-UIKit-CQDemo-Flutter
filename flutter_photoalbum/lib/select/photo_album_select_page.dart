@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import './cq-photo-list.dart';
 import './photo_album_datasource_notifier.dart';

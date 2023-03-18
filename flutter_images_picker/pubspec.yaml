@@ -14,6 +14,7 @@ dependencies:
 
   permission_handler: any
   image_picker: any
+  device_info_plus: any
 
 dev_dependencies:
   flutter_test:

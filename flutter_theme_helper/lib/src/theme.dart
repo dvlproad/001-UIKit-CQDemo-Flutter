@@ -1,12 +1,5 @@
-/*
- * @Author: dvlproad
- * @Date: 2022-04-15 19:20:38
- * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-15 21:57:39
- * @Description: 主题
- */
 import 'package:flutter/material.dart';
-
+import 'dart:math';
 // import 'dart:ui';
 // 按钮主题使用 buttontheme
 
@@ -16,21 +9,38 @@ import 'package:flutter/material.dart';
 所以，**即使是你所定义的类只有一个入参，也一定要遵守使用`继承父类式封装`的设计规范。**
 */
 
+class ColorHelper {
+  //随机颜色
+  static Color randomColor() {
+    return Color.fromARGB(255, Random.secure().nextInt(255),
+        Random.secure().nextInt(255), Random.secure().nextInt(255));
+  }
+}
+
 // Regular 的文本样式
 class RegularTextStyle extends TextStyle {
   final double fontSize;
   final Color color;
   final double height;
+  final TextOverflow overflow;
+  final TextDecoration decoration;
+  final double letterSpacing;
 
   RegularTextStyle({
     @required this.fontSize,
     this.color,
     this.height,
+    this.overflow,
+    this.decoration,
+    this.letterSpacing,
   })  : assert(fontSize != null),
         // assert(color != null),
         super(
           fontFamily: 'PingFang SC',
+          overflow: overflow,
+          decoration: decoration,
           fontSize: fontSize,
+          letterSpacing: letterSpacing,
           fontWeight: FontWeight.w400,
           color: color,
           height: height,
@@ -43,19 +53,34 @@ class BoldTextStyle extends TextStyle {
   final double fontSize;
   final Color color;
   final double height;
+  final TextOverflow overflow;
+  final TextDecoration decoration;
+  final double letterSpacing;
+  final Color decorationColor;
+  final TextBaseline textBaseline;
 
   BoldTextStyle({
     @required this.fontSize,
     this.color,
     this.height,
+    this.overflow,
+    this.decoration,
+    this.letterSpacing,
+    this.decorationColor,
+    this.textBaseline,
   })  : assert(fontSize != null),
         // assert(color != null),
         super(
           fontFamily: 'PingFang SC',
+          overflow: overflow,
+          decoration: decoration,
           fontSize: fontSize,
+          letterSpacing: letterSpacing,
           fontWeight: FontWeight.bold,
           color: color,
           height: height,
+          decorationColor: decorationColor,
+          textBaseline: textBaseline,
         );
 }
 
@@ -64,18 +89,69 @@ class MediumTextStyle extends TextStyle {
   final double fontSize;
   final Color color;
   final double height;
+  final TextOverflow overflow;
+  final TextDecoration decoration;
+  final double letterSpacing;
+  final Color decorationColor;
+  final TextBaseline textBaseline;
 
   MediumTextStyle({
     @required this.fontSize,
     this.color,
     this.height,
+    this.overflow,
+    this.decoration,
+    this.letterSpacing,
+    this.decorationColor,
+    this.textBaseline,
   })  : assert(fontSize != null),
         // assert(color != null),
         super(
           fontFamily: 'PingFang SC',
+          overflow: overflow,
+          decoration: decoration,
           fontSize: fontSize,
+          letterSpacing: letterSpacing,
           fontWeight: FontWeight.w500,
           color: color,
           height: height,
+          decorationColor: decorationColor,
+          textBaseline: textBaseline,
+        );
+}
+
+// DDINPRO字体
+class DDINPROBoldTextStyle extends TextStyle {
+  final double fontSize;
+  final Color color;
+  final double height;
+  final TextOverflow overflow;
+  final TextDecoration decoration;
+  final double letterSpacing;
+  final Color decorationColor;
+  final TextBaseline textBaseline;
+
+  DDINPROBoldTextStyle({
+    @required this.fontSize,
+    this.color,
+    this.height,
+    this.overflow,
+    this.decoration,
+    this.letterSpacing,
+    this.decorationColor,
+    this.textBaseline,
+  })  : assert(fontSize != null),
+        // assert(color != null),
+        super(
+          fontFamily: 'DDINPRO',
+          overflow: overflow,
+          decoration: decoration,
+          fontSize: fontSize,
+          letterSpacing: letterSpacing,
+          fontWeight: FontWeight.w700,
+          color: color,
+          height: height,
+          decorationColor: decorationColor,
+          textBaseline: textBaseline,
         );
 }

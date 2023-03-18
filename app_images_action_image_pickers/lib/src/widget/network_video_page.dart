@@ -2,12 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-06 12:44:43
+ * @LastEditTime: 2023-03-18 13:29:47
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/src/services/system_chrome.dart';
-import '../preview/widget/network_video_widget.dart';
+
+import 'package:flutter_player_ui/flutter_player_ui.dart';
 
 class NetworkVideoPage extends StatefulWidget {
   final String? fileUrl;
@@ -56,7 +57,7 @@ class _NetworkVideoPageState extends State<NetworkVideoPage> {
         },
         child: Stack(
           children: <Widget>[
-            Positioned.fill(
+            Center(
               child: NetworkVideoWidget(
                 key: _videoWidgetKey,
                 fileUrl: widget.fileUrl,

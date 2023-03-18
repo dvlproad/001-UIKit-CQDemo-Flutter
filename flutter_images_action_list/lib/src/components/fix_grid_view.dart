@@ -9,6 +9,12 @@ class FixGridView extends StatefulWidget {
   final double width;
   final double? height; // 未设置时候将自动适应高度
   final Color? color;
+
+  final Axis direction;
+  final Axis scrollDirection;
+  final ScrollPhysics? physics;
+  // NeverScrollableScrollPhysics() \ ClampingScrollPhysics()\ AlwaysScrollableScrollPhysics(),
+
   final bool dragEnable;
   final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
   final int itemCount;
@@ -37,6 +43,9 @@ class FixGridView extends StatefulWidget {
     required this.width,
     this.height,
     this.color,
+    this.direction = Axis.horizontal,
+    this.scrollDirection = Axis.vertical,
+    this.physics, // default is NeverScrollableScrollPhysics()
     this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
     this.columnSpacing, //水平列间距
@@ -117,8 +126,12 @@ class FixGridViewState extends State<FixGridView> {
         needsLongPressDraggable: true,
         spacing: mainSpacing,
         runSpacing: crossSpacing,
+        scrollAnimationDuration: Duration(milliseconds: 200),
         padding: const EdgeInsets.all(0),
-        direction: Axis.horizontal,
+        direction: widget.direction,
+        scrollDirection: widget.scrollDirection,
+        scrollPhysics: widget.physics,
+        controller: ScrollController(),
         children: _widgets,
         enableReorder: widget.dragEnable,
         // buildItemsContainer:
@@ -192,7 +205,12 @@ class FixGridViewState extends State<FixGridView> {
       var column = Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          wrap,
+          // 注意:有设置高度的时候，需要 Expanded;没设置的话，不能Expanded,从而使得其能自适应高度
+          widget.height == null
+              ? wrap
+              : Expanded(
+                  child: wrap,
+                ),
           Container(), // 为了让铺满宽
           // ButtonBar(
           //   alignment: MainAxisAlignment.start,
@@ -234,6 +252,7 @@ class FixGridViewState extends State<FixGridView> {
       return ImagesPreSufBadgeBaseList(
         color: widget.color,
         height: widget.height,
+        physics: widget.physics,
         customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columnCount,
           mainAxisSpacing: mainSpacing,

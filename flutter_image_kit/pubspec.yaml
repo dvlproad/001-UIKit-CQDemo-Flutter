@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
     
   cached_network_image: any
-
+  extended_image: any
+  flutter_cache_manager: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

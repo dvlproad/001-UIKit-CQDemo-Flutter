@@ -13,6 +13,11 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
   final double width;
   final double? height;
   final Color? color;
+
+  final Axis direction;
+  final Axis scrollDirection;
+  final ScrollPhysics? physics;
+
   final bool dragEnable;
   final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
 
@@ -42,6 +47,9 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     required this.width,
     this.height,
     this.color,
+    this.direction = Axis.horizontal,
+    this.scrollDirection = Axis.vertical,
+    this.physics,
     this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
     required this.imageCount,
@@ -91,6 +99,9 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
       width: widget.width,
       height: widget.height,
       color: widget.color,
+      direction: widget.direction,
+      scrollDirection: widget.scrollDirection,
+      physics: widget.physics,
       dragEnable: widget.dragEnable,
       dragCompleteBlock: widget.dragCompleteBlock,
       itemCount: itemCount,

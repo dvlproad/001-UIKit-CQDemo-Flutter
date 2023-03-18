@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -8,14 +11,24 @@ class PermissionsManager {
 
   //获取相册权限
   static Future<bool> photos() async {
-    var status = await [Permission.storage, Permission.photos].request();
-
-    if (status[Permission.storage].isGranted &&
-        status[Permission.photos].isGranted) {
-      return true;
+    var permissionList = <Permission>[Permission.storage];
+    if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final AndroidDeviceInfo info = await deviceInfoPlugin.androidInfo;
+      if (info.version.sdkInt >= 33) {
+        permissionList.add(Permission.photos);
+      }
     } else {
-      return false;
+      permissionList.add(Permission.photos);
     }
+
+    var status = await permissionList.request();
+    for(var element in permissionList){
+      if (!status[element].isGranted && !status[element].isLimited) {
+        return false;
+      }
+    }
+    return true;
   }
 
   //获取相机权限
@@ -104,13 +117,13 @@ class PermissionsManager {
         title: Text(title ?? ''),
         content: Text(content ?? ''),
         actions: [
-          FlatButton(
+          TextButton(
             child: Text("取消"),
             onPressed: () {
               Navigator.pop(context, false);
             },
           ),
-          FlatButton(
+          TextButton(
             child: Text("前往设置"),
             onPressed: () async {
               await openAppSettings();

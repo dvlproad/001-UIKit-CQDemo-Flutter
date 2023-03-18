@@ -2,33 +2,43 @@ import 'dart:io' show File;
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter_media_picker/flutter_media_picker.dart';
+import 'package:flutter_player_ui/flutter_player_ui.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
 
 import './widget/image_or_photo_grid_cell.dart';
-import './bean/image_choose_bean.dart';
-export './bean/image_choose_bean.dart';
+import 'package:flutter_image_process/flutter_image_process.dart';
 
 import './images_add_cell.dart';
 export './images_add_cell.dart' show AddCellType;
 
 import './preview/preview_util.dart';
-import 'pick_util.dart';
-import './pick_util/pick_asset_util.dart' show PickPhotoAllowType;
 
-///TODO:临时处理
-import './app_upload_util.dart';
-import './app_upload_bean.dart';
+import 'package:app_network/app_network.dart';
+
+import './images_check_util.dart';
 
 class ImageAddDeletePickList extends StatefulWidget {
   final double width;
   final double? height;
   final Color? color;
+
+  final Axis direction;
+  final Axis scrollDirection;
+  // NeverScrollableScrollPhysics() \ ClampingScrollPhysics()\ AlwaysScrollableScrollPhysics(),
+  final ScrollPhysics? physics; // default is NeverScrollableScrollPhysics()
   final bool dragEnable;
   final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
 
   final List<AppImageChooseBean>? imageChooseModels;
+  final bool showCenterIconIfVideo;
+  final Widget? Function({
+    required ImageChooseBean imageChooseModel,
+    double? width,
+    double? height,
+  })? customImageWidgetGetBlock;
   // final Widget Function(dynamic imageChooseModel) badgeWidgetSetupBlock; // 可以返回为'删除'按钮 或者 '选中'按钮等任意
   final void Function(List<AppImageChooseBean> imageChooseModels,
           PickPhotoAllowType bNewPickPhotoAllowType)
@@ -37,6 +47,8 @@ class ImageAddDeletePickList extends StatefulWidget {
           List<AppImageChooseBean> imageChooseModels, int imageIndex)?
       onPressedImage;
 
+  final bool Function(PickPhotoAllowType pickAllowType)?
+      hideDeleteIconGetBlock; // 是否隐藏删除按钮
   final AddCellType addCellType;
 
   final PickPhotoAllowType Function(
@@ -44,22 +56,38 @@ class ImageAddDeletePickList extends StatefulWidget {
   final int Function(PickPhotoAllowType pickPhotoAllowType)?
       maxAddCountGetBlock;
 
-  final String Function({int imageIndex})? flagTextBuilder;
+  final String? Function(
+      {required AppImageChooseBean imageChooseModel,
+      required int imageIndex})? flagTextBuilder;
+
+  // 视频帧
+  final bool needVideoFrames;
+
+  final Function(ImageChooseBean? bean)? onChangeCover;
 
   ImageAddDeletePickList({
     Key? key,
     required this.width,
     this.height,
     this.color,
+    this.direction = Axis.horizontal,
+    this.scrollDirection = Axis.vertical,
+    this.physics,
     this.dragEnable = false, // 是否可以拖动
+
     this.dragCompleteBlock,
     this.imageChooseModels,
+    this.showCenterIconIfVideo = true, // 是视频文件的时候是否在中间显示icon播放图标,
+    this.customImageWidgetGetBlock,
     this.flagTextBuilder,
     required this.imageChooseModelsChangeBlock,
     this.onPressedImage, // 自定义点击图片的事件(默认是浏览)
+    this.hideDeleteIconGetBlock,
     this.addCellType = AddCellType.defalut_add,
     this.pickAllowTypeGetBlock,
     this.maxAddCountGetBlock, // 最大选择数(未设置则图片9张，视频1张，互斥)
+    this.needVideoFrames = false,
+    this.onChangeCover,
   }) : super(key: key);
 
   @override
@@ -71,6 +99,9 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
   int _maxAddCount = 9;
 
   PickPhotoAllowType _pickAllowType = PickPhotoAllowType.imageOnly;
+
+  PickPhotoAllowType get pickAllowType => _pickAllowType;
+  List<AppImageChooseBean> get imageChooseModels => _imageChooseModels;
 
   @override
   void dispose() {
@@ -99,7 +130,13 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
       width: widget.width,
       height: widget.height,
       color: widget.color,
+      direction: widget.direction,
+      scrollDirection: widget.scrollDirection,
+      physics: widget.physics,
       dragEnable: widget.dragEnable,
+      hideDeleteIcon: widget.hideDeleteIconGetBlock == null
+          ? false
+          : widget.hideDeleteIconGetBlock!(_pickAllowType),
       dragCompleteBlock: (int oldIndex, int newIndex) {
         if (widget.dragCompleteBlock != null) {
           widget.dragCompleteBlock!(oldIndex, newIndex);
@@ -123,13 +160,18 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
 
         String? flagText = null;
         if (widget.flagTextBuilder != null) {
-          flagText = widget.flagTextBuilder!(imageIndex: imageIndex);
+          flagText = widget.flagTextBuilder!(
+            imageChooseModel: imageChooseModel,
+            imageIndex: imageIndex,
+          );
         }
 
         return CQImageOrPhotoGridCell(
           width: itemWidth,
           height: itemHeight,
           imageChooseModel: imageChooseModel,
+          showCenterIconIfVideo: widget.showCenterIconIfVideo,
+          customImageWidgetGetBlock: widget.customImageWidgetGetBlock,
           index: imageIndex,
           flagText: flagText,
           onPressed: () {
@@ -140,11 +182,7 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
             if (widget.onPressedImage != null) {
               widget.onPressedImage!(_imageChooseModels, imageIndex);
             } else {
-              PreviewUtil.preview(
-                context,
-                imageChooseModels: _imageChooseModels,
-                imageIndex: imageIndex,
-              );
+              preview(imageIndex: imageIndex);
             }
           },
         );
@@ -162,6 +200,20 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
     );
   }
 
+  preview({
+    required int imageIndex,
+  }) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+    _log('点击imageIndex=$imageIndex的图片');
+    // _focusNode.unfocus();
+
+    PreviewUtil.preview(
+      context,
+      imageChooseModels: _imageChooseModels,
+      imageIndex: imageIndex,
+    );
+  }
+
   /// 清空图片和视频，供外部使用
   clear() {
     setState(() {
@@ -169,39 +221,12 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
     });
   }
 
-  update(List<AppImageChooseBean>? imageChooseModels) {
+  updateMedias(List<AppImageChooseBean>? imageChooseModels) {
     setState(() {
       _imageChooseModels = imageChooseModels ?? [];
     });
-  }
 
-  Future<bool> upload() async {
-    if (_imageChooseModels != null) {
-      UploadMediaType mediaType = UploadMediaType.image;
-      if (_pickAllowType == PickPhotoAllowType.videoOnly) {
-        mediaType = UploadMediaType.video;
-        _log("==============视频上传开始，请等待");
-      } else {
-        _log("==============图片上传开始，请等待");
-      }
-      UploadMediaResultType uploadMediaResultType =
-          await UploadApiUtil.uploadImageChooseModels(
-        context: context,
-        imageChooseModels: _imageChooseModels,
-        mediaType: mediaType,
-      );
-
-      if (uploadMediaResultType == UploadMediaResultType.UploadSuccess) {
-        _log("==============图片/视频上传完毕，继续上传语音/开始发布");
-      } else {
-        String errorString =
-            UploadApiUtil.getUploadMediaResultTypeString(uploadMediaResultType);
-        ToastUtil.showMessage(errorString);
-        return false;
-      }
-    }
-
-    return true;
+    _updatePickAllowTypeAndMaxAddCountByMediaModels();
   }
 
   void _imageChooseModelsChange() {
@@ -275,6 +300,11 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
     //     },
     //   );
     // } else {
+    addMedia();
+    // }
+  }
+
+  addMedia() {
     PickUtil.pickPhoto(
       context,
       maxCount: _maxAddCount,
@@ -283,8 +313,14 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
       imagePickerCallBack: ({
         List<ImageChooseBean>? newAddedImageChooseModels,
         List<ImageChooseBean>? newCancelImageChooseModels,
-      }) {
+      }) async {
         _log('PickUtil 03');
+        if (newAddedImageChooseModels != null &&
+            await ImageCheckUtil.checkMediaBeans(newAddedImageChooseModels) !=
+                true) {
+          return;
+        }
+
         // 新取消的图片
         List<AssetEntity> shouldCancelAssetEntitys = [];
         for (var item in newCancelImageChooseModels ?? []) {
@@ -307,7 +343,7 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
         PickPhotoAllowType newPickPhotoAllowType = _pickAllowType;
         if (newAddedImageChooseModels != null &&
             newAddedImageChooseModels.isNotEmpty) {
-          List<AppImageChooseBean> addImageBeans = [];
+          List<AppImageChooseBean> addMeidaBeans = [];
           for (ImageChooseBean item in newAddedImageChooseModels) {
             AppImageChooseBean bean = AppImageChooseBean(
               assetEntity: item.assetEntity,
@@ -322,11 +358,33 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
             // bean.width = item.width;
             // bean.height = item.height;
             // bean.compressImageBean = item.compressImageBean;
-            addImageBeans.add(bean);
+            addMeidaBeans.add(bean);
           }
-          _compressAddMediaBeans(addImageBeans); // 异步压缩所添加的文件
-
-          _imageChooseModels.addAll(addImageBeans);
+          ImageCompressUtil.compressMediaBeans(addMeidaBeans); // 异步压缩所添加的文件
+          if (addMeidaBeans.first.assetEntity?.type == AssetType.video) {
+            if (widget.needVideoFrames == true) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (c) => ChooseFramePage(
+                    video: _imageChooseModels.first,
+                    onSubmit: (ImageChooseBean? imageChooseBean) {
+                      widget.onChangeCover?.call(imageChooseBean);
+                      if (imageChooseBean != null) {
+                        ImageCompressUtil.compressMediaBeans(
+                            [imageChooseBean]); // 异步压缩所添加的文件
+                      }
+                    },
+                    customChooseCover: null,
+                  ),
+                ),
+              );
+            } else {
+              // 预先截帧
+              addMeidaBeans.first.getVideoFrameBeans();
+            }
+          }
+          _imageChooseModels.addAll(addMeidaBeans);
         }
 
         // setState(() {
@@ -336,18 +394,56 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
         _imageChooseModelsChange();
       },
     );
-    // }
   }
 
-  /// 异步压缩所添加的文件
-  Future _compressAddMediaBeans(List<AppImageChooseBean> addMeidaBeans) async {
-    for (AppImageChooseBean bean in addMeidaBeans) {
-      _log("bean.assetEntity.id=${bean.assetEntity!.id} begin...");
-      bean.checkAndBeginCompressAssetEntity();
-      // 异步压缩，并且每个压缩间隔一下,防止内存还没释放,导致积累过多崩溃
-      await Future.delayed(Duration(milliseconds: 500));
-      _log("bean.assetEntity.id=${bean.assetEntity!.id} finish...");
-    }
+  /// 图片/视频更新自身接口(目前使用于：'更换视频'按钮的点击)
+  updateMediaSelf(
+    int mediaIndex, {
+    PickPhotoAllowType pickAllowType = PickPhotoAllowType.imageOnly,
+    void Function()? updateCompleteBlock,
+  }) {
+    PickUtil.chooseOneMedia(
+      context,
+      pickAllowType: pickAllowType,
+      completeBlock: (ImageChooseBean item) async {
+        AppImageChooseBean bean = AppImageChooseBean(
+          assetEntity: item.assetEntity,
+          networkUrl: item.networkUrl,
+          width: item.width,
+          height: item.height,
+        );
+
+        await ImageCompressUtil.compressMediaBeans([bean]); // 异步压缩所添加的文件
+        if (bean.mediaType == UploadMediaType.video &&
+            widget.needVideoFrames == true) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (c) => ChooseFramePage(
+                video: _imageChooseModels.first,
+                onSubmit: (ImageChooseBean? imageChooseBean) {
+                  widget.onChangeCover?.call(imageChooseBean);
+                  if (imageChooseBean != null) {
+                    ImageCompressUtil.compressMediaBeans(
+                        [imageChooseBean]); // 异步压缩所添加的文件
+                  }
+                },
+                customChooseCover: null,
+              ),
+            ),
+          );
+        }
+
+        // Future.delayed(Duration(milliseconds: 500)).then((value) {
+        _imageChooseModels[mediaIndex] = bean;
+        _imageChooseModelsChange();
+
+        if (updateCompleteBlock != null) {
+          updateCompleteBlock();
+        }
+        // });
+      },
+    );
   }
 
   /*

@@ -2,13 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-06 11:58:03
+ * @LastEditTime: 2023-03-18 13:34:04
  * @Description: 图片选择器的单元视图
  */
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_images_action_list/flutter_images_action_list.dart'
@@ -19,17 +20,24 @@ import 'package:photo_manager/photo_manager.dart'
 
 import 'package:flutter_image_kit/flutter_image_kit.dart';
 
-import '../bean/image_choose_bean.dart';
+import 'package:flutter_image_process/flutter_image_process.dart';
 import '../preview/widget/asset_entity_widget.dart';
-import '../preview/widget/network_video_widget.dart';
+import 'package:flutter_player_ui/flutter_player_ui.dart';
 
-import '../image_compress_util/assetEntity_info_getter.dart';
+import './image_choose_bean_view.dart';
 
 class CQImageOrPhotoGridCell extends StatelessWidget {
   final double? width;
   final double? height;
   final double? cornerRadius;
   final ImageChooseBean imageChooseModel;
+  final bool showCenterIconIfVideo;
+
+  final Widget? Function({
+    required ImageChooseBean imageChooseModel,
+    double? width,
+    double? height,
+  })? customImageWidgetGetBlock;
 
   final int index;
   final String? flagText;
@@ -41,6 +49,8 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
     this.height,
     this.cornerRadius,
     required this.imageChooseModel, // 类型可为 AssetEntity 或 String
+    this.showCenterIconIfVideo = true, // 是视频文件的时候是否在中间显示icon播放图标
+    this.customImageWidgetGetBlock, // 需要对这个model自定义的情况
     required this.index,
     this.flagText,
     required this.onPressed,
@@ -48,60 +58,38 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
 
   String? _lastNetworImagekUrl;
   Widget _getCustomImageWidget(BuildContext context) {
-    if (imageChooseModel.assetEntity != null) {
-      AssetEntity entity = imageChooseModel.assetEntity!;
-
-      // ImageProvider imageProvider = AssetEntityImageProvider(
-      //   entity,
-      //   isOriginal: false,
-      // );
-      return AssetEntityWidget(assetEntity: entity);
-    } else if (imageChooseModel.networkUrl != null &&
-        imageChooseModel.networkUrl!.isNotEmpty) {
-      String imageUrl = imageChooseModel.networkUrl!;
-      // imageProvider = NetworkImage(imageUrl);
-      // imageProvider = CachedNetworkImageProvider(imageUrl);
-
-      UploadMediaType mediaType = imageChooseModel.mediaType;
-      if (mediaType == UploadMediaType.video) {
-        return NetworkVideoWidget(
-          networkUrl: imageUrl,
-          showCenterIcon: true,
-        );
+    if (this.customImageWidgetGetBlock != null) {
+      Widget? view = this.customImageWidgetGetBlock!(
+        imageChooseModel: imageChooseModel,
+        width: width,
+        height: height,
+      );
+      if (view != null) {
+        return view;
       }
-
-      return TolerantNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
-        width: width,
-        height: height,
-        lastImageUrlGetBlock: (String lastImageUrl) {
-          _lastNetworImagekUrl = lastImageUrl;
-        },
-      );
-    } else if (imageChooseModel.compressImageBean != null &&
-        imageChooseModel.compressImageBean!.compressPath != null) {
-      String imagePath = imageChooseModel.compressImageBean!.compressPath!;
-      Image image = Image.file(File(imagePath));
-
-      // imageProvider = image.image;
-      // // imageProvider = AssetImage(photoAlbumPath);
-
-      return Image(
-        image: image.image,
-        fit: BoxFit.cover,
-        width: width,
-        height: height,
-      );
-    } else {
-      // String imagePath = imageChooseModel.assetEntityPath;
-      // Image image = Image.file(File(imagePath));
-      // imageProvider = image.image;
-      // // imageProvider = AssetImage(photoAlbumPath);
-      // imagePathOrUrl = imagePath;
-
-      return Container();
     }
+
+    return ImageChooseBeanView.getImageWidget(
+      context: context,
+      imageChooseModel: imageChooseModel,
+      width: width,
+      height: height,
+      showCenterIconIfVideo: showCenterIconIfVideo,
+      lastImageUrlGetBlock: (String lastImageUrl) {
+        _lastNetworImagekUrl = lastImageUrl;
+      },
+    );
+  }
+
+  LinearGradient get imageCellTextGradient {
+    return LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        const Color(0xff404040).withOpacity(0.0),
+        const Color(0xff404040).withOpacity(1.0),
+      ],
+    );
   }
 
   Widget _getLastCustomImageWidget(BuildContext context) {
@@ -116,17 +104,37 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
           children: [
             _getCustomImageWidget(context),
             Positioned(
-              left: 2,
-              bottom: 2,
+              left: 0,
+              right: 0,
+              bottom: 0,
               child: Visibility(
                 visible: flagText != null && flagText!.isNotEmpty,
-                child: ThemeBGButton(
-                  width: 50,
-                  height: 20,
-                  cornerRadius: 10,
-                  bgColorType: ThemeBGType.theme,
-                  title: flagText ?? '',
-                  // titleStyle: RegularTextStyle(fontSize: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: imageCellTextGradient,
+                        // borderRadius: BorderRadius.only(
+                        //   bottomLeft: Radius.circular(4.w_bj),
+                        //   bottomRight: Radius.circular(4.w_bj),
+                        // ),
+                      ),
+                      width: constraints.maxWidth,
+                      child: ThemeBGButton(
+                        width: 50,
+                        height: 20,
+                        cornerRadius: 10,
+                        // bgColorType: ThemeBGType.theme,
+                        bgColor: Colors.transparent,
+                        textColor: Colors.white,
+                        title: flagText ?? '',
+                        titleStyle: RegularTextStyle(fontSize: 13),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
