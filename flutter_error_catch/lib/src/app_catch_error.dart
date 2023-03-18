@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-28 12:38:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-31 21:44:01
+ * @LastEditTime: 2022-08-25 23:28:42
  * @Description: 错误捕获
  */
 import 'dart:async';
@@ -37,6 +37,8 @@ void main111() {
 //全局异常的捕捉
 class AppCatchError {
   // static late GlobalKey<NavigatorState> globalKey;
+  static String? beforePageClassString;
+  static String? beforePageRoutePath;
   static String? currentPageClassString;
   static String? currentPageRoutePath;
 
@@ -118,10 +120,14 @@ class AppCatchError {
     // var currentRoutePath = Get.currentRoute;
     // print("current route: $currentRoutePath");
 
+    beforePageClassString ??= 'unknow page class';
+    beforePageRoutePath ??= 'unknow page route';
     currentPageClassString ??= 'unknow page class';
     currentPageRoutePath ??= 'unknow page route';
     Map<String, dynamic> pageParmas = {
+      "beforePageClassString": beforePageClassString,
       "currentPageClassString": currentPageClassString,
+      "beforePageRoutePath": beforePageRoutePath,
       "currentPageRoutePath": currentPageRoutePath,
     };
     Map<String, dynamic> lastShortMap = {};
