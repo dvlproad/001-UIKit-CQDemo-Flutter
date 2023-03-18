@@ -7,8 +7,10 @@
  */
 import 'dart:io' show Platform;
 import 'dart:convert' as convert;
+import 'package:flutter/services.dart';
 import 'package:app_network/app_network.dart';
 import 'package:package_info/package_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 class CheckVersionSystemUtil<T extends VersionBaseBean> {
@@ -29,14 +31,31 @@ class CheckVersionSystemUtil<T extends VersionBaseBean> {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     String buildNumber = packageInfo.buildNumber; // 为了不升级version，也能检测到更新
+    final params = {
+      // "channel": channel ?? "official",
+      'version': version, // 以防后台不从header中取
+      'buildNumber': buildNumber, // 以防后台不从header中取
+      'platform': platform, // 以防后台不从header中取
+    };
+
+    final deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      final methodChannel = MethodChannel("android_channel_info");
+      final map = await methodChannel.invokeMethod("getChannelInfo");
+      if (map != null) {
+        params["channel"] = map["channel"];
+      }
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      params["deviceId"] = androidInfo.id ?? '';
+    } else {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      params["deviceId"] = iosInfo.identifierForVendor ?? '';
+    }
+
     return AppNetworkKit.get(
       'config/check-version',
-      params: {
-        // "channel": channel ?? "official",
-        'version': version, // 以防后台不从header中取
-        'buildNumber': buildNumber, // 以防后台不从header中取
-        'platform': platform, // 以防后台不从header中取
-      },
+      params: params,
       // cancelToken: cancelToken,
     ).then((ResponseModel responseModel) {
       if (responseModel.isSuccess && responseModel.result != null) {
@@ -44,23 +63,21 @@ class CheckVersionSystemUtil<T extends VersionBaseBean> {
         // 测试代码
         // result["hasUpdateVersion"] = true;
         // result['lastVersionNo'] = '1.0.1';
-        bool hasNewVersion = result["hasUpdateVersion"] ?? false;
-        if (hasNewVersion != true) {
-          responseModel.result = null;
-        } else {
-          String buildNumber = '1';
-          if (result['buildNumber'] != null) {
-            buildNumber = result['buildNumber'].toString(); // 兼容后台返回int值
-          }
+        bool? hasNewVersion = result["hasUpdateVersion"];
 
-          responseModel.result = VersionBaseBean(
-            version: result['lastVersionNo'],
-            buildNumber: buildNumber,
-            updateLog: result['versionMsg'],
-            downloadUrl: result['downloadUrl'],
-            forceUpdate: result['forceUpdateFlag'] ?? false,
-          );
+        String buildNumber = '1';
+        if (result['buildNumber'] != null) {
+          buildNumber = result['buildNumber'].toString(); // 兼容后台返回int值
         }
+
+        responseModel.result = VersionBaseBean(
+          version: result['lastVersionNo'],
+          buildNumber: buildNumber,
+          buildHaveNewVersion: hasNewVersion,
+          updateLog: result['versionMsg'],
+          downloadUrl: result['downloadUrl'],
+          forceUpdate: result['forceUpdateFlag'] ?? false,
+        );
       }
       return responseModel;
     });

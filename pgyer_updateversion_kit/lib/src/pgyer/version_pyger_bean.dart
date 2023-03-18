@@ -6,6 +6,7 @@
  * @Description: 
  */
 import 'dart:convert' show json;
+import 'dart:io';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 class VersionPgyerBean extends VersionBaseBean {
@@ -44,11 +45,12 @@ class VersionPgyerBean extends VersionBaseBean {
     // iOS:itms-services://?action=download-manifest&url=https://www.pgyer.com/app/plist/c9356ea75030eee48073b2cb99b16df4/update/s.plist
     // iOS:itms-services://?action=download-manifest&url=https://www.pgyer.com/app/plist/com.bojue.wish"
     String downloadUrl = json['downloadURL']; // 应用安装地址
-    if (json['buildShortcutUrl'] != null) {
-      // 应用短链接(有空值情况,如版本号1.07.08,编译号07081011时候)
-      downloadUrl = json['buildShortcutUrl'];
+    if(Platform.isIOS){
+      if (json['buildShortcutUrl'] != null) {
+        // 应用短链接(有空值情况,如版本号1.07.08,编译号07081011时候)
+        downloadUrl = json['buildShortcutUrl'];
+      }
     }
-
     // 是否需要强制更新
     bool needForceUpdate = json['needForceUpdate'];
 

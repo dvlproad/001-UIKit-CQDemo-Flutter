@@ -1,0 +1,86 @@
+{
+  "package_merger_branchs_searchFromDateString": "2022-12-26 10:45:24",
+  "brances_record_time": "12.12",
+  "nocode_brances": [
+    {
+      "name": "master",
+      "des": "线上功能(主分支)"
+    },
+    {
+      "name": "development",
+      "des": "线上功能(开发稳定分支)"
+    },
+    {
+      "name": "dev_all",
+      "des": "线上+修复+所有提测的功能"
+    },
+    {
+      "name": "dev_publish_out",
+      "des": "审核包功能"
+    },
+    {
+      "name": "dev_publish_in",
+      "des": "内测包功能"
+    }
+  ],
+  "feature_brances": [
+    {
+      "create_time": "12.28",
+      "submit_test_time": "12.28",
+      "pass_test_time": "01.13",
+      "merger_pre_time": "01.13",
+      "type": "other",
+      "name": "dev_js_demo",
+      "des": "详见outlines",
+      "outlines": [
+        {
+          "title": "h5调用app跳转任意app页面的JS"
+        },
+        {
+          "title": "h5调用app分享内容到微信"
+        },
+        {
+          "title": "h5调用app发送IM文本消息"
+        },
+        {
+          "title": "h5调用app限制键盘弹出时候是否自动调整界面大小"
+        },
+        {
+          "title": "新增可直接进行指定网页测试(含游戏)"
+        },
+        {
+          "title": "桥接方法示例增加参数说明"
+        }
+      ],
+      "answer": {
+        "name": "qian"
+      },
+      "tester": {
+        "name": "qian"
+      }
+    },
+    {
+      "create_time": "12.26",
+      "submit_test_time": "12.26",
+      "pass_test_time": "12.27",
+      "merger_pre_time": "12.27",
+      "type": "other",
+      "name": "dev_script_pack",
+      "des": "详见outlines",
+      "outlines": [
+        {
+          "title": "脚本优化"
+        }
+      ],
+      "answer": {
+        "name": "qian"
+      },
+      "tester": {
+        "name": "qian"
+      }
+    }
+  ],
+  "package_merger_branchs": [
+    
+  ]
+}

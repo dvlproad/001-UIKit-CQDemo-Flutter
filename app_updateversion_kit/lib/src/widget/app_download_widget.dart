@@ -11,7 +11,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
-import 'package:pgyer_updateversion_kit/pgyer_updateversion_kit.dart';
 
 class AppDownloadWidget extends StatefulWidget {
   AppDownloadWidget({Key? key}) : super(key: key);
@@ -29,12 +28,12 @@ class _AppDownloadWidgetState extends State<AppDownloadWidget> {
         children: [
           ImageTitleTextValueCell(
             height: 40,
-            title: "app下载页(外测)",
+            title: "app下载页(其他发布平台)",
             textValue: '',
             arrowImageType: TableViewCellArrowImageType.none,
           ),
           _app_downloadpage_cell(UpdateAppType.product),
-          PgyerAppDownloadWidget(),
+          // 请补充 app 内测版本的下载页
         ],
       ),
     );

@@ -9,6 +9,9 @@ library flutter_updateversion_kit;
 
 // 获取版本号
 export './src/branch_package_info/branch_package_info.dart';
+export './src/branch_package_info/history_version_bean.dart';
+export './src/branch_package_info/dev_branch_bean.dart';
+export './src/branch_package_info/pgyer_bean.dart';
 
 export './src/common/check_version_common_util.dart';
 export './src/common/version_base_bean.dart';

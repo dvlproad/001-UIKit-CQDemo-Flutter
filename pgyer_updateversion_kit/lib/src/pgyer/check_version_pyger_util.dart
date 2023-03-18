@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-07 18:51:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 15:41:25
+ * @LastEditTime: 2022-08-10 23:32:37
  * @Description: 
  */
 import 'dart:io' show Platform;
@@ -70,7 +70,10 @@ class PygerUtil {
   static Future<ResponseModel> getVersion() async {
     String url = 'https://www.pgyer.com/apiv2/app/check';
 
-    ResponseModel responseModel = await PgyerNetworkManager().post(url);
+    ResponseModel responseModel = await PgyerNetworkManager().requestUrl(
+      url,
+      requestMethod: RequestMethod.post,
+    );
     if (responseModel.isSuccess != true) {
       return responseModel;
     }
@@ -78,7 +81,9 @@ class PygerUtil {
     Map<String, dynamic> result = responseModel.result;
     VersionPgyerBean bean = VersionPgyerBean.fromJson(result);
     // if (bean.downloadUrl.startsWith(RegExp(r'https?:')) != true) {
-    bean.downloadUrl = _pgyerDownloadUrl;
+    if(Platform.isIOS){
+      bean.downloadUrl = _pgyerDownloadUrl;
+    }
     // TODO:在安卓机上发现使用蒲公英的下载地址。如果没有授权“始终”以默认浏览器打开，就会出现那个“下载超时”，若是有始终授权的话，直接跳转到默认浏览器下载页进行下载
     // 所以暂时都用外部地址
     // }
@@ -91,8 +96,9 @@ class PygerUtil {
   static Future<ResponseModel> getPgyerHistoryVersions() async {
     String url = 'https://www.pgyer.com/apiv2/app/builds';
 
-    ResponseModel responseModel = await PgyerNetworkManager().post(
+    ResponseModel responseModel = await PgyerNetworkManager().requestUrl(
       url,
+      requestMethod: RequestMethod.post,
       customParams: {
         "buildKey": 'com.bojue.wish',
         "page": 3, //(选填) 历史版本分页页数

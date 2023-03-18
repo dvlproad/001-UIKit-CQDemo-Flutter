@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 14:35:08
+ * @LastEditTime: 2022-09-06 13:16:21
  * @Description: 蒲公英请求管理中心
  */
 import 'package:meta/meta.dart';
@@ -43,8 +43,8 @@ class PgyerNetworkManager extends CacheNetworkClient {
       dio = Dio(options);
 
       normal_setup(
-        getSuccessResponseModelBlock:
-            (String fullUrl, dynamic responseObject, bool? isFromCache) {
+        getSuccessResponseModelBlock: (String fullUrl, int statusCode,
+            dynamic responseObject, bool? isFromCache) {
           Map<String, dynamic> responseMap = responseObject;
 
           int errorCode = responseMap['code'];
@@ -73,7 +73,7 @@ class PgyerNetworkManager extends CacheNetworkClient {
             isCacheData,
           );
         },
-        checkResponseModelHandel: (responseModel, {showToastForNoNetwork}) {
+        checkResponseModelHandel: (responseModel, {bool? toastIfMayNeed}) {
           // CheckResponseModelUtil.needReloginHandle = needReloginHandle;
           // return CheckResponseModelUtil.checkResponseModel(
           //   responseModel,

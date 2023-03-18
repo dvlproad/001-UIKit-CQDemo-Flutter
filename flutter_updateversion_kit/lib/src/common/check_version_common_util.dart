@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
@@ -56,8 +58,19 @@ class CheckVersionCommonUtil {
     String serviceVersion,
     String serviceBuildNumber,
     bool isManualCheck, {
+    bool?
+        buildHaveNewVersion, // Boolean	是否有新版本(默认null，true/false直接显示/不显示弹窗不管版本是不是低了，null时候才根据版本判断)
     required bool isServiceNeedForceUpdate,
   }) async {
+    // Boolean	是否有新版本(默认null，true/false直接显示/不显示弹窗不管版本是不是低了，null时候才根据版本判断)
+    if (buildHaveNewVersion == true) {
+      return ServiceVersionCompareResult.newAndShow;
+    }
+
+    if (buildHaveNewVersion == false) {
+      return ServiceVersionCompareResult.noNew;
+    }
+
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
     String appVersion = packageInfo.version;
 
@@ -152,7 +165,7 @@ class CheckVersionCommonUtil {
     required String buildNumber,
     required String updateLog,
     required String downloadUrl,
-    required void Function() skipUpdateBlock,
+    required void Function() notNowBlock,
   }) {
     if (UpdateVersionPage.isUpdateWindowShowing != true) {
       UpdateVersionPage.isUpdateWindowShowing = true;
@@ -168,19 +181,39 @@ class CheckVersionCommonUtil {
             updateLog: updateLog,
             downloadUrl: downloadUrl,
             updateVersionBlock: () async {
-              bool goSuccess = await _launcherAppDownloadUrl(downloadUrl);
-              if (goSuccess != true) {
-                ToastUtil.showMsg("Error:无法打开网页$downloadUrl", context);
+              if (Platform.isAndroid) {
+                final methodChannel = MethodChannel("android_updater");
+                methodChannel.invokeMethod("DownloadApk", {
+                  "url": downloadUrl,
+                  "forceUpdate": forceUpdate,
+                  "version": version,
+                  "buildNumber": buildNumber
+                });
+              } else {
+                bool goSuccess = await _launcherAppDownloadUrl(downloadUrl);
+                if (goSuccess != true) {
+                  ToastUtil.showMsg("Error:无法打开网页$downloadUrl", context);
+                }
               }
             },
             skipUpdateBlock: () {
-              if (skipUpdateBlock != null) {
-                skipUpdateBlock();
+              if (Platform.isAndroid) {
+                final methodChannel = MethodChannel("android_updater");
+                methodChannel.invokeMethod(
+                  "skip_this_version",
+                  {
+                    "url": downloadUrl,
+                  },
+                );
               }
               UpdateVersionPage.isUpdateWindowShowing = false;
             },
             closeUpdateBlock: () {
               UpdateVersionPage.isUpdateWindowShowing = false;
+            },
+            notNowBlock: (){
+              UpdateVersionPage.isUpdateWindowShowing = false;
+              notNowBlock?.call();
             },
           );
         },
@@ -201,7 +234,10 @@ class CheckVersionCommonUtil {
       return false;
     }
     if (await canLaunch(url)) {
-      return launch(url);
+      // 拦截PlatformException 避免上报到bugly
+      return launch(url).catchError((e) {
+        return false;
+      });
     } else {
       return false;
     }

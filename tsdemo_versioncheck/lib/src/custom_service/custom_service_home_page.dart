@@ -2,11 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 16:27:23
+ * @LastEditTime: 2023-03-19 02:09:50
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+
+import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 import 'custom_service_routes.dart';
 
 class CustomServiceHomePage extends CJTSBasePage {
@@ -39,24 +41,11 @@ class _CQModulesHomePageState extends CJTSBasePageState<CustomServiceHomePage> {
         'theme': "单条信息的弹窗视图",
         'values': [
           {
-            'title': "MessageAlertPage",
-            'content': '单条信息的弹窗视图显示测试',
-            'nextPageName': CustomServiceRouters.messageAlertViewPage,
-          },
-          {
             'title': "Toast(View)-暂无",
             'imageSource': imageSource,
-            // 'nextPageName': "ToastHomePage1"
-          },
-          {
-            'title': "ActionSheet(View)",
-            'imageSource': imageSource,
-            // 'nextPageName': "ActionSheetHomePage1"
-          },
-          {
-            'title': "Alert(View)",
-            'imageSource': imageSource,
-            'nextPageName': CustomServiceRouters.alertViewHomePage,
+            'actionBlock': () {
+              _manualCheckVersion();
+            },
           },
         ]
       },
@@ -72,5 +61,19 @@ class _CQModulesHomePageState extends CJTSBasePageState<CustomServiceHomePage> {
         ),
       ],
     );
+  }
+
+  _manualCheckVersion() {
+    // LoadingUtil.showInContext(context);
+    // Future.delayed(Duration(milliseconds: 3000)).then((value) {
+    //   LoadingUtil.dismissInContext(context);
+    // });
+    CheckVersionUtil.checkVersion(
+      isManualCheck: true,
+    ).then((value) {
+      // LoadingUtil.dismissInContext(context);
+    }).catchError((onError) {
+      // LoadingUtil.dismissInContext(context);
+    });
   }
 }

@@ -3,12 +3,13 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/style.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../flutter_updateversion_kit_adapt.dart';
@@ -16,6 +17,8 @@ import '../../flutter_updateversion_kit_adapt.dart';
 import './download_file.dart';
 import './update_version_notifier.dart';
 import './flex_width_buttons.dart';
+import 'package:extended_image/extended_image.dart';
+// import 'package:flutter_effect/flutter_effect.dart';
 
 class UpdateVersionPage extends StatefulWidget {
   static bool isUpdateWindowShowing = false;
@@ -26,6 +29,7 @@ class UpdateVersionPage extends StatefulWidget {
   final String downloadUrl;
   final void Function() closeUpdateBlock;
   final void Function() skipUpdateBlock;
+  final void Function() notNowBlock;
   final void Function() updateVersionBlock;
   final bool forceUpdate;
 
@@ -36,6 +40,7 @@ class UpdateVersionPage extends StatefulWidget {
     this.updateLog,
     required this.downloadUrl,
     required this.closeUpdateBlock, // 点击'取消升级'执行的方法
+    required this.notNowBlock,
     required this.skipUpdateBlock, // 点击'跳过此版本'执行的方法
     required this.updateVersionBlock, // 点击"立即升级”执行的方法(默认不传null，内部会自己处理,这里设置只是为了内部没处理完前点击时候跳到下载的网页)
     this.forceUpdate = false, // 是否是强制升级
@@ -49,6 +54,7 @@ class UpdateVersionPage extends StatefulWidget {
 
 class UpdateVersionPageState extends State<UpdateVersionPage> {
   UpdateNotifier _updateNotifier = UpdateNotifier();
+
   // final url = "https://xxx.com/files/app.apk";
 
   late String _newVersion;
@@ -77,12 +83,15 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
       onWillPop: () async {
         return false;
       },
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          alertViewBulider(context),
-        ],
+      child: Container(
+        margin: EdgeInsets.only(bottom: 80),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            alertViewBulider(context),
+          ],
+        ),
       ),
     );
   }
@@ -103,12 +112,9 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
     return ChangeNotifierProvider<UpdateNotifier>.value(
       value: _updateNotifier,
       child: Container(
-        color: Colors.transparent,
-        alignment: Alignment.center,
-        child: Stack(
-          children: <Widget>[_uploadDIalogBuild()],
-        ),
-      ),
+          color: Colors.transparent,
+          alignment: Alignment.center,
+          child: _uploadDialogBuild()),
     );
   }
 
@@ -149,24 +155,56 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
     );
   }
 
-  Widget _uploadDIalogBuild() {
+  Widget _uploadDialogBuild() {
     final screenSize = MediaQuery.of(context).size;
-    double width = screenSize.width * 0.9;
-    var _maxContentHeight = width * 1.2;
-    return Container(
-      margin: EdgeInsets.only(left: 40, right: 40),
-      width: width,
-      height: _maxContentHeight,
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(child: _updateInfo(_maxContentHeight)),
-            _bottomMenu(width)
-          ],
+    double width = screenSize.width - 86;
+    var _maxContentHeight = width * 1.1;
+    return Column(
+      children: [
+        Container(
+          width: width,
+          margin: EdgeInsets.only(left: 40, right: 40),
+          child: _topIcon,
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 40, right: 40),
+          width: width,
+          height: _maxContentHeight,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                  child: Stack(
+                children: [_updateInfo(_maxContentHeight), _shadowCover()],
+              )),
+              _new_bottomMenu(width),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _shadowCover() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: 67,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Color(0x00FFFFFF), Colors.white]),
         ),
       ),
     );
@@ -175,13 +213,13 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
   Widget _updateInfo(var maxHeight) {
     return CustomScrollView(
       shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
       slivers: <Widget>[
         SliverPadding(
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.zero,
           sliver: SliverList(
             delegate: SliverChildListDelegate(
               <Widget>[
-                _versionIcon(),
                 Material(child: _versionTitle()),
                 Material(child: _versionContent()),
               ],
@@ -192,23 +230,17 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
     );
   }
 
-  Widget _versionIcon() {
-    return Center(
-      child: RichText(
-        text: TextSpan(
-            text: ' \ue636 ',
-            style: TextStyle(
-              fontFamily: "iconfont",
-              fontSize: 50.sp_cj,
-              color: Colors.black,
-            )),
-      ),
+  Widget get _topIcon {
+    return ExtendedImage.asset(
+      "assets/images/icon_update_top.png",
+      package: 'flutter_updateversion_kit',
     );
   }
 
   Widget _versionContent() {
     return Container(
-      padding: EdgeInsets.all(10),
+      color: Colors.white,
+      padding: EdgeInsets.only(left: 24, right: 24, top: 15, bottom: 15),
       child: Text(
         _updateLog,
         style: TextStyle(color: Colors.grey),
@@ -231,27 +263,134 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
 
   Widget _versionTitle() {
     return Container(
-      padding: EdgeInsets.only(top: 10),
+      padding: EdgeInsets.only(top: 15, left: 24, right: 24),
+      color: Colors.white,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          SizedBox(width: 10),
-          Expanded(child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-            return Container(
-              width: constraints.maxWidth,
-              child: Text(
-                "发现新版本 $_newVersion",
-                style: TextStyle(color: Colors.black, fontSize: 18.sp_cj),
-              ),
-            );
-          })),
-          SizedBox(width: 10),
+          Text(
+            "Hi～发现了新版本咯！",
+            style: TextStyle(color: Colors.black, fontSize: 15),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 5),
+            height: 18,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Color(0xFFF69368), Color(0xFFE87F52)]),
+                borderRadius: BorderRadius.circular(20)),
+            child: Text(
+              "$_buildNumber",
+              style: TextStyle(color: Colors.white, fontSize: 10),
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _bottomMenu(double w) {
+  /// 当前新版按钮
+  Widget _new_bottomMenu(double w) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: widget.forceUpdate
+            ? [
+                _updateButton(context),
+              ]
+            : [
+                _closeButton(context),
+                Container(width: 10),
+                _updateButton(context),
+              ],
+      ),
+    );
+  }
+
+  Widget _updateButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        this._updateNotifier.setIsClickAble(false);
+        _update();
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          gradient:
+              LinearGradient(colors: [Color(0xFFF69368), Color(0xFFE87F52)]),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        height: 36,
+        width: 116,
+        child: Text(
+          "马上更新",
+          style: MediumTextStyle(
+            color: Colors.white,
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _closeButton(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.pop(context);
+        if (widget.notNowBlock != null) {
+          widget.notNowBlock();
+        }
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Color(0xFFffffff),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Color(0xFFb8b8b8),
+            width: 1,
+          ),
+        ),
+        height: 36,
+        width: 116,
+        child: Text(
+          "暂不更新",
+          style: MediumTextStyle(
+            color: Color(0xFF8b8b8b),
+            fontSize: 14,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _downloadBtn(double w) {
+    return Consumer<UpdateNotifier>(
+      builder: (context, value, child) => InkWell(
+        child: Container(
+          width: w / 2,
+          alignment: Alignment.center,
+          child: Text(
+            value.updateBtn,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        onTap: () {
+          if (value.isClickAble) {
+            // todo 判断点击与否
+            this._updateNotifier.setIsClickAble(false);
+            _update();
+            print("立即升级");
+          }
+        },
+      ),
+    );
+  }
+
+  /// 旧版按钮
+  Widget _old_bottomMenu(double w) {
     if (widget.forceUpdate == true) {
       return FlexWidthButtons(
         titles: ['立即升级'],
@@ -283,29 +422,6 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
           _update();
         }
       },
-    );
-  }
-
-  Widget _downloadBtn(double w) {
-    return Consumer<UpdateNotifier>(
-      builder: (context, value, child) => InkWell(
-        child: Container(
-          width: w / 2,
-          alignment: Alignment.center,
-          child: Text(
-            value.updateBtn,
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-        onTap: () {
-          if (value.isClickAble) {
-            // todo 判断点击与否
-            this._updateNotifier.setIsClickAble(false);
-            _update();
-            print("立即升级");
-          }
-        },
-      ),
     );
   }
 
@@ -404,7 +520,7 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
           title: Text("App下载"),
           content: Text("下载完成，是否马上安装？"),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               onPressed: () {
                 this._updateNotifier.setProgress(0);
                 this._updateNotifier.setUpdateBtn("立即升级");
@@ -414,7 +530,7 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
               },
               child: Text("取消"),
             ),
-            FlatButton(
+            TextButton(
               onPressed: () {
                 this._updateNotifier.setProgress(0);
                 this._updateNotifier.setUpdateBtn("立即升级");

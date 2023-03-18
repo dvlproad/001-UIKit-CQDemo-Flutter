@@ -3,7 +3,31 @@
     "buildNumber": "package unknow buildNumber",
     "package_create_time": "package unknow time",
     "package_from_brance": "package unknow brance",
+    "platform_type": "package unknow platform",
+    "package_default_target": "package unknow target",
     "package_default_env": "package unknow env",
+    "package_result": {
+        "package_description": "package unknow description",
+        "shoudUploadToAppStrore": "no upload appstore",
+        "shoudUploadToCos": "no upload cos",
+        "shoudUploadToPgyerOwner": "no upload pgyerOwner",
+        "shoudUploadToPgyerKey": "no upload pgyerKey",
+        "shoudUploadToPgyerChannelShortcut": "unknow upload pgyer channelShortcut",
+        "shoudUploadToPgyerChannelKey": "unknow upload pgyer channelKey",
+        "package_official_website": "unknown official website"
+    },
+    "package_url_result": {
+      "package_local_url": "package local url",
+      "package_local_backup_dir": "package local backup dir",
+      "package_cos_url": "package cos url"
+    },
+    "package_update_des": "package unknow update",
+    "package_version_update_detail": "package version unkonw update detail",
+    "package_merger_branchs_searchFromDateString": "package unknow searchFromDateString",
+    "packing_state": "pack doing",
+    "package_code": "package_code_0",
+    "package_message": "package unknow message",
+    "package_noti_people": "用户1#用户2#用户3#用户4",
     "brances_record_time": "04.07",
     "nocode_brances": [
         {
@@ -20,23 +44,25 @@
         },
         {
             "name": "dev_will_publish",
-            "des": "线上+修复+所有待上线功能"
+            "des": "线上+修复+所有待上线的功能"
         }
     ],
     "feature_brances": [
+        {"create_time": "10.17", "name": "dev_asset_unuse", "des": "app无用资源清理"},
+        {"create_time": "10.17", "name": "dev_environment", "des": "网络及环境初始化、解耦等优化",
+            "des_detail": "①打包测试的需求信息提供的设计、开发、自动化，方便查看当前包是否含有某个功能;②自动化打包各种特殊情况下需求信息的准确性的处理;③最近历史线上版记录的信息添加，方便比较当前包与线上包的功能区别;④打包信息在企业微信、蒲公英更新说明、app检查更新上的通知支持更长及多行的处理;"
+        },
+        {"create_time": "10.17", "name": "dev_script", "des": "打包自动化提取功能需求信息"},
         {
-            "name": "dev_1.0.0_fix",
-            "create_time": "04.06",
-            "des": "一堆优化"
+            "name": "dev_fix",
+            "des": "线上版问题修复或优化",
+            "create_time": "03.01"
+        },
+        {
+            "name": "dev_hundred_wishes_new",
+            "create_time": "03.01",
+            "des": "线上+百愿清单"
         }
     ],
-    "history_record_time": "04.07",
-    "history_versions": [
-        
-        {
-            "version": "1.06.05",
-            "online_time": "06.05",
-            "des": "一堆优化"
-        }
-    ]
+    "historyVersionJsonFile": "unkonw historyVersionJsonFile path"
 }

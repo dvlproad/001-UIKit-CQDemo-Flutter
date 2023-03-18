@@ -1,0 +1,36 @@
+{
+    "history_record_time": "10.19",
+    "history_versions": [
+        {
+            "version": "1.10.19",
+            "online_time": "10.19",
+            "online_brances": [
+                {"create_time": "10.17", "name": "dev_lzh_wish_goods", "des": "愿望单详情使用新接口"},
+                {"create_time": "10.16", "name": "dev_lzh_im_order", "des": "im发送订单"},
+                {"create_time": "10.16", "name": "dev_splash", "des": "开屏页样式修改"},
+                {"create_time": "10.16", "name": "dev_fix", "des": "线上版问题修复或优化"}
+            ]
+        },
+        {
+            "version": "1.10.17",
+            "online_time": "10.17",
+            "online_brances": [
+                {"create_time": "10.15", "name": "dev_route", "des": "app的第一次安装可以打开指定路由"},
+                {"create_time": "10.15", "name": "dev_logistics", "des": "订单显示多物流"},
+                {"create_time": "10.10", "name": "dev_mine_ui", "des": "「我的」改版，基于个人主页调整"},
+                {"create_time": "10.15", "name": "dev_nearyby", "des": "同城无数据切换到有数据时候的滑动问题修复"},
+                {"create_time": "10.15", "name": "dev_search_location", "des": "愿望单筛选每次启动默认当前城市的全部区"}
+            ]
+        },
+        {
+            "version": "1.07.12",
+            "online_time": "07.12",
+            "des": "1.订单详情改版；2.商品详情优化"
+        },
+        {
+            "version": "1.07.08",
+            "online_time": "07.08",
+            "des": "一堆优化:1.订单流水开发上线；2.IM私聊新增打赏功能上线；3.详情里打赏后，新增可直接发信息到IM上线；4.消息页新增打赏消息上线；5.大搜索功能改版上线；6.商城改版上线；7店铺改版上线；"
+        }
+    ]
+}

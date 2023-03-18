@@ -11,6 +11,7 @@ import '../branch_package_info/branch_package_info.dart';
 enum UpdateAppType {
   develop1, // 开发环境1
   develop2, // 开发环境2
+  test1, // 测试环境1
   preproduct, // 预生产环境
   product, // 正式环境
 }
@@ -19,6 +20,7 @@ class VersionBaseBean {
   bool forceUpdate;
   String version;
   String buildNumber;
+  bool? buildHaveNewVersion;
   String updateLog;
   String downloadUrl;
 
@@ -26,6 +28,7 @@ class VersionBaseBean {
     this.forceUpdate = false, // 是否强制升级
     required this.version, // 版本号, 默认为1.0
     this.buildNumber = '1', // 上传包的版本编号，默认为1 (即编译的版本号)
+    this.buildHaveNewVersion, // Boolean	是否有新版本(默认null，true/false直接显示/不显示弹窗不管版本是不是低了，null时候才根据版本判断)
     required this.updateLog,
     required this.downloadUrl,
   });

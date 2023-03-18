@@ -42,6 +42,8 @@ dependencies:
     path: ../flutter_updateversion_kit/
   pgyer_updateversion_kit:
     path: ../pgyer_updateversion_kit/
+  app_updateversion_kit:
+    path: ../app_updateversion_kit/
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

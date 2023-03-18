@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -8,45 +8,39 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 // common
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
-// pgyer
-import 'package:pgyer_updateversion_kit/pgyer_updateversion_kit.dart';
+// inner 内测功能
 
-// system
-import 'package:app_network/app_network.dart' show ResponseModel;
+// formal 正式的外测功能
+import 'package:flutter_network/src/mock/local_mock_util.dart';
+import 'package:app_network/app_network.dart' show ResponseModel, AppNetworkKit;
 import './system/check_version_system_util.dart';
 import './system/version_system_bean.dart';
+
+// import 'package:app_global_config/app_global_config.dart';
+import 'package:app_log/app_log.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class CheckVersionUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
   static late GlobalKey<State<StatefulWidget>> _navigatorKey;
-
-  static bool isUsePygerVersion = false; // 是否使用蒲公英上的版本
-
-  static void initPyger(
-    UpdateAppType pgyerAppType,
-    GlobalKey<State<StatefulWidget>> globalKey,
-  ) {
-    isUsePygerVersion = true;
-    PygerUtil.init(
-      pgyerAppType: pgyerAppType,
-    );
-    _navigatorKey = globalKey;
-
-    if (_navigatorKey == null) {
-      throw Exception('Warning:请先设置CheckVersionUtil.initPyger');
-    }
-  }
-
-  static void initSytem(GlobalKey<State<StatefulWidget>> globalKey) {
-    isUsePygerVersion = false;
+  static bool _useOtherVersionApi = false; // 是否使用其他版本检查接口(蒲公英)
+  static void initVersion(
+    GlobalKey<State<StatefulWidget>> globalKey, {
+    bool useOtherVersionApi = false,
+  }) {
+    _useOtherVersionApi = useOtherVersionApi;
     _navigatorKey = globalKey;
     if (_navigatorKey == null) {
-      throw Exception('Warning:请先设置CheckVersionUtil.initSytem');
+      throw Exception('Warning:请先设置CheckVersionUtil.initVersion');
     }
   }
 
   static Future checkVersion({
     bool isManualCheck = false, // 是否是手动检查，手动检查即使点击取消，也应该弹窗
+    String? Function(String realServiceVersion)?
+        changeServiceVersionBlock, // 改变后台返回的版本号，用于模拟在此版本后，发了一个新版本时候的检查更新弹窗是否可用的功能
+    String? Function(String realServiceBuildNumber)?
+        changeServiceBuildNumberBlock, // 改变后台返回的版本号，用于模拟在此版本后，发了一个新版本时候的检查更新弹窗是否可用的功能
   }) async {
     if (_navigatorKey.currentContext == null) {
       throw Exception('Warning:navigatorKey!.currentContext不能为空');
@@ -55,8 +49,21 @@ class CheckVersionUtil {
     BuildContext context = _navigatorKey.currentContext!;
 
     late ResponseModel responseModel;
-    if (isUsePygerVersion == true) {
-      responseModel = await PygerUtil.getVersion();
+    if (_useOtherVersionApi == true) {
+      responseModel = ResponseModel(
+        statusCode: -100,
+        message: '请补充其他版本控制的接口',
+      );
+      AppLogUtil.logMessage(
+        logType: LogObjectType.api_app,
+        logLevel: LogLevel.warning,
+        shortMap: {
+          "message": '版本检查代码出错了，请补充其他版本控制的接口',
+        },
+        detailMap: {
+          "message": '版本检查代码出错了，请补充其他版本控制的接口',
+        },
+      );
     } else {
       responseModel = await CheckVersionSystemUtil.getVersion();
     }
@@ -70,6 +77,19 @@ class CheckVersionUtil {
       return;
     }
     VersionBaseBean bean = responseModel.result;
+    if (changeServiceVersionBlock != null) {
+      String? newServiceVersion = changeServiceVersionBlock(bean.version);
+      if (newServiceVersion != null && newServiceVersion.isNotEmpty) {
+        bean.version = newServiceVersion;
+      }
+    }
+    if (changeServiceBuildNumberBlock != null) {
+      String? newServiceBuildNumber =
+          changeServiceBuildNumberBlock(bean.buildNumber);
+      if (newServiceBuildNumber != null && newServiceBuildNumber.isNotEmpty) {
+        bean.buildNumber = newServiceBuildNumber;
+      }
+    }
 
     bool _shouldShow = await shouldShow(bean, isManualCheck);
     if (_shouldShow != true) {
@@ -83,6 +103,7 @@ class CheckVersionUtil {
     String? updateLog = await bean.updateContent;
     String downloadUrl = bean.downloadUrl;
     bool forceUpdate = bean.forceUpdate;
+
     CheckVersionCommonUtil.showUpdateView(
       context: context,
       forceUpdate: forceUpdate,
@@ -90,12 +111,19 @@ class CheckVersionUtil {
       buildNumber: buildNumber,
       updateLog: updateLog,
       downloadUrl: downloadUrl,
-      skipUpdateBlock: () {
-        if (isManualCheck == true) {
-          // 手动检查，点击取消，不会影响下次是否展示
-          return;
+      notNowBlock: () async {
+        final deviceInfo = DeviceInfoPlugin();
+        final params = Map<String, String>();
+        if (Platform.isIOS) {
+          IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+          params["deviceId"] = iosInfo.identifierForVendor ?? '';
+        } else {
+          AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+          params["deviceId"] = androidInfo.id ?? '';
         }
-        cancelShowVersion(bean);
+        params["buildNo"] = buildNumber;
+        params["versionNo"] = bean.version;
+        AppNetworkKit.post("/config/check-version/close", params: params);
       },
     );
   }
@@ -114,6 +142,7 @@ class CheckVersionUtil {
       bean.version,
       bean.buildNumber,
       isManualCheck,
+      buildHaveNewVersion: bean.buildHaveNewVersion,
       isServiceNeedForceUpdate: bean.forceUpdate,
     );
 
@@ -135,10 +164,10 @@ class CheckVersionUtil {
 
   // 之前对升级弹窗点击取消，后续不再弹出的那些版本号
   static void cancelShowVersion<T extends VersionBaseBean>(T bean) async {
-    if (isUsePygerVersion == true) {
+    if (_useOtherVersionApi == true) {
       CheckVersionSystemUtil.cancelShowVersion(bean);
     } else {
-      PygerUtil.cancelShowVersion(bean);
+      debugPrint("警告⚠️：'Error:请补充内测功能3'");
     }
   }
 }

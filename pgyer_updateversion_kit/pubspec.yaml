@@ -11,6 +11,9 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_updateversion_kit:
+    path: ../flutter_updateversion_kit/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

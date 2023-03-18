@@ -2,17 +2,17 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 16:39:00
+ * @LastEditTime: 2023-03-19 02:09:14
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
+
+import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 import 'pgyer_action_routes.dart';
 
 class TSPgyerHomePage extends CJTSBasePage {
-  final String? title;
-
-  TSPgyerHomePage({Key? key, this.title}) : super(key: key);
+  TSPgyerHomePage({Key? key}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();
@@ -32,7 +32,7 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSPgyerHomePage> {
   @override
   PreferredSizeWidget appBar() {
     return AppBar(
-      title: Text(widget.title ?? 'Overlay Action 首页'),
+      title: Text('Pagyer 首页'),
     );
   }
 
@@ -43,10 +43,10 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSPgyerHomePage> {
         'theme': "Version Check",
         'values': [
           {
-            'title': "Overlay.of(context).insert(overlayEntry1);",
-            'content': 'Overlay的弹出',
+            'title': "蒲公英上的版本检查",
+            'content': '版本检查',
             'actionBlock': () {
-              // OverlayActionUtil.show(context);
+              _manualCheckVersion();
             },
           },
         ]
@@ -63,5 +63,19 @@ class _CQModulesHomePageState extends CJTSBasePageState<TSPgyerHomePage> {
         ),
       ],
     );
+  }
+
+  _manualCheckVersion() {
+    // LoadingUtil.showInContext(context);
+    // Future.delayed(Duration(milliseconds: 3000)).then((value) {
+    //   LoadingUtil.dismissInContext(context);
+    // });
+    CheckVersionUtil.checkVersion(
+      isManualCheck: true,
+    ).then((value) {
+      // LoadingUtil.dismissInContext(context);
+    }).catchError((onError) {
+      // LoadingUtil.dismissInContext(context);
+    });
   }
 }
