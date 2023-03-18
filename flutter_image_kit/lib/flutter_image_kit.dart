@@ -8,6 +8,7 @@
 library flutter_image_kit;
 
 // image
+export 'package:cached_network_image/src/image_provider/cached_network_image_provider.dart';
 export './src/data_vientiane.dart';
 export './src/image.dart';
 export './src/fade_image.dart';

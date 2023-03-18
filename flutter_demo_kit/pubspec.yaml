@@ -12,8 +12,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_section_table_view: ^1.0.5
+  # flutter_section_table_view:
+  #   path: ../flutter_section_table_view/
   fluttertoast: any
+  crypto: any
 
 dev_dependencies:
   flutter_test:

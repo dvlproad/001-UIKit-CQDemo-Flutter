@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_section_table_view/flutter_section_table_view.dart';
+import 'flutter_section_table_view.dart';
 import 'CJTSTableViewCell.dart';
 import 'CJTSTableViewHeader.dart';
 
@@ -66,7 +66,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
       ),
       //SectionTableController
       sectionHeaderHeight: (section) => 25.0,
-      dividerHeight: () => 1.0,
+      dividerHeightBlock: () => 1.0,
       cellHeightAtIndexPath: (section, row) => 44.0,
     );
   }
