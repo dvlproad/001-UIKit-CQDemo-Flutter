@@ -20,14 +20,14 @@ class ColorHelper {
 // Regular 的文本样式
 class RegularTextStyle extends TextStyle {
   final double fontSize;
-  final Color color;
-  final double height;
-  final TextOverflow overflow;
-  final TextDecoration decoration;
-  final double letterSpacing;
+  final Color? color;
+  final double? height;
+  final TextOverflow? overflow;
+  final TextDecoration? decoration;
+  final double? letterSpacing;
 
   RegularTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     this.color,
     this.height,
     this.overflow,
@@ -51,16 +51,16 @@ class RegularTextStyle extends TextStyle {
 // bold 的文本样式
 class BoldTextStyle extends TextStyle {
   final double fontSize;
-  final Color color;
-  final double height;
-  final TextOverflow overflow;
-  final TextDecoration decoration;
-  final double letterSpacing;
-  final Color decorationColor;
-  final TextBaseline textBaseline;
+  final Color? color;
+  final double? height;
+  final TextOverflow? overflow;
+  final TextDecoration? decoration;
+  final double? letterSpacing;
+  final Color? decorationColor;
+  final TextBaseline? textBaseline;
 
   BoldTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     this.color,
     this.height,
     this.overflow,
@@ -87,16 +87,16 @@ class BoldTextStyle extends TextStyle {
 // medium 的文本样式
 class MediumTextStyle extends TextStyle {
   final double fontSize;
-  final Color color;
-  final double height;
-  final TextOverflow overflow;
-  final TextDecoration decoration;
-  final double letterSpacing;
-  final Color decorationColor;
-  final TextBaseline textBaseline;
+  final Color? color;
+  final double? height;
+  final TextOverflow? overflow;
+  final TextDecoration? decoration;
+  final double? letterSpacing;
+  final Color? decorationColor;
+  final TextBaseline? textBaseline;
 
   MediumTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     this.color,
     this.height,
     this.overflow,
@@ -123,16 +123,16 @@ class MediumTextStyle extends TextStyle {
 // DDINPRO字体
 class DDINPROBoldTextStyle extends TextStyle {
   final double fontSize;
-  final Color color;
-  final double height;
-  final TextOverflow overflow;
-  final TextDecoration decoration;
-  final double letterSpacing;
-  final Color decorationColor;
-  final TextBaseline textBaseline;
+  final Color? color;
+  final double? height;
+  final TextOverflow? overflow;
+  final TextDecoration? decoration;
+  final double? letterSpacing;
+  final Color? decorationColor;
+  final TextBaseline? textBaseline;
 
   DDINPROBoldTextStyle({
-    @required this.fontSize,
+    required this.fontSize,
     this.color,
     this.height,
     this.overflow,
