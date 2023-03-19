@@ -6,17 +6,6 @@ import 'package:app_global_config/app_global_config.dart';
 import '../flutter_share_kit_adapt.dart';
 
 class ShareUtil {
-  // shareToWechat({
-  //   String webUrl,
-  //   Map<String, dynamic> params,
-  // }) {
-  //   webUrl ??= 'http://dev.h5.xxx.com/#/pages-h5/share/share';
-
-  //   if (!webUrl.contains("?")) {
-  //     webUrl += "?";
-  //   }
-  // }
-
   /// 分享愿望单详情
   static shareWishDetail({
     @required String wishID,
@@ -24,6 +13,8 @@ class ShareUtil {
     String wishDescription,
     String wishImageUrl,
     @required String buyerId,
+    WeChatScene scene,
+    String sharerId,
   }) async {
     var isInstalled = await isWeChatInstalled;
     if (!isInstalled) {
@@ -35,6 +26,7 @@ class ShareUtil {
     String webPage = GlobalConfig.wishDetailFullShareUrl(
       wishID: wishID,
       buyerId: buyerId,
+      sharerId: sharerId,
     );
     var model = WeChatShareWebPageModel(
       webPage,
@@ -42,7 +34,7 @@ class ShareUtil {
       description: _lastText(wishDescription, config.shareDescription),
       thumbnail: WeChatImage.network(
           _lastText(wishImageUrl, config.shareThumbnailUrl)),
-      scene: WeChatScene.SESSION,
+      scene: scene ?? WeChatScene.SESSION,
     );
     shareToWeChat(model);
   }
@@ -61,6 +53,7 @@ class ShareUtil {
     @required String goodsID,
     @required String goodsName,
     @required String goodsThumbnailUrl,
+    WeChatScene scene,
   }) async {
     var isInstalled = await isWeChatInstalled;
     if (!isInstalled) {
@@ -85,7 +78,79 @@ class ShareUtil {
       title: goodsName,
       description: shareDescription,
       thumbnail: WeChatImage.network(goodsThumbnailUrl),
-      scene: WeChatScene.SESSION,
+      scene: scene ?? WeChatScene.SESSION,
+    );
+    shareToWeChat(model);
+  }
+
+  /// 分享个人中心
+  static shareUserInfo({
+    @required String accountId,
+    @required String nickname,
+    @required String avatar,
+    WeChatScene scene,
+  }) async {
+    var isInstalled = await isWeChatInstalled;
+    if (!isInstalled) {
+      ToastUtil.showMessage("未安装微信");
+      return;
+    }
+
+    ShareConfig config = GlobalConfig.userInfoShareConfig;
+
+    String webPage = GlobalConfig.userInfoFullShareUrl(
+      h5BgImageUrl: config.h5BgImageUrl,
+      h5Title: nickname,
+      accountId: accountId,
+    );
+    // print('webPage = $webPage');
+
+    String shareDescription = "快来愿望屋和我一起玩！";
+    if (config.shareDescription != null && config.shareDescription.isNotEmpty) {
+      shareDescription = config.shareDescription;
+    }
+    var model = WeChatShareWebPageModel(
+      webPage,
+      title: '@$nickname 这个账号很棒，推荐给你',
+      description: shareDescription,
+      thumbnail: WeChatImage.network(avatar),
+      scene: scene ?? WeChatScene.SESSION,
+    );
+    shareToWeChat(model);
+  }
+
+  /// 分享店铺
+  static shareShop({
+    @required String shopId,
+    @required String shopName,
+    @required String icon,
+    WeChatScene scene,
+  }) async {
+    var isInstalled = await isWeChatInstalled;
+    if (!isInstalled) {
+      ToastUtil.showMessage("未安装微信");
+      return;
+    }
+
+    ShareConfig config = GlobalConfig.shopShareConfig;
+
+    String webPage = GlobalConfig.shopShareUrl(
+      h5BgImageUrl: config.h5BgImageUrl,
+      h5Title: shopName,
+      shopId: shopId,
+    );
+    // print('webPage = $webPage');
+
+    String shareDescription = "愿望屋的这个店铺不错，推荐给你";
+    if (config.shareDescription != null && config.shareDescription.isNotEmpty) {
+      shareDescription = config.shareDescription;
+    }
+    var model = WeChatShareWebPageModel(
+      webPage,
+      title: shopName,
+      description: shareDescription,
+      thumbnail: WeChatImage.network(icon),
+      scene: scene ?? WeChatScene.SESSION,
     );
     shareToWeChat(model);
   }
@@ -141,6 +206,28 @@ class ShareUtil {
     shareToWeChat(model);
   }
 
+  /// 分享待支付的订单(使用于:众筹购买的业务)
+  static crowdToPayOrder({@required String bizId, String imgUrl}) async {
+    var isInstalled = await isWeChatInstalled;
+    if (!isInstalled) {
+      ToastUtil.showMessage("未安装微信");
+      return;
+    }
+    imgUrl = imgUrl.replaceAll('http:', 'https:');
+    ShareConfig config = GlobalConfig.crowdPayOrderShareConfig;
+    String webPage = GlobalConfig.crowdToPayOrderFullShareUrl(
+      bizId: bizId ?? "",
+    );
+    var model = WeChatShareWebPageModel(
+      webPage,
+      title: '一起给TA送上好礼',
+      description: '距离实现又近了一步',
+      thumbnail: WeChatImage.network(imgUrl),
+      scene: WeChatScene.SESSION,
+    );
+    shareToWeChat(model);
+  }
+
   /// 分享邀请好礼(使用于:邀请好礼)
   static shareInvite({
     @required String name,
@@ -166,6 +253,53 @@ class ShareUtil {
       title: title,
       description: config.shareDescription,
       thumbnail: WeChatImage.network(config.shareThumbnailUrl),
+      scene: WeChatScene.SESSION,
+    );
+    shareToWeChat(model);
+  }
+
+  ///豆了个豆邀请好友分享(使用于：豆了个豆游戏邀请分享)
+  static shareBeanFullGameInvite({
+    @required String accountId,
+  }) async {
+    var isInstalled = await isWeChatInstalled;
+    if (!isInstalled) {
+      ToastUtil.showMessage("未安装微信");
+      return;
+    }
+
+    ShareConfig config = GlobalConfig.beanFullGameInviteShareConfig;
+
+    String webPage = GlobalConfig.beanFullGameInviteShareUrl(
+      accountId: accountId ?? "",
+    );
+    var model = WeChatShareWebPageModel(
+      webPage,
+      title: config.shareTitle,
+      description: config.shareDescription,
+      thumbnail: WeChatImage.network(config.shareThumbnailUrl),
+      scene: WeChatScene.SESSION,
+    );
+    shareToWeChat(model);
+  }
+
+  static shareWebPageUrl({
+    @required String webPage,
+    String shareTitle = "",
+    String shareDescription,
+    String shareThumbnailUrl,
+  }) async {
+    var isInstalled = await isWeChatInstalled;
+    if (!isInstalled) {
+      ToastUtil.showMessage("未安装微信");
+      return;
+    }
+
+    var model = WeChatShareWebPageModel(
+      webPage,
+      title: shareTitle,
+      description: shareDescription,
+      thumbnail: WeChatImage.network(shareThumbnailUrl ?? ''),
       scene: WeChatScene.SESSION,
     );
     shareToWeChat(model);
