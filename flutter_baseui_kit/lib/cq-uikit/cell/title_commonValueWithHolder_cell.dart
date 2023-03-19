@@ -1,6 +1,5 @@
 // 包含标题文本title，值文本textValue(文本前可设置是否添加点来突出)、箭头类型固定为向右 的视图
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
 export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
@@ -8,8 +7,8 @@ export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
 
 class ImageTitleCommonValueWithHolderTableViewCell
     extends BJHTitleCommonValueTableViewCell {
-  String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
-  TextStyle? valuePlaceHodlerTextStyle; // 值文本的style(默认字体大小16)
+  final String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
+  final TextStyle? valuePlaceHodlerTextStyle; // 值文本的style(默认字体大小16)
 
   ImageTitleCommonValueWithHolderTableViewCell({
     Key? key,
@@ -33,9 +32,8 @@ class ImageTitleCommonValueWithHolderTableViewCell
     // 右侧-值视图
     required Widget? Function(BuildContext context, {required bool canExpanded})
         valueWidgetBuilder, // 值视图（此值为空时候，视图会自动隐藏）
-    String?
-        valuePlaceHodler, // 值文本占位符(默认null，不显示)，且此值必须当 valueWidgetBuilder 为null才显示
-    TextStyle? valuePlaceHodlerTextStyle, // 值文本的style(默认字体大小16)
+    this.valuePlaceHodler, // 值文本占位符(默认null，不显示)，且此值必须当 valueWidgetBuilder 为null才显示
+    this.valuePlaceHodlerTextStyle, // 值文本的style(默认字体大小16)
     // 右侧-箭头
     TableViewCellArrowImageType? arrowImageType, // 箭头类型(默认none)
 
@@ -85,8 +83,9 @@ class ImageTitleCommonValueWithHolderTableViewCell
         );
 }
 
+// ignore: must_be_immutable
 class HolderTableViewCellHolderWidget extends StatelessWidget {
-  String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
+  final String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
   TextStyle? valuePlaceHodlerTextStyle;
 
   HolderTableViewCellHolderWidget({
@@ -98,7 +97,6 @@ class HolderTableViewCellHolderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String showText;
-    Color showTextColor = Color(0xff999999);
 
     if (valuePlaceHodler != null) {
       showText = valuePlaceHodler!;

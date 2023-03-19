@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 15:12:50
+ * @LastEditTime: 2023-03-19 19:16:41
  * @Description: 包含标题文本title，值图片imageValue、箭头类型固定为向右 的视图
  */
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class BJHTitleImageValueCell extends StatelessWidget {
   final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
   final String title; // 标题
   final String? imageValue; // 值图片（此值为空时候，视图会自动隐藏）
-  void Function()? onTap; // 点击事件
+  final void Function()? onTap; // 点击事件
 
   BJHTitleImageValueCell({
     Key? key,

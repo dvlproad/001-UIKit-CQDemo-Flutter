@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 14:14:04
+ * @LastEditTime: 2023-03-19 18:31:49
  * @Description: 宽高等适配
  */
 import 'dart:ui';
@@ -84,7 +84,10 @@ class AdaptCJHelper {
 }
 
 extension CJSizeExtension on num {
+  // ignore: non_constant_identifier_names
   double get w_pt_cj => AdaptCJHelper.setWidth(this);
+  // ignore: non_constant_identifier_names
   double get h_pt_cj => AdaptCJHelper.setWidth(this);
+  // ignore: non_constant_identifier_names
   double get f_pt_cj => AdaptCJHelper.setSp(this);
 }

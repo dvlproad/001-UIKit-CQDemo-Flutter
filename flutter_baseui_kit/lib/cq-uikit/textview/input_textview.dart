@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 typedef TextChangeCallback = void Function(String text);
 
@@ -61,9 +59,7 @@ class _CQInputTextViewState extends State<CQInputTextView> {
     _inputTextViewController.addListener(() {
       _updateCountTextWidget();
 
-      if (null != widget.textChangeCallback) {
-        widget.textChangeCallback(_inputTextViewController.text);
-      }
+      widget.textChangeCallback(_inputTextViewController.text);
     });
   }
 

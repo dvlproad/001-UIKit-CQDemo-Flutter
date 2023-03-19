@@ -4,13 +4,13 @@ import './button_child_widget.dart';
 import './buttontheme.dart';
 
 class RowPaddingButton extends StatelessWidget {
-  double? leftRightPadding;
-  double? height;
-  double? cornerRadius;
-  ThemeBGType bgColorType;
-  String title;
-  TextStyle? titleStyle;
-  void Function() onPressed;
+  final double? leftRightPadding;
+  final double? height;
+  final double? cornerRadius;
+  final ThemeBGType bgColorType;
+  final String title;
+  final TextStyle? titleStyle;
+  final void Function() onPressed;
 
   RowPaddingButton({
     Key? key,
@@ -67,8 +67,7 @@ class ThemeBGButton extends CJStateTextButton {
     double? cornerRadius,
     bool enable = true,
     VoidCallback? onPressed, // null时候会自动透传事件
-  })  : assert(title != null),
-        assert(bgColorType != null || bgColor != null),
+  })  : assert(bgColorType != null || bgColor != null),
         assert(bgColorType != null || textColor != null),
         super(
           key: key,
@@ -113,9 +112,7 @@ class ThemeBorderButton extends CJStateTextButton {
     double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
-  })  : assert(title != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,

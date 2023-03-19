@@ -10,8 +10,11 @@ enum TableViewCellArrowImageType {
   arrowTopBottom, // 上下箭头
 }
 
+// ignore: non_constant_identifier_names
 double fontSize_cellLeft_default = 13.f_pt_cj;
+// ignore: non_constant_identifier_names
 double fontSize_cellRight_default = 13.f_pt_cj;
+// ignore: non_constant_identifier_names
 double fontSize_cellRight_textIconSpacing = 5.f_pt_cj; // cell右侧视图中文案与箭头等icon的间距
 
 class BJHTitleCommonValueTableViewCell extends StatelessWidget {
@@ -134,8 +137,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
     // 添加valueWidget到rowWidgets中
 
-    if (null != this.valueWidgetBuilder &&
-        this.valueWidgetBuilder(context, canExpanded: canExpanded) != null) {
+    if (this.valueWidgetBuilder(context, canExpanded: canExpanded) != null) {
       Widget valueWidget =
           this.valueWidgetBuilder(context, canExpanded: canExpanded)!;
       rightRowWidgets.add(SizedBox(width: fontSize_cellRight_textIconSpacing));

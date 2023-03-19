@@ -98,7 +98,7 @@ class CJStateButton extends StatelessWidget {
 
       _currentBorderWidth = normalBorderWidth;
     }
-
+    /*
     BorderSide borderSide = BorderSide(
       width: _currentBorderWidth,
       color: _currentBorderWidth == 0
@@ -112,6 +112,7 @@ class CJStateButton extends StatelessWidget {
     );
 
     OutlinedBorder shapeBorder2 = StadiumBorder();
+    */
     //* // 使用新版 TextButton
     //[Flutter TextButton 详细使用配置、Flutter ButtonStyle概述实践](https://zhuanlan.zhihu.com/p/278330232)
 

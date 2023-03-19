@@ -2,13 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-17 17:22:25
+ * @LastEditTime: 2023-03-19 19:00:59
  * @Description: button 中 childWidget 的创建
  */
 import 'package:flutter/material.dart';
-
-import '../../flutter_baseui_kit_adapt.dart';
-import './imagebutton.dart';
 
 enum ButtonImagePosition {
   none, // 无图片
@@ -61,6 +58,7 @@ class ButtonChildWidget extends StatelessWidget {
   }
 
   // 为什么 Button 里 不要再设置颜色。猜测是由于[DefaultTextStyle](https://blog.csdn.net/jungle_pig/article/details/94383759)
+  // ignore: non_constant_identifier_names
   Widget get _childWidget_onlyText {
     return Center(
       child: Text(
@@ -78,6 +76,7 @@ class ButtonChildWidget extends StatelessWidget {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget get _childWidget_textAndImage {
     if (this.imagePosition == ButtonImagePosition.left) {
       return Center(
@@ -106,39 +105,9 @@ class ButtonChildWidget extends StatelessWidget {
     } else {
       // if (this.imagePosition == ButtonImagePosition.none)
       return Container(
-        constraints: width != null ? BoxConstraints(
-            maxWidth: width!
-        ) : null,
+        constraints: width != null ? BoxConstraints(maxWidth: width!) : null,
         child: _childWidget_onlyText,
       );
     }
-  }
-
-  Widget get _testWidget {
-    String _currentTitle = '临时标题';
-    return Column(
-      children: [
-        Text(
-          _currentTitle,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          style: this.titleStyle ??
-              TextStyle(
-                // color: _currentTextColor,
-                fontSize: 18.0,
-              ),
-        ),
-        Text(
-          _currentTitle,
-          textAlign: TextAlign.left,
-          overflow: TextOverflow.ellipsis,
-          style: this.titleStyle ??
-              TextStyle(
-                // color: _currentTextColor,
-                fontSize: 18.0,
-              ),
-        ),
-      ],
-    );
   }
 }

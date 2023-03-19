@@ -1,6 +1,5 @@
 // 包含标题文本title，值文本textValue(文本前可设置是否添加点来突出)、箭头类型固定为向右 的视图
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
 export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
@@ -30,8 +29,8 @@ class ImageTitleTextValueCell extends StatelessWidget {
   final String? textValue; // 值文本（此值为空时候，视图会自动隐藏）
   final int? textValueMaxLines; // 值文本的最大行数(为null时候，默认1)
   final double? textValueFontSize; // 值文本的字体大小(默认30)
-  bool textThemeIsRed; // 值文本是否是红色主题(不设置即默认灰色)
-  bool addDotForValue; // 是否在value前添加·点(不设置即默认不添加，如果添加则点的颜色和文本颜色一直)
+  final bool textThemeIsRed; // 值文本是否是红色主题(不设置即默认灰色)
+  final bool addDotForValue; // 是否在value前添加·点(不设置即默认不添加，如果添加则点的颜色和文本颜色一直)
   final String? textSubValue; // 值文本的副文本（此值为空时候，视图会自动隐藏）
   final int? textSubValueMaxLines; // 值文本的副文本的最大行数(为null时候，默认1)
   // 右侧-值文本占位符

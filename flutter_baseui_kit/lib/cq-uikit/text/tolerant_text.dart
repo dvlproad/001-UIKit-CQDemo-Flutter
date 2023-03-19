@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import './skeleton.dart.dart';
+import './skeleton.dart';
 
 class LazyText extends StatelessWidget {
-  String? data;
-  TextStyle? style;
-  int? maxLines;
-  TextAlign? textAlign;
-  TextOverflow? overflow;
-  double? lazyWidth;
-  double? lazyHeight;
+  final String? data;
+  final TextStyle? style;
+  final int? maxLines;
+  final TextAlign textAlign;
+  final TextOverflow? overflow;
+  final double lazyWidth;
+  final double lazyHeight;
 
   LazyText(
     this.data, {
@@ -28,8 +28,8 @@ class LazyText extends StatelessWidget {
       backgroundColor = const Color(0xFFF0F0F0);
 
       return Skeleton(
-        width: lazyWidth ?? 10,
-        height: lazyHeight ?? 10,
+        width: lazyWidth,
+        height: lazyHeight,
         cornerRadius: 4,
       );
       /*
@@ -60,19 +60,19 @@ class LazyText extends StatelessWidget {
 }
 
 class TolerantText extends StatelessWidget {
-  double? height;
-  String? data;
-  TextStyle? style;
-  int? maxLines;
-  TextAlign? textAlign;
-  TextOverflow? overflow;
+  final double? height;
+  final String? data;
+  final TextStyle? style;
+  final int? maxLines;
+  final TextAlign textAlign;
+  final TextOverflow? overflow;
   // Color backgroundColor; // 文本框背景色(请在 style 中设置)
 
   TolerantText(
     this.data, {
     Key? key,
     this.height,
-    this.textAlign,
+    this.textAlign = TextAlign.left,
     this.style,
     this.maxLines,
     this.overflow,
@@ -80,10 +80,6 @@ class TolerantText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (textAlign == null) {
-      textAlign = TextAlign.left;
-    }
-
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center;
     if (textAlign == TextAlign.left) {
       crossAxisAlignment = CrossAxisAlignment.start;

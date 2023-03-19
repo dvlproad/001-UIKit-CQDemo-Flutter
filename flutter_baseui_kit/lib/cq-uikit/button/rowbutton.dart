@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 14:18:47
+ * @LastEditTime: 2023-03-19 18:39:09
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -21,13 +21,11 @@ class ThemeBGButton extends CJStateTextButton {
     required String title,
     TextStyle? titleStyle,
     Image? imageWidget, // 图片
-    double? imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
-    double? cornerRadius = 5.0,
+    double imageTitleGap = 5.0, // 图片和文字之间的距离(imageWidget存在的时候才有效)
+    double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
-  })  : assert(title != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,
@@ -63,13 +61,11 @@ class ThemeBorderButton extends CJStateTextButton {
     required String title,
     TextStyle? titleStyle,
     Image? imageWidget, // 图片
-    double? imageTitleGap, // 图片和文字之间的距离(imageWidget存在的时候才有效)
+    double imageTitleGap = 5.0, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
-  })  : assert(title != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,

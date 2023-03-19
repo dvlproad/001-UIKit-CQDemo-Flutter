@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 // import 'dart:ui';
 
@@ -252,9 +254,7 @@ class ButtonRegularTextStyle extends TextStyle {
     required this.fontSize,
     // this.color,
     this.height,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  }) : super(
           fontFamily: 'PingFang SC',
           fontSize: fontSize,
           fontWeight: FontWeight.w400,
@@ -271,9 +271,7 @@ class ButtonBoldTextStyle extends TextStyle {
   ButtonBoldTextStyle({
     required this.fontSize,
     // this.color,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  }) : super(
           fontFamily: 'PingFang SC',
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
@@ -289,9 +287,7 @@ class ButtonMediumTextStyle extends TextStyle {
   ButtonMediumTextStyle({
     required this.fontSize,
     // this.color,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  }) : super(
           fontFamily: 'PingFang SC',
           fontSize: fontSize,
           fontWeight: FontWeight.w500,

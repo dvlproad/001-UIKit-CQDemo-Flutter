@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-24 23:54:10
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-17 17:34:14
+ * @LastEditTime: 2023-03-19 19:11:19
  * @Description: 以主题色为背景或边框的按钮(selected 属性的值会影响 ui 样式, 即可通过 selected 属性来自动变更样式)
  */
 import 'package:flutter/material.dart';
@@ -27,43 +27,38 @@ class ThemeStateButton extends CJReverseThemeStateTextButton {
     bool enable = true,
     bool selected = false,
     required void Function() onPressed,
-  })
-      : assert(normalTitle != null),
-        assert(onPressed != null),
-        super(
-        key: key,
-        width: width,
-        height: height,
-        childBuider: (bSelected) {
-          String _currentTitle = normalTitle;
-          if (selected) {
-            _currentTitle = selectedTitle ?? normalTitle;
-          }
+  }) : super(
+          key: key,
+          width: width,
+          height: height,
+          childBuider: (bSelected) {
+            String _currentTitle = normalTitle;
+            if (selected) {
+              _currentTitle = selectedTitle ?? normalTitle;
+            }
 
-          return ButtonChildWidget(
-            title: _currentTitle,
-            titleStyle: titleStyle,
-            imagePosition: imagePosition,
-            imageWidget: imageWidget,
-            imageTitleGap: imageTitleGap,
-          );
-        },
-        enable: enable,
-        selected: selected,
-        onPressed: () {
-          if (onPressed != null) {
+            return ButtonChildWidget(
+              title: _currentTitle,
+              titleStyle: titleStyle,
+              imagePosition: imagePosition,
+              imageWidget: imageWidget,
+              imageTitleGap: imageTitleGap,
+            );
+          },
+          enable: enable,
+          selected: selected,
+          onPressed: () {
             onPressed();
-          }
-        },
-        cornerRadius: cornerRadius,
-        themeColor: stateThemeColor(normalBGColorType),
-        themeOppositeColor: stateThemeOppositeColor(normalBGColorType),
-        normalBorderWidth: 0.0,
-        selectedBorderWidth: 1.0,
-        // normalBackgroundHighlightColor: Colors.yellow,
-        // selectedBackgroundHighlightColor: Colors.pink,
-        highlightOpacity: needHighlight ? 0.7 : 1.0,
-      );
+          },
+          cornerRadius: cornerRadius,
+          themeColor: stateThemeColor(normalBGColorType),
+          themeOppositeColor: stateThemeOppositeColor(normalBGColorType),
+          normalBorderWidth: 0.0,
+          selectedBorderWidth: 1.0,
+          // normalBackgroundHighlightColor: Colors.yellow,
+          // selectedBackgroundHighlightColor: Colors.pink,
+          highlightOpacity: needHighlight ? 0.7 : 1.0,
+        );
 }
 
 class RichThemeStateButton extends CJStateTextButton {
@@ -85,63 +80,62 @@ class RichThemeStateButton extends CJStateTextButton {
     bool enable = true,
     bool selected = false,
     required void Function() onPressed,
-  })
-      : assert(normalTitle != null),
-        assert(onPressed != null),
-        super(
-        key: key,
-        width: width,
-        height: height,
-        margin: margin,
-        padding: padding,
-        childBuider: (bSelected) {
-          String _currentTitle = normalTitle;
-          if (selected) {
-            _currentTitle = selectedTitle ?? normalTitle;
-          }
-          double? childWidth = width;
-          double? childHeight = height;
-          if (childWidth != null && childHeight != null) {
-            if (bSelected) {
-              childWidth -= richStateTheme_selectedBorderWidth(richBGColorType) * 2;
-              childHeight -= richStateTheme_selectedBorderWidth(richBGColorType) * 2;
-            } else {
-              childWidth -= richStateTheme_normalBorderWidth(richBGColorType) * 2;
-              childHeight -= richStateTheme_normalBorderWidth(richBGColorType) * 2;
+  }) : super(
+          key: key,
+          width: width,
+          height: height,
+          margin: margin,
+          padding: padding,
+          childBuider: (bSelected) {
+            String _currentTitle = normalTitle;
+            if (selected) {
+              _currentTitle = selectedTitle ?? normalTitle;
             }
-          }
-          return ButtonChildWidget(
-            width: childWidth,
-            height: childHeight,
-            title: _currentTitle,
-            titleStyle: titleStyle,
-            imagePosition: imagePosition,
-            imageWidget: imageWidget,
-            imageTitleGap: imageTitleGap,
-          );
-        },
-        enable: enable,
-        selected: selected,
-        onPressed: () {
-          if (onPressed != null) {
+            double? childWidth = width;
+            double? childHeight = height;
+            if (childWidth != null && childHeight != null) {
+              if (bSelected) {
+                childWidth -=
+                    richStateTheme_selectedBorderWidth(richBGColorType) * 2;
+                childHeight -=
+                    richStateTheme_selectedBorderWidth(richBGColorType) * 2;
+              } else {
+                childWidth -=
+                    richStateTheme_normalBorderWidth(richBGColorType) * 2;
+                childHeight -=
+                    richStateTheme_normalBorderWidth(richBGColorType) * 2;
+              }
+            }
+            return ButtonChildWidget(
+              width: childWidth,
+              height: childHeight,
+              title: _currentTitle,
+              titleStyle: titleStyle,
+              imagePosition: imagePosition,
+              imageWidget: imageWidget,
+              imageTitleGap: imageTitleGap,
+            );
+          },
+          enable: enable,
+          selected: selected,
+          onPressed: () {
             onPressed();
-          }
-        },
-        cornerRadius: cornerRadius,
-        normalBGColor: richStateTheme_normalBGColor(richBGColorType),
-        normalTextColor: richStateTheme_normalTextColor(richBGColorType),
-        normalBorderWidth: richStateTheme_normalBorderWidth(richBGColorType),
-        normalBorderColor: richStateTheme_normalBorderColor(richBGColorType),
-        normalBackgroundHighlightColor:
-        richStateTheme_normalBackgroundHighlightColor(richBGColorType),
-        selectedBGColor: richStateTheme_selectedBGColor(richBGColorType),
-        selectedTextColor: richStateTheme_selectedTextColor(richBGColorType),
-        selectedBorderWidth:
-        richStateTheme_selectedBorderWidth(richBGColorType),
-        selectedBorderColor:
-        richStateTheme_selectedBorderColor(richBGColorType),
-        selectedBackgroundHighlightColor:
-        richStateTheme_selectedBackgroundHighlightColor(richBGColorType),
-        highlightOpacity: needHighlight ? 0.7 : 1.0,
-      );
+          },
+          cornerRadius: cornerRadius,
+          normalBGColor: richStateTheme_normalBGColor(richBGColorType),
+          normalTextColor: richStateTheme_normalTextColor(richBGColorType),
+          normalBorderWidth: richStateTheme_normalBorderWidth(richBGColorType),
+          normalBorderColor: richStateTheme_normalBorderColor(richBGColorType),
+          normalBackgroundHighlightColor:
+              richStateTheme_normalBackgroundHighlightColor(richBGColorType),
+          selectedBGColor: richStateTheme_selectedBGColor(richBGColorType),
+          selectedTextColor: richStateTheme_selectedTextColor(richBGColorType),
+          selectedBorderWidth:
+              richStateTheme_selectedBorderWidth(richBGColorType),
+          selectedBorderColor:
+              richStateTheme_selectedBorderColor(richBGColorType),
+          selectedBackgroundHighlightColor:
+              richStateTheme_selectedBackgroundHighlightColor(richBGColorType),
+          highlightOpacity: needHighlight ? 0.7 : 1.0,
+        );
 }

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:41:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-01-30 16:49:56
+ * @LastEditTime: 2023-03-19 18:58:58
  * @Description: 吸底视图
  */
 import 'dart:ui' show window;
@@ -36,7 +36,7 @@ class AbsorbBottomContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(window);
     double _width = mediaQuery.size.width;
-    double _height = mediaQuery.size.height;
+    // double _height = mediaQuery.size.height;
     double screenBottomHeight = mediaQuery.padding.bottom;
     if (screenBottomHeight == 0) {
       print("///TODO:疑难杂症:这里为什么有时候会等于0，常见于点击搜索后，弹窗键盘,回来发现");

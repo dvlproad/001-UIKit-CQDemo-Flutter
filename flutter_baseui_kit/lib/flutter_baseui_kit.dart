@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-17 17:37:07
+ * @LastEditTime: 2023-03-19 18:54:04
  * @Description: 基础UI库
  */
 library flutter_baseui_kit;
@@ -50,4 +50,4 @@ export './cq-uikit/absorbBottom/absorb_bottom_widget.dart';
 // 点击优化
 export './opt/click_optimization.dart';
 
-export './cq-uikit/text/skeleton.dart.dart';
+export './cq-uikit/text/skeleton.dart';

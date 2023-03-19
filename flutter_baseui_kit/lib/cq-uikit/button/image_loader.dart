@@ -1,3 +1,11 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2023-01-30 11:55:19
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 18:35:40
+ * @Description: 
+ */
+/*
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -17,6 +25,7 @@ typedef AsyncImageMemoryWidgetBuilder<T> = Widget Function(
 
 enum AsperctRaioImageType { NETWORK, FILE, ASSET, MEMORY }
 
+
 ///有宽高的Image
 class AsperctRaioImage extends StatelessWidget {
   String url;
@@ -28,25 +37,25 @@ class AsperctRaioImage extends StatelessWidget {
   AsyncImageFileWidgetBuilder<ui.Image> filebBuilder;
   AsyncImageMemoryWidgetBuilder<ui.Image> memoryBuilder;
 
-  AsperctRaioImage.network(url, {Key key, @required this.builder})
+  AsperctRaioImage.network(url, {Key? key, required this.builder})
       : provider = NetworkImage(url),
         type = AsperctRaioImageType.NETWORK,
         this.url = url;
 
   AsperctRaioImage.file(
     file, {
-    Key key,
-    @required this.filebBuilder,
+    Key? key,
+    required this.filebBuilder,
   })  : provider = FileImage(file),
         type = AsperctRaioImageType.FILE,
         this.file = file;
 
-  AsperctRaioImage.asset(name, {Key key, @required this.builder})
+  AsperctRaioImage.asset(name, {Key? key, required this.builder})
       : provider = AssetImage(name),
         type = AsperctRaioImageType.ASSET,
         this.url = name;
 
-  AsperctRaioImage.memory(bytes, {Key key, @required this.memoryBuilder})
+  AsperctRaioImage.memory(bytes, {Key? key, required this.memoryBuilder})
       : provider = MemoryImage(bytes),
         type = AsperctRaioImageType.MEMORY,
         this.bytes = bytes;
@@ -56,13 +65,14 @@ class AsperctRaioImage extends StatelessWidget {
     final ImageConfiguration config = createLocalImageConfiguration(context);
     final Completer<ui.Image> completer = Completer<ui.Image>();
     final ImageStream stream = provider.resolve(config);
-    ImageStreamListener listener;
+    late ImageStreamListener listener;
     listener = ImageStreamListener(
       (ImageInfo image, bool sync) {
         completer.complete(image.image);
         stream.removeListener(listener);
       },
-      onError: (dynamic exception, StackTrace stackTrace) {
+      onError: (Object exception, StackTrace? stackTrace) {
+        // ignore: null_argument_to_non_null_type
         completer.complete();
         stream.removeListener(listener);
         FlutterError.reportError(FlutterErrorDetails(
@@ -94,3 +104,4 @@ class AsperctRaioImage extends StatelessWidget {
     );
   }
 }
+*/

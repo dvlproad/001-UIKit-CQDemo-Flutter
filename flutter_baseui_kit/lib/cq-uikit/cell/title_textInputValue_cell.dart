@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-07 13:48:06
+ * @LastEditTime: 2023-03-19 19:11:31
  * @Description: 包含标题文本title，值输入框textInputValue(文本前可设置是否添加点来突出)、箭头类型固定为向右 的视图
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
 

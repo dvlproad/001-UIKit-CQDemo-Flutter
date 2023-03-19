@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-08-07 16:54:57
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 18:30:52
+ * @Description: 
+ */
 import 'package:flutter/cupertino.dart';
 
 class RoundImage extends StatelessWidget {
@@ -6,8 +13,8 @@ class RoundImage extends StatelessWidget {
   final String networkSrc;
 
   RoundImage({
-    Key key,
-    this.size,
+    Key? key,
+    required this.size,
     this.networkSrc =
         'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1091405991,859863778&fm=26&gp=0.jpg',
   }) : super(key: key);

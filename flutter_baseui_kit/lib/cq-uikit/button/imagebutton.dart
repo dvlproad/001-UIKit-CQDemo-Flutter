@@ -3,12 +3,12 @@ import '../../flutter_baseui_kit_adapt.dart';
 
 /// 图片在左，文字在右的按钮
 class LeftImageButton extends StatelessWidget {
-  double? width;
-  double? height;
-  String buttonText;
-  int? maxLines;
-  Image buttonImageView;
-  GestureTapCallback? onTap;
+  final double? width;
+  final double? height;
+  final String buttonText;
+  final int? maxLines;
+  final Image buttonImageView;
+  final GestureTapCallback? onTap;
 
   LeftImageButton({
     Key? key,
@@ -17,6 +17,7 @@ class LeftImageButton extends StatelessWidget {
     required this.buttonText,
     required this.buttonImageView,
     this.onTap,
+    this.maxLines,
   }) : super(key: key);
 
   @override
@@ -55,25 +56,26 @@ class LeftImageButton extends StatelessWidget {
 
 // 左图片+右文字的按钮视图:icon和文字保持一定上下间距，一起居中(常见于等)
 class LeftImageTextDeleteButton extends StatelessWidget {
-  double? width;
-  double? height;
-  BoxConstraints? constraints;
-  EdgeInsetsGeometry? padding; // 图片与边缘一般都有一定距离
-  Color? bgColor;
-  double? cornerRadius;
-  double? iconHeight; // icon的高度(宽度等于高度)
-  double? iconTitleSpace; // icon与文字之间的间距
-  double? titleHeight; // 文字高度
-  double? clickHandle; // 点击视图的事件
+  final double? width;
+  final double? height;
+  final BoxConstraints? constraints;
+  final EdgeInsetsGeometry? padding; // 图片与边缘一般都有一定距离
+  final Color? bgColor;
+  final double? cornerRadius;
+  final double? iconHeight; // icon的高度(宽度等于高度)
+  final double? iconTitleSpace; // icon与文字之间的间距
+  final double? titleHeight; // 文字高度
+  final double? clickHandle; // 点击视图的事件
 
-  Image? imageView;
-  bool shouldExpandedTextLabel;
-  Widget? textLabel;
-  GestureTapCallback? onTap;
+  final Image? imageView;
+  final bool shouldExpandedTextLabel;
+  final Widget? textLabel;
+  final GestureTapCallback? onTap;
 
-  bool? showDeleteIcon; // 是否显示删除按钮
-  Widget Function()? customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
-  GestureTapCallback? onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
+  final bool? showDeleteIcon; // 是否显示删除按钮
+  final Widget Function()?
+      customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
+  final GestureTapCallback? onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
 
   LeftImageTextDeleteButton({
     Key? key,
@@ -201,12 +203,12 @@ class LeftImageTextDeleteButton extends StatelessWidget {
 }
 
 class TopImageButton extends StatelessWidget {
-  double? width;
-  double? height;
-  Image? icon;
-  String title;
-  Color? titleColor;
-  GestureTapCallback? onTap;
+  final double? width;
+  final double? height;
+  final Image? icon;
+  final String title;
+  final Color? titleColor;
+  final GestureTapCallback? onTap;
   final void Function()? onDoubleTap;
   final void Function()? onLongPress;
 
@@ -241,13 +243,13 @@ class TopImageButton extends StatelessWidget {
 }
 
 class MenuImageTextButton extends StatelessWidget {
-  double width;
-  double? height;
-  Color? color;
-  String imgUrl;
-  String title;
-  int? badgeCount;
-  GestureTapCallback? onTap;
+  final double width;
+  final double? height;
+  final Color? color;
+  final String imgUrl;
+  final String title;
+  final int? badgeCount;
+  final GestureTapCallback? onTap;
 
   MenuImageTextButton({
     Key? key,
@@ -281,7 +283,7 @@ class MenuImageTextButton extends StatelessWidget {
     }
 
     double badgePositionedLeft = 0;
-    if (width != null && width > 0) {
+    if (width > 0) {
       badgePositionedLeft = width / 2;
     }
     double badgePositionedRight =
@@ -375,18 +377,18 @@ class MenuImageTextButton extends StatelessWidget {
 
 // 上图片+下文字的按钮视图:icon和文字保持一定上下间距，一起居中(常见于第三方登录icon设置等)
 class TopImageTextButton extends StatelessWidget {
-  double? width;
-  double? height;
-  Color? color;
-  double? iconHeight; // icon的高度(宽度等于高度)
-  double? iconLeftRightSpace; // icon与左/右两边的距离
-  double? iconTitleSpace; // icon与文字之间的间距
-  double? titleHeight; // 文字高度
-  double? clickHandle; // 点击视图的事件
+  final double? width;
+  final double? height;
+  final Color? color;
+  final double? iconHeight; // icon的高度(宽度等于高度)
+  final double? iconLeftRightSpace; // icon与左/右两边的距离
+  final double? iconTitleSpace; // icon与文字之间的间距
+  final double? titleHeight; // 文字高度
+  final double? clickHandle; // 点击视图的事件
 
-  Image? imageView;
-  Widget? textLabel;
-  GestureTapCallback? onTap;
+  final Image? imageView;
+  final Widget? textLabel;
+  final GestureTapCallback? onTap;
   final void Function()? onDoubleTap;
   final void Function()? onLongPress;
 

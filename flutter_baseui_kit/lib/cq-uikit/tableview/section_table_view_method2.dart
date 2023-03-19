@@ -17,6 +17,7 @@ typedef int RowCountInSectionCallBack(int section);
 typedef Widget CellAtIndexPathCallBack(int section, int row);
 typedef Widget SectionHeaderCallBack(int section);
 
+// ignore: must_be_immutable
 class CreateSectionTableView2 extends StatefulWidget {
   //required
   final int sectionCount;

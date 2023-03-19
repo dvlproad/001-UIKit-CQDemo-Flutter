@@ -20,9 +20,7 @@ class CJReverseThemeStateTextButton extends CJStateTextButton {
     Color? selectedBackgroundHighlightColor,
     double? highlightOpacity, // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
     required VoidCallback onPressed,
-  })  : assert(childBuider != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,
@@ -95,8 +93,7 @@ class CJStateTextButton extends StatelessWidget {
     this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
     this.selectedBackgroundHighlightColor,
     this.highlightOpacity,
-  })  : assert(childBuider != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

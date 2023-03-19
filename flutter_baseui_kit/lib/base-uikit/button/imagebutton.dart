@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 14:17:49
+ * @LastEditTime: 2023-03-19 18:30:15
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 class CenterIconButton extends StatelessWidget {
   final String assestName; // 按钮的本地图片名
   final double iconButtonSize; // 按钮大小
-  final double? iconImageSize; // 按钮中的图片大小
+  final double iconImageSize; // 按钮中的图片大小
   final VoidCallback onPressed; // 按钮点击事件
 
   CenterIconButton({
@@ -29,7 +29,7 @@ class CenterIconButton extends StatelessWidget {
     return Container(
       height: iconButtonSize,
       width: iconButtonSize,
-      child: FlatButton(
+      child: IconButton(
         color: Colors.red,
         onPressed: this.onPressed,
         padding: EdgeInsets.fromLTRB(
@@ -38,7 +38,7 @@ class CenterIconButton extends StatelessWidget {
           0,
           (iconButtonSize - iconImageSize) / 2,
         ),
-        child: Image.asset(
+        icon: Image.asset(
           assestName,
           width: iconImageSize,
           height: iconImageSize,

@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-05-12 19:19:37
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 13:23:17
+ * @LastEditTime: 2023-03-19 18:59:38
  * @Description: toolbar 上 的左右两侧按钮视图
  */
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
@@ -90,6 +89,7 @@ class ToolBarTextActionWidget extends StatelessWidget {
       onPressed: this.onPressed,
     );
     // */
+    // ignore: dead_code
     return GestureDetector(
       onTap: this.onPressed,
       child: Container(
