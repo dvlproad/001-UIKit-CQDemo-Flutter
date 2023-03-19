@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:42:37
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-08 00:47:50
+ * @LastEditTime: 2023-03-19 12:38:27
  * @Description: 启动初始化
  */
 import 'dart:convert';
@@ -16,7 +16,7 @@ import 'package:flutter_bugly/flutter_bugly.dart';
 export 'package:app_devtool_framework/app_devtool_framework.dart'
     show PackageType, PackageTargetType;
 
-import 'package:flutter_cache_kit/flutter_cache_kit.dart';
+// import 'package:flutter_cache_kit/flutter_cache_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
 import 'package:flutter_images_picker/flutter_images_picker.dart';
@@ -32,7 +32,7 @@ class MainInit {
 
   static initWithGlobalKey(
     GlobalKey globalKey,
-    PackageType packageType,
+    PackageNetworkType packageNetworkType,
     PackageTargetType packageTargetType,
   ) {
     _navigatorKey = globalKey;
@@ -61,7 +61,7 @@ class MainInit {
 
   static Future _initWithGlobalKey(
     GlobalKey globalKey,
-    PackageType packageType,
+    PackageNetworkType packageNetworkType,
     PackageTargetType packageTargetType,
   ) async {
     // 缓存(网络中的token获取需要用到，所以需要最先初始化)
@@ -71,7 +71,7 @@ class MainInit {
     String userApiToken = await UserInfoManager().getCacheUserAuthToken();
     await DevToolInit.initWithGlobalKey(
       globalKey,
-      packageType,
+      packageNetworkType,
       packageTargetType,
       logoutHandleWhenExitAppByChangeNetwork: () {
         if (UserInfoManager.isLoginState == true) {

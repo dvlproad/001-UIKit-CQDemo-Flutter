@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2023-01-30 11:55:19
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 13:14:59
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart'
     show StateLoadingWidget;
@@ -11,19 +18,19 @@ import '../pagetype_nodata/nodata_widget.dart';
 ///根据不同状态来展示不同的视图
 class PageTypeLoadStateDefaultWidget extends StatefulWidget {
   final WidgetType widgetType; //页面类型
-  final Widget initWidget; //初始视图(未设置时，将使用Container())
-  final Widget successWidget; //成功视图
-  final VoidCallback emptyRetry; //空数据事件处理
+  final Widget? initWidget; //初始视图(未设置时，将使用Container())
+  final Widget? successWidget; //成功视图
+  final VoidCallback? emptyRetry; //空数据事件处理
   final VoidCallback errorRetry; //错误视图(网络错误)错误事件处理
 
-  final bool showSelfLoading; // 是否显示loading
+  final bool? showSelfLoading; // 是否显示loading
 
   PageTypeLoadStateDefaultWidget({
-    Key key,
+    Key? key,
     this.widgetType = WidgetType.Init, //默认为加载状态
     this.initWidget,
     this.successWidget,
-    this.errorRetry,
+    required this.errorRetry,
     this.emptyRetry,
     this.showSelfLoading,
   }) : super(key: key);

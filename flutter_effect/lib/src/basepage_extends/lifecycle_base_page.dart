@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-12 17:34:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-06 17:56:22
+ * @LastEditTime: 2023-03-19 13:11:57
  * @Description: 含生命周期的 base page
  */
 import 'dart:core';
@@ -16,7 +16,7 @@ abstract class LifeCyclePage extends StatefulWidget {
   static RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   LifeCyclePage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   // @override
@@ -43,12 +43,8 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
     with RouteAware {
   @override
   void dispose() {
-    if (this is PageRoute) {
-      LifeCyclePage.routeObserver.unsubscribe(this); // 取消订阅
-    }
-    // else if (this is _ModalBottomSheetRoute) {
-    //   // 页面是从底部弹出在本页面的模态视图的时候，不能监听到 LifeCyclePage
-    // }
+    LifeCyclePage.routeObserver.unsubscribe(this); // 取消订阅
+
     super.dispose();
   }
 
@@ -59,12 +55,17 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
 
   @override
   void didChangeDependencies() {
-    if (this is PageRoute) {
-      LifeCyclePage.routeObserver.subscribe(this, ModalRoute.of(context)); //订阅
+    if (ModalRoute.of(context) is PopupRoute) {
+      // 示例: 页面是从底部弹出在本页面的模态视图的时候，不能监听到 LifeCyclePage
+      // class _ModalBottomSheetRoute<T> extends PopupRoute<T>
+      debugPrint(
+          "Warning:当前类${this.runtimeType}无法出发viewDidAppear,类似常见的有 showModalBottomSheet 方法调出的页面");
+    } else {
+      LifeCyclePage.routeObserver.subscribe(
+        this,
+        ModalRoute.of(context) as PageRoute,
+      ); //订阅
     }
-    // else if (this is _ModalBottomSheetRoute) {
-    //   // 页面是从底部弹出在本页面的模态视图的时候，不能监听到 LifeCyclePage
-    // }
 
     super.didChangeDependencies();
   }
@@ -111,21 +112,21 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
 
   void viewDidDisappear(DisAppearBecause disAppearBecause) {}
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-  }
+  // @override
+  // Widget build(BuildContext context) {
+  //   super.build(context);
+  // }
 
   printStack() {
     print('$__CLASS__ $__METHOD__($__FILE__:$__LINE__)');
   }
 
-  String get __CLASS__ {
+  String? get __CLASS__ {
     var frames = Trace.current().frames; //调用栈
     if (frames.length > 1) {
       var member = frames[1].member;
-      var parts = member.split(".");
-      if (parts.length > 1) {
+      var parts = member?.split(".");
+      if (parts != null && parts.length > 1) {
         return parts[0];
       }
     }
@@ -133,12 +134,12 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
     return null;
   }
 
-  String get __METHOD__ {
+  String? get __METHOD__ {
     var frames = Trace.current().frames;
     if (frames.length > 1) {
       var member = frames[1].member;
-      var parts = member.split(".");
-      if (parts.length > 1) {
+      var parts = member?.split(".");
+      if (parts != null && parts.length > 1) {
         return parts[1];
       }
     }
@@ -146,18 +147,18 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
     return null;
   }
 
-  String get __FILE__ {
+  String? get __FILE__ {
     var frames = Trace.current().frames;
-    if (frames.length > 1) {
+    if (frames != null && frames.length > 1) {
       return frames[1].uri.path;
     }
 
     return null;
   }
 
-  int get __LINE__ {
+  int? get __LINE__ {
     var frames = Trace.current().frames;
-    if (frames.length > 1) {
+    if (frames != null && frames.length > 1) {
       return frames[1].line;
     }
 

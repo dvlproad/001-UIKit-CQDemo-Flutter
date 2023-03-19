@@ -29,7 +29,7 @@ class QuickToolBarImageActionWidget extends StatelessWidget {
     Key? key,
     this.width,
     this.imageType,
-    @required this.onPressed,
+    required this.onPressed,
   }) : super(key: key);
 
   @override

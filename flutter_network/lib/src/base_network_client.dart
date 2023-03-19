@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/adapter.dart';
 // import 'package:flutter/src/foundation/print.dart';
 
 import './interceptor/interceptor_request.dart';

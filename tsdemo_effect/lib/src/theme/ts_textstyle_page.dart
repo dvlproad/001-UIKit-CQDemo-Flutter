@@ -1,5 +1,12 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 13:05:04
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
-import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 
 class TSTextStylePage extends StatefulWidget {
   TSTextStylePage({Key key}) : super(key: key);

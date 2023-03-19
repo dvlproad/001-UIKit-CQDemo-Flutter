@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 13:19:34
+ * @Description: 
+ */
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -55,8 +62,8 @@ class _TSPageTypeAppBarPageState extends State<TSPageTypeAppBarPage> {
 
     if (widget.successHasCustomAppBar) {
       Widget appBar = CommonAppBar(
-        title: AppBarTitleWidget(text: '我是成功页面的标题'),
-        leading: AppBarBackWidget(
+        title: ToolBarTitleWidget(text: '我是成功页面的标题'),
+        leading: QuickToolBarImageActionWidget(
           onPressed: () {
             Navigator.pop(context);
           },

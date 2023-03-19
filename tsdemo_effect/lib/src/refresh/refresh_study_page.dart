@@ -74,13 +74,13 @@ class _TSRefreshStudyPageState extends State<TSRefreshStudyPage> {
       ),
       // 固定在下方显示的按钮
       persistentFooterButtons: <Widget>[
-        FlatButton(
+        TextButton(
           onPressed: () {
             _refreshController.callRefresh();
           },
           child: Text("refresh", style: TextStyle(color: Colors.black)),
         ),
-        FlatButton(
+        TextButton(
           onPressed: () {
             _refreshController.callLoad();
           },

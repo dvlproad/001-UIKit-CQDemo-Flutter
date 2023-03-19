@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_bugly: any
+  
   app_devtool_framework:
     path: ../app_devtool_framework/
   flutter_network:

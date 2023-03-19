@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 13:28:26
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_effect/flutter_effect.dart';
 
@@ -46,20 +53,17 @@ class _TSNetworkResultWidgetState extends State<TSNetworkResultWidget> {
       children: [
         Container(height: widget.marginTop),
         Text(widget.title ?? '我是等你传进来设置的标题'),
-        FlatButton(
+        TextButton(
           onPressed: widget.getData_Success,
           child: Text('重新加载(模拟网络请求：请求成功，且有数据)'),
-          color: Colors.blue,
         ),
-        FlatButton(
+        TextButton(
           onPressed: widget.getData_NoData,
           child: Text('重新加载(模拟网络请求结束：请求成功，但无数据)'),
-          color: Colors.blue,
         ),
-        FlatButton(
+        TextButton(
           onPressed: widget.getData_Error,
           child: Text('重新加载(模拟网络请求结束：请求失败)'),
-          color: Colors.blue,
         ),
       ],
     );

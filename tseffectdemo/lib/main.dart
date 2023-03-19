@@ -1,5 +1,11 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-17 17:16:22
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
-import 'package:flutter_effect/flutter_effect.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tsdemo_effect/tsdemo_effect.dart';
 

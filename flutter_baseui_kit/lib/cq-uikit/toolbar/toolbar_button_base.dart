@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-12 19:19:37
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 14:53:53
+ * @LastEditTime: 2023-03-19 13:23:17
  * @Description: toolbar 上 的左右两侧按钮视图
  */
 import 'dart:ui';
@@ -27,8 +27,8 @@ class ToolBarImageActionWidget extends StatelessWidget {
     Key? key,
     this.width,
     this.color,
-    @required this.image,
-    @required this.onPressed,
+    required this.image,
+    required this.onPressed,
   }) : super(key: key);
 
   @override

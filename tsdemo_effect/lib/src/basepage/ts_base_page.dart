@@ -75,7 +75,7 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   Widget get _appBar {
     // return AppBar(title: Text("BasePage(加载各状态视图:加载中、成功、失败、无数据)"));
     return CommonAppBar(
-      title: AppBarTitleWidget(
+      title: ToolBarTitleWidget(
         text: '商品收藏',
         // onPressed: () {
         //   print('点击标题');
@@ -88,16 +88,18 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
             print('search....');
           },
         ),
-        AppBarActionWidget(
-          image: AssetImage(
-            'assets/appbar/icon_search.png',
-            package: 'flutter_effect',
+        ToolBarImageActionWidget(
+          image: Image(
+            image: AssetImage(
+              'assets/appbar/icon_search.png',
+              package: 'flutter_effect',
+            ),
           ),
           onPressed: () {
             print('点击管理');
           },
         ),
-        AppBarActionWidget(
+        ToolBarTextActionWidget(
           text: '地址管理',
           onPressed: () {
             print('点击管理');
@@ -111,8 +113,8 @@ class _TSBasePageState extends BJHBasePageState<TSBasePage> {
   Widget appBarWidget(BuildContext context) {
     if (widget.appBarIsAddToSuccess) {
       return CommonAppBar(
-        title: AppBarTitleWidget(text: '我是成功页面的标题'),
-        leading: AppBarBackWidget(
+        title: ToolBarTitleWidget(text: '我是成功页面的标题'),
+        leading: QuickToolBarImageActionWidget(
           onPressed: () {
             Navigator.pop(context);
           },

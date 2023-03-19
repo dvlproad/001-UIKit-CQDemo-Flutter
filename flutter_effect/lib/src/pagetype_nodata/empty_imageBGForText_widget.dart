@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 12:51:28
+ * @Description: 
+ */
 // 图片+文字:图片作为背景，文字显示在图片上
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +13,8 @@ import './base-uikit/bg_border_widget.dart';
 class CQFullEmptyView extends StatelessWidget {
   final String text;
   const CQFullEmptyView({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -27,7 +34,7 @@ class CQFullEmptyView extends StatelessWidget {
 class CQPartEmptyView extends StatelessWidget {
   final String text;
   CQPartEmptyView({
-    Key key,
+    Key? key,
     this.text = '',
   }) : super(key: key);
 

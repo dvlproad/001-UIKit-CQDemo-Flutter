@@ -21,13 +21,13 @@ enum WidgetType {
 ///根据不同类型来展示不同的视图
 class LoadStateLayout extends StatefulWidget {
   final WidgetType widgetType; //页面类型
-  final Widget initWidget; //初始视图(未设置时，将使用Container())
-  final Widget successWidget; //成功视图
-  final Widget errorWidget; //错误视图(网络错误)
-  final Widget nodataWidget; //空数据视图(网络请求成功，但数据为空)
+  final Widget? initWidget; //初始视图(未设置时，将使用Container())
+  final Widget? successWidget; //成功视图
+  final Widget? errorWidget; //错误视图(网络错误)
+  final Widget? nodataWidget; //空数据视图(网络请求成功，但数据为空)
 
   LoadStateLayout({
-    Key key,
+    Key? key,
     this.widgetType = WidgetType.Init, //默认为加载状态
     this.initWidget,
     // this.initWidget = const Container(), // 默认Container()
@@ -64,7 +64,7 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
       stackWidgets.add(
         Visibility(
           visible: shouldShowSuccess,
-          child: widget.successWidget,
+          child: widget.successWidget!,
         ),
       );
     }

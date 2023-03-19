@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-05-13 13:12:03
+ * @LastEditTime: 2023-03-19 12:54:59
  * @Description: 
  */
 import 'package:flutter/cupertino.dart';
@@ -26,17 +26,17 @@ import '../appbar/appbar.dart';
 
 class StateNodataWidget extends StatefulWidget {
   final bool needAppBar;
-  final VoidCallback onNavBackTap;
-  final Color color;
-  final ImageProvider image;
+  final VoidCallback? onNavBackTap;
+  final Color? color;
+  final ImageProvider? image;
   // image: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
   // image: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
-  final String mainTitle;
-  final String subTitle;
-  final Widget buttonWidget;
+  final String? mainTitle;
+  final String? subTitle;
+  final Widget? buttonWidget;
 
   const StateNodataWidget({
-    Key key,
+    Key? key,
     this.needAppBar = false, // 是否需要为你补充上导航栏(默认不需要)
     this.onNavBackTap, //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
     this.color, // 背景颜色

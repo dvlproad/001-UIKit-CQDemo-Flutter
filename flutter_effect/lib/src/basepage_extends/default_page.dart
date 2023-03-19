@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 13:02:43
+ * @Description: 
+ */
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +15,9 @@ import '../pagetype_nodata/nodata_widget.dart';
 
 //class BJHDefaultPage extends StatefulWidget {
 abstract class BJHDefaultPage extends BJHBasePage {
-  final String title;
+  final String? title;
 
-  BJHDefaultPage({Key key, this.title}) : super(key: key);
+  BJHDefaultPage({Key? key, this.title}) : super(key: key);
 
   // @override
   // // BJHDefaultPageState createState() => BJHDefaultPageState();
@@ -36,7 +43,7 @@ abstract class BJHDefaultPageState<V extends BJHDefaultPage>
   }
 
   @override
-  Widget buildSuccessWidget(BuildContext context) {
+  Widget? buildSuccessWidget(BuildContext context) {
     return null;
   }
 

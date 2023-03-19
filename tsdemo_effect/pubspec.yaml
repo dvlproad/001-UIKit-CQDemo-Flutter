@@ -12,6 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   dio: any
+  flutter_theme_helper:
+    path: ../flutter_theme_helper/
 
 dev_dependencies:
   flutter_test:

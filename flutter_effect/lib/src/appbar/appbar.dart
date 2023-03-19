@@ -11,20 +11,22 @@ import '../../flutter_effect_adapt.dart';
 class QuickAppBar extends CommonAppBar {
   QuickAppBar(
     BuildContext context, {
-    Key key,
-    Color backgroundColor, // 导航栏背景色
+    Key? key,
+    Color? backgroundColor, // 导航栏背景色
 
-    SystemUiOverlayStyle systemOverlayStyle,
+    SystemUiOverlayStyle? systemOverlayStyle,
     dynamic title, // 中间导航栏标题文本或文本视图
-    final EdgeInsetsGeometry titleMargin,
-    AppBarTextColorType textColorType, // 左侧(返回)按钮视图的类型
-    bool automaticallyImplyLeading, // 是否显示左侧(返回)按钮视图(默认true显示)
+    final EdgeInsetsGeometry? titleMargin,
+    AppBarTextColorType? textColorType, // 左侧(返回)按钮视图的类型
+    bool automaticallyImplyLeading = true, // 是否显示左侧(返回)按钮视图(默认true显示)
 
-    QuickToolBarImageType leadingImageType, // 返回按钮的样式(未设置的话，会自动根据标题颜色和导航栏背景色设置)
-    String leadingText, // 左侧返回按钮不使用图片时候的文本(默认null时，使用图片)
-    double leadingTextWidth, // 左侧返回按钮为文字时候所占宽度(未设置会取内容所占的最小宽度，其他为图片时候宽度固定)
-    void Function() customOnPressedBack,
-    List<Widget> actions, // 右侧操作按钮视图
+    QuickToolBarImageType?
+        leadingImageType, // 返回按钮的样式(未设置的话，会自动根据标题颜色和导航栏背景色设置)
+    String? leadingText, // 左侧返回按钮不使用图片时候的文本(默认null时，使用图片)
+    double? leadingTextWidth, // 左侧返回按钮为文字时候所占宽度(未设置会取内容所占的最小宽度，其他为图片时候宽度固定)
+    void Function()? customOnPressedBack,
+    List<Widget>? actions, // 右侧操作按钮视图
+    double actionsPositionedRight = 10, // 右侧操作按钮视图离边缘的距离(如保存按钮时有距离)
   })  : assert(title == null || (title is String) || (title is Widget)),
         super(
           key: key,
@@ -78,7 +80,7 @@ class QuickAppBar extends CommonAppBar {
           leadingPositionedLeft: leadingText != null ? 10 : 0,
           automaticallyImplyLeading: automaticallyImplyLeading,
           actions: actions,
-          actionsPositionedRight: 10,
+          actionsPositionedRight: actionsPositionedRight,
         );
 }
 
@@ -86,14 +88,14 @@ class QuickAppBar extends CommonAppBar {
 
 // 使用自己的布局方式
 class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final Color backgroundColor;
-  final SystemUiOverlayStyle systemOverlayStyle;
+  final Color? backgroundColor;
+  final SystemUiOverlayStyle? systemOverlayStyle;
 
-  final Widget title; // 中间标题视图
-  final EdgeInsetsGeometry titleMargin;
+  final Widget? title; // 中间标题视图
+  final EdgeInsetsGeometry? titleMargin;
 
-  final Widget leading; // 左侧(返回)按钮视图
-  final double leadingPositionedLeft;
+  final Widget? leading; // 左侧(返回)按钮视图
+  final double? leadingPositionedLeft;
   final bool automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图(默认true显示)
   // final ImageProvider navbackImage;
   // final String navbackTitle;
@@ -102,11 +104,11 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   // final VoidCallback
   //     onTapNavback; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
 
-  final List<Widget> actions; // 右侧操作按钮视图
-  final double actionsPositionedRight;
+  final List<Widget>? actions; // 右侧操作按钮视图
+  final double? actionsPositionedRight;
 
   CommonAppBar({
-    Key key,
+    Key? key,
     this.backgroundColor,
     this.systemOverlayStyle,
     this.title, // 中间标题视图
@@ -115,7 +117,7 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
     this.leadingPositionedLeft,
     this.automaticallyImplyLeading = true, // 是否显示左侧(返回)按钮视图
     this.actions,
-    this.actionsPositionedRight,
+    this.actionsPositionedRight, // 右侧操作按钮视图离边缘的距离(如保存按钮时有距离)
   }) : super(key: key);
 
   @override

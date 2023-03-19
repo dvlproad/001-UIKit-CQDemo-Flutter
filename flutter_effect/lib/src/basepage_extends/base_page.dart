@@ -14,10 +14,14 @@ import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetTy
 
 import 'package:flutter_error_catch/flutter_error_catch.dart';
 
+import 'package:app_buried_point/app_buried_point.dart';
+
+import 'package:flutter_network/src/network_bean.dart'; // 网络 HttpStatusCode
+
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends LifeCyclePage {
   BJHBasePage({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   // @override
@@ -35,7 +39,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
-  Widget _initWidget = null;
+  Widget? _initWidget = null;
 
   @override
   bool get wantKeepAlive => true;
@@ -59,14 +63,37 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   void viewDidAppear(AppearBecause appearBecause) {
     String routeClassString = widget.runtimeType.toString();
 
-    String currentRoutePath;
-    ModalRoute route = ModalRoute.of(context);
+    String? currentRoutePath;
+    ModalRoute? route = ModalRoute.of(context);
     if (route != null) {
-      currentRoutePath = route.settings.name;
+      currentRoutePath = route!.settings.name;
     }
 
     AppCatchError.currentPageClassString = routeClassString;
     AppCatchError.currentPageRoutePath = currentRoutePath;
+
+    // if (appearBecause == AppearBecause.newCreate) {}
+    String appearBecauseString = appearBecause.toString().split('.').last;
+    BuriedPointManager().addEvent('viewDidAppear_newCreate', {
+      "page": routeClassString,
+      "appearBC": appearBecauseString,
+    });
+  }
+
+  @override
+  void viewDidDisappear(DisAppearBecause disAppearBecause) {
+    super.viewDidDisappear(disAppearBecause);
+
+    String routeClassString = widget.runtimeType.toString();
+
+    String? currentRoutePath;
+    ModalRoute? route = ModalRoute.of(context);
+    if (route != null) {
+      currentRoutePath = route!.settings.name;
+    }
+
+    AppCatchError.beforePageClassString = routeClassString;
+    AppCatchError.beforePageRoutePath = currentRoutePath;
   }
 
   @override
@@ -113,7 +140,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   bool resizeToAvoidBottomInset() => true;
 
   // appBar(在Scaffold中)
-  PreferredSizeWidget appBar() {
+  PreferredSizeWidget? appBar() {
     return null; // 要有导航栏，请在子类中实现
     // return AppBar(
     //   title: Text('BJHBasePage'),
@@ -132,7 +159,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   // 虽然复用了，但是success视图也显示上去了，而你的buildErrorWidget(BuildContext context)确是透明的，那就变成了把原本要遮盖住的视图给显示出来了，
   // 除非你能够把success中非appBar的部分给隐藏起来(可以，但代码操作不方便)
   // 所以appBar不能设置在success中，只能设置在appBar()或此处appBarWidget(BuildContext context)
-  Widget appBarWidget(BuildContext context) {
+  Widget? appBarWidget(BuildContext context) {
     return null;
   }
 
@@ -142,7 +169,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   }
 
   /// 底部吸附视图
-  Widget bottomAdsorbWidget(BuildContext context, double screenBottomHeight) {
+  Widget? bottomAdsorbWidget(BuildContext context, double screenBottomHeight) {
     return null;
     // return Container(
     //   height: screenBottomHeight + 100,
@@ -258,13 +285,13 @@ abstract class BJHBasePageState<V extends BJHBasePage>
 
   /// 内容视图
   Widget _contentWidget(BuildContext context) {
-    Widget _errorWidget = buildErrorWidget(context);
+    Widget? _errorWidget = buildErrorWidget(context);
     if (_currentWidgetType == WidgetType.ErrorNetwork && _errorWidget == null) {
       print(
           "Error:你想要展示无网络状态页，但未设置，所以请重写 Widget buildErrorWidget(BuildContext context)");
     }
 
-    Widget _nodataWidget = buildNodataWidget(context);
+    Widget? _nodataWidget = buildNodataWidget(context);
     if (_currentWidgetType == WidgetType.SuccessNoData &&
         _nodataWidget == null) {
       print(
@@ -299,7 +326,37 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   }
 
   /// 更新当前页面的页面类型(会自动停止动画)，调用此方法未设置 needUpdateUI 会默认刷新
-  void updateWidgetType(WidgetType widgetType, {bool needUpdateUI}) {
+  void updateWidgetType(WidgetType widgetType, {bool? needUpdateUI}) {
+    _currentWidgetType = widgetType;
+    _showSelfLoading = false;
+    if (mounted == false) {
+      // 防止页面关闭执行setState()方法
+      return;
+    }
+
+    bool needSetState = needUpdateUI ?? true;
+    if (needSetState && mounted) {
+      setState(() {});
+    }
+  }
+
+  void updateWidgetTypeWithApiStatusCode(
+    int apiStatusCode, {
+    bool? needUpdateUI,
+  }) {
+    WidgetType widgetType;
+    if (apiStatusCode == 0) {
+      return;
+    } else if (apiStatusCode == HttpStatusCode.ErrorTimeout) {
+      return;
+    } else {
+      if (currentWidgetType == WidgetType.SuccessWithData) {
+        return;
+      }
+
+      widgetType = WidgetType.ErrorNetwork;
+    }
+
     _currentWidgetType = widgetType;
     _showSelfLoading = false;
     if (mounted == false) {
@@ -318,11 +375,11 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     return _currentWidgetType;
   }
 
-  Widget buildInitWidget(BuildContext context) {
+  Widget? buildInitWidget(BuildContext context) {
     return null; // 如果返回null 不会黑屏，因为上面盖着 buildSuccessWidget
   }
 
-  Widget buildSuccessWidget(BuildContext context) {
+  Widget? buildSuccessWidget(BuildContext context) {
     print('请在子类中重写此方法,不需要调用super.');
     // MediaQueryData mediaQuery = MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     // MediaQueryData mediaQuery = MediaQuery.of(context);
@@ -330,12 +387,12 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     return null;
   }
 
-  Widget buildNodataWidget(BuildContext context) {
+  Widget? buildNodataWidget(BuildContext context) {
     return null;
     // return StateNodataWidget();
   }
 
-  Widget buildErrorWidget(BuildContext context) {
+  Widget? buildErrorWidget(BuildContext context) {
     return null;
     // return StateErrorWidget(errorRetry: () {
     //   print("刷新了");

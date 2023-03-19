@@ -55,7 +55,7 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
       backgroundColor: Colors.white,
       centerTitle: true, // 标题统一居中(ios下默认居中对对齐,安卓下默认左对齐)
       elevation: 0, //隐藏底部阴影分割线
-      // title: AppBarTitleWidget(text: '好友列表'),
+      // title: ToolBarTitleWidget(text: '好友列表'),
       title: Text(
         "好友列表",
         style: TextStyle(
@@ -64,7 +64,7 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
           fontWeight: FontWeight.bold,
         ),
       ),
-      leading: AppBarBackWidget(
+      leading: QuickToolBarImageActionWidget(
         onPressed: () {
           Navigator.of(context).pop();
         },
@@ -78,21 +78,21 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
         Container(color: Colors.white, height: 20),
         CommonAppBar(
           backgroundColor: Colors.transparent,
-          title: AppBarTitleWidget(text: '我是有返回按钮的导航栏标题'),
+          title: ToolBarTitleWidget(text: '我是有返回按钮的导航栏标题'),
           automaticallyImplyLeading: true,
-          leading: AppBarBackWidget(
+          leading: QuickToolBarImageActionWidget(
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
         ),
         CommonAppBar(
-          title: AppBarTitleWidget(text: '我是没有返回按钮的导航栏标题'),
+          title: ToolBarTitleWidget(text: '我是没有返回按钮的导航栏标题'),
           automaticallyImplyLeading: false,
         ),
         appBar(),
         CommonAppBar(
-          title: AppBarTitleWidget(
+          title: ToolBarTitleWidget(
             text: '商品收藏',
             // onPressed: () {
             //   print('点击标题');
@@ -105,16 +105,18 @@ class _TSAppBarPageState extends State<TSAppBarPage> {
                 print('search....');
               },
             ),
-            AppBarActionWidget(
-              image: AssetImage(
-                'assets/appbar/icon_search.png',
-                package: 'flutter_effect',
+            ToolBarImageActionWidget(
+              image: Image(
+                image: AssetImage(
+                  'assets/appbar/icon_search.png',
+                  package: 'flutter_effect',
+                ),
               ),
               onPressed: () {
                 print('点击管理');
               },
             ),
-            AppBarActionWidget(
+            ToolBarTextActionWidget(
               text: '地址管理',
               onPressed: () {
                 print('点击管理');
