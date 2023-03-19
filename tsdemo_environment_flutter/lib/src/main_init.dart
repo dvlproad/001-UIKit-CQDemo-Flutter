@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:42:37
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 12:38:27
+ * @LastEditTime: 2023-03-19 13:59:05
  * @Description: 启动初始化
  */
 import 'dart:convert';
@@ -18,8 +18,11 @@ export 'package:app_devtool_framework/app_devtool_framework.dart'
 
 // import 'package:flutter_cache_kit/flutter_cache_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
+import 'package:app_environment/app_environment.dart'
+    show devtoolEventBus, DevtoolEnvironmentInitCompleteEvent;
 
-import 'package:flutter_images_picker/flutter_images_picker.dart';
+import 'package:flutter_images_picker/flutter_images_picker.dart'
+    show PermissionsManager;
 
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_log/flutter_log.dart';
@@ -36,7 +39,7 @@ class MainInit {
     PackageTargetType packageTargetType,
   ) {
     _navigatorKey = globalKey;
-    _initWithGlobalKey(globalKey, packageType, packageTargetType);
+    _initWithGlobalKey(globalKey, packageNetworkType, packageTargetType);
 
     // 其他开发页
     DevPage.navbarActions = [
@@ -79,7 +82,8 @@ class MainInit {
         }
       },
       userApiToken: userApiToken,
-      userDescribeBlock: () {
+      channelName: 'channelName',
+      logUserDescribeBlock: () {
         if (UserInfoManager.isLoginState) {
           User_manager_bean user = UserInfoManager.instance.userModel;
           String userDescribe = "${user.nickname ?? ''}(${user.tel ?? ''})";

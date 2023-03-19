@@ -102,9 +102,11 @@ class _TSLogPageState extends State<TSLogPage> {
                   }
 
                   DevLogUtil.addLogModel(
-                    logLevel: logLevel,
-                    logTitle: '',
-                    logText: Url,
+                    LogModel(
+                      logLevel: logLevel,
+                      title: '',
+                      shortMap: {"url": Url},
+                    ),
                   );
 
                   // setState(() {});

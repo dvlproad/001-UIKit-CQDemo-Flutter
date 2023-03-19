@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-19 14:21:08
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:tsdemo_environment_flutter/tsdemo_environment_flutter.dart';
 import 'package:tsdemo_environment_flutter/src/overlay_page2.dart';
@@ -5,7 +12,13 @@ import 'package:tsdemo_environment_flutter/src/overlay_page2.dart';
 GlobalKey<NavigatorState> globalKey = GlobalKey<NavigatorState>();
 
 void main() {
-  MainInit.initWithGlobalKey(globalKey, PackageType.develop1);
+  WidgetsFlutterBinding.ensureInitialized();
+
+  MainInit.initWithGlobalKey(
+    globalKey,
+    PackageNetworkType.test1,
+    PackageTargetType.formal,
+  );
   OverlayPage2.globalKey = globalKey;
 
   runApp(MyApp());

@@ -22,6 +22,12 @@ dependencies:
     path: ../flutter_overlay_kit/
   flutter_network:
     path: ../flutter_network/
+  flutter_network_kit:  # 为了引入 api 的 log 方法， LogApiUtil
+    path: ../flutter_network_kit/
+  flutter_environment:
+    path: ../flutter_environment/
+  app_environment:      # 为了引入 EnvManagerUtil
+    path: ../app_environment/
   # flutter_updateversion_kit:
   #   path: ../flutter_updateversion_kit/
 
