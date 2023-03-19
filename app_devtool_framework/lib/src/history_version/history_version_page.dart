@@ -1,15 +1,22 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-11-16 10:51:15
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2022-11-16 15:50:32
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import './history_version_cell.dart';
-import './history_version_bean.dart';
-export './history_version_bean.dart';
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
+    show HistoryVersionBean, DevBranchBean;
 
 class HistoryVersionPage extends StatefulWidget {
-  final String historyRecordTime;
-  final List<HistoryVersionBean> historyVersionBeans;
+  final String? historyRecordTime;
+  final List<HistoryVersionBean>? historyVersionBeans;
 
   const HistoryVersionPage({
-    Key key,
+    Key? key,
     this.historyRecordTime,
     this.historyVersionBeans,
   }) : super(key: key);
@@ -19,8 +26,8 @@ class HistoryVersionPage extends StatefulWidget {
 }
 
 class _HistoryVersionPageState extends State<HistoryVersionPage> {
-  String _historyRecordTime;
-  List<HistoryVersionBean> _historyVersionBeans;
+  late String _historyRecordTime;
+  late List<HistoryVersionBean> _historyVersionBeans;
 
   @override
   void dispose() {
@@ -32,14 +39,14 @@ class _HistoryVersionPageState extends State<HistoryVersionPage> {
     super.initState();
 
     _historyRecordTime = widget.historyRecordTime ?? '';
-    _historyVersionBeans = widget.historyVersionBeans;
+    _historyVersionBeans = widget.historyVersionBeans ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('当前【已上线】的版本记录'),
+        title: Text('历史版本记录'),
       ),
       body: Column(
         children: [
@@ -55,7 +62,8 @@ class _HistoryVersionPageState extends State<HistoryVersionPage> {
                 HistoryVersionBean historyVersionBean =
                     _historyVersionBeans[index];
                 return HistoryVerisonCell(
-                    historyVersionBean: historyVersionBean);
+                  historyVersionBean: historyVersionBean,
+                );
               },
             ),
           ),

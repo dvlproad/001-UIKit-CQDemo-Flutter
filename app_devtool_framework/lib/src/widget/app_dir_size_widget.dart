@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-07 10:54:27
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-30 18:08:18
+ * @LastEditTime: 2022-11-16 14:49:26
  * @Description: app几个环境的下载页罗列
  */
 import 'dart:io';
@@ -12,9 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:app_environment/src/init/main_diff_util.dart';
-
 import './clear_cache_util.dart';
+import 'document_page.dart';
 
 enum AppDirOrFileType {
   libraryCaches,
@@ -22,7 +21,7 @@ enum AppDirOrFileType {
 }
 
 class AppDirSizeWidget extends StatefulWidget {
-  AppDirSizeWidget({Key key}) : super(key: key);
+  AppDirSizeWidget({Key? key}) : super(key: key);
 
   @override
   State<AppDirSizeWidget> createState() => _AppDirSizeWidgetState();
@@ -60,6 +59,7 @@ class _AppDirSizeWidgetState extends State<AppDirSizeWidget> {
             },
           ),
           _file_cell("library Caches", _libraryCachesSizeString),
+          _file_cell("Video Caches", _videoCachesSizeString),
           _file_cell("documents", _documentsSizeString),
           _file_cell("documents DioCache.db", _documentDioCacheFileSizeString),
         ],
@@ -70,6 +70,7 @@ class _AppDirSizeWidgetState extends State<AppDirSizeWidget> {
   String _appPath = '';
 
   String _libraryCachesSizeString = '0';
+  String _videoCachesSizeString = '0';
   String _documentsSizeString = '0';
   String _documentDioCacheFileSizeString = '0';
   void getCount() async {
@@ -77,7 +78,9 @@ class _AppDirSizeWidgetState extends State<AppDirSizeWidget> {
     _appPath = tempDir.path;
 
     _libraryCachesSizeString = await DirSizeUtil.loadLibraryCachesSize();
-    // print('=== library Caches 大小：${_libraryCachesSizeString}');
+
+    _videoCachesSizeString = await DirSizeUtil.loadVideoCachesSize();
+
     _documentsSizeString = await DirSizeUtil.loadDocumentsSize();
     // print('=== documents 大小：${_documentsSizeString}');
     _documentDioCacheFileSizeString =
@@ -91,7 +94,7 @@ class _AppDirSizeWidgetState extends State<AppDirSizeWidget> {
   Widget _file_cell(
     String title,
     String textValue, {
-    void Function() onLongPress,
+    void Function()? onLongPress,
   }) {
     return ImageTitleTextValueCell(
       height: 40,
@@ -100,6 +103,10 @@ class _AppDirSizeWidgetState extends State<AppDirSizeWidget> {
       textValue: textValue,
       textValueFontSize: 13,
       onTap: () async {
+        if(title == "documents"){
+          Navigator.push(context, MaterialPageRoute(builder: (ctx)=>const DocumentPage()));
+          return;
+        }
         Clipboard.setData(ClipboardData(text: "$title:$textValue"));
         ToastUtil.showMessage('app文件大小拷贝成功');
       },

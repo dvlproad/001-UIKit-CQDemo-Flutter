@@ -1,9 +1,10 @@
+import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:dio/dio.dart' show Dio, Options, Response;
+import 'package:dio/dio.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_effect/flutter_effect.dart';
@@ -11,6 +12,10 @@ import 'package:app_network/app_network.dart';
 import 'package:app_log/app_log.dart';
 import 'package:app_environment/app_environment.dart';
 import 'package:app_updateversion_kit/app_updateversion_kit.dart';
+import 'package:app_service_user/app_service_user.dart';
+
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
+    show HistoryVersionBean, DevBranchBean;
 
 import './dev_environment_change_notifiter.dart';
 
@@ -24,11 +29,62 @@ import './dev_notifier.dart';
 import './history_version/history_version_page.dart';
 import './dev_branch/dev_branch_page.dart';
 import './apns_util.dart';
+// import 'package:app_map/app_map.dart';
+// import 'package:wish/widget/dialog/area_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' show json;
+// import 'package:wish/common/locate_manager.dart';
 
+/// 开发工具调试入口
+class DevPageEntranceWidget extends StatelessWidget {
+  const DevPageEntranceWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (EnvManagerUtil.isPackageTargetDev == true) {
+      return ImageTitleTextValueCell(
+          title: "定制开发工具",
+          textValue: '',
+          onTap: () {
+            _goDevPage(context);
+          });
+    } else {
+      return Container(
+        height: 40,
+        width: 40,
+        // color: Colors.red,
+        alignment: Alignment.centerLeft,
+        child: Row(children: [
+          GestureDetector(
+            onLongPress: () {
+              _goDevPage(context);
+            },
+            child: Container(
+              color: Colors.transparent, // 避免无响应区域
+              width: 40,
+            ),
+          ),
+        ]),
+      );
+    }
+  }
+
+  void _goDevPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return const DevPage();
+        },
+      ),
+    );
+  }
+}
+
+/// 开发工具主页面
 class DevPage extends StatefulWidget {
-  static List<Widget> navbarActions; // 开发工具页面导航栏上的按钮
+  static List<Widget>? navbarActions; // 开发工具页面导航栏上的按钮
 
-  const DevPage({Key key}) : super(key: key);
+  const DevPage({Key? key}) : super(key: key);
 
   @override
   _DevPageState createState() => _DevPageState();
@@ -37,13 +93,16 @@ class DevPage extends StatefulWidget {
 class _DevPageState extends State<DevPage> {
   bool devSwtichValue = DevUtil.isDevFloatingWidgetShowing();
 
-  BranchPackageInfo packageInfo;
+  late BranchPackageInfo _packageInfo;
 
-  String _historyRecordTime;
-  List<HistoryVersionBean> _historyVersionBeans;
+  late String _historyRecordTime;
+  late List<HistoryVersionBean> _historyVersionBeans;
 
-  String _brancesRecordTime;
-  List<DevBranchBean> _devBranchBeans;
+  late String _brancesRecordTime;
+  late List<DevBranchBean> _devBranchBeans;
+
+  String location = "选择虚拟位置";
+  bool virtualLocationChecked = false;
 
   @override
   void dispose() {
@@ -58,30 +117,38 @@ class _DevPageState extends State<DevPage> {
   void initState() {
     super.initState();
 
-    packageInfo = BranchPackageInfo.nullPackageInfo;
+    _packageInfo = BranchPackageInfo.nullPackageInfo;
 
     DevUtil.isDevPageShowing = true;
     _getVersion();
+
+    SharedPreferences.getInstance().then((sp) {
+      final map = json.decode(sp.getString("Virtual Location") ?? "{}");
+      final province = map["provice"];
+      final city = map["city"];
+      final area = map["county"];
+      setState(() {
+        virtualLocationChecked =
+            sp.getBool("Virtual Location Checked") ?? false;
+        if (province != null) {
+          location = province + " " + city + " " + area;
+        } else {
+          location = "选择虚拟位置";
+        }
+      });
+    });
   }
 
   // 获取版本号
   _getVersion() async {
-    packageInfo = await BranchPackageInfo.fromPlatform();
+    _packageInfo = await BranchPackageInfo.fromPlatform();
 
-    _historyRecordTime = packageInfo.historyRecordTime;
-    _historyVersionBeans = packageInfo.historyVersionMaps?.map((json) {
-      return HistoryVersionBean.fromJson(json);
-    }).toList();
+    _historyRecordTime = _packageInfo.historyRecordTime;
+    _historyVersionBeans = _packageInfo.historyVersionBeans;
 
-    _brancesRecordTime = packageInfo.brancesRecordTime;
-    List<DevBranchBean> featureBranchBeans =
-        packageInfo.featureBranchMaps?.map((json) {
-      return DevBranchBean.fromJson(json);
-    }).toList();
-    List<DevBranchBean> nocodeBranceBeans =
-        packageInfo.nocodeBranceMaps?.map((json) {
-      return DevBranchBean.fromJson(json);
-    }).toList();
+    _brancesRecordTime = _packageInfo.brancesRecordTime;
+    List<DevBranchBean> featureBranchBeans = _packageInfo.featureBranchBeans;
+    List<DevBranchBean> nocodeBranceBeans = _packageInfo.nocodeBranceBeans;
 
     _devBranchBeans = [];
     _devBranchBeans.addAll(nocodeBranceBeans);
@@ -138,8 +205,15 @@ class _DevPageState extends State<DevPage> {
             // 版本信息+检查更新
             Container(height: 20),
             _devtool_appinfo_cell(),
+            // 需求分支+线上版本记录
+            Container(height: 20),
+            // _devBranch_cell(),
+            _historyVersion_cell(),
+            // 检查更新
+            Container(height: 20),
             _devtool_checkVersion_cell(context),
-            CanceledVersionWidget(),
+            _devtool_checkVersion_mock_cell(context),
+            // 请补充 app 内测版本的跳过的版本列表
             // 文件大小
             Container(height: 20),
             AppDirSizeWidget(),
@@ -158,20 +232,20 @@ class _DevPageState extends State<DevPage> {
             // 网络库测试相关
             _devtool_changeheader_cell(), // 网络库:header 的 增删该
             _devtool_removeheaderKey_cell(), // 网络库:header 的 增删该
+            _api_pureDio_cell(context),
             _apilog_get_cell(context),
             _apicache_businessFailure_cell(context),
             _apicache_businessSuccess_cell(context),
             _apiretry_cell(context),
             _api_buriedpoint_cell(context),
             _api_buriedpoint_cell2(context),
-            // 需求分支+线上版本记录
-            Container(height: 20),
-            _devBranch_cell(),
-            _historyVersion_cell(),
+
             // 日志相关
             Container(height: 20),
             _devtool_logSwtich_cell(),
             _devtool_logTest_cell(),
+            Container(height: 20),
+            _devtool_virtualLocation(),
             Container(height: 40),
           ],
         ),
@@ -179,7 +253,7 @@ class _DevPageState extends State<DevPage> {
     );
   }
 
-  _rennderItemPage({@required String title, @required Widget page}) {
+  _rennderItemPage({required String title, required Widget page}) {
     return ImageTitleTextValueCell(
       title: title,
       textValue: '',
@@ -223,7 +297,7 @@ class _DevPageState extends State<DevPage> {
 
   // app 信息
   Widget _devtool_appinfo_cell() {
-    return PackageInfoCell(packageInfo: packageInfo);
+    return PackageInfoCell(packageInfo: _packageInfo);
   }
 
   // deviceToken
@@ -246,7 +320,7 @@ class _DevPageState extends State<DevPage> {
   Widget _devBranch_cell() {
     return ImageTitleTextValueCell(
       title: "当前【开发中】的需求记录",
-      textValue: '记于${packageInfo.brancesRecordTime}',
+      textValue: '记于${_packageInfo.brancesRecordTime}',
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return DevBranchPage(
@@ -261,8 +335,8 @@ class _DevPageState extends State<DevPage> {
   // 线上版本记录
   Widget _historyVersion_cell() {
     return ImageTitleTextValueCell(
-      title: "当前【已上线】的版本记录",
-      textValue: '记于${packageInfo.historyRecordTime}',
+      title: "历史版本记录",
+      textValue: '记于${_packageInfo.historyRecordTime}',
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
           return HistoryVersionPage(
@@ -290,6 +364,24 @@ class _DevPageState extends State<DevPage> {
         }).catchError((onError) {
           LoadingUtil.dismissInContext(context);
         });
+      },
+    );
+  }
+
+  Widget _devtool_checkVersion_mock_cell(BuildContext context) {
+    return ImageTitleTextValueCell(
+      title: "检查更新_mock",
+      titlePrompt: '后台不设置有新版本情况下，前端自己修改模拟后端改了',
+      titlePromptMaxLines: 2,
+      rightMaxWidth: 20,
+      textValue: '',
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MockNewVersionPage(),
+          ),
+        );
       },
     );
   }
@@ -336,11 +428,13 @@ class _DevPageState extends State<DevPage> {
     if (!_isDebug()) {
       return Container();
     }
+    String token = '12345';
     return ImageTitleTextValueCell(
       title: "添加/修改header",
-      textValue: '12345',
+      titlePrompt: '修改的是header中的Authorization',
+      textValue: token,
       onTap: () {
-        AppNetworkManager().addOrUpdateToken('12345');
+        AppNetworkManager().updateToken(token);
         ToastUtil.showMessage('添加/修改header成功');
       },
     );
@@ -354,8 +448,67 @@ class _DevPageState extends State<DevPage> {
       title: "删除header",
       textValue: '',
       onTap: () {
-        AppNetworkManager().removeToken();
+        AppNetworkManager().updateToken(null);
         ToastUtil.showMessage('删除header成功');
+      },
+    );
+  }
+
+  Widget _api_pureDio_cell(BuildContext context) {
+    return ImageTitleTextValueCell(
+      title: "网络库：纯净的Dio请求(验证不是封装问题)",
+      textSubValue: '',
+      textValue: '',
+      onTap: () async {
+        String baseUrl = NetworkPageDataManager().selectedNetworkModel.apiHost;
+        String userApiToken = await UserInfoManager().getCacheUserAuthToken();
+        Map<String, dynamic> headers = {};
+        if (userApiToken != null && userApiToken.isNotEmpty) {
+          headers.addAll({'Authorization': userApiToken});
+        }
+
+        BaseOptions options = BaseOptions(
+          connectTimeout: 15000,
+          receiveTimeout: 15000,
+          contentType: "application/json",
+          baseUrl: baseUrl,
+          headers: headers,
+        );
+
+        Dio dio = Dio(options);
+        String api = '/account/wallet/wishStar/page';
+        dio.post(
+          api,
+          queryParameters: {
+            "smsPhoneNumber": '18012345678',
+            "captchaType": "LOGIN",
+          },
+        ).then((Response response) {
+          debugPrint(
+              "网络库：纯净的Dio请求baseUrl=$baseUrl,api=$api,token=$userApiToken,response = $response");
+
+          Map<String, dynamic> map = {
+            "baseUrl": baseUrl,
+            "api": api,
+          };
+          Map<String, dynamic> lastShortMap = {};
+          lastShortMap.addAll(map);
+
+          Map<String, dynamic> lastDetailMap = {};
+          lastDetailMap.addAll(map);
+          lastDetailMap.addAll({
+            "token": userApiToken,
+            "response.data": response.data,
+          });
+
+          AppLogUtil.logMessage(
+            logType: LogObjectType.api_app,
+            logLevel: LogLevel.error,
+            title: api,
+            shortMap: lastShortMap,
+            detailMap: lastDetailMap,
+          );
+        });
       },
     );
   }
@@ -417,18 +570,6 @@ class _DevPageState extends State<DevPage> {
             debugPrint('测试网络请求的缓存功能:$message');
           },
         );
-        // AppNetworkManager().cache_post(
-        //   'user/account/getTelCaptcha',
-        //   params: {
-        //     "smsPhoneNumber": '18012345678',
-        //     "captchaType": "LOGIN",
-        //   },
-        //   cacheLevel: AppNetworkCacheLevel.one,
-        // )
-        //     .then((ResponseModel responseModel) {
-        //   String message = responseModel.isCache == true ? "是缓存数据" : "是网络数据";
-        //   debugPrint('测试网络请求的缓存功能:$message');
-        // });
       },
     );
   }
@@ -459,6 +600,7 @@ class _DevPageState extends State<DevPage> {
     }
     return ImageTitleTextValueCell(
       title: "网络库：测试请求的重试功能",
+      titlePrompt: '日志有多条,但回调只能一次',
       textValue: '',
       onTap: () {
         int requestCount = 0;
@@ -472,23 +614,9 @@ class _DevPageState extends State<DevPage> {
           cacheLevel: AppNetworkCacheLevel.none,
           completeCallBack: (resultData) {
             requestCount++;
-            debugPrint('测试网络请求的重试功能:当前重试次数$requestCount');
+            debugPrint('测试网络请求的重试功能(日志有多条,但回调只能一次):当前重试次数$requestCount');
           },
         );
-        // int requestCount = 0;
-        // AppNetworkManager().cache_post(
-        //   'login/doLogin',
-        //   params: {
-        //     "clientId": "clientApp",
-        //     "clientSecret": "123123",
-        //   },
-        //   retryCount: 3,
-        //   cacheLevel: AppNetworkCacheLevel.none,
-        // )
-        //     .then((ResponseModel responseModel) {
-        //   requestCount++;
-        //   debugPrint('测试网络请求的重试功能:当前重试次数$requestCount');
-        // });
       },
     );
   }
@@ -523,7 +651,7 @@ class _DevPageState extends State<DevPage> {
       title: "网络库：测试埋点请求接口--底层网络库",
       textValue: '',
       onTap: () async {
-        String buriedpoint_url = 'http://test.api.xihuanwu.com/bi/sendMessage';
+        String buriedpoint_url = 'http://test.api.xxx.com/bi/sendMessage';
         Map<String, dynamic> buriedpoint_customParams = {
           "DataHubId": "datahub-y32g29n6",
           // "Message": "[{\"Key\":\"\",\"Body\":{\"lib\":\"MiniProgram_app\"}},{\"Body\":{\"lib\":\"MiniProgram_app\"}}]",
@@ -606,6 +734,74 @@ class _DevPageState extends State<DevPage> {
         ));
       },
     );
+  }
+
+  ///虚拟位置
+  Widget _devtool_virtualLocation() {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          BJHTitleSwitchValueCell(
+            title: "虚拟位置",
+            boolValue: virtualLocationChecked,
+            onChanged: (bSwtichValue) async {
+              setState(() {
+                virtualLocationChecked = bSwtichValue;
+              });
+              final sp = await SharedPreferences.getInstance();
+              sp.setBool("Virtual Location Checked", bSwtichValue);
+            },
+          ),
+          virtualLocationChecked
+              ? ImageTitleTextValueCell(
+                  title: location,
+                  textValue: '',
+                  onTap: () async {
+                    final sp = await SharedPreferences.getInstance();
+                    final map =
+                        json.decode(sp.getString("Virtual Location") ?? "{}");
+                    _showCityPicker(map, sp);
+                  },
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  _showCityPicker(Map<String, dynamic> map, SharedPreferences sp) async {
+    /*
+    showModalBottomSheet(
+      context: context,
+      builder: (_) => AreaSelection(
+          showAllAreaType: true,
+          height: 300.w_bj,
+          initProviceIndex: map["proviceIndex"] ?? 0,
+          initCityIndex: map["cityIndex"] ?? 0,
+          initCountyIndex: map["countyIndex"] ?? 0,
+          onSelect: (Map targetArea) {
+            map["proviceIndex"] = targetArea["proviceIndex"];
+            map["cityIndex"] = targetArea["cityIndex"];
+            map["countyIndex"] = targetArea["countyIndex"];
+            map["cityId"] = targetArea["cityId"];
+            map["countyId"] = targetArea["countyId"];
+            map["proviceId"] = targetArea["proviceId"];
+            map["provice"] = targetArea["provice"];
+            map["city"] = targetArea["city"];
+            map["county"] = targetArea["county"];
+            sp.setString("Virtual Location", json.encode(map));
+            LocateManager().getLatitudeAndLongitude(map);
+            setState(() {
+              location = targetArea["provice"] +
+                  " " +
+                  targetArea["city"] +
+                  " " +
+                  targetArea["county"];
+            });
+          }),
+    );
+    */
   }
 
   /// 判断是否为Debug模式

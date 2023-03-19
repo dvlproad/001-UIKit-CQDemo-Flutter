@@ -1,16 +1,22 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
     show ImageTitleTextValueCell, TableViewCellArrowImageType;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import './dev_branch_bean.dart';
+import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
+    show HistoryVersionBean, DevBranchBean;
+
+import '../cell/title_value_cell.dart';
 
 class DevBranchCell extends StatefulWidget {
   final DevBranchBean devBranchBean;
+  final int branchIndex;
 
   const DevBranchCell({
-    Key key,
-    this.devBranchBean,
+    Key? key,
+    required this.devBranchBean,
+    required this.branchIndex,
   }) : super(key: key);
 
   @override
@@ -18,7 +24,7 @@ class DevBranchCell extends StatefulWidget {
 }
 
 class _DevBranchCellState extends State<DevBranchCell> {
-  DevBranchBean _devBranchBean;
+  late DevBranchBean _devBranchBean;
 
   @override
   void dispose() {
@@ -40,8 +46,8 @@ class _DevBranchCellState extends State<DevBranchCell> {
         child: Column(
           children: [
             ImageTitleTextValueCell(
-              height: 40,
-              title: _devBranchBean.name,
+              constraints: BoxConstraints(minHeight: 30),
+              title: "${widget.branchIndex + 1}.${_devBranchBean.name}",
               textValue: '',
               arrowImageType: TableViewCellArrowImageType.none,
             ),
@@ -58,22 +64,40 @@ class _DevBranchCellState extends State<DevBranchCell> {
                       color: Colors.transparent,
                       child: Column(
                         children: [
-                          cellWidget(
-                            title: "创建时间",
-                            textValue: _devBranchBean.createTime,
-                            textValueFontSize: 12,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              titleTimeClosedWidget(
+                                title: "创建:",
+                                textValue: _devBranchBean.createTime,
+                              ),
+                              titleTimeClosedWidget(
+                                title: "提测:",
+                                textValue: _devBranchBean.submitTestTime,
+                              ),
+                              titleTimeClosedWidget(
+                                title: "通过:",
+                                textValue: _devBranchBean.passTestTime,
+                              ),
+                              titleTimeClosedWidget(
+                                title: "合入:",
+                                textValue: _devBranchBean.mergerPreTime,
+                              ),
+                            ],
                           ),
-                          cellWidget(
+                          TitleValueCellFactory.columnCellWidget(
                             title: "分支功能",
                             textValue: _devBranchBean.des,
-                            textValueFontSize: 12,
+                            textValueFontSize: 16,
+                            textValueMaxLines: 50,
                           ),
                           Container(height: 1, color: Colors.black),
                         ],
                       ),
                     ),
                   ),
-                  _arrowImage(),
+                  TitleValueCellFactory.arrowImage(),
                 ],
               ),
             ),
@@ -81,7 +105,7 @@ class _DevBranchCellState extends State<DevBranchCell> {
         ),
       ),
       onTap: () {
-        String fullVersionDes = _devBranchBean.toString();
+        String fullVersionDes = _devBranchBean.description;
 
         Clipboard.setData(ClipboardData(text: fullVersionDes));
         ToastUtil.showMessage('版本信息拷贝成功');
@@ -90,85 +114,46 @@ class _DevBranchCellState extends State<DevBranchCell> {
     );
   }
 
-  Widget cellWidget({
-    String title,
-    String textValue,
-    double textValueFontSize,
+  Widget titleTimeClosedWidget({
+    required String title,
+    String? textValue,
+    double? textValueFontSize,
   }) {
     if (textValue == null || textValue.isEmpty) {
-      textValue = '未标明';
+      return Container(
+        width: 20,
+        height: 10,
+        color: Color.fromARGB(255, Random.secure().nextInt(255),
+            Random.secure().nextInt(255), Random.secure().nextInt(255)),
+      );
     }
-    // return ImageTitleTextValueCell(
-    //   title: title,
-    //   textValue: textValue,
-    //   textValueFontSize: textValueFontSize ?? 12,
-    // );
 
     return Container(
       color: Colors.transparent,
+      alignment: Alignment.center,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _mainText(title),
-          Expanded(child: _textValueWidget(textValue)),
+          TitleValueCellFactory.mainText(title),
+          Container(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+            color: Colors.transparent,
+            alignment: Alignment.center,
+            child: Text(
+              textValue,
+              textAlign: TextAlign.right,
+              maxLines: 10,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: const Color(0xff333333),
+                fontSize: textValueFontSize ?? 15,
+                fontFamily: 'PingFang SC',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ],
-      ),
-    );
-  }
-
-  // 主文本
-  Widget _mainText(String title) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        title ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: Color(0xff222222),
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _textValueWidget(String textValue, {double textValueFontSize}) {
-    // // 自动缩小字体的组件
-    // return FlutterAutoText(
-    //   text: this.textValue ?? '',
-    // );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      constraints: const BoxConstraints(maxWidth: 180, minHeight: 30),
-      color: Colors.transparent,
-      child: Text(
-        textValue ?? '',
-        textAlign: TextAlign.right,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: const Color(0xff999999),
-          fontSize: textValueFontSize ?? 15,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: const Image(
-        image:
-            AssetImage('assets/arrow_right.png', package: 'flutter_baseui_kit'),
-        width: 17,
-        height: 32,
       ),
     );
   }

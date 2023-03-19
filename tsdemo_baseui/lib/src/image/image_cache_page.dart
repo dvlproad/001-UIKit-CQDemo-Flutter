@@ -13,7 +13,7 @@ class _TSImageCachePageState extends State<TSImageCachePage> {
   String assetName = 'assets/zhangjiajie.jpg';
 
   String netImagePrefix =
-      'https://bojuehui-1302324914.cos.ap-guangzhou.myqcloud.com/image/tag_bg';
+      'https://xxx-1302324914.cos.ap-guangzhou.myqcloud.com/image/tag_bg';
 
   List networkImageModels;
   int showImageIndex;

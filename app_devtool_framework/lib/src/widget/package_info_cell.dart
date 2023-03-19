@@ -1,3 +1,5 @@
+import 'dart:math';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -6,13 +8,15 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 import 'package:app_environment/app_environment.dart';
+import '../cell/title_value_cell.dart';
+import '../dev_branch/dev_branch_page.dart';
 
 class PackageInfoCell extends StatefulWidget {
   final BranchPackageInfo packageInfo;
 
   const PackageInfoCell({
-    Key key,
-    this.packageInfo,
+    Key? key,
+    required this.packageInfo,
   }) : super(key: key);
 
   @override
@@ -20,6 +24,8 @@ class PackageInfoCell extends StatefulWidget {
 }
 
 class _PackageInfoCellState extends State<PackageInfoCell> {
+  late BranchPackageInfo _packageInfo;
+
   @override
   void dispose() {
     super.dispose();
@@ -32,17 +38,34 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
 
   @override
   Widget build(BuildContext context) {
-    BranchPackageInfo packageInfo = widget.packageInfo;
-    packageInfo ??= BranchPackageInfo.nullPackageInfo;
+    _packageInfo = widget.packageInfo;
 
-    String version = packageInfo.version;
-    String buildNumber = packageInfo.buildNumber;
-    String branceName = packageInfo.buildBranceName;
-    String buildCreateTime = packageInfo.buildCreateTime;
+    // _packageInfo.buildContainBranchs =
+    //     "0.dev_lzh_im_order:im发送订单#1.dev_splash:开屏页样式修改#2.dev_upload:分块上传#3.dev_fix:线上版问题修复或优化#4.dev_lzh_wish_goods:愿望单详情使用新接口#5.dev_asset_unuse:app无用资源清理";
+    String version = _packageInfo.version;
+    String buildNumber = _packageInfo.buildNumber;
+    String branceName = _packageInfo.buildBranceName;
+    String buildCreateTime = _packageInfo.buildCreateTime;
+    String versionName = "$version($buildNumber)";
 
-    String packageType = MainDiffUtil.diffPackageBean().des;
-    String versionName = "$packageType：V$version($buildNumber)";
-    // String versionName = "测试包：V1.02.25(22221010)";
+    PackageTargetType originTargetType = EnvManagerUtil.originPackageTargetType;
+    String originTargetDes =
+        EnvManagerUtil.packageTargetString(originTargetType);
+
+    PackageTargetModel originTargetModel =
+        EnvManagerUtil.packageDefaultTargetModel;
+
+    TSEnvNetworkModel originNetworkModel =
+        EnvManagerUtil.packageDefaultNetworkModel;
+    String originNetworkDes =
+        originNetworkModel.type.toString().split('.').last;
+    originNetworkDes += "_${originNetworkModel.name}";
+
+    String appTargetNetworkDes = EnvManagerUtil.appTargetNetworkString(
+      containLetter: false,
+    );
+
+    // String versionName = "formal_product：V1.02.25(22221010)";
 
     // return ImageTitleTextValueCell(
     //   title: "app信息",
@@ -54,6 +77,39 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
     //   },
     // );
 
+    String packageBranchLog = _packageInfo.getBuildContainBranchsDescription(
+      showBranchName: false,
+    );
+    int currentBranchCount = _packageInfo.buildContainBranchs.length;
+
+    String packUploadLocationLog = '';
+    if (_packageInfo.packResultModel != null) {
+      PackResultModel packResultModel = _packageInfo.packResultModel!;
+      packUploadLocationLog += '${packResultModel.pgyerOwner!}';
+
+      String? pgyerChannelShortcut =
+          packResultModel.pgyerChannelConfigModel?.pgyerChannelShortcut_upload;
+      if (pgyerChannelShortcut != null) {
+        packUploadLocationLog += '_${pgyerChannelShortcut!}';
+      } else {
+        packUploadLocationLog += '_all';
+      }
+    }
+
+    String packDownloadLocationLog = '';
+    if (_packageInfo.packResultModel != null) {
+      PackResultModel packResultModel = _packageInfo.packResultModel!;
+      packDownloadLocationLog += '${packResultModel.pgyerOwner}';
+
+      String? pgyerChannelShortcut = packResultModel
+          .pgyerChannelConfigModel?.pgyerChannelShortcut_download;
+      if (pgyerChannelShortcut != null) {
+        packDownloadLocationLog += '_${pgyerChannelShortcut!}';
+      } else {
+        packDownloadLocationLog += '_all';
+      }
+    }
+
     return GestureDetector(
       child: Container(
         color: Colors.white,
@@ -61,7 +117,7 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
           children: [
             ImageTitleTextValueCell(
               height: 40,
-              title: "app信息",
+              title: "app信息(${appTargetNetworkDes})",
               textValue: '',
               arrowImageType: TableViewCellArrowImageType.none,
             ),
@@ -74,140 +130,97 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.only(right: 10),
+                      padding: const EdgeInsets.only(left: 0, right: 0),
                       color: Colors.transparent,
                       child: Column(
                         children: [
-                          cellWidget(
+                          TitleValueCellFactory.rowCellWidget(
                             title: "①包与版本",
                             textValue: versionName,
                             textValueFontSize: 12,
                           ),
-                          cellWidget(
-                            title: "②最佳环境",
-                            textValue:
-                                MainDiffUtil.diffPackageBean().bestNetworkDes,
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "②原始平台",
+                            textValue: originTargetDes,
                             textValueFontSize: 12,
                           ),
-                          cellWidget(
-                            title: "③生成时间",
-                            textValue: buildCreateTime,
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "②原始环境",
+                            textValue: originNetworkDes,
                             textValueFontSize: 12,
                           ),
-                          cellWidget(
-                            title: "④来源分支",
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "③来源分支",
                             textValue: branceName,
                             textValueFontSize: 12,
                           ),
-                          cellWidget(
-                            title: "⑤功能涵盖",
-                            textValue: packageInfo.buildBranceFeature,
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "④生成时间",
+                            textValue: buildCreateTime,
                             textValueFontSize: 12,
+                          ),
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "⑤功能涵盖",
+                            textValue: _packageInfo.buildBranceFeature,
+                            textValueFontSize: 12,
+                          ),
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "⑥上传位置",
+                            textValue: packUploadLocationLog,
+                            textValueFontSize: 12,
+                            textValueMaxLines: 20,
+                          ),
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "⑥下载位置",
+                            textValue: packDownloadLocationLog,
+                            textValueFontSize: 12,
+                            textValueMaxLines: 20,
+                          ),
+                          TitleValueCellFactory.rowCellWidget(
+                            title: "⑦打包信息",
+                            textValue: _packageInfo.buildDescription,
+                            textValueFontSize: 12,
+                          ),
+                          TitleValueCellFactory.columnCellWidget(
+                            title: "⑧分支信息",
+                            textValue: packageBranchLog,
+                            textValueFontSize: 12,
+                            textValueMaxLines: 100,
                           ),
                         ],
                       ),
                     ),
                   ),
-                  _arrowImage(),
+                  TitleValueCellFactory.arrowImage(),
                 ],
               ),
             ),
           ],
         ),
       ),
+      onLongPress: throttle(() async {
+        String _brancesRecordTime = _packageInfo.buildCreateTime;
+        List<DevBranchBean> _devBranchBeans = _packageInfo.buildContainBranchs;
+        if (_devBranchBeans.isEmpty) {
+          ToastUtil.showMessage('暂无分支信息');
+          return;
+        }
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return DevBranchPage(
+            brancesRecordTime: _brancesRecordTime,
+            devBranchBeans: _devBranchBeans,
+          );
+        }));
+      }),
       onTap: throttle(() async {
-        String packageTypeDes = MainDiffUtil.diffPackageBean().des;
+        String packageTypeDes = EnvManagerUtil.packageDefaultNetworkModel.des;
         String fullPackageDes = '';
         fullPackageDes += "$packageTypeDes：";
-        fullPackageDes += "${packageInfo.fullPackageDes()}";
+        fullPackageDes += "${_packageInfo.fullPackageDes()}";
 
         Clipboard.setData(ClipboardData(text: fullPackageDes));
         ToastUtil.showMessage('app信息拷贝成功');
       }),
-      onLongPress: () {},
-    );
-  }
-
-  Widget cellWidget({
-    String title,
-    String textValue,
-    double textValueFontSize,
-  }) {
-    if (textValue == null || textValue.isEmpty) {
-      textValue = '未标明';
-    }
-    // return ImageTitleTextValueCell(
-    //   title: title,
-    //   textValue: textValue,
-    //   textValueFontSize: textValueFontSize ?? 12,
-    // );
-
-    return Container(
-      color: Colors.transparent,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _mainText(title),
-          Expanded(child: _textValueWidget(textValue)),
-        ],
-      ),
-    );
-  }
-
-  // 主文本
-  Widget _mainText(String title) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: Text(
-        title ?? '',
-        textAlign: TextAlign.left,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          color: Color(0xff222222),
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _textValueWidget(String textValue, {double textValueFontSize}) {
-    // // 自动缩小字体的组件
-    // return FlutterAutoText(
-    //   text: this.textValue ?? '',
-    // );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      constraints: const BoxConstraints(maxWidth: 180, minHeight: 30),
-      color: Colors.transparent,
-      child: Text(
-        textValue ?? '',
-        textAlign: TextAlign.right,
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: const Color(0xff999999),
-          fontSize: textValueFontSize ?? 15,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-
-  // 箭头
-  Widget _arrowImage() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: Colors.transparent,
-      child: const Image(
-        image:
-            AssetImage('assets/arrow_right.png', package: 'flutter_baseui_kit'),
-        width: 17,
-        height: 32,
-      ),
     );
   }
 }

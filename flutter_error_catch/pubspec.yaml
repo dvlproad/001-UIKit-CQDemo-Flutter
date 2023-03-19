@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_bugly: any
+
+  app_log:
+    path: ../app_log/
   flutter_log:
     path: ../flutter_log/
 

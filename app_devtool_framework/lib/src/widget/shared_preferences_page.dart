@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-07 10:54:27
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-18 19:14:20
+ * @LastEditTime: 2022-11-16 15:39:15
  * @Description: app几个环境的下载页罗列
  */
 import 'package:flutter/material.dart';
@@ -13,14 +13,14 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 class SharedPreferencesPage extends StatefulWidget {
-  SharedPreferencesPage({Key key}) : super(key: key);
+  SharedPreferencesPage({Key? key}) : super(key: key);
 
   @override
   State<SharedPreferencesPage> createState() => _SharedPreferencesPageState();
 }
 
 class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
-  SharedPreferences _prefs;
+  SharedPreferences? _prefs;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
   Widget build(BuildContext context) {
     List<String> keys = [];
     if (_prefs != null) {
-      Set<String> keySet = _prefs.getKeys();
+      Set<String> keySet = _prefs!.getKeys();
       for (String key in keySet) {
         keys.add(key);
       }
@@ -64,7 +64,10 @@ class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
                 //
               },
               onLongPress: () async {
-                bool clearSuccess = await _prefs.clear();
+                if (_prefs == null) {
+                  return;
+                }
+                bool clearSuccess = await _prefs!.clear();
                 ToastUtil.showMessage("清除数据缓存${clearSuccess ? '成功' : '失败'}");
               },
             ),
@@ -87,7 +90,10 @@ class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
                         return;
                       }
 
-                      bool clearSuccess = await _prefs.remove(key);
+                      if (_prefs == null) {
+                        return;
+                      }
+                      bool clearSuccess = await _prefs!.remove(key);
                       ToastUtil.showMessage(
                           "清除$key缓存${clearSuccess ? '成功' : '失败'}");
                       setState(() {});

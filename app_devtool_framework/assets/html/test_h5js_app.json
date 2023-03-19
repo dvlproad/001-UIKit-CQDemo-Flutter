@@ -1,0 +1,82 @@
+[
+    {
+        "h5CallBridgeActionDes": "获取app的公共信息，并回调给h5",
+        "h5CallBridgeActionName": "h5CallBridgeAction_getFixedAppInfo",
+        "h5CallBridgeSendMessage": {
+            "callbackMethod": "bridgeCallH5Action_showCallbackJsonString"
+        },
+        "h5CallBridgeDescription": {
+            "callbackMethod": "获取到的数值在h5上用哪个方法来接口"
+        },
+        "appCallbackDemo_ValueAndDescription": {
+            "version": "1.0.0",
+            "buildNumber": "1",
+            "platform": "iOS",
+            "appType": "App类型，公司产品上可能有多个app",
+            "appFeatureType": "dev(pgyer蒲公英)、inner(TestFlight)、formal(AppStore)"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "获取埋点monitor的公共信息，并回调给h5",
+        "h5CallBridgeActionName": "h5CallBridgeAction_getFixedMonitorInfo",
+        "h5CallBridgeSendMessage": {
+            "callbackMethod": "bridgeCallH5Action_showCallbackJsonString"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "显示app的toast样式",
+        "h5CallBridgeActionName": "h5CallBridgeAction_showAppToast",
+        "h5CallBridgeSendMessage": {
+            "message": "恭喜您分享成功"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "更新状态栏颜色_light",
+        "h5CallBridgeActionName": "setStatusBarColor",
+        "h5CallBridgeSendMessage": {
+            "statusBarColor": "light"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "更新状态栏颜色_dark",
+        "h5CallBridgeActionName": "setStatusBarColor",
+        "h5CallBridgeSendMessage": {
+            "statusBarColor": "dark"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "跳转到app的指定聊天页面",
+        "h5CallBridgeActionName": "jump_app_url",
+        "h5CallBridgeSendMessage": {
+            "url": "yuanwangwu://openpage?pageName=imChatPage&conversationID=126191&imUserId=1602856363702501376&showName=婉艺&type=1&dialogSubjectId=1506196208391966720"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "跳转到app的发布愿望单",
+        "h5CallBridgeActionName": "jump_app_url",
+        "h5CallBridgeSendMessage": {
+            "url": "yuanwangwu://openpage?pageName=WishPublishPage"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "跳转到app的愿望单首页",
+        "h5CallBridgeActionName": "jump_app_url",
+        "h5CallBridgeSendMessage": {
+            "url": "yuanwangwu://openpage?pageName=WishHomePage"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "回到app的第几个一级页",
+        "h5CallBridgeActionName": "h5CallBridgeAction_backToHomeIndex",
+        "h5CallBridgeSendMessage": {
+            "homeIndex": 0
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "显示打赏弹窗及动画",
+        "h5CallBridgeActionName": "h5CallBridgeAction_showAppReward",
+        "h5CallBridgeSendMessage": {
+            "url": "yuanwangwu://openpage?pageName=imChatPage&conversationID=126191&imUserId=1602856363702501376&showName=婉艺&type=1&dialogSubjectId=1506196208391966720"
+        }
+    }
+]

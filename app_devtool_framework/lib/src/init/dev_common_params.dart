@@ -75,6 +75,12 @@ class CommonParamsHelper {
       model = androidInfo.model;
       // machine = androidInfo.utsname.machine;
     }
+    if (brand.length > 200) {
+      brand = brand.substring(0, 200);
+    }
+    if (model.length > 200) {
+      model = model.substring(0, 200);
+    }
 
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';

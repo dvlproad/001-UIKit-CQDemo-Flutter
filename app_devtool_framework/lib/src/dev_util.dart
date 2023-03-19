@@ -10,24 +10,24 @@ import './dev_page.dart';
 
 class DevUtil {
   // 设置 app 的 navigatorKey(用来处理悬浮按钮的展示)
-  static GlobalKey _navigatorKey;
+  static late GlobalKey<NavigatorState> _navigatorKey;
 
   // 定义 navigatorKey 属性的 get 和 set 方法
-  static GlobalKey get navigatorKey => _navigatorKey;
-  static set navigatorKey(GlobalKey globalKey) {
+  static GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+  static set navigatorKey(GlobalKey<NavigatorState> globalKey) {
     _navigatorKey = globalKey; // ①悬浮按钮的显示功能需要
     ApplicationLogViewManager.globalKey = globalKey; // ②日志系统需要
   }
 
   static init({
-    @required GlobalKey navigatorKey,
-    @required ImageProvider floatingToolImageProvider, // 悬浮按钮上的图片
-    @required String floatingToolTextNetworkNameOrigin, // 悬浮按钮上的文本:此包的默认网络环境
-    @required String floatingToolTextNetworkNameCurrent, // 悬浮按钮上的文本:此包的当前网络环境
-    @required String floatingToolTextTargetNameOrigin, // 悬浮按钮上的文本:此包的默认发布网站
-    @required String floatingToolTextTargetNameCurrent, // 悬浮按钮上的文本:此包的当前发布网站
-    void Function(BuildContext bContext) onFloatingToolDoubleTap, // 悬浮按钮的双击事件
-    @required bool overlayEntryShouldShowIfNil,
+    required GlobalKey<NavigatorState> navigatorKey,
+    ImageProvider? floatingToolImageProvider, // 悬浮按钮上的图片
+    required String floatingToolTextNetworkNameOrigin, // 悬浮按钮上的文本:此包的默认网络环境
+    required String floatingToolTextNetworkNameCurrent, // 悬浮按钮上的文本:此包的当前网络环境
+    required String floatingToolTextTargetNameOrigin, // 悬浮按钮上的文本:此包的默认发布网站
+    required String floatingToolTextTargetNameCurrent, // 悬浮按钮上的文本:此包的当前发布网站
+    void Function(BuildContext bContext)? onFloatingToolDoubleTap, // 悬浮按钮的双击事件
+    required bool overlayEntryShouldShowIfNil,
   }) {
     DevUtil.navigatorKey = navigatorKey;
 
@@ -44,8 +44,11 @@ class DevUtil {
           throw Exception(
               "Warning:请先执行 DevUtil.navigatorKey = GlobalKey<NavigatorState>(); 才能正常显示悬浮按钮");
         }
-        BuildContext context =
+        BuildContext? context =
             navigatorKey.currentContext; // 点击的时候才去获取 context，避免未取到
+        if (context == null) {
+          throw Exception("Warning:未获取到navigatorKey.currentContext");
+        }
 
         if (DevUtil.isDevPageShowing == true) {
           debugPrint('当前已是开发工具页面,无需重复跳转');
@@ -73,8 +76,9 @@ class DevUtil {
         }
       },
       onDoubleTap: () {
-        if (onFloatingToolDoubleTap != null) {
-          onFloatingToolDoubleTap(navigatorKey.currentContext);
+        if (onFloatingToolDoubleTap != null &&
+            navigatorKey.currentContext != null) {
+          onFloatingToolDoubleTap(navigatorKey.currentContext!);
         }
       },
     ).then((value) {

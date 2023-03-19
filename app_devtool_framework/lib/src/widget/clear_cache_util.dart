@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-07 10:54:27
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-30 18:03:54
+ * @LastEditTime: 2022-11-16 16:02:07
  * @Description: 
  */
 import 'dart:io';
@@ -22,6 +22,29 @@ class DirSizeUtil {
       });*/
     // print('临时目录大小: ' + value.toString());
     return _renderSize(value);
+  }
+
+  // 视频缓存文件大小
+  static Future<String> loadVideoCachesSize() async {
+    Directory? dir;
+    if (Platform.isAndroid) {
+      dir = await getExternalStorageDirectory();
+    } else {
+      dir = await getApplicationDocumentsDirectory();
+    }
+
+    if (dir == null) {
+      return "0";
+    }
+    for (var value1 in dir.listSync()) {
+      if (value1 is Directory) {
+        if (value1.path.contains('video_cache')) {
+          double value = await _getTotalSizeOfFilesInDir(value1);
+          return _renderSize(value);
+        }
+      }
+    }
+    return "0";
   }
 
   static Future<String> loadDocumentsSize() async {
@@ -91,11 +114,7 @@ class DirSizeUtil {
     if (null == value) {
       return 0;
     }
-    List<String> unitArr = List()
-      ..add('B')
-      ..add('K')
-      ..add('M')
-      ..add('G');
+    List<String> unitArr = ['B', 'K', 'M', 'G'];
     int index = 0;
     while (value > 1024) {
       index++;
