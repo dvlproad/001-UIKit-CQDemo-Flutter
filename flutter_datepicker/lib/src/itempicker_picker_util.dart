@@ -44,7 +44,7 @@ class ItemPickerPickerUtil {
     void Function() onFooterCancel,
     @required void Function(int selectedIndex) onConfirm,
   }) {
-    PickerAdapter adapter = PickerDataAdapter<String>(pickerdata: pickerdata);
+    PickerAdapter adapter = PickerDataAdapter<String>(pickerData: pickerdata);
 
     Picker picker = PickerCreaterUtil.getPicker(
       title: title,

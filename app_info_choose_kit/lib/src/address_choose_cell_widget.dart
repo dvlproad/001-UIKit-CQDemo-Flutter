@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-02 10:24:30
+ * @LastEditTime: 2023-01-17 17:31:02
  * @Description: 地址选择cell
  */
 import 'package:flutter/material.dart';
@@ -10,15 +10,17 @@ import './address/address_util.dart';
 
 import '../app_info_choose_kit_adapt.dart';
 import './cell_factory.dart';
-import 'package:wish/service/user/address/address_list_entity.dart';
+import 'package:app_service_user/app_service_user.dart';
 
 class AddressChooseCellWidget extends StatefulWidget {
+  final Color color;
   final double leftRightPadding;
   final AddressListEntity addressModel;
   final void Function({AddressListEntity bAddressModel}) valueChangeBlock;
 
   AddressChooseCellWidget({
     Key key,
+    this.color,
     this.leftRightPadding,
     this.addressModel,
     @required this.valueChangeBlock,
@@ -44,11 +46,12 @@ class _AddressChooseCellWidgetState extends State<AddressChooseCellWidget> {
     bool hasContent = _addressModel != null;
 
     return AppImageTitleTextValueCell(
-      leftRightPadding: widget.leftRightPadding,
+      color: widget.color,
+      leftRightPadding: 0,
       leftMaxWidth: 130,
       title: '收货信息',
       imageProvider: AssetImage(
-        'assets/icon_address.png',
+        'assets/icon_logistics.png',
         package: 'app_info_choose_kit',
       ),
       textValue: _addressModel?.address,

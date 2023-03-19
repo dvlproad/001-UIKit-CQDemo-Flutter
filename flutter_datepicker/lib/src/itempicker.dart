@@ -195,28 +195,41 @@ class CJStateTextButton extends StatelessWidget {
     }
 
     return Container(
-      child: FlatButton(
+      child: TextButton(
         child: Text(
           _currentTitle,
           textAlign: TextAlign.left,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-            // color: Color(0xFF222222),
+            color: Color(0xFF222222),
             fontFamily: 'PingFang SC',
             fontSize: 15.0,
             fontWeight: FontWeight.w500,
           ),
         ),
         onPressed: _onPressed,
-        splashColor: Colors.transparent,
-        color: _currentBackgroundColor,
-        textColor: Color(0xFF222222),
-        highlightColor: Color(0xFFFF7F00).withOpacity(0.12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(_cornerRadius),
-          side: BorderSide(
-            width: _currentBorderWidth,
-            color: _currentBorderColor,
+        style: ButtonStyle(
+          //背景颜色
+          backgroundColor: MaterialStateProperty.resolveWith(
+            (states) {
+              //设置按下时的背景颜色
+              if (states.contains(MaterialState.pressed)) {
+                return Color(0xFFFF7F00).withOpacity(0.12);
+              }
+              //默认不使用背景颜色
+              return _currentBackgroundColor;
+            },
+          ),
+          shape: MaterialStateProperty.resolveWith(
+            (states) {
+              return RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_cornerRadius),
+                side: BorderSide(
+                  width: _currentBorderWidth,
+                  color: _currentBorderColor,
+                ),
+              );
+            },
           ),
         ),
       ),

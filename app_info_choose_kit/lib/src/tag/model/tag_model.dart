@@ -11,7 +11,7 @@ import 'package:flutter_datepicker/flutter_datepicker.dart'
 import './base_tag_model.dart';
 
 import 'package:wish/route/route_manager.dart';
-import 'package:wish/service/user/user_manager.dart';
+import 'package:app_service_user/app_service_user.dart';
 
 class SelectedTagInfo<T extends BaseTagModel> extends BaseTagModel {
   String customValue;

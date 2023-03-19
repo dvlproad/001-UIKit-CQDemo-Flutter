@@ -18,22 +18,14 @@ dependencies:
 
   #百度地图
   # any
-  # flutter_baidu_mapapi_map: any
-  # flutter_baidu_mapapi_utils: any
-  # flutter_baidu_mapapi_search: any
-  # 3.0
-  # flutter_baidu_mapapi_map: ^3.0.0+1
-  # flutter_baidu_mapapi_utils: ^3.0.0
-  # flutter_baidu_mapapi_search: ^3.0.0
-  # 3.1
-  flutter_baidu_mapapi_map: ^3.1.0+1
-  flutter_baidu_mapapi_search: ^3.1.0
-  flutter_baidu_mapapi_utils: ^3.1.0+1
+  flutter_baidu_mapapi_map: any
+  flutter_baidu_mapapi_utils: any
+  flutter_baidu_mapapi_search: any
 
   # tim
-  # tim_ui_kit_lbs_plugin: ^1.1.2
-  tim_ui_kit_lbs_plugin:
-    path: ../tim_ui_kit_lbs_plugin-1.1.2/ # 自己支持3.0
+  tim_ui_kit_lbs_plugin: ^1.1.2
+  # tim_ui_kit_lbs_plugin:
+  #   path: ../tim_ui_kit_lbs_plugin-1.1.2/ # 自己支持3.0
 
 dev_dependencies:
   flutter_test:

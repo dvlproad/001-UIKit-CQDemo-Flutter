@@ -17,6 +17,8 @@ import 'package:wish/common/locate_manager.dart';
 import 'package:wish/widget/appbar_view.dart';
 
 import 'package:tim_ui_kit_lbs_plugin/widget/location_input.dart';
+import 'package:get/get.dart';
+import 'dart:io';
 
 //39.965, 116.404北京
 class LocationChoosePage extends StatefulWidget {
@@ -45,6 +47,8 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
   bool _isLocateSuccess = false;
 
   List<BMFPoiInfo> _poiInfoList = [];
+
+  final showMap = true.obs;
 
   // 构造检索参数
   List<String> _keywords = [
@@ -101,12 +105,14 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     // 检索回调
     nearbySearch.onGetPoiNearbySearchResult(
         callback: (BMFPoiSearchResult result, BMFSearchErrorCode errorCode) {
-      print(
-          'poi周边检索回调 errorCode = ${errorCode}  \n result = ${result.toMap()}');
-      setState(() {
-        _poiInfoList = result.poiInfoList != null ? result.poiInfoList! : [];
-      });
-    });
+          print(
+              'poi周边检索回调 errorCode = ${errorCode}  \n result = ${result
+                  .toMap()}');
+          setState(() {
+            _poiInfoList =
+            result.poiInfoList != null ? result.poiInfoList! : [];
+          });
+        });
     // 发起检索
     bool flag = await nearbySearch.poiNearbySearch(poiNearbySearchOption);
   }
@@ -117,19 +123,21 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     required String keyword,
   }) async {
     BMFPoiCitySearchOption poiCitySearchOption =
-        BMFPoiCitySearchOption(city: city ?? '厦门', keyword: keyword);
+    BMFPoiCitySearchOption(city: city ?? '厦门', keyword: keyword);
     // 检索实例
     BMFPoiCitySearch poiCitySearch = BMFPoiCitySearch();
     // 检索回调
     poiCitySearch.onGetPoiCitySearchResult(
         callback: (BMFPoiSearchResult result, BMFSearchErrorCode errorCode) {
-      print(
-          'poi城市检索回调 errorCode = ${errorCode}  \n result = ${result.toMap()}');
-      // 解析reslut，具体参考demo
-      setState(() {
-        _poiInfoList = result.poiInfoList != null ? result.poiInfoList! : [];
-      });
-    });
+          print(
+              'poi城市检索回调 errorCode = ${errorCode}  \n result = ${result
+                  .toMap()}');
+          // 解析reslut，具体参考demo
+          setState(() {
+            _poiInfoList =
+            result.poiInfoList != null ? result.poiInfoList! : [];
+          });
+        });
     // 发起检索
     bool flag = await poiCitySearch.poiCitySearch(poiCitySearchOption);
     if (!flag) {
@@ -139,48 +147,48 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _renderAppBar(),
-      body: Container(
-        decoration: const BoxDecoration(color: Colors.white),
-        child: GestureDetector(
-          onTap: () {
-            FocusScopeNode currentFocus = FocusScope.of(context);
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          },
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    _renderMap(mapHeight: 400.h),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: _renderContent(mapHeight: 400.h),
-                    ),
-                  ],
-                ),
+    return WillPopScope(
+        child: Scaffold(
+          appBar: _renderAppBar(),
+          body: Container(
+            decoration: const BoxDecoration(color: Colors.white),
+            child: GestureDetector(
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx(() {
+                    if (showMap.value) {
+                      return _renderMap(mapHeight: 400.h);
+                    } else {
+                      return Container();
+                    }
+                  }),
+                  Expanded(child: _renderContent())
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
+        onWillPop: () {
+          showMap.value = false;
+          Navigator.pop(context);
+          return Future(() => false);
+        });
   }
 
-  _renderContent({required double mapHeight}) {
-    double top = MediaQueryData.fromWindow(window).padding.top;
+  _renderContent() {
     return Container(
-      height: MediaQuery.of(context).size.height - top - 44 - mapHeight,
       // constraints: BoxConstraints(
       //   maxHeight: MediaQuery.of(context).size.height / 10 * 3,
       //   maxWidth: MediaQuery.of(context).size.width,
       // ),
+      margin: EdgeInsets.only(top: 0.w),
       color: Colors.white,
       child: Column(
         children: [
@@ -219,13 +227,17 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
       centerTitle: true,
       leading: GestureDetector(
         onTap: () {
-          Navigator.of(context).pop();
+          showMap.value = false;
+          Navigator.pop(context);
         },
         child: Container(
           width: 50.w,
           height: 44.w,
           alignment: Alignment.center,
-          child: getBackWidget(context),
+          child: getBackWidget(context, onClick: () {
+            showMap.value = false;
+            Navigator.pop(context);
+          }),
         ),
       ),
       title: GestureDetector(
@@ -256,7 +268,10 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     }
     return Container(
       height: mapHeight,
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery
+          .of(context)
+          .size
+          .width,
       child: Stack(
         alignment: AlignmentDirectional.center,
         children: [
@@ -264,7 +279,10 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
             left: 0.w,
             top: 0.w,
             height: mapHeight,
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
             child: _mapWidget(context),
           ),
           Positioned(
@@ -275,7 +293,7 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
               // color:Colors.yellow,
               child: Image(
                 image:
-                    AssetImage('images/mine/BaiduMap/icon_binding_point.png'),
+                AssetImage('images/mine/BaiduMap/icon_binding_point.png'),
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -292,6 +310,7 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
       zoomLevel: 17,
       maxZoomLevel: 21,
       minZoomLevel: 4,
+      showZoomControl: true,
       logoPosition: BMFLogoPosition.LeftBottom,
       mapPadding: BMFEdgeInsets(top: 0, left: 0, right: 0, bottom: 0),
       overlookEnabled: true,
@@ -300,83 +319,56 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     );
 
     BMFMapController myMapController;
-    return BMFMapWidget(
-      onBMFMapCreated: (controller) {
-        myMapController = controller;
-        myMapController.showUserLocation(true);
-        BMFCoordinate coordinate = BMFCoordinate(_userLatitude, _userLongitude);
+    final onBMFMapCreated = (controller) {
+      myMapController = controller;
+      myMapController.showUserLocation(true);
+      BMFCoordinate coordinate = BMFCoordinate(_userLatitude, _userLongitude);
 
-        BMFLocation location = BMFLocation(
-            coordinate: coordinate,
-            altitude: 0,
-            horizontalAccuracy: 5,
-            verticalAccuracy: -1.0,
-            speed: -1.0,
-            course: -1.0);
-        BMFUserLocation userLocation = BMFUserLocation(
-          location: location,
-        );
-        // myMapController.updateLocationData(userLocation);
-        myMapController.updateLocationData(userLocation).then((e) {
-          print("e:${e}");
-        });
+      BMFLocation location = BMFLocation(
+          coordinate: coordinate,
+          altitude: 0,
+          horizontalAccuracy: 5,
+          verticalAccuracy: -1.0,
+          speed: -1.0,
+          course: -1.0);
+      BMFUserLocation userLocation = BMFUserLocation(
+        location: location,
+      );
+      // myMapController.updateLocationData(userLocation);
+      myMapController.updateLocationData(userLocation).then((e) {
+        print("e:${e}");
+      });
 
-        // BMFUserlocationDisplayParam displayParam = BMFUserlocationDisplayParam(
-        //     locationViewOffsetX: 0,
-        //     locationViewOffsetY: 0,
-        //     accuracyCircleFillColor: Colors.red,
-        //     accuracyCircleStrokeColor: Colors.blue,
-        //     isAccuracyCircleShow: true,
-        //     locationViewImage: 'resoures/animation_red.png',
-        //     locationViewHierarchy:
-        //     BMFLocationViewHierarchy.LOCATION_VIEW_HIERARCHY_BOTTOM);
+      // /// 地图加载回调
+      myMapController.setMapDidLoadCallback(callback: () {
+        print("setMapDidLoadCallback");
+      });
 
-        // myMapController.updateLocationViewWithParam(displayParam);
+      /// 地图区域改变完成后会调用此接口
+      /// mapStatus 地图状态信息
+      /// regionChangeReason 地图改变原因
+      myMapController.setMapRegionDidChangeWithReasonCallback(callback:
+          (BMFMapStatus mapStatus, BMFRegionChangeReason regionChangeReason) {
+        if (mapStatus.targetGeoPt == null) {
+          _moveLatitude = 0.0;
+          _moveLongitude = 0.0;
+        } else {
+          BMFCoordinate targetGeoPt = mapStatus.targetGeoPt!;
+          _moveLatitude = targetGeoPt.latitude;
+          _moveLongitude = targetGeoPt.longitude;
+        }
 
-        // /// 地图加载回调
-        myMapController.setMapDidLoadCallback(callback: () {
-          print("setMapDidLoadCallback");
-
-          // /// 创建BMFMarker
-          // BMFMarker marker = BMFMarker(
-          //   position:
-          //       BMFCoordinate(_userLatitude, _userLongitude),
-          //   title: 'flutterMaker',
-          //   identifier: 'flutter_marker',
-          //   icon: 'images/mine/BaiduMap/icon_binding_point.png',
-          //   isLockedToScreen: true,
-          //   screenPointToLock: BMFPoint(
-          //       MediaQuery.of(context).size.width / 2, 300.w / 2),
-          //   canShowCallout: false,
-          // );
-          //
-          // /// 添加Marker
-          // myMapController.addMarker(marker);
-        });
-
-        /// 地图区域改变完成后会调用此接口
-        /// mapStatus 地图状态信息
-        /// regionChangeReason 地图改变原因
-        myMapController.setMapRegionDidChangeWithReasonCallback(callback:
-            (BMFMapStatus mapStatus, BMFRegionChangeReason regionChangeReason) {
-          if (mapStatus.targetGeoPt == null) {
-            _moveLatitude = 0.0;
-            _moveLongitude = 0.0;
-          } else {
-            BMFCoordinate targetGeoPt = mapStatus.targetGeoPt!;
-            _moveLatitude = targetGeoPt.latitude;
-            _moveLongitude = targetGeoPt.longitude;
-          }
-
-          print("${_moveLatitude}");
-          print("${_moveLongitude}");
-          _searchNearby(latitude: _moveLatitude, longitude: _moveLongitude);
-          inputKeywordEditingController.text = '';
-          // _searchInCity(keyword: '学校');
-        });
-      },
+        print("${_moveLatitude}");
+        print("${_moveLongitude}");
+        _searchNearby(latitude: _moveLatitude, longitude: _moveLongitude);
+        inputKeywordEditingController.text = '';
+        // _searchInCity(keyword: '学校');
+      });
+    };
+    return Platform.isAndroid ? BMFTextureMapWidget(
+      onBMFMapCreated: onBMFMapCreated,
       mapOptions: mapOptions,
-    );
+    ) : BMFMapWidget(onBMFMapCreated: onBMFMapCreated, mapOptions: mapOptions,);
   }
 
   Widget _listWidget(BuildContext context) {
@@ -397,8 +389,7 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     );
   }
 
-  _renderItemNoChoose(
-    BuildContext context, {
+  _renderItemNoChoose(BuildContext context, {
     required double height,
   }) {
     if (_isLocateSuccess == false) {
@@ -407,6 +398,7 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
     return InkWell(
       splashColor: Colors.grey,
       onTap: () {
+        showMap.value = false;
         Navigator.of(context).pop();
         if (widget.callBack != null) {
           widget.callBack(null);
@@ -454,6 +446,7 @@ class _LocationChoosePageState extends State<LocationChoosePage> {
         //   ToastUtil.showMessage('当前经纬度为{$latitude,$longitude},请换个');
         //   return;
         // }
+        showMap.value = false;
         Navigator.of(context).pop();
         if (widget.callBack != null) {
           widget.callBack(poiInfo);

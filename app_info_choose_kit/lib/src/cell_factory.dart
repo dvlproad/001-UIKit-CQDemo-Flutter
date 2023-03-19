@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-02 10:55:31
+ * @LastEditTime: 2023-01-17 17:58:49
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import '../app_info_choose_kit_adapt.dart';
 
 class AppImageTitleTextValueCell extends StatelessWidget {
+  final Color color;
   final double leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
   final double leftMaxWidth;
   final double rightMaxWidth;
@@ -22,6 +23,7 @@ class AppImageTitleTextValueCell extends StatelessWidget {
 
   AppImageTitleTextValueCell({
     Key key,
+    this.color,
     this.leftRightPadding,
     this.leftMaxWidth,
     this.rightMaxWidth,
@@ -34,15 +36,17 @@ class AppImageTitleTextValueCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = (18 + 2 * 9).h_pt_cj;
     return ImageTitleTextValueCell(
-      height: 52.h_pt_cj,
+      height: height,
+      color: color,
       leftMaxWidth: leftMaxWidth,
       rightMaxWidth: rightMaxWidth,
       leftRightPadding: leftRightPadding,
       title: title,
       imageProvider: imageProvider,
-      imageWith: 22.w_pt_cj,
-      imageTitleSpace: 10.w_pt_cj,
+      imageWith: 16.w_pt_cj,
+      imageTitleSpace: 5.w_pt_cj,
       textValue: textValue,
       textValuePlaceHodler: textValuePlaceHodler,
       onTap: onTap,

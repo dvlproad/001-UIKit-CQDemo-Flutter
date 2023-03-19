@@ -10,9 +10,8 @@ import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-import 'package:wish/service/user/address/address_list_entity.dart';
-export 'package:wish/service/user/address/address_list_entity.dart'
-    show AddressListEntity;
+import 'package:app_service_user/app_service_user.dart';
+export 'package:app_service_user/app_service_user.dart' show AddressListEntity;
 
 import 'package:wish/ui/class/mine/mine_set_page.dart';
 

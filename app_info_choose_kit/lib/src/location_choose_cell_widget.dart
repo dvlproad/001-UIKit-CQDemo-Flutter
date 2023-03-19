@@ -54,7 +54,7 @@ class LocationChooseCellWidgetState extends State<LocationChooseCellWidget> {
       leftRightPadding: widget.leftRightPadding,
       title: '定位',
       imageProvider: AssetImage(
-        'assets/icon_location.png',
+        'assets/ation.png',
         package: 'app_info_choose_kit',
       ),
       textValue: _locationBean?.address,

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-03 20:09:30
+ * @LastEditTime: 2022-11-17 17:58:01
  * @Description: 愿望单标签视图
  */
 import 'package:bruno/bruno.dart';
@@ -18,15 +18,25 @@ import 'package:wish/route/route_manager.dart';
 import 'package:app_network/app_network.dart';
 
 import 'package:flutter_datepicker/flutter_datepicker.dart';
-import 'package:wish/service/user/user_manager.dart';
+import 'package:app_service_user/app_service_user.dart';
+
+export 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
+    show ButtonImagePosition;
 
 class WishTagView extends StatefulWidget {
+  double width;
+  double height;
+  ButtonImagePosition imagePosition;
+
   TagModel tagModel;
   void Function(TagModel newTagModel)
       tagModelChangeBlock; // SelectedTagInfo selectedLeafTagInfo 通过 newTagModel 的属性返回
 
   WishTagView({
     Key key,
+    this.width,
+    this.height,
+    this.imagePosition,
     @required this.tagModel,
     @required this.tagModelChangeBlock,
   }) : super(key: key);
@@ -89,12 +99,30 @@ class _WishTagViewState extends State<WishTagView> {
     }
     */
 
-    return ThemeStateButton(
+    return RichThemeStateButton(
+      width: widget.width,
+      height: widget.height,
       normalTitle: title,
       selectedTitle: title,
-      cornerRadius: 6.w_pt_cj,
-      normalBGColorType: ThemeBGType.theme,
-      selected: !isSelected,
+      titleStyle: TextStyle(
+        fontFamily: 'PingFang SC',
+        fontSize: 11.0.f_pt_cj,
+        fontWeight: FontWeight.w400,
+      ),
+      imagePosition: widget.imagePosition,
+      imageTitleGap: 2.w_pt_cj,
+      imageWidget: Image(
+        image: AssetImage(
+          'assets/icon_arrow_down.png',
+          package: 'app_info_choose_kit',
+        ),
+        width: 16.w_pt_cj,
+        height: 16.h_pt_cj,
+        fit: BoxFit.contain,
+      ),
+      cornerRadius: widget.height != null ? (widget.height / 2.0) : 6.w_pt_cj,
+      richBGColorType: RichThemeStateBGType.grey_theme,
+      selected: isSelected,
       onPressed: () {
         FocusScope.of(context).requestFocus(FocusNode());
 

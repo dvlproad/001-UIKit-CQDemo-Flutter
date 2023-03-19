@@ -24,33 +24,31 @@ import './quick_location_choose_page.dart';
 
 class PluginUtil {
   static String _baiduMapIOSAppKey = '';
+
   static String get baiduMapIOSAppKey => _baiduMapIOSAppKey;
+
   static initMap(String baiduMapIOSAppKey) {
     WidgetsFlutterBinding.ensureInitialized();
 
     /// 百度定位
     _baiduMapIOSAppKey = baiduMapIOSAppKey;
     BMFMapSDK.setAgreePrivacy(true);
-    Future.delayed(Duration(milliseconds: 00)).then((value) {
-      BMFMapSDK.setAgreePrivacy(true);
-      LocationFlutterPlugin locationFlutterPlugin = LocationFlutterPlugin();
-      locationFlutterPlugin.setAgreePrivacy(true);
-
-      if (Platform.isIOS) {
-        BMFMapSDK.setApiKeyAndCoordType(
-            _baiduMapIOSAppKey, BMF_COORD_TYPE.BD09LL);
-        locationFlutterPlugin.authAK(_baiduMapIOSAppKey);
-      } else if (Platform.isAndroid) {
-        // Android 目前不支持接口设置Apikey,
-        // 请在主工程的Manifest文件里设置，详细配置方法请参考官网(https://lbsyun.baidu.com/)demo
-        BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);
-      }
-      // BMKLocationAuth.setAgreePrivacy(true);
-    });
+    BMFMapSDK.setAgreePrivacy(true);
+    LocationFlutterPlugin locationFlutterPlugin = LocationFlutterPlugin();
+    locationFlutterPlugin.setAgreePrivacy(true);
+    if (Platform.isIOS) {
+      BMFMapSDK.setApiKeyAndCoordType(
+          _baiduMapIOSAppKey, BMF_COORD_TYPE.BD09LL);
+      locationFlutterPlugin.authAK(_baiduMapIOSAppKey);
+    } else if (Platform.isAndroid) {
+      // Android 目前不支持接口设置Apikey,
+      // 请在主工程的Manifest文件里设置，详细配置方法请参考官网(https://lbsyun.baidu.com/)demo
+      BMFMapSDK.setCoordType(BMF_COORD_TYPE.BD09LL);
+    }
+    // BMKLocationAuth.setAgreePrivacy(true);
   }
 
-  static onTapLocation(
-    BuildContext context, {
+  static onTapLocation(BuildContext context, {
     required ValueChanged<LocationMessage> onChange,
     required Function() onClear,
   }) {
@@ -62,19 +60,21 @@ class PluginUtil {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuickLocationPicker(
-          onChange: (LocationMessage location) async {
-            print("location=$location");
-            onChange(location);
-          },
-          onClear: onClear,
-          mapBuilder: (onMapLoadDone, mapKey, onMapMoveEnd) => BaiduMap(
-            onMapMoveEnd: onMapMoveEnd,
-            onMapLoadDone: onMapLoadDone,
-            key: mapKey,
-          ),
-          locationUtils: LocationUtils(BaiduMapService()),
-        ),
+        builder: (context) =>
+            QuickLocationPicker(
+              onChange: (LocationMessage location) async {
+                print("location=$location");
+                onChange(location);
+              },
+              onClear: onClear,
+              mapBuilder: (onMapLoadDone, mapKey, onMapMoveEnd) =>
+                  BaiduMap(
+                    onMapMoveEnd: onMapMoveEnd,
+                    onMapLoadDone: onMapLoadDone,
+                    key: mapKey,
+                  ),
+              locationUtils: LocationUtils(BaiduMapService()),
+            ),
       ),
     );
   }

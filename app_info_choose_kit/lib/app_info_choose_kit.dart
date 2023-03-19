@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 14:41:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-02 14:36:27
+ * @LastEditTime: 2023-01-16 17:03:05
  * @Description: 应用的选择库
  */
 library app_info_choose_kit;
@@ -21,6 +21,16 @@ export 'package:flutter_datepicker/flutter_datepicker.dart'
 export './src/location_choose_tag_widget.dart';
 export './src/location_choose_cell_widget.dart';
 
+// jurisdiction
+export './src/jurisdiction_bean.dart';
+// export './src/jurisdiction_choose_cell_widget.dart';
+export './src/jurisdiction_choose_tag_widget.dart';
+
+// thanksType
+export './src/thanks_choose_tag_widget.dart';
+export './src/thanks_choose_cell_widget.dart';
+export './src/thank_type_model.dart';
+
 // voice
 export './src/voice_choose_tag_widget.dart';
 export './src/voice_choose_cell_widget.dart';
@@ -36,3 +46,7 @@ export './src/address_choose_cell_widget.dart';
 export './src/tag/model/base_tag_model.dart';
 export './src/tag/model/tag_model.dart';
 export './src/tag/widget/wish_tags_widget.dart';
+
+// tag(个人主页)
+export './src/tag_mine/mine_tag_model.dart';
+export './src/tag_mine/mine_tag_widget.dart';

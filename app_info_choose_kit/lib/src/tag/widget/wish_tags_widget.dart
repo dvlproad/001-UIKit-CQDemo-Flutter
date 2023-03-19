@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-02 14:29:43
+ * @LastEditTime: 2023-01-30 16:13:00
  * @Description: 愿望单标签视图
  */
 import 'package:flutter/material.dart';
@@ -11,6 +11,10 @@ import './wish_tag_widget.dart';
 import '../model/tag_model.dart';
 
 class TagsWidget extends StatefulWidget {
+  double width;
+  double height;
+  final Color color;
+
   List<TagModel> tagModels;
   void Function(
     List<TagModel> newTagModels, {
@@ -19,6 +23,9 @@ class TagsWidget extends StatefulWidget {
 
   TagsWidget({
     Key key,
+    this.width,
+    this.height,
+    this.color,
     @required this.tagModels,
     @required this.tagModelsChangeBlock,
   }) : super(key: key);
@@ -35,25 +42,60 @@ class _TagsWidgetState extends State<TagsWidget> {
     super.initState();
   }
 
+  int crossAxisCount = 3;
+  double childAspectRatio = 105 / 30;
+  double mainAxisSpacing = 3.5.w_pt_cj; // 竖直滚动，这是行距离
+  double crossAxisSpacing = 15.h_pt_cj; // 竖直滚动，这是水平距离
+  double itemWidth, itemHeight;
+
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        double selfViewWidth = constraints.maxWidth;
+        double selfViewHeight = constraints.maxHeight;
+
+        itemWidth = (selfViewWidth - (crossAxisCount - 1) * crossAxisSpacing )/ crossAxisCount;
+        itemHeight = itemWidth / childAspectRatio;
+        print("itemWidth = $itemWidth, itemHeight = $itemHeight");
+
+        return buildContent(context);
+      },
+    );
+  }
+
+  Widget buildContent(BuildContext context) {
     _tagModels = widget.tagModels ?? [];
     return Container(
+      color: widget.color,
       child: GridView.builder(
         padding: EdgeInsets.only(bottom: 0.5.h_pt_cj),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          childAspectRatio: 55 / 15,
-          mainAxisSpacing: 3.5.w_pt_cj,
-          crossAxisSpacing: 3.5.h_pt_cj,
+          crossAxisCount: crossAxisCount,
+          childAspectRatio: childAspectRatio,
+          mainAxisSpacing: mainAxisSpacing,
+          crossAxisSpacing: crossAxisSpacing,
         ),
         itemCount: _tagModels.length,
         itemBuilder: (BuildContext context, int index) {
           TagModel tagModel = _tagModels[index];
 
+          // 是否显示标签右侧的选择icon
+          bool showRightIcon = false;
+          if (index != 2) {
+            if (_tagModels[index].isChoose != true) {
+              showRightIcon = true;
+            }
+          }
+
           return WishTagView(
+            width: itemWidth,
+            height: itemHeight,
+            imagePosition: showRightIcon == true
+                ? ButtonImagePosition.right
+                : ButtonImagePosition.none,
             tagModel: tagModel,
             tagModelChangeBlock: (TagModel newTagModel) {
               tagModel = newTagModel;
