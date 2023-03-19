@@ -38,12 +38,12 @@ enum CQTSThemeBGType {
   transparent_whiteText, //透明背景，白色字的按钮
 }
 
-Color themeColor(CQTSThemeBGType type) {
+Color themeColor(CQTSThemeBGType? type) {
   type = type ?? CQTSThemeBGType.pink;
   return theme[type.toString().split('.').last]['themeColor'];
 }
 
-Color themeOppositeColor(CQTSThemeBGType type) {
+Color themeOppositeColor(CQTSThemeBGType? type) {
   type = type ?? CQTSThemeBGType.pink;
   return theme[type.toString().split('.').last]['themeOppositeColor'];
 }
@@ -57,6 +57,7 @@ Color themeOppositeColor(CQTSThemeBGType type) {
 class ButtonThemeUtil {
   // 类命名注意：系统有 ButtonTheme 类，别取重名，否则外部取不到
 
+  // ignore: non_constant_identifier_names
   static TextStyle PingFang_FontSize_Bold(double fontSize) {
     return TextStyle(
       fontFamily: 'PingFang SC',
@@ -65,6 +66,7 @@ class ButtonThemeUtil {
     );
   }
 
+  // ignore: non_constant_identifier_names
   static TextStyle PingFang_FontSize_Medium(double fontSize) {
     return TextStyle(
       fontFamily: 'PingFang SC',
@@ -82,9 +84,7 @@ class ButtonBoldTextStyle extends TextStyle {
   ButtonBoldTextStyle({
     required this.fontSize,
     // this.color,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  }) : super(
           fontFamily: 'PingFang SC',
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
@@ -100,9 +100,7 @@ class ButtonMediumTextStyle extends TextStyle {
   ButtonMediumTextStyle({
     required this.fontSize,
     // this.color,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  }) : super(
           fontFamily: 'PingFang SC',
           fontSize: fontSize,
           fontWeight: FontWeight.w500,

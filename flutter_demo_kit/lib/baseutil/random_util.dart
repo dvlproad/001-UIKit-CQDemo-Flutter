@@ -2,12 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-23 21:27:18
+ * @LastEditTime: 2023-03-19 18:00:28
  * @Description: 在 Dart（以及 Flutter）中生成随机字符串的 3 种不同方法
  * 参考文章:[在 Dart（以及 Flutter）中生成随机字符串的 3 种不同方法](https://developer.aliyun.com/article/852404)
  */
 import 'dart:math';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 
 import 'dart:convert';
 import 'package:crypto/crypto.dart';

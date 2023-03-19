@@ -1,6 +1,5 @@
 // 包含主文本main，且可选定制副文本、箭头 的视图
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 typedef ClickCellCallback = void Function(int? section, int? row);
 
@@ -84,7 +83,7 @@ class CJTSTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.text ?? '',
+        this.text,
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(

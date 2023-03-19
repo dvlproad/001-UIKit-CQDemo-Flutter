@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'flutter_section_table_view.dart';
 import 'CJTSTableViewCell.dart';
@@ -72,7 +71,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
   }
 
   void __dealDataModel(moduleModel, int? section, int? row) {
-    ClickTSItemCallback clickTSItemCallback = moduleModel['actionBlock'];
+    ClickTSItemCallback? clickTSItemCallback = moduleModel['actionBlock'];
     // // actionBlock 形如：
     // moduleModel['actionBlock'] = () {
     //   Navigator.push(
@@ -91,7 +90,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
       return;
     }
 
-    String nextPageName = moduleModel['nextPageName'];
+    String? nextPageName = moduleModel['nextPageName'];
     if (null != nextPageName) {
       var title = moduleModel['title'];
       if (nextPageName.startsWith('/', 0) == false) {

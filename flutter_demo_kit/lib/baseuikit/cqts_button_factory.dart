@@ -17,9 +17,7 @@ class CQTSThemeBGButton extends CJStateTextButton {
     double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
-  })  : assert(title != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,
@@ -55,9 +53,7 @@ class CQTSThemeBorderButton extends CJStateTextButton {
     double cornerRadius = 5.0,
     bool enable = true,
     required VoidCallback onPressed,
-  })  : assert(title != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,
@@ -96,9 +92,7 @@ class CQTSThemeStateButton extends CJReverseThemeStateTextButton {
     bool enable = true,
     bool selected = false,
     required void Function() onPressed,
-  })  : assert(normalTitle != null),
-        assert(onPressed != null),
-        super(
+  }) : super(
           key: key,
           width: width,
           height: height,
@@ -116,9 +110,7 @@ class CQTSThemeStateButton extends CJReverseThemeStateTextButton {
           enable: enable,
           selected: selected,
           onPressed: () {
-            if (onPressed != null) {
-              onPressed();
-            }
+            onPressed();
           },
           cornerRadius: cornerRadius,
           themeColor: themeColor(normalBGColorType),
