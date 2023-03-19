@@ -63,6 +63,9 @@ class LocalStorage {
     } else if (value is Map) {
       return _saveMapOrMaps(key, value);
     } else if (value is List<String>) {
+      if (value.isEmpty) {
+        return prefs.setStringList(key, value);
+      }
       if (value.first is String) {
         return prefs.setStringList(key, value);
       } else if (value.first is Map) {
@@ -111,7 +114,7 @@ class LocalStorage {
       return prefs.getDouble(key) as T?;
     } else if (T == bool) {
       return prefs.getBool(key) as T?;
-    } else if (T is List<String>) {
+    } else if (T is List<String> || T.toString() == 'List<String>') {
       return prefs.getStringList(key) as T?;
     } else if (T is Map) {
       String? mapString = prefs.getString(key);

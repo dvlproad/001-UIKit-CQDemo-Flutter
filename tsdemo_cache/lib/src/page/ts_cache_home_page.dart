@@ -14,7 +14,7 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
   void initState() {
     super.initState();
 
-    LocalStorage.init();
+    // LocalStorage.init();
   }
 
   @override
@@ -38,8 +38,8 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
             ),
             ListTile(
               title: Text('获取 bool'),
-              onTap: () {
-                bool bValue = LocalStorage.get('test_bool');
+              onTap: () async {
+                bool bValue = await LocalStorage.get('test_bool');
                 String message = bValue ? 'true' : 'false';
                 CJTSToastUtil.showMessage(message);
               },
@@ -53,8 +53,8 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取 String',
-              onPressedGet: () {
-                String string = LocalStorage.get('test_string');
+              onPressedGet: () async {
+                String string = await LocalStorage.get('test_string');
                 String message = string;
                 CJTSToastUtil.showMessage(message);
               },
@@ -72,8 +72,9 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取 StringList',
-              onPressedGet: () {
-                List<String> stringList = LocalStorage.get('test_stringList');
+              onPressedGet: () async {
+                List<String> stringList =
+                    await LocalStorage.get('test_stringList');
                 String message = stringList.toString();
                 CJTSToastUtil.showMessage(message);
               },
@@ -89,15 +90,15 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                 LocalStorage.saveCustomBean(
                   'test_custom',
                   customBean,
-                  itemToJson: (TSCustomBean bItem) {
+                  valueToJson: (bItem) {
                     return bItem.toJson();
                   },
                 );
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取自定义类 Custom',
-              onPressedGet: () {
-                TSCustomBean customBean = LocalStorage.getCustomBean(
+              onPressedGet: () async {
+                TSCustomBean customBean = await LocalStorage.getCustomBean(
                   'test_custom',
                   fromJson: (bMap) {
                     return TSCustomBean.fromJson(bMap);
@@ -123,15 +124,16 @@ class _TSCacheHomePageState extends State<TSCacheHomePage> {
                 LocalStorage.saveCustomBeans(
                   'test_customBeans',
                   customBeans,
-                  itemToJson: (TSCustomBean bItem) {
+                  itemToJson: (bItem) {
                     return bItem.toJson();
                   },
                 );
                 CJTSToastUtil.showMessage('保存结束');
               },
               getTitle: '获取自定义类 CustomBeans',
-              onPressedGet: () {
-                List<TSCustomBean> customBeans = LocalStorage.getCustomBeans(
+              onPressedGet: () async {
+                List<TSCustomBean> customBeans =
+                    await LocalStorage.getCustomBeans(
                   'test_customBeans',
                   fromJson: (bMap) {
                     return TSCustomBean.fromJson(bMap);
