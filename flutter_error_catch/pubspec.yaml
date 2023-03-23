@@ -15,8 +15,8 @@ dependencies:
 
   app_log:
     path: ../app_log/
-  flutter_log:
-    path: ../flutter_log/
+  flutter_log_base:
+    path: ../flutter_log_base/
 
 dev_dependencies:
   flutter_test:

@@ -25,7 +25,7 @@ import 'package:flutter_images_picker/flutter_images_picker.dart'
     show PermissionsManager;
 
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 import './dev_user_page.dart';
 import './userInfoManager.dart';
 

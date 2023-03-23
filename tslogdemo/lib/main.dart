@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

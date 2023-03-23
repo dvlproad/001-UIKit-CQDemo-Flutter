@@ -8,7 +8,7 @@
 library app_network;
 
 export 'package:dio/dio.dart' show CancelToken;
-export 'package:flutter_network/flutter_network.dart'
+export 'package:flutter_network_base/flutter_network_base.dart'
     show ResponseModel, DioChangeUtil;
 
 // url

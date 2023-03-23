@@ -8,9 +8,9 @@
 import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_log/src/log/log_base_cell.dart';
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_log_base/src/log/log_base_cell.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
 

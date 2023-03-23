@@ -149,7 +149,7 @@ class _LogHomePageState extends State<LogHomePage>
       icon: const Image(
         image: AssetImage(
           'assets/log_close.png',
-          package: 'flutter_log',
+          package: 'flutter_log_base',
         ),
         width: 34,
         height: 34,

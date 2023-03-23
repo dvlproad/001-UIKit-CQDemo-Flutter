@@ -3,10 +3,9 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
-    show CreateSectionTableView2, IndexPath;
+import 'package:flutter_reuse_view/flutter_reuse_view.dart';
 
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 // import '../evvironment_header.dart';
 // import '../log_change_notifiter.dart';
 
@@ -146,7 +145,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
       icon: Image(
         image: AssetImage(
           'assets/log_close.png',
-          package: 'flutter_log',
+          package: 'flutter_log_base',
         ),
         width: 34,
         height: 34,

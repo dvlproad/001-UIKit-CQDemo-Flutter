@@ -8,9 +8,9 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart'; // 为了使用 required
 import 'package:flutter/services.dart';
-import 'package:flutter_network/flutter_network.dart';
-import 'package:flutter_network/src/bean/req_options.dart';
-import 'package:flutter_network/src/bean/res_options.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
+import 'package:flutter_network_base/src/bean/req_options.dart';
+import 'package:flutter_network_base/src/bean/res_options.dart';
 import 'package:flutter_network_kit/src/log/api_log_util.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';

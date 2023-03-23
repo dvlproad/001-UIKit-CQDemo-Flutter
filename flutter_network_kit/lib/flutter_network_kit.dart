@@ -9,7 +9,7 @@ library flutter_network_kit;
 
 export 'package:dio/dio.dart'
     show Dio, DioError, BaseOptions, Options, CancelToken;
-export 'package:flutter_network/flutter_network.dart';
+export 'package:flutter_network_base/flutter_network_base.dart';
 
 export './src/error_response_model_util.dart';
 
@@ -20,7 +20,7 @@ export './src/log/util/api_post_util.dart';
 export './src/log/bean/apihost_robot_bean.dart';
 
 export './src/log/api_log_util.dart';
-export 'package:flutter_log/flutter_log.dart' show LogLevel;
+export 'package:flutter_log_base/flutter_log_base.dart' show LogLevel;
 
 // network status
 export './src/networkStatus/network_eventbus.dart';

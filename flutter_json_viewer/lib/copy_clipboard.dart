@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
+import 'package:flutter_log_base/src/string_format_util/formatter_object_util.dart';
 
 ///复制到粘贴板
 copyClipboard(BuildContext context, String? value) {

@@ -16,12 +16,12 @@ dependencies:
   
   app_devtool_framework:
     path: ../app_devtool_framework/
-  flutter_network:
-    path: ../flutter_network
+  flutter_network_base:
+    path: ../flutter_network_base
   flutter_network_kit:
     path: ../flutter_network_kit/
-  flutter_log:
-    path: ../flutter_log/
+  flutter_log_base:
+    path: ../flutter_log_base/
   flutter_effect:
     path: ../flutter_effect/
   flutter_screenutil: any

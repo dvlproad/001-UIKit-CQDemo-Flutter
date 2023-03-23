@@ -16,7 +16,7 @@ import 'package:flutter_error_catch/flutter_error_catch.dart';
 
 import 'package:app_buried_point/app_buried_point.dart';
 
-import 'package:flutter_network/src/network_bean.dart'; // 网络 HttpStatusCode
+import 'package:flutter_network_base/src/network_bean.dart'; // 网络 HttpStatusCode
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends LifeCyclePage {

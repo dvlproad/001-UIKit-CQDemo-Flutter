@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:app_network/app_network.dart';
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_network/src/mock/local_mock_util.dart';
+import 'package:flutter_network_base/src/mock/local_mock_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 

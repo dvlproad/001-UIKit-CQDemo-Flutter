@@ -23,7 +23,7 @@ import '../bean/image_info_bean.dart';
 import './base_image_compress_util.dart';
 import '../get_image_info_util/get_image_info_util.dart';
 import './assetEntity_info_getter.dart';
-import 'package:flutter_network/src/url/appendPathExtension.dart';
+import 'package:flutter_network_base/src/url/appendPathExtension.dart';
 
 enum VideoCheckResultType {
   success, // 可以使用

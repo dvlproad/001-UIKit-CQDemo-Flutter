@@ -2,8 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
-import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_log/src/log/log_list.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_log_base/src/log/log_list.dart';
 
 class TSLogPage extends StatefulWidget {
   TSLogPage({Key key}) : super(key: key);

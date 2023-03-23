@@ -1,4 +1,4 @@
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:dio/dio.dart';
 // log

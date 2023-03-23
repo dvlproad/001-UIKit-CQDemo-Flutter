@@ -10,4 +10,4 @@ library app_log;
 export './src/app_log_util.dart';
 export './src/log_test_page.dart';
 
-export 'package:flutter_log/flutter_log.dart';
+export 'package:flutter_log_base/flutter_log_base.dart';

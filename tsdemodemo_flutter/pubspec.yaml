@@ -63,8 +63,8 @@ dependencies:
     path: ../app_environment/
   flutter_network_kit:
     path: ../flutter_network_kit/
-  flutter_network:
-    path: ../flutter_network/
+  flutter_network_base:
+    path: ../flutter_network_base/
 
   tsdemo_baseui:
     path: ../tsdemo_baseui/
@@ -110,8 +110,8 @@ dependencies:
     # path: /Users/lichaoqian/Project/Github/CJMonitor-Flutter/cj_monitor_flutter
     path: ../cj_monitor_flutter/
 
-  flutter_log:
-    path: ../flutter_log/
+  flutter_log_base:
+    path: ../flutter_log_base/
 
   tsdemo_guide:
     path: ../tsdemo_guide/

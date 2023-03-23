@@ -5,7 +5,7 @@
  * @LastEditTime: 2022-07-21 21:12:54
  * @Description: ResponseModel 的处理方式
  */
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 
 class ErrorResponseUtil {
   static ResponseModel getErrorResponseModel(

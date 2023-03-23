@@ -7,7 +7,7 @@ import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 import 'package:tencent_cos/tencent_cos.dart';
 
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 import 'package:app_environment/app_environment.dart';
 
 import './app_network/app_network_manager.dart';

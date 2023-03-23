@@ -6,8 +6,8 @@
  * @Description: 打印网络日志的工具类
  */
 import 'dart:async';
-import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 import './bean/api_describe_bean.dart';
 import './util/api_describe_util.dart';
 import '../networkStatus/network_status_manager.dart';

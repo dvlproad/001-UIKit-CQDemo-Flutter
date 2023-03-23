@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import 'package:app_network/app_network.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
 import './page/ts_network_home_page.dart';

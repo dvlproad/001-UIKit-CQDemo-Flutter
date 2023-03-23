@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_log/flutter_log.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 // import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';

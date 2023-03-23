@@ -5,8 +5,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:flutter_log/flutter_log.dart';
-import 'package:flutter_network/flutter_network.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:app_environment/app_environment.dart';
 

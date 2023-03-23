@@ -8,7 +8,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 // ignore: implementation_imports
-import 'package:flutter_network/src/url/url_util.dart';
+import 'package:flutter_network_base/src/url/url_util.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 
 // ignore: constant_identifier_names

@@ -7,7 +7,7 @@
  */
 import 'package:meta/meta.dart'; // 为了使用 @required
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_network/src/mock/local_mock_util.dart';
+import 'package:flutter_network_base/src/mock/local_mock_util.dart';
 import 'package:flutter_environment/flutter_environment.dart';
 
 extension SimulateExtension on String {

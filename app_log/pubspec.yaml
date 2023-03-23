@@ -11,17 +11,22 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_log:
-    path: ../flutter_log/
+  # 底层Log库
+  flutter_log_base: #^0.0.1
+    path: ../flutter_log_base/
   flutter_json_viewer:
     path: ../flutter_json_viewer/
 
-  flutter_baseui_kit:
-    path: ../flutter_baseui_kit/
+  # 机器人
+  flutter_robot_base: #^0.0.1
+    path: ../flutter_robot_base/
+
+  flutter_reuse_view: #^0.0.1
+    path: ../flutter_reuse_view/
   flutter_overlay_kit:
     path: ../flutter_overlay_kit/
-  flutter_network:
-    path: ../flutter_network/
+  flutter_network_base: #^0.0.1
+    path: ../flutter_network_base/
   flutter_network_kit:  # 为了引入 api 的 log 方法， LogApiUtil
     path: ../flutter_network_kit/
   flutter_environment:

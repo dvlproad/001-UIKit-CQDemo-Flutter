@@ -9,14 +9,15 @@
 import 'dart:io' show File, Directory;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:flutter_network/src/url/appendPathExtension.dart';
+import 'package:flutter_network_base/src/url/appendPathExtension.dart';
 
 class BaseImageCompressUtil {
   static Future<String> getFileTargetPath(File file) async {
     Directory dir = await path_provider.getTemporaryDirectory();
     String dirPath = dir.absolute.path;
     final String appImageRelativeDir = "localImage";
-    final String appImageDirPath = dirPath.appendPathString(appImageRelativeDir);
+    final String appImageDirPath =
+        dirPath.appendPathString(appImageRelativeDir);
     var appImageDir = Directory(appImageDirPath);
     try {
       bool exists = await appImageDir.exists();

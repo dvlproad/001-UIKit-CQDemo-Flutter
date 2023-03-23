@@ -28,8 +28,8 @@ dependencies:
   app_buried_point:
     path: ../app_buried_point/
 
-  flutter_network:  # 网络 HttpStatusCode
-    path: ../flutter_network/
+  flutter_network_base:  # 网络 HttpStatusCode
+    path: ../flutter_network_base/
 
   
 

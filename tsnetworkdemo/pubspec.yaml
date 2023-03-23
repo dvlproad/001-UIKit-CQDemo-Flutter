@@ -41,10 +41,10 @@ dependencies:
     path: ../tsdemo_network/
   flutter_network_kit:
     path: ../flutter_network_kit/
-  flutter_network:
-    path: ../flutter_network/
-  flutter_log:
-    path: ../flutter_log/
+  flutter_network_base:
+    path: ../flutter_network_base/
+  flutter_log_base:
+    path: ../flutter_log_base/
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
 

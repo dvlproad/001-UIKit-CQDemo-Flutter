@@ -11,7 +11,7 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 // inner 内测功能
 
 // formal 正式的外测功能
-import 'package:flutter_network/src/mock/local_mock_util.dart';
+import 'package:flutter_network_base/src/mock/local_mock_util.dart';
 import 'package:app_network/app_network.dart' show ResponseModel, AppNetworkKit;
 import './system/check_version_system_util.dart';
 import './system/version_system_bean.dart';

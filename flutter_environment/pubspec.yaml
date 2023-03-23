@@ -18,8 +18,8 @@ dependencies:
   http_proxy: any
 
   fluttertoast: any
-  flutter_network:
-    path: ../flutter_network/
+  flutter_network_base:
+    path: ../flutter_network_base/
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
   flutter_overlay_kit:
