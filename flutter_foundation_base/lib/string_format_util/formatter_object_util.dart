@@ -97,6 +97,7 @@ class FormatterUtil {
     return buffer.toString();
   }
 
+  /*
   /// 判断是否为Debug模式
   static bool _isDebug() {
     bool inDebug = false;
@@ -104,4 +105,5 @@ class FormatterUtil {
         true); // 根据模式的介绍，可以知道Release模式关闭了所有的断言，assert的代码在打包时不会打包到二进制包中。因此我们可以借助断言，写出只在Debug模式下生效的代码
     return inDebug;
   }
+  */
 }
