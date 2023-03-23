@@ -2,18 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-03 17:03:51
+ * @LastEditTime: 2023-03-23 17:10:10
  * @Description: log日志管理器
  */
 import 'dart:collection';
-import 'package:meta/meta.dart';
 
 import '../../bean/err_options.dart';
 import '../../bean/net_options.dart';
 import '../../bean/req_options.dart';
 import '../../bean/res_options.dart';
-
-import '../util/net_options_log_util.dart';
 
 class LogPoolManager {
   ///请求日志存储
@@ -26,14 +23,13 @@ class LogPoolManager {
   static LogPoolManager? _instance;
 
   LogPoolManager._singleton() {
+    // ignore: prefer_collection_literals
     logMap = LinkedHashMap();
     keys = <String>[];
   }
 
   static LogPoolManager getInstance() {
-    if (_instance == null) {
-      _instance = LogPoolManager._singleton();
-    }
+    _instance ??= LogPoolManager._singleton();
     return _instance!;
   }
 
@@ -49,9 +45,7 @@ class LogPoolManager {
       getSuccessResponseModelBlock: getSuccessResponseModelBlock,
     );
 
-    if (completeBlock != null) {
-      completeBlock(apiInfo);
-    }
+    completeBlock(apiInfo);
   }
 
   NetOptions _addNew(
@@ -102,9 +96,7 @@ class LogPoolManager {
       // print("未找到该返回对应的请求，请修复。可能原因有①使用缓存的时候，返回的reponse中，修改了requestOptions");
     }
 
-    if (completeBlock != null) {
-      completeBlock(apiInfo);
-    }
+    completeBlock(apiInfo);
   }
 
   // response
@@ -135,9 +127,7 @@ class LogPoolManager {
       // debugPrint("未找到该返回对应的请求，请修复。可能原因有①使用缓存的时候，返回的reponse中，修改了requestOptions");
     }
 
-    if (completeBlock != null) {
-      completeBlock(apiInfo);
-    }
+    completeBlock(apiInfo);
   }
 
   ///日志清除

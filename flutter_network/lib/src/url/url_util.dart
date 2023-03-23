@@ -2,13 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-03 16:24:59
+ * @LastEditTime: 2023-03-23 16:58:01
  * @Description: Url获取工具
  */
 import 'package:dio/dio.dart';
 import '../bean/req_options.dart';
 import '../bean/err_options.dart';
-import '../bean/res_options.dart';
+// import '../bean/res_options.dart';
 import './appendPathExtension.dart';
 
 class UrlUtil {

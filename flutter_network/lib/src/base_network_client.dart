@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-// import 'package:flutter/src/foundation/print.dart';
 
 import './interceptor/interceptor_request.dart';
 import './interceptor/interceptor_response.dart';
@@ -10,8 +9,6 @@ import './interceptor/interceptor_error.dart';
 import './interceptor_log/dio_interceptor_log.dart';
 import './url/appendPathExtension.dart';
 import './bean/net_options.dart';
-import './log/dio_log_util.dart';
-import './cache/dio_cache_util.dart';
 import './mock/local_mock_util.dart';
 
 import './network_change_util.dart';
@@ -23,7 +20,7 @@ class BaseNetworkClient {
   // bool get hasStart => _hasStart;
 
   bool _hasStart = false;
-  Completer _initCompleter = Completer<String>();
+  final Completer _initCompleter = Completer<String>();
 
   /// 确保网络库start 启动成功过(使用此方法，省得开放_initCompleter)
   Future<void> makeSureCompleteStart() async {
@@ -94,6 +91,7 @@ class BaseNetworkClient {
  *  @param getFailureResponseModelBlock 将"网络请求失败返回的数据error"转换为"模型"的方法
  *  @param getErrorResponseModelBlock   将"网络请求失败返回的数据error"转换为"模型"的方法
  */
+  // ignore: non_constant_identifier_names
   void base_setup({
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
@@ -115,6 +113,7 @@ class BaseNetworkClient {
     checkResponseModelFunction = checkResponseModelHandel;
   }
 
+  // ignore: non_constant_identifier_names
   /// 初始化公共属性
   ///
   /// [baseUrl] 地址前缀
@@ -181,17 +180,18 @@ class BaseNetworkClient {
     RequestInterceptor.dealRequestOptionsAction = dealRequestOptionsAction;
 
     if (interceptors != null && interceptors.isNotEmpty) {
-      lastInterceptors..addAll(interceptors);
+      lastInterceptors.addAll(interceptors);
       // lastInterceptors..insertAll(2, interceptors);// 将外部 interceptors 插入到 log 前面
     }
 
-    dio!.interceptors..addAll(lastInterceptors);
+    dio!.interceptors.addAll(lastInterceptors);
 
     _hasStart = true;
     _initCompleter.complete('NetworkClient:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
-    print('NetworkClient:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
+    debugPrint('NetworkClient:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
   }
 
+  // ignore: non_constant_identifier_names
   void base_postUrl<T>(
     String url, {
     Map<String, dynamic>? customParams,
@@ -221,6 +221,7 @@ class BaseNetworkClient {
   }
 
   // 网络请求的最底层方法
+  // ignore: non_constant_identifier_names
   Future<ResponseModel> base_requestUrl(
     String url, {
     RequestMethod requestMethod = RequestMethod.post,
@@ -290,7 +291,7 @@ class BaseNetworkClient {
     DioChangeUtil.changeOptions(dio!, baseUrl: baseUrl);
   }
 
-  /************************* proxy 设置 *************************/
+  /// *********************** proxy 设置 ************************
   String? serviceValidProxyIp; // 网络库当前服务的有效的代理ip地址(无代理或其地址无效时候，该值会是null)
   // 修改代理 proxy(返回代理设置成功与否，当传入的不是ip地址格式不正确等则无法成功设置代理)
   bool changeProxy(String? proxyIp) {

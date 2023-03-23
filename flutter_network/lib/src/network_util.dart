@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:convert' show json;
-import 'dart:convert' as convert;
 
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
@@ -12,7 +10,6 @@ import './bean/net_options_convert_util.dart';
 import './network_bean.dart';
 import './url/url_util.dart';
 
-import './base_network_client.dart';
 import './mock/local_mock_util.dart';
 
 import './log/dio_log_util.dart';
@@ -36,8 +33,6 @@ class NetworkUtil {
     required CJNetworkClientGetDioErrorResponseModelBlock
         getDioErrorResponseModelBlock,
   }) async {
-    assert(getSuccessResponseModelBlock != null);
-
     if (url.startsWith(LocalMockUtil.localApiHost)) {
       String loaclFilePath = url.substring(LocalMockUtil.localApiHost.length);
       return LocalMockUtil.requestLocalFilePath(
@@ -46,14 +41,10 @@ class NetworkUtil {
       );
     }
 
-    if (cancelToken == null) {
-      cancelToken = CancelToken();
-    }
+    cancelToken ??= CancelToken();
 
     try {
-      if (customParams == null) {
-        customParams = {};
-      }
+      customParams ??= {};
 
       DioLogUtil.debugApiWithLog(url, "请求开始...");
       Response response;
@@ -144,10 +135,8 @@ class NetworkUtil {
       }
 
       // ②.isFromCache
-      bool? isFromCache = null;
-      if (null != DioCacheUtil.isCacheErrorCheckFunction) {
-        isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
-      }
+      bool? isFromCache;
+      isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
 
       ResponseModel responseModel =
           getDioErrorResponseModelBlock(fullUrl, newErrorModel, isFromCache);
@@ -165,15 +154,11 @@ class NetworkUtil {
     ProgressCallback? onSendProgress,
     JsonParse<T>? jsonParse,
   }) async {
-    if (cancelToken == null) {
-      cancelToken = CancelToken();
-    }
+    cancelToken ??= CancelToken();
 
     try {
-      if (file != null) {
-        formData[fileName] =
-            await MultipartFile.fromFile(file.path, filename: fileName);
-      }
+      formData[fileName] =
+          await MultipartFile.fromFile(file.path, filename: fileName);
 
       FormData data = FormData.fromMap(formData);
 
@@ -220,9 +205,7 @@ class NetworkUtil {
     ProgressCallback? onSendProgress,
     JsonParse<T>? jsonParse,
   }) async {
-    if (cancelToken == null) {
-      cancelToken = CancelToken();
-    }
+    cancelToken ??= CancelToken();
 
     try {
       FormData data = FormData.fromMap(formData);

@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-03 16:05:04
+ * @LastEditTime: 2023-03-23 17:11:16
  * @Description: 请求拦截器
  */
 import 'package:dio/dio.dart';
-import './device_info.dart';
 
 class RequestInterceptor extends Interceptor {
   /// 对 RequestOptions 添加额外的信息
@@ -33,14 +32,5 @@ class RequestInterceptor extends Interceptor {
     //   options.headers.addAll(header);
     //   handler.next(options);
     // });
-  }
-
-  ///获取公共 header 信息
-  Future<Map<String, dynamic>> getHeaders() async {
-    String version = await DeviceInfo.version();
-    Map<String, dynamic> header = {
-      'full_version': version,
-    };
-    return header;
   }
 }

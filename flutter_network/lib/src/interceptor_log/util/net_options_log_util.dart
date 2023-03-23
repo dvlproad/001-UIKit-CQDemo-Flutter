@@ -2,16 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-06 13:53:56
+ * @LastEditTime: 2023-03-23 16:54:09
  * @Description: 请求各过程中的信息获取
  */
-import 'package:meta/meta.dart';
-
-import 'dart:convert' as convert;
-import 'package:meta/meta.dart';
-import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
-import '../../log/dio_log_util.dart';
-import '../../url/url_util.dart';
 
 import '../../bean/err_options.dart';
 import '../../bean/req_options.dart';
@@ -19,9 +12,6 @@ import '../../bean/res_options.dart';
 import '../../bean/net_options.dart';
 
 import '../../network_bean.dart';
-
-import '../../network_util.dart'
-    show CJNetworkClientGetSuccessResponseModelBlock;
 
 import './net_options_log_bean.dart';
 
@@ -106,7 +96,7 @@ class ApiInfoGetter {
     shortLogJsonMap.addAll({"ERRORTYPE": detailLogJsonMap['ERRORTYPE']});
     if (err.response != null) {
       int statusCode = err.response!.statusCode ?? HttpStatusCode.Unknow;
-      String responseCodeMessage = "Response:statusCode:${statusCode}";
+      String responseCodeMessage = "Response:statusCode:$statusCode";
       shortLogJsonMap.addAll({"Response": responseCodeMessage});
     }
     // String apiShortMessge = '';
@@ -158,12 +148,10 @@ class ApiInfoGetter {
       shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
     }
     shortLogJsonMap.addAll({"URL": detailLogJsonMap['URL']});
-    String responseCodeMessage = "Response:statusCode:${statusCode}";
+    String responseCodeMessage = "Response:statusCode:$statusCode";
     int businessCode = responseModel
         .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
-    if (businessCode != null) {
-      responseCodeMessage += "_code:${businessCode}";
-    }
+    responseCodeMessage += "_code:$businessCode";
     shortLogJsonMap.addAll({"Response": responseCodeMessage});
 
     // String apiShortMessge = '';
@@ -194,7 +182,7 @@ class ApiInfoGetter {
   }
 
   static String printWrapped(String text) {
-    final pattern = new RegExp('.{1,800}'); // 800 is the size of each chunk
+    final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
 
     String allString = '';
     pattern.allMatches(text).forEach((match) {

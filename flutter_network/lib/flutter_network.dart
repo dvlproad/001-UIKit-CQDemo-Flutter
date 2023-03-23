@@ -13,7 +13,7 @@ export './src/base_network_client.dart';
 
 export './src/network_change_util.dart';
 
-export './src/log/dio_log_util.dart' show ApiProcessType, ApiLogLevel;
+export './src/log/dio_log_util.dart';
 export './src/interceptor_log/util/net_options_log_util.dart';
 export './src/interceptor_log/util/net_options_log_bean.dart';
 

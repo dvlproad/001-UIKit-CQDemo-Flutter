@@ -2,15 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-03 16:50:22
+ * @LastEditTime: 2023-03-23 17:08:18
  * @Description: log日志的处理类
  */
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
-import '../network_bean.dart'
-    show
-        CJNetworkClientGetSuccessResponseModelBlock,
-        CJNetworkClientGetFailureResponseModelBlock;
 // manager
 import './manager/log_pool_manager.dart';
 // bean
@@ -20,8 +15,6 @@ import '../bean/req_options.dart';
 import '../bean/res_options.dart';
 // util
 import '../bean/net_options_convert_util.dart';
-
-import '../log/dio_log_util.dart';
 
 class DioLogInterceptor implements Interceptor {
   LogPoolManager logManage = LogPoolManager.getInstance();
@@ -42,6 +35,7 @@ class DioLogInterceptor implements Interceptor {
     logManage = LogPoolManager.getInstance();
     _getSuccessResponseModelBlock = getSuccessResponseModelBlock;
 
+    // ignore: unnecessary_null_comparison
     if (logApiInfoAction == null) {
       throw Exception(
           "Error：网络api日志输出接口未定义，请先调用 DioLogUtil.initDioLogUtil 来实现");

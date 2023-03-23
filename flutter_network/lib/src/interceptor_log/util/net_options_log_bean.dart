@@ -5,30 +5,18 @@
  * @LastEditTime: 2022-07-14 00:01:22
  * @Description: 请求各过程中的信息获取
  */
-import 'package:meta/meta.dart';
-import 'package:dio/dio.dart';
-import 'dart:convert' as convert;
-import 'package:meta/meta.dart';
-import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
-import '../../log/dio_log_util.dart';
-import '../../url/url_util.dart';
-
-import '../../bean/err_options.dart';
-import '../../bean/req_options.dart';
-import '../../bean/res_options.dart';
 import '../../bean/net_options.dart';
-
-import '../../network_bean.dart';
-
-import '../../network_util.dart'
-    show CJNetworkClientGetSuccessResponseModelBlock;
 
 /// api 日志信息类型
 enum ApiLogLevel {
   request, // 正常日志信息
+  // ignore: constant_identifier_names
   error_timeout, // 请求超时的错误信息（超时的请求错误企业微信上报，使用文件折叠，其他用纯文本铺开）
+  // ignore: constant_identifier_names
   error_other, // 请求失败的其他错误信息（超时的请求错误企业微信上报，使用文件折叠，其他用纯文本铺开）
+  // ignore: constant_identifier_names
   response_warning, // 请求成功但业务失败(警告)
+  // ignore: constant_identifier_names
   response_success, // 请求成功并业务成功(恭喜)
 }
 

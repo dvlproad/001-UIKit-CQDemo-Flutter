@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-06 14:04:30
+ * @LastEditTime: 2023-03-23 16:50:55
  * @Description: 网络请求成功返回的数据模型
  */
 import 'dart:convert' as convert;
@@ -45,11 +45,11 @@ class ResOptions {
   }
 
   int get id {
-    return this.requestOptions.id;
+    return requestOptions.id;
   }
 
   String get fullUrl {
-    return this.requestOptions.fullUrl;
+    return requestOptions.fullUrl;
   }
 
   Map<String, dynamic> get detailLogJsonMap {
@@ -89,7 +89,7 @@ class ResOptions {
       if ((response.data as String).isEmpty) {
         String responseDataString = "\'\'"; // 空字符串
         String errorMessage =
-            "Error:请求${fullUrl}后台response用字符串返回,且值为${responseDataString},该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
+            "Error:请求$fullUrl后台response用字符串返回,且值为$responseDataString,该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
         responseMap = {
           'data': response.data,
           'lichaoqian_log': {

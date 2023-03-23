@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-14 03:08:07
+ * @LastEditTime: 2023-03-23 17:00:00
  * @Description: 
  */
 import 'package:dio/dio.dart';
@@ -74,6 +74,7 @@ class DioChangeUtil {
 
   // 判断是否是有效的代理ip地址
   static bool isValidProxyIp(String ipString) {
+    // ignore: unnecessary_null_comparison
     if (ipString == null) {
       return false;
     }

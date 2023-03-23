@@ -76,11 +76,11 @@ class ErrOptions {
   }
 
   int get id {
-    return this.requestOptions.id;
+    return requestOptions.id;
   }
 
   String get fullUrl {
-    return this.requestOptions.fullUrl;
+    return requestOptions.fullUrl;
   }
 
   Map<String, dynamic> get detailLogJsonMap {

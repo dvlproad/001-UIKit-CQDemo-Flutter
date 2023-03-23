@@ -2,27 +2,17 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-06 13:13:34
+ * @LastEditTime: 2023-03-23 16:57:20
  * @Description: 本地接口模拟工具
  */
-import 'dart:io' show File;
 import 'dart:convert' show json;
-import 'package:meta/meta.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../network_bean.dart';
 import '../url/appendPathExtension.dart';
-import '../log/dio_log_util.dart';
-import '../interceptor_log/dio_interceptor_log.dart';
-import 'package:flutter_log/src/string_format_util/formatter_object_util.dart';
-import 'package:flutter_log/src/log_console/long_string_print_util.dart';
-
-import '../bean/net_options_convert_util.dart';
 import '../bean/net_options.dart';
 import '../bean/req_options.dart';
-import '../bean/err_options.dart';
-import '../bean/res_options.dart';
-
-import '../url/url_util.dart';
+// import '../bean/err_options.dart';
+// import '../bean/res_options.dart';
 
 class LocalMockUtil {
   static String localApiHost = "local_api_json_file";
@@ -80,7 +70,7 @@ class LocalMockUtil {
         baseUrl: localApiHost,
         path: apiPath,
       );
-
+      /*
       ResOptions resOpt = ResOptions(
         statusCode: 0,
         data: responseMap,
@@ -92,6 +82,7 @@ class LocalMockUtil {
         resOptions: resOpt,
         getSuccessResponseModelBlock: getSuccessResponseModelBlock,
       );
+      */
 
       String fullUrl = reqOptions.fullUrl;
       ResponseModel responseModel =
@@ -117,19 +108,19 @@ class LocalMockUtil {
         baseUrl: localApiHost,
         path: apiPath,
       );
-
+      /*
       ErrOptions errOptions = ErrOptions(
         message: responseLogString,
         type: NetworkErrorType.other,
         requestOptions: reqOptions,
       );
-
+      
       NetOptions apiInfo = NetOptions(
         reqOptions: reqOptions,
         errOptions: errOptions,
         getSuccessResponseModelBlock: getSuccessResponseModelBlock,
       );
-
+      */
       // DioLogInterceptor.logApi(apiInfo, ApiProcessType.error);
 
       return ResponseModel.tryCatchErrorResponseModel(message);

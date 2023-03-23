@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 14:49:32
+ * @LastEditTime: 2023-03-23 16:59:42
  * @Description: 服务器返回的数据模型
  */
 
@@ -78,15 +78,15 @@ class ResponseModel {
   }
 
   bool isEqualToResponse(ResponseModel cacheResponseModel) {
-    if (this.statusCode != cacheResponseModel.statusCode) {
+    if (statusCode != cacheResponseModel.statusCode) {
       return false;
     }
 
-    if (this.message != cacheResponseModel.message) {
+    if (message != cacheResponseModel.message) {
       return false;
     }
 
-    if (this.result.toString() != cacheResponseModel.result.toString()) {
+    if (result.toString() != cacheResponseModel.result.toString()) {
       return false;
     }
 

@@ -2,11 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-12 18:35:17
+ * @LastEditTime: 2023-03-23 16:50:34
  * @Description: 请求Request信息模型
  */
-import 'dart:convert' as convert;
-import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart' show FormData;
 import '../url/appendPathExtension.dart';
 
@@ -60,9 +58,9 @@ class ReqOptions {
 
   int get id {
     if (isRequestCache == true) {
-      return this.uri.toString().hashCode;
+      return uri.toString().hashCode;
     } else {
-      return this.hashCode;
+      return hashCode;
     }
     // response 和 error 的 id 都用 requestOptions 的 hashCode
     // int requestOptionsHashCode = DateTime.now().millisecondsSinceEpoch;

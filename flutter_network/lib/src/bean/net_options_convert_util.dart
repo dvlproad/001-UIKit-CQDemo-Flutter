@@ -6,7 +6,6 @@
  * @Description: dio模型转为自身模型的转换方法
  */
 
-import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'req_options.dart';
 import 'err_options.dart';
@@ -17,10 +16,8 @@ import '../cache/dio_cache_util.dart';
 class NetworkModelConvertUtil {
   // request
   static ReqOptions newRequestOptions(RequestOptions options) {
-    bool? isRequestCache = null;
-    if (null != DioCacheUtil.isRequestCacheCheckFunction) {
-      isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(options);
-    }
+    bool? isRequestCache;
+    isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(options);
 
     var reqOpt = ReqOptions(
       baseUrl: options.baseUrl,
@@ -71,10 +68,8 @@ class NetworkModelConvertUtil {
       errOptions.response = resOpt;
     }
 
-    bool? isErrorFromCache = null;
-    if (null != DioCacheUtil.isCacheErrorCheckFunction) {
-      isErrorFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
-    }
+    bool? isErrorFromCache;
+    isErrorFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
     errOptions.isErrorFromCache = isErrorFromCache;
 
     return errOptions;
@@ -83,10 +78,8 @@ class NetworkModelConvertUtil {
   // response
   static ResOptions newResponse(Response response) {
     ReqOptions reqOpt = newRequestOptions(response.requestOptions);
-    bool? isResponseFromCache = null;
-    if (null != DioCacheUtil.isCacheResponseCheckFunction) {
-      isResponseFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
-    }
+    bool? isResponseFromCache;
+    isResponseFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
 
     var resOpt = ResOptions(
       requestOptions: reqOpt,
@@ -102,15 +95,13 @@ class NetworkModelConvertUtil {
 
 extension RequestId on RequestOptions {
   int get requestId {
-    bool? isRequestCache = null;
-    if (null != DioCacheUtil.isRequestCacheCheckFunction) {
-      isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(this);
-    }
+    bool? isRequestCache;
+    isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(this);
 
     if (isRequestCache == true) {
-      return this.uri.toString().hashCode;
+      return uri.toString().hashCode;
     } else {
-      return this.hashCode;
+      return hashCode;
     }
   }
 }

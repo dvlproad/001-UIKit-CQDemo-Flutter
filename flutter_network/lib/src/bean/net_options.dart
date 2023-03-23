@@ -2,11 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-06 14:11:52
+ * @LastEditTime: 2023-03-23 16:50:16
  * @Description: 请求过程的各种数据模型类
  */
-import 'dart:convert' as convert;
-import 'package:flutter/foundation.dart';
 import 'req_options.dart';
 import 'err_options.dart';
 import 'res_options.dart';
@@ -119,7 +117,7 @@ class NetOptions {
       );
 
       // shortMessage
-      int? statusCode = response.statusCode; // 真正的 statusCode
+      // int? statusCode = response.statusCode; // 真正的 statusCode
       int businessCode = responseModel
           .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
 
