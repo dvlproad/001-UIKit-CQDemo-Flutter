@@ -2,10 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 13:18:05
+ * @LastEditTime: 2023-03-23 18:29:30
  * @Description: 底层网络库
  */
-library flutter_network;
+library flutter_network_base;
 
 export './src/network_bean.dart';
 export './src/network_util.dart' show NetworkUtil;
