@@ -81,6 +81,7 @@ class SectionTableView extends StatefulWidget {
 
   final ScrollController _scrollController;
   ScrollController get scrollController => _scrollController;
+  final bool reverse;
 
   SectionTableView({
     Key? key,
@@ -93,6 +94,7 @@ class SectionTableView extends StatefulWidget {
     this.dividerHeightBlock,
     this.cellHeightAtIndexPath,
     this.controller,
+    this.reverse = false,
   })  : _scrollController = ScrollController(),
         super(key: key);
   @override
@@ -332,6 +334,7 @@ class _SectionTableViewState extends State<SectionTableView> {
       key: listViewKey,
       physics: AlwaysScrollableScrollPhysics(),
       controller: widget.scrollController,
+      reverse: widget.reverse,
       itemBuilder: (context, index) {
         return _buildCell(context, index);
       },
