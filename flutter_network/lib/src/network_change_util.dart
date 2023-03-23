@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 17:00:00
+ * @LastEditTime: 2023-03-23 17:59:08
  * @Description: 
  */
 import 'package:dio/dio.dart';
@@ -49,6 +49,7 @@ class DioChangeUtil {
           return 'DIRECT';
         }
       };
+      return null;
       // client.badCertificateCallback =
       //     (X509Certificate cert, String host, int port) {
       //   return true;

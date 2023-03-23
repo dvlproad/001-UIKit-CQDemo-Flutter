@@ -87,7 +87,7 @@ class ResOptions {
     if (response.data is String) {
       // 后台把data按字符串返回的时候
       if ((response.data as String).isEmpty) {
-        String responseDataString = "\'\'"; // 空字符串
+        String responseDataString = "''"; // 空字符串
         String errorMessage =
             "Error:请求$fullUrl后台response用字符串返回,且值为$responseDataString,该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
         responseMap = {

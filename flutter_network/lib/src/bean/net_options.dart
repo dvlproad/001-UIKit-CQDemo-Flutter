@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 16:50:16
+ * @LastEditTime: 2023-03-23 17:54:31
  * @Description: 请求过程的各种数据模型类
  */
 import 'req_options.dart';
@@ -97,7 +97,7 @@ class NetOptions {
       NetworkErrorType errorType = errOptions!.type;
       logHeaderString += "请求失败(${errorType.toString()})的回复：\n";
       logHeaderString += "============== Error ==============";
-
+      /*
       ApiLogLevel apiErroLogLevel;
       if (errorType == NetworkErrorType.connectTimeout ||
           errorType == NetworkErrorType.sendTimeout ||
@@ -106,6 +106,7 @@ class NetOptions {
       } else {
         apiErroLogLevel = ApiLogLevel.error_other;
       }
+      */
     } else if (apiProcessType == ApiProcessType.response) {
       logHeaderString += "=========== RESPONSE ===========\n"; // 日志头
       ResOptions response = resOptions!;

@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 16:59:42
+ * @LastEditTime: 2023-03-23 18:00:46
  * @Description: 服务器返回的数据模型
  */
 
@@ -39,7 +41,7 @@ class HttpStatusCode {
 class ResponseModel {
   int statusCode;
   String? message;
-  dynamic? result;
+  dynamic result;
   bool? isCache;
   bool? isSameToBefore; // 网络新数据是否和之前数据一样(重试/缓存)
 
@@ -65,9 +67,7 @@ class ResponseModel {
       responseMap.addAll({"isSameToBefore": isSameToBefore});
     }
 
-    if (statusCode != null) {
-      responseMap.addAll({"statusCode": statusCode});
-    }
+    responseMap.addAll({"statusCode": statusCode});
     if (message != null) {
       responseMap.addAll({"message": message});
     }

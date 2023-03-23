@@ -15,7 +15,7 @@ import './mock/local_mock_util.dart';
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
 
-typedef T JsonParse<T>(dynamic data);
+typedef JsonParse<T> = T Function(dynamic data);
 
 class NetworkUtil {
   // 网络请求的最底层方法
@@ -76,9 +76,7 @@ class NetworkUtil {
       DioLogUtil.debugApiWithLog(url, "请求结束...");
 
       bool isFromCache = false;
-      if (DioCacheUtil.isCacheResponseCheckFunction != null) {
-        isFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
-      }
+      isFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
 
       DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
       late ResponseModel responseModel;

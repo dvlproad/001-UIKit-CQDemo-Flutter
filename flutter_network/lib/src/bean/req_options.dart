@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 16:50:34
+ * @LastEditTime: 2023-03-23 17:55:13
  * @Description: 请求Request信息模型
  */
 import 'package:dio/dio.dart' show FormData;
-import '../url/appendPathExtension.dart';
+import '../url/append_path_extension.dart';
 
 class ReqOptions {
   String? baseUrl;
@@ -16,7 +16,7 @@ class ReqOptions {
   String? contentType;
   late DateTime requestTime;
   Map<String, dynamic>? params;
-  dynamic? data;
+  dynamic data;
   Map<String, dynamic>? headers;
 
   bool? isRequestCache; // 是否是请求缓存数据(默认null，请求实际后台数据)
@@ -90,7 +90,7 @@ class ReqOptions {
       if (data is Map) {
         bodyJsonMap = data as Map<String, dynamic>;
       } else if (data is FormData) {
-        final formDataMap = Map()
+        final formDataMap = {}
           ..addEntries(data.fields)
           ..addEntries(data.files);
 

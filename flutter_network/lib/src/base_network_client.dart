@@ -7,7 +7,7 @@ import './interceptor/interceptor_request.dart';
 import './interceptor/interceptor_response.dart';
 import './interceptor/interceptor_error.dart';
 import './interceptor_log/dio_interceptor_log.dart';
-import './url/appendPathExtension.dart';
+import 'url/append_path_extension.dart';
 import './bean/net_options.dart';
 import './mock/local_mock_util.dart';
 
@@ -113,13 +113,13 @@ class BaseNetworkClient {
     checkResponseModelFunction = checkResponseModelHandel;
   }
 
-  // ignore: non_constant_identifier_names
   /// 初始化公共属性
   ///
   /// [baseUrl] 地址前缀
   /// [connectTimeout] 连接超时赶时间
   /// [receiveTimeout] 接收超时赶时间
   /// [interceptors] 基础拦截器
+  // ignore: non_constant_identifier_names
   void base_start({
     required String baseUrl,
     int? connectTimeout,
@@ -145,11 +145,11 @@ class BaseNetworkClient {
     _bodyCommonChangeParamsGetBlock = bodyCommonChangeParamsGetBlock;
 
     if (_hasStart == true) {
-      //print('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
+      //debugPrint('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
       return;
     }
 
-    print('NetworkClient:初始化开始执行中...');
+    debugPrint('NetworkClient:初始化开始执行中...');
     dio!.options = dio!.options.copyWith(
       baseUrl: baseUrl,
       connectTimeout: connectTimeout,
@@ -170,9 +170,7 @@ class BaseNetworkClient {
             getSuccessResponseModelBlock: _getSuccessResponseModelBlock,
             logApiInfoAction:
                 (NetOptions apiInfo, ApiProcessType apiProcessType) {
-              if (logApiInfoAction != null) {
-                logApiInfoAction(apiInfo, apiProcessType);
-              }
+              logApiInfoAction(apiInfo, apiProcessType);
             }),
       ];
       lastInterceptors.addAll(defaultInterceptors);
@@ -209,13 +207,9 @@ class BaseNetworkClient {
     ).then((ResponseModel responseModel) {
       int errorCode = responseModel.statusCode;
       if (errorCode == 0) {
-        if (onSuccess != null) {
-          onSuccess(responseModel.result);
-        }
+        onSuccess(responseModel.result);
       } else {
-        if (onFailure != null) {
-          onFailure(responseModel.message);
-        }
+        onFailure(responseModel.message);
       }
     });
   }

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-28 19:01:39
+ * @LastEditTime: 2023-03-23 17:40:42
  * @Description: 网络请求Error错误的信息模型
  */
 import 'dart:convert' as convert;
@@ -52,7 +52,6 @@ class NetworkErrorTypeUtil {
   ///枚举类型转string
   static String networkErrorTypeStringFromEnum(o) {
     return o.toString().split('.').last;
-    ;
   }
 }
 

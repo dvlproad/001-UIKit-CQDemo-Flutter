@@ -1,7 +1,8 @@
 name: flutter_network
-description: A new Flutter package project.
+description: Pure network foundation library(纯净的网络基础库).
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
@@ -11,13 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  dio: any
-  package_info: any
-  shared_preferences: any
-  ez_localization: any
-
-  flutter_log:  # 需要用到 mapToStructureString 和 listToStructureString
-    path: ../flutter_log/
+  dio: ^4.0.4
 
 dev_dependencies:
   flutter_test:

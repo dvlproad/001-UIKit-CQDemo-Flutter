@@ -2,13 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 16:57:20
+ * @LastEditTime: 2023-03-23 17:57:49
  * @Description: 本地接口模拟工具
  */
 import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
 import '../network_bean.dart';
-import '../url/appendPathExtension.dart';
+import '../url/append_path_extension.dart';
 import '../bean/net_options.dart';
 import '../bean/req_options.dart';
 // import '../bean/err_options.dart';
@@ -95,6 +95,7 @@ class LocalMockUtil {
       return responseModel;
     } catch (e) {
       String message = '请求$apiPath的时候，发生网络错误,未设置json文件';
+      /*
       if (e is NoSuchMethodError) {
         // do something
       }
@@ -108,7 +109,7 @@ class LocalMockUtil {
         baseUrl: localApiHost,
         path: apiPath,
       );
-      /*
+      
       ErrOptions errOptions = ErrOptions(
         message: responseLogString,
         type: NetworkErrorType.other,

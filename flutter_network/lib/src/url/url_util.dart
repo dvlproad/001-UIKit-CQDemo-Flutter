@@ -9,7 +9,7 @@ import 'package:dio/dio.dart';
 import '../bean/req_options.dart';
 import '../bean/err_options.dart';
 // import '../bean/res_options.dart';
-import './appendPathExtension.dart';
+import 'append_path_extension.dart';
 
 class UrlUtil {
   static String _fullUrl(String? baseUrl, String path) {
