@@ -2,16 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-10 22:14:26
+ * @LastEditTime: 2023-03-23 18:49:48
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class EnvironmentTableViewHeader extends StatefulWidget {
   final String title;
 
-  EnvironmentTableViewHeader({
+  const EnvironmentTableViewHeader({
     Key? key,
     required this.title,
   }) : super(key: key);
@@ -39,10 +38,10 @@ class _EnvironmentTableViewHeaderState
 
   Widget _headerContainer() {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 10, 0),
+      padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
       //color: Colors.green,
       alignment: Alignment.centerLeft,
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minHeight: 30,
       ),
       child: Row(
@@ -60,12 +59,12 @@ class _EnvironmentTableViewHeaderState
     List<Widget> columnWidgets = [];
     // 添加主文本
     Widget mainTextWidget = Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
       color: Colors.transparent,
       child: Text(
         widget.title,
         textAlign: TextAlign.left,
-        style: TextStyle(
+        style: const TextStyle(
           color: Colors.red,
           fontSize: 18.0,
           fontWeight: FontWeight.bold,

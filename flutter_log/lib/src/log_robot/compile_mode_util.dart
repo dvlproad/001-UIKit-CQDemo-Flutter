@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-23 19:02:30
+ * @Description: 
+ */
 /// 编译模式类型
 enum ComplieMode {
   unknown, // 未知模式
@@ -12,8 +19,8 @@ class ComplieModeUtil {
     if (_isDebug()) {
       return ComplieMode.debug; //"debug"
     } else {
-      const bool isProfile = const bool.fromEnvironment("dart.vm.profile");
-      const bool isReleaseMode = const bool.fromEnvironment("dart.vm.product");
+      const bool isProfile = bool.fromEnvironment("dart.vm.profile");
+      const bool isReleaseMode = bool.fromEnvironment("dart.vm.product");
       if (isProfile) {
         return ComplieMode.profile; //"profile";
       } else if (isReleaseMode) {

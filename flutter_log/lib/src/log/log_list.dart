@@ -1,12 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
-    show CreateSectionTableView2, IndexPath;
+    show CreateSectionTableView2;
 
-import './evvironment_header.dart';
 import './log_cell.dart';
 export './log_cell.dart' show ClickApiLogCellCallback;
 
@@ -39,17 +37,18 @@ class LogList extends StatefulWidget {
 }
 
 class _LogListState extends State<LogList> {
-  ScrollController _controller = new ScrollController();
+  final ScrollController _controller = new ScrollController();
   bool _reverse = false;
 
   List<LogModel> _logModels = [];
-  ApiLogChangeNotifier _environmentChangeNotifier = ApiLogChangeNotifier();
+  final ApiLogChangeNotifier _environmentChangeNotifier =
+      ApiLogChangeNotifier();
 
   @override
   void initState() {
     super.initState();
 
-    print("_LogListState initState");
+    debugPrint("_LogListState initState");
 
     // _logModels = widget.logModels ?? [];
 
@@ -104,6 +103,7 @@ class _LogListState extends State<LogList> {
     double bottomHeight = padding.top;
     // [flutter-获取刘海屏头部高度，以及没有home键时底部高度](https://www.jianshu.com/p/27603ac09b36)
 
+    // ignore: avoid_unnecessary_containers
     return Container(
       // constraints: BoxConstraints(
       //   minWidth: double.infinity,
@@ -113,6 +113,7 @@ class _LogListState extends State<LogList> {
       // height: mediaQuery.size.height - 300,
       child: Column(
         children: <Widget>[
+          // ignore: avoid_unnecessary_containers
           Container(
             // color: Colors.cyan,
             // height: 30,
@@ -165,7 +166,7 @@ class _LogListState extends State<LogList> {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -211,14 +212,12 @@ class _LogListState extends State<LogList> {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 
-            if (widget.clickLogCellCallback != null) {
-              widget.clickLogCellCallback(
-                context: context,
-                section: section,
-                row: row,
-                bLogModel: bLogModel,
-              );
-            }
+            widget.clickLogCellCallback(
+              context: context,
+              section: section,
+              row: row,
+              bLogModel: bLogModel,
+            );
           },
         );
       },

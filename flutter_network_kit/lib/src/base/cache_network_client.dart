@@ -1,33 +1,19 @@
-import 'dart:async' show Completer, StreamSubscription;
-import 'dart:developer' as developer;
-
-import 'dart:io' show NetworkInterface, InternetAddressType, InternetAddress;
-import 'dart:ui' show window;
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_network/flutter_network.dart';
-import 'package:flutter_network/src/cache/dio_cache_util.dart';
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 // network client
 import './network_client.dart';
-// log
-import '../log/api_log_util.dart';
 // cache
 import '../cache/cache_helper.dart';
 
 class CacheNetworkClient extends NetworkClient {
   DioCacheManager? _dioCacheManager;
   DioCacheManager getCacheManager({String? baseUrl}) {
-    if (null == _dioCacheManager) {
-      _dioCacheManager = DioCacheManager(CacheConfig(
-        baseUrl: baseUrl,
-        maxMemoryCacheCount: 100,
-      ));
-    }
+    _dioCacheManager ??= DioCacheManager(CacheConfig(
+      baseUrl: baseUrl,
+      maxMemoryCacheCount: 100,
+    ));
     return _dioCacheManager!;
   }
 
@@ -67,6 +53,7 @@ class CacheNetworkClient extends NetworkClient {
   /// 初始化公共属性
   ///
   /// [baseUrl] 地址前缀
+  // ignore: non_constant_identifier_names
   void cache_start({
     required String baseUrl,
     String?
@@ -109,7 +96,7 @@ class CacheNetworkClient extends NetworkClient {
       },
       localApiDirBlock: localApiDirBlock,
     );
-
+    /*
     DioCacheUtil.initDioCacheUtil(
       isCacheRequestCheckBlock: (options) {
         bool isRequestCache = CacheHelper.isCacheRequest(options);
@@ -124,11 +111,13 @@ class CacheNetworkClient extends NetworkClient {
         return isFromCache;
       },
     );
+    */
   }
 
   /// 通用的POST请求(如果设置缓存，可实现如果从缓存中取到数据，仍然能继续执行正常的请求)
 
   /// 可进行缓存的请求(需要多次返回结果)
+  // ignore: non_constant_identifier_names
   void cache_requestWithCallback(
     String api, {
     RequestMethod requestMethod = RequestMethod.post,
@@ -164,7 +153,7 @@ class CacheNetworkClient extends NetworkClient {
     );
 
     // 不是真正的网络请求返回的Response\Error结果(eg:比如是取缓存的结果时候)
-    bool noRealRequest = cacheLevel == NetworkCacheLevel.one;
+    // bool noRealRequest = cacheLevel == NetworkCacheLevel.one;
     if (responseModel.isCache != true) {
       // 1、当请求结果是后台实际请求返回的时候:
       if (responseModel.isSuccess) {
@@ -195,7 +184,7 @@ class CacheNetworkClient extends NetworkClient {
         newCacheLevel = NetworkCacheLevel.forceRefreshAndCacheOne;
       } else {
         _log(
-            'Error：${api}判断出错啦，此结果不是缓存数据，却走到了isCache==true'); // TODO:无网络的情况下会发生此现象
+            'Error：$api判断出错啦，此结果不是缓存数据，却走到了isCache==true'); // TODO:无网络的情况下会发生此现象
         newCacheLevel = NetworkCacheLevel
             .none; //TODO:临时为了走下去，应该自始至终都不会走到这里，这里之后要 throw Exception
       }

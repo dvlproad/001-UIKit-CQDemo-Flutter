@@ -1,15 +1,17 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2022-08-11 11:47:10
+ * @LastEditTime: 2023-03-23 18:09:44
  * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
 import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+// ignore: implementation_imports
 import 'package:flutter_network/src/url/url_util.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 
+// ignore: constant_identifier_names
 const DIO_CACHE_KEY_CACHE_LEVEL = "dio_cache_cache_level";
 
 /// 网络缓存
@@ -17,7 +19,6 @@ enum NetworkCacheLevel {
   none, // 不需要缓存（接下来的request时候不取缓存，也不会对其response结果进行缓存来备下次使用）
   one, // 先取缓存，有结果再缓存一次(接下来的request时候先取缓存，同时会对其response结果进行缓存以备下次使用)
   forceRefreshAndCacheOne, // 强制刷新并缓存结果(即接下来的request直接请求后台接口，同时对返回结果response进行缓存以备下次使用)
-
 }
 
 class CacheHelper {
@@ -32,16 +33,16 @@ class CacheHelper {
     options.extra ??= {};
     options.extra!.addAll({DIO_CACHE_KEY_CACHE_LEVEL: cacheLevel});
 
-    Options? dioOptions = null;
+    Options? dioOptions;
     if (cacheLevel == NetworkCacheLevel.one) {
       dioOptions = buildCacheOptions(
-        Duration(days: 0, hours: 1),
+        const Duration(days: 0, hours: 1),
         options: options,
         forceRefresh: false,
       );
     } else if (cacheLevel == NetworkCacheLevel.forceRefreshAndCacheOne) {
       dioOptions = buildCacheOptions(
-        Duration(days: 0, hours: 1),
+        const Duration(days: 0, hours: 1),
         options: options,
         forceRefresh: true,
       );
@@ -57,12 +58,12 @@ class CacheHelper {
     // String cacheSubKey = '1';
     String cacheSubKey = _getSubKeyFromUri(options.uri,
         data: options.data, ignoreKeys: ignoreKeys);
-    if (cacheSubKey != null && cacheSubKey.isNotEmpty) {
+    if (cacheSubKey.isNotEmpty) {
       options.extra.addAll({DIO_CACHE_KEY_SUB_KEY: cacheSubKey});
     }
   }
 
-  static String _getPrimaryKeyFromUri(Uri uri) => "${uri.host}${uri.path}";
+  // static String _getPrimaryKeyFromUri(Uri uri) => "${uri.host}${uri.path}";
 
   static String _getSubKeyFromUri(
     Uri uri, {

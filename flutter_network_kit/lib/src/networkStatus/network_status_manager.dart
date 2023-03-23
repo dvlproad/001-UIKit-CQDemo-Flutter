@@ -2,16 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-07 15:01:55
+ * @LastEditTime: 2023-03-23 18:21:57
  * @Description: 网络状态管理
  */
 import 'dart:async' show Completer, StreamSubscription;
 import 'dart:developer' as developer;
 
-import 'dart:io' show NetworkInterface, InternetAddressType, InternetAddress;
-import 'dart:ui' show window;
-
-import 'package:meta/meta.dart'; // 为了使用 @required
+// 为了使用 @required
 import 'package:flutter/services.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 // eventbus
@@ -19,7 +16,6 @@ import './network_eventbus.dart';
 export './network_eventbus.dart' show NetworkType;
 // export 'package:connectivity_plus/connectivity_plus.dart' show ConnectivityResult;
 
-import 'package:flutter_log/flutter_log.dart';
 import '../log/api_log_util.dart';
 
 class NetworkStatusManager {
@@ -32,16 +28,15 @@ class NetworkStatusManager {
   }
 
   // 单例
+  // ignore: unused_field
   bool _hasStart = false;
-  Completer _initCompleter = Completer<String>();
+  final Completer _initCompleter = Completer<String>();
 
   factory NetworkStatusManager() => _getInstance();
   static NetworkStatusManager get instance => _getInstance();
   static NetworkStatusManager? _instance;
   static NetworkStatusManager _getInstance() {
-    if (_instance == null) {
-      _instance = NetworkStatusManager._internal();
-    }
+    _instance ??= NetworkStatusManager._internal();
     return _instance!;
   }
 

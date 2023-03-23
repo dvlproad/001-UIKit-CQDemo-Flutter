@@ -2,17 +2,19 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-10 21:05:16
+ * @LastEditTime: 2023-03-23 19:00:41
  * @Description: 控制台日志的打印工具(已考虑太长本来会截端的问题)
  */
+import 'package:flutter/foundation.dart';
 import './long_string_print_util.dart';
 
 class PrintConsoleLogUtil {
   static void templog(String message) {
     String dateTimeString = DateTime.now().toString().substring(0, 19);
-    print('$dateTimeString:$message');
+    debugPrint('$dateTimeString:$message');
   }
 
+  // ignore: constant_identifier_names
   static const String _TAG_DEFAULT = "###qianqianqian###\n";
   static bool _hasInit = false;
   static void printConsoleLog(Object object, {String? tag, String? stag}) {

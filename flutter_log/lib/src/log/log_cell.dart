@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-10 23:40:09
+ * @LastEditTime: 2023-03-23 18:51:45
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import './log_base_cell.dart';
 import './log_data_bean.dart';
 
@@ -26,7 +25,7 @@ class ApiLogTableViewCell extends StatelessWidget {
   final int row;
   final ClickApiLogCellCallback clickApiLogCellCallback; // logCell 的点击
 
-  ApiLogTableViewCell({
+  const ApiLogTableViewCell({
     Key? key,
     this.maxLines,
     required this.apiLogModel,
@@ -59,14 +58,12 @@ class ApiLogTableViewCell extends StatelessWidget {
         List<String>? subTitles,
         bool? check,
       }) {
-        if (null != this.clickApiLogCellCallback) {
-          this.clickApiLogCellCallback(
-            context: context,
-            section: this.section,
-            row: this.row,
-            bLogModel: this.apiLogModel,
-          );
-        }
+        clickApiLogCellCallback(
+          context: context,
+          section: this.section,
+          row: this.row,
+          bLogModel: apiLogModel,
+        );
       },
     );
   }

@@ -2,17 +2,16 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-10 20:55:15
+ * @LastEditTime: 2023-03-23 18:48:05
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class CJTSToastUtil {
   static showMessage(String message) {
-    if (message != null && message is String && message.isNotEmpty) {
-      print(message);
+    if (message.isNotEmpty) {
+      debugPrint("CJTSToastUtil.showMessage($message)");
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,

@@ -5,7 +5,7 @@
  * @LastEditTime: 2022-07-10 22:19:54
  * @Description: 长字符串在控制台的输出(使其不会被截端)
  */
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 class LongStringPrintUtil {
   static var _separator = "=";
@@ -42,15 +42,15 @@ class LongStringPrintUtil {
   }
 
   static void newPrint(String msg) {
-    print("$_startLine");
+    debugPrint("1111...$_startLine");
     _logEmpyLine();
     if (msg.length < _limitLength) {
-      print(msg);
+      debugPrint(msg);
     } else {
       segmentationLog(msg);
     }
     _logEmpyLine();
-    print("$_endLine");
+    debugPrint("1111...$_endLine");
   }
 
   static void segmentationLog(String msg) {
@@ -58,12 +58,12 @@ class LongStringPrintUtil {
     for (var index = 0; index < msg.length; index++) {
       outStr.write(msg[index]);
       if (index % _limitLength == 0 && index != 0) {
-        print(outStr);
+        debugPrint("1111...$outStr");
         outStr.clear();
         var lastIndex = index + 1;
         if (msg.length - lastIndex < _limitLength) {
           var remainderStr = msg.substring(lastIndex, msg.length);
-          print(remainderStr);
+          debugPrint("1111...$remainderStr");
           break;
         }
       }
@@ -71,6 +71,6 @@ class LongStringPrintUtil {
   }
 
   static void _logEmpyLine() {
-    print("");
+    debugPrint("");
   }
 }

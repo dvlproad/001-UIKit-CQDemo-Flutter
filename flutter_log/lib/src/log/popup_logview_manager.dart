@@ -40,8 +40,9 @@ class ApplicationLogViewManager {
     //print('尝试刷新 overlay 的 chid 视图....');
     OverlayEntry? logOverlayEntry = logOverlayMap[logListOverlayKey];
     if (logOverlayEntry != null) {
+      // ignore: todo
       // TODO:使用延迟临时修复setState() or markNeedsBuild() called during build.错误解决
-      Future.delayed(Duration(microseconds: 100)).then((value) {
+      Future.delayed(const Duration(microseconds: 100)).then((value) {
         logOverlayEntry.markNeedsBuild();
       });
     }
@@ -141,6 +142,7 @@ class ApplicationLogViewManager {
       left: left,
       top: top,
       builder: (context) {
+        /*
         Widget logDetailWidget;
         if (logDetailPageBuilder == null) {
           logDetailWidget = Container(
@@ -150,6 +152,7 @@ class ApplicationLogViewManager {
         } else {
           logDetailWidget = logDetailPageBuilder!(apiLogModel);
         }
+        */
 
         return _overlayContentWidget(
           opacity: 1.0,
@@ -159,7 +162,7 @@ class ApplicationLogViewManager {
             child: Container(
               color: Colors.white,
               child: logDetailPageBuilder == null
-                  ? Text("请实现logDetailPageBuilder")
+                  ? const Text("请实现logDetailPageBuilder")
                   : logDetailPageBuilder!(apiLogModel),
             ),
           ),
@@ -176,8 +179,6 @@ class ApplicationLogViewManager {
     double top = 0.0,
     required WidgetBuilder builder,
   }) async {
-    assert(builder != null);
-
     if (ApplicationLogViewManager.globalKey == null) {
       throw Exception(
           'Error:请先在main.dart中设置 ApplicationLogViewManager.globalKey = GlobalKey<NavigatorState>();');

@@ -2,22 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-09 10:30:59
+ * @LastEditTime: 2023-03-23 18:44:08
  * @Description: 网络库
  */
 library flutter_network_kit;
 
 export 'package:dio/dio.dart'
     show Dio, DioError, BaseOptions, Options, CancelToken;
-export 'package:flutter_network/flutter_network.dart'
-    show
-        RequestMethod,
-        ResponseModel,
-        HttpStatusCode,
-        NetworkUtil,
-        NetOptions,
-        ErrOptions,
-        NetworkErrorType;
+export 'package:flutter_network/flutter_network.dart';
 
 export './src/error_response_model_util.dart';
 

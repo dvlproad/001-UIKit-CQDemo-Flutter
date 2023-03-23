@@ -50,6 +50,7 @@ class ExpandableText extends StatefulWidget {
       this.color})
       : super(key: key);
 
+  @override
   _ExpandableTextState createState() => _ExpandableTextState();
 }
 
@@ -75,7 +76,7 @@ class _ExpandableTextState extends State<ExpandableText> {
             ellipsis: 'EllipseText');
         tp.layout(maxWidth: size.maxWidth);
         if (tp.didExceedMaxLines) {
-          if (this._expanded) {
+          if (_expanded) {
             return _expandedText(context, widget.text);
           } else {
             return _foldedText(context, widget.text);
@@ -108,12 +109,12 @@ class _ExpandableTextState extends State<ExpandableText> {
   Widget _clickExpandTextWidget(context) {
     Color btnColor = widget.color ?? Colors.white;
 
-    Text tx = Text(
+    Text tx = const Text(
       '更多',
       style: TextStyle(color: Colors.blue, fontSize: 14),
     );
     Container cnt = Container(
-      padding: EdgeInsets.only(left: 22),
+      padding: const EdgeInsets.only(left: 22),
       alignment: Alignment.centerRight,
       child: tx,
       decoration: BoxDecoration(
@@ -146,7 +147,7 @@ class _ExpandableTextState extends State<ExpandableText> {
 
   TextStyle _defaultTextStyle() {
     TextStyle style = widget.textStyle ??
-        TextStyle(
+        const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
           color: Colors.black,
@@ -156,20 +157,21 @@ class _ExpandableTextState extends State<ExpandableText> {
 
   InlineSpan _foldButtonSpan(context) {
     return TextSpan(
-        text: ' 收起',
-        style: TextStyle(
-          color: Colors.blue,
-          fontSize: 14,
-        ),
-        recognizer: TapGestureRecognizer()
-          ..onTap = () {
-            setState(() {
-              _expanded = false;
-              if (null != widget.onExpanded) {
-                widget.onExpanded!(_expanded);
-              }
-            });
+      text: ' 收起',
+      style: const TextStyle(
+        color: Colors.blue,
+        fontSize: 14,
+      ),
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          setState(() {
+            _expanded = false;
+            if (null != widget.onExpanded) {
+              widget.onExpanded!(_expanded);
+            }
           });
+        },
+    );
   }
 
   Widget _regularText(text, style) {

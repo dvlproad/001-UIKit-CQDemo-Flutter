@@ -8,12 +8,12 @@
 import 'package:flutter/material.dart';
 
 class TSTabBarBaePage extends StatefulWidget {
-  final String title; // 标题
+  final String? title; // 标题
   final List<Widget> tabs; // <Widget>[Tab(text: '新文件没Base'),]
   final List<Widget> tabPages;
 
   TSTabBarBaePage({
-    Key key,
+    Key? key,
     this.title,
     required this.tabs,
     required this.tabPages,
@@ -27,23 +27,22 @@ class TSTabBarBaePage extends StatefulWidget {
 class _TSTabBarBaePageState extends State<TSTabBarBaePage>
     with SingleTickerProviderStateMixin {
   // 2 定义 TabController 变量
-  TabController _tabController;
+  late TabController _tabController;
 
   // 3 覆盖重写 initState，实例化 _tabController
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     if (widget.tabs.length != widget.tabPages.length) {
-      print("Error:请保证个数相等");
+      debugPrint("Error:请保证个数相等");
     }
 
     int length = widget.tabs.length;
-    _tabController = new TabController(length: length, vsync: this);
+    _tabController = TabController(length: length, vsync: this);
 
     _tabController.addListener(() {
-      print(_tabController.index);
+      debugPrint("点击tabIndex:${_tabController.index}");
     });
   }
 
@@ -53,11 +52,12 @@ class _TSTabBarBaePageState extends State<TSTabBarBaePage>
   }
 
   Widget get _tabBarAndTabBarView {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Column(
         children: [
           Container(child: header(widget.title ?? '')),
-          Container(height: 30, child: _tabbar),
+          SizedBox(height: 30, child: _tabbar),
           Expanded(child: Container(child: _tabBarView)),
         ],
       ),
@@ -68,7 +68,7 @@ class _TSTabBarBaePageState extends State<TSTabBarBaePage>
     return Text(
       text,
       textAlign: TextAlign.center,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.red,
         fontSize: 18,
         fontWeight: FontWeight.bold,

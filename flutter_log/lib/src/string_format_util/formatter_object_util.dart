@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-18 01:44:23
+ * @LastEditTime: 2023-03-23 19:02:56
  * @Description: object转格式化的字符串的工具类
  */
 
-import './object2StringExtension.dart';
+// import './object2StringExtension.dart';
 
 class FormatterUtil {
   ///获取缩进空白符
@@ -44,7 +44,7 @@ class FormatterUtil {
       var keyList = object.keys.toList();
       if (!isObject) {
         //如果map来自某个字段，则不需要显示缩进
-        buffer.write("${getDeepSpace(deep)}");
+        buffer.write(getDeepSpace(deep));
       }
       buffer.write("{");
       if (keyList.isEmpty) {
@@ -66,7 +66,7 @@ class FormatterUtil {
     } else if (object is List) {
       if (!isObject) {
         //如果list来自某个字段，则不需要显示缩进
-        buffer.write("${getDeepSpace(deep)}");
+        buffer.write(getDeepSpace(deep));
       }
       buffer.write("[");
       if (object.isEmpty) {

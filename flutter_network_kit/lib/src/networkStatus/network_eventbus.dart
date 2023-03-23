@@ -2,15 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-10 16:43:45
+ * @LastEditTime: 2023-03-23 18:12:19
  * @Description: 开发工具的各种事件
  */
 import 'package:event_bus/event_bus.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-export 'package:connectivity_plus/connectivity_plus.dart'
-    show ConnectivityResult;
+// export 'package:connectivity_plus/connectivity_plus.dart'
+//     show ConnectivityResult;
 
-EventBus networkEventBus = new EventBus();
+EventBus networkEventBus = EventBus();
 
 /// Connection status check result.
 enum NetworkType {

@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import '../bean/api_describe_bean.dart';
 import '../bean/api_user_bean.dart';
 

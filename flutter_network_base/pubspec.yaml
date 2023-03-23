@@ -1,8 +1,8 @@
 name: flutter_network_base
 description: Pure network foundation library(纯净的网络基础库).
 version: 0.0.1
-repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network
-homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_base
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_base
 
 environment:
   sdk: ">=2.15.0 <3.0.0"

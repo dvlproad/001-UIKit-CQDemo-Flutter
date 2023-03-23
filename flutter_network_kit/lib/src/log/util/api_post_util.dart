@@ -1,23 +1,12 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-04-13 00:17:19
- * @LastEditTime: 2022-07-28 18:46:49
+ * @LastEditTime: 2023-03-23 18:08:54
  * @LastEditors: dvlproad
  * @Description: 网络异常上报机器人
  */
-import 'package:meta/meta.dart';
-import 'package:flutter_log/flutter_log.dart'
-    show CommonErrorRobot, RobotPostType;
-import 'package:flutter_network/flutter_network.dart' show ApiLogLevel;
-import 'package:flutter_network/src/interceptor_log/util/net_options_log_util.dart';
-import 'package:flutter_network/src/interceptor_log/util/net_options_log_bean.dart';
-
-import '../bean/api_describe_bean.dart';
-import '../bean/api_user_bean.dart';
-import './api_describe_util.dart';
 
 import '../bean/apihost_robot_bean.dart';
-import '../../networkStatus/network_status_manager.dart';
 
 class ApiPostUtil {
   static late List<ApiHostRobotBean> apiErrorRobots;

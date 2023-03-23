@@ -1,19 +1,10 @@
-import 'dart:async' show Completer, StreamSubscription;
-import 'dart:developer' as developer;
-
-import 'dart:io' show NetworkInterface, InternetAddressType, InternetAddress;
-import 'dart:ui' show window;
-
-import 'package:meta/meta.dart'; // 为了使用 required
-import 'package:flutter/services.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_network/flutter_network.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:dio/dio.dart';
 // log
 import '../log/api_log_util.dart';
 // networkStatus
-import '../networkStatus/network_status_manager.dart';
+// import '../networkStatus/network_status_manager.dart';
 
 class NetworkClient extends BaseNetworkClient {
   List<String>? _headerAuthorizationWhiteList;
@@ -21,6 +12,7 @@ class NetworkClient extends BaseNetworkClient {
   /// 初始化公共属性
   ///
   /// [baseUrl] 地址前缀
+  // ignore: non_constant_identifier_names
   void normal_start({
     required String baseUrl,
     String?
@@ -42,9 +34,7 @@ class NetworkClient extends BaseNetworkClient {
     void Function(RequestOptions options)? dealRequestOptionsAction,
   }) {
     Map<String, dynamic> headers = {};
-    if (headerCommonFixParams != null) {
-      headers.addAll(headerCommonFixParams);
-    }
+    headers.addAll(headerCommonFixParams);
     if (headerCommonChangeParamsGetBlock != null) {
       headers.addAll(headerCommonChangeParamsGetBlock());
     }
@@ -64,7 +54,7 @@ class NetworkClient extends BaseNetworkClient {
       bodyCommonChangeParamsGetBlock: bodyCommonChangeParamsGetBlock,
       logApiInfoAction: (NetOptions apiInfo, ApiProcessType apiProcessType) {
         ApiEnvInfo apiEnvInfo = ApiEnvInfo(
-          serviceValidProxyIp: this.serviceValidProxyIp,
+          serviceValidProxyIp: serviceValidProxyIp,
         );
         LogApiUtil.logApiInfo(
           apiInfo,
@@ -85,6 +75,7 @@ class NetworkClient extends BaseNetworkClient {
  *  @param getFailureResponseModelBlock 将"网络请求失败返回的数据error"转换为"模型"的方法
  *  @param getErrorResponseModelBlock   将"网络请求失败返回的数据error"转换为"模型"的方法
  */
+  // ignore: non_constant_identifier_names
   void normal_setup({
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
@@ -216,9 +207,11 @@ class NetworkClient extends BaseNetworkClient {
     bool?
         toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
   }) async {
+    /*
     NetworkType realConnectionStatus = await NetworkStatusManager()
         .realConnectionStatus; // 修复无网络情况下,启动应用，导致无网络也走网络请求
-    /* ///TODO:暂时注释掉。原因:后台长时间挂起后，网络状态获取不准
+    // ignore: todo
+    ///TODO:暂时注释掉。原因:后台长时间挂起后，网络状态获取不准
     if (realConnectionStatus == NetworkType.none) {
       return checkResponseModelFunction(
         ResponseModel.nonetworkResponseModel(),

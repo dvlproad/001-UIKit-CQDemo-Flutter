@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import './log_list.dart';
-import './log_data_bean.dart';
 
 class LogHomePage extends StatefulWidget {
   final Color? color;
@@ -15,7 +14,7 @@ class LogHomePage extends StatefulWidget {
       required LogCategory bLogCategory}) onPressedClear; // 点击清空按钮的事件
   final void Function() onPressedClose; // 点击关闭按钮的事件
 
-  LogHomePage({
+  const LogHomePage({
     Key? key,
     this.color,
     required this.logModels,
@@ -36,6 +35,7 @@ class _LogHomePageState extends State<LogHomePage>
   late TabController _tabController;
 
   List<LogModel> _logModels = [];
+  // ignore: non_constant_identifier_names
   List<LogModel> _success_warning_error_logModels = []; // 所有的请求结果(包含成功、警告、失败)
   List<LogModel> _warningLogModels = [];
   List<LogModel> _errorLogModels = [];
@@ -50,13 +50,12 @@ class _LogHomePageState extends State<LogHomePage>
   // 3 覆盖重写 initState，实例化 _tabController
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
-    _tabController = new TabController(length: 7, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
 
     _tabController.addListener(() {
-      print(_tabController.index);
+      debugPrint("点击tabIndex:${_tabController.index}");
     });
 
     _logModels = widget.logModels;
@@ -115,7 +114,7 @@ class _LogHomePageState extends State<LogHomePage>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: const [
               Center(
                 child: Text(
                   '日志系统(单击查看详情)',
@@ -144,7 +143,7 @@ class _LogHomePageState extends State<LogHomePage>
     required void Function() onPressed,
   }) {
     return IconButton(
-      icon: Image(
+      icon: const Image(
         image: AssetImage(
           'assets/log_close.png',
           package: 'flutter_log',
@@ -175,24 +174,22 @@ class _LogHomePageState extends State<LogHomePage>
 
   Tab tab(String text) {
     //创建随机颜色
+    /*
     Color randomColor = Color.fromRGBO(
       Random().nextInt(256),
       Random().nextInt(256),
       Random().nextInt(256),
       1,
     );
+    */
     return Tab(
-      child: Container(
-        // width: 44,
-        // color: randomColor,
-        child: Text(
-          text,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.pink,
-            fontSize: 13,
-            fontWeight: FontWeight.bold,
-          ),
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          color: Colors.pink,
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -248,16 +245,14 @@ class _LogHomePageState extends State<LogHomePage>
   }) {
     return LogList(
       // key: pageKey(logType),
-      color: Color(0xFFF2F2F2),
+      color: const Color(0xFFF2F2F2),
       logModels: logModels,
       clickLogCellCallback: widget.clickLogCellCallback,
       onPressedClear: () {
-        if (widget.onPressedClear != null) {
-          widget.onPressedClear(
-            bLogCategory: logCategory,
-            logType: logObjectType,
-          );
-        }
+        widget.onPressedClear(
+          bLogCategory: logCategory,
+          logType: logObjectType,
+        );
       },
       onPressedCopyAll: widget.onPressedCopyAll,
     );

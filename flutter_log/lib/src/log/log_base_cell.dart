@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import './expandable_text.dart';
 
 typedef ClickEnvBaseCellCallback = void Function({
@@ -24,7 +23,7 @@ class LogBaseTableViewCell extends StatelessWidget {
   final ClickEnvBaseCellCallback clickEnvBaseCellCallback; // 网络 networkCell 的点击
   final void Function()? onLongPress;
 
-  LogBaseTableViewCell({
+  const LogBaseTableViewCell({
     Key? key,
     this.maxLines = 20,
     required this.mainTitle,
@@ -67,12 +66,12 @@ class LogBaseTableViewCell extends StatelessWidget {
   }
 
   void _onTapCell() {
-    this.clickEnvBaseCellCallback(
-      section: this.section,
-      row: this.row,
-      mainTitle: this.mainTitle,
-      subTitles: this.subTitles,
-      check: this.check,
+    clickEnvBaseCellCallback(
+      section: section,
+      row: row,
+      mainTitle: mainTitle,
+      subTitles: subTitles,
+      check: check,
     );
   }
 
@@ -95,14 +94,14 @@ class LogBaseTableViewCell extends StatelessWidget {
     List<Widget> columnWidgets = [];
     // 添加主文本
     Widget mainTextWidget = Container(
-      padding: EdgeInsets.fromLTRB(10, 5, 0, 0),
+      padding: const EdgeInsets.fromLTRB(10, 5, 0, 0),
       color: Colors.transparent,
       child: Text(
-        this.mainTitle,
+        mainTitle,
         textAlign: TextAlign.left,
         // overflow: TextOverflow.ellipsis, // ellipsis 会有省略号
-        style: this.mainTitleStyle ??
-            TextStyle(
+        style: mainTitleStyle ??
+            const TextStyle(
               color: Colors.black,
               fontSize: 16.0,
             ),
@@ -111,10 +110,10 @@ class LogBaseTableViewCell extends StatelessWidget {
     columnWidgets.add(mainTextWidget);
 
     // 判断是否添加其他文本
-    for (String subTitle in this.subTitles ?? []) {
+    for (String subTitle in subTitles ?? []) {
       if (subTitle.isNotEmpty) {
         Widget subTextWidget = Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
           color: Colors.transparent,
           // child: Text(
           //   subTitle ?? '',
@@ -128,8 +127,8 @@ class LogBaseTableViewCell extends StatelessWidget {
           child: ExpandableText(
             //当文案过长时，可以设置展开和收起
             text: subTitle,
-            textStyle: TextStyle(color: this.subTitleColor ?? Colors.black),
-            maxLines: this.maxLines,
+            textStyle: TextStyle(color: subTitleColor ?? Colors.black),
+            maxLines: maxLines,
             onExpanded: (bool isExpanded) {
               if (isExpanded) {
                 //debugPrint('已经展开');
@@ -155,14 +154,14 @@ class LogBaseTableViewCell extends StatelessWidget {
   // row 右边箭头
   Widget get _rowRightWidget {
     // 判断是否添加箭头
-    if (this.check == false) {
+    if (check == false) {
       return Container();
     }
 
     Widget arrowImageWidget = Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
       color: Colors.transparent,
-      child: Icon(Icons.check_box, color: Colors.black, size: 14),
+      child: const Icon(Icons.check_box, color: Colors.black, size: 14),
     );
     return arrowImageWidget;
   }

@@ -2,16 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-10 22:10:52
+ * @LastEditTime: 2023-03-23 19:03:28
  * @Description: 底层企业微信机器人
  */
-import 'dart:io' show Platform;
-import 'dart:convert' show json;
-import 'package:meta/meta.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/src/multipart_file.dart';
-import 'package:package_info/package_info.dart';
+// import 'package:package_info/package_info.dart';
 
+import 'package:flutter/foundation.dart';
 import '../string_format_util/formatter_object_util.dart';
 
 enum RobotPostType {
@@ -31,7 +29,6 @@ class CommonErrorRobot {
     String? packageDescribe, // 包的描述(生产、测试、开发包)
     String Function()? userDescribeBlock, // 当前使用该包的用户信息
   }) {
-    assert(tolerantRobotKey != null);
     _tolerantRobotKey = tolerantRobotKey;
     _packageDescribe = packageDescribe ?? "未知包"; // 包、平台、分支及版本等相关信息
     _userDescribeBlock = userDescribeBlock;
@@ -45,7 +42,7 @@ class CommonErrorRobot {
     String? title,
     required String customMessage,
   }) async {
-    if (robotUrls == null || robotUrls.length == 0) {
+    if (robotUrls == null || robotUrls.isEmpty) {
       String myRobotKey = CommonErrorRobot.myRobotKey; // 单个人测试用的
       robotUrls = [myRobotKey];
     }
@@ -82,7 +79,7 @@ class CommonErrorRobot {
       fullMessage += '$title\n';
     }
 
-    fullMessage += '$_packageDescribe';
+    fullMessage += _packageDescribe;
 
     if (_userDescribeBlock != null) {
       String userDescribe = _userDescribeBlock!(); // 当前使用该包的用户信息
@@ -163,6 +160,7 @@ class CommonErrorRobot {
     }
   }
 
+  // ignore: non_constant_identifier_names
   static get testMarkdownContent_normal {
     return '''实时新增用户反馈<font color=\"warning\">132例</font>，请相关同事注意。
             类型:<font color=\"comment\">用户反馈</font>
@@ -176,6 +174,7 @@ class CommonErrorRobot {
             ''';
   }
 
+  // ignore: non_constant_identifier_names
   static get testMarkdownContent_json {
     Map jsonMap = {
       "code": 0,
@@ -265,7 +264,7 @@ class CommonErrorRobot {
     Map responseObject = response.data;
     if (responseObject['errcode'] != 0) {
       String errorMessage = responseObject['errmsg'];
-      print('企业微信文件上传请求失败:errorMessage=$errorMessage');
+      debugPrint('企业微信文件上传请求失败:errorMessage=$errorMessage');
       return null;
     }
 

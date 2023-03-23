@@ -1,12 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-28 18:05:28
+ * @LastEditTime: 2023-03-23 18:52:17
  * @Description: 日志信息模型
  */
 
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart'; // 需要使用颜色 Color
 import '../string_format_util/formatter_object_util.dart';
 
@@ -83,7 +84,7 @@ class LogModel {
     if (logType == LogObjectType.api_app && extraLogInfo != null) {
       // List<String> robotUrls = ApiPostUtil.getRobotUrlsByApiHost(apiHost);
       String logFotterMessage = extraLogInfo!["logFotterMessage"] ?? '';
-      detailString += '\n${logFotterMessage}';
+      detailString += '\n$logFotterMessage';
     }
 
     return detailString;
@@ -145,35 +146,35 @@ class LogModel {
   }
   Map<dynamic, dynamic> toJson() {
     return {
-      "title": this.title,
-      "shortMap": this.shortMap,
-      "logLevel": this.logLevel,
-      "extraLogInfo": this.extraLogInfo,
+      "title": title,
+      "shortMap": shortMap,
+      "logLevel": logLevel,
+      "extraLogInfo": extraLogInfo,
     };
   }
 
   // 获取其他值
   Color get logColor {
     Color subTitleColor = Colors.black;
-    if (this.logLevel == LogLevel.error) {
-      if (this.logType == LogObjectType.api_cache) {
+    if (logLevel == LogLevel.error) {
+      if (logType == LogObjectType.api_cache) {
         subTitleColor = Colors.red.shade200;
       } else {
         subTitleColor = Colors.red;
       }
-    } else if (this.logLevel == LogLevel.warning) {
-      if (this.logType == LogObjectType.api_cache) {
+    } else if (logLevel == LogLevel.warning) {
+      if (logType == LogObjectType.api_cache) {
         subTitleColor = Colors.orange.shade200;
       } else {
         subTitleColor = Colors.orange;
       }
-    } else if (this.logLevel == LogLevel.success) {
-      if (this.logType == LogObjectType.route) {
+    } else if (logLevel == LogLevel.success) {
+      if (logType == LogObjectType.route) {
         subTitleColor = Colors.blue;
-      } else if (this.logType == LogObjectType.monitor_network) {
+      } else if (logType == LogObjectType.monitor_network) {
         subTitleColor = Colors.cyan;
       } else {
-        if (this.logType == LogObjectType.api_cache) {
+        if (logType == LogObjectType.api_cache) {
           subTitleColor = Colors.green.shade200;
         } else {
           subTitleColor = Colors.green;

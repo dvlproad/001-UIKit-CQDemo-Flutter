@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-28 16:28:38
+ * @LastEditTime: 2023-03-23 18:49:21
  * @Description: 日志
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import './popup_logview_manager.dart';
 import './log_data_bean.dart';
 
@@ -47,7 +46,7 @@ class DevLogUtil {
       },
       onPressedClear: (
           {required LogObjectType logType, required LogCategory bLogCategory}) {
-        print('点击清空数据');
+        debugPrint('点击清空数据');
         logModels.clear();
 
         ApplicationLogViewManager.updateLogOverlayEntry();
