@@ -1,5 +1,5 @@
 /*
- * section_table_view_method2.dart
+ * section_table_view.dart
  *
  * @Description: 分组列表实现方法测试2：以只一个 list 来实现，即将分组 sectionHeader 作为row==-1 的 cell 来在 list 中绘制
  *
@@ -13,12 +13,11 @@ import 'package:flutter/material.dart';
 import './index_path.dart';
 export './index_path.dart';
 
-typedef int RowCountInSectionCallBack(int section);
-typedef Widget CellAtIndexPathCallBack(int section, int row);
-typedef Widget SectionHeaderCallBack(int section);
+typedef RowCountInSectionCallBack = int Function(int section);
+typedef CellAtIndexPathCallBack = Widget Function(int section, int row);
+typedef SectionHeaderCallBack = Widget Function(int section);
 
-// ignore: must_be_immutable
-class CreateSectionTableView2 extends StatefulWidget {
+class SectionTableView extends StatefulWidget {
   //required
   final int sectionCount;
   final RowCountInSectionCallBack numOfRowInSection;
@@ -29,10 +28,10 @@ class CreateSectionTableView2 extends StatefulWidget {
   final Widget? divider;
 
   // controller
-  ScrollController? controller;
-  bool reverse;
+  final ScrollController? controller;
+  final bool reverse;
 
-  CreateSectionTableView2({
+  const SectionTableView({
     Key? key,
     required this.sectionCount,
     required this.numOfRowInSection,
@@ -42,12 +41,14 @@ class CreateSectionTableView2 extends StatefulWidget {
     this.controller,
     this.reverse = false,
   }) : super(key: key);
+
   @override
-  _CreateSectionTableView2State createState() =>
-      new _CreateSectionTableView2State();
+  State<StatefulWidget> createState() {
+    return _SectionTableViewState();
+  }
 }
 
-class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
+class _SectionTableViewState extends State<SectionTableView> {
   List<IndexPath> indexToIndexPathSearch = [];
   // Map<String, double> indexPathToOffsetSearch;
 
@@ -66,7 +67,7 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
   }
 
   @override
-  void didUpdateWidget(CreateSectionTableView2 oldWidget) {
+  void didUpdateWidget(SectionTableView oldWidget) {
     super.didUpdateWidget(oldWidget);
   }
 
@@ -77,23 +78,23 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
 
   @override
   Widget build(BuildContext context) {
-    List<IndexPath> _indexToIndexPathSearch = [];
+    List<IndexPath> indexToIndexPathSearch = [];
     for (int i = 0; i < widget.sectionCount; i++) {
       if (widget.headerInSection != null) {
-        _indexToIndexPathSearch.add(IndexPath(section: i, row: -1));
+        indexToIndexPathSearch.add(IndexPath(section: i, row: -1));
       }
 
       int rows = widget.numOfRowInSection(i);
       for (int j = 0; j < rows; j++) {
-        _indexToIndexPathSearch.add(IndexPath(section: i, row: j));
+        indexToIndexPathSearch.add(IndexPath(section: i, row: j));
       }
     }
-    indexToIndexPathSearch = _indexToIndexPathSearch;
+    indexToIndexPathSearch = indexToIndexPathSearch;
 
     return ListView.builder(
       key: listViewKey,
-      padding: EdgeInsets.only(top: 0), // 修复 ListView 没有顶部对齐的问题
-      physics: AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 0), // 修复 ListView 没有顶部对齐的问题
+      physics: const AlwaysScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return _buildCell(context, index);
       },
@@ -116,8 +117,8 @@ class _CreateSectionTableView2State extends State<CreateSectionTableView2> {
     Widget cell = widget.cellAtIndexPath(indexPath.section, indexPath.row);
     if (widget.divider != null) {
       return Column(
-        children: <Widget>[cell, widget.divider!],
         mainAxisSize: MainAxisSize.min,
+        children: <Widget>[cell, widget.divider!],
       );
     } else {
       return cell;

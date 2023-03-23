@@ -35,9 +35,6 @@ export './cq-uikit/textfield/prefixText_textField.dart';
 // cell
 export './cq-uikit/cell/cell.dart';
 
-// tableview
-export './cq-uikit/tableview/section_table_view_method2.dart';
-
 // toolbar
 export './cq-uikit/toolbar/toolbar.dart';
 export './cq-uikit/toolbar/toolbar_button_base.dart';
