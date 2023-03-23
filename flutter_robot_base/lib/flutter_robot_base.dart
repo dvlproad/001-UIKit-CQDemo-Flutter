@@ -1,7 +1,4 @@
 library flutter_robot_base;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+// 企业微信上报机器人
+export './src/common_error_robot.dart';
