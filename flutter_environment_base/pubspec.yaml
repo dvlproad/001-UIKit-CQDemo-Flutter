@@ -1,8 +1,9 @@
-name: flutter_overlay_kit
-description: toast + alert + actionsheet.
+name: flutter_environment_base
+description: 各种环境基础管理库(core+kit).
 version: 0.0.1
-repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
-homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
+
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -12,15 +13,20 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # toast
-  fluttertoast: ^8.1.2
+  shared_preferences: ^2.0.17
 
+  connectivity_plus: ^3.0.0
+  http_proxy: ^1.2.1
+  provider: ^6.0.5
+
+  flutter_network_base: #^0.0.1
+    path: ../flutter_network_base/
+  flutter_reuse_view: #^0.0.2
+    path: ../flutter_reuse_view/
+  flutter_overlay_kit: #^0.0.1
+    path: ../flutter_overlay_kit/ # 切换环境时候的alert确认
   flutter_baseui_kit: #^0.0.1
     path: ../flutter_baseui_kit/
-  # flutter_button_base:
-  #   path: ../flutter_baseui_kit/flutter_button_base/
-
-  
 
 dev_dependencies:
   flutter_test:
