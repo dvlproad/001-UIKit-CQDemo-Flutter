@@ -1,16 +1,18 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+// import 'package:flutter_button_base/flutter_button_base.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+
 import '../flutter_overlay_kit_adapt.dart';
 
 class BasePopupWidget extends StatefulWidget {
   static double toolbarHeight = 40.h_pt_cj;
 
-  double? height;
+  final double? height;
 
-  String? title;
-  Widget Function(BuildContext bContext) customViewBuilder;
-  Widget Function(BuildContext bContext)? bottomButtonBuilder;
+  final String? title;
+  final Widget Function(BuildContext bContext) customViewBuilder;
+  final Widget Function(BuildContext bContext)? bottomButtonBuilder;
 
   BasePopupWidget({
     Key? key,
@@ -18,8 +20,7 @@ class BasePopupWidget extends StatefulWidget {
     this.title,
     required this.customViewBuilder, // 由 Expanded 包裹，如果高度不够，会自动被拉伸
     this.bottomButtonBuilder,
-  })  : assert(customViewBuilder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _BasePopupWidgetState createState() => _BasePopupWidgetState();
@@ -27,7 +28,7 @@ class BasePopupWidget extends StatefulWidget {
   // 计算弹出视图的完整高度(customViewHeight为UI图上扣除 toolbarHeight 和 srceenBottom 后的高度)
   static double viewHeight(double customViewHeight) {
     MediaQueryData mediaQuery = MediaQueryData.fromWindow(window);
-    double screenHeight = mediaQuery.size.height;
+    // double screenHeight = mediaQuery.size.height;
     double srceenBottom = mediaQuery.padding.bottom;
 
     double viewHeight =
@@ -93,8 +94,8 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
 }
 
 class BottomPopupButton extends StatelessWidget {
-  String buttonText;
-  void Function() onPressedButton;
+  final String buttonText;
+  final void Function() onPressedButton;
 
   BottomPopupButton({
     Key? key,
@@ -120,11 +121,7 @@ class BottomPopupButton extends StatelessWidget {
         title: buttonText,
         titleStyle: ButtonRegularTextStyle(fontSize: 12.h_pt_cj),
         onPressed: () {
-          if (onPressedButton != null) {
-            onPressedButton();
-          } else {
-            Navigator.pop(context);
-          }
+          onPressedButton();
         },
       ),
     );

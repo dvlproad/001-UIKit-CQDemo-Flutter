@@ -1,22 +1,24 @@
 name: flutter_overlay_kit
-description: A new Flutter package project.
+description: toast + alert + actionsheet.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=1.17.0 <2.0.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=1.16.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   # toast
-  fluttertoast: any
+  fluttertoast: ^8.1.2
 
-  flutter_baseui_kit:
-    path: ../flutter_baseui_kit/
+  flutter_baseui_kit: ^0.0.1
+    # path: ../flutter_baseui_kit/
+  # flutter_button_base:
+  #   path: ../flutter_baseui_kit/flutter_button_base/
 
   
 

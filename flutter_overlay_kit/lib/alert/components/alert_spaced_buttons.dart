@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_button_base/flutter_button_base.dart';
+// import 'package:flutter_button_base/flutter_button_base_adapt.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
@@ -67,9 +69,7 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
           enable: true, // 不设置,默认true
           onPressed: () {
             Future.delayed(Duration(milliseconds: 100), () {
-              if (this.okHandle != null) {
-                this.okHandle();
-              }
+              this.okHandle();
             });
           },
         ),
@@ -115,9 +115,7 @@ class AlertIKnowSpacedButton extends StatelessWidget {
           cornerRadius: 20,
           onPressed: () {
             Future.delayed(Duration(milliseconds: 100), () {
-              if (this.iKnowTitle != null) {
-                this.iKnowHandle();
-              }
+              this.iKnowHandle();
             });
           },
         ),

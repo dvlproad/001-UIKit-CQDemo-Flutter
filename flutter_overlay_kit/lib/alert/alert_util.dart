@@ -2,14 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 15:14:07
+ * @LastEditTime: 2023-03-24 13:53:28
  * @Description: Alert弹窗工具类
  */
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import './message_alert_view.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
+// import 'package:flutter_button_base/flutter_button_base.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 
 class AlertUtil {
   // 我知道了
@@ -104,9 +103,7 @@ class AlertUtil {
           okTitle: okTitle ?? "确定",
           okHandle: () {
             Navigator.of(context).pop();
-            if (okHandle != null) {
-              okHandle();
-            }
+            okHandle();
           },
           closeHandle: () {
             Navigator.of(context).pop();

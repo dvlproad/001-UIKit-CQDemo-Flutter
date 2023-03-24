@@ -31,10 +31,8 @@ class ActionSheetUtil {
             Navigator.of(context).pop();
           },
           onConfirm: (int selectedIndex) {
-            if (onConfirm != null) {
-              Navigator.of(context).pop();
-              onConfirm(selectedIndex);
-            }
+            Navigator.of(context).pop();
+            onConfirm(selectedIndex);
           },
         );
       },
@@ -55,16 +53,12 @@ class ActionSheetUtil {
       titleTextStyle: titleTextStyle,
       itemTitles: itemTitles,
       onItemTap: (selectedIndex) {
-        if (onConfirm != null) {
-          onConfirm(selectedIndex);
-        }
+        onConfirm(selectedIndex);
       },
       currentSelectedIndex: currentSelectedIndex,
       onCancel: onCancel,
       onConfirm: (selectedIndex) async {
-        if (onConfirm != null) {
-          onConfirm(selectedIndex);
-        }
+        onConfirm(selectedIndex);
       },
     );
   }

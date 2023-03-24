@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 00:51:59
+ * @LastEditTime: 2023-03-24 14:24:09
  * @Description: Toast工具类
  */
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -22,7 +21,7 @@ class ToastUtil {
     int duration = 1,
     bool needCancelOld = false, // 是否要取消旧的，避免视图一直叠加
   }) {
-    if (message != null && message is String && message.isNotEmpty) {
+    if (message.isNotEmpty) {
       debugPrint(message);
 
       if (needCancelOld == true) {
@@ -43,10 +42,7 @@ class ToastUtil {
 
   // 同时只显示一次toast
   static showMessageOnlyOnce(String message, {int duration = 1}) async {
-    if (message != null &&
-        message is String &&
-        message.isNotEmpty &&
-        _showing == false) {
+    if (message.isNotEmpty && _showing == false) {
       debugPrint(message);
       _showing = true;
       await Fluttertoast.showToast(
@@ -68,13 +64,13 @@ class ToastUtil {
     required String toastKey,
     Duration duration = const Duration(milliseconds: 1000),
   }) async {
-    if (message == null || message.isEmpty) {
+    if (message.isEmpty) {
       return;
     }
 
     bool isToastKeyShowing = onlyOnceShowingToastKeys.contains(toastKey);
     debugPrint(
-        "1======toastKey=${toastKey},onlyOnceShowingToastKeys=${onlyOnceShowingToastKeys},message=${message}");
+        "1======toastKey=$toastKey,onlyOnceShowingToastKeys=$onlyOnceShowingToastKeys,message=$message");
     if (isToastKeyShowing == false) {
       onlyOnceShowingToastKeys.add(toastKey);
       await Fluttertoast.showToast(
@@ -90,7 +86,7 @@ class ToastUtil {
       Future.delayed(duration).then((value) {
         onlyOnceShowingToastKeys.remove(toastKey);
         debugPrint(
-            "2======toastKey=${toastKey},onlyOnceShowingToastKeys=${onlyOnceShowingToastKeys}");
+            "2======toastKey=$toastKey,onlyOnceShowingToastKeys=$onlyOnceShowingToastKeys");
       });
     }
   }
@@ -129,10 +125,10 @@ class ToastUtil {
 
   static FToast? timeoutToast;
   static bool timeoutToastShowing = false;
-  static BuildContext Function()? _contextGetBlock;
+  static BuildContext? Function()? _contextGetBlock;
 
   static init({
-    required BuildContext Function() contextGetBlock,
+    required BuildContext? Function() contextGetBlock,
   }) {
     _contextGetBlock = contextGetBlock;
   }
@@ -148,7 +144,7 @@ class ToastUtil {
 
     if (timeoutToast == null && _contextGetBlock != null) {
       timeoutToast = FToast();
-      BuildContext context = _contextGetBlock!();
+      BuildContext? context = _contextGetBlock!();
       if (context == null) {
         return;
       }

@@ -63,9 +63,7 @@ class FlexWidthButtons extends StatelessWidget {
       child: TextButton(
         // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
-          if (this.onPressed != null) {
-            this.onPressed(index);
-          }
+          this.onPressed(index);
         },
         child: Text(
           this.titles[index],

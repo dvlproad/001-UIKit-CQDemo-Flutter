@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import './components/alert_closed_buttons.dart';
+// import './components/alert_closed_buttons.dart';
 import './components/alert_spaced_buttons.dart';
 import './components/flex_width_buttons.dart';
 import './components/alert_container.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+// import 'package:flutter_button_base/flutter_button_base.dart';
+// import 'package:flutter_button_base/flutter_button_base_adapt.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
 class CJBaseMessageAlertView extends StatelessWidget {
@@ -64,7 +66,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       }
     }
 
-    Widget? alertTitleComponent = null;
+    Widget? alertTitleComponent;
     if (this.title != null) {
       alertTitleComponent = Container(
         margin: EdgeInsets.only(top: alertMarginVerticals[titleVerticalIndex]),
@@ -83,7 +85,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       );
     }
 
-    Widget? alertMessageComponent = null;
+    Widget? alertMessageComponent;
     if (this.message != null) {
       alertMessageComponent = Container(
         margin:
@@ -156,9 +158,7 @@ class IKnowMessageAlertView extends CJBaseMessageAlertView {
       iKnowTitle: this.iKnowTitle,
       iKnowHandle: () {
         // print("点击Alert按钮:'我知道了'");
-        if (this.iKnowHandle != null) {
-          this.iKnowHandle();
-        }
+        this.iKnowHandle();
       },
     );
   }

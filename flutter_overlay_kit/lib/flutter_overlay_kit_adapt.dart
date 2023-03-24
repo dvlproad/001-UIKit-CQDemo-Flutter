@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 01:01:47
+ * @LastEditTime: 2023-03-24 11:28:13
  * @Description: 宽高等适配
  */
 import 'dart:ui';
@@ -26,6 +26,7 @@ class AdaptCJHelper {
     _screenHeight = mediaQuery.size.height;
     _stautsBarHeight = mediaQuery.padding.top;
 
+    // ignore: todo
     ///TODO:疑难杂症:这里为什么有时候会等于0，常见于点击搜索后，弹窗键盘,回来发现
     _screenBottomHeight = mediaQuery.padding.bottom;
 
@@ -84,7 +85,10 @@ class AdaptCJHelper {
 }
 
 extension CJSizeExtension on num {
+  // ignore: non_constant_identifier_names
   double get w_pt_cj => AdaptCJHelper.setWidth(this);
+  // ignore: non_constant_identifier_names
   double get h_pt_cj => AdaptCJHelper.setWidth(this);
+  // ignore: non_constant_identifier_names
   double get f_pt_cj => AdaptCJHelper.setSp(this);
 }

@@ -113,9 +113,7 @@ class AlertIKnowCloseButton extends StatelessWidget {
           // shape: StadiumBorder(),
           onPressed: () {
             Future.delayed(Duration(milliseconds: 100), () {
-              if (this.iKnowTitle != null) {
-                this.iKnowHandle();
-              }
+              this.iKnowHandle();
             });
           },
           child: Text(

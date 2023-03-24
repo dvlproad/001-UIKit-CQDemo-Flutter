@@ -2,15 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 14:28:46
+ * @LastEditTime: 2023-03-24 13:54:02
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-// import 'package:flutter_baseui_kit/base-uikit/button/textbutton.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+// import 'package:flutter_button_base/flutter_button_base.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 import './bottomwidget.dart';
-import './components/actionsheet_item.dart';
+// import './components/actionsheet_item.dart';
 
 class ActionSheetWidget extends StatefulWidget {
   final String? title;
@@ -41,6 +41,7 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
   double itemExtent = 40;
   double extralHeight = 30; // 为了让滚轮能显示，额外自己添加的高度
 
+  // ignore: unused_field
   late int _selectedIndex;
   @override
   void initState() {
@@ -67,6 +68,7 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Widget get _itemsWidget_useList {
     return ListView.builder(
       padding: EdgeInsets.zero, // 保证可以滚回
