@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-08-07 16:54:57
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 18:30:52
+ * @LastEditTime: 2023-03-24 11:46:24
  * @Description: 
  */
 import 'package:flutter/cupertino.dart';
@@ -12,7 +12,7 @@ class RoundImage extends StatelessWidget {
 
   final String networkSrc;
 
-  RoundImage({
+  const RoundImage({
     Key? key,
     required this.size,
     this.networkSrc =
@@ -24,7 +24,7 @@ class RoundImage extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(size / 2),
       child: Image.network(
-        this.networkSrc,
+        networkSrc,
         width: size,
         height: size,
         fit: BoxFit.cover,

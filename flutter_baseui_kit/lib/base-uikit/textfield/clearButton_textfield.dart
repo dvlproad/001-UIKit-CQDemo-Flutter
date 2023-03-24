@@ -20,7 +20,7 @@ class CJClearButtonTextField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
 
-  CJClearButtonTextField({
+  const CJClearButtonTextField({
     Key? key,
     this.text = '',
     this.style,
@@ -71,8 +71,8 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
 
     // 注意不使用 addListener，而使用 onChanged，会造成执行 _controller.clear 进行文本清空的事件无法监听到
     _controller.addListener(() {
-      print('CJTextField.text addListener: ${_controller.text}');
-      this._changeText(_controller.text);
+      debugPrint('CJTextField.text addListener: ${_controller.text}');
+      _changeText(_controller.text);
     });
   }
 
@@ -85,7 +85,7 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
       // if (_isFirstResponse == false) {
       //   _curShowClear = false;
       // } else {
-      _curShowClear = _text.length > 0;
+      _curShowClear = _text.isNotEmpty;
       // }
 
       if (_curShowClear != _oldShowClear) {
@@ -108,13 +108,13 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
     Widget? suffixIcon;
     if (_allowShowClear == true && _curShowClear == true) {
       suffixIcon = IconButton(
-        icon: new Icon(Icons.clear, color: _textColor, size: 14),
+        icon: Icon(Icons.clear, color: _textColor, size: 14),
         onPressed: _controller.clear,
       );
     }
 
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
 //          maxHeight: 44,
           ),
       child: TextField(
@@ -127,7 +127,7 @@ class _CJClearButtonTextFieldState extends State<CJClearButtonTextField> {
         inputFormatters: widget.inputFormatters,
         cursorWidth: 1,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(bottom: 12),
+          contentPadding: const EdgeInsets.only(bottom: 12),
           hintText: widget.placeholder,
           hintStyle: TextStyle(fontSize: 17, color: widget.placeholderColor),
           // prefixIcon: widget.prefixWidget,

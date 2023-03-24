@@ -10,7 +10,7 @@ class LeftImageButton extends StatelessWidget {
   final Image buttonImageView;
   final GestureTapCallback? onTap;
 
-  LeftImageButton({
+  const LeftImageButton({
     Key? key,
     this.width,
     this.height,
@@ -22,12 +22,12 @@ class LeftImageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    buttonImageView.image.resolve(new ImageConfiguration()).addListener(
-      new ImageStreamListener(
+    buttonImageView.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener(
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          print('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          debugPrint('imageWidth=$imageWidth, imageHeight=$imageHeight');
         },
       ),
     );
@@ -77,7 +77,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
       customDeleteIconBuilder; // 自定义删除按钮(默认null,null时候有默认图片)
   final GestureTapCallback? onTapDelete; // 点击删除按钮执行的操作(如果有显示删除按钮的情况下)
 
-  LeftImageTextDeleteButton({
+  const LeftImageTextDeleteButton({
     Key? key,
     this.width,
     this.height,

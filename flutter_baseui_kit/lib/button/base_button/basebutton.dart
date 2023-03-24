@@ -1,5 +1,7 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
-import '../../base-uikit/bg_border_widget.dart';
+import '../bg_border_widget/bg_border_widget.dart';
 
 /// 底层按钮(已配置 Normal 和 Selected 风格的主题色按钮)
 class CJStateButton extends StatelessWidget {
@@ -26,7 +28,7 @@ class CJStateButton extends StatelessWidget {
   final Color? selectedBackgroundHighlightColor;
   final double? highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
 
-  CJStateButton({
+  const CJStateButton({
     Key? key,
     this.width,
     this.height,
@@ -60,11 +62,11 @@ class CJStateButton extends StatelessWidget {
 
     Color _currentBorderColor;
     double _currentBorderWidth;
-    double _cornerRadius = this.cornerRadius;
+    double _cornerRadius = cornerRadius;
 
     double _highlightOpacity = 1.0; // 默认为1.0,即没直接设置高亮颜色的时候，高亮为原色
-    if (this.highlightOpacity != null) {
-      _highlightOpacity = this.highlightOpacity!;
+    if (highlightOpacity != null) {
+      _highlightOpacity = highlightOpacity!;
     }
 
     if (selected == true) {
@@ -192,17 +194,17 @@ class CJStateButton extends StatelessWidget {
     );
     */
 
-    VoidCallback? _onPressed = this.onPressed;
-    if (this.enable == false) {
+    VoidCallback? _onPressed = onPressed;
+    if (enable == false) {
       _onPressed = () {}; // 不能点击的时候，如果还是this.onPressed，则也会自行该操作
     }
 
     return CJBGBorderWidget(
-      width: this.width,
-      height: this.height,
-      constraints: this.constraints,
-      margin: this.margin,
-      padding: this.padding,
+      width: width,
+      height: height,
+      constraints: constraints,
+      margin: margin,
+      padding: padding,
       backgroundColor: _currentBackgroundColor,
       borderColor: _currentBorderColor,
       borderWidth: _currentBorderWidth,

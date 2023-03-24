@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import './button.dart';
+import './basebutton.dart';
 
 /// 文本按钮(已配置 Normal 和 Selected 风格的主题色按钮，并且背景和边框文字的颜色互为反面)
 class CJReverseThemeStateTextButton extends CJStateTextButton {
-  CJReverseThemeStateTextButton({
+  const CJReverseThemeStateTextButton({
     Key? key,
     double? width,
     double? height,
@@ -69,7 +69,7 @@ class CJStateTextButton extends StatelessWidget {
   final Color? selectedBackgroundHighlightColor;
   final double? highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
 
-  CJStateTextButton({
+  const CJStateTextButton({
     Key? key,
     this.width,
     this.height,
@@ -98,27 +98,28 @@ class CJStateTextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CJStateButton(
-      width: this.width,
-      height: this.height,
-      constraints: this.constraints,
-      margin: this.margin,
-      padding: this.padding,
-      child: this.childBuider(selected),
-      onPressed: this.onPressed,
-      enable: this.enable,
-      disableOpacity: this.disableOpacity,
-      selected: this.selected,
-      cornerRadius: this.cornerRadius,
-      normalBGColor: this.normalBGColor,
-      normalTextColor: this.normalTextColor,
-      normalBorderColor: this.normalBorderColor,
-      normalBorderWidth: this.normalBorderWidth ?? 0,
-      normalBackgroundHighlightColor: this.normalBackgroundHighlightColor,
-      selectedBGColor: this.selectedBGColor,
-      selectedTextColor: this.selectedTextColor,
-      selectedBorderColor: this.selectedBorderColor,
-      selectedBorderWidth: this.selectedBorderWidth ?? 0,
-      selectedBackgroundHighlightColor: this.selectedBackgroundHighlightColor,
+      width: width,
+      height: height,
+      constraints: constraints,
+      margin: margin,
+      padding: padding,
+      // ignore: sort_child_properties_last
+      child: childBuider(selected),
+      onPressed: onPressed,
+      enable: enable,
+      disableOpacity: disableOpacity,
+      selected: selected,
+      cornerRadius: cornerRadius,
+      normalBGColor: normalBGColor,
+      normalTextColor: normalTextColor,
+      normalBorderColor: normalBorderColor,
+      normalBorderWidth: normalBorderWidth ?? 0,
+      normalBackgroundHighlightColor: normalBackgroundHighlightColor,
+      selectedBGColor: selectedBGColor,
+      selectedTextColor: selectedTextColor,
+      selectedBorderColor: selectedBorderColor,
+      selectedBorderWidth: selectedBorderWidth ?? 0,
+      selectedBackgroundHighlightColor: selectedBackgroundHighlightColor,
       highlightOpacity: highlightOpacity,
     );
   }

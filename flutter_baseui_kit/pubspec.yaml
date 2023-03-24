@@ -5,12 +5,18 @@ repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flu
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_baseui_kit
 
 environment:
-  sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.16.0"
+
+# include:
+#   flutter_button_base:
 
 dependencies:
   flutter:
     sdk: flutter
+
+  # flutter_button_base: ^0.0.1
+    # path: ./flutter_button_base/
 
   cached_network_image: ^3.2.0
   # flutter_marquee: any # 跑马灯

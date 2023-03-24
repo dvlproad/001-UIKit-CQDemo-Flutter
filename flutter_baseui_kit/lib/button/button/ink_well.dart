@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 19:06:53
+ * @LastEditTime: 2023-03-24 13:21:25
  * @Description: 已添加防抖的按钮
  */
 import 'package:flutter/material.dart';
-import '../../opt/click_optimization.dart';
+import '../opt/click_optimization.dart';
 
 class BJHInkWell extends InkWell {
   BJHInkWell({

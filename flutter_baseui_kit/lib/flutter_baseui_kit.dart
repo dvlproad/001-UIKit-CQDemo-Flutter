@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 18:54:04
+ * @LastEditTime: 2023-03-24 13:46:49
  * @Description: 基础UI库
  */
 library flutter_baseui_kit;
@@ -10,23 +10,11 @@ library flutter_baseui_kit;
 // text
 export './cq-uikit/text/tolerant_text.dart';
 
-// button
-export './cq-uikit/button/themtextbutton.dart';
-export './cq-uikit/button/statetextbutton.dart';
-export './cq-uikit/button/buttontheme.dart'
-    show
-        ThemeBGType,
-        ThemeStateBGType,
-        RichThemeStateBGType,
-        ButtonRegularTextStyle,
-        ButtonBoldTextStyle,
-        ButtonMediumTextStyle;
+// export 'package:flutter_button_base/flutter_button_base.dart';
+export './button/flutter_button_base.dart';
+
 // image button
 export './cq-uikit/button/imagebutton.dart';
-export './cq-uikit/button/button_child_widget.dart' show ButtonImagePosition;
-
-// inkWelll
-export './cq-uikit/button/ink_well.dart';
 
 // textinput
 export './cq-uikit/textfield/prefixIcon_textField.dart';
@@ -43,8 +31,5 @@ export './cq-uikit/toolbar/toolbar_enum.dart';
 
 // absorb bootom
 export './cq-uikit/absorbBottom/absorb_bottom_widget.dart';
-
-// 点击优化
-export './opt/click_optimization.dart';
 
 export './cq-uikit/text/skeleton.dart';

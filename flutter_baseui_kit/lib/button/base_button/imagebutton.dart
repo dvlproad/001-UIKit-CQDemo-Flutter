@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 18:30:15
+ * @LastEditTime: 2023-03-24 11:39:17
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class CenterIconButton extends StatelessWidget {
   final double iconImageSize; // 按钮中的图片大小
   final VoidCallback onPressed; // 按钮点击事件
 
-  CenterIconButton({
+  const CenterIconButton({
     Key? key,
     required this.assestName,
     required this.iconButtonSize,
@@ -26,12 +26,13 @@ class CenterIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: sized_box_for_whitespace
     return Container(
       height: iconButtonSize,
       width: iconButtonSize,
       child: IconButton(
         color: Colors.red,
-        onPressed: this.onPressed,
+        onPressed: onPressed,
         padding: EdgeInsets.fromLTRB(
           0,
           (iconButtonSize - iconImageSize) / 2,
