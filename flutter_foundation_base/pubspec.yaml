@@ -1,12 +1,12 @@
 name: flutter_foundation_base
 description: 基础的foundation库.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_foundation_base
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_foundation_base
 
 environment:
-  sdk: '>=2.19.4 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=1.16.0"
 
 dependencies:
   flutter:

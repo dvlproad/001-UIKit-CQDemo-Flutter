@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-13 10:17:11
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-22 18:36:21
+ * @LastEditTime: 2023-03-24 17:18:58
  * @Description: loading 单例形式的弹出方法
  * @FilePath: /wish/Users/qian/Project/Bojue/mobile_flutter_wish/flutter_effect_kit/lib/src/hud/loading_util.dart
  */
@@ -43,7 +45,7 @@ class LoadingUtil {
           ..loadingStyle =
               EasyLoadingStyle.custom // 设置custom，才能自定义backgroundColor
           ..boxShadow = [
-            BoxShadow(color: Colors.transparent)
+            const BoxShadow(color: Colors.transparent)
           ] // 设置custom后，不设置boxShadow或设为null都会取默认值，而不是真正的null
           ..backgroundColor = Colors.transparent
           ..indicatorColor = Colors
@@ -57,7 +59,7 @@ class LoadingUtil {
 
   static show() {
     EasyLoading.show();
-    Future.delayed(Duration(milliseconds: 15000)).then((value) {
+    Future.delayed(const Duration(milliseconds: 15000)).then((value) {
       if (EasyLoading.isShow == true) {
         if (fullLoadingWidgetKey.currentState != null) {
           fullLoadingWidgetKey.currentState!.showCloseButton(
@@ -87,8 +89,12 @@ class LoadingUtil {
     EasyLoading.dismiss();
   }
 
-  static showForVideo(
-      {double width = 40, double height = 40, EasyLoadingMaskType? maskType, bool dismissOnTap = false}) {
+  static showForVideo({
+    double width = 40,
+    double height = 40,
+    EasyLoadingMaskType? maskType,
+    bool dismissOnTap = false,
+  }) {
     EasyLoading.show(
       indicator: LoadingWidget(
         width: width,
@@ -132,11 +138,11 @@ class LoadingUtil {
     pageOverlayEntry =
         _getCenterOverlayInContext(context, child, loadingWidth, loadingHeight);
 
-    if (Overlay.of(context) == null) {
-      return;
-    }
+    // if (Overlay.of(context) == null) {
+    //   return;
+    // }
 
-    Overlay.of(context)!.insert(pageOverlayEntry);
+    Overlay.of(context).insert(pageOverlayEntry);
     contextOverlayMap[contextKey] = pageOverlayEntry;
     if (minLoadingMilliseconds != null) {
       _minLoadingMilliseconds = minLoadingMilliseconds;
@@ -158,9 +164,7 @@ class LoadingUtil {
       return;
     }
 
-    if (_startLoadingDateTime == null) {
-      _startLoadingDateTime = DateTime.now();
-    }
+    _startLoadingDateTime ??= DateTime.now();
 
     Duration difference = DateTime.now().difference(_startLoadingDateTime!);
     bool canFinishLoad = difference.inMilliseconds >= _minLoadingMilliseconds!;
@@ -189,11 +193,9 @@ class LoadingUtil {
       return; // 已删除
     }
 
-    if (pageOverlayEntry != null) {
-      pageOverlayEntry.remove();
+    pageOverlayEntry.remove();
 
-      contextOverlayMap.remove(contextKey);
-    }
+    contextOverlayMap.remove(contextKey);
   }
 
   static showDongingTextInContext(
@@ -208,7 +210,7 @@ class LoadingUtil {
       // color: Colors.grey[350],
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(color: Colors.blue, spreadRadius: 1),
         ],
       ),
@@ -221,9 +223,7 @@ class LoadingUtil {
     doingTextOverlayEntry =
         _getCenterOverlayInContext(context, child, childWidth, childHeight);
 
-    if (Overlay.of(context) != null) {
-      Overlay.of(context)!.insert(doingTextOverlayEntry!);
-    }
+    Overlay.of(context).insert(doingTextOverlayEntry!);
 
     if (milliseconds > 0) {
       Future.delayed(Duration(milliseconds: milliseconds), () {
@@ -250,7 +250,6 @@ class LoadingUtil {
     double childWidth,
     double childHeight,
   ) {
-    assert(context != null);
     double left = MediaQuery.of(context).size.width / 2 - childWidth / 2;
     double top = MediaQuery.of(context).size.height / 2 - childHeight / 2;
 

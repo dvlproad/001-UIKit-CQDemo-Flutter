@@ -2,19 +2,19 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 18:21:57
+ * @LastEditTime: 2023-03-24 23:05:41
  * @Description: 网络状态管理
  */
 import 'dart:async' show Completer, StreamSubscription;
 import 'dart:developer' as developer;
 
 // 为了使用 @required
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 // eventbus
 import './network_eventbus.dart';
 export './network_eventbus.dart' show NetworkType;
-// export 'package:connectivity_plus/connectivity_plus.dart' show ConnectivityResult;
 
 import '../log/api_log_util.dart';
 
@@ -48,6 +48,7 @@ class NetworkStatusManager {
 
   NetworkType _connectionStatus = NetworkType.unknow;
   final Connectivity _connectivity = Connectivity();
+  // ignore: unused_field
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
   _init() {
     initConnectivity();
@@ -71,7 +72,7 @@ class NetworkStatusManager {
     _hasStart = true;
     _initCompleter
         .complete('NetworkStatusManager:初始化完成，此时才可以获取ConnectivityResult');
-    print('NetworkStatusManager:初始化完成，此时才可以获取ConnectivityResult');
+    debugPrint('NetworkStatusManager:初始化完成，此时才可以获取ConnectivityResult');
 
     return;
   }

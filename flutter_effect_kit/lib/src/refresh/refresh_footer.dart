@@ -31,11 +31,11 @@ class RefreshFooter extends Footer {
           extent: 52.0,
           triggerDistance: 52.0,
           completeDuration: completeDuration == null
-              ? Duration(
+              ? const Duration(
                   milliseconds: 300,
                 )
               : completeDuration +
-                  Duration(
+                  const Duration(
                     milliseconds: 300,
                   ),
           enableHapticFeedback: enableHapticFeedback,
@@ -130,7 +130,7 @@ class RefreshFooterWidgetState extends State<RefreshFooterWidget> {
         _refreshState == LoadMode.load ||
         _refreshState == LoadMode.loaded ||
         _refreshState == LoadMode.done) {
-      child = Container(
+      child = SizedBox(
         height: 40,
         child: Transform.scale(
           scale: 1,
@@ -144,10 +144,10 @@ class RefreshFooterWidgetState extends State<RefreshFooterWidget> {
         ),
       );
     } else {
-      child = Container(
+      child = SizedBox(
         height: 50,
         child: Center(
-          child: widget.noMoreWidget ?? Text(""),
+          child: widget.noMoreWidget ?? const Text(""),
         ),
       );
     }

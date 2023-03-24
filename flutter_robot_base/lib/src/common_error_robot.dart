@@ -1,14 +1,14 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
- * @LastEditors: dvlproad dvlproad@163.com
- * @LastEditTime: 2023-03-23 23:12:40
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-24 21:59:21
  * @Description: 底层企业微信机器人
  */
 import 'package:dio/dio.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_foundation_base/string_format_util/formatter_object_util.dart';
+import 'package:flutter_foundation_base/flutter_foundation_base.dart';
 
 enum RobotPostType {
   text,

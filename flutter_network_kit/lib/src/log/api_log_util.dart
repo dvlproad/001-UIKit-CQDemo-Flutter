@@ -2,11 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 18:09:10
+ * @LastEditTime: 2023-03-24 23:00:17
  * @Description: 打印网络日志的工具类
  */
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_robot_base/flutter_robot_base.dart';
 import 'package:flutter_network_base/flutter_network_base.dart';
 import './bean/api_describe_bean.dart';
 import './util/api_describe_util.dart';
@@ -24,7 +26,7 @@ typedef LogMessageBlock = void Function({
 });
 
 class LogApiUtil {
-  static Completer _initCompleter = Completer<String>();
+  static final Completer _initCompleter = Completer<String>();
 
   static LogMessageBlock? _logMessageBlock;
   static set logMessageBlock(LogMessageBlock? logMessageBlock) {
@@ -48,11 +50,11 @@ class LogApiUtil {
     String apiPath = apiInfo.reqOptions.path;
     int index = apiFullUrl.indexOf(apiPath);
     if (index == -1) {
-      print("Error:计算出错啦，肯定是你前面fullUrl计算出错了");
+      debugPrint("Error:计算出错啦，肯定是你前面fullUrl计算出错了");
     }
     String apiHost = apiFullUrl.substring(0, index);
 
-    DateTime dateTime = apiMessageModel.dateTime;
+    // DateTime dateTime = apiMessageModel.dateTime;
     // String dateTimeString = dateTime.toString().substring(5, 19);
 
     ApiLogLevel apiLogLevel = apiMessageModel.apiLogLevel;
@@ -151,7 +153,7 @@ class LogApiUtil {
     } else {
       postType = RobotPostType.file;
     }
-    title += "$apiPath";
+    title += apiPath;
 
     _logMessageBlock!(
       logType: logObjectType,

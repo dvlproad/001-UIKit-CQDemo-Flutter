@@ -11,3 +11,5 @@ export './src/log/log_data_bean.dart';
 export './src/log_robot/compile_mode_util.dart';
 export './src/log/dev_log_util.dart';
 export './src/log/popup_logview_manager.dart';
+
+export './src/log_console/print_console_log_util.dart';

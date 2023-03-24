@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-13 19:32:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-22 16:48:55
+ * @LastEditTime: 2023-03-24 17:20:40
  * @Description: 可对child进行下拉刷新/上拉加载的视图
  */
 import 'package:flutter/cupertino.dart';
@@ -39,7 +39,7 @@ class AppRefreshContainer extends StatelessWidget {
   /// Controll inner state
   final AppRefreshController controller;
 
-  AppRefreshContainer({
+  const AppRefreshContainer({
     Key? key,
     this.child,
     this.enablePullDown = true,
@@ -54,8 +54,8 @@ class AppRefreshContainer extends StatelessWidget {
     return SmartRefresher(
       enablePullDown: enablePullDown,
       enablePullUp: enablePullUp,
-      header: RefreshHeaderGif(),
-      footer: RefreshFooterGif(),
+      header: const RefreshHeaderGif(),
+      footer: const RefreshFooterGif(),
       controller: controller._refreshController,
       onRefresh: onRefresh,
       onLoading: onLoading,
@@ -74,36 +74,36 @@ class AppRefreshController {
   /// initialRefreshStatus: headerMode default value
   ///
   /// initialLoadStatus: footerMode default value
-  AppRefreshController({initialRefresh: false}) {
+  AppRefreshController({initialRefresh = false}) {
     _refreshController = RefreshController(initialRefresh: initialRefresh);
   }
 
   /// request complete,the header will enter complete state,
   ///
   /// resetFooterState : it will set the footer state from noData to idle
-  void refreshCompleted({bool resetFooterState: false}) {
-    if (_refreshController == null) {
-      print('Error:友情提示请先执行初始化动作');
-      return;
-    }
+  void refreshCompleted({bool resetFooterState = false}) {
+    // if (_refreshController == null) {
+    //   debugPrint('Error:友情提示请先执行初始化动作');
+    //   return;
+    // }
     _refreshController.refreshCompleted(resetFooterState: resetFooterState);
   }
 
   /// after data returned,set the footer state to idle
   void loadComplete() {
-    if (_refreshController == null) {
-      print('Error:友情提示请先执行初始化动作');
-      return;
-    }
+    // if (_refreshController == null) {
+    //   debugPrint('Error:友情提示请先执行初始化动作');
+    //   return;
+    // }
     _refreshController.loadComplete();
   }
 
   /// load more success without error,but no data returned
   void loadNoData() {
-    if (_refreshController == null) {
-      print('Error:友情提示请先执行初始化动作');
-      return;
-    }
+    // if (_refreshController == null) {
+    //   debugPrint('Error:友情提示请先执行初始化动作');
+    //   return;
+    // }
     _refreshController.loadNoData();
   }
 }

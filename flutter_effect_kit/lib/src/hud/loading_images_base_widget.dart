@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-22 14:50:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-22 16:22:07
+ * @LastEditTime: 2023-03-24 17:19:24
  * @Description: 一帧一帧图片组成的动画组件
  */
 import 'package:flutter/material.dart';
@@ -13,8 +13,13 @@ class FrameAnimationImageWidget extends StatefulWidget {
   final double? height;
   final int interval;
 
-  FrameAnimationImageWidget(this._assetList,
-      {this.width, this.height, this.interval = 200,});
+  const FrameAnimationImageWidget(
+    this._assetList, {
+    Key? key,
+    this.width,
+    this.height,
+    this.interval = 200,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -26,16 +31,14 @@ class _FrameAnimationImageWidgetState extends State<FrameAnimationImageWidget>
     with SingleTickerProviderStateMixin {
   /// 动画控制
   late Animation<double> _animation;
- late AnimationController _controller;
+  late AnimationController _controller;
   int interval = 200;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.interval != null) {
-      interval = widget.interval;
-    }
+    interval = widget.interval;
     final int imageCount = widget._assetList.length;
     final int maxTime = interval * imageCount;
 

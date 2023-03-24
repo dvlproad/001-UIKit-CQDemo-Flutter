@@ -2,17 +2,16 @@
  * @Author: dvlproad
  * @Date: 2022-04-06 10:09:31
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-24 16:17:58
+ * @LastEditTime: 2023-03-24 17:20:50
  * @Description: 下拉刷新视图
  */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class RefreshHeaderGifNew extends StatefulWidget {
-  double? height;
+  final double? height;
 
-  RefreshHeaderGifNew({
+  const RefreshHeaderGifNew({
     Key? key,
     this.height,
   }) : super(key: key);
@@ -52,10 +51,13 @@ class RefreshHeaderGifNewState extends State<RefreshHeaderGifNew> {
 }
 
 class RefreshHeaderGif extends StatelessWidget {
-  RefreshHeaderGif({Key? key}) : super(key: key);
+  const RefreshHeaderGif({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    /*
     //转动loading
     Widget circular = SizedBox(
       width: 25,
@@ -75,6 +77,7 @@ class RefreshHeaderGif extends StatelessWidget {
         value: 1,
       ),
     );
+    */
     //gif图片
     Widget gifImageWidget = Image.asset(
       "assets/loading_gif/loading_top_refresh.gif",
@@ -86,16 +89,17 @@ class RefreshHeaderGif extends StatelessWidget {
     //icon+gif
     Widget iconWidget(String text) {
       bool isIdle = text != '下拉加载' ? true : false;
+      // ignore: avoid_unnecessary_containers
       return Container(
         // color: Colors.red,
         child: Column(
           children: [
-            isIdle ? SizedBox(height: 11) : SizedBox(),
+            isIdle ? const SizedBox(height: 11) : const SizedBox(),
             gifImageWidget,
-            SizedBox(height: 3),
+            const SizedBox(height: 3),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 10,
                 fontWeight: FontWeight.normal,

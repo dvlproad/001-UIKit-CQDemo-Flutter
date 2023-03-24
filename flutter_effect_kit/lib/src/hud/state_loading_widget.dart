@@ -1,10 +1,17 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2023-01-30 11:55:19
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-24 16:55:02
+ * @Description: 
+ */
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './loading_widget.dart'; // 使用 images
 
 class StateLoadingWidget extends StatefulWidget {
-  StateLoadingWidget({
+  const StateLoadingWidget({
     Key? key,
   }) : super(key: key);
 
@@ -29,7 +36,7 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
         width: 200,
         height: 200,
         // alignment: Alignment.center,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,6 +54,6 @@ class _StateLoadingWidgetState extends State<StateLoadingWidget> {
   }
 
   Widget get _loadingWidget {
-    return LoadingWidget();
+    return const LoadingWidget();
   }
 }

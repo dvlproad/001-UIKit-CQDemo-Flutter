@@ -27,8 +27,8 @@ class RefreshHeader extends Header {
           triggerDistance: triggerDistance,
           float: float,
           completeDuration: float
-              ? completeDuration + Duration(milliseconds: 400)
-              : completeDuration + Duration(milliseconds: 0),
+              ? completeDuration + const Duration(milliseconds: 400)
+              : completeDuration + const Duration(milliseconds: 0),
           enableInfiniteRefresh: enableInfiniteRefresh,
           enableHapticFeedback: enableHapticFeedback,
         );
@@ -78,20 +78,20 @@ class RefreshHeaderWidget extends StatefulWidget {
   final bool? success;
   final bool? noMore;
 
-  RefreshHeaderWidget(
-      {Key? key,
-      this.refreshState,
-      required this.classicalHeader,
-      this.pulledExtent = 0.0,
-      this.refreshTriggerPullDistance = 0.0,
-      this.refreshIndicatorExtent = 0.0,
-      this.axisDirection,
-      this.float = false,
-      required this.completeDuration,
-      this.enableInfiniteRefresh,
-      this.success,
-      this.noMore})
-      : super(key: key);
+  const RefreshHeaderWidget({
+    Key? key,
+    this.refreshState,
+    required this.classicalHeader,
+    this.pulledExtent = 0.0,
+    this.refreshTriggerPullDistance = 0.0,
+    this.refreshIndicatorExtent = 0.0,
+    this.axisDirection,
+    this.float = false,
+    required this.completeDuration,
+    this.enableInfiniteRefresh,
+    this.success,
+    this.noMore,
+  }) : super(key: key);
 
   @override
   RefreshHeaderWidgetState createState() => RefreshHeaderWidgetState();
@@ -118,8 +118,8 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
   set refreshFinish(bool finish) {
     if (_refreshFinish != finish) {
       if (finish && widget.float) {
-        Future.delayed(widget.completeDuration - Duration(milliseconds: 400),
-            () {
+        Future.delayed(
+            widget.completeDuration - const Duration(milliseconds: 400), () {
           if (mounted) {
             _floatBackController.forward();
           }
@@ -257,12 +257,13 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
   }
 
   Widget buildLoading(bool isVertical, bool isReverse) {
-    return Container(
+    return SizedBox(
       height: widget.classicalHeader.extent,
       child: SingleChildScrollView(
+        // ignore: avoid_unnecessary_containers
         child: Container(
 //          color: LcfarmColor.colorF7F8FA,
-          child: Container(
+          child: SizedBox(
             height: widget.classicalHeader.extent > 45
                 ? widget.classicalHeader.extent
                 : 45,
@@ -272,7 +273,7 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
                     children: <Widget>[
                       Offstage(
                         offstage: !_isLoading,
-                        child: LoadingWidget(),
+                        child: const LoadingWidget(),
                       ),
                       Offstage(
                         offstage: _isLoading,
@@ -290,7 +291,7 @@ class RefreshHeaderWidgetState extends State<RefreshHeaderWidget>
                     children: <Widget>[
                       Offstage(
                         offstage: !_isLoading,
-                        child: LoadingWidget(),
+                        child: const LoadingWidget(),
                       ),
                       Offstage(
                         offstage: _isLoading,

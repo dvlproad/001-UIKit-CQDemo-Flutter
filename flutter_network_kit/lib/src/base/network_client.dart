@@ -162,7 +162,7 @@ class NetworkClient extends BaseNetworkClient {
         }
       }
 
-      bool allowRetryIfFailure = retryCount != null && retryCount > 1;
+      bool allowRetryIfFailure = retryCount > 1;
       if (allowRetryIfFailure != true) {
         // 重试次数用完的话，最后一次不管成功与否都要返回
         return responseModel;

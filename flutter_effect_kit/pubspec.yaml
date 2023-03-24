@@ -1,27 +1,24 @@
 name: flutter_effect_kit
-description: A new Flutter package project.
+description: loading + hud + refresh.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect_kit
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=1.16.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   # hud
-  lottie: any
-  flutter_easyloading: any # 为了弹出自定义的loading组件
+  lottie: ^2.3.0
+  flutter_easyloading: ^3.0.5 # 为了弹出自定义的loading组件
 
   # refresh
-  pull_to_refresh: any
-  flutter_easyrefresh: any
-  # pull_to_refresh:
-  #   path: ../pull_to_refresh-2.0.0/ # 自己支持3.0
-  # flutter_easyrefresh:
-  #   path: ../flutter_easyrefresh-2.2.1/ # 自己支持3.0
+  pull_to_refresh: ^2.0.0
+  flutter_easyrefresh: ^2.2.2
 
 dev_dependencies:
   flutter_test:

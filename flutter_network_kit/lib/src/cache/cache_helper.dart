@@ -1,7 +1,7 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2023-03-23 18:09:44
+ * @LastEditTime: 2023-03-24 22:58:21
  * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
@@ -151,13 +151,13 @@ class CacheHelper {
   }
 
   static bool _isCacheHeadersMap(Map headersMap) {
-    if (headersMap == null) {
-      return false;
-    }
+    // if (headersMap == null) {
+    //   return false;
+    // }
     // String fromCacheValue = headersMap.values.last[0];
     // bool isFromCache = fromCacheValue == 'from_cache';
     bool isFromCache = false;
-    List<String> cacheHeaders = headersMap[DIO_CACHE_HEADER_KEY_DATA_SOURCE];
+    List<String>? cacheHeaders = headersMap[DIO_CACHE_HEADER_KEY_DATA_SOURCE];
     if (cacheHeaders != null && cacheHeaders.isNotEmpty) {
       String fromCacheValue = cacheHeaders[0];
       isFromCache = fromCacheValue == 'from_cache';

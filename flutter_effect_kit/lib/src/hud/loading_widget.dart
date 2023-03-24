@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, unused_element
+
 /*
  * @Author: dvlproad
  * @Date: 2022-07-22 14:50:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-22 16:21:04
+ * @LastEditTime: 2023-03-24 16:54:18
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -21,12 +23,13 @@ class LoadingWidget extends StatelessWidget {
 
   final int? interval;
 
-  LoadingWidget({
+  const LoadingWidget({
+    Key? key,
     this.width,
     this.height,
     this.interval,
     this.loadingFor = LoadingFor.normal,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +69,7 @@ class LoadingWidget extends StatelessWidget {
 
   // 动画加载方法3：使用 json 加载动画
   Widget get _loadingWidget_json {
+    // ignore: sized_box_for_whitespace
     return Container(
       // color: Colors.yellow,
       height: height ?? 40,

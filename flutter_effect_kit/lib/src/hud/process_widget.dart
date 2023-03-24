@@ -2,12 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-07-22 14:50:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-31 17:25:35
+ * @LastEditTime: 2023-03-24 17:19:51
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import './loading_images_base_widget.dart'; // 使用 images 加载动画
-import 'package:lottie/lottie.dart'; // 使用 json 加载动画
+// import './loading_images_base_widget.dart'; // 使用 images 加载动画
+// import 'package:lottie/lottie.dart'; // 使用 json 加载动画
 
 class ProgressUtil {
   static Widget? _progressWidget;
@@ -56,7 +56,7 @@ class ProgressWidget extends StatefulWidget {
   final bool showProgressText;
   final String? Function(double progressValue)? progressTextGetBlock;
 
-  ProgressWidget({
+  const ProgressWidget({
     Key? key,
     this.width,
     this.height,
@@ -107,26 +107,28 @@ class ProgressWidgetState extends State<ProgressWidget> {
             ? Container()
             : Text(
                 "$progressText%",
-                style: TextStyle(fontSize: 14, color: Colors.black),
+                style: const TextStyle(fontSize: 14, color: Colors.black),
               ),
         ClipRRect(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
           child: Container(
             height: widget.height,
             width: widget.width,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.red,
               // borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
             child: LinearProgressIndicator(
               value: _progressValue / 100.0,
               backgroundColor: Colors.grey,
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFF7F00)),
+              valueColor:
+                  const AlwaysStoppedAnimation<Color>(Color(0xFFFF7F00)),
             ),
           ),
         ),
       ],
     );
+    // ignore: dead_code
     return Column(
       children: [
         Center(
@@ -138,7 +140,7 @@ class ProgressWidgetState extends State<ProgressWidget> {
               //背景颜色
               backgroundColor: Colors.yellow,
               //进度颜色
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+              valueColor: const AlwaysStoppedAnimation<Color>(Colors.red),
             ),
           ),
         ),
@@ -149,7 +151,7 @@ class ProgressWidgetState extends State<ProgressWidget> {
   updateProgressValue(double progressValue) {
     setState(() {
       _progressValue = progressValue;
-      print("progress == $_progressValue");
+      debugPrint("progress == $_progressValue");
     });
   }
 }
