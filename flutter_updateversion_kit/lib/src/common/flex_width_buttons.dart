@@ -15,7 +15,7 @@ class FlexWidthButtons extends StatelessWidget {
   final List<String> titles;
   final void Function(int buttonIndex) onPressed;
 
-  FlexWidthButtons({
+  const FlexWidthButtons({
     Key? key,
     this.height,
     required this.titles,
@@ -26,10 +26,10 @@ class FlexWidthButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
-      height: this.height ?? 50,
+      height: height ?? 50,
       child: Stack(
         children: <Widget>[
-          Divider(color: Colors.grey, height: 1),
+          const Divider(color: Colors.grey, height: 1),
           Container(child: _row())
         ],
       ),
@@ -38,7 +38,7 @@ class FlexWidthButtons extends StatelessWidget {
 
   Widget _row() {
     List<Widget> rowWidgets = [];
-    int count = this.titles.length;
+    int count = titles.length;
     for (var i = 0; i < count; i++) {
       rowWidgets.add(_button(i));
       if (i != count - 1) {
@@ -63,14 +63,12 @@ class FlexWidthButtons extends StatelessWidget {
       child: TextButton(
         // shape: StadiumBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
-          if (this.onPressed != null) {
-            this.onPressed(index);
-          }
+          onPressed(index);
         },
         child: Text(
-          this.titles[index],
+          titles[index],
           textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.grey, fontSize: 15.0),
+          style: const TextStyle(color: Colors.grey, fontSize: 15.0),
         ),
       ),
     );

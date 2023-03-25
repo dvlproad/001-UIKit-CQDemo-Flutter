@@ -1,12 +1,12 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-12-21 15:35:41
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-12-21 17:06:23
+ * @LastEditTime: 2023-03-25 21:07:17
  * @Description: 
  */
-import 'dart:io' show Platform;
-import 'dart:convert' show json; // 用于使用json.decode
 
 class PgyerPlatformBean {
   String pygerAppKey;
@@ -29,14 +29,10 @@ class PgyerPlatformBean {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (pygerAppKey != null) {
-      data["pygerAppKey"] = this.pygerAppKey;
-    }
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data["pygerAppKey"] = pygerAppKey;
 
-    if (appOfficialWebsite != null) {
-      data["appOfficialWebsite"] = this.appOfficialWebsite;
-    }
+    data["appOfficialWebsite"] = appOfficialWebsite;
 
     return data;
   }
@@ -76,21 +72,21 @@ class PgyerChannelConfigModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (pgyerChannelShortcut_upload != null) {
-      data["uploadChannelShortcut"] = this.pgyerChannelShortcut_upload;
+      data["uploadChannelShortcut"] = pgyerChannelShortcut_upload;
     }
 
     if (pgyerChannelKey_upload != null) {
-      data["uploadChannelKey"] = this.pgyerChannelKey_upload;
+      data["uploadChannelKey"] = pgyerChannelKey_upload;
     }
 
     if (pgyerChannelShortcut_download != null) {
-      data["downloadChannelShortcut"] = this.pgyerChannelShortcut_download;
+      data["downloadChannelShortcut"] = pgyerChannelShortcut_download;
     }
 
     if (pgyerChannelKey_upload != null) {
-      data["downloadChannelKey"] = this.pgyerChannelKey_upload;
+      data["downloadChannelKey"] = pgyerChannelKey_upload;
     }
 
     return data;

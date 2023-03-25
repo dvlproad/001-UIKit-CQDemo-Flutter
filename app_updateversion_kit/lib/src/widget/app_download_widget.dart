@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-05-07 10:54:27
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 20:39:01
+ * @LastEditTime: 2023-03-26 01:23:12
  * @Description: app几个环境的下载页罗列
  */
 import 'package:flutter/material.dart';
@@ -49,14 +51,14 @@ class _AppDownloadWidgetState extends State<AppDownloadWidget> {
     return ImageTitleTextValueCell(
       height: 40,
       leftMaxWidth: 80,
-      title: "${title}：",
+      title: "$title：",
       textValue: downloadUrl,
       textValueFontSize: 13,
       textValueMaxLines: 2,
       onTap: () async {
         bool goSuccess = await _launcherAppDownloadUrl(downloadUrl);
         if (goSuccess != true) {
-          ToastUtil.showMsg("Error:无法打开网页$downloadUrl", context);
+          ToastUtil.showMessage("Error:无法打开网页$downloadUrl");
         }
       },
       onLongPress: () {
@@ -67,11 +69,9 @@ class _AppDownloadWidgetState extends State<AppDownloadWidget> {
   }
 
   static Future<bool> _launcherAppDownloadUrl(String url) async {
-    if (url == null) {
-      return false;
-    }
-    if (await canLaunch(url)) {
-      return launch(url);
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      return launchUrl(uri);
     } else {
       return false;
     }

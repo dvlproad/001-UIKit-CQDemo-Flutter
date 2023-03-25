@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 /*
  * 文件下载
@@ -10,7 +11,7 @@ import 'package:dio/dio.dart';
 class DownLoadFile {
   //用于记录正在下载的url，避免重复下载
 //  var downloadingUrls = new List();
-  var downloadingUrls = new Map<String, CancelToken>();
+  var downloadingUrls = <String, CancelToken>{};
 
   // 单例公开访问点
   factory DownLoadFile() => _getInstance();
@@ -25,9 +26,7 @@ class DownLoadFile {
 
   // 静态、同步、私有访问点
   static DownLoadFile _getInstance() {
-    if (_instance == null) {
-      _instance = DownLoadFile._();
-    }
+    _instance ??= DownLoadFile._();
     return _instance!;
   }
 
@@ -48,7 +47,7 @@ class DownLoadFile {
       downloadStart = f.lengthSync();
       fileExists = true;
     }
-    print("开始：" + downloadStart.toString());
+    debugPrint("开始：" + downloadStart.toString());
     if (fileExists && downloadingUrls.containsKey(url)) {
       //正在下载
       return;
@@ -60,7 +59,7 @@ class DownLoadFile {
       done();
       return;
     }
-    CancelToken cancelToken = new CancelToken();
+    CancelToken cancelToken = CancelToken();
     downloadingUrls[url] = cancelToken;
 
     Future downloadByDio(String url, int start) async {
@@ -74,11 +73,11 @@ class DownLoadFile {
           ),
           cancelToken: cancelToken,
         );
-        print(response.headers);
-        File file = new File(savePath.toString());
+        debugPrint("${response.headers}");
+        File file = File(savePath.toString());
 
         var raf = file.openSync(mode: FileMode.append);
-        Completer completer = new Completer<Response>();
+        Completer completer = Completer<Response>();
         Future future = completer.future;
 
         int received = start;
@@ -95,9 +94,7 @@ class DownLoadFile {
             asyncWrite = raf.writeFrom(data).then((_raf) {
               // Notify progress
               received += data.length;
-              if (onReceiveProgress != null) {
-                onReceiveProgress(received, total);
-              }
+              onReceiveProgress(received, total);
               raf = _raf;
               if (!cancelToken.isCancelled) {
                 subscription?.resume();
@@ -110,16 +107,12 @@ class DownLoadFile {
               await raf.close();
               completer.complete(response);
               downloadingUrls.remove(url);
-              if (done != null) {
-                done();
-              }
+              done();
             } catch (e) {
               downloadingUrls.remove(url);
               completer
                   .completeError(_assureDioError(response.requestOptions, e));
-              if (failed != null) {
-                failed(e);
-              }
+              failed(e);
             }
           },
           onError: (e) async {
@@ -127,9 +120,7 @@ class DownLoadFile {
               await asyncWrite;
               await raf.close();
               downloadingUrls.remove(url);
-              if (failed != null) {
-                failed(e);
-              }
+              failed(e);
             } finally {
               completer
                   .completeError(_assureDioError(response.requestOptions, e));
@@ -154,20 +145,18 @@ class DownLoadFile {
         }
         DioError err = e as DioError;
         if (err.response != null) {
-          print(err.response!.data);
-          print(err.response!.headers);
-          print(err.response!.requestOptions);
+          debugPrint("${err.response!.data}");
+          debugPrint("${err.response!.headers}");
+          debugPrint("${err.response!.requestOptions}");
         } else {
           // Something happened in setting up or sending the request that triggered an Error
-          print(err.requestOptions);
-          print(err.message);
+          debugPrint("${err.requestOptions}");
+          debugPrint(err.message);
         }
         if (CancelToken.isCancel(err)) {
-          print("下载取消");
+          debugPrint("下载取消");
         } else {
-          if (failed != null) {
-            failed(err);
-          }
+          failed(err);
         }
         downloadingUrls.remove(url);
       }
@@ -188,7 +177,7 @@ class DownLoadFile {
       }
       return int.parse(string);
     } catch (e) {
-      print("_getContentLength Failed:" + e.toString());
+      debugPrint("_getContentLength Failed:" + e.toString());
       return 0;
     }
   }
@@ -201,8 +190,8 @@ class DownLoadFile {
 
   Future<T> _listenCancelForAsyncTask<T>(
       CancelToken cancelToken, Future<T> future) {
-    Completer completer = new Completer();
-    if (cancelToken != null && cancelToken.cancelError == null) {
+    Completer completer = Completer();
+    if (cancelToken.cancelError == null) {
       cancelToken.addCompleter(completer);
       return Future.any([completer.future, future]).then<T>((result) {
         cancelToken.removeCompleter(completer);
@@ -235,12 +224,10 @@ extension CancelTokenExtension on CancelToken {
   static List<Completer> completers = [];
 
   _trigger(Completer completer) {
-    if (completer != null) {
-      if (cancelError != null) {
-        completer.completeError(cancelError!);
-      }
-      completers.remove(completer);
+    if (cancelError != null) {
+      completer.completeError(cancelError!);
     }
+    completers.remove(completer);
   }
 
   /// Add a [completer] to the token.

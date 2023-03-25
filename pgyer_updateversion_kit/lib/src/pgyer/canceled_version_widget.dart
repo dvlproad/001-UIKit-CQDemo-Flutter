@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 /*
  * @Author: dvlproad
  * @Date: 2022-07-08 11:28:29
@@ -6,13 +8,11 @@
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 class CanceledVersionWidget extends StatefulWidget {
-  CanceledVersionWidget({Key? key}) : super(key: key);
+  const CanceledVersionWidget({Key? key}) : super(key: key);
 
   @override
   State<CanceledVersionWidget> createState() => _CanceledVersionWidgetState();
@@ -37,7 +37,7 @@ class _CanceledVersionWidgetState extends State<CanceledVersionWidget> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CancelVersionPage(),
+            builder: (context) => const CancelVersionPage(),
           ),
         ).then((value) {
           // setState(() {});

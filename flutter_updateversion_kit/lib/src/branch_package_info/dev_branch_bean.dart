@@ -22,7 +22,7 @@ class DevBranchBeanUtil {
       if (showBranchName == true) {
         branchString += '${onlineBranceModel.name}:';
       }
-      branchString += '${onlineBranceModel.description}';
+      branchString += onlineBranceModel.description;
     }
     return branchString;
   }
@@ -75,9 +75,9 @@ class DevBranchBean {
         if (i > 0) {
           _description += "\n";
         }
-        String iOutlineLog = "${outlineIndexString}${outlineBean.title}";
+        String iOutlineLog = "$outlineIndexString${outlineBean.title}";
 
-        _description += "$iOutlineLog";
+        _description += iOutlineLog;
       }
     } else {
       _description = des ?? '未标明';

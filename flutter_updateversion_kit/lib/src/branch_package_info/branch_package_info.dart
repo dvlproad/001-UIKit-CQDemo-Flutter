@@ -1,7 +1,9 @@
-import 'package:package_info/package_info.dart';
 import 'dart:io' show Platform;
-import 'package:flutter/services.dart' show rootBundle; // 用于使用 rootBundle
 import 'dart:convert' show json; // 用于使用json.decode
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart' show rootBundle; // 用于使用 rootBundle
+import 'package:package_info_plus/package_info_plus.dart';
+
 import './dev_branch_bean.dart';
 import './history_version_bean.dart';
 import './pgyer_bean.dart';
@@ -108,7 +110,7 @@ class BranchPackageInfo {
       fullPackageDescribe += '${buildDefaultEnv}_';
     }
     fullPackageDescribe +=
-        '${buildBranceName}($buildBranceFeature)_${platformName}_V$version($buildNumber)';
+        '$buildBranceName($buildBranceFeature)_${platformName}_V$version($buildNumber)';
 
     return fullPackageDescribe;
   }
@@ -126,7 +128,7 @@ class BranchPackageInfo {
     // version:1.02.25/development_1.0.0_fix_abcdef
     // iOS bulidNumber:1022 \ Android versionCode:11021022
     // 此包的版本：
-    String realVersion = packageInfo.version;
+    // String realVersion = packageInfo.version;
     String buildDefaultEnv = '';
     // 此包的来源分支
     String fromBranceName = 'unkonw';
@@ -136,28 +138,25 @@ class BranchPackageInfo {
     try {
       // import 'package:flutter/services.dart'; // 用于使用 rootBundle
       //var value = await rootBundle.loadString("assets/data/app_info.json");
-      var value = await rootBundle.loadString(
+      String value = await rootBundle.loadString(
           "packages/flutter_updateversion_kit/assets/data/app_info.json");
-      if (value != null) {
-        Map<String, dynamic> data =
-            json.decode(value); // import 'dart:convert'; // 用于使用json.decode
+      Map<String, dynamic> data = json.decode(value);
 
-        // 打包的默认环境
-        buildDefaultEnv = data['package_default_env'] ?? '';
-        // 此包打包时候填写的说明信息
-        buildDescription = data['package_update_des'] ?? '';
+      // 打包的默认环境
+      buildDefaultEnv = data['package_default_env'] ?? '';
+      // 此包打包时候填写的说明信息
+      buildDescription = data['package_update_des'] ?? '';
 
-        // 当前分支信息
-        fromBranceName = data['package_from_brance'] ?? '';
+      // 当前分支信息
+      fromBranceName = data['package_from_brance'] ?? '';
 
-        Map<String, dynamic>? packageResultMap = data['package_result'];
-        if (packageResultMap != null) {
-          packResultModel = PackResultModel.fromJson(packageResultMap);
-        }
+      Map<String, dynamic>? packageResultMap = data['package_result'];
+      if (packageResultMap != null) {
+        packResultModel = PackResultModel.fromJson(packageResultMap);
       }
     } catch (e) {
       if (_isDebug() == false) {
-        print('app_info.json文件内容获取失败,可能未存在或解析过程出错');
+        debugPrint('app_info.json文件内容获取失败,可能未存在或解析过程出错');
       }
     }
 
@@ -172,60 +171,58 @@ class BranchPackageInfo {
     try {
       // import 'package:flutter/services.dart'; // 用于使用 rootBundle
       //var value = await rootBundle.loadString("assets/data/app_info.json");
-      var value = await rootBundle.loadString(
+      String value = await rootBundle.loadString(
           "packages/flutter_updateversion_kit/assets/data/app_branch_info.json");
-      if (value != null) {
-        Map<String, dynamic> data =
-            json.decode(value); // import 'dart:convert'; // 用于使用json.decode
+      Map<String, dynamic> data =
+          json.decode(value); // import 'dart:convert'; // 用于使用json.decode
 
-        if (data['package_merger_branchs'] != null) {
-          for (var json in data['package_merger_branchs']) {
-            buildContainBranchs.add(DevBranchBean.fromJson(json));
+      if (data['package_merger_branchs'] != null) {
+        for (var json in data['package_merger_branchs']) {
+          buildContainBranchs.add(DevBranchBean.fromJson(json));
+        }
+      }
+
+      // 所有分支信息
+      brancesRecordTime = data['brances_record_time'] ?? '';
+      DevBranchBean? currentBranceBean;
+
+      if (data['feature_brances'] != null) {
+        for (var json in data['feature_brances']) {
+          featureBrances.add(DevBranchBean.fromJson(json));
+        }
+      }
+
+      if (data['nocode_brances'] != null) {
+        for (var json in data['nocode_brances']) {
+          nocodeBrances.add(DevBranchBean.fromJson(json));
+        }
+      }
+
+      if (currentBranceBean == null) {
+        for (DevBranchBean branceBean in featureBrances) {
+          String? branceName = branceBean.name;
+          if (branceName == fromBranceName) {
+            currentBranceBean = branceBean;
+            break;
           }
         }
-
-        // 所有分支信息
-        brancesRecordTime = data['brances_record_time'] ?? '';
-        DevBranchBean? currentBranceBean;
-
-        if (data['feature_brances'] != null) {
-          for (var json in data['feature_brances']) {
-            featureBrances.add(DevBranchBean.fromJson(json));
+      }
+      if (currentBranceBean == null) {
+        for (DevBranchBean branceBean in nocodeBrances) {
+          String? branceName = branceBean.name;
+          if (branceName == fromBranceName) {
+            currentBranceBean = branceBean;
+            break;
           }
         }
+      }
 
-        if (data['nocode_brances'] != null) {
-          for (var json in data['nocode_brances']) {
-            nocodeBrances.add(DevBranchBean.fromJson(json));
-          }
-        }
-
-        if (currentBranceBean == null) {
-          for (DevBranchBean branceBean in featureBrances) {
-            String? branceName = branceBean.name;
-            if (branceName == fromBranceName) {
-              currentBranceBean = branceBean;
-              break;
-            }
-          }
-        }
-        if (currentBranceBean == null) {
-          for (DevBranchBean branceBean in nocodeBrances) {
-            String? branceName = branceBean.name;
-            if (branceName == fromBranceName) {
-              currentBranceBean = branceBean;
-              break;
-            }
-          }
-        }
-
-        if (currentBranceBean != null) {
-          branceFeature = currentBranceBean.description;
-        }
+      if (currentBranceBean != null) {
+        branceFeature = currentBranceBean.description;
       }
     } catch (e) {
       if (_isDebug() == false) {
-        print('app_branch_info.json文件内容获取失败,可能未存在或解析过程出错');
+        debugPrint('app_branch_info.json文件内容获取失败,可能未存在或解析过程出错');
       }
     }
 
@@ -234,27 +231,24 @@ class BranchPackageInfo {
     try {
       // import 'package:flutter/services.dart'; // 用于使用 rootBundle
       //var value = await rootBundle.loadString("assets/data/app_info.json");
-      var value = await rootBundle.loadString(
+      String value = await rootBundle.loadString(
           "packages/flutter_updateversion_kit/assets/data/app_history_version.json");
-      if (value != null) {
-        Map<String, dynamic> data =
-            json.decode(value); // import 'dart:convert'; // 用于使用json.decode
+      Map<String, dynamic> data = json.decode(value);
 
-        // 版本记录信息
-        // historyRecordTime = data['history_record_time'] ?? '';
+      // 版本记录信息
+      // historyRecordTime = data['history_record_time'] ?? '';
 
-        if (data['history_versions'] != null) {
-          for (var json in data['history_versions']) {
-            historyVersionBeans.add(HistoryVersionBean.fromJson(json));
-          }
-          if (historyVersionBeans.isNotEmpty) {
-            historyRecordTime = historyVersionBeans.first.onlineTime;
-          }
+      if (data['history_versions'] != null) {
+        for (var json in data['history_versions']) {
+          historyVersionBeans.add(HistoryVersionBean.fromJson(json));
+        }
+        if (historyVersionBeans.isNotEmpty) {
+          historyRecordTime = historyVersionBeans.first.onlineTime;
         }
       }
     } catch (e) {
       if (_isDebug() == false) {
-        print('app_history_version.json文件内容获取失败,可能未存在或解析过程出错');
+        debugPrint('app_history_version.json文件内容获取失败,可能未存在或解析过程出错');
       }
     }
 
@@ -334,13 +328,13 @@ class PackResultModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-    data["shoudUploadToPgyerOwner"] = this.pgyerOwner;
-    data["shoudUploadToPgyerKey"] = this.pgyerKey;
+    data["shoudUploadToPgyerOwner"] = pgyerOwner;
+    data["shoudUploadToPgyerKey"] = pgyerKey;
 
     if (pgyerChannelConfigModel != null) {
-      data["pgyer_branch_config"] = this.pgyerChannelConfigModel!.toJson();
+      data["pgyer_branch_config"] = pgyerChannelConfigModel!.toJson();
     }
 
     return data;

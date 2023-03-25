@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-07 18:51:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-08 14:50:58
+ * @LastEditTime: 2023-03-25 21:07:40
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -10,6 +10,10 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './check_version_common_util.dart';
 
 class CancelVersionPage extends StatefulWidget {
+  const CancelVersionPage({
+    Key? key,
+  }) : super(key: key);
+
   @override
   _CancelVersionPageState createState() => _CancelVersionPageState();
 }
@@ -33,11 +37,11 @@ class _CancelVersionPageState extends State<CancelVersionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('不再提示更新的版本'),
+        title: const Text('不再提示更新的版本'),
         actions: _cancelShowVersions.isNotEmpty
             ? [
                 TextButton(
-                  child: Text(
+                  child: const Text(
                     '清空',
                     style: TextStyle(
                       color: Colors.white,
@@ -65,7 +69,7 @@ class _CancelVersionPageState extends State<CancelVersionPage> {
             : null,
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         alignment: Alignment.topCenter,
         child: ListView.builder(
           itemCount: _cancelShowVersions.length,

@@ -1,5 +1,12 @@
 /*
  * @Author: dvlproad
+ * @Date: 2023-02-08 13:23:21
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-26 01:56:12
+ * @Description: 
+ */
+/*
+ * @Author: dvlproad
  * @Date: 2022-07-07 18:51:21
  * @LastEditors: dvlproad
  * @LastEditTime: 2022-07-16 18:13:18
@@ -73,7 +80,7 @@ class VersionBaseBean {
   }
 
   String get newVersion {
-    String _newVersion = '${version}(${buildNumber})';
+    String _newVersion = '$version($buildNumber)';
     return _newVersion;
   }
 
@@ -98,7 +105,7 @@ class VersionBaseBean {
   }
 
   String _getNewLineString(List<String> lineStrings) {
-    StringBuffer sb = new StringBuffer();
+    StringBuffer sb = StringBuffer();
     for (String line in lineStrings) {
       sb.write(line + "\n");
     }
@@ -107,6 +114,7 @@ class VersionBaseBean {
 
   @override
   String toString() {
-    return '{"version": ${version != null ? '${json.encode(version)}' : 'null'},"forceUpdate": ${forceUpdate != null ? '${json.encode(forceUpdate)}' : 'null'},"buildNumber": ${buildNumber != null ? '${json.encode(buildNumber)}' : 'null'},"updateLog": ${updateLog != null ? '${json.encode(updateLog)}' : 'null'},"downloadUrl": ${downloadUrl != null ? '${json.encode(downloadUrl)}' : 'null'}}';
+    // ignore: unnecessary_null_comparison
+    return '{"version": ${version != null ? json.encode(version) : 'null'},"forceUpdate": ${forceUpdate != null ? json.encode(forceUpdate) : 'null'},"buildNumber": ${buildNumber != null ? json.encode(buildNumber) : 'null'},"updateLog": ${updateLog != null ? json.encode(updateLog) : 'null'},"downloadUrl": ${downloadUrl != null ? json.encode(downloadUrl) : 'null'}}';
   }
 }

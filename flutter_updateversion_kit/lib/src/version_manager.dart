@@ -17,6 +17,6 @@ class VersionManager {
 
   bool get firstSHow => _firstShow;
   void setFirstShow(bool b) {
-    this._firstShow = b;
+    _firstShow = b;
   }
 }

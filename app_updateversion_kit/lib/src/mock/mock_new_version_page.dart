@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-07 18:51:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-29 13:37:59
+ * @LastEditTime: 2023-03-26 01:18:29
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -11,13 +11,15 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../check_version_util.dart';
 
 class MockNewVersionPage extends StatefulWidget {
+  const MockNewVersionPage({Key? key}) : super(key: key);
+
   @override
-  _MockNewVersionPageState createState() => _MockNewVersionPageState();
+  State createState() => _MockNewVersionPageState();
 }
 
 class _MockNewVersionPageState extends State<MockNewVersionPage> {
-  TextEditingController _versionController = TextEditingController();
-  TextEditingController _buildNumberController = TextEditingController();
+  final TextEditingController _versionController = TextEditingController();
+  final TextEditingController _buildNumberController = TextEditingController();
 
   String? _currentVersion;
   String? _currentBuildNumber;
@@ -42,17 +44,17 @@ class _MockNewVersionPageState extends State<MockNewVersionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('模拟有新版本的页面'),
+        title: const Text('模拟有新版本的页面'),
       ),
       body: Container(
-        padding: EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
         alignment: Alignment.topCenter,
         child: Column(
           children: [
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
+                contentPadding: const EdgeInsets.all(10.0),
                 hintText: _currentVersion,
                 helperText: '请输入模拟的后台版本号',
               ),
@@ -61,7 +63,7 @@ class _MockNewVersionPageState extends State<MockNewVersionPage> {
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(10.0),
+                contentPadding: const EdgeInsets.all(10.0),
                 hintText: _currentBuildNumber,
                 helperText: '请输入模拟的后台版本编译号',
               ),
@@ -81,7 +83,7 @@ class _MockNewVersionPageState extends State<MockNewVersionPage> {
                 color: Colors.blue,
                 height: 44,
                 width: 200,
-                child: Center(
+                child: const Center(
                   child: Text(
                     '模拟新版本，检查更新',
                     style: TextStyle(color: Colors.white),

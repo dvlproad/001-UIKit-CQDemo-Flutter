@@ -12,27 +12,27 @@ class UpdateNotifier with ChangeNotifier {
   get isClickAble => _isClickAble;
 
   void setIsClickAble(bool b) {
-    this._isClickAble = b;
+    _isClickAble = b;
     notifyListeners();
   }
 
   void setProgress(int p) {
-    this._progress = p;
-    if (this._progress > 0 && this._progress < 100) {
-      this._updateBtn = "下载中";
-    } else if (this._progress == 100) {
-      this._updateBtn = "下载完成";
+    _progress = p;
+    if (_progress > 0 && _progress < 100) {
+      _updateBtn = "下载中";
+    } else if (_progress == 100) {
+      _updateBtn = "下载完成";
     }
     notifyListeners();
   }
 
   void setUpdateBtn(String txt) {
-    this._updateBtn = txt;
+    _updateBtn = txt;
     notifyListeners();
   }
 
   void setIsHideProgress(bool b) {
-    this._isHideProgress = b;
+    _isHideProgress = b;
     notifyListeners();
   }
 }

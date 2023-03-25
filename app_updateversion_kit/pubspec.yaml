@@ -11,8 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # url_launcher: any
+  # package_info_plus: any
   flutter_updateversion_kit:
     path: ../flutter_updateversion_kit/
+  # flutter_baseui_kit:
+  #   path: ../flutter_baseui_kit/
+  # flutter_overlay_kit:
+  #   path: ../flutter_overlay_kit/
+  # flutter_effect_kit:
+  #   path: ../flutter_effect_kit/
   app_log:
     path: ../app_log/
 

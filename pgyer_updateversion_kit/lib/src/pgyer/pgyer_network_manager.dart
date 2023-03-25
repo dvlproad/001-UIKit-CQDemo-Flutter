@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
@@ -5,12 +7,7 @@
  * @LastEditTime: 2022-09-06 13:16:21
  * @Description: 蒲公英请求管理中心
  */
-import 'package:meta/meta.dart';
-import 'dart:io' show Platform;
-import 'dart:convert' show json;
-import 'dart:convert' as convert;
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
 class PgyerNetworkManager extends CacheNetworkClient {
   static const int CONNECT_TIMEOUT = 60000;
@@ -21,9 +18,7 @@ class PgyerNetworkManager extends CacheNetworkClient {
   static PgyerNetworkManager get instance => _getInstance();
   static PgyerNetworkManager? _instance;
   static PgyerNetworkManager _getInstance() {
-    if (_instance == null) {
-      _instance = PgyerNetworkManager._internal();
-    }
+    _instance ??= PgyerNetworkManager._internal();
     return _instance!;
   }
 

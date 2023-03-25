@@ -1,22 +1,19 @@
+// ignore_for_file: depend_on_referenced_packages
+
 /*
  * @Author: dvlproad
  * @Date: 2022-07-07 18:51:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-10 23:32:37
+ * @LastEditTime: 2023-03-26 01:34:59
  * @Description: 
  */
 import 'dart:io' show Platform;
-import 'dart:convert' as convert;
-import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import './version_pyger_bean.dart';
 
 import './pgyer_env_util.dart';
-import './pgyer_env_util.dart' show PgyerAppType;
 
 import './pgyer_network_manager.dart';
 
@@ -34,14 +31,8 @@ class PygerUtil {
       pygerAppKey = packageBean.pygerAppKeyIOS;
     }
 
-    String platformName = "";
-    if (Platform.isIOS) {
-      platformName = 'ios';
-    } else if (Platform.isAndroid) {
-      platformName = 'android';
-    }
     BranchPackageInfo packageInfo = await BranchPackageInfo.fromPlatform();
-    String appBundleID = packageInfo.packageName;
+    // String appBundleID = packageInfo.packageName;
     String appVersion = packageInfo.version;
     String buildBuildVersion = packageInfo.buildNumber;
 
@@ -81,7 +72,7 @@ class PygerUtil {
     Map<String, dynamic> result = responseModel.result;
     VersionPgyerBean bean = VersionPgyerBean.fromJson(result);
     // if (bean.downloadUrl.startsWith(RegExp(r'https?:')) != true) {
-    if(Platform.isIOS){
+    if (Platform.isIOS) {
       bean.downloadUrl = _pgyerDownloadUrl;
     }
     // TODO:在安卓机上发现使用蒲公英的下载地址。如果没有授权“始终”以默认浏览器打开，就会出现那个“下载超时”，若是有始终授权的话，直接跳转到默认浏览器下载页进行下载

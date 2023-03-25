@@ -1,15 +1,16 @@
+// ignore_for_file: depend_on_referenced_packages
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-21 17:41:29
+ * @LastEditTime: 2023-03-26 01:26:16
  * @Description: 检查版本的工具类
  */
 import 'dart:io' show Platform;
-import 'dart:convert' as convert;
 import 'package:flutter/services.dart';
 import 'package:app_network/app_network.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
@@ -41,7 +42,7 @@ class CheckVersionSystemUtil<T extends VersionBaseBean> {
     final deviceInfo = DeviceInfoPlugin();
 
     if (Platform.isAndroid) {
-      final methodChannel = MethodChannel("android_channel_info");
+      MethodChannel methodChannel = const MethodChannel("android_channel_info");
       final map = await methodChannel.invokeMethod("getChannelInfo");
       if (map != null) {
         params["channel"] = map["channel"];
@@ -53,11 +54,13 @@ class CheckVersionSystemUtil<T extends VersionBaseBean> {
       params["deviceId"] = iosInfo.identifierForVendor ?? '';
     }
 
-    return AppNetworkKit.get(
+    return AppNetworkManager()
+        .get(
       'config/check-version',
-      params: params,
+      customParams: params,
       // cancelToken: cancelToken,
-    ).then((ResponseModel responseModel) {
+    )
+        .then((ResponseModel responseModel) {
       if (responseModel.isSuccess && responseModel.result != null) {
         dynamic result = responseModel.result;
         // 测试代码

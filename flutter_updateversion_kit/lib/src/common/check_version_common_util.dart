@@ -33,7 +33,7 @@ class CheckVersionCommonUtil {
     String serviceVersion,
     String serviceBuildNumber,
   ) async {
-    String versionId = '${serviceVersion}(${serviceBuildNumber})';
+    String versionId = '$serviceVersion($serviceBuildNumber)';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> cancelShowVersions =
         prefs.getStringList(cancelShowVersionsKey) ?? [];
@@ -109,7 +109,7 @@ class CheckVersionCommonUtil {
     bool isManualCheck, {
     required bool isServiceNeedForceUpdate,
   }) async {
-    String currrentNewVersionId = '${serviceVersion}(${serviceBuildNumber})';
+    String currrentNewVersionId = '$serviceVersion($serviceBuildNumber)';
     // 有新版本的情况下：
     // 如果是手动检查，那一定展示
     if (isManualCheck == true) {
@@ -134,9 +134,9 @@ class CheckVersionCommonUtil {
 
   // 获取 版本号version后者buildNumber 的数值
   static int getVersionValue(String appVersion) {
-    if (appVersion == null) {
-      return 0;
-    }
+    // if (appVersion == null) {
+    //   return 0;
+    // }
     List<String> versionList = appVersion.split(".");
 
     // if (versionList.length >= 3) {
@@ -182,7 +182,8 @@ class CheckVersionCommonUtil {
             downloadUrl: downloadUrl,
             updateVersionBlock: () async {
               if (Platform.isAndroid) {
-                final methodChannel = MethodChannel("android_updater");
+                MethodChannel methodChannel =
+                    const MethodChannel("android_updater");
                 methodChannel.invokeMethod("DownloadApk", {
                   "url": downloadUrl,
                   "forceUpdate": forceUpdate,
@@ -198,7 +199,8 @@ class CheckVersionCommonUtil {
             },
             skipUpdateBlock: () {
               if (Platform.isAndroid) {
-                final methodChannel = MethodChannel("android_updater");
+                MethodChannel methodChannel =
+                    const MethodChannel("android_updater");
                 methodChannel.invokeMethod(
                   "skip_this_version",
                   {
@@ -211,9 +213,9 @@ class CheckVersionCommonUtil {
             closeUpdateBlock: () {
               UpdateVersionPage.isUpdateWindowShowing = false;
             },
-            notNowBlock: (){
+            notNowBlock: () {
               UpdateVersionPage.isUpdateWindowShowing = false;
-              notNowBlock?.call();
+              notNowBlock.call();
             },
           );
         },
@@ -230,12 +232,13 @@ class CheckVersionCommonUtil {
   }
 
   static Future<bool> _launcherAppDownloadUrl(String url) async {
-    if (url == null) {
-      return false;
-    }
-    if (await canLaunch(url)) {
+    // if (url == null) {
+    //   return false;
+    // }
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
       // 拦截PlatformException 避免上报到bugly
-      return launch(url).catchError((e) {
+      return launchUrl(uri).catchError((e) {
         return false;
       });
     } else {

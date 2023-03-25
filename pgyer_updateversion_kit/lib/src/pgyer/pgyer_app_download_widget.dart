@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages, non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-05-07 10:54:27
@@ -14,7 +16,7 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import './pgyer_env_util.dart';
 
 class PgyerAppDownloadWidget extends StatefulWidget {
-  PgyerAppDownloadWidget({Key? key}) : super(key: key);
+  const PgyerAppDownloadWidget({Key? key}) : super(key: key);
 
   @override
   State<PgyerAppDownloadWidget> createState() => _PgyerAppDownloadWidgetState();
@@ -55,7 +57,7 @@ class _PgyerAppDownloadWidgetState extends State<PgyerAppDownloadWidget> {
       onTap: () async {
         bool goSuccess = await _launcherAppDownloadUrl(downloadUrl);
         if (goSuccess != true) {
-          ToastUtil.showMsg("Error:无法打开网页$downloadUrl", context);
+          ToastUtil.showMessage("Error:无法打开网页$downloadUrl");
         }
       },
       onLongPress: () {
@@ -66,11 +68,9 @@ class _PgyerAppDownloadWidgetState extends State<PgyerAppDownloadWidget> {
   }
 
   static Future<bool> _launcherAppDownloadUrl(String url) async {
-    if (url == null) {
-      return false;
-    }
-    if (await canLaunch(url)) {
-      return launch(url);
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      return launchUrl(uri);
     } else {
       return false;
     }

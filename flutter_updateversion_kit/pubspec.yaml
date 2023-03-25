@@ -1,7 +1,8 @@
 name: flutter_updateversion_kit
-description: A new Flutter package project.
+description: 版本检查的基础库.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_updateversion_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_updateversion_kit
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -11,18 +12,16 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_screenutil: any
-  provider: any
+  package_info_plus:  ^1.4.2
+  provider: ^6.0.5
   flutter_html: ^2.2.1
-  url_launcher: any
-  path_provider: any
-  open_file: any
-  shared_preferences: any
-
-  flutter_theme_helper:
-    path: ../flutter_theme_helper/
-  app_network:
-    path: ../app_network/
+  url_launcher: ^6.1.5
+  path_provider: ^2.0.11
+  open_file: ^3.2.1
+  shared_preferences: ^2.0.20
+  flutter_overlay_kit: ^0.0.1
+    # path: ../flutter_overlay_kit/
+  dio: ^4.0.6
   
 
 dev_dependencies:

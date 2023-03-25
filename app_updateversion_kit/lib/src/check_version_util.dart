@@ -1,9 +1,9 @@
-import 'dart:math';
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 // common
@@ -11,12 +11,9 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 // inner 内测功能
 
 // formal 正式的外测功能
-import 'package:flutter_network_base/src/mock/local_mock_util.dart';
-import 'package:app_network/app_network.dart' show ResponseModel, AppNetworkKit;
+import 'package:app_network/app_network.dart';
 import './system/check_version_system_util.dart';
-import './system/version_system_bean.dart';
 
-// import 'package:app_global_config/app_global_config.dart';
 import 'package:app_log/app_log.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
@@ -69,7 +66,7 @@ class CheckVersionUtil {
     }
 
     if (responseModel.isSuccess != true) {
-      // ToastUtil.showMsg("Error:版本检查请求失败:${responseModel.message}", context);
+      // ToastUtil.showMessage("Error:版本检查请求失败:${responseModel.message}");
       return;
     }
 
@@ -91,8 +88,8 @@ class CheckVersionUtil {
       }
     }
 
-    bool _shouldShow = await shouldShow(bean, isManualCheck);
-    if (_shouldShow != true) {
+    bool shouldShow = await checkShouldShow(bean, isManualCheck);
+    if (shouldShow != true) {
       return;
     }
 
@@ -123,12 +120,13 @@ class CheckVersionUtil {
         }
         params["buildNo"] = buildNumber;
         params["versionNo"] = bean.version;
-        AppNetworkKit.post("/config/check-version/close", params: params);
+        AppNetworkManager()
+            .post("/config/check-version/close", customParams: params);
       },
     );
   }
 
-  static Future<bool> shouldShow(
+  static Future<bool> checkShouldShow(
     VersionBaseBean? bean,
     bool isManualCheck,
   ) async {
