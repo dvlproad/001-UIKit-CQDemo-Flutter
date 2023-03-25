@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
 
 void main() {

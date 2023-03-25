@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:app_devtool_framework/app_devtool_framework.dart';
 import 'package:app_devtool_framework/src/dev_util.dart';

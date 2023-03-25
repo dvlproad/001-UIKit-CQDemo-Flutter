@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-20 14:10:23
+ * @LastEditTime: 2023-03-25 13:50:59
  * @Description: 用户各种状态变化的事件
  */
 /// 当前用户状态
@@ -13,14 +13,14 @@ enum UserLoginState {
 }
 
 class UserDataEvent {
-  UserLoginState loginState;
-  bool fromOverdue;
+  final UserLoginState loginState;
+  final bool? fromOverdue;
 
-  UserDataEvent({this.loginState, this.fromOverdue});
+  UserDataEvent({required this.loginState, this.fromOverdue});
 }
 
 class UserCacheGetCompleteEvent {
-  UserLoginState cacheLoginState;
+  final UserLoginState? cacheLoginState;
 
   UserCacheGetCompleteEvent({this.cacheLoginState});
 }
@@ -28,7 +28,7 @@ class UserCacheGetCompleteEvent {
 class PopAllLoginEvent {}
 
 class LoginSuccessEvent {
-  String phone;
+  final String? phone;
   LoginSuccessEvent({this.phone});
 }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:app_devtool_framework/src/dev_util.dart';
 
 class DraggablePage2 extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_network_base/src/mock/local_mock_util.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 class TSNetworkHomePage extends StatefulWidget {
   @override

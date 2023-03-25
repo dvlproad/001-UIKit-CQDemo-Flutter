@@ -2,13 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-03-01 11:49:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 14:08:46
+ * @LastEditTime: 2023-03-25 13:47:17
  * @Description: 用户信息相关api
  */
-import 'package:flutter/foundation.dart';
-import 'package:app_network/app_network.dart';
+import 'package:app_devtool_framework/app_devtool_framework.dart';
+
+import '../user_manager.dart';
+
 // import 'package:wish/http/Network/UrlPath.dart';
-import 'package:app_service_user/app_service_user.dart';
 // import 'package:wish/ui/class/mine/member/model/member_info_model.dart';
 
 class UserApi {
@@ -35,8 +36,8 @@ class UserApi {
   /*
   /// 获取用户会员信息
   static void getUserMemberInfo({
-    @required void Function(Member_info_model memberInfoModel) success,
-    @required void Function() failure,
+    required void Function(Member_info_model memberInfoModel) success,
+    required void Function() failure,
   }) async {
     if (await UserInfoManager().isLogin != true) {
       return failure();

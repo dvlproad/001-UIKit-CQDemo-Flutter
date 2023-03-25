@@ -17,7 +17,7 @@ export 'package:app_devtool_framework/app_devtool_framework.dart'
     show PackageType, PackageTargetType;
 
 // import 'package:flutter_cache_kit/flutter_cache_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:app_environment/app_environment.dart'
     show devtoolEventBus, DevtoolEnvironmentInitCompleteEvent;
 
