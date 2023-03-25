@@ -1,11 +1,11 @@
 name: app_environment
-description: A new Flutter package project.
+description: app的环境切换.
 version: 0.0.1
 homepage:
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=1.16.0"
 
 dependencies:
   flutter:
@@ -13,9 +13,9 @@ dependencies:
 
   provider: any
   event_bus: any
-  flutter_environment:
-    path: ../flutter_environment/
-  flutter_effect_kit:
+  flutter_environment_base: #^0.0.1
+    path: ../flutter_environment_base/
+  flutter_effect_kit: #^0.0.1
     path: ../flutter_effect_kit/
 
 dev_dependencies:

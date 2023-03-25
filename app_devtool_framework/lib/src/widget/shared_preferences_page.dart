@@ -6,14 +6,12 @@
  * @Description: app几个环境的下载页罗列
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 class SharedPreferencesPage extends StatefulWidget {
-  SharedPreferencesPage({Key? key}) : super(key: key);
+  const SharedPreferencesPage({Key? key}) : super(key: key);
 
   @override
   State<SharedPreferencesPage> createState() => _SharedPreferencesPageState();
@@ -42,7 +40,7 @@ class _SharedPreferencesPageState extends State<SharedPreferencesPage> {
     int keyCount = keys.length;
     return Scaffold(
       appBar: AppBar(
-        title: Text('SharedPreferences'),
+        title: const Text('SharedPreferences'),
       ),
       body: Container(
         color: const Color(0xfff0f0f0),

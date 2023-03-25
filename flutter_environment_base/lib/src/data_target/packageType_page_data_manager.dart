@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-24 16:00:34
+ * @LastEditTime: 2023-03-25 00:39:25
  * @Description: 网络环境管理器
  */
 // 创建一个单例的Manager类
@@ -18,6 +18,7 @@ class PackageTargetPageDataManager {
   Completer initCompleter = Completer<String>();
 
   List<PackageTargetModel> _packageTargetModels = [];
+  late PackageTargetModel originPackageTargetModel;
   PackageTargetModel _selectedPackageTargetModel =
       PackageTargetModel.targetModelByType(PackageTargetType.formal);
 
@@ -96,6 +97,10 @@ class PackageTargetPageDataManager {
         _selectedPackageTargetModel = packageTargetModel;
       } else {
         packageTargetModel.check = false;
+      }
+
+      if (packageTargetModel.envId == defaultPackageTargetId_whenNull) {
+        originPackageTargetModel = packageTargetModel;
       }
     }
 

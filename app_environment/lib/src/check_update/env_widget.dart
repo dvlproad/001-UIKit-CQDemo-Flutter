@@ -1,16 +1,16 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-10-13 10:53:02
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 18:05:49
+ * @LastEditTime: 2023-03-25 00:44:52
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:provider/provider.dart';
 import './package_check_update_network_util.dart';
@@ -19,8 +19,6 @@ import './package_check_update_proxy_util.dart';
 
 import './env_page_util.dart';
 import './env_notifier.dart';
-
-import '../env_manager_util.dart';
 
 class EnvWidget extends StatefulWidget {
   const EnvWidget({Key? key}) : super(key: key);
@@ -47,9 +45,9 @@ class _EnvWidgetState extends State<EnvWidget> {
     setState(() {});
   }
 
-  EnvChangeNotifier _devChangeNotifier = EnvChangeNotifier();
+  final EnvChangeNotifier _devChangeNotifier = EnvChangeNotifier();
 
-  NetworkEnvironmentChangeNotifier _environmentChangeNotifier =
+  final NetworkEnvironmentChangeNotifier _environmentChangeNotifier =
       NetworkEnvironmentChangeNotifier();
 
   @override
@@ -85,7 +83,7 @@ class _EnvWidgetState extends State<EnvWidget> {
       color: const Color(0xfff0f0f0),
       height: 3 * envCellHeight,
       child: ListView(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           // 网络环境相关
           Consumer<NetworkEnvironmentChangeNotifier>(
@@ -105,11 +103,11 @@ class _EnvWidgetState extends State<EnvWidget> {
   Widget _devtool_env_cell(BuildContext context) {
     TSEnvNetworkModel selectedNetworkModel =
         NetworkPageDataManager().selectedNetworkModel;
-    if (selectedNetworkModel == null) {
-      return Container();
-      throw Exception(
-          '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
-    }
+    // if (selectedNetworkModel == null) {
+    //   return Container();
+    //   throw Exception(
+    //       '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+    // }
     return ImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换环境",
@@ -189,12 +187,12 @@ class _EnvWidgetState extends State<EnvWidget> {
   Widget _devtool_proxy_cell(BuildContext context) {
     TSEnvProxyModel? selectedProxyModel =
         ProxyPageDataManager().selectedProxyModel;
-    if (selectedProxyModel == null) {
-      return Container();
+    // if (selectedProxyModel == null) {
+    //   return Container();
 
-      throw Exception(
-          '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
-    }
+    //   throw Exception(
+    //       '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
+    // }
     return ImageTitleTextValueCell(
       height: envCellHeight,
       leftMaxWidth: 80,
@@ -229,7 +227,7 @@ class _EnvWidgetState extends State<EnvWidget> {
       textValue: mockCountString,
       onTap: () {
         PackageNetworkType packageNetworkType =
-            EnvManagerUtil.originPackageNetworkType;
+            NetworkPageDataManager().originNetworkModel.type;
         if (packageNetworkType == PackageNetworkType.develop1 ||
             packageNetworkType == PackageNetworkType.develop2) {
           EnvPageUtil.goChangeApiMock(context).then((value) {
@@ -237,7 +235,7 @@ class _EnvWidgetState extends State<EnvWidget> {
           });
         } else {
           String message =
-              "您当前包为${EnvManagerUtil.packageDefaultNetworkModel.name}，不支持Mock";
+              "您当前包为${NetworkPageDataManager().originNetworkModel.name}，不支持Mock";
           ToastUtil.showMsg(message, context);
         }
       },
@@ -245,6 +243,7 @@ class _EnvWidgetState extends State<EnvWidget> {
   }
 
   /// 判断是否为Debug模式
+  // ignore: unused_element
   static bool _isDebug() {
     bool inDebug = false;
     assert(inDebug =

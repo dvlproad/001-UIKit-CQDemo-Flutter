@@ -1,19 +1,9 @@
 import 'dart:io';
 import 'dart:async';
-import 'package:meta/meta.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-export 'package:flutter_environment/flutter_environment.dart'
-    show
-        TSEnvNetworkModel,
-        TSEnvProxyModel,
-        PackageTargetModel,
-        NetworkPageDataManager,
-        ProxyPageDataManager,
-        PackageTargetPageDataManager,
-        ApiManager;
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 /// 测试API的场景类型
 enum TestApiScene {
@@ -142,11 +132,8 @@ class EnvPageUtil {
   }
 
   static void exitApp(BuildContext context) {
-    if (_logoutHandleWhenExitAppByChangeNetwork != null) {
-      _logoutHandleWhenExitAppByChangeNetwork();
-    } else {
-      throw Exception("切换环境，需要退出app，但你没尝试优先退出登录");
-    }
+    // 切换环境，需要退出app，如何退出
+    _logoutHandleWhenExitAppByChangeNetwork();
 
     // Future.delayed(const Duration(milliseconds: 500), () {
     LoadingUtil.showDongingTextInContext(
@@ -179,10 +166,8 @@ class EnvPageUtil {
     String? targetText, // 悬浮按钮上的文本:此包的发布网站
     required String currentNetworkName, // 悬浮按钮上的文本:此包的当前网络环境
   }) {
-    if (currentNetworkName != null) {
-      ApplicationDraggableManager.updateDevToolFloatingIconOverlayEntry(
-        currentNetworkName,
-      );
-    }
+    ApplicationDraggableManager.updateDevToolFloatingIconOverlayEntry(
+      currentNetworkName,
+    );
   }
 }

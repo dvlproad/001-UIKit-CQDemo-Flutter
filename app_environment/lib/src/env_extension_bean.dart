@@ -6,7 +6,7 @@
  * @Description: 不同网络环境下包含各属性值的模型
  */
 
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import './init/environment_datas_util.dart';
 
 extension NetworkType on TSEnvNetworkModel {

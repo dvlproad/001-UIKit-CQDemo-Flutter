@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-import '../env_extension_bean.dart';
 import './env_page_util.dart';
-import '../init/environment_datas_util.dart';
-
-import '../env_manager_util.dart';
 
 class PackageCheckUpdateNetworkUtil {
   // 启动时候，检查当前包的当前网络环境和默认的网络环境是否一样，如果不一样，提示切回默认的环境，避免用户使用不存在或者过期或者未上线的功能
@@ -21,7 +17,7 @@ class PackageCheckUpdateNetworkUtil {
 
     // 获取当前包应该的默认网络环境
     TSEnvNetworkModel defaultNetworkModel =
-        EnvManagerUtil.packageDefaultNetworkModel;
+        NetworkPageDataManager().originNetworkModel;
 
     // 检查当前包的当前网络环境和默认的网络环境是否一样，如果不一样，提示切回默认的环境
     if (goChangeHandle == null) {
@@ -87,9 +83,9 @@ class PackageCheckUpdateNetworkUtil {
     void Function()
         goChangeHandle, // 是否允许有进入切换环境的功能，如果允许的话，其执行的操作(如果为null，则不允许,如启动的时候，只有‘取消+恢复默认')
   ) {
-    if (goChangeHandle == null) {
-      throw Exception('进入切换环境的操作不能为空，请检查');
-    }
+    // if (goChangeHandle == null) {
+    //   throw Exception('进入切换环境的操作不能为空，请检查');
+    // }
 
     BuildContext? currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {

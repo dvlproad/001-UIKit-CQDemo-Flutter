@@ -5,18 +5,10 @@
  * @LastEditTime: 2022-08-11 15:21:21
  * @Description: 网络库缓存接口支持形如Future样式的写法，方便极简代码替换接口
  */
-import 'package:meta/meta.dart'; // 为了使用 required
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-import 'package:tencent_cos/tencent_cos.dart';
-import 'dart:convert';
 
 import './app_network/app_network_manager.dart';
 import './app_network/app_network_cache_manager.dart';
-import './trace/trace_util.dart';
-import './monitor_network/monitor_network_manager.dart';
-import './app_response_model_util.dart';
-import './app_api_simulate_util.dart';
 
 class AppNetworkCacheUtil {
   String api;

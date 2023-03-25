@@ -7,7 +7,7 @@
  */
 import 'package:meta/meta.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import '../mock/app_mock_manager.dart';
+import '../mock/app_api_mock_manager.dart';
 
 class MockNetworkManager extends CacheNetworkClient {
   Future<ResponseModel> get(

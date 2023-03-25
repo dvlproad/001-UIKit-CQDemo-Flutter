@@ -7,8 +7,6 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
     show HistoryVersionBean, DevBranchBean;
 
 import '../dev_branch/dev_branch_page.dart';
-import 'package:flutter_theme_helper/flutter_theme_helper.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import '../cell/title_value_cell.dart';
 
 class HistoryVerisonCell extends StatefulWidget {
@@ -46,7 +44,7 @@ class _HistoryVerisonCellState extends State<HistoryVerisonCell> {
         child: Column(
           children: [
             ImageTitleTextValueCell(
-              constraints: BoxConstraints(minHeight: 30),
+              constraints: const BoxConstraints(minHeight: 30),
               title: 'V${_historyVersionBean.version}',
               textValue: '',
               arrowImageType: TableViewCellArrowImageType.none,

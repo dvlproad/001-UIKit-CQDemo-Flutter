@@ -1,51 +1,40 @@
-import 'dart:io' show Platform;
-import 'dart:convert' as convert;
+/*
+ * @Author: dvlproad
+ * @Date: 2023-03-24 10:55:55
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-03-25 13:05:16
+ * @Description: 
+ */
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
-import 'package:flutter_network_base/flutter_network_base.dart';
-import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:app_environment/app_environment.dart';
+import 'package:flutter_robot_base/flutter_robot_base.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 import './detail/log_detail_widget.dart';
+import './log_util.dart';
 
 class AppLogUtil {
-  static Completer _initCompleter = Completer<String>();
-  static String myRobotKey = 'e3c3f7f1-5d03-42c5-8c4a-a3d25d7a8587'; // 单个人测试用的
+  static final Completer _initCompleter = Completer<String>();
 
   static init({
+    required String tolerantRobotKey,
     required PackageNetworkType originPackageNetworkType,
+    required PackageNetworkType Function() currentNetworkTypeGetBlock,
     required PackageTargetType originPackageTargetType,
     required String packageDescribe,
     required String Function() userDescribeBlock,
+    required bool Function()
+        isForceNoUploadEnvGetBlock, // 是否是强制不上报的环境(正式上生产的时候就不要上报了)
+    required String Function(String apiHost) getRobotUrlByApiHostBlock,
   }) async {
-    // 如何输出 log 的设置
-    LogApiUtil.logMessageBlock = ({
-      required LogObjectType logType,
-      required LogLevel logLevel,
-      String? title,
-      required Map<String, dynamic> shortMap,
-      required Map<String, dynamic> detailMap,
-      Map<String, dynamic>? extraLogInfo, // log 的 额外信息
-      RobotPostType? postType,
-      List<String>? mentionedList,
-    }) {
-      logMessage(
-        logType: logType,
-        logLevel: logLevel,
-        title: title,
-        shortMap: shortMap,
-        detailMap: detailMap,
-        extraLogInfo: extraLogInfo,
-        postType: postType,
-        mentionedList: mentionedList,
-      );
-    };
     LogUtil.init(
-      tolerantRobotKey: myRobotKey,
+      tolerantRobotKey: tolerantRobotKey,
       packageDescribe: packageDescribe,
       userDescribeBlock: userDescribeBlock,
       shouldPrintToConsoleBlock: (LogObjectType logObjectType, logLevel,
@@ -100,11 +89,10 @@ class AppLogUtil {
       },
       postToWechatRobotUrlGetBlock: (LogObjectType logObjectType, logLevel,
           {Map<String, dynamic>? extraLogInfo}) {
-        /// TODO:正式上生产的时候就不要上报了
-        PackageTargetType currentTargetType =
-            EnvManagerUtil.packageCurrentTargetModel.type;
-        PackageNetworkType currentNetworkType =
-            EnvManagerUtil.packageCurrentNetworkModel.type;
+        bool isForceNoUploadEnv = isForceNoUploadEnvGetBlock();
+        if (isForceNoUploadEnv) {
+          return null;
+        }
 
         if (logObjectType == LogObjectType.dart ||
             logObjectType == LogObjectType.widget) {
@@ -119,9 +107,11 @@ class AppLogUtil {
           return _postToWechatRobotUrl_api(
             originPackageNetworkType: originPackageNetworkType,
             originPackageTargetType: originPackageTargetType,
+            currentPackageNetworkType: currentNetworkTypeGetBlock(),
             logObjectType: logObjectType,
             logLevel: logLevel,
             extraLogInfo: extraLogInfo,
+            getRobotUrlByApiHostBlock: getRobotUrlByApiHostBlock,
           );
         }
 
@@ -137,7 +127,6 @@ class AppLogUtil {
     );
 
     _initCompleter.complete('log初始化完成，后续 logMessage 才可以正常使用回调判断如何打印log');
-    _initApiErrorRobots();
   }
 
   static String? _postToWechatRobotUrl_dart_widget({
@@ -168,10 +157,12 @@ class AppLogUtil {
 
   static String? _postToWechatRobotUrl_api({
     required PackageNetworkType originPackageNetworkType,
+    required PackageNetworkType currentPackageNetworkType,
     required PackageTargetType originPackageTargetType,
     required LogObjectType logObjectType,
     required LogLevel logLevel,
     Map<String, dynamic>? extraLogInfo,
+    required String Function(String apiHost) getRobotUrlByApiHostBlock,
   }) {
     /*
     // 拿指定接口来测试上报的代码
@@ -194,27 +185,21 @@ class AppLogUtil {
     // if (isOutProduct) {
     //   return null; // 外测生产包都不上报
     // }
-    PackageNetworkType currentPackageType =
-        EnvManagerUtil.packageCurrentNetworkModel.type;
     // 如果环境是生产环境，但包却不是生产包，则异常先不进行上报
-    if (originPackageNetworkType != currentPackageType &&
-        currentPackageType == PackageNetworkType.product) {
+    if (originPackageNetworkType != currentPackageNetworkType &&
+        currentPackageNetworkType == PackageNetworkType.product) {
       return null;
     }
 
     bool hasProxy = false;
     bool isCacheApiLog = false;
     String? apiHost;
-    NetworkErrorType? networkErrorType;
+    String? apiErrorTypeString;
     if (extraLogInfo != null) {
       hasProxy = extraLogInfo['hasProxy'] ?? false;
       apiHost = extraLogInfo["apiHost"];
       isCacheApiLog = extraLogInfo["isCacheApiLog"] ?? false;
-      String? apiErrorTypeString = extraLogInfo["apiErrorType"];
-      if (apiErrorTypeString != null) {
-        networkErrorType =
-            NetworkErrorTypeUtil.networkErrorTypeFromString(apiErrorTypeString);
-      }
+      apiErrorTypeString = extraLogInfo["apiErrorType"];
     }
     // 3、网络有代理的时候不通知
     if (hasProxy) {
@@ -230,16 +215,16 @@ class AppLogUtil {
     if (isCacheApiLog) {
       return null;
     }
-    if (networkErrorType == NetworkErrorType.connectTimeout ||
-        networkErrorType == NetworkErrorType.sendTimeout ||
-        networkErrorType == NetworkErrorType.receiveTimeout) {
+    bool isTimeoutError = ["connectTimeout", "sendTimeout", "receiveTimeout"]
+        .contains(apiErrorTypeString);
+    if (isTimeoutError) {
       String robotKey_timeout = '9b7e7b8d-b0a3-49a0-9eba-bb8f1111ae55';
       return robotKey_timeout;
     } else {
       if (apiHost == null) {
         return null;
       }
-      String? postApiErrorRobotUrl = ApiPostUtil.getRobotUrlByApiHost(apiHost);
+      String? postApiErrorRobotUrl = getRobotUrlByApiHostBlock(apiHost);
       return postApiErrorRobotUrl;
     }
   }
@@ -261,57 +246,6 @@ class AppLogUtil {
       onPressedClose: () => ApplicationLogViewManager.dismissLogOverlayEntry(
           ApplicationLogViewManager.logDetailOverlayKey),
     );
-  }
-
-  static void _initApiErrorRobots() {
-    String apiErrorRobotKey_dev2 =
-        'de1d8e9d-2d28-4f58-8e66-5fd71fa3d170'; // api异常监控-dev2专属
-    String apiErrorRobotKey_dev1 =
-        'f49ee9a3-8199-4c1a-9d5c-23c95aa7a3ba'; // api异常监控-dev1专属
-    String apiErrorRobotKey_tke =
-        'fb5d5015-87b3-4f6a-8e06-04cbef1c3893'; // api异常监控-tke专属
-    String apiErrorRobotKey_product =
-        '7f3cc810-5a60-46ed-a752-1105d38aae54'; // api异常监控-生产专属
-
-    ApiHostRobotBean robotBean_mock = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_mock,
-      pushToWechatRobots: [
-        myRobotKey,
-      ],
-    );
-    ApiHostRobotBean robotBean_dev1 = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_dev1,
-      pushToWechatRobots: [
-        apiErrorRobotKey_dev1,
-      ],
-    );
-    ApiHostRobotBean robotBean_dev2 = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_dev2,
-      pushToWechatRobots: [
-        apiErrorRobotKey_dev2,
-      ],
-    );
-
-    ApiHostRobotBean robotBean_preproduct = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.networkModel_preProduct.apiHost,
-      pushToWechatRobots: [
-        apiErrorRobotKey_tke,
-      ],
-    );
-    ApiHostRobotBean robotBean_product = ApiHostRobotBean(
-      errorApiHost: TSEnvironmentDataUtil.apiHost_product,
-      pushToWechatRobots: [
-        apiErrorRobotKey_product,
-      ],
-    );
-
-    ApiPostUtil.apiErrorRobots = [
-      robotBean_mock,
-      robotBean_dev1,
-      robotBean_dev2,
-      robotBean_preproduct,
-      robotBean_product,
-    ];
   }
 
   // 打印请求各阶段出现的不同等级的日志信息

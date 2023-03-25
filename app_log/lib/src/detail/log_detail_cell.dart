@@ -2,19 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-28 15:28:25
+ * @LastEditTime: 2023-03-24 16:22:50
  * @Description: 
  */
-import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
+// ignore: implementation_imports
 import 'package:flutter_log_base/src/log/log_base_cell.dart';
-import 'package:flutter_network_base/flutter_network_base.dart';
 
 import 'package:flutter_json_viewer/flutter_json_viewer.dart';
-
-import '../app_log_util.dart';
 
 class ApiLogDetailCell extends StatefulWidget {
   final int? maxLines;
@@ -31,7 +27,7 @@ class ApiLogDetailCell extends StatefulWidget {
   }) clickApiLogCellCallback; // logCell 的点击
   final void Function()? onLongPress;
 
-  ApiLogDetailCell({
+  const ApiLogDetailCell({
     Key? key,
     this.maxLines,
     required this.apiLogModel,
@@ -149,6 +145,7 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
     required void Function() onPressed,
   }) {
     return TextButton(
+      onPressed: onPressed,
       child: Container(
         color: Colors.pink,
         width: 260,
@@ -157,7 +154,7 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
           child: Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -165,7 +162,6 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
           ),
         ),
       ),
-      onPressed: onPressed,
     );
   }
 }

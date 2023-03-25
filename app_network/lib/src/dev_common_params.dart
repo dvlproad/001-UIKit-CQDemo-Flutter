@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-11 02:39:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-16 14:59:55
+ * @LastEditTime: 2023-03-25 01:30:44
  * @Description: 公共参数获取帮助类
  */
 import 'dart:io' show Platform;
@@ -65,7 +67,7 @@ class CommonParamsHelper {
     String machine = '';
     if (Platform.isIOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
+      debugPrint('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
       uuid = iosInfo.identifierForVendor ?? '';
       systemName = iosInfo.systemName ?? '';
       systemVersion = iosInfo.systemVersion ?? '';
@@ -74,10 +76,9 @@ class CommonParamsHelper {
       machine = iosInfo.utsname.machine ?? '';
     } else {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      print('Running on ${androidInfo.model ?? ''}'); // e.g. "Moto G (4)"
+      debugPrint('Running on ${androidInfo.model ?? ''}'); // e.g. "Moto G (4)"
       uuid = androidInfo.id ?? '';
-      String incremental =
-          androidInfo.version.incremental ?? ''; // 手机具体的固件型号/Ui版本
+      // String incremental = androidInfo.version.incremental; // 手机具体的固件型号/Ui版本
       systemName = androidInfo.version.baseOS ?? '';
       systemVersion = androidInfo.version.release ?? '';
       brand = "${androidInfo.brand ?? ''}${androidInfo.model ?? ''}"; // 手机品牌加型号

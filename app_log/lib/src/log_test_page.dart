@@ -1,19 +1,19 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-20 17:18:27
+ * @LastEditTime: 2023-03-25 12:19:37
  * @Description: 日志功能的测试页面
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_robot_base/flutter_robot_base.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-// import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 
-// import 'package:app_environment/app_environment.dart';
+import './log_util.dart';
 
 class LogTestPage extends StatefulWidget {
   const LogTestPage({
@@ -21,7 +21,7 @@ class LogTestPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _LogTestPageState createState() => _LogTestPageState();
+  State createState() => _LogTestPageState();
 }
 
 class _LogTestPageState extends State<LogTestPage> {
@@ -50,7 +50,7 @@ class _LogTestPageState extends State<LogTestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('日志测试页'),
+        title: const Text('日志测试页'),
       ),
       body: GestureDetector(
         child: Container(

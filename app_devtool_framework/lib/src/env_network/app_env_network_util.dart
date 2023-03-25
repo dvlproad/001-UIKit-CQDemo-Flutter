@@ -1,24 +1,8 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart'; // 为了使用 required
 import 'package:flutter/material.dart';
-import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-import 'package:tencent_cos/tencent_cos.dart';
-
-import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:app_network/app_network.dart';
 import 'package:app_environment/app_environment.dart';
-
-import './app_network/app_network_manager.dart';
-import './app_network/app_network_cache_manager.dart';
-import './trace/trace_util.dart';
-import './monitor_network/monitor_network_manager.dart';
-import './app_response_model_util.dart';
-import './app_api_simulate_util.dart';
-import './dev_common_params.dart';
-
-import 'package:flutter/services.dart' show rootBundle; // 用于使用 rootBundle
+import 'package:flutter_network_kit/flutter_network_kit.dart';
+import 'package:flutter_foundation_base/flutter_foundation_base.dart';
 
 class AppNetworkKit {
   static Future<void> start(
@@ -60,7 +44,7 @@ class AppNetworkKit {
       monitorBaseUrl: selectedNetworkModel.monitorApiHost,
       getMonitorDataHubIdBlock: () {
         String monitorDataHubId =
-            EnvManagerUtil.packageCurrentNetworkModel.monitorDataHubId;
+            NetworkPageDataManager().selectedNetworkModel.monitorDataHubId;
         return monitorDataHubId;
       },
       token: token,
@@ -70,12 +54,12 @@ class AppNetworkKit {
       forceNoToastStatusCodesGetFunction: forceNoToastStatusCodesGetFunction,
       uidGetBlock: uidGetBlock,
       packageNetworkTypeGetBlock: () {
-        return EnvManagerUtil.packageCurrentNetworkModel.type;
+        return NetworkPageDataManager().selectedNetworkModel.type;
       },
     );
 
     // proxy:
-    AppNetworkKit.changeProxy(selectedProxyModel.proxyIp);
+    changeProxy(selectedProxyModel.proxyIp);
 
     // check network+proxy+mock
     Future.delayed(const Duration(milliseconds: 2000)).then((value) {
@@ -91,16 +75,16 @@ class AppNetworkKit {
     EnvPageUtil.initWithPage(
       navigatorKey: navigatorKey,
       updateNetworkCallback: (TSEnvNetworkModel bNetworkModel) {
-        AppNetworkKit.changeOptions(bNetworkModel);
+        changeOptions(bNetworkModel);
       },
       logoutHandleWhenExitAppByChangeNetwork:
           logoutHandleWhenExitAppByChangeNetwork,
       updateProxyCallback: (TSEnvProxyModel bProxyModel) {
-        AppNetworkKit.changeProxy(bProxyModel.proxyIp);
+        changeProxy(bProxyModel.proxyIp);
       },
       onPressTestApiCallback: (TestApiScene testApiScene) {
         // 测试环境改变之后，网络请求是否生效
-        AppNetworkKit.post(
+        post(
           'login/doLogin',
           params: {
             "clientId": "clientApp",
@@ -189,17 +173,17 @@ class AppNetworkKit {
     }
   }
 
-  /************************* baseUrl 设置 *************************/
+  /// *********************** baseUrl 设置 ************************
   static void changeOptions(TSEnvNetworkModel bNetworkModel) {
     AppNetworkManager().changeOptions(baseUrl: bNetworkModel.apiHost);
     MonitorNetworkManager()
         .changeOptions(baseUrl: bNetworkModel.monitorApiHost);
   }
 
-  /************************* proxy 设置 *************************/
+  /// *********************** proxy 设置 ************************
   static bool changeProxy(String? proxyIp) {
     bool changeSuccess = AppNetworkManager().changeProxy(proxyIp);
-    bool changeSuccess2 = MonitorNetworkManager().changeProxy(proxyIp);
+    // bool changeSuccess2 = MonitorNetworkManager().changeProxy(proxyIp);
 
     return changeSuccess;
   }
@@ -320,7 +304,9 @@ class AppNetworkKit {
   static bool Function()? _loginStateGetBlock;
   static List<String>?
       _ignoreRequestApiIfLogout; // 如果是未登录状态下，默认不请求(可省去外部加isLoginState()的判断)
+
   /// 是否不请求(如果是未登录状态下，默认不请求(可省去外部加isLoginState()的判断))
+  // ignore: unused_element
   static bool _shouldIgnoreRequest(String api) {
     if (_loginStateGetBlock != null &&
         _ignoreRequestApiIfLogout != null &&

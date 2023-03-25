@@ -1,4 +1,6 @@
-import 'package:flutter_environment/flutter_environment.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 class TSEnvironmentDataUtil {
   // // 设置默认的环境

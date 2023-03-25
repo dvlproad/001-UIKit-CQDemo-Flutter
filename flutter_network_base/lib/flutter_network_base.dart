@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 18:29:30
+ * @LastEditTime: 2023-03-25 02:00:35
  * @Description: 底层网络库
  */
 library flutter_network_base;
@@ -19,3 +19,9 @@ export './src/interceptor_log/util/net_options_log_bean.dart';
 
 export './src/bean/net_options.dart';
 export './src/bean/err_options.dart';
+
+// local_mock
+export './src/mock/local_mock_util.dart';
+
+export './src/bean/req_options.dart';
+export './src/bean/res_options.dart';

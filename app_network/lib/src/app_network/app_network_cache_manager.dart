@@ -2,22 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-11 15:20:54
+ * @LastEditTime: 2023-03-25 01:32:59
  * @Description: 可带缓存的网络请求方法
  */
-import 'dart:async' show Completer, StreamSubscription;
-import 'dart:developer' as developer;
 
-import 'dart:io' show NetworkInterface, InternetAddressType, InternetAddress;
-import 'dart:ui' show window;
-
-import 'package:meta/meta.dart'; // 为了使用 required
-import 'package:flutter/services.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 
 import './app_network_manager.dart';
-import '../mock/app_mock_manager.dart';
+import '../mock/app_api_mock_manager.dart';
 
 /// 网络缓存
 enum AppNetworkCacheLevel {
@@ -81,6 +74,7 @@ extension Cache on AppNetworkManager {
       isGet: requestMethod == RequestMethod.get ? true : false,
     );
 
+    // ignore: todo
     /* ///TODO:判断不准确，临时注释起来
     if (cacheLevel != NetworkCacheLevel.one) {
       // 不是取缓存的请求的时候，才需要取网络
@@ -121,9 +115,7 @@ extension Cache on AppNetworkManager {
           toastIfMayNeed: showToastForNoNetwork,
         );
 
-        if (completeCallBack != null) {
-          completeCallBack(newResponseModel);
-        }
+        completeCallBack(newResponseModel);
       },
     );
 

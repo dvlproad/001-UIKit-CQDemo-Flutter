@@ -1,13 +1,12 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter_image_process/flutter_image_process.dart'
-    show ImageChooseBean, CompressResultType, UploadMediaType;
-import 'package:flutter_image_process/flutter_image_process.dart'
-    show VoiceBaseBean;
+import 'package:flutter_image_process/flutter_image_process.dart';
 
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart' show ToastUtil;
 import './upload/app_upload_channel_manager.dart';
@@ -15,7 +14,6 @@ import './upload/app_compress_bean.dart';
 import './upload/app_upload_bean.dart';
 import './app_network/app_network_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:path_provider/path_provider.dart';
 
 enum UploadState {
   uploadStart, // 上传开始
@@ -157,28 +155,20 @@ extension UploadApi on AppNetworkManager {
     switch (resultType) {
       case UploadMediaResultType.ImageFailureBCThumbnailGet:
         return "图片压缩失败";
-        break;
       case UploadMediaResultType.ImageFailureBCThumbnailUpload:
         return "图片上传失败";
-        break;
       case UploadMediaResultType.VideoFailureBCSelfTooBig:
         return "您的视频太大，请上传小于200M的视频";
-        break;
       case UploadMediaResultType.VideoFailureBCSelfTooLong:
         return "您的视频太长，请上传小于30分钟的视频";
-        break;
       case UploadMediaResultType.VideoFailureBCThumbnailSelfGet:
         return "视频压缩失败";
-        break;
       case UploadMediaResultType.VideoFailureBCThumbnailSelfUpload:
         return "视频上传失败";
-        break;
       case UploadMediaResultType.VideoFailureBCThumbnailImageGet:
         return "视频缩略图获取失败";
-        break;
       case UploadMediaResultType.VideoFailureBCThumbnailImageUpload:
         return "视频缩略图上传失败";
-        break;
       default:
         return "上传成功";
     }
@@ -347,11 +337,12 @@ extension UploadApi on AppNetworkManager {
           });
         }
       }
+      // ignore: dead_code
     } else {
       // 串行
       for (var i = 0; i < needUploadNumber; i++) {
         ImageChooseBean imageChooseModel = needUploadImageChooseModels[i];
-        double currentProgressValue = 0.0;
+        // double currentProgressValue = 0.0;
         UploadMediaResultBean bean = await _compressAndUploadLocalMediaPath(
           mediaType: mediaType,
           multipart: multipart,
@@ -487,7 +478,7 @@ extension UploadApi on AppNetworkManager {
       uploadResultType: UploadResultType.Unknow,
     );
 
-    if (voicePath == null || voicePath.isEmpty) {
+    if (voicePath.isEmpty) {
       uploadResultBean.uploadResultType = UploadResultType.UploadNone;
       uploadResultBean.url = null;
       completer.complete(uploadResultBean);

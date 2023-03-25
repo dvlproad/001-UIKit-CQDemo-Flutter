@@ -152,7 +152,8 @@ extension ApiSimulateExtension on String {
   // 获取新的api地址
   String newApi({
     required String newApiHost,
-    required List<String> shouldChangeApiHosts, // 允许 mock api 的 host
+    required List<String>
+        shouldChangeApiHosts, // 允许 mock api 的 host，即使同一环境也可能有多个网络库，多种host
   }) {
     String apiPath; //api path
     bool hasHttpPrefix = this.startsWith(RegExp(r'https?:'));

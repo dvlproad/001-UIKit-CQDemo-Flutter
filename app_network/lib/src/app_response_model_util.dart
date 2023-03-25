@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-11 15:17:06
+ * @LastEditTime: 2023-03-25 01:31:22
  * @Description: ResponseModel 的处理方式
  */
-import 'package:meta/meta.dart'; // 为了使用 @required
 import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
@@ -70,7 +69,7 @@ class CheckResponseModelUtil {
     } else if (errorCode == 401) {
       if (responseModel.message == '暂未登录或token已经过期') {
         responseMessage = "登录失效，请重新登录";
-        if (_needReloginHandle != null && responseModel.isCache != true) {
+        if (responseModel.isCache != true) {
           _needReloginHandle();
         }
         toastIfMayNeed = true;

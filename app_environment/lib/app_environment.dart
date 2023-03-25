@@ -2,15 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-16 14:16:11
+ * @LastEditTime: 2023-03-25 13:19:29
  * @Description: app环境、设备信息相关的库
  */
 library app_environment;
 
 export './src/env_manager_util.dart';
 
-export 'package:flutter_environment/flutter_environment.dart'
-    show DeviceInfoPage, PackageNetworkType, PackageTargetType;
+export 'package:flutter_environment_base/flutter_environment_base.dart';
 
 export './src/init/environment_datas_util.dart';
 export './src/env_extension_bean.dart';

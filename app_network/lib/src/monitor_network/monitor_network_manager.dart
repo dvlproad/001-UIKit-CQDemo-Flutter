@@ -1,16 +1,13 @@
+// ignore_for_file: constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-09-06 13:15:26
+ * @LastEditTime: 2023-03-25 01:31:35
  * @Description: 正常请求管理中心+埋点请求管理中心
  */
-import 'package:meta/meta.dart';
-import 'dart:convert' show json;
-import 'dart:convert' as convert;
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import '../mock/mock_analy_util.dart' show EnvironmentMockType;
-import '../app_response_model_util.dart';
 
 import '../base/mock_network_manager.dart';
 
@@ -23,9 +20,7 @@ class MonitorNetworkManager extends MockNetworkManager {
   static MonitorNetworkManager get instance => _getInstance();
   static MonitorNetworkManager? _instance;
   static MonitorNetworkManager _getInstance() {
-    if (_instance == null) {
-      _instance = MonitorNetworkManager._internal();
-    }
+    _instance ??= MonitorNetworkManager._internal();
     return _instance!;
   }
 

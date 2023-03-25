@@ -1,13 +1,17 @@
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unused_element
+
 import 'dart:core';
+import 'dart:convert' show json;
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_foundation_base/flutter_foundation_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:flutter_effect/flutter_effect.dart';
+import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:app_network/app_network.dart';
 import 'package:app_log/app_log.dart';
 import 'package:app_environment/app_environment.dart';
@@ -28,12 +32,9 @@ import './dev_util.dart';
 import './dev_notifier.dart';
 import './history_version/history_version_page.dart';
 import './dev_branch/dev_branch_page.dart';
-import './apns_util.dart';
-// import 'package:app_map/app_map.dart';
-// import 'package:wish/widget/dialog/area_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert' show json;
-// import 'package:wish/common/locate_manager.dart';
+
+import './env_network/app_env_network_util.dart';
+import 'apns_util.dart';
 
 /// 开发工具调试入口
 class DevPageEntranceWidget extends StatelessWidget {
@@ -157,9 +158,9 @@ class _DevPageState extends State<DevPage> {
     setState(() {});
   }
 
-  DevChangeNotifier _devChangeNotifier = DevChangeNotifier();
+  final DevChangeNotifier _devChangeNotifier = DevChangeNotifier();
 
-  DevEnvironmentChangeNotifier _environmentChangeNotifier =
+  final DevEnvironmentChangeNotifier _environmentChangeNotifier =
       DevEnvironmentChangeNotifier();
 
   @override
@@ -218,7 +219,8 @@ class _DevPageState extends State<DevPage> {
             Container(height: 20),
             AppDirSizeWidget(),
             // deviceToken
-            _rennderItemPage(title: '清理缓存', page: SharedPreferencesPage()),
+            _rennderItemPage(
+                title: '清理缓存', page: const SharedPreferencesPage()),
             Container(height: 20),
             _deviceToken_cell(),
 
@@ -228,7 +230,7 @@ class _DevPageState extends State<DevPage> {
 
             // 网络环境相关
             Container(height: 20),
-            EnvWidget(),
+            const EnvWidget(),
             // 网络库测试相关
             _devtool_changeheader_cell(), // 网络库:header 的 增删该
             _devtool_removeheaderKey_cell(), // 网络库:header 的 增删该
@@ -461,7 +463,7 @@ class _DevPageState extends State<DevPage> {
       textValue: '',
       onTap: () async {
         String baseUrl = NetworkPageDataManager().selectedNetworkModel.apiHost;
-        String userApiToken = await UserInfoManager().getCacheUserAuthToken();
+        String? userApiToken = await UserInfoManager().getCacheUserAuthToken();
         Map<String, dynamic> headers = {};
         if (userApiToken != null && userApiToken.isNotEmpty) {
           headers.addAll({'Authorization': userApiToken});
@@ -673,13 +675,12 @@ class _DevPageState extends State<DevPage> {
           );
 
           Map responseObject = response.data;
-          print("埋点请求测试结果:${responseObject.toString()}");
+          debugPrint("埋点请求测试结果:${responseObject.toString()}");
         } catch (e) {
-          String errorMessage = e.toString();
+          // String errorMessage = e.toString();
 
-          String message = '请求${buriedpoint_url}的时候，发生网络错误:$errorMessage';
+          // String message = '请求${buriedpoint_url}的时候，发生网络错误:$errorMessage';
           // throw Exception(message);
-          return null;
         }
       },
     );
@@ -695,7 +696,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () async {
         AppNetworkKit.postMonitorMessage(buriedpoint_messsageParam)
             .then((ResponseModel responseModel) {
-          print("埋点请求测试结果:${responseModel.toString()}");
+          debugPrint("埋点请求测试结果:${responseModel.toString()}");
         });
       },
     );
@@ -729,7 +730,7 @@ class _DevPageState extends State<DevPage> {
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
           builder: (context) {
-            return LogTestPage();
+            return const LogTestPage();
           },
         ));
       },

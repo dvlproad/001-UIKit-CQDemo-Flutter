@@ -1,27 +1,24 @@
+// ignore_for_file: constant_identifier_names, unnecessary_string_interpolations
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 23:59:28
+ * @LastEditTime: 2023-03-25 11:50:20
  * @Description: 正常请求管理中心+埋点请求管理中心
  */
-import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
-import 'dart:convert' show json;
 import 'dart:convert' as convert;
+import 'dart:convert';
+import 'package:flutter/services.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
+import 'package:flutter_image_process/flutter_image_process.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'package:flutter_environment/flutter_environment.dart';
-import 'package:app_environment/app_environment.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../base/mock_network_manager.dart';
 import '../app_response_model_util.dart';
 import '../mock/mock_analy_util.dart';
 import '../trace/trace_util.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:flutter_image_process/flutter_image_process.dart'
-    show UploadMediaType;
-
-import '../base/mock_network_manager.dart';
-import 'package:path_provider/path_provider.dart';
 
 class AppNetworkManager extends MockNetworkManager {
   static const int CONNECT_TIMEOUT = 3000;
@@ -32,9 +29,7 @@ class AppNetworkManager extends MockNetworkManager {
   static AppNetworkManager get instance => _getInstance();
   static AppNetworkManager? _instance;
   static AppNetworkManager _getInstance() {
-    if (_instance == null) {
-      _instance = AppNetworkManager._internal();
-    }
+    _instance ??= AppNetworkManager._internal();
     return _instance!;
   }
 
@@ -156,7 +151,7 @@ class AppNetworkManager extends MockNetworkManager {
     // uidGetFunction = uidGetBlock;
     regionGetFunction = () {
       TSEnvNetworkModel currentNetworkModel =
-          EnvManagerUtil.packageCurrentNetworkModel;
+          NetworkPageDataManager().selectedNetworkModel;
       return currentNetworkModel.cosParamModel.region;
     };
 
@@ -164,7 +159,7 @@ class AppNetworkManager extends MockNetworkManager {
       String bucket = "";
       // 环境
       TSEnvNetworkModel currentNetworkModel =
-          EnvManagerUtil.packageCurrentNetworkModel;
+          NetworkPageDataManager().selectedNetworkModel;
       if (mediaType == UploadMediaType.image) {
         bucket = currentNetworkModel.cosParamModel.bucket_image;
       } else {
@@ -177,7 +172,7 @@ class AppNetworkManager extends MockNetworkManager {
     // String Function() regionGetFunction;
     cosFilePrefixGetFunction = () {
       TSEnvNetworkModel currentNetworkModel =
-          EnvManagerUtil.packageCurrentNetworkModel;
+          NetworkPageDataManager().selectedNetworkModel;
       return currentNetworkModel.cosParamModel.cosFilePrefix;
     };
     cosFileRelativePathGetFunction = (
@@ -238,7 +233,7 @@ class AppNetworkManager extends MockNetworkManager {
     };
     cosFileUrlPrefixGetFunction = (UploadMediaType mediaType) {
       TSEnvNetworkModel currentNetworkModel =
-          EnvManagerUtil.packageCurrentNetworkModel;
+          NetworkPageDataManager().selectedNetworkModel;
       if (mediaType == UploadMediaType.image) {
         return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
       } else if (mediaType == UploadMediaType.video) {
@@ -292,11 +287,11 @@ class AppNetworkManager extends MockNetworkManager {
       return responseModel;
     }
 
-    if (responseData is String && (responseData as String).isEmpty) {
+    if (responseData is String && (responseData).isEmpty) {
       // 后台把data按字符串返回的时候
-      String responseDataString = "\'\'"; // 空字符串
+      String responseDataString = "''"; // 空字符串
       String errorMessage =
-          "Error:请求${fullUrl}后台response用字符串返回,且值为${responseDataString},该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
+          "Error:请求$fullUrl后台response用字符串返回,且值为$responseDataString,该字符串却无法转成标准的由code+msg+result组成的map结构(目前发现于503时候)";
       ResponseModel responseModel = ResponseModel(
         statusCode: statusCode,
         // message: response.m,

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-24 16:04:08
+ * @LastEditTime: 2023-03-25 00:31:45
  * @Description: 网络环境管理器
  */
 // 创建一个单例的Manager类
@@ -17,6 +17,7 @@ class NetworkPageDataManager {
   Completer initCompleter = Completer<String>();
 
   List<TSEnvNetworkModel> _networkModels = [];
+  late TSEnvNetworkModel originNetworkModel;
   TSEnvNetworkModel _selectedNetworkModel = TSEnvNetworkModel.none();
 
   List<TSEnvNetworkModel> get networkModels => _networkModels;
@@ -86,6 +87,10 @@ class NetworkPageDataManager {
         _selectedNetworkModel = networkModel;
       } else {
         networkModel.check = false;
+      }
+
+      if (networkModel.envId == defaultNetworkId) {
+        originNetworkModel = networkModel;
       }
     }
 

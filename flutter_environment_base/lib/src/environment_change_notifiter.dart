@@ -31,7 +31,8 @@ class TargetEnvironmentChangeNotifier extends ChangeNotifier {
 
   List<PackageTargetModel> get targetModels => _targetModels;
 
-  PackageTargetModel _targetModel = PackageTargetModel.targetModelByType(PackageTargetType.formal);
+  PackageTargetModel _targetModel =
+      PackageTargetModel.targetModelByType(PackageTargetType.formal);
 
   PackageTargetModel get targetModel => _targetModel;
 

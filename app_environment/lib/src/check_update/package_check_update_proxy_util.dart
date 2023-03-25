@@ -7,12 +7,10 @@
  */
 import 'package:flutter/material.dart';
 
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './env_page_util.dart';
-import '../init/environment_datas_util.dart';
-import '../env_manager_util.dart';
 
 class PackageCheckUpdateProxyUtil {
   /// 设置页点击添加代理的时候，检查包的环境
@@ -21,7 +19,7 @@ class PackageCheckUpdateProxyUtil {
         goChangeHandle, // 是否允许有进入添加代理的功能，如果允许的话，其执行的操作(如果为null，则不允许,如启动的时候，只有‘取消+恢复默认')
   }) {
     TSEnvNetworkModel originNetworkModel =
-        EnvManagerUtil.packageDefaultNetworkModel;
+        NetworkPageDataManager().originNetworkModel;
 
     if (goChangeHandle == null) {
       throw Exception('进入添加代理的操作不能为空，请检查');

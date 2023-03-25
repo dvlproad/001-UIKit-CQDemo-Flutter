@@ -1,25 +1,23 @@
-import 'dart:io' show Platform;
+// ignore_for_file: unnecessary_string_interpolations
 
 import 'package:flutter/material.dart';
 
-import 'package:app_network/app_network.dart';
-import 'package:app_log/app_log.dart';
 import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 import 'package:app_environment/app_environment.dart';
-
-import '../dev_util.dart';
-import '../apns_util.dart';
-
 import 'package:app_service_user/app_service_user.dart';
 
 import 'package:app_global_config/app_global_config.dart';
 
-import 'package:package_info/package_info.dart';
+import '../env_network/app_env_log_util.dart';
+import '../env_network/app_env_network_util.dart';
+
+import '../dev_util.dart';
 
 class DevToolInit {
   // static String apiHost;
-  static String webHost = EnvManagerUtil.packageCurrentNetworkModel.webHost;
-  static String gameHost = EnvManagerUtil.packageCurrentNetworkModel.gameHost;
+  static String webHost = NetworkPageDataManager().selectedNetworkModel.webHost;
+  static String gameHost =
+      NetworkPageDataManager().selectedNetworkModel.gameHost;
 
   static Future<void> initWithGlobalKey(
     GlobalKey<NavigatorState> globalKey,
@@ -58,7 +56,7 @@ class DevToolInit {
     )}';
     packageDescribe += '_${packageInfo.fullPackageDescribe}';
     packageDescribe += '】';
-    AppLogUtil.init(
+    AppEnvLogUtil.init(
       originPackageNetworkType: originPackageNetworkType,
       originPackageTargetType: originPackageTargetType,
       packageDescribe: packageDescribe,
@@ -105,7 +103,7 @@ class DevToolInit {
         return globalNetworkConfigBean.noToastForCodes;
       },
       uidGetBlock: () {
-        String uid = UserInfoManager().userModel.userId;
+        String? uid = UserInfoManager().userModel.userId;
         if (uid == null) {
           debugPrint("Errror:uid不能为空,请检查，下方先临时赋值，让其通过");
           uid = '0';
@@ -139,7 +137,7 @@ class DevToolInit {
     ImageProvider? floatingToolImageProvider; // 悬浮按钮上的图片
 
     TSEnvNetworkModel originNetworkModel =
-        EnvManagerUtil.packageDefaultNetworkModel;
+        NetworkPageDataManager().originNetworkModel;
 
     PackageTargetModel originTargetModel =
         EnvManagerUtil.packageDefaultTargetModel;
@@ -175,7 +173,7 @@ class DevToolInit {
   // 当前是否是生产网络环境
   static bool get isProductNetwork {
     PackageNetworkType currentPackageNetworkType =
-        EnvManagerUtil.packageCurrentNetworkModel.type;
+        NetworkPageDataManager().selectedNetworkModel.type;
     return currentPackageNetworkType == PackageNetworkType.product;
   }
 

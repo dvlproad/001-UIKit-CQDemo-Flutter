@@ -7,11 +7,11 @@
  */
 import 'package:flutter/material.dart';
 
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 class DevEnvironmentChangeNotifier extends ChangeNotifier {
-  List<TSEnvNetworkModel> _networkModels = [];
-  List<TSEnvProxyModel> _proxyModels = [];
+  final List<TSEnvNetworkModel> _networkModels = [];
+  final List<TSEnvProxyModel> _proxyModels = [];
 
   List<TSEnvNetworkModel> get networkModels => _networkModels;
   List<TSEnvProxyModel> get proxyModels => _proxyModels;

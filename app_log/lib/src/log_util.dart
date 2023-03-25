@@ -2,15 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-23 19:03:20
+ * @LastEditTime: 2023-03-24 16:30:35
  * @Description: 日志类
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_robot_base/flutter_robot_base.dart';
-
-import './log_console/print_console_log_util.dart';
-import './log/log_data_bean.dart';
-import './log/popup_logview_manager.dart';
+import 'package:flutter_log_base/flutter_log_base.dart';
 
 typedef ShouldLogFunction = bool Function(
     LogObjectType logObjectType, LogLevel logLevel,

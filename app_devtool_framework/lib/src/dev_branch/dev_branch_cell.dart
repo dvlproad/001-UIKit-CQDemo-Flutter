@@ -5,7 +5,7 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
     show ImageTitleTextValueCell, TableViewCellArrowImageType;
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
-    show HistoryVersionBean, DevBranchBean;
+    show DevBranchBean;
 
 import '../cell/title_value_cell.dart';
 

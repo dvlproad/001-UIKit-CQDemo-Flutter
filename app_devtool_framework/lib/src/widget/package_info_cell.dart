@@ -1,7 +1,6 @@
-import 'dart:math';
-import 'dart:io' show Platform;
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
@@ -52,11 +51,10 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
     String originTargetDes =
         EnvManagerUtil.packageTargetString(originTargetType);
 
-    PackageTargetModel originTargetModel =
-        EnvManagerUtil.packageDefaultTargetModel;
+    // PackageTargetModel originTargetModel = PackageTargetPageDataManager().originPackageTargetModel;
 
     TSEnvNetworkModel originNetworkModel =
-        EnvManagerUtil.packageDefaultNetworkModel;
+        NetworkPageDataManager().originNetworkModel;
     String originNetworkDes =
         originNetworkModel.type.toString().split('.').last;
     originNetworkDes += "_${originNetworkModel.name}";
@@ -80,12 +78,12 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
     String packageBranchLog = _packageInfo.getBuildContainBranchsDescription(
       showBranchName: false,
     );
-    int currentBranchCount = _packageInfo.buildContainBranchs.length;
+    // int currentBranchCount = _packageInfo.buildContainBranchs.length;
 
     String packUploadLocationLog = '';
     if (_packageInfo.packResultModel != null) {
       PackResultModel packResultModel = _packageInfo.packResultModel!;
-      packUploadLocationLog += '${packResultModel.pgyerOwner!}';
+      packUploadLocationLog += packResultModel.pgyerOwner!;
 
       String? pgyerChannelShortcut =
           packResultModel.pgyerChannelConfigModel?.pgyerChannelShortcut_upload;
@@ -99,7 +97,7 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
     String packDownloadLocationLog = '';
     if (_packageInfo.packResultModel != null) {
       PackResultModel packResultModel = _packageInfo.packResultModel!;
-      packDownloadLocationLog += '${packResultModel.pgyerOwner}';
+      packDownloadLocationLog += packResultModel.pgyerOwner;
 
       String? pgyerChannelShortcut = packResultModel
           .pgyerChannelConfigModel?.pgyerChannelShortcut_download;
@@ -213,10 +211,10 @@ class _PackageInfoCellState extends State<PackageInfoCell> {
         }));
       }),
       onTap: throttle(() async {
-        String packageTypeDes = EnvManagerUtil.packageDefaultNetworkModel.des;
+        String packageTypeDes = NetworkPageDataManager().originNetworkModel.des;
         String fullPackageDes = '';
         fullPackageDes += "$packageTypeDes：";
-        fullPackageDes += "${_packageInfo.fullPackageDes()}";
+        fullPackageDes += _packageInfo.fullPackageDes();
 
         Clipboard.setData(ClipboardData(text: fullPackageDes));
         ToastUtil.showMessage('app信息拷贝成功');

@@ -1,26 +1,22 @@
+// ignore_for_file: unnecessary_brace_in_string_interps, non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 23:03:36
+ * @LastEditTime: 2023-03-25 11:54:59
  * @Description: 应用层网络上抽离的管理上传方法的类
  */
 import 'dart:convert';
+import 'dart:collection';
 import 'package:flutter/foundation.dart'; // 为了使用 required
 import 'package:flutter/services.dart';
-import 'package:flutter_network_base/flutter_network_base.dart';
-import 'package:flutter_network_base/src/bean/req_options.dart';
-import 'package:flutter_network_base/src/bean/res_options.dart';
-import 'package:flutter_network_kit/src/log/api_log_util.dart';
-import 'package:flutter_environment/flutter_environment.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
-import '../app_network/app_network_manager.dart';
-import '../app_env_network_util.dart';
+import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './app_upload_bean.dart';
 import 'package:path_provider/path_provider.dart';
-import 'dart:collection';
-import 'dart:io';
+
+import '../app_network/app_network_manager.dart';
 
 extension UploadByChannel on AppNetworkManager {
   Future<String?> channel_uploadQCloud(
@@ -31,17 +27,13 @@ extension UploadByChannel on AppNetworkManager {
     // required void Function(String mediaUrl) uploadSuccess,
     // required void Function() uploadFailure,
   }) async {
-    if (localPath == null) {
-      return Future.value(null);
-    }
-
     if (mediaType == UploadMediaType.unkonw) {
       mediaType = getMediaType(localPath);
     }
 
     String bucket = bucketGetFunction(mediaType);
     String region = regionGetFunction();
-    String cosFilePrefix = cosFilePrefixGetFunction();
+    // String cosFilePrefix = cosFilePrefixGetFunction();
     String cosPath;
     String? uploadId;
     if (multipart) {
@@ -49,7 +41,7 @@ extension UploadByChannel on AppNetworkManager {
       final uploadIdStr =
           sharedPreferences.getString("multipart.uploadId") ?? "{}";
       final Map map = json.decode(uploadIdStr);
-      final cacheDir = (await getApplicationDocumentsDirectory()).path;
+      // final cacheDir = (await getApplicationDocumentsDirectory()).path;
       String key = localPath.split("/").last;
       final id = map[key];
       if (id != null) {
@@ -107,9 +99,9 @@ extension UploadByChannel on AppNetworkManager {
     final cosFilePrefix = cosFilePrefixGetFunction();
     final bucket = bucketGetFunction(mediaType);
     final region = regionGetFunction();
-    ResponseModel responseModel = await AppNetworkKit.post(
+    ResponseModel responseModel = await AppNetworkManager().post(
       "oos/getOosCredential",
-      params: {
+      customParams: {
         "allowPrefix": ['${cosFilePrefix}/*'],
         "bucket": bucket,
         "durationSeconds": 1800,
@@ -158,7 +150,6 @@ extension UploadByChannel on AppNetworkManager {
       "cosPath": cosPath,
       "bucket": bucket,
       "uploadId": uploadId,
-      "cosPath": cosPath,
     };
     NetOptions apiInfo = NetOptions(
       reqOptions: ReqOptions(
@@ -192,7 +183,7 @@ extension UploadByChannel on AppNetworkManager {
       if (call.method == 'onProgress') {
         Map data = call.arguments;
         double progress = data['progress'];
-        print('progress = $progress');
+        debugPrint('progress = $progress');
         if (uploadProgress != null) {
           uploadProgress(progressValue: progress);
         }
@@ -205,7 +196,7 @@ extension UploadByChannel on AppNetworkManager {
         } else {
           progress = percent;
         }
-        print('progress = $progress');
+        debugPrint('progress = $progress');
         if (uploadProgress != null) {
           uploadProgress(progressValue: progress);
         }

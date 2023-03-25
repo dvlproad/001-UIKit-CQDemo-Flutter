@@ -25,7 +25,7 @@ class _DevPageState extends State<EnvPage> {
       appBar: AppBar(
         title: const Text('环境工具'),
       ),
-      body: EnvWidget(),
+      body: const EnvWidget(),
     );
   }
 }

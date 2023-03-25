@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './env_page_util.dart';
-import '../init/environment_datas_util.dart';
-import '../env_manager_util.dart';
 
 class PackageCheckUpdateTargetUtil {
   // 启动时候，检查当前包的当前平台环境和默认的平台环境是否一样，如果不一样，提示切回默认的环境，避免用户使用不存在或者过期或者未上线的功能
@@ -16,10 +14,11 @@ class PackageCheckUpdateTargetUtil {
     // 获取当前平台环境
     PackageTargetModel currentPackageTargetModel =
         PackageTargetPageDataManager().selectedTargetModel;
-    PackageTargetType currentTargetType = currentPackageTargetModel.type;
+    // PackageTargetType currentTargetType = currentPackageTargetModel.type;
 
     // 获取当前包应该的默认平台环境
-    PackageTargetType originTargetType = EnvManagerUtil.originPackageTargetType;
+    PackageTargetType originTargetType =
+        PackageTargetPageDataManager().originPackageTargetModel.type;
     PackageTargetModel originPackageTargetModel =
         PackageTargetModel.targetModelByType(originTargetType);
 
@@ -42,6 +41,7 @@ class PackageCheckUpdateTargetUtil {
   }
 
   /// 启动时候检查包的环境
+  // ignore: unused_element
   static _checkNetworkWhenStartForPackage({
     required PackageTargetType originTargetType,
     required PackageTargetType currentTargetType,
@@ -106,16 +106,16 @@ class PackageCheckUpdateTargetUtil {
     String title;
     String message;
     List<String> buttonTitles = [];
-    buttonTitles.add('继续${currentTargetDes}');
+    buttonTitles.add('继续$currentTargetDes');
     buttonTitles.add('其他');
     if (currentPackageTargetModel.type != originPackageTargetModel.type) {
-      title = '是否恢复默认的【${originTargetDes}】';
+      title = '是否恢复默认的【$originTargetDes】';
       message =
-          '您当前${currentTargetDes}不是默认平台，而是[${originTargetDes}]，建议切回默认，以免影响使用！';
-      buttonTitles.add('恢复${originTargetDes}');
+          '您当前$currentTargetDes不是默认平台，而是[$originTargetDes]，建议切回默认，以免影响使用！';
+      buttonTitles.add('恢复$originTargetDes');
     } else {
       title = '不建议切换平台';
-      message = '您当前${currentTargetDes}已是默认的平台，不建议切换，以免影响使用！';
+      message = '您当前$currentTargetDes已是默认的平台，不建议切换，以免影响使用！';
     }
 
     AlertUtil.showFlexWidthButtonsAlert(

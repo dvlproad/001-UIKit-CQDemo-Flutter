@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-11-16 10:51:15
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-16 15:56:13
+ * @LastEditTime: 2023-03-25 13:25:27
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart'
     show DevBranchBean;
 import './dev_branch_cell.dart';

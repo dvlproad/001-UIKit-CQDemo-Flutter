@@ -1,11 +1,9 @@
 import 'dart:ui';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_reuse_view/flutter_reuse_view.dart';
 
 import 'package:flutter_log_base/flutter_log_base.dart';
+import 'package:flutter_reuse_view/flutter_reuse_view.dart';
 // import '../evvironment_header.dart';
 // import '../log_change_notifiter.dart';
 
@@ -26,7 +24,7 @@ class LogDetailWidget extends StatefulWidget {
   final void Function()? onPressedClear; // 点击清空按钮的事件
   final void Function() onPressedClose; // 点击关闭按钮的事件
 
-  LogDetailWidget({
+  const LogDetailWidget({
     Key? key,
     this.color,
     required this.apiLogModel,
@@ -43,8 +41,8 @@ class LogDetailWidget extends StatefulWidget {
 }
 
 class _LogDetailWidgetState extends State<LogDetailWidget> {
-  ScrollController _controller = new ScrollController();
-  bool _reverse = false;
+  final ScrollController _controller = ScrollController();
+  final bool _reverse = false;
 
   late LogModel _logModel;
 
@@ -103,6 +101,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
   }
 
   Widget get _headerWidget {
+    // ignore: sized_box_for_whitespace
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 40,
@@ -112,7 +111,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: const [
               Center(
                 child: Text(
                   '日志系统(单击可复制)',
@@ -142,7 +141,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
     required void Function() onPressed,
   }) {
     return IconButton(
-      icon: Image(
+      icon: const Image(
         image: AssetImage(
           'assets/log_close.png',
           package: 'flutter_log_base',
@@ -153,7 +152,9 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
       ),
       onPressed: onPressed,
     );
+    // ignore: dead_code
     return TextButton(
+      onPressed: onPressed,
       child: Container(
         color: Colors.pink,
         width: 80,
@@ -161,7 +162,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -169,7 +170,6 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
           ),
         ),
       ),
-      onPressed: onPressed,
     );
   }
 
@@ -181,6 +181,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
     double bottomHeight = padding.top;
     // [flutter-获取刘海屏头部高度，以及没有home键时底部高度](https://www.jianshu.com/p/27603ac09b36)
 
+    // ignore: avoid_unnecessary_containers
     return Container(
       // constraints: BoxConstraints(
       //   minWidth: double.infinity,
@@ -190,6 +191,7 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
       // height: mediaQuery.size.height - 300,
       child: Column(
         children: <Widget>[
+          // ignore: avoid_unnecessary_containers
           Container(
             // color: Colors.cyan,
             // height: 30,
@@ -210,10 +212,11 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
     int sectionCount = 1;
 
     int numOfRowInSection(section) {
+      // ignore: unnecessary_null_comparison
       return _logModel != null ? 1 : 0;
     }
 
-    return CreateSectionTableView2(
+    return SectionTableView(
       controller: _controller,
       reverse: _reverse,
       sectionCount: sectionCount,
@@ -239,14 +242,12 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 
-            if (widget.clickApiLogCellCallback != null) {
-              widget.clickApiLogCellCallback(
-                context: context,
-                section: section,
-                row: row,
-                bLogModel: bLogModel,
-              );
-            }
+            widget.clickApiLogCellCallback(
+              context: context,
+              section: section,
+              row: row,
+              bLogModel: bLogModel,
+            );
           },
         );
       },

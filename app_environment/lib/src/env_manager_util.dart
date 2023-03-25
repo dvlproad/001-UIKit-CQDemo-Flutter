@@ -1,26 +1,25 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-18 00:29:29
+ * @LastEditTime: 2023-03-25 00:45:40
  * @Description: 环境初始化类
  */
 
 import 'dart:io';
-import 'package:flutter_environment/flutter_environment.dart';
+import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 import './init/environment_datas_util.dart';
 
-import './check_update/env_page_util.dart';
-
 import './eventbus/dev_tool_eventbus.dart';
-import './env_extension_bean.dart';
 
 class EnvManagerUtil {
   static late PackageNetworkType _originPackageNetworkType;
   static late PackageTargetType _originPackageTargetType;
 
-  /************************* environment 环境设置 *************************/
+  /// *********************** environment 环境设置 ************************
   static bool hasInitCompleter_Env = false;
   static Future<void> init_target_network_proxy({
     required PackageTargetType originPackageTargetType,
@@ -30,29 +29,27 @@ class EnvManagerUtil {
     // network:api host
     await _initNetworkEnvironmentManager(originPackageNetworkType);
     await NetworkPageDataManager().initCompleter.future;
-    TSEnvNetworkModel selectedNetworkModel =
-        NetworkPageDataManager().selectedNetworkModel;
+    // TSEnvNetworkModel selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
 
     // proxy:
     await _initProxyEnvironmentManager(originPackageNetworkType);
     await ProxyPageDataManager().initCompleter.future;
-    TSEnvProxyModel selectedProxyModel =
-        ProxyPageDataManager().selectedProxyModel;
+    // TSEnvProxyModel selectedProxyModel = ProxyPageDataManager().selectedProxyModel;
 
     // target:
     await _initPackageTargetManager(
         originPackageNetworkType, originPackageTargetType);
     await PackageTargetPageDataManager().initCompleter.future;
-    PackageTargetModel selectedTargetModel =
-        PackageTargetPageDataManager().selectedTargetModel;
+    // PackageTargetModel selectedTargetModel = PackageTargetPageDataManager().selectedTargetModel;
 
     hasInitCompleter_Env = true;
     devtoolEventBus.fire(DevtoolEnvironmentInitCompleteEvent());
   }
 
   // network
-  static Future<Null> _initNetworkEnvironmentManager(
-      PackageNetworkType packageNetworkType) async {
+  static Future<void> _initNetworkEnvironmentManager(
+    PackageNetworkType packageNetworkType,
+  ) async {
     _originPackageNetworkType = packageNetworkType;
 
     _initEnvShouldExitWhenChangeNetworkEnv();
@@ -85,7 +82,7 @@ class EnvManagerUtil {
     );
   }
 
-  static Future<Null> _initPackageTargetManager(
+  static Future<void> _initPackageTargetManager(
     PackageNetworkType packageNetworkType,
     PackageTargetType packageTargetType,
   ) async {
@@ -116,7 +113,7 @@ class EnvManagerUtil {
   }
 
   // proxy
-  static Future<Null> _initProxyEnvironmentManager(
+  static Future<void> _initProxyEnvironmentManager(
       PackageNetworkType packageNetworkType) async {
     bool canUseCacheProxy = false;
     if (packageNetworkType == PackageNetworkType.develop1) {
@@ -157,10 +154,10 @@ class EnvManagerUtil {
     return PackageTargetModel.targetModelByType(_originPackageTargetType);
   }
 
-  static TSEnvNetworkModel get packageDefaultNetworkModel {
-    return TSEnvNetworkModelExtension.networkModelByType(
-        _originPackageNetworkType);
-  }
+  // static TSEnvNetworkModel get packageDefaultNetworkModel {
+  //   return TSEnvNetworkModelExtension.networkModelByType(
+  //       _originPackageNetworkType);
+  // }
 
   static PackageTargetType get originPackageTargetType =>
       _originPackageTargetType;
@@ -169,24 +166,23 @@ class EnvManagerUtil {
   static String packageTargetString(PackageTargetType targetType) {
     PackageTargetModel targetModel =
         PackageTargetModel.targetModelByType(targetType);
-    String targetDes = "${targetModel.name}";
     return "${targetModel.envId}_${targetModel.name}";
   }
 
-  /// 获取包当前的网络环境(初始的时候有网络环境，使用过程中可切换网络环境)
-  static TSEnvNetworkModel get packageCurrentNetworkModel {
-    if (!NetworkPageDataManager().hasInitCompleter) {
-      print(
-          "Error:NetworkPageDataManager初始化未完成，无法正确获取网络环境，请确保执行完了 NetworkPageDataManager().initWithDefaultNetworkIdAndModels");
-    }
-    TSEnvNetworkModel currentNetworkModel =
-        NetworkPageDataManager().selectedNetworkModel;
+  // /// 获取包当前的网络环境(初始的时候有网络环境，使用过程中可切换网络环境)
+  // static TSEnvNetworkModel get packageCurrentNetworkModel {
+  //   if (!NetworkPageDataManager().hasInitCompleter) {
+  //     debugPrint(
+  //         "Error:NetworkPageDataManager初始化未完成，无法正确获取网络环境，请确保执行完了 NetworkPageDataManager().initWithDefaultNetworkIdAndModels");
+  //   }
+  //   TSEnvNetworkModel currentNetworkModel =
+  //       NetworkPageDataManager().selectedNetworkModel;
 
-    return currentNetworkModel;
-  }
+  //   return currentNetworkModel;
+  // }
 
-  static PackageTargetModel get packageCurrentTargetModel =>
-      PackageTargetPageDataManager().selectedTargetModel;
+  // static PackageTargetModel get packageCurrentTargetModel =>
+  //     PackageTargetPageDataManager().selectedTargetModel;
 
   static String appTargetNetworkString({bool containLetter = true}) {
     String originTargetNetworkDes = _originTargetNetworkString(
@@ -196,9 +192,9 @@ class EnvManagerUtil {
       containLetter: containLetter,
     );
     String appTargetNetworkDes = '';
-    appTargetNetworkDes += '${originTargetNetworkDes}';
-    if (EnvManagerUtil.isCurrentEqualOrigin != true) {
-      appTargetNetworkDes += "->${currentTargetNetworkDes}";
+    appTargetNetworkDes += originTargetNetworkDes;
+    if (isCurrentEqualOrigin != true) {
+      appTargetNetworkDes += "->$currentTargetNetworkDes";
     }
 
     return appTargetNetworkDes;
@@ -226,9 +222,9 @@ class EnvManagerUtil {
     String currentPackage = '';
 
     PackageTargetType currentTargetType =
-        EnvManagerUtil.packageCurrentTargetModel.type;
+        PackageTargetPageDataManager().selectedTargetModel.type;
     PackageNetworkType currentNetworkType =
-        EnvManagerUtil.packageCurrentNetworkModel.type;
+        NetworkPageDataManager().selectedNetworkModel.type;
     currentPackage += _getPackageTargetNetworkString(
       currentTargetType,
       currentNetworkType,
@@ -245,9 +241,9 @@ class EnvManagerUtil {
   /// 包的当前环境是否完全等于初始环境(因为中间可以且网络环境和内外测功能)
   static bool get isCurrentEqualOrigin {
     PackageTargetType targetType =
-        EnvManagerUtil.packageCurrentTargetModel.type;
+        PackageTargetPageDataManager().selectedTargetModel.type;
     PackageNetworkType networkType =
-        EnvManagerUtil.packageCurrentNetworkModel.type;
+        NetworkPageDataManager().selectedNetworkModel.type;
 
     if (targetType == _originPackageTargetType &&
         networkType == _originPackageNetworkType) {
@@ -296,9 +292,9 @@ class EnvManagerUtil {
     return _originPackageTargetType == PackageTargetType.dev;
   }
 
-  static Future<bool> _isProduct() async {
-    await NetworkPageDataManager().initCompleter.future;
-    return NetworkPageDataManager().selectedNetworkModel.apiHost ==
-        TSEnvironmentDataUtil.apiHost_product;
-  }
+  // static Future<bool> _isProduct() async {
+  //   await NetworkPageDataManager().initCompleter.future;
+  //   return NetworkPageDataManager().selectedNetworkModel.apiHost ==
+  //       TSEnvironmentDataUtil.apiHost_product;
+  // }
 }
