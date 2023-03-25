@@ -5,8 +5,8 @@ repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flu
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_media_browser_interface
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=2.17.0 <3.0.0'
+  flutter: ">=1.16.0"
 
 dependencies:
   flutter:
