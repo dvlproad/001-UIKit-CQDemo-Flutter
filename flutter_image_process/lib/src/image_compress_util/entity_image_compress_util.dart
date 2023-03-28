@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 13:22:01
+ * @LastEditTime: 2023-03-28 14:00:26
  * @Description: 图片压缩
  */
 
@@ -13,7 +13,7 @@ import '../bean/image_compress_bean.dart';
 import '../bean/base_compress_bean.dart';
 import './base_image_compress_util.dart';
 import '../get_image_info_util/get_image_info_util.dart';
-import './assetEntity_info_getter.dart';
+import './entity_info_getter.dart';
 
 class AssetEntityImageCompressUtil {
   static Future<ImageCompressBean?> getCompressImageBean(

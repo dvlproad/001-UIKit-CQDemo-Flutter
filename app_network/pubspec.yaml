@@ -16,16 +16,16 @@ dependencies:
   device_info_plus: any
   connectivity_plus: any
   flutter_native_timezone: any
-  flutter_network_kit:
-    path: ../flutter_network_kit/
+  flutter_network_kit: ^0.0.1
+    # path: ../flutter_network_kit/
 
-  flutter_environment_base:
-    path: ../flutter_environment_base/ # 为了引入 ApiManager
+  flutter_environment_base: ^0.0.1
+    # path: ../flutter_environment_base/ # 为了引入 ApiManager
   
-  flutter_overlay_kit:
-    path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
-  flutter_image_process:
-    path: ../flutter_image_process/
+  flutter_overlay_kit: ^0.0.1
+    # path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
+  flutter_image_process: ^0.0.1
+    # path: ../flutter_image_process/
 
   tencent_cos: ^1.0.6
 

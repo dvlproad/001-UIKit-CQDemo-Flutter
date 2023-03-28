@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 13:20:11
+ * @LastEditTime: 2023-03-28 14:01:08
  * @Description: 图片选择器的数据模型
  */
 
@@ -16,9 +16,9 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-import '../image_compress_util/assetentity_image_compress_util.dart';
-import '../image_compress_util/assetentity_video_thumb_util.dart';
-import '../image_compress_util/assetentity_info_getter.dart';
+import '../image_compress_util/entity_image_compress_util.dart';
+import '../image_compress_util/entity_video_thumb_util.dart';
+import '../image_compress_util/entity_info_getter.dart';
 
 import './image_compress_bean.dart';
 import './video_compress_bean.dart';
