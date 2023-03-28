@@ -1,6 +1,6 @@
 name: flutter_reuse_view
 description: 各种复用视图(tableView+collectionView).
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_reuse_view
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_reuse_view
 

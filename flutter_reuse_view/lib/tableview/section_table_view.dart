@@ -49,7 +49,7 @@ class SectionTableView extends StatefulWidget {
 }
 
 class _SectionTableViewState extends State<SectionTableView> {
-  List<IndexPath> indexToIndexPathSearch = [];
+  List<IndexPath> _indexToIndexPathSearch = [];
   // Map<String, double> indexPathToOffsetSearch;
 
   final listViewKey = GlobalKey();
@@ -78,18 +78,17 @@ class _SectionTableViewState extends State<SectionTableView> {
 
   @override
   Widget build(BuildContext context) {
-    List<IndexPath> indexToIndexPathSearch = [];
+    _indexToIndexPathSearch = [];
     for (int i = 0; i < widget.sectionCount; i++) {
       if (widget.headerInSection != null) {
-        indexToIndexPathSearch.add(IndexPath(section: i, row: -1));
+        _indexToIndexPathSearch.add(IndexPath(section: i, row: -1));
       }
 
       int rows = widget.numOfRowInSection(i);
       for (int j = 0; j < rows; j++) {
-        indexToIndexPathSearch.add(IndexPath(section: i, row: j));
+        _indexToIndexPathSearch.add(IndexPath(section: i, row: j));
       }
     }
-    indexToIndexPathSearch = indexToIndexPathSearch;
 
     return ListView.builder(
       key: listViewKey,
@@ -104,11 +103,11 @@ class _SectionTableViewState extends State<SectionTableView> {
   }
 
   _buildCell(BuildContext context, int index) {
-    if (index >= indexToIndexPathSearch.length) {
+    if (index >= _indexToIndexPathSearch.length) {
       return null;
     }
 
-    IndexPath indexPath = indexToIndexPathSearch[index];
+    IndexPath indexPath = _indexToIndexPathSearch[index];
     //section header
     if (indexPath.section >= 0 && indexPath.row < 0) {
       return widget.headerInSection!(indexPath.section);
