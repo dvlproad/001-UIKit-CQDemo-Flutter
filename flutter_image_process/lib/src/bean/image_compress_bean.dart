@@ -46,6 +46,7 @@ class ImageCompressBean extends ImageInfoBean {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> map = super.toJson();
 

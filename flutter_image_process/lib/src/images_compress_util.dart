@@ -2,19 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-08-11 19:18:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 22:41:58
+ * @LastEditTime: 2023-03-28 12:04:34
  * @Description: 
  */
-import 'dart:io' show File;
-import 'dart:async';
 import 'dart:core';
 import 'package:flutter/foundation.dart';
 
 import './bean/image_choose_bean.dart';
-import './bean/app_choose_bean.dart';
-
-import './bean/base_compress_bean.dart';
-import './bean/image_compress_bean.dart';
 
 class ImageCompressUtil {
   /// 异步压缩所添加的文件
@@ -28,7 +22,7 @@ class ImageCompressUtil {
       bean.checkAndBeginCompressAssetEntity();
       if (i < count - 1) {
         // 异步压缩，并且不是最后一个时候,每个压缩间隔一下,防止内存还没释放,导致积累过多崩溃
-        await Future.delayed(Duration(milliseconds: 500));
+        await Future.delayed(const Duration(milliseconds: 500));
       }
       _log("bean.assetEntity.id=${bean.assetEntity?.id} finish...");
     }

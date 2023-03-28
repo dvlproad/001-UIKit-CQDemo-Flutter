@@ -2,20 +2,21 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 18:17:13
+ * @LastEditTime: 2023-03-28 12:02:12
  * @Description: 图片压缩
  */
 
 import 'dart:io' show File, Directory;
+import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:flutter_network_base/src/url/appendPathExtension.dart';
+// import 'package:flutter_network_base/flutter_network_base.dart';
 
 class BaseImageCompressUtil {
   static Future<String> getFileTargetPath(File file) async {
     Directory dir = await path_provider.getTemporaryDirectory();
     String dirPath = dir.absolute.path;
-    final String appImageRelativeDir = "localImage";
+    const String appImageRelativeDir = "localImage";
     final String appImageDirPath =
         dirPath.appendPathString(appImageRelativeDir);
     var appImageDir = Directory(appImageDirPath);
@@ -25,7 +26,7 @@ class BaseImageCompressUtil {
         await appImageDir.create();
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
 
     String fileRelativePath = getFileTargetRelativePath(file);
@@ -34,7 +35,7 @@ class BaseImageCompressUtil {
   }
 
   static String getFileTargetRelativePath(File file) {
-    final String appImageRelativeDir = "localImage";
+    const String appImageRelativeDir = "localImage";
 
     List<String> filePathComponents = file.path.split("/");
     String fileName = filePathComponents.last;
@@ -47,7 +48,7 @@ class BaseImageCompressUtil {
     File file,
     String targetCompressPath,
   ) async {
-    print("testCompressAndGetFile");
+    debugPrint("testCompressAndGetFile");
     String filePath = file.absolute.path;
     // UploadMediaType mediaType = getMediaType(filePath);
     // if (mediaType == UploadMediaType.image) {
@@ -62,12 +63,33 @@ class BaseImageCompressUtil {
         rotate: 0,
       );
 
-      print("原图大小:${file.lengthSync()}");
-      print("新图大小:${result?.lengthSync() ?? 0}");
+      debugPrint("原图大小:${file.lengthSync()}");
+      debugPrint("新图大小:${result?.lengthSync() ?? 0}");
 
       return result;
     } else {
       return file;
     }
+  }
+}
+
+extension PathStringAppendExtension on String {
+  String appendPathString(String appendPath) {
+    String noslashThis; // 没带斜杠的 api host
+    if (endsWith('/')) {
+      noslashThis = substring(0, length - 1);
+    } else {
+      noslashThis = this;
+    }
+
+    String hasslashAppendPath; // 带有斜杠的 appendPath
+    if (appendPath.startsWith('/')) {
+      hasslashAppendPath = appendPath;
+    } else {
+      hasslashAppendPath = '/$appendPath';
+    }
+
+    String newPath = noslashThis + hasslashAppendPath;
+    return newPath;
   }
 }

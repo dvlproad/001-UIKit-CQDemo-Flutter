@@ -2,13 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-05-18 15:06:49
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 21:14:08
+ * @LastEditTime: 2023-03-28 12:04:01
  * @Description: 
  */
 import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 import './image_choose_bean.dart';
-import './image_compress_bean.dart';
-import './video_compress_bean.dart';
 
 // class AppImageBean {
 //   String url; // 视频或图片地址
@@ -121,6 +119,7 @@ class AppImageChooseBean extends ImageChooseBean {
     updatedAt = json['updatedAt'];
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = super.toJson();
     if (fileType != null) {

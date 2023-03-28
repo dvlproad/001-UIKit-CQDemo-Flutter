@@ -1,8 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-10 19:52:52
+ * @LastEditTime: 2023-03-28 12:04:18
  * @Description: 图片选择器的数据模型
  */
 
@@ -14,9 +16,9 @@ enum CompressInfoProcess {
 }
 
 CompressInfoProcess compressInfoProcessFromString(String value) {
-  if (value == null) {
-    return CompressInfoProcess.none;
-  }
+  // if (value == null) {
+  //   return CompressInfoProcess.none;
+  // }
 
   Iterable<CompressInfoProcess> values = [
     CompressInfoProcess.none, // 未进行任何压缩处理
@@ -40,9 +42,9 @@ enum CompressResultType {
 }
 
 CompressResultType compressResultTypeFromString(String value) {
-  if (value == null) {
-    return CompressResultType.unknow;
-  }
+  // if (value == null) {
+  //   return CompressResultType.unknow;
+  // }
 
   Iterable<CompressResultType> values = [
     CompressResultType.unknow, //未知

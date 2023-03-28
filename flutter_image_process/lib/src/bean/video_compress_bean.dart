@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 18:47:48
+ * @LastEditTime: 2023-03-28 11:58:20
  * @Description: 图片选择器的数据模型
  */
 import './base_compress_bean.dart';
-import './image_info_bean.dart';
 
 class VideoCompressBean {
   String originPath;

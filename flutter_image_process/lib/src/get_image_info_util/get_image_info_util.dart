@@ -10,8 +10,6 @@ import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-import 'package:photo_manager/photo_manager.dart' show AssetEntity;
-
 class GetImageInfoUtil {
   static ImageProvider getImageProvider(String imageUrlOrPath) {
     Image image;
@@ -42,7 +40,7 @@ class GetImageInfoUtil {
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          print('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          debugPrint('imageWidth=$imageWidth, imageHeight=$imageHeight');
 
           Map<String, dynamic> imageWithHeight = {
             "width": imageWidth,

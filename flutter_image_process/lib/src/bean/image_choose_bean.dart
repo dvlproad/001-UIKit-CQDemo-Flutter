@@ -1,8 +1,10 @@
+// ignore_for_file: unnecessary_getters_setters
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 21:00:44
+ * @LastEditTime: 2023-03-28 13:20:11
  * @Description: 图片选择器的数据模型
  */
 
@@ -10,19 +12,13 @@ import 'dart:ui' show Size;
 import 'dart:async';
 import 'dart:io';
 
-import 'dart:io' show File, Directory;
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:video_thumbnail/video_thumbnail.dart';
-
-import '../images_compress_util.dart';
-import '../image_compress_util/assetEntity_image_compress_util.dart';
-import '../image_compress_util/assetEntity_video_thumb_util.dart';
-import '../image_compress_util/assetEntity_info_getter.dart';
-
-import '../get_image_info_util/get_image_info_util.dart';
+import '../image_compress_util/assetentity_image_compress_util.dart';
+import '../image_compress_util/assetentity_video_thumb_util.dart';
+import '../image_compress_util/assetentity_info_getter.dart';
 
 import './image_compress_bean.dart';
 import './video_compress_bean.dart';
@@ -33,15 +29,13 @@ import './image_info_bean.dart';
 import 'package:flutter/material.dart' show ImageProvider, Image;
 import 'package:photo_manager/photo_manager.dart'
     show AssetEntity, AssetEntityImageProvider, AssetType;
-import 'package:cached_network_image/cached_network_image.dart'
-    show CachedNetworkImageProvider;
 
 import 'package:extended_image/extended_image.dart';
 
 UploadMediaType getMediaType(String localPathOrNetworkUrl) {
-  if (localPathOrNetworkUrl == null) {
-    throw Exception("localPath 不能为空");
-  }
+  // if (localPathOrNetworkUrl == null) {
+  //   throw Exception("localPath 不能为空");
+  // }
   String fileExtensionType = localPathOrNetworkUrl.split('.').last;
   fileExtensionType = fileExtensionType.toLowerCase();
 
@@ -127,9 +121,9 @@ class ImageChooseBean {
   int _getRealWidthForAssetEntity(AssetEntity assetEntity) {
     int width = assetEntity.width;
 
-    bool _isLandscape =
+    bool isLandscape =
         assetEntity.orientation == 90 || assetEntity.orientation == 270;
-    if (Platform.isAndroid && !_isLandscape) {
+    if (Platform.isAndroid && !isLandscape) {
       // 注意:安卓宽高有时候会相反，有些机子又是正确的，所以使用不传的方案，让后台去腾讯云判断
       // width = assetEntity.height;
     }
@@ -140,9 +134,9 @@ class ImageChooseBean {
   int _getRealHeightForAssetEntity(AssetEntity assetEntity) {
     int height = assetEntity.height;
 
-    bool _isLandscape =
+    bool isLandscape =
         assetEntity.orientation == 90 || assetEntity.orientation == 270;
-    if (Platform.isAndroid && !_isLandscape) {
+    if (Platform.isAndroid && !isLandscape) {
       // 注意:安卓宽高有时候会相反，有些机子又是正确的，所以使用不传的方案，让后台去腾讯云判断
       // height = assetEntity.width;
     }
@@ -168,7 +162,7 @@ class ImageChooseBean {
     if (json["compressVideoBean"] != null) {
       compressVideoBean = VideoCompressBean.fromJson(json["compressVideoBean"]);
     }
-    Map<String, dynamic> asset = json["assetEntity"];
+    Map<String, dynamic>? asset = json["assetEntity"];
     if (asset != null) {
       assetEntity = AssetEntity(
           id: asset["id"],
@@ -293,18 +287,18 @@ class ImageChooseBean {
     late int uploadImageHeight;
 
     // 网络图已有宽高数据
-    if (this.width != null && this.height != null) {
-      uploadImageWidth = this.width!;
-      uploadImageHeight = this.height!;
-    } else if (this.compressImageBean != null &&
-        this.compressImageBean!.width != null &&
-        this.compressImageBean!.height != null) {
+    if (width != null && height != null) {
+      uploadImageWidth = width!;
+      uploadImageHeight = height!;
+    } else if (compressImageBean != null &&
+        compressImageBean!.width != null &&
+        compressImageBean!.height != null) {
       // 本地缩略图
-      uploadImageWidth = this.compressImageBean!.width!;
-      uploadImageHeight = this.compressImageBean!.height!;
-    } else if (this.assetEntity != null) {
-      uploadImageWidth = this.assetEntity!.width;
-      uploadImageHeight = this.assetEntity!.height;
+      uploadImageWidth = compressImageBean!.width!;
+      uploadImageHeight = compressImageBean!.height!;
+    } else if (assetEntity != null) {
+      uploadImageWidth = assetEntity!.width;
+      uploadImageHeight = assetEntity!.height;
     } else {
       uploadImageWidth = 103;
       uploadImageHeight = 103;
@@ -336,7 +330,7 @@ class ImageChooseBean {
   }
 
   Future<String?> lastUploadThumbnailImagePath() async {
-    _log("image choose bean hashCode = ${this.hashCode}");
+    _log("image choose bean hashCode = $hashCode");
     // 草稿里的图片已有压缩数据
     if (_compressImageBean != null &&
         _compressImageBean!.compressInfoProcess ==
@@ -375,10 +369,10 @@ class ImageChooseBean {
     _compressVideoBean = compressVideoBean;
   }
 
-  Completer _compressCompleter = Completer<String>();
+  final Completer _compressCompleter = Completer<String>();
 
   Future checkAndBeginCompressAssetEntity({bool force = false}) async {
-    _log("image choose bean hashCode111 = ${this.hashCode}");
+    _log("image choose bean hashCode111 = $hashCode");
     if ((_compressImageBean != null || _compressVideoBean != null) && !force) {
       // 已经开始异步压缩、异步请求宽高等的时候，直接返回，即使未结束，也慢慢等待，防止重复创建
       return;
@@ -408,8 +402,9 @@ class ImageChooseBean {
             await AssetEntityImageCompressUtil.getCompressImageBean(
                 assetEntity!);
       }
-      if (!_compressCompleter.isCompleted)
+      if (!_compressCompleter.isCompleted) {
         _compressCompleter.complete('压缩:压缩完成，此时才可以进行上传压缩视频及其缩略图、或图片请求');
+      }
       if (_compressCompleter.isCompleted != true) {
         _log('_compressCompleter.isCompleted');
       }
@@ -458,8 +453,9 @@ class ImageChooseBean {
             await AssetEntityImageCompressUtil.getCompressImageBean(
                 assetEntity!);
       }
-      if (!_compressCompleter.isCompleted)
+      if (!_compressCompleter.isCompleted) {
         _compressCompleter.complete('压缩:压缩完成，此时才可以进行上传压缩视频及其缩略图、或图片请求');
+      }
       if (_compressCompleter.isCompleted != true) {
         _log('_compressCompleter.isCompleted');
       }
@@ -493,10 +489,10 @@ class ImageChooseBean {
     return _videoFrameBeans ?? [];
   }
 
-  Completer _videoFramesCompleter = Completer<String>();
+  final Completer _videoFramesCompleter = Completer<String>();
 
   Future<List<ImageCompressBean>?> checkAndBeginGetVideoFrames() async {
-    _log("image choose bean hashCode111 = ${this.hashCode}");
+    _log("image choose bean hashCode111 = $hashCode");
 
     if (assetEntity == null || assetEntity!.type != AssetType.video) {
       return null;

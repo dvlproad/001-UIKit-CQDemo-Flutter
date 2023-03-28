@@ -1,3 +1,3 @@
-## 0.0.1
+## [0.0.1] - Add release date.
 
-* TODO: Describe initial release.
+* Describe initial release.

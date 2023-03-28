@@ -1,7 +1,8 @@
 name: app_network
-description: A new Flutter package project.
+description: 利用网络环境即可完成初始化的网络库.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_baseui_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_baseui_kit
 
 environment:
   sdk: '>=2.17.0 <3.0.0'

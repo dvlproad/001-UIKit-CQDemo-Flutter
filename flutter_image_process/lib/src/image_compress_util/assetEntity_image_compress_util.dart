@@ -2,19 +2,15 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-05 18:57:54
+ * @LastEditTime: 2023-03-28 13:22:01
  * @Description: 图片压缩
  */
 
-import 'dart:io' show File, Directory;
-import 'package:flutter/foundation.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
+import 'dart:io' show File;
 
-import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
+import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 import '../bean/image_compress_bean.dart';
 import '../bean/base_compress_bean.dart';
-import '../bean/image_info_bean.dart';
 import './base_image_compress_util.dart';
 import '../get_image_info_util/get_image_info_util.dart';
 import './assetEntity_info_getter.dart';

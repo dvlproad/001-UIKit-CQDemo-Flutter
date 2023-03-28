@@ -1,29 +1,25 @@
+// ignore_for_file: unused_element
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 22:06:35
+ * @LastEditTime: 2023-03-28 13:24:43
  * @Description: 图片压缩
  */
 
 import 'dart:math';
-import 'dart:io' show File, Directory, Platform;
+import 'dart:io' show File, Directory;
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_compress/video_compress.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
+import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 import '../bean/video_compress_bean.dart';
 import '../bean/image_compress_bean.dart';
 import '../bean/base_compress_bean.dart';
-import '../bean/image_info_bean.dart';
-import './base_image_compress_util.dart';
 import '../get_image_info_util/get_image_info_util.dart';
-import './assetEntity_info_getter.dart';
-import 'package:flutter_network_base/src/url/appendPathExtension.dart';
 
 class AssetEntityVideoThumbUtil {
   static Future<CompressResponseBean> getVideoComppressBean(
@@ -52,7 +48,7 @@ class AssetEntityVideoThumbUtil {
       */
     // }
     int? videoDuration = assetEntity.duration; // milliseconds
-    int position = -1;
+    // ignore: unnecessary_null_comparison
     if (videoDuration != null) {
       if (videoDuration > 30 * 60) {
         // 30分钟
@@ -63,7 +59,7 @@ class AssetEntityVideoThumbUtil {
         );
       }
       if (videoDuration > 2) {
-        position = 1; // 大于2秒的情况下取第一秒
+// 大于2秒的情况下取第一秒
       }
     }
 
@@ -151,10 +147,10 @@ class AssetEntityVideoThumbUtil {
     */
     // 创建文件夹
     Directory tempDir = await getTemporaryDirectory();
-    var videoThumbDir = Directory(tempDir.path + "/" + "video_thumb");
+    var videoThumbDir = Directory("${tempDir.path}/video_thumb");
     if (!videoThumbDir.existsSync()) {
       debugPrint(
-          'getVideoThumbFrameList 文件夹不存在，准备创建：${tempDir.path + "/" + "video_thumb"}');
+          'getVideoThumbFrameList 文件夹不存在，准备创建：${"${tempDir.path}/video_thumb"}');
       videoThumbDir.createSync();
     }
 
@@ -221,6 +217,7 @@ class AssetEntityVideoThumbUtil {
     }
     debugPrint('视频时长：$videoDuration');
     List<double> framePositions = [];
+    // ignore: unnecessary_null_comparison
     if (videoDuration == null) {
       framePositions = [-1];
     } else {

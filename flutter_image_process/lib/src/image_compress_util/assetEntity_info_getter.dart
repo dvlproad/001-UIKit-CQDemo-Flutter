@@ -2,15 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-05 16:09:20
+ * @LastEditTime: 2023-03-28 13:26:06
  * @Description: 图片压缩
  */
 
-import 'dart:io' show File, Directory;
+import 'dart:io' show File;
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart' as path_provider;
 
-import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
+import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 
 class AssetEntityInfoGetter {
   /// 危险！！！！获取相册的文件流，此方法会产生极大的内存开销，请勿连续调用比如在for中
