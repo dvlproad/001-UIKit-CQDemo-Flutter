@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-18 15:06:49
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 13:14:18
+ * @LastEditTime: 2023-03-27 18:24:20
  * @Description: 应用层的网络库(含正常请求+埋点请求)
  */
 library app_network;
@@ -20,12 +20,16 @@ export './src/app_network/app_network_manager.dart';
 export './src/app_network/app_network_cache_manager.dart';
 export './src/monitor_network/monitor_network_manager.dart';
 export './src/app_response_model_util.dart';
+// util
+export './src/util/app_network_init_util.dart';
+export './src/util/app_network_change_util.dart';
+export './src/util/app_network_request_util.dart';
 
 // callback
 export './src/app_network_callback_util.dart';
 
 // upload
-export './src/app_upload_util.dart';
+export './src/util/app_network_upload_util.dart';
 export './src/upload/app_upload_bean.dart';
 export 'package:flutter_image_process/flutter_image_process.dart'
     show UploadMediaType;
@@ -34,3 +38,6 @@ export 'package:flutter_image_process/flutter_image_process.dart'
 export './src/dev_common_params.dart';
 
 export './src/trace/trace_util.dart';
+
+// mock
+export './src/mock/app_api_mock_manager.dart';

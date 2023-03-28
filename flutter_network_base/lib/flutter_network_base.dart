@@ -25,3 +25,6 @@ export './src/mock/local_mock_util.dart';
 
 export './src/bean/req_options.dart';
 export './src/bean/res_options.dart';
+
+// url
+export './src/url/append_path_extension.dart';

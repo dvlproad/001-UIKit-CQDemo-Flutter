@@ -7,13 +7,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_image_process/flutter_image_process.dart';
-
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart' show ToastUtil;
-import './upload/app_upload_channel_manager.dart';
-import './upload/app_compress_bean.dart';
-import './upload/app_upload_bean.dart';
-import './app_network/app_network_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../app_network/app_network_manager.dart';
+import '../upload/app_upload_channel_manager.dart';
+import '../upload/app_compress_bean.dart';
+import '../upload/app_upload_bean.dart';
 
 enum UploadState {
   uploadStart, // 上传开始
