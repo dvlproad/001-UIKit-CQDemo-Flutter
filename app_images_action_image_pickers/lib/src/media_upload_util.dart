@@ -5,22 +5,14 @@
  * @LastEditTime: 2023-03-18 13:13:43
  * @Description: 
  */
-import 'dart:io' show File;
-import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_picker/flutter_media_picker.dart';
-import 'package:flutter_images_action_list/flutter_images_action_list.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
 
-import './widget/image_or_photo_grid_cell.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
 
-import './images_add_cell.dart';
 export './images_add_cell.dart' show AddCellType;
-
-import './preview/preview_util.dart';
 
 import 'package:app_network/app_network.dart';
 
@@ -113,34 +105,32 @@ class MediaListUploadUtil {
     void Function()? uploadSuccess,
     void Function(UploadMediaResultType errorResultType)? uploadFailure,
   }) async {
-    if (imageChooseModels != null) {
-      UploadMediaType mediaType = UploadMediaType.image;
-      if (pickAllowType == PickPhotoAllowType.videoOnly) {
-        mediaType = UploadMediaType.video;
-        _log("==============视频上传开始，请等待");
-      } else {
-        _log("==============图片上传开始，请等待");
-      }
-      UploadMediaResultType uploadMediaResultType =
-          await UploadApiUtil.uploadImageChooseModelsByCallBack(
-        multipart: multipart,
-        imageChooseModels: imageChooseModels,
-        mediaType: mediaType,
-        uploadProgress: uploadProgress,
-        uploadSuccess: uploadSuccess,
-        uploadFailure: uploadFailure,
-      );
+    UploadMediaType mediaType = UploadMediaType.image;
+    if (pickAllowType == PickPhotoAllowType.videoOnly) {
+      mediaType = UploadMediaType.video;
+      _log("==============视频上传开始，请等待");
+    } else {
+      _log("==============图片上传开始，请等待");
+    }
+    UploadMediaResultType uploadMediaResultType =
+        await UploadApiUtil.uploadImageChooseModelsByCallBack(
+      multipart: multipart,
+      imageChooseModels: imageChooseModels,
+      mediaType: mediaType,
+      uploadProgress: uploadProgress,
+      uploadSuccess: uploadSuccess,
+      uploadFailure: uploadFailure,
+    );
 
-      if (uploadMediaResultType == UploadMediaResultType.UploadSuccess) {
-        _log("==============图片/视频上传完毕，继续上传语音/开始发布");
-      } else {
-        if (autoShowToastWhenError == true) {
-          String errorString = UploadApiUtil.getUploadMediaResultTypeString(
-              uploadMediaResultType);
-          // ToastUtil.showMessage(errorString);
-        }
-        return false;
+    if (uploadMediaResultType == UploadMediaResultType.UploadSuccess) {
+      _log("==============图片/视频上传完毕，继续上传语音/开始发布");
+    } else {
+      if (autoShowToastWhenError == true) {
+        // String errorString = UploadApiUtil.getUploadMediaResultTypeString(
+        //     uploadMediaResultType);
+        // ToastUtil.showMessage(errorString);
       }
+      return false;
     }
 
     return true;

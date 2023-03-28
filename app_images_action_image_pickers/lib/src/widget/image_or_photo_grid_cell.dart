@@ -1,13 +1,13 @@
+// ignore_for_file: unnecessary_brace_in_string_interps
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-18 13:34:04
+ * @LastEditTime: 2023-03-28 10:26:04
  * @Description: 图片选择器的单元视图
  */
 import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
@@ -15,14 +15,8 @@ import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:flutter_images_action_list/flutter_images_action_list.dart'
     show CQImageBaseGridCell;
 // import 'package:image_pickers/image_pickers.dart';
-import 'package:photo_manager/photo_manager.dart'
-    show AssetEntity, AssetEntityImageProvider, AssetType;
-
-import 'package:flutter_image_kit/flutter_image_kit.dart';
 
 import 'package:flutter_image_process/flutter_image_process.dart';
-import '../preview/widget/asset_entity_widget.dart';
-import 'package:flutter_player_ui/flutter_player_ui.dart';
 
 import './image_choose_bean_view.dart';
 
@@ -93,11 +87,11 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
   }
 
   Widget _getLastCustomImageWidget(BuildContext context) {
-    bool showFlagView = flagText != null && flagText!.isNotEmpty;
+    // bool showFlagView = flagText != null && flagText!.isNotEmpty;
 
     return LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-      return Container(
+      return SizedBox(
         width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: Stack(
@@ -151,11 +145,11 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
     return CQImageBaseGridCell(
       width: width,
       height: height,
-      cornerRadius: this.cornerRadius ?? 8,
+      cornerRadius: cornerRadius ?? 8,
       customImageWidget: customImageWidget,
       message: '',
-      index: this.index,
-      onTap: this.onPressed,
+      index: index,
+      onTap: onPressed,
       onDoubleTap: () async {
         // 以下代码纯测试，实际生产中没用
         List<String> pathOrUrls = [];
@@ -167,9 +161,7 @@ class CQImageOrPhotoGridCell extends StatelessWidget {
               imageChooseModel.assetEntity!);
           if (file != null) {
             assetEntityFilePath = file.path;
-            if (assetEntityFilePath != null) {
-              pathOrUrls.add('本地路径:${assetEntityFilePath}');
-            }
+            pathOrUrls.add('本地路径:${assetEntityFilePath}');
           }
         }
 

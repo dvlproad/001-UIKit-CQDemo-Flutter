@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
@@ -89,7 +91,7 @@ class AddCell extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image(
+        const Image(
           image: AssetImage(
             'assets/icon_add_photo.png',
             package: 'app_images_action_image_pickers',
@@ -98,7 +100,7 @@ class AddCell extends StatelessWidget {
           height: 32,
         ),
         Container(height: 10),
-        Center(
+        const Center(
           child: Text(
             "添加图片",
             style: TextStyle(
@@ -129,7 +131,7 @@ class AddCell extends StatelessWidget {
     Widget childWidget = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: const [
         Image(
           image: AssetImage(
             'assets/user_photo_publish.png',
@@ -155,8 +157,8 @@ class AddCell extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: const Color(0xfff0f0f0),
-        borderRadius: BorderRadius.all(Radius.circular(5)),
-        border: Border.all(color: Color(0xfff0f0f0), width: 0.0),
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        border: Border.all(color: const Color(0xfff0f0f0), width: 0.0),
       ),
       child: childWidget,
     );
@@ -177,19 +179,19 @@ class AddCell extends StatelessWidget {
             width: 19,
             height: 17,
           ),
-          SizedBox(height: 3),
-          Text(
+          const SizedBox(height: 3),
+          const Text(
             "上传凭证",
             style: TextStyle(
-              color: const Color(0xff999999),
+              color: Color(0xff999999),
               height: 1.5,
               fontSize: 9,
             ),
           ),
-          Text(
+          const Text(
             "（最多3张）",
             style: TextStyle(
-              color: const Color(0xff999999),
+              color: Color(0xff999999),
               height: 1.5,
               fontSize: 9,
             ),
@@ -201,8 +203,8 @@ class AddCell extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: const Color(0xfff3f3f3),
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        border: Border.all(color: Color(0xFFBBBBBB), width: 0.0),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        border: Border.all(color: const Color(0xFFBBBBBB), width: 0.0),
       ),
       child: childWidget,
     );
@@ -216,7 +218,7 @@ class AddCell extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           Image(
             image: AssetImage(
               'assets/icon_add_photo.png',
@@ -243,8 +245,8 @@ class AddCell extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: const Color(0xfff3f3f3),
-        borderRadius: BorderRadius.all(Radius.circular(12)),
-        border: Border.all(color: Color(0xFFBBBBBB), width: 0.0),
+        borderRadius: const BorderRadius.all(Radius.circular(12)),
+        border: Border.all(color: const Color(0xFFBBBBBB), width: 0.0),
       ),
       child: childWidget,
     );

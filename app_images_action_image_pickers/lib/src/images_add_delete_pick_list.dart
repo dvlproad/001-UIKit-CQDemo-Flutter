@@ -1,11 +1,9 @@
-import 'dart:io' show File;
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_picker/flutter_media_picker.dart';
 import 'package:flutter_player_ui/flutter_player_ui.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
 
 import './widget/image_or_photo_grid_cell.dart';
@@ -15,8 +13,6 @@ import './images_add_cell.dart';
 export './images_add_cell.dart' show AddCellType;
 
 import './preview/preview_util.dart';
-
-import 'package:app_network/app_network.dart';
 
 import './images_check_util.dart';
 
@@ -158,7 +154,7 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
         AppImageChooseBean imageChooseModel = _imageChooseModels[imageIndex];
         // print("list path111=$imageIndex:${imageChooseModel.localPath}");
 
-        String? flagText = null;
+        String? flagText;
         if (widget.flagTextBuilder != null) {
           flagText = widget.flagTextBuilder!(
             imageChooseModel: imageChooseModel,
@@ -340,7 +336,7 @@ class ImageAddDeletePickListState extends State<ImageAddDeletePickList> {
         });
 
         // 新添加的图片
-        PickPhotoAllowType newPickPhotoAllowType = _pickAllowType;
+        // PickPhotoAllowType newPickPhotoAllowType = _pickAllowType;
         if (newAddedImageChooseModels != null &&
             newAddedImageChooseModels.isNotEmpty) {
           List<AppImageChooseBean> addMeidaBeans = [];

@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-07-01 10:17:40
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 14:18:19
+ * @LastEditTime: 2023-03-25 13:48:42
  * @Description: 头像视图
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import 'package:flutter_image_kit/flutter_image_kit.dart';
 // import 'package:wish/route/route_manager.dart';
 import '../user/user_base_bean.dart';
@@ -19,10 +18,10 @@ class UserAavtarCrownWidget<T extends UserBaseBean> extends StatelessWidget {
   final bool disableGoPersonalPage;
   final Function onTap;
   const UserAavtarCrownWidget({
-    Key key,
-    @required this.outerCircleSize,
+    Key? key,
+    required this.outerCircleSize,
     this.outerCircleWidth = 0.0,
-    @required this.userBean,
+    required this.userBean,
     this.disableGoPersonalPage = false,
     this.onTap,
   }) : super(key: key);
@@ -62,10 +61,10 @@ class LevelImage extends StatelessWidget {
   final double scale;
 
   LevelImage({
-    Key key,
+    Key? key,
     this.level,
     this.avtarSize,
-    @required this.scale = 1.0,
+    required this.scale = 1.0,
   }) : super(key: key);
 
   @override
@@ -88,10 +87,10 @@ class UserAavtarWidget<T extends UserBaseBean> extends StatelessWidget {
   final Function onTap; // 如果有实现，则响应外部的点击事件
 
   const UserAavtarWidget({
-    Key key,
-    @required this.outerCircleSize,
+    Key? key,
+    required this.outerCircleSize,
     this.outerCircleWidth = 0.0,
-    @required this.userBean,
+    required this.userBean,
     this.disableGoPersonalPage = false,
     this.onTap,
   }) : super(key: key);
@@ -134,10 +133,10 @@ class UserAvatarAndNickNameWidget<T extends UserBaseBean>
   final TextStyle nicknameTextStyle;
 
   const UserAvatarAndNickNameWidget({
-    Key key,
-    @required this.outerCircleSize,
+    Key? key,
+    required this.outerCircleSize,
     this.outerCircleWidth = 0.0,
-    @required this.userBean,
+    required this.userBean,
     this.axis = Axis.horizontal,
     this.avatarNicknameSpacing = 4.0,
     this.disableGoPersonalPage = false,
@@ -209,7 +208,7 @@ class UserAvatarAndNickNameWidget<T extends UserBaseBean>
 }
 
 class RouterUtil {
-  static goUserPage(BuildContext context, {@required String uid}) {
+  static goUserPage(BuildContext context, {required String uid}) {
     // RouteManager.pushPage(
     //   context,
     //   RouteNames.spaceUserPage,
@@ -261,10 +260,10 @@ class AppCircleAvatarWidget extends StatelessWidget {
   final int userLevel;
 
   const AppCircleAvatarWidget({
-    Key key,
-    @required this.outerCircleSize,
+    Key? key,
+    required this.outerCircleSize,
     this.outerCircleWidth = 0.0,
-    @required this.avatarUrl,
+    required this.avatarUrl,
     this.onTap,
     this.userLevel = 0,
   }) : super(key: key);

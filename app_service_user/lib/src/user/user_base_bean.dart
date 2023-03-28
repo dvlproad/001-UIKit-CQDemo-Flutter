@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-05 19:32:02
+ * @LastEditTime: 2023-03-25 14:07:27
  * @Description: 用户基类
  */
 import 'dart:convert' show json;
@@ -17,20 +17,21 @@ class UserBaseBean {
   int consumerLevel;
 
   UserBaseBean({
-    @required this.userId,
-    @required this.avatar,
-    @required this.nickname,
-    this.consumerLevel
+    required this.userId,
+    required this.avatar,
+    required this.nickname,
+    this.consumerLevel,
   });
 
   UserBaseBean.fromJson(jsonRes) {
     if (jsonRes == null) {
       return;
     }
-    userId = jsonRes['userId']??jsonRes['accountId'];
+    userId = jsonRes['userId'] ?? jsonRes['accountId'];
     avatar = jsonRes['avatar'];
-    nickname = jsonRes['nickName']??jsonRes['nickname']??jsonRes['userName'];
-    consumerLevel = jsonRes['consumerLevel']??0;
+    nickname =
+        jsonRes['nickName'] ?? jsonRes['nickname'] ?? jsonRes['userName'];
+    consumerLevel = jsonRes['consumerLevel'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {

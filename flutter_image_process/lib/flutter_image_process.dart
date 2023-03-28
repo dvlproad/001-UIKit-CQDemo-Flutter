@@ -21,3 +21,5 @@ export './src/bean/base_compress_bean.dart'
 
 // 语音
 export './src/voice/voice_base_bean.dart';
+
+export './src/image_compress_util/assetEntity_video_thumb_util.dart';

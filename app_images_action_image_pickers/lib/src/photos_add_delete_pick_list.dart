@@ -1,9 +1,7 @@
-import 'dart:io' show File;
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import 'package:flutter_media_picker/flutter_media_picker.dart';
 
@@ -38,7 +36,7 @@ class PhotoAddDeletePickList extends StatefulWidget {
   final PickPhotoAllowType pickAllowType;
   final Function isClickUpImg;
 
-  PhotoAddDeletePickList({
+  const PhotoAddDeletePickList({
     Key? key,
     required this.width,
     this.height,
@@ -59,7 +57,7 @@ class PhotoAddDeletePickList extends StatefulWidget {
 
 class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
   List<AppImageChooseBean> _imageChooseModels = [];
-  int _maxAddCount = 9;
+  final int _maxAddCount = 9;
 
   @override
   void dispose() {
@@ -81,7 +79,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
       color: widget.color,
       direction: Axis.horizontal,
       scrollDirection: Axis.horizontal,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       dragEnable: widget.dragEnable,
       dragCompleteBlock: widget.dragCompleteBlock,
       hideDeleteIcon: true,
@@ -104,7 +102,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
           index: imageIndex,
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            print('点击imageIndex=$imageIndex的图片');
+            debugPrint('点击imageIndex=$imageIndex的图片');
             // _focusNode.unfocus();
 
             if (widget.onPressedImage != null) {
@@ -127,15 +125,13 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
       addCellBuilder: () {
         return AddCell(addCellType: AddCellType.image_text_for_user_photos);
       },
-      onPressedAdd: this._addevent,
+      onPressedAdd: _addevent,
     );
   }
 
   void _addevent() {
     FocusScope.of(context).requestFocus(FocusNode());
-    if (widget.isClickUpImg != null) {
-      widget.isClickUpImg();
-    }
+    widget.isClickUpImg();
     dealAvatar(0);
     // ActionSheetUtil.chooseItem(
     //   context,
@@ -199,10 +195,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
         // await _dealAddedImageChooseModels(_imageChooseModels);
         // setState(() {});
 
-        if (widget.imageChooseModelsChangeBlock != null) {
-          modelsChangeBlock();
-          // widget.imageChooseModelsChangeBlock(_imageChooseModels);
-        }
+        modelsChangeBlock();
         // print('images_add_delete_pick_list 22:${DateTime.now().toString()}');
       },
     );
@@ -211,7 +204,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
 
   //回调
   modelsChangeBlock() {
-    if (_imageChooseModels.length <= 0) {
+    if (_imageChooseModels.isEmpty) {
       return;
     }
     if (_imageChooseModels.last.compressImageBean == null) {
@@ -222,7 +215,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
     } else {
       widget.imageChooseModelsChangeBlock(_imageChooseModels);
     }
-    print('当前最新的图片数目为${_imageChooseModels.length}');
+    debugPrint('当前最新的图片数目为${_imageChooseModels.length}');
   }
 
   /*
@@ -296,7 +289,7 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          print('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          debugPrint('imageWidth=$imageWidth, imageHeight=$imageHeight');
 
           Map<String, dynamic> imageWithHeight = {
             "width": imageWidth,
@@ -308,10 +301,5 @@ class _PhotoAddDeletePickListState extends State<PhotoAddDeletePickList> {
     );
 
     return completer.future;
-  }
-
-  _log(String message) {
-    // String dateTimeString = DateTime.now().toString().substring(0, 19);
-    // print('$dateTimeString:$message');
   }
 }

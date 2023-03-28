@@ -2,20 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-19 12:37:00
+ * @LastEditTime: 2023-03-28 10:34:49
  * @Description: 图片选择器的单元视图
  */
-import 'dart:io';
-import 'dart:typed_data';
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_images_action_list/flutter_images_action_list.dart'
-    show CQImageBaseGridCell;
-// import 'package:image_pickers/image_pickers.dart';
 import 'package:photo_manager/photo_manager.dart'
     show AssetEntity, AssetEntityImageProvider, AssetType;
-
-import 'package:flutter_image_kit/flutter_image_kit.dart';
 
 class AssetEntityWidget extends StatelessWidget {
   final double? width;
@@ -61,7 +53,7 @@ class AssetEntityWidget extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: double.infinity,
         minHeight: double.infinity,
       ),

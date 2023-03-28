@@ -5,21 +5,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart';
 
-import 'package:wechat_assets_picker/src/constants/constants.dart';
-import 'package:wechat_assets_picker/src/constants/enums.dart';
-import 'package:wechat_assets_picker/src/constants/typedefs.dart';
-
-import 'package:wechat_assets_picker/src/delegates/asset_picker_viewer_builder_delegate.dart'
-    show AssetPickerViewerBuilderDelegate; // 新增
-import 'package:wechat_assets_picker/src/widget/asset_picker_viewer.dart'
-    show AssetPickerViewerState;
-import './asset_picker_viewer_builder_delegate.dart';
-
-import 'package:wechat_assets_picker/src/provider/asset_picker_provider.dart';
-import 'package:wechat_assets_picker/src/provider/asset_picker_viewer_provider.dart';
-import 'package:wechat_assets_picker/src/widget/asset_picker.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class AssetPickerViewer<Asset, Path> extends StatefulWidget {
   const AssetPickerViewer({

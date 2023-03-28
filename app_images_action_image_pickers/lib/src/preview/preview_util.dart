@@ -8,7 +8,6 @@
 import 'dart:io' show File;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
-import 'package:flutter_image_process/src/image_compress_util/assetEntity_info_getter.dart';
 
 import 'package:wechat_assets_picker/wechat_assets_picker.dart'
     show AssetEntity, AssetPicker, SpecialPickerType;
@@ -17,9 +16,6 @@ import 'package:wechat_assets_picker/wechat_assets_picker.dart'
 // import './asset_picker_viewer.dart' show AssetPickerViewer;
 
 import '../widget/network_video_page.dart';
-
-import 'package:fluro/fluro.dart';
-import 'package:flutter_media_browser/flutter_media_browser.dart';
 
 class PreviewUtil {
   static preview(

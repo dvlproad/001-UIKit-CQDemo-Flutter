@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-18 13:29:47
+ * @LastEditTime: 2023-03-28 10:28:04
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import 'package:flutter/src/services/system_chrome.dart';
 
 import 'package:flutter_player_ui/flutter_player_ui.dart';
 
@@ -14,7 +13,7 @@ class NetworkVideoPage extends StatefulWidget {
   final String? fileUrl;
   final String? networkUrl;
 
-  NetworkVideoPage({
+  const NetworkVideoPage({
     Key? key,
     this.fileUrl,
     this.networkUrl,
@@ -71,6 +70,7 @@ class _NetworkVideoPageState extends State<NetworkVideoPage> {
     );
   }
 
+  // ignore: unused_element
   void _playOrPause() {
     if (_videoWidgetKey.currentState != null) {
       _videoWidgetKey.currentState!.playOrPause();

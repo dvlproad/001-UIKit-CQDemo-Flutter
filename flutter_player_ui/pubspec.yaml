@@ -19,6 +19,9 @@ dependencies:
   video_player: any
   tsdemo_player:
     path: ../null/tsdemo_player/
+  flutter_overlay_kit:
+    path: ../flutter_overlay_kit/
+  extended_image: any
 
 dev_dependencies:
   flutter_test:

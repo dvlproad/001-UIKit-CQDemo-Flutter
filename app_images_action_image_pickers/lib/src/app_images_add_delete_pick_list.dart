@@ -1,8 +1,9 @@
+// ignore_for_file: unnecessary_import, unused_import
+
 import 'dart:io' show Directory, File;
 import 'dart:async';
 import 'dart:core';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
@@ -64,7 +65,7 @@ class AppImageAddDeletePickList extends StatefulWidget {
   final Future<AppImageChooseBean?> Function(AppImageChooseBean chooseBean)?
       downloadVideoBlock;
 
-  AppImageAddDeletePickList({
+  const AppImageAddDeletePickList({
     Key? key,
     required this.width,
     this.height,
@@ -90,7 +91,6 @@ class AppImageAddDeletePickList extends StatefulWidget {
 class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
   ImageChooseBean? _coverImageChooseModel; // 封面
   List<AppImageChooseBean> _imageChooseModels = [];
-  int _maxAddCount = 9;
 
   GlobalKey<ImageAddDeletePickListState> imagesChooseViewKey = GlobalKey();
 
@@ -133,6 +133,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_unnecessary_containers
     return Container(
       child: Column(
         children: [
@@ -145,7 +146,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
             direction: Axis.horizontal,
             scrollDirection: Axis.vertical,
             // NeverScrollableScrollPhysics() \ ClampingScrollPhysics()\ AlwaysScrollableScrollPhysics(),
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             dragEnable: true,
             hideDeleteIconGetBlock: (PickPhotoAllowType pickAllowType) {
               return pickAllowType == PickPhotoAllowType.videoOnly
@@ -296,7 +297,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
 
   Future<void> updateCoverImage() async {
     var videoModel = _imageChooseModels.first;
-    print('videoModel: ${coverImageChooseModel?.toJson()}');
+    debugPrint('videoModel: ${coverImageChooseModel?.toJson()}');
     if (videoModel.assetEntity == null &&
         videoModel.compressVideoBean == null) {
       debugPrint('没有找到视频，从网络下载:${videoModel.networkUrl}');
@@ -346,7 +347,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
       return Container();
     }
 
-    return Container(
+    return SizedBox(
       height: 60.h_pt_cj,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -369,7 +370,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
             buttonImageName: 'assets/icon_video_thumbnail_update.png',
             buttonText: '修改封面',
             onTap: () {
-              print('点击修改封面');
+              debugPrint('点击修改封面');
               updateCoverImage();
             },
           ),
@@ -379,7 +380,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
             buttonImageName: 'assets/icon_video_self_update.png',
             buttonText: '更换视频',
             onTap: () {
-              print('点击更换视频');
+              debugPrint('点击更换视频');
               if (imagesChooseViewKey.currentState != null) {
                 imagesChooseViewKey.currentState!.updateMediaSelf(
                   0,
@@ -430,6 +431,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
         ],
       ),
     );
+    // ignore: dead_code
     return Container(
       color: Colors.red,
       height: 50.h_pt_cj,
@@ -502,6 +504,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
         ),
       ),
     );
+    // ignore: dead_code
     return LeftImageButton(
       width: 65.w_pt_cj,
       height: 50.h_pt_cj,
@@ -514,6 +517,7 @@ class AppImageAddDeletePickListState extends State<AppImageAddDeletePickList> {
     );
   }
 
+  // ignore: unused_element
   _log(String message) {
     String dateTimeString = DateTime.now().toString().substring(0, 19);
     debugPrint('$dateTimeString:$message');

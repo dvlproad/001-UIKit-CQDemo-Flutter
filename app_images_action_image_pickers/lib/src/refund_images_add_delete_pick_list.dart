@@ -1,10 +1,8 @@
-import 'dart:io' show File;
 import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_media_picker/flutter_media_picker.dart';
 import 'package:flutter_images_action_list/flutter_images_action_list.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
 
 import './widget/image_or_photo_grid_cell.dart';
@@ -100,7 +98,7 @@ class _RefundImageAddDeletePickListState
           index: imageIndex,
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            print('点击imageIndex=$imageIndex的图片');
+            debugPrint('点击imageIndex=$imageIndex的图片');
             // _focusNode.unfocus();
 
             if (widget.onPressedImage != null) {
@@ -121,18 +119,15 @@ class _RefundImageAddDeletePickListState
 
         setState(() {});
 
-        if (widget.imageChooseModelsChangeBlock != null) {
-          // print('当前最新的图片数目为${_imageChooseModels.length}');
-          widget.imageChooseModelsChangeBlock(
-            _imageChooseModels,
-            widget.pickAllowType,
-          );
-        }
+        widget.imageChooseModelsChangeBlock(
+          _imageChooseModels,
+          widget.pickAllowType,
+        );
       },
       addCellBuilder: () {
         return AddCell(addCellType: widget.addCellType);
       },
-      onPressedAdd: this._addevent,
+      onPressedAdd: _addevent,
     );
   }
 
@@ -228,13 +223,10 @@ class _RefundImageAddDeletePickListState
         //   _dealAddedImageChooseModels(_imageChooseModels);
         // });
 
-        if (widget.imageChooseModelsChangeBlock != null) {
-          // print('当前最新的图片数目为${_imageChooseModels.length}');
-          widget.imageChooseModelsChangeBlock(
-            _imageChooseModels,
-            newPickPhotoAllowType,
-          );
-        }
+        widget.imageChooseModelsChangeBlock(
+          _imageChooseModels,
+          newPickPhotoAllowType,
+        );
         // print('images_add_delete_pick_list 22:${DateTime.now().toString()}');
       },
     );
@@ -312,7 +304,7 @@ class _RefundImageAddDeletePickListState
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          print('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          debugPrint('imageWidth=$imageWidth, imageHeight=$imageHeight');
 
           Map<String, dynamic> imageWithHeight = {
             "width": imageWidth,
@@ -324,10 +316,5 @@ class _RefundImageAddDeletePickListState
     );
 
     return completer.future;
-  }
-
-  _log(String message) {
-    // String dateTimeString = DateTime.now().toString().substring(0, 19);
-    // print('$dateTimeString:$message');
   }
 }

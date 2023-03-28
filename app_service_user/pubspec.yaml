@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
   
   event_bus: any
+
+  app_devtool_framework:
+    path: ../app_devtool_framework/
   flutter_cache_kit:
     path: ../flutter_cache_kit/
   flutter_image_kit:

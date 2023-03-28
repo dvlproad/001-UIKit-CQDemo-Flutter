@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_image_process/src/image_compress_util/assetEntity_video_thumb_util.dart';
+import 'package:flutter_image_process/flutter_image_process.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:tsdemo_player/tsdemo_player.dart';
 import 'package:video_player/video_player.dart';
+// ignore: implementation_imports
 import 'package:flutter_effect_kit/src/hud/loading_widget.dart';
 
 // import '../../app_images_action_image_pickers.dart';

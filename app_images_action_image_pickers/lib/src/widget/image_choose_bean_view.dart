@@ -1,8 +1,10 @@
+// ignore_for_file: unused_import
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-18 13:38:01
+ * @LastEditTime: 2023-03-28 10:25:38
  * @Description: 图片选择器的单元视图
  */
 import 'dart:io';
@@ -10,17 +12,11 @@ import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter/services.dart' show Clipboard, ClipboardData;
-import 'package:flutter_images_action_list/flutter_images_action_list.dart'
-    show CQImageBaseGridCell;
-// import 'package:image_pickers/image_pickers.dart';
-import 'package:photo_manager/photo_manager.dart'
-    show AssetEntity, AssetEntityImageProvider, AssetType;
+import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 
 import 'package:flutter_image_kit/flutter_image_kit.dart';
 
 import 'package:flutter_image_process/flutter_image_process.dart';
-import 'package:flutter_image_process/src/image_compress_util/assetEntity_info_getter.dart';
 
 import '../preview/widget/asset_entity_widget.dart';
 import 'package:flutter_player_ui/flutter_player_ui.dart';

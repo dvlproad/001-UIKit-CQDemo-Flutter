@@ -58,7 +58,7 @@ class MainPageControl {
   }
 
   /// 显示登录页（是否是token过期)
-  void showLoginPage({@required bool isTokenOverdue}) {
+  void showLoginPage({required bool isTokenOverdue}) {
     isTokenOverdue ??= false;
 
     RouteManager.pushPage(null, RouteNames.loginPage, arguments: {
