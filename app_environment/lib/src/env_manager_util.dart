@@ -13,7 +13,7 @@ import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 import './init/environment_datas_util.dart';
 
-import './eventbus/dev_tool_eventbus.dart';
+import './eventbus/environment_eventbus.dart';
 
 class EnvManagerUtil {
   static late PackageNetworkType _originPackageNetworkType;
@@ -43,7 +43,7 @@ class EnvManagerUtil {
     // PackageTargetModel selectedTargetModel = PackageTargetPageDataManager().selectedTargetModel;
 
     hasInitCompleter_Env = true;
-    devtoolEventBus.fire(DevtoolEnvironmentInitCompleteEvent());
+    environmentEventBus.fire(EnvironmentInitCompleteEvent());
   }
 
   // network

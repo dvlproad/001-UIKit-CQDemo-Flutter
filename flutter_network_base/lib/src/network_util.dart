@@ -75,8 +75,10 @@ class NetworkUtil {
       }
       DioLogUtil.debugApiWithLog(url, "请求结束...");
 
-      bool isFromCache = false;
-      isFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
+      bool? isFromCache;
+      if (DioCacheUtil.isCacheResponseCheckFunction != null) {
+        isFromCache = DioCacheUtil.isCacheResponseCheckFunction!(response);
+      }
 
       DioLogUtil.debugApiWithLog(url, "请求后解析开始...");
       late ResponseModel responseModel;
@@ -134,8 +136,9 @@ class NetworkUtil {
 
       // ②.isFromCache
       bool? isFromCache;
-      isFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
-
+      if (DioCacheUtil.isCacheErrorCheckFunction != null) {
+        isFromCache = DioCacheUtil.isCacheErrorCheckFunction!(err);
+      }
       ResponseModel responseModel =
           getDioErrorResponseModelBlock(fullUrl, newErrorModel, isFromCache);
       return responseModel;

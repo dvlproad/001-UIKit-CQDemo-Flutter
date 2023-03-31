@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 02:00:35
+ * @LastEditTime: 2023-03-30 18:28:42
  * @Description: 底层网络库
  */
 library flutter_network_base;
@@ -25,6 +25,9 @@ export './src/mock/local_mock_util.dart';
 
 export './src/bean/req_options.dart';
 export './src/bean/res_options.dart';
+
+// cache
+export './src/cache/dio_cache_util.dart';
 
 // url
 export './src/url/append_path_extension.dart';

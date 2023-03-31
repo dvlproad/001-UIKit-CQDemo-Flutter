@@ -19,8 +19,9 @@ class TSEnvironmentDataUtil {
   // proxy
   static String noneProxykId = TSEnvProxyModel.noneProxykId;
   static String dvlproadProxykId = "proxyId_chaoqian";
-  static String proxykId2 = "proxyId_2";
-  static String proxykId3 = "proxyId_3";
+  static String proxykId_developer2 = "proxykId_developer2";
+  static String proxykId_tester1 = "proxykId_tester1";
+  static String proxykId_tester2 = "proxykId_tester2";
   static String customProxykId = "proxyId_custom";
 
   // 环境:网络代理
@@ -40,7 +41,7 @@ class TSEnvironmentDataUtil {
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel(
-        proxyId: proxykId2,
+        proxyId: proxykId_developer2,
         name: "泽华的代理",
         proxyIp: "192.168.72.200:8888",
       );
@@ -48,7 +49,15 @@ class TSEnvironmentDataUtil {
     }
     {
       TSEnvProxyModel dataModel = TSEnvProxyModel(
-        proxyId: proxykId3,
+        proxyId: proxykId_tester1,
+        name: "婉艺的代理",
+        proxyIp: "192.168.23.119:8888",
+      );
+      envModels.add(dataModel);
+    }
+    {
+      TSEnvProxyModel dataModel = TSEnvProxyModel(
+        proxyId: proxykId_tester2,
         name: "智荣的代理",
         proxyIp: "192.168.72.222:8888",
       );

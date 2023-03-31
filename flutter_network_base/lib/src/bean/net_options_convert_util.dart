@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-28 13:07:39
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-12 18:34:26
+ * @LastEditTime: 2023-03-30 19:29:13
  * @Description: dio模型转为自身模型的转换方法
  */
 
@@ -17,8 +17,9 @@ class NetworkModelConvertUtil {
   // request
   static ReqOptions newRequestOptions(RequestOptions options) {
     bool? isRequestCache;
-    isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(options);
-
+    if (DioCacheUtil.isRequestCacheCheckFunction != null) {
+      isRequestCache = DioCacheUtil.isRequestCacheCheckFunction!(options);
+    }
     var reqOpt = ReqOptions(
       baseUrl: options.baseUrl,
       path: options.path,
@@ -69,7 +70,9 @@ class NetworkModelConvertUtil {
     }
 
     bool? isErrorFromCache;
-    isErrorFromCache = DioCacheUtil.isCacheErrorCheckFunction(err);
+    if (DioCacheUtil.isCacheErrorCheckFunction != null) {
+      isErrorFromCache = DioCacheUtil.isCacheErrorCheckFunction!(err);
+    }
     errOptions.isErrorFromCache = isErrorFromCache;
 
     return errOptions;
@@ -79,8 +82,10 @@ class NetworkModelConvertUtil {
   static ResOptions newResponse(Response response) {
     ReqOptions reqOpt = newRequestOptions(response.requestOptions);
     bool? isResponseFromCache;
-    isResponseFromCache = DioCacheUtil.isCacheResponseCheckFunction(response);
-
+    if (DioCacheUtil.isCacheResponseCheckFunction != null) {
+      isResponseFromCache =
+          DioCacheUtil.isCacheResponseCheckFunction!(response);
+    }
     var resOpt = ResOptions(
       requestOptions: reqOpt,
       statusCode: response.statusCode ?? 0,
@@ -96,7 +101,9 @@ class NetworkModelConvertUtil {
 extension RequestId on RequestOptions {
   int get requestId {
     bool? isRequestCache;
-    isRequestCache = DioCacheUtil.isRequestCacheCheckFunction(this);
+    if (DioCacheUtil.isRequestCacheCheckFunction != null) {
+      isRequestCache = DioCacheUtil.isRequestCacheCheckFunction!(this);
+    }
 
     if (isRequestCache == true) {
       return uri.toString().hashCode;

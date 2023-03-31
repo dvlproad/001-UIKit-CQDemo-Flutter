@@ -23,4 +23,4 @@ export './src/check_update/package_check_update_target_util.dart';
 export './src/check_update/package_check_update_proxy_util.dart';
 
 // eventbus
-export './src/eventbus/dev_tool_eventbus.dart';
+export './src/eventbus/environment_eventbus.dart';

@@ -96,7 +96,7 @@ class CacheNetworkClient extends NetworkClient {
       },
       localApiDirBlock: localApiDirBlock,
     );
-    /*
+
     DioCacheUtil.initDioCacheUtil(
       isCacheRequestCheckBlock: (options) {
         bool isRequestCache = CacheHelper.isCacheRequest(options);
@@ -111,7 +111,6 @@ class CacheNetworkClient extends NetworkClient {
         return isFromCache;
       },
     );
-    */
   }
 
   /// 通用的POST请求(如果设置缓存，可实现如果从缓存中取到数据，仍然能继续执行正常的请求)
