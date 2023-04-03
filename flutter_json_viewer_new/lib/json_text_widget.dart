@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-09 14:13:56
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-05-11 23:51:18
+ * @LastEditTime: 2023-04-03 16:06:13
  * @Description: 显示json内容的视图
  */
 
@@ -17,7 +17,7 @@ class JSONText extends StatelessWidget {
   final TextStyle? style;
   final dynamic value;
 
-  JSONText(
+  const JSONText(
     this.data, {
     Key? key,
     this.style,
