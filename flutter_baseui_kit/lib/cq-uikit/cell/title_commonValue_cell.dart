@@ -265,7 +265,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
           fontFamily: 'PingFang SC',
           color: Color(0xff404040),
           fontSize: fontSize_cellLeft_default,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
           // height: 1,
         ),
       ),

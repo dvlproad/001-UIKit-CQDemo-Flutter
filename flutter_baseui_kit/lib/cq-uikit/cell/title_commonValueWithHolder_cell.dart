@@ -103,7 +103,7 @@ class HolderTableViewCellHolderWidget extends StatelessWidget {
 
       if (valuePlaceHodlerTextStyle == null) {
         valuePlaceHodlerTextStyle = TextStyle(
-          color: const Color(0xFFC1C1C1),
+          color: Color(0xff8b8b8b),
           fontFamily: 'PingFang SC',
           fontSize: fontSize_cellRight_default,
           fontWeight: FontWeight.w400,
