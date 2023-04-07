@@ -5,8 +5,8 @@ class CommonShareWidget extends StatefulWidget {
   final Function(int) onClick;
 
   const CommonShareWidget({
-    Key key,
-    this.onClick,
+    Key? key,
+    required this.onClick,
   }) : super(key: key);
 
   @override
@@ -137,7 +137,7 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
       ),
       alignment: Alignment.center,
       // width: Adapt.screenW(),
-      child: Text(
+      child: const Text(
         "分享",
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -166,7 +166,7 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
         child: Image.asset(
           "images/hope/close_icon2.png",
           width: 30.w_cj,
-          color: Color(0xff595959),
+          color: const Color(0xff595959),
           fit: BoxFit.fitWidth,
         ),
       ),
@@ -176,9 +176,9 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
   // 分享item视图
   Widget cellWidget(
     BuildContext context, {
-    String text,
-    String imageName,
-    void Function() onTap,
+    required String text,
+    required String imageName,
+    required void Function() onTap,
   }) {
     return GestureDetector(
       child: Container(
@@ -193,7 +193,7 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
             Container(height: 14.h_cj),
             Text(
               text,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 color: Color(0xff595959),
               ),

@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-05-12 19:40:05
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 13:07:59
+ * @LastEditTime: 2023-04-03 14:13:26
  * @Description: 堆栈信息获取工具
  */
 import 'package:stack_trace/stack_trace.dart';
@@ -15,11 +17,8 @@ String? get __CLASS__ {
   var frames = Trace.current().frames; //调用栈
   if (frames.length > 1) {
     var member = frames[1].member;
-    if (member == null) {
-      return null;
-    }
-    var parts = member!.split(".");
-    if (parts.length > 1) {
+    var parts = member?.split(".");
+    if (parts != null && parts.length > 1) {
       return parts[0];
     }
   }
@@ -31,11 +30,8 @@ String? get __METHOD__ {
   var frames = Trace.current().frames;
   if (frames.length > 1) {
     var member = frames[1].member;
-    if (member == null) {
-      return null;
-    }
-    var parts = member!.split(".");
-    if (parts.length > 1) {
+    var parts = member?.split(".");
+    if (parts != null && parts.length > 1) {
       return parts[1];
     }
   }

@@ -21,8 +21,8 @@ dependencies:
   #   path: ../flutter_overlay_kit/
   # flutter_effect_kit:
   #   path: ../flutter_effect_kit/
-  app_log:
-    path: ../app_log/
+  flutter_log_with_env:
+    path: ../flutter_log_with_env/
 
 dev_dependencies:
   flutter_test:

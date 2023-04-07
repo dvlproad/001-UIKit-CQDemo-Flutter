@@ -20,9 +20,9 @@ enum WidgetType {
 
 ///根据不同类型来展示不同的视图
 class LoadStateLayout extends StatefulWidget {
-  final WidgetType widgetType; //页面类型
+  final WidgetType? widgetType; //页面类型
   final Widget? initWidget; //初始视图(未设置时，将使用Container())
-  final Widget? successWidget; //成功视图
+  final Widget successWidget; //成功视图
   final Widget? errorWidget; //错误视图(网络错误)
   final Widget? nodataWidget; //空数据视图(网络请求成功，但数据为空)
 
@@ -31,7 +31,7 @@ class LoadStateLayout extends StatefulWidget {
     this.widgetType = WidgetType.Init, //默认为加载状态
     this.initWidget,
     // this.initWidget = const Container(), // 默认Container()
-    this.successWidget,
+    required this.successWidget,
     this.errorWidget,
     this.nodataWidget,
   }) : super(key: key);
@@ -56,18 +56,15 @@ class _LoadStateLayoutState extends State<LoadStateLayout> {
     double marginTop = 0;
     List<Widget> stackWidgets = [];
 
-    if (widget.successWidget != null) {
-      // 当状态是 SuccessWithData 时候,才显示success
-      bool shouldShowSuccess = widget.widgetType == WidgetType.SuccessWithData;
-      // bool shouldShowSuccess =
-      //     true; // 临时修复外界请求成功时候,没有更新 updateWidgetType(WidgetType.SuccessWithData); 导致无法使用 widget.widgetType == WidgetType.SuccessWithData 来判断的问题. eg: 我的关注 my_follow_page
-      stackWidgets.add(
-        Visibility(
-          visible: shouldShowSuccess,
-          child: widget.successWidget!,
-        ),
-      );
-    }
+    bool shouldShowSuccess = widget.widgetType == WidgetType.SuccessWithData;
+    // bool shouldShowSuccess =
+    //     true; // 临时修复外界请求成功时候,没有更新 updateWidgetType(WidgetType.SuccessWithData); 导致无法使用 widget.widgetType == WidgetType.SuccessWithData 来判断的问题. eg: 我的关注 my_follow_page
+    stackWidgets.add(
+      Visibility(
+        visible: shouldShowSuccess,
+        child: widget.successWidget,
+      ),
+    );
 
     if (widget.initWidget != null) {
       stackWidgets.add(

@@ -5,8 +5,6 @@ import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 export 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
-import '../../flutter_effect_adapt.dart';
-
 // 一个可以快速设置 导航栏标题 和 导航栏返回按钮 的导航栏视图
 class QuickAppBar extends CommonAppBar {
   QuickAppBar(
@@ -18,7 +16,7 @@ class QuickAppBar extends CommonAppBar {
     dynamic title, // 中间导航栏标题文本或文本视图
     final EdgeInsetsGeometry? titleMargin,
     AppBarTextColorType? textColorType, // 左侧(返回)按钮视图的类型
-    bool automaticallyImplyLeading = true, // 是否显示左侧(返回)按钮视图(默认true显示)
+    bool? automaticallyImplyLeading, // 是否显示左侧(返回)按钮视图(默认true显示)
 
     QuickToolBarImageType?
         leadingImageType, // 返回按钮的样式(未设置的话，会自动根据标题颜色和导航栏背景色设置)
@@ -96,7 +94,7 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   final Widget? leading; // 左侧(返回)按钮视图
   final double? leadingPositionedLeft;
-  final bool automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图(默认true显示)
+  final bool? automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图(默认true显示)
   // final ImageProvider navbackImage;
   // final String navbackTitle;
   // // navbackImage: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),

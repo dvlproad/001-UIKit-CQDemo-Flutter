@@ -80,6 +80,7 @@ class CheckVersionSystemUtil<T extends VersionBaseBean> {
           updateLog: result['versionMsg'],
           downloadUrl: result['downloadUrl'],
           forceUpdate: result['forceUpdateFlag'] ?? false,
+          noNewPrompt: result['noNewPrompt'],
         );
       }
       return responseModel;

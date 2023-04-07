@@ -1,14 +1,12 @@
 /*
  * @Author: dvlproad
- * @Date: 2022-04-15 22:08:25
+ * @Date: 2023-03-21 17:53:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 12:51:28
- * @Description: 
+ * @LastEditTime: 2023-04-03 14:39:52
+ * @Description: 图片+文字:图片作为背景，文字显示在图片上
  */
-// 图片+文字:图片作为背景，文字显示在图片上
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import './base-uikit/bg_border_widget.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class CQFullEmptyView extends StatelessWidget {
   final String text;

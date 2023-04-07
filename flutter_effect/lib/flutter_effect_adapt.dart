@@ -1,26 +1,8 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
-
-class AdaptCJHelper {
-  static var _ratio;
-
-  static init(int number) {
-    int uiwidth = number is int ? number : 750;
-
-    MediaQueryData mediaQuery = MediaQueryData.fromWindow(window);
-    double _width = mediaQuery.size.width;
-    _ratio = _width / uiwidth;
-  }
-
-  static setWidth(number) {
-    if (!(_ratio is double || _ratio is int)) {
-      AdaptCJHelper.init(750);
-    }
-    return number * _ratio;
-  }
-}
-
-extension CJSizeExtension on num {
-  double get w_cj => AdaptCJHelper.setWidth(this);
-  double get h_cj => AdaptCJHelper.setWidth(this);
-}
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-15 22:08:25
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2023-04-03 14:48:27
+ * @Description: 
+ */
+export 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';

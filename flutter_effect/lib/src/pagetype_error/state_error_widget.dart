@@ -2,15 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 12:55:48
+ * @LastEditTime: 2023-04-03 14:42:19
  * @Description: 错误视图
  */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了引入 ThemeBorderButton
 import '../pagetype_nodata/empty_imageAboveText_widget.dart';
 import '../appbar/appbar.dart';
-import 'package:flutter_baseui_kit/cq-uikit/button/buttontheme.dart';
 
 class StateErrorWidget extends StatefulWidget {
   final bool needAppBar;

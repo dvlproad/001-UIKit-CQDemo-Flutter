@@ -45,10 +45,10 @@ class _VoiceChoooseCellWidgetState extends State<VoiceChoooseCellWidget> {
 
     return ImageTitleCommonValueWithHolderTableViewCell(
       leftRightPadding: widget.leftRightPadding,
-      height: 52.h_pt_cj,
+      // height: 52.h_pt_cj,
       title: "语音",
       imageProvider: AssetImage(
-        "assets/icon_voice_record.png",
+        "assets/icon_voice.png",
         package: 'app_info_choose_kit',
       ),
       valueWidgetBuilder: (BuildContext bContext, {bool canExpanded}) {

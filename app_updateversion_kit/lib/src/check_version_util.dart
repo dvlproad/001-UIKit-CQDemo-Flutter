@@ -14,7 +14,7 @@ import 'package:flutter_updateversion_kit/flutter_updateversion_kit.dart';
 import 'package:app_network/app_network.dart';
 import './system/check_version_system_util.dart';
 
-import 'package:app_log/app_log.dart';
+import 'package:flutter_log_with_env/flutter_log_with_env.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class CheckVersionUtil {
@@ -40,7 +40,9 @@ class CheckVersionUtil {
         changeServiceBuildNumberBlock, // 改变后台返回的版本号，用于模拟在此版本后，发了一个新版本时候的检查更新弹窗是否可用的功能
   }) async {
     if (_navigatorKey.currentContext == null) {
-      throw Exception('Warning:navigatorKey!.currentContext不能为空');
+      // throw Exception('Warning:navigatorKey!.currentContext不能为空');
+      debugPrint('Warning:navigatorKey!.currentContext不能为空');
+      return;
     }
 
     BuildContext context = _navigatorKey.currentContext!;
@@ -88,7 +90,8 @@ class CheckVersionUtil {
       }
     }
 
-    bool shouldShow = await checkShouldShow(bean, isManualCheck);
+    bool shouldShow = await checkShouldShow(bean, isManualCheck,
+        noNewPrompt: bean.noNewPrompt);
     if (shouldShow != true) {
       return;
     }
@@ -128,8 +131,9 @@ class CheckVersionUtil {
 
   static Future<bool> checkShouldShow(
     VersionBaseBean? bean,
-    bool isManualCheck,
-  ) async {
+    bool isManualCheck, {
+    String? noNewPrompt,
+  }) async {
     if (bean == null) {
       return false;
     }
@@ -147,8 +151,7 @@ class CheckVersionUtil {
     if (compareResult == ServiceVersionCompareResult.noNew) {
       if (isManualCheck == true) {
         // 手动检查才弹提示
-        String message = '当前已是最新版本';
-        ToastUtil.showMessage(message);
+        ToastUtil.showMessage(noNewPrompt ?? '当前是最新版本~');
       }
       return false;
     }

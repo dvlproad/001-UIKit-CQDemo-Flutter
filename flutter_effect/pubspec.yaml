@@ -1,8 +1,8 @@
 name: flutter_effect
 description: A new Flutter package project.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -13,22 +13,26 @@ dependencies:
     sdk: flutter
 
   cached_network_image: any
-  flutter_error_catch:
+  flutter_theme_helper: #^0.1.0
+    path: ../flutter_theme_helper/
+  flutter_error_catch: #^0.1.0
     path: ../flutter_error_catch/
 
-  flutter_baseui_kit:     # 为了引入 ThemeBorderButton
+  flutter_baseui_kit: #^0.1.0     # 为了引入 ThemeBorderButton
     path: ../flutter_baseui_kit/ 
 
-  flutter_overlay_kit:
+  flutter_overlay_kit: #^0.1.0
     path: ../flutter_overlay_kit/
 
-  flutter_effect_kit:
+  flutter_effect_kit: #^0.1.0
     path: ../flutter_effect_kit/
 
-  app_buried_point:
+  app_buried_point: #^0.1.0
     path: ../app_buried_point/
 
-  flutter_network_base:  # 网络 HttpStatusCode
+  app_devtool_framework: #^0.1.0
+    path: ../app_devtool_framework/
+  flutter_network_base: #^0.1.0
     path: ../flutter_network_base/
 
   

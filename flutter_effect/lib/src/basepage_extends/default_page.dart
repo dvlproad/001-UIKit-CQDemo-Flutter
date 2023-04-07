@@ -1,11 +1,10 @@
 /*
  * @Author: dvlproad
- * @Date: 2022-04-15 22:08:25
+ * @Date: 2023-03-21 17:53:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 13:02:43
+ * @LastEditTime: 2023-04-03 14:37:40
  * @Description: 
  */
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 import './base_page.dart';
@@ -43,8 +42,8 @@ abstract class BJHDefaultPageState<V extends BJHDefaultPage>
   }
 
   @override
-  Widget? buildSuccessWidget(BuildContext context) {
-    return null;
+  Widget buildSuccessWidget(BuildContext context) {
+    return Container();
   }
 
   @override

@@ -4,8 +4,8 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
-  flutter: ">=1.16.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -16,7 +16,8 @@ dependencies:
     path: ../flutter_overlay_kit/
   app_global_config:
     path: ../app_global_config/
-
+  app_network:
+    path: ../app_network/
 dev_dependencies:
   flutter_test:
     sdk: flutter

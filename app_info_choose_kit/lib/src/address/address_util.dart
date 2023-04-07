@@ -24,13 +24,21 @@ class AddressUtil {
   }) async {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return MineSetPage(
-          isSelect: true,
-          selectedAddressModel: selectedAddressModel,
-          callBack: (data) {
+        isSelect: true,
+        selectedAddressModel: selectedAddressModel,
+        callBack: (AddressListEntity data) {
+          if (chooseCompleteBlock != null) {
+            chooseCompleteBlock(bAddressModel: data);
+          }
+        },
+        delBack: (AddressListEntity entity) {
+          if (entity.id == selectedAddressModel.id) {
             if (chooseCompleteBlock != null) {
-              chooseCompleteBlock(bAddressModel: data);
+              chooseCompleteBlock(bAddressModel: null);
             }
-          });
+          }
+        },
+      );
     }));
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart'
     show StateLoadingWidget;
@@ -16,7 +15,8 @@ import 'package:flutter_error_catch/flutter_error_catch.dart';
 
 import 'package:app_buried_point/app_buried_point.dart';
 
-import 'package:flutter_network_base/src/network_bean.dart'; // 网络 HttpStatusCode
+import 'package:flutter_network_base/flutter_network_base.dart'; // 网络 HttpStatusCode
+export 'package:app_devtool_framework/app_devtool_framework.dart';
 
 //class BJHBasePage extends StatefulWidget {
 abstract class BJHBasePage extends LifeCyclePage {
@@ -39,7 +39,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
-  Widget? _initWidget = null;
+  Widget? _initWidget;
 
   @override
   bool get wantKeepAlive => true;
@@ -66,7 +66,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     String? currentRoutePath;
     ModalRoute? route = ModalRoute.of(context);
     if (route != null) {
-      currentRoutePath = route!.settings.name;
+      currentRoutePath = route.settings.name;
     }
 
     AppCatchError.currentPageClassString = routeClassString;
@@ -89,7 +89,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     String? currentRoutePath;
     ModalRoute? route = ModalRoute.of(context);
     if (route != null) {
-      currentRoutePath = route!.settings.name;
+      currentRoutePath = route.settings.name;
     }
 
     AppCatchError.beforePageClassString = routeClassString;
@@ -231,8 +231,6 @@ abstract class BJHBasePageState<V extends BJHBasePage>
         appBarWidget(context) != null ? stautsBarHeight + 44 : 0;
     double screenBottomHeight = mediaQuery.padding.bottom;
 
-    assert(backgroundWidget(context) != null);
-
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -326,7 +324,10 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   }
 
   /// 更新当前页面的页面类型(会自动停止动画)，调用此方法未设置 needUpdateUI 会默认刷新
-  void updateWidgetType(WidgetType widgetType, {bool? needUpdateUI}) {
+  void updateWidgetType(
+    WidgetType widgetType, {
+    bool needUpdateUI = true,
+  }) {
     _currentWidgetType = widgetType;
     _showSelfLoading = false;
     if (mounted == false) {
@@ -334,7 +335,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
       return;
     }
 
-    bool needSetState = needUpdateUI ?? true;
+    bool needSetState = needUpdateUI;
     if (needSetState && mounted) {
       setState(() {});
     }
@@ -342,7 +343,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
 
   void updateWidgetTypeWithApiStatusCode(
     int apiStatusCode, {
-    bool? needUpdateUI,
+    bool needUpdateUI = true,
   }) {
     WidgetType widgetType;
     if (apiStatusCode == 0) {
@@ -364,7 +365,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
       return;
     }
 
-    bool needSetState = needUpdateUI ?? true;
+    bool needSetState = needUpdateUI;
     if (needSetState && mounted) {
       setState(() {});
     }
@@ -379,12 +380,12 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     return null; // 如果返回null 不会黑屏，因为上面盖着 buildSuccessWidget
   }
 
-  Widget? buildSuccessWidget(BuildContext context) {
+  Widget buildSuccessWidget(BuildContext context) {
     print('请在子类中重写此方法,不需要调用super.');
     // MediaQueryData mediaQuery = MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
     // MediaQueryData mediaQuery = MediaQuery.of(context);
     // double _height = mediaQuery.size.height;
-    return null;
+    return Container();
   }
 
   Widget? buildNodataWidget(BuildContext context) {
@@ -405,5 +406,9 @@ abstract class BJHBasePageState<V extends BJHBasePage>
       // color: Color.fromRGBO(22, 17, 175, 0.5),
       child: StateLoadingWidget(),
     );
+  }
+
+  popPage() {
+    Navigator.of(context).pop();
   }
 }

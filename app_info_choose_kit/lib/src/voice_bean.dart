@@ -2,22 +2,23 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 19:15:17
+ * @LastEditTime: 2023-04-07 19:03:33
  * @Description: 语音模型
  */
-class VoiceBean {
-  String localPath; // 本地地址
-  String networkUrl; // 网络地址
+import "package:flutter_image_process/flutter_image_process.dart";
 
-  String recorderTxt; // 语音长度显示的文本(如1秒，显示成00:01)
-  int timeInt; // 语音长度
-
+class VoiceBean extends VoiceBaseBean {
   VoiceBean({
-    this.localPath,
-    this.networkUrl,
-    this.recorderTxt,
-    this.timeInt,
-  });
+    String localPath,
+    String networkUrl,
+    String recorderTxt,
+    int timeInt,
+  }) : super(
+          localPath: localPath,
+          networkUrl: networkUrl,
+          recorderTxt: recorderTxt,
+          timeInt: timeInt,
+        );
 
   VoiceBean.fromJson(Map<String, dynamic> json) {
     localPath = json["localPath"];

@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-05-12 17:34:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 13:11:57
+ * @LastEditTime: 2023-04-03 14:38:01
  * @Description: 含生命周期的 base page
  */
 import 'dart:core';
@@ -149,7 +151,7 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
 
   String? get __FILE__ {
     var frames = Trace.current().frames;
-    if (frames != null && frames.length > 1) {
+    if (frames.length > 1) {
       return frames[1].uri.path;
     }
 
@@ -158,7 +160,7 @@ abstract class LifeCycleBasePageState<V extends LifeCyclePage> extends State<V>
 
   int? get __LINE__ {
     var frames = Trace.current().frames;
-    if (frames != null && frames.length > 1) {
+    if (frames.length > 1) {
       return frames[1].line;
     }
 

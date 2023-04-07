@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-08-11 19:18:21
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 10:21:02
+ * @LastEditTime: 2023-03-28 14:18:05
  * @Description: 
  */
 import 'dart:io' show File;
@@ -17,7 +17,6 @@ import 'package:photo_manager/photo_manager.dart' show AssetType;
 import './widget/image_or_photo_grid_cell.dart';
 
 import 'package:flutter_image_process/flutter_image_process.dart';
-import 'package:flutter_image_process/src/image_compress_util/assetEntity_video_check_util.dart';
 
 import './images_add_cell.dart';
 export './images_add_cell.dart' show AddCellType;
