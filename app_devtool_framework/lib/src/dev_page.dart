@@ -2,6 +2,7 @@
 
 import 'dart:core';
 import 'dart:convert' show json;
+import 'package:app_devtool_framework/src/widget/password_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show Clipboard, ClipboardData;
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_foundation_base/flutter_foundation_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:app_network/app_network.dart';
-import 'package:app_log/app_log.dart';
+import 'package:flutter_log_with_env/flutter_log_with_env.dart';
 import 'package:app_environment/app_environment.dart';
 import 'package:app_updateversion_kit/app_updateversion_kit.dart';
 import 'package:app_service_user/app_service_user.dart';
@@ -37,36 +38,56 @@ import './env_network/app_env_network_util.dart';
 import 'apns_util.dart';
 
 /// 开发工具调试入口
-class DevPageEntranceWidget extends StatelessWidget {
-  const DevPageEntranceWidget({Key? key}) : super(key: key);
+class DevPageEntranceWidget extends StatefulWidget {
+  DevPageEntranceWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DevPageEntranceWidget> createState() => _DevPageEntranceWidgetState();
+}
+
+class _DevPageEntranceWidgetState extends State<DevPageEntranceWidget> {
+  bool showEnterUI = false;
 
   @override
   Widget build(BuildContext context) {
     if (EnvManagerUtil.isPackageTargetDev == true) {
       return ImageTitleTextValueCell(
-          title: "定制开发工具",
-          textValue: '',
-          onTap: () {
-            _goDevPage(context);
-          });
-    } else {
-      return Container(
-        height: 40,
-        width: 40,
-        // color: Colors.red,
-        alignment: Alignment.centerLeft,
-        child: Row(children: [
-          GestureDetector(
-            onLongPress: () {
-              _goDevPage(context);
-            },
-            child: Container(
-              color: Colors.transparent, // 避免无响应区域
-              width: 40,
-            ),
-          ),
-        ]),
+        title: "定制开发工具",
+        textValue: '',
+        onTap: () {
+          _goDevPage(context);
+        },
       );
+    } else {
+      if (showEnterUI) {
+        return PasswordInput(
+          passwordCorrectBlock: () {
+            _goDevPage(context);
+          },
+        );
+      } else {
+        return Container(
+          height: 40,
+          width: 40,
+          color: Colors.transparent,
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              GestureDetector(
+                onLongPress: () {
+                  setState(() {
+                    showEnterUI = !showEnterUI;
+                  });
+                },
+                child: Container(
+                  color: Colors.transparent, // 避免无响应区域
+                  width: 40,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 

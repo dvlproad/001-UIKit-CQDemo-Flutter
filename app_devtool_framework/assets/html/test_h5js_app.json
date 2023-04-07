@@ -78,5 +78,19 @@
         "h5CallBridgeSendMessage": {
             "url": "yuanwangwu://openpage?pageName=imChatPage&conversationID=126191&imUserId=1602856363702501376&showName=婉艺&type=1&dialogSubjectId=1506196208391966720"
         }
+    },
+    {
+        "h5CallBridgeActionDes": "跳转商场",
+        "h5CallBridgeActionName": "h5CallBridgeAction_jumpToGoodsDetiilPage",
+        "h5CallBridgeSendMessage": {
+            "goodsId": "159054"
+        }
+    },
+    {
+        "h5CallBridgeActionDes": "登出",
+        "h5CallBridgeActionName": "h5CallBridgeAction_logout",
+        "h5CallBridgeSendMessage": {
+            "goodsId": "159054"
+        }
     }
 ]

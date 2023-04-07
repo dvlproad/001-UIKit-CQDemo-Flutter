@@ -13,10 +13,10 @@ dependencies:
 
   provider: any
   event_bus: any
-  flutter_environment_base: ^0.0.1
-    # path: ../flutter_environment_base/
-  flutter_effect_kit: ^0.0.1
-    # path: ../flutter_effect_kit/
+  flutter_environment_base: #^0.0.1
+    path: ../flutter_environment_base/
+  flutter_effect_kit: #^0.0.1
+    path: ../flutter_effect_kit/
 
 dev_dependencies:
   flutter_test:

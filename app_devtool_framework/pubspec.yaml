@@ -26,6 +26,8 @@ dependencies:
   flutter_environment_base:
     path: ../flutter_environment_base/
 
+  flutter_theme_helper:
+    path: ../flutter_theme_helper/
   flutter_baseui_kit:
     path: ../flutter_baseui_kit/
   flutter_overlay_kit:
@@ -41,8 +43,8 @@ dependencies:
   
   path_provider: any
 
-  app_log:
-    path: ../app_log/
+  flutter_log_with_env:
+    path: ../flutter_log_with_env/
 
 dev_dependencies:
   flutter_test:

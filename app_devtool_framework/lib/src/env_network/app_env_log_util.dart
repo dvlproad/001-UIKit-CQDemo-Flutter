@@ -3,7 +3,7 @@
 import 'dart:async';
 
 import 'package:app_environment/app_environment.dart';
-import 'package:app_log/app_log.dart';
+import 'package:flutter_log_with_env/flutter_log_with_env.dart';
 
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import 'package:flutter_robot_base/flutter_robot_base.dart';
@@ -52,13 +52,16 @@ class AppEnvLogUtil {
       packageDescribe: packageDescribe,
       userDescribeBlock: userDescribeBlock,
       isForceNoUploadEnvGetBlock: () {
-        /*
-        /// TODO:正式上生产的时候就不要上报了
+        /// 上报企业微信的处理：上架包不上报企业微信，内测包和测试包可以
         PackageTargetType currentTargetType =
             PackageTargetPageDataManager().selectedTargetModel.type;
         PackageNetworkType currentNetworkType =
             NetworkPageDataManager().selectedNetworkModel.type;
-        */
+        if (currentTargetType == PackageTargetType.formal &&
+            currentNetworkType == PackageNetworkType.product) {
+          return true;
+        }
+
         return false;
       },
       getRobotUrlByApiHostBlock: (String apiHost) {
