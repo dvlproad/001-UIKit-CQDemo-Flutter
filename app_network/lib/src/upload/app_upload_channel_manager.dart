@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 11:54:59
+ * @LastEditTime: 2023-04-06 13:01:53
  * @Description: 应用层网络上抽离的管理上传方法的类
  */
 import 'dart:convert';
@@ -59,7 +59,10 @@ extension UploadByChannel on AppNetworkManager {
         localPath,
         mediaType: mediaType,
       );
-      await initQCloudCredential(mediaType);
+      bool initSuccess = await initQCloudCredential(mediaType);
+      if (initSuccess != true) {
+        return null;
+      }
     }
 
     return _channel_uploadQCloud(
@@ -71,8 +74,12 @@ extension UploadByChannel on AppNetworkManager {
       uploadId: uploadId,
       region: region,
       uploadProgress: uploadProgress,
-      // uploadSuccess: uploadSuccess,
-      // uploadFailure: uploadFailure,
+      uploadSuccess: (String mediaUrl) {
+        //
+      },
+      uploadFailure: () {
+        return null;
+      },
     );
   }
 
@@ -91,7 +98,7 @@ extension UploadByChannel on AppNetworkManager {
     return map["hasBreakPoint$key"] ?? false;
   }
 
-  Future initQCloudCredential(UploadMediaType mediaType) async {
+  Future<bool> initQCloudCredential(UploadMediaType mediaType) async {
     //获取腾讯云上传相关
     int startTime = 0; // 安卓会用到(搜 "bucket" 可以定位到)
     int expiredTime = 0; // 安卓会用到(搜 "bucket" 可以定位到)
@@ -110,13 +117,15 @@ extension UploadByChannel on AppNetworkManager {
     );
 
     Map<String, dynamic>? tencent_cos_credentials;
-    if (responseModel.isSuccess) {
-      Map map = json.decode(responseModel.result);
-      tencent_cos_credentials = map["credentials"];
-
-      startTime = map["startTime"];
-      expiredTime = map["expiredTime"];
+    if (responseModel.isSuccess != true) {
+      return false;
     }
+
+    Map credentialMap = json.decode(responseModel.result);
+    tencent_cos_credentials = credentialMap["credentials"];
+
+    startTime = credentialMap["startTime"];
+    expiredTime = credentialMap["expiredTime"];
 
     if (tencent_cos_credentials == null) {
       return Future.value(null);
@@ -131,6 +140,8 @@ extension UploadByChannel on AppNetworkManager {
     map["region"] = region;
     map["expiredTime"] = expiredTime.toString();
     await platform.invokeMethod("TencentCos.multipart.credential", map);
+
+    return true;
   }
 
   Future<String?> _channel_uploadQCloud(
@@ -142,8 +153,8 @@ extension UploadByChannel on AppNetworkManager {
     required String bucket,
     required String region,
     void Function({required double progressValue})? uploadProgress, // 上传进度监听
-    // required void Function(String mediaUrl) uploadSuccess,
-    // required void Function() uploadFailure,
+    required void Function(String mediaUrl) uploadSuccess,
+    required void Function() uploadFailure,
   }) async {
     Map<String, dynamic> params = {
       "localPath": localPath,
@@ -200,6 +211,17 @@ extension UploadByChannel on AppNetworkManager {
         if (uploadProgress != null) {
           uploadProgress(progressValue: progress);
         }
+      } else if (call.method == 'onSuccess') {
+        Map data = call.arguments;
+        String mediaUrl = data['cosPath'];
+        // String mediaLocalPath = data['localPath'];
+        uploadSuccess(mediaUrl);
+      } else if (call.method == 'onFailed') {
+        uploadFailure();
+      } else {
+        debugPrint('call.arguments = ${call.arguments.toString()}');
+        throw Exception(
+            "${call.method}方法携带${call.arguments.toString()}参数未实现，请先实现");
       }
     });
     return platform

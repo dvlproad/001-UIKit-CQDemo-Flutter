@@ -18,6 +18,8 @@ class WishUrlPath {
   static String getWishDetail = "wish/getWishDetail"; //获取愿望单详情（无商品信息）
   static String getWishItems = "wish/getWishItems"; //获取愿望单商品
   static String showOtherWishGoods = "wish/showOtherWishGoods"; //是否展示其他愿望单商品
+  static String checkSendGiftMsgAccess =
+      "imCustomer/checkSendGiftMsgAccess"; //送礼后是否可以给对方发送im消息
 
   static String getTagListAll = "wish/tag/listTagsWithTree"; //获取所有标签
 
@@ -53,7 +55,7 @@ class WishUrlPath {
   static String wishCommentUpDown =
       "front-node/comment/do-up-or-down"; //愿望单点赞点踩
   static String wishReplyList = "front-node/comment/reply-list"; //愿望回复列表
-  static String commentAnchorPoint = "front-node/comment/anchor-point"; //获取评论所在位置
+  static String commentAnchorPoint =
+      "front-node/comment/anchor-point"; //获取评论所在位置
   static String wishCostSendMsg = "imCustomer/sendMsg"; //打赏后给用户发im消息
-
 }

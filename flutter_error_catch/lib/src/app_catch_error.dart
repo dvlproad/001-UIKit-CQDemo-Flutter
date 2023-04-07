@@ -2,16 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-07-28 12:38:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-25 23:28:42
+ * @LastEditTime: 2023-04-03 19:48:44
  * @Description: 错误捕获
  */
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:app_log/app_log.dart';
-import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:flutter_log_with_env/flutter_log_with_env.dart';
 
 // import 'package:get/get.dart';
 

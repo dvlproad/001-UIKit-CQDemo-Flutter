@@ -1,7 +1,8 @@
 name: flutter_error_catch
-description: A new Flutter package project.
+description: A error catch for Flutter package project.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_error_catch
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_error_catch
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -11,12 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_bugly: any
-
-  app_log:
-    path: ../app_log/
-  flutter_log_base:
-    path: ../flutter_log_base/
+  # flutter_bugly: any
+  flutter_log_with_env: #^0.0.1
+    path: ../flutter_log_with_env/
 
 dev_dependencies:
   flutter_test:

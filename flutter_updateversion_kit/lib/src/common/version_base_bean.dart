@@ -30,6 +30,7 @@ class VersionBaseBean {
   bool? buildHaveNewVersion;
   String updateLog;
   String downloadUrl;
+  String? noNewPrompt;
 
   VersionBaseBean({
     this.forceUpdate = false, // 是否强制升级
@@ -38,6 +39,7 @@ class VersionBaseBean {
     this.buildHaveNewVersion, // Boolean	是否有新版本(默认null，true/false直接显示/不显示弹窗不管版本是不是低了，null时候才根据版本判断)
     required this.updateLog,
     required this.downloadUrl,
+    this.noNewPrompt, // 已是最新版本的提示语
   });
 
   // VersionBaseBean.fromJson(Map<String, dynamic> json) {
