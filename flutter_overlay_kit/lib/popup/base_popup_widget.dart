@@ -8,7 +8,8 @@ import '../flutter_overlay_kit_adapt.dart';
 class BasePopupWidget extends StatefulWidget {
   static double toolbarHeight = 40.h_pt_cj;
 
-  final double? height;
+  double? height;
+  double? leftMargin;
 
   final String? title;
   final Widget Function(BuildContext bContext) customViewBuilder;
@@ -17,6 +18,7 @@ class BasePopupWidget extends StatefulWidget {
   BasePopupWidget({
     Key? key,
     this.height,
+    this.leftMargin,
     this.title,
     required this.customViewBuilder, // 由 Expanded 包裹，如果高度不够，会自动被拉伸
     this.bottomButtonBuilder,
@@ -47,15 +49,17 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
     return QuickToolBar(
       context,
       automaticallyImplyLeading: false,
+      leftMargin: widget.leftMargin ?? 0,
       title: widget.title ?? '',
       actions: [
         ToolBarImageActionWidget(
+          width: 60.w_pt_cj,
           image: Image(
             image: AssetImage(
               'assets/icon_close.png',
               package: 'flutter_overlay_kit',
             ),
-            width: 17.w_pt_cj,
+            width: 12.w_pt_cj,
             fit: BoxFit.cover,
           ),
           onPressed: () {
@@ -82,7 +86,7 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _toolbar,
+          SizedBox(child: _toolbar, height: 52.w_pt_cj,),
           Expanded(child: widget.customViewBuilder(context)),
           widget.bottomButtonBuilder == null
               ? Container()
