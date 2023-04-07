@@ -6,6 +6,7 @@ import './global_appinfo_config_bean.dart';
 import './global_share_config_bean.dart';
 import './global_game_config_bean.dart';
 import './global_web_config_bean.dart';
+import './global_chat_config_bean.dart';
 
 /*
 命名如下
@@ -92,6 +93,16 @@ class GlobalConfig {
     return GlobalWebConfigBean.fromJson(globalConfigMap!['webConfig']);
   }
 
+  /// 获取web的配置信息
+  static GlobalChatConfigBean? chatConfig() {
+    if (globalConfigMap == null || globalConfigMap!['chatConfig'] == null) {
+      return GlobalChatConfigBean(
+        fromRemindMessage: '对方还未关注或回复你之前，只能发1条文字消息',
+      );
+    }
+    return GlobalChatConfigBean.fromJson(globalConfigMap!['chatConfig']);
+  }
+
   /// 获取app下载链接的配置信息
   static GlobalAppInfoConfigBean appInfoConfig() {
     GlobalAppInfoConfigBean defaultConfig = GlobalAppInfoConfigBean(
@@ -159,6 +170,17 @@ class GlobalConfig {
     return bgImageUrl;
   }
 
+  //农场游戏h5背景图
+  static String? farmBgImageUrl() {
+    if (GlobalConfig.gameConfig() == null) {
+      return null;
+    }
+
+    GameConfig gameConfigBean = GlobalConfig.gameConfig()!.mineGameConfig!;
+    String? bgImageUrl = gameConfigBean.bgImageUrl;
+    return bgImageUrl;
+  }
+
   /// 豆了个豆 游戏入口 搜索关键字
   static String? beanFullGameName() {
     if (GlobalConfig.gameConfig() == null) {
@@ -171,8 +193,6 @@ class GlobalConfig {
   //获取豆了个豆游戏url
   static String? beanFullGameUrl({
     required String h5Title,
-    required String usertoken,
-    required String accountId,
   }) {
     if (GlobalConfig.gameConfig() == null) {
       return null;
@@ -459,6 +479,24 @@ class GlobalConfig {
 
     return fullShareUrl;
   }
+
+  ///平台客服shopId
+  static String? appShopId() {
+    if (globalConfigMap == null ||
+        globalConfigMap!['appCustomerServiceConfig'] == null) {
+      return '';
+    }
+    return globalConfigMap!['appCustomerServiceConfig']['appShopId'].toString();
+  }
+
+  ///平台客服头像
+  static String? appHeadImage() {
+    if (globalConfigMap == null ||
+        globalConfigMap!['appCustomerServiceConfig'] == null) {
+      return 'https://images.xihuanwu.com/applet/wishhouse/images/head_image/app_kefu.png';
+    }
+    return globalConfigMap!['appCustomerServiceConfig']['headImage'];
+  }
 }
 
 extension H5ParamsAdd on String {
@@ -466,6 +504,9 @@ extension H5ParamsAdd on String {
     Map<String, String> h5Params = {};
     if (config.h5ButtonText != null && config.h5ButtonText!.isNotEmpty) {
       h5Params.addAll({"btntext": config.h5ButtonText!});
+    }
+    if (config.type != null && config.type!.isNotEmpty) {
+      h5Params.addAll({"type": config.type!});
     }
 
     String newString = this.addH5CustomParams(h5Params);

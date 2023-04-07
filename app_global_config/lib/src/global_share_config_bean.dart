@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-11 17:05:53
+ * @LastEditTime: 2023-04-07 18:37:46
  * @Description: 
  */
 class ShareConfig {
@@ -13,6 +13,7 @@ class ShareConfig {
   String? shareDescription; //分享的描述
   String? shareThumbnailUrl; //分享的缩略图
   String shareUrl; //	分享的h5地址
+  String type; //	分享的类型
 
   ShareConfig({
     required this.h5Title,
@@ -21,6 +22,7 @@ class ShareConfig {
     this.shareTitle,
     this.shareDescription,
     this.shareThumbnailUrl,
+    required this.type,
     required this.shareUrl,
   });
 
@@ -32,6 +34,7 @@ class ShareConfig {
     String shareDescription = json['shareDescription'] ?? '';
     String shareThumbnailUrl = json['shareThumbnailUrl'] ?? '';
     String shareUrl = json['shareUrl'] ?? '';
+    String type = json['type'] ?? '';
 
     return ShareConfig(
       h5Title: h5Title,
@@ -41,6 +44,7 @@ class ShareConfig {
       shareDescription: shareDescription,
       shareThumbnailUrl: shareThumbnailUrl,
       shareUrl: shareUrl,
+      type: type,
     );
   }
 
@@ -53,6 +57,7 @@ class ShareConfig {
     _data['shareDescription'] = shareDescription;
     _data['shareThumbnailUrl'] = shareThumbnailUrl;
     _data['shareUrl'] = shareUrl;
+    _data['type'] = type;
     return _data;
   }
 }

@@ -4,20 +4,24 @@
  * @Description: 全局的网页配置（挂起后x分钟后，唤起app时reload）
  */
 class GlobalWebConfigBean {
-  late int reloadInterval;
+  int? reloadInterval;
 
   GlobalWebConfigBean({
-    required this.reloadInterval,
+    this.reloadInterval,
   });
 
-  GlobalWebConfigBean.fromJson(Map<String, dynamic> json) {
-    reloadInterval = json['reloadInterval'] ?? '';
+  static GlobalWebConfigBean fromJson(Map<String, dynamic> json) {
+    int reloadInterval = json['reloadInterval'];
+
+    return GlobalWebConfigBean(
+      reloadInterval: reloadInterval,
+    );
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
     if (reloadInterval != null) {
-      _data['appCode'] = reloadInterval;
+      _data['reloadInterval'] = reloadInterval;
     }
 
     return _data;

@@ -115,6 +115,7 @@ class GameConfig {
   final String? gameName; // 游戏名
   final GameImageConfig? gameEntranceImageBean; // 游戏入口图片
   final String gameUrl;
+  final String? bgImageUrl;
   final String? gameBackgroundImageUrl; // 游戏背景图(eg:大转盘需要)
   final bool shouldHideNavBar;
 
@@ -122,6 +123,7 @@ class GameConfig {
     this.show = true,
     this.gameName,
     this.gameEntranceImageBean,
+    this.bgImageUrl,
     required this.gameUrl,
     this.gameBackgroundImageUrl,
     this.shouldHideNavBar = true,
@@ -135,6 +137,7 @@ class GameConfig {
           GameImageConfig.fromJson(json['gameEntranceImage']);
     }
     String gameUrl = json['gameUrl'] ?? '';
+    String bgImageUrl = json['bgImageUrl'];
     String gameBackgroundImageUrl = json['gameBackgroundImageUrl'];
     bool shouldHideNavBar = json["hideAppNavBar"] ?? true;
 
@@ -142,6 +145,7 @@ class GameConfig {
       gameName: gameName,
       gameEntranceImageBean: gameEntranceImageBean,
       gameUrl: gameUrl,
+      bgImageUrl: bgImageUrl,
       gameBackgroundImageUrl: gameBackgroundImageUrl,
       shouldHideNavBar: shouldHideNavBar,
     );
