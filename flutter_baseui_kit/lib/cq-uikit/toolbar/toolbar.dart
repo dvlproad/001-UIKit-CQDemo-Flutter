@@ -13,6 +13,7 @@ class QuickToolBar extends CommonToolBar {
     Key? key,
     Color? backgroundColor, // 导航栏背景色
     String? title, // 中间导航栏标题文本
+    double? leftMargin,
     EdgeInsetsGeometry? titleMargin,
     AppBarTextColorType? textColorType, // 左侧(返回)按钮视图的类型
     bool? automaticallyImplyLeading, // 是否显示左侧(返回)按钮视图(默认true显示)
@@ -24,7 +25,17 @@ class QuickToolBar extends CommonToolBar {
   }) : super(
           key: key,
           backgroundColor: backgroundColor,
-          title: ToolBarTitleWidget(text: title, textColorType: textColorType),
+          title: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: leftMargin ?? 0),
+                child: ToolBarTitleWidget(
+                  text: title,
+                  textColorType: textColorType,
+                ),
+              )
+            ],
+          ),
           titleMargin: titleMargin,
           automaticallyImplyLeading: false,
           leadingPositionedLeft: leadingPositionedLeft,

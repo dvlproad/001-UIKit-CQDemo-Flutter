@@ -7,6 +7,9 @@
  */
 library flutter_baseui_kit;
 
+// bgcontainer
+export './base-uikit/bg_border_widget.dart';
+
 // text
 export './cq-uikit/text/tolerant_text.dart';
 
