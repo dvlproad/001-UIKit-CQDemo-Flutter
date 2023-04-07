@@ -7,7 +7,7 @@
  */
 import 'package:flutter/material.dart';
 import './log_base_cell.dart';
-import './log_data_bean.dart';
+import '../bean/log_data_bean.dart';
 
 typedef ClickApiLogCellCallback = void Function({
   required BuildContext context,

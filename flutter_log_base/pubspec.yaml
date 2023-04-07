@@ -1,6 +1,6 @@
 name: flutter_log_base
 description: flutter的log基础库.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_base
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_base
 
@@ -22,6 +22,8 @@ dependencies:
   fluttertoast: ^8.2.1
   flutter_reuse_view: #^0.0.1
     path: ../flutter_reuse_view/
+  flutter_json_viewer_new: #^0.0.1
+    path: ../flutter_json_viewer_new/
 
 dev_dependencies:
   flutter_test:

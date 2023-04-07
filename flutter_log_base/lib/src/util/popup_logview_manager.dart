@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import './log_home_page.dart';
-import './log_data_bean.dart';
+import '../log_ui/home/log_home_page.dart';
+import '../bean/log_data_bean.dart';
 
 // import 'package:sliding_up_panel/sliding_up_panel.dart';
 

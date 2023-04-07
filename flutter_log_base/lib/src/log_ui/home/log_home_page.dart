@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import './log_list.dart';
+
+import '../list/log_list.dart';
+import '../log_cell.dart';
+import '../../bean/log_data_bean.dart';
 
 class LogHomePage extends StatefulWidget {
   final Color? color;

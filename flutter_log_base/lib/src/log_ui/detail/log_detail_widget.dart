@@ -1,52 +1,54 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:flutter_reuse_view/flutter_reuse_view.dart';
+// import '../evvironment_header.dart';
+// import '../log_change_notifiter.dart';
 
-import './log_cell.dart';
-export './log_cell.dart' show ClickApiLogCellCallback;
+import '../../bean/log_data_bean.dart';
+import './log_detail_cell.dart';
 
-import './log_change_notifiter.dart';
-import './log_data_bean.dart';
-export './log_data_bean.dart';
-
-class LogList extends StatefulWidget {
+class LogDetailWidget extends StatefulWidget {
   final Color? color;
-  final List<LogModel> logModels;
-  final ClickApiLogCellCallback clickLogCellCallback; // apimockCell 的点击
+  final LogModel apiLogModel;
+  final Function({
+    required BuildContext context,
+    int? section,
+    int? row,
+    required LogModel bLogModel,
+  }) clickApiLogCellCallback; // apimockCell 的点击
 
-  final void Function(List<LogModel> bLogModels)
+  final void Function(List<LogModel> bLogModels)?
       onPressedCopyAll; // 点击复制所有按钮的事件
-  final void Function() onPressedClear; // 点击清空按钮的事件
+  final void Function()? onPressedClear; // 点击清空按钮的事件
+  final void Function() onPressedClose; // 点击关闭按钮的事件
 
-  const LogList({
+  const LogDetailWidget({
     Key? key,
     this.color,
-    required this.logModels,
-    required this.clickLogCellCallback,
-    required this.onPressedCopyAll,
-    required this.onPressedClear,
+    required this.apiLogModel,
+    required this.clickApiLogCellCallback,
+    this.onPressedCopyAll,
+    this.onPressedClear,
+    required this.onPressedClose,
   }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _LogListState();
+    return _LogDetailWidgetState();
   }
 }
 
-class _LogListState extends State<LogList> {
-  bool _reverse = false;
+class _LogDetailWidgetState extends State<LogDetailWidget> {
+  final ScrollController _controller = ScrollController();
+  final bool _reverse = false;
 
-  List<LogModel> _logModels = [];
-  final ApiLogChangeNotifier _environmentChangeNotifier =
-      ApiLogChangeNotifier();
+  late LogModel _logModel;
 
   @override
   void initState() {
     super.initState();
-
-    debugPrint("_LogListState initState");
 
     // _logModels = widget.logModels ?? [];
 
@@ -71,10 +73,12 @@ class _LogListState extends State<LogList> {
         // }
       },
     );
+
+    _logModel = widget.apiLogModel; // 写在这里用来临时修复外部传进来的数据改变的情况
   }
 
-  void updateLogModels(List<LogModel> logModels) {
-    _logModels = logModels;
+  void updateLogModel(LogModel logModel) {
+    _logModel = logModel;
     setState(() {});
   }
 
@@ -82,13 +86,89 @@ class _LogListState extends State<LogList> {
   Widget build(BuildContext context) {
     // print(
     //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
-    _logModels = widget.logModels; // 写在这里用来临时修复外部传进来的数据改变的情况
+    _logModel = widget.apiLogModel; // 写在这里用来临时修复外部传进来的数据改变的情况
 
     return Container(
       color: widget.color,
-      child: ChangeNotifierProvider<ApiLogChangeNotifier>.value(
-        value: _environmentChangeNotifier,
-        child: _pageWidget(context),
+      child: Column(
+        children: [
+          Container(height: 80),
+          _headerWidget,
+          Expanded(child: Container(child: _pageWidget(context))),
+        ],
+      ),
+    );
+  }
+
+  Widget get _headerWidget {
+    // ignore: sized_box_for_whitespace
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: 40,
+      //color: Colors.green,
+      child: Stack(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Center(
+                child: Text(
+                  '日志系统(单击可复制)',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Positioned(
+            right: 0,
+            child: Center(
+              child: _buildButton('关闭', onPressed: widget.onPressedClose),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(
+    String text, {
+    required void Function() onPressed,
+  }) {
+    return IconButton(
+      icon: const Image(
+        image: AssetImage(
+          'assets/log_close.png',
+          package: 'flutter_log_base',
+        ),
+        width: 34,
+        height: 34,
+        fit: BoxFit.scaleDown,
+      ),
+      onPressed: onPressed,
+    );
+    // ignore: dead_code
+    return TextButton(
+      onPressed: onPressed,
+      child: Container(
+        color: Colors.pink,
+        width: 80,
+        height: 30,
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -118,59 +198,13 @@ class _LogListState extends State<LogList> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _buildButton('清空', onPressed: widget.onPressedClear),
-                _buildButton(
-                  _reverse ? '正序' : '逆序',
-                  onPressed: () {
-                    setState(() {
-                      _reverse = !_reverse;
-                    });
-                  },
-                ),
-                _buildButton(
-                  '复制所有',
-                  onPressed: () {
-                    widget.onPressedCopyAll(_logModels);
-                  },
-                ),
-              ],
+              children: const [],
             ),
           ),
-          Consumer<ApiLogChangeNotifier>(
-            builder: (context, environmentChangeNotifier, child) {
-              return Expanded(
-                child: _searchResultWidget(context),
-              );
-            },
-          ),
+          Expanded(child: _searchResultWidget(context)),
           Container(height: bottomHeight)
         ],
       ),
-    );
-  }
-
-  Widget _buildButton(
-    String text, {
-    required void Function() onPressed,
-  }) {
-    return TextButton(
-      child: Container(
-        color: Colors.pink,
-        width: 80,
-        height: 30,
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
-      onPressed: onPressed,
     );
   }
 
@@ -178,12 +212,13 @@ class _LogListState extends State<LogList> {
     int sectionCount = 1;
 
     int numOfRowInSection(section) {
-      return _logModels.length;
+      // ignore: unnecessary_null_comparison
+      return _logModel != null ? 1 : 0;
     }
 
     return SectionTableView(
-      // controller: _controller,
-      // reverse: _reverse,
+      controller: _controller,
+      reverse: _reverse,
       sectionCount: sectionCount,
       numOfRowInSection: (section) {
         return numOfRowInSection(section);
@@ -193,10 +228,9 @@ class _LogListState extends State<LogList> {
         return Container();
       },
       cellAtIndexPath: (section, row) {
-        LogModel logModel = _logModels[row];
-        return ApiLogTableViewCell(
-          maxLines: 5,
-          apiLogModel: logModel,
+        return ApiLogDetailCell(
+          maxLines: 100,
+          apiLogModel: _logModel,
           section: section,
           row: row,
           clickApiLogCellCallback: ({
@@ -208,7 +242,7 @@ class _LogListState extends State<LogList> {
             // print('点击选中 log');
             // setState(() {}); // 请在外部执行
 
-            widget.clickLogCellCallback(
+            widget.clickApiLogCellCallback(
               context: context,
               section: section,
               row: row,

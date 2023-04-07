@@ -7,7 +7,7 @@
  */
 import 'package:flutter/material.dart';
 
-import './log_data_bean.dart';
+import '../bean/log_data_bean.dart';
 
 class ApiLogChangeNotifier extends ChangeNotifier {
   String? _searchText;

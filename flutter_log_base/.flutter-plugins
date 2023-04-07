@@ -1,2 +1,8 @@
 # This is a generated file; do not edit or check into version control.
-fluttertoast=/Users/lichaoqian/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.2.1/
+fluttertoast=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/fluttertoast-8.2.1/
+path_provider=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider-2.0.14/
+path_provider_android=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.0.24/
+path_provider_foundation=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_foundation-2.2.1/
+path_provider_linux=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_linux-2.1.10/
+path_provider_windows=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_windows-2.1.5/
+sqflite=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/sqflite-2.2.6/
