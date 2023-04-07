@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-18 18:07:40
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-24 15:29:45
+ * @LastEditTime: 2023-04-07 18:11:05
  * @Description: 数据万象(宽高都不传的时候，只会做 format/webp/auto-orient 处理)
  */
 import 'dart:math';
@@ -38,6 +38,7 @@ class DataVientiane {
     double? height,
     void Function(String lastImageUrl)? lastImageUrlGetBlock,
   }) {
+    // ignore: unnecessary_null_comparison
     if (imageUrl == null) {
       return "";
     }

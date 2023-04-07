@@ -11,12 +11,15 @@ class PermissionsManager {
 
   //获取相册权限
   static Future<bool> photos() async {
-    var permissionList = <Permission>[Permission.storage];
+    var permissionList = <Permission>[];
     if (Platform.isAndroid) {
       final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
       final AndroidDeviceInfo info = await deviceInfoPlugin.androidInfo;
       if (info.version.sdkInt >= 33) {
         permissionList.add(Permission.photos);
+        permissionList.add(Permission.videos);
+      } else {
+        permissionList.add(Permission.storage);
       }
     } else {
       permissionList.add(Permission.photos);

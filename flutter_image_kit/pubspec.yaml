@@ -1,7 +1,8 @@
 name: flutter_image_kit
-description: A new Flutter package project.
+description: 图片的基础库.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_image_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_image_kit
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -11,9 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
     
-  cached_network_image: any
-  extended_image: any
-  flutter_cache_manager: any
+  cached_network_image: ^3.2.1
+  extended_image: ^6.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

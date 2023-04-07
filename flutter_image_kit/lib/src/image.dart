@@ -1,9 +1,7 @@
 // 兼容错误的 图片视图
-import 'dart:math';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import './data_vientiane.dart';
 
@@ -23,6 +21,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
     Duration? placeholderFadeInDuration,
     Duration? fadeOutDuration,
     Duration fadeInDuration = Duration.zero,
+    bool gaplessPlayback = true,
     ProgressIndicatorBuilder? progressIndicatorBuilder,
   }) : super(
           key: key,
@@ -42,6 +41,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
           fadeOutDuration: fadeOutDuration,
           fadeInDuration: fadeInDuration,
           progressIndicatorBuilder: progressIndicatorBuilder,
+          gaplessPlayback: gaplessPlayback,
         );
 }
 
@@ -68,7 +68,9 @@ class BaseTolerantNetworkImage extends StatelessWidget {
   /// Widget displayed while the target [imageUrl] is loading.
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
-  BaseTolerantNetworkImage({
+  final bool? gaplessPlayback;
+
+  const BaseTolerantNetworkImage({
     Key? key,
     this.width,
     this.height,
@@ -80,11 +82,12 @@ class BaseTolerantNetworkImage extends StatelessWidget {
     this.fadeOutDuration,
     this.fadeInDuration,
     this.progressIndicatorBuilder,
+    this.gaplessPlayback,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool urlValid = imageUrl != null && imageUrl.isEmpty == false;
+    bool urlValid = imageUrl.isEmpty == false;
     if (urlValid == true) {
       bool isNetworkUrl = imageUrl.startsWith(RegExp(r'https?:'));
       urlValid = isNetworkUrl;
@@ -108,7 +111,7 @@ class BaseTolerantNetworkImage extends StatelessWidget {
         height: height,
         fit: fit,
         cache: true,
-        gaplessPlayback: true,
+        gaplessPlayback: gaplessPlayback ?? true,
         // clearMemoryCacheWhenDispose: true,
         loadStateChanged: (ExtendedImageState state) {
           return FadeWidget(
@@ -156,7 +159,7 @@ class BaseTolerantNetworkImage extends StatelessWidget {
       return Container(
         width: width,
         height: height,
-        color: Color(0xFFF0F0F0),
+        color: const Color(0xFFF0F0F0),
       );
     }
   }
@@ -198,7 +201,6 @@ class _FadeWidgetState extends State<FadeWidget>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     hideWidget = false;
 
@@ -250,18 +252,17 @@ class _FadeWidgetState extends State<FadeWidget>
             ) ??
             Container();
     }
+    // ignore: dead_code
     return const SizedBox.shrink();
   }
 
   @override
   void didUpdateWidget(covariant FadeWidget oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller.dispose();
     _isControllerDisposed = true;
     super.dispose();

@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-07-22 15:26:15
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-24 16:06:44
+ * @LastEditTime: 2023-04-07 18:07:48
  * @Description: 图片403、404错误不上报(TODO:暂未实现)
  */
 // 参考文章:[Flutter cached_network_image图片缓存异常/加载失败优化 403\404](https://www.cnblogs.com/maqingyuan/p/13717437.html)
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -14,8 +13,9 @@ import './image.dart';
 import './data_vientiane.dart';
 
 class StatefulImage extends StatefulWidget {
-  ImageDealType? imageDealType;
-  void Function(String lastImageUrl)? lastImageUrlGetBlock; // 获取最后显示的url(打印用)
+  final ImageDealType? imageDealType;
+  final void Function(String lastImageUrl)?
+      lastImageUrlGetBlock; // 获取最后显示的url(打印用)
 
   final double? prepageImageWidth; // 前一个页面图片的点宽高(用于先提前用前一页图片展示)
   final double? prepageImageHeight; // 前一个页面图片的点宽高(用于先提前用前一页图片展示)
@@ -42,7 +42,7 @@ class StatefulImage extends StatefulWidget {
   /// Widget displayed while the target [imageUrl] is loading.
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
-  StatefulImage({
+  const StatefulImage({
     Key? key,
     this.imageDealType,
     this.lastImageUrlGetBlock,
@@ -65,6 +65,7 @@ class StatefulImage extends StatefulWidget {
 }
 
 class _StatefulImageState extends State<StatefulImage> {
+  // ignore: unused_field
   late ImageProvider _imageProvider;
   bool imgCheck = true;
 
@@ -81,7 +82,7 @@ class _StatefulImageState extends State<StatefulImage> {
 
     precacheImage(CachedNetworkImageProvider(widget.imageUrl), context,
         onError: (e, stackTrace) {
-      print(('Image failed to load with error：$e'));
+      debugPrint(('Image failed to load with error：$e'));
       setState(() {
         imgCheck = false;
       });

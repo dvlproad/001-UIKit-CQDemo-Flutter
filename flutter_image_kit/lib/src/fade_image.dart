@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-07-22 15:26:15
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-29 14:05:16
+ * @LastEditTime: 2023-04-07 18:13:26
  * @Description: 图片过度(TODO:暂未实现)
  */
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -84,7 +83,7 @@ class FadeImage extends StatefulWidget {
   /// Widget displayed while the target [imageUrl] is loading.
   final ProgressIndicatorBuilder? progressIndicatorBuilder;
 
-  FadeImage({
+  const FadeImage({
     Key? key,
     this.prepageImageWidth,
     this.prepageImageHeight,
@@ -106,6 +105,7 @@ class FadeImage extends StatefulWidget {
 
 class _FadeImageState extends State<FadeImage> {
   String _prePageImageUrl = '';
+  // ignore: unused_field
   String _currentPageImageUrl = '';
 
   bool isShowMoney = false;
@@ -157,7 +157,7 @@ class _FadeImageState extends State<FadeImage> {
       behavior: HitTestBehavior.opaque,
       onTap: () => isShowMoney = !isShowMoney,
       child: Container(
-        padding: EdgeInsets.only(left: 3),
+        padding: const EdgeInsets.only(left: 3),
         child: AnimatedCrossFade(
           firstChild: Image.network(
             "https://img1.baidu.com/it/u=1966616150,2146512490&fm=253&fmt=auto&app=138&f=JPEG?w=751&h=500",
@@ -174,7 +174,7 @@ class _FadeImageState extends State<FadeImage> {
           crossFadeState: isShowMoney
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
-          duration: Duration(
+          duration: const Duration(
             milliseconds: 500,
           ),
         ),
