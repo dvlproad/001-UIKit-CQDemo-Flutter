@@ -91,7 +91,7 @@ class ApplicationDraggableManager {
                 image: _floatingToolImageProvider ??
                     AssetImage(
                       'assets/icon_dev.png',
-                      package: 'flutter_environment',
+                      package: 'flutter_environment_base',
                     ),
                 fit: BoxFit.cover,
               ),

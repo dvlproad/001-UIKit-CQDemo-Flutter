@@ -28,6 +28,7 @@ export 'src/apimock/manager/api_data_bean.dart';
 export 'src/page/api_mock_page_content.dart';
 
 export 'src/environment_util.dart';
+export 'src/network_page_data_cache.dart';
 
 export './darg/draggable_manager.dart';
 
