@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-09-18 16:20:23
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 14:50:55
+ * @LastEditTime: 2023-09-19 16:38:33
  * @Description: 
  */
 import 'dart:async';
@@ -35,7 +35,7 @@ class _DebugPageState extends State<DebugPage> {
       "https://pics6.baidu.com/feed/32fa828ba61ea8d31d2b6af0778ff742241f584f.jpeg@f_auto?token=ec9fb18c52b405fa5e542b3ddc1314b9";
   String vientianeImageUrl =
       "https://images.xihuanwu.com/mcms/uploads/1647604960983901.jpg";
-  String homePath = "unknow";
+  String cachePath = "unknow";
 
   int vientianeImageWidthStart = 50;
   int vientianeImageWidthEnd = 50; // 万象图片宽度的结束值
@@ -53,11 +53,14 @@ class _DebugPageState extends State<DebugPage> {
   }
 
   getDir() async {
-    Directory homeDir = await getApplicationCacheDirectory();
+    Directory tempDir = await getTemporaryDirectory();
+    Directory cacheDir = await getApplicationCacheDirectory();
     setState(() {
-      homePath = homeDir.path;
-      Clipboard.setData(ClipboardData(text: "open $homePath"));
-      debugPrint("open $homePath");
+      debugPrint("tempDir: open ${tempDir.path}");
+
+      cachePath = cacheDir.path;
+      Clipboard.setData(ClipboardData(text: "open $cachePath"));
+      debugPrint("cacheDir: open $cachePath");
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -77,10 +80,10 @@ class _DebugPageState extends State<DebugPage> {
           ListView(
             children: [
               _renderItem(
-                title: 'document $homePath',
+                title: 'cachePath: $cachePath',
                 alignment: Alignment.centerLeft,
                 onTap: () async {
-                  Clipboard.setData(ClipboardData(text: homePath));
+                  Clipboard.setData(ClipboardData(text: cachePath));
                 },
               ),
               _renderItem(
