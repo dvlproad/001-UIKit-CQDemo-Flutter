@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-09-18 16:20:23
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 14:50:55
+ * @LastEditTime: 2023-09-19 14:43:11
  * @Description: 
  */
 import 'dart:async';
@@ -19,18 +19,17 @@ import 'package:flutter/services.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tsimagekitdemo/ts_images_page.dart';
 
 import 'test_data_vientiane.dart';
 
-class DebugPage extends StatefulWidget {
-  const DebugPage({Key? key}) : super(key: key);
+class TSImagesPage extends StatefulWidget {
+  const TSImagesPage({Key? key}) : super(key: key);
 
   @override
-  _DebugPageState createState() => _DebugPageState();
+  _TSImagesPageState createState() => _TSImagesPageState();
 }
 
-class _DebugPageState extends State<DebugPage> {
+class _TSImagesPageState extends State<TSImagesPage> {
   String bgUrl =
       "https://pics6.baidu.com/feed/32fa828ba61ea8d31d2b6af0778ff742241f584f.jpeg@f_auto?token=ec9fb18c52b405fa5e542b3ddc1314b9";
   String vientianeImageUrl =
@@ -38,7 +37,11 @@ class _DebugPageState extends State<DebugPage> {
   String homePath = "unknow";
 
   int vientianeImageWidthStart = 50;
-  int vientianeImageWidthEnd = 50; // 万象图片宽度的结束值
+  int vientianeImageWidthEnd = 100; // 万象图片宽度的结束值
+
+  int showImageCount = 1;
+
+  int? allCount;
 
   @override
   void dispose() {
@@ -50,6 +53,8 @@ class _DebugPageState extends State<DebugPage> {
     super.initState();
 
     getDir();
+
+    showImageCount = 1;
   }
 
   getDir() async {
@@ -61,8 +66,9 @@ class _DebugPageState extends State<DebugPage> {
     });
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    vientianeImageWidthEnd =
-        prefs.getInt("kVientianeImageWidthEndKey") ?? vientianeImageWidthStart;
+    vientianeImageWidthEnd = prefs.getInt("kVientianeImageWidthEndKey") ?? 50;
+
+    allCount = vientianeImageWidthEnd - vientianeImageWidthStart;
   }
 
   @override
@@ -70,59 +76,71 @@ class _DebugPageState extends State<DebugPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Text('Debug'),
+        title: const Text('Images'),
       ),
       body: Stack(
         children: [
           ListView(
             children: [
               _renderItem(
-                title: 'document $homePath',
+                title: '显示两张',
                 alignment: Alignment.centerLeft,
                 onTap: () async {
-                  Clipboard.setData(ClipboardData(text: homePath));
-                },
-              ),
-              _renderItem(
-                title: '删除图片缓存',
-                alignment: Alignment.centerLeft,
-                onTap: () async {
-                  await clearDiskCachedImages();
-                  clearMemoryImageCache();
-                  // ToastUtil.showMessage('本地、内存 缓存清空');
-                },
-              ),
-              _renderItem(
-                title:
-                    '下载图片 下载($vientianeImageWidthEnd - ${vientianeImageWidthEnd + 100})',
-                alignment: Alignment.centerLeft,
-                onTap: () async {
-                  getNetworkImageData(bgUrl);
-
-                  int vientianeImageNewCount = 100;
-                  for (var i = 0; i < vientianeImageNewCount; i++) {
-                    double imageWidthStart =
-                        (vientianeImageWidthEnd + i + 1).toDouble();
-                    String iImageUrl = TestDataVientiane.newImageUrl(
-                      vientianeImageUrl,
-                      width: imageWidthStart,
-                    );
-
-                    getNetworkImageData(iImageUrl);
-                    sleep(const Duration(milliseconds: 10));
-                  }
-
                   setState(() {
-                    vientianeImageWidthEnd += vientianeImageNewCount;
+                    showImageCount = 2;
                   });
-
-                  SharedPreferences prefs =
-                      await SharedPreferences.getInstance();
-                  prefs.setInt(
-                      "kVientianeImageWidthEndKey", vientianeImageWidthEnd);
                 },
               ),
-              _rennderItemPage(title: '图片列表页', page: const TSImagesPage()),
+              _renderItem(
+                title: '多显示100张(显示到${showImageCount + 100}张)',
+                alignment: Alignment.centerLeft,
+                onTap: () async {
+                  setState(() {
+                    showImageCount = showImageCount + 100;
+                  });
+                },
+              ),
+              _renderItem(
+                title: '全部显示(共${allCount ?? 0}张)',
+                alignment: Alignment.centerLeft,
+                onTap: () async {
+                  setState(() {
+                    showImageCount = allCount ?? 0;
+                  });
+                },
+              ),
+              // 注意，为了在嵌套的 ListView 中正常工作，我们将 shrinkWrap 属性设置为 true，这样内部 ListView 将根据其内容的高度自动调整大小。
+              // 我们还将 physics 属性设置为 ClampingScrollPhysics()，以避免与外部 ListView 的滚动行为冲突。
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemCount: showImageCount,
+                itemBuilder: (context, index) {
+                  int imageWidthStartValue =
+                      vientianeImageWidthStart + index + 1;
+                  double imageWidthStart = imageWidthStartValue.toDouble();
+                  String indexImageUrl = TestDataVientiane.newImageUrl(
+                    vientianeImageUrl,
+                    width: imageWidthStart,
+                  );
+
+                  return Container(
+                    color: Colors.amber,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ExtendedImage.network(
+                          indexImageUrl,
+                          width: imageWidthStart,
+                          height: 100,
+                        ),
+                        Text("$imageWidthStartValue:$indexImageUrl"),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ],
           ),
         ],

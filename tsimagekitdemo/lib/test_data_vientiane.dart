@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-07-18 18:07:40
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 11:04:17
+ * @LastEditTime: 2023-09-19 14:49:32
  * @Description: 数据万象(宽高都不传的时候，只会做 format/webp/auto-orient 处理)
  */
 import 'dart:math';
@@ -44,10 +44,7 @@ class TestDataVientiane {
     }
 
     String newImageUrl = imageUrl;
-    // 固定取2倍图，能保证清晰，万象中已做处理，也不会太大
-    // 0.652173913043478是为了对标小红书让414的屏幕宽度下最终获取到的图片宽度是540
-    // double multiple = 2 * 0.652173913043478;
-    double multiple = 2;
+    double multiple = 1;
     String thumbnail = '?imageMogr2/thumbnail/';
     if (width != null && width > 0) {
       double useWidth = width;
