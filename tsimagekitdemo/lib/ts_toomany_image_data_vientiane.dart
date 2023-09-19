@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-07-18 18:07:40
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 14:49:32
+ * @LastEditTime: 2023-09-19 16:59:16
  * @Description: 数据万象(宽高都不传的时候，只会做 format/webp/auto-orient 处理)
  */
-import 'dart:math';
 
 /// [图片处理方式:快速缩略模板](https://cloud.tencent.com/document/product/460/6929)
 /// [图片处理方式:数据万象-缩放thumbnail](https://cloud.tencent.com/document/product/460/36540)
@@ -17,7 +16,7 @@ import 'dart:math';
 /// [图片处理方式:数据万象-文字水印](https://cloud.tencent.com/document/product/460/36542)
 /// eg:http://examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg?watermark/2/text/6IW-6K6v5LqRwrfkuIfosaHkvJjlm74/fill/IzNEM0QzRA/fontsize/20/dissolve/50/gravity/northeast/dx/20/dy/20/batch/1/degree/45
 
-class TestDataVientiane {
+class TSTooManyImageDataVientiane {
   static bool canVientiane(String imageUrl) {
     // https://images.xihuanwu.com/mcms/uploads/1647604960983901.jpg?imageMogr2/thumbnail/100x/format/webp/auto-orient
     int index = imageUrl.indexOf('.xihuanwu.com');

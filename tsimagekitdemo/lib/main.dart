@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'debug_page.dart';
+import 'ts_toomany_image_home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -122,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       MaterialPageRoute(
         builder: (context) {
-          return const DebugPage();
+          return const TSTooManyImageHomePage();
         },
       ),
     );

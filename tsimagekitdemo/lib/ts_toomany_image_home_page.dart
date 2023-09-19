@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-09-18 16:20:23
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 16:38:33
+ * @LastEditTime: 2023-09-19 17:00:28
  * @Description: 
  */
 import 'dart:async';
@@ -19,18 +19,18 @@ import 'package:flutter/services.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tsimagekitdemo/ts_images_page.dart';
 
-import 'test_data_vientiane.dart';
+import 'ts_toomany_image_data_vientiane.dart';
+import 'ts_toomany_image_page.dart';
 
-class DebugPage extends StatefulWidget {
-  const DebugPage({Key? key}) : super(key: key);
+class TSTooManyImageHomePage extends StatefulWidget {
+  const TSTooManyImageHomePage({Key? key}) : super(key: key);
 
   @override
   _DebugPageState createState() => _DebugPageState();
 }
 
-class _DebugPageState extends State<DebugPage> {
+class _DebugPageState extends State<TSTooManyImageHomePage> {
   String bgUrl =
       "https://pics6.baidu.com/feed/32fa828ba61ea8d31d2b6af0778ff742241f584f.jpeg@f_auto?token=ec9fb18c52b405fa5e542b3ddc1314b9";
   String vientianeImageUrl =
@@ -106,7 +106,7 @@ class _DebugPageState extends State<DebugPage> {
                   for (var i = 0; i < vientianeImageNewCount; i++) {
                     double imageWidthStart =
                         (vientianeImageWidthEnd + i + 1).toDouble();
-                    String iImageUrl = TestDataVientiane.newImageUrl(
+                    String iImageUrl = TSTooManyImageDataVientiane.newImageUrl(
                       vientianeImageUrl,
                       width: imageWidthStart,
                     );
@@ -125,7 +125,8 @@ class _DebugPageState extends State<DebugPage> {
                       "kVientianeImageWidthEndKey", vientianeImageWidthEnd);
                 },
               ),
-              _rennderItemPage(title: '图片列表页', page: const TSImagesPage()),
+              _rennderItemPage(
+                  title: '图片列表页', page: const TSTooManyImagePage()),
             ],
           ),
         ],
