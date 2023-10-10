@@ -50,6 +50,7 @@ dev_dependencies:
   extended_image: ^7.0.2
   path_provider: ^2.0.4
   shared_preferences: ^2.0.13
+  crypto: ^3.0.1  #字符加密
 
   # flutter_baseui_kit:
   #   path: ../flutter_baseui_kit/

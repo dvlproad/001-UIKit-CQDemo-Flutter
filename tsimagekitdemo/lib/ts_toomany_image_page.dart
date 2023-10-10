@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-09-18 16:20:23
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-19 17:00:41
+ * @LastEditTime: 2023-09-25 10:20:34
  * @Description: 
  */
 import 'dart:io';
@@ -24,10 +24,10 @@ class TSTooManyImagePage extends StatefulWidget {
   const TSTooManyImagePage({Key? key}) : super(key: key);
 
   @override
-  _TSImagesPageState createState() => _TSImagesPageState();
+  _TSTooManyImagePageState createState() => _TSTooManyImagePageState();
 }
 
-class _TSImagesPageState extends State<TSTooManyImagePage> {
+class _TSTooManyImagePageState extends State<TSTooManyImagePage> {
   String bgUrl =
       "https://pics6.baidu.com/feed/32fa828ba61ea8d31d2b6af0778ff742241f584f.jpeg@f_auto?token=ec9fb18c52b405fa5e542b3ddc1314b9";
   String vientianeImageUrl =
@@ -114,9 +114,7 @@ class _TSImagesPageState extends State<TSTooManyImagePage> {
                 physics: const ClampingScrollPhysics(),
                 itemCount: showImageCount,
                 itemBuilder: (context, index) {
-                  int imageWidthStartValue =
-                      vientianeImageWidthStart + index + 1;
-                  double imageWidthStart = imageWidthStartValue.toDouble();
+                  int imageWidthStart = vientianeImageWidthStart + index + 1;
                   String indexImageUrl =
                       TSTooManyImageDataVientiane.newImageUrl(
                     vientianeImageUrl,
@@ -131,10 +129,10 @@ class _TSImagesPageState extends State<TSTooManyImagePage> {
                       children: [
                         ExtendedImage.network(
                           indexImageUrl,
-                          width: imageWidthStart,
+                          width: imageWidthStart.toDouble(),
                           height: 100,
                         ),
-                        Text("$imageWidthStartValue:$indexImageUrl"),
+                        Text("$imageWidthStart:$indexImageUrl"),
                       ],
                     ),
                   );
