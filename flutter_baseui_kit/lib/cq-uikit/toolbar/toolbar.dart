@@ -22,10 +22,12 @@ class QuickToolBar extends CommonToolBar {
     void Function()? customOnPressedBack,
     List<Widget>? actions, // 右侧操作按钮视图
     double? actionsPositionedRight,
+    bool? centerTitle,
   }) : super(
           key: key,
           backgroundColor: backgroundColor,
           title: Row(
+            mainAxisAlignment: centerTitle == true ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.only(left: leftMargin ?? 0),

@@ -69,7 +69,7 @@ class ButtonChildWidget extends StatelessWidget {
             TextStyle(
               fontFamily: 'PingFang SC',
               // color: _currentTextColor, //不用设颜色，会自动使用外层样式
-              fontSize: 13.0,
+              fontSize: 14.0,
               fontWeight: FontWeight.w400,
             ),
       ),

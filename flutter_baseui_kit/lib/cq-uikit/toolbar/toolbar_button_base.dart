@@ -5,6 +5,7 @@
  * @LastEditTime: 2023-03-24 13:20:30
  * @Description: toolbar 上 的左右两侧按钮视图
  */
+import '../../button/tap_view/tap_widget.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_button_base/flutter_button_base.dart';
 import '../../button/flutter_button_base.dart';
@@ -35,12 +36,12 @@ class ToolBarImageActionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // [Flutter Image 参数详解](https://blog.csdn.net/chenlove1/article/details/84111554)
     //BoxFit.cover:以原图填满Image为目的，如果原图size大于Image的size，按比例缩小，居中显示在Image上。如果原图size小于Image的size，则按比例拉升原图的宽和高，填充Image居中显示。
-    return GestureDetector(
+    return DebounceTapWidget(
       onTap: this.onPressed,
       child: Container(
         width: width ?? 44.w_pt_cj,
         height: 44.h_pt_cj,
-        color: color,
+        color: color ?? Colors.white, // 如果不给默认颜色，container的点击响应区域只有中间的图片
         alignment: Alignment.center,
         child: image,
       ),
