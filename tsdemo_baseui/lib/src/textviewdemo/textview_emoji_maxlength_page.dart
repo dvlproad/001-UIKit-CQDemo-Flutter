@@ -1,9 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:21:57
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/cq-uikit/textview/emoji_input_textview.dart';
 // import 'package:tsdemodemo_flutter/commonui/cq-photo-add-delete-list/images_add_delete_pick_list.dart';
 
 class TSTextViewEmojiMaxLengthPage extends StatefulWidget {
-  TSTextViewEmojiMaxLengthPage({Key key}) : super(key: key);
+  TSTextViewEmojiMaxLengthPage({Key? key}) : super(key: key);
 
   @override
   _TSTextViewEmojiMaxLengthPageState createState() =>

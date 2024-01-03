@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSThemeButtonPage extends StatefulWidget {
-  TSThemeButtonPage({Key key}) : super(key: key);
+  TSThemeButtonPage({Key? key}) : super(key: key);
 
   @override
   _TSThemeButtonPageState createState() => new _TSThemeButtonPageState();

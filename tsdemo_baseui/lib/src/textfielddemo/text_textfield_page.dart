@@ -3,10 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSTextTextFieldPage extends StatefulWidget {
-  TSTextTextFieldPage({Key key, this.title, this.username}) : super(key: key);
-
-  final String title;
-  final String username;
+  final String? title;
+  final String? username;
+  TSTextTextFieldPage({
+    Key? key,
+    this.title,
+    this.username,
+  }) : super(key: key);
 
   @override
   _TSTextTextFieldPageState createState() => new _TSTextTextFieldPageState();
@@ -26,7 +29,7 @@ class _TSTextTextFieldPageState extends State<TSTextTextFieldPage> {
   // 控制文本框焦点
   FocusNode usernameFocusNode = new FocusNode();
   FocusNode phoneFocusNode = new FocusNode();
-  FocusScopeNode currentFocusNode;
+  FocusScopeNode? currentFocusNode;
 
   @override
   void initState() {

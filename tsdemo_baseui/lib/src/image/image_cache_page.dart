@@ -3,7 +3,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_image_kit/flutter_image_kit.dart';
 
 class TSImageCachePage extends StatefulWidget {
-  TSImageCachePage({Key key}) : super(key: key);
+  TSImageCachePage({Key? key}) : super(key: key);
 
   @override
   _TSImageCachePageState createState() => new _TSImageCachePageState();
@@ -15,10 +15,10 @@ class _TSImageCachePageState extends State<TSImageCachePage> {
   String netImagePrefix =
       'https://xxx-1302324914.cos.ap-guangzhou.myqcloud.com/image/tag_bg';
 
-  List networkImageModels;
-  int showImageIndex;
+  late List networkImageModels;
+  late int showImageIndex;
 
-  List<ImageProvider> imageProviders_network;
+  late List<ImageProvider> imageProviders_network;
 
   @override
   void initState() {

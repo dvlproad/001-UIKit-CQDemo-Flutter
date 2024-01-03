@@ -1,12 +1,19 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-20 18:53:09
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:18:38
+ * @Description: 
+ */
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './baseui_routes.dart';
 
 class TSBaseUIHomePage extends CJTSBasePage {
-  final String title;
+  final String? title;
 
-  TSBaseUIHomePage({Key key, this.title}) : super(key: key);
+  TSBaseUIHomePage({Key? key, this.title}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();

@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:19:54
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/cq-uikit/textview/input_textview.dart';
 // [Dart学习--之Runes与Symbols相关方法总结](https://www.cnblogs.com/lxlx1798/p/11371285.html)
@@ -8,7 +15,7 @@ import 'package:flutter_baseui_kit/cq-uikit/textview/input_textview.dart';
 // 对于非4个数值的情况，把编码值放到大括号中即可, 如，笑脸emoji (😆) 是\u{1f600}
 
 class TSTextViewPage extends StatefulWidget {
-  TSTextViewPage({Key key}) : super(key: key);
+  TSTextViewPage({Key? key}) : super(key: key);
 
   @override
   _TSTextViewPageState createState() => new _TSTextViewPageState();

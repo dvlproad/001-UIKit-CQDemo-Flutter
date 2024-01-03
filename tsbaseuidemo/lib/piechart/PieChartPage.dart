@@ -14,11 +14,11 @@ class PieChartPage extends StatefulWidget {
 }
 
 class _PieChartPageState extends State<PieChartPage> {
-  List<double> angles;
+  late List<double> angles;
 
-  List<Color> colors;
-  List<String> contents;
-  ui.Image image;
+  late List<Color> colors;
+  late List<String> contents;
+  ui.Image? image;
 
   @override
   void initState() {

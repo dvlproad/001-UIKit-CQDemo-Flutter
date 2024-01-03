@@ -3,7 +3,7 @@ import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSStateButtonPage extends StatefulWidget {
-  TSStateButtonPage({Key key}) : super(key: key);
+  TSStateButtonPage({Key? key}) : super(key: key);
 
   @override
   _TSStateButtonPageState createState() => new _TSStateButtonPageState();

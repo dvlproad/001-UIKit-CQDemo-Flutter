@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 // [Flutter - 图片Image组件](https://www.jianshu.com/p/107b1fb6a1d3)
 
 class TSImagePage extends StatefulWidget {
-  TSImagePage({Key key}) : super(key: key);
+  TSImagePage({Key? key}) : super(key: key);
 
   @override
   _TSImagePageState createState() => new _TSImagePageState();

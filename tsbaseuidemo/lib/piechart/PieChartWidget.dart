@@ -10,27 +10,26 @@ import './ChartUtils.dart';
 
 class PieChartWidget extends StatefulWidget {
   ///比例集合
-  required
+
   List<double> proportions;
 
   ///文案集合
-  required
+
   List<String> contents;
-  ui.Image image;
+  ui.Image? image;
 
   ///颜色集合
-  required
   List<Color> colors;
 
-  double startTurns = .0;
-  double radius = 130;
+  double startTurns;
+  double radius;
 
   PieChartWidget(
     this.proportions,
     this.colors, {
-    this.contents,
-    this.radius,
-    this.startTurns,
+    required this.contents,
+    this.radius = 130,
+    this.startTurns = .0,
     this.image,
   });
 
@@ -41,9 +40,9 @@ class PieChartWidget extends StatefulWidget {
 class _PieChartWidgetState extends State<PieChartWidget>
     with TickerProviderStateMixin {
   ///这个是 自动
-  AnimationController autoAnimationController;
+  AnimationController? autoAnimationController;
 
-  Animation<double> tween;
+  Animation<double>? tween;
 
   double turns = .0;
 
@@ -52,22 +51,22 @@ class _PieChartWidgetState extends State<PieChartWidget>
   ///角加速度，类似摩擦力 的作用 ，让惯性滚动 减慢，这个意思是每一秒 ，角速度 减慢vA个pi。
   double vA = 40.0;
 
-  Offset offset;
+  Offset offset = Offset.zero;
 
-  double pBy;
+  double pBy = 0;
 
-  double pBx;
+  double pBx = 0;
 
-  double pAx;
+  double pAx = 0;
 
-  double pAy;
+  double pAy = 0;
 
-  double mCenterX;
-  double mCenterY;
+  double mCenterX = 0;
+  double mCenterY = 0;
 
-  Animation<double> _valueTween;
+  Animation<double>? _valueTween;
 
-  double animalValue;
+  double animalValue = 0;
 
   @override
   void initState() {
@@ -121,8 +120,8 @@ class _PieChartWidgetState extends State<PieChartWidget>
   void _onPanDown(DragDownDetails details) {
     if (offset == null) {
       //获取position
-      RenderBox box = _key.currentContext.findRenderObject();
-      offset = box.localToGlobal(Offset.zero);
+      RenderBox? box = _key.currentContext?.findRenderObject() as RenderBox?;
+      offset = box!.localToGlobal(Offset.zero);
       mCenterX = offset.dx + 130;
       mCenterY = offset.dy + 130;
     }
@@ -241,7 +240,7 @@ class _PieChartWidgetState extends State<PieChartWidget>
           });
         });
 
-      autoAnimationController.forward();
+      autoAnimationController?.forward();
     }
   }
 
@@ -249,18 +248,18 @@ class _PieChartWidgetState extends State<PieChartWidget>
   void dispose() {
     super.dispose();
     if (autoAnimationController != null) {
-      autoAnimationController.dispose();
+      autoAnimationController?.dispose();
     }
   }
 }
 
 class ImageNode {
-  int curIndex;
-  int index;
-  Path path;
-  Rect rect;
+  int? curIndex;
+  late int index;
+  Path? path;
+  Rect? rect;
   // ignore: undefined_class
-  ui.Image image;
+  ui.Image? image;
 
   int getXIndex(int level) {
     return index % level;
@@ -278,7 +277,7 @@ class PieChartPainter extends CustomPainter {
   double startTurns = .0;
 
   List<String> contents;
-  ui.Image mmimage;
+  ui.Image? mmimage;
 
   PieChartPainter(
     this.turns,
@@ -349,7 +348,7 @@ class PieChartPainter extends CustomPainter {
         ..blendMode = BlendMode.colorDodge; // 模式
       // canvas.drawImage(mmimage, Offset(40, 0), _paint);
 
-      canvas.drawImageRect(mmimage, imageRect, imageRect, _paint);
+      canvas.drawImageRect(mmimage!, imageRect, imageRect, _paint);
     }
     return;
 

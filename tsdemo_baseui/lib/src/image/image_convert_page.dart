@@ -1,10 +1,17 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:23:51
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/base-uikit/bg_border_widget.dart';
 
 // [Flutter - 图片Image组件](https://www.jianshu.com/p/107b1fb6a1d3)
 
 class TSImageConvertPage extends StatefulWidget {
-  TSImageConvertPage({Key key}) : super(key: key);
+  TSImageConvertPage({Key? key}) : super(key: key);
 
   @override
   _TSImageConvertPageState createState() => new _TSImageConvertPageState();

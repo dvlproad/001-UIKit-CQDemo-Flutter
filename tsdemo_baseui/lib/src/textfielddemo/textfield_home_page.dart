@@ -1,11 +1,18 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:20:12
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:tsdemo_baseui/src/baseui_routes.dart';
 
 class TSTextFieldHomePage extends CJTSBasePage {
-  final String title;
+  final String? title;
 
-  TSTextFieldHomePage({Key key, this.title}) : super(key: key);
+  TSTextFieldHomePage({Key? key, this.title}) : super(key: key);
 
   @override
 //  _CJTSTableHomeBasePageState createState() => _CJTSTableHomeBasePageState();

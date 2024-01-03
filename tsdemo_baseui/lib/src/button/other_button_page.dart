@@ -1,8 +1,15 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2022-04-18 03:24:17
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-03 16:25:58
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSOtherButtonsPage extends StatefulWidget {
-  TSOtherButtonsPage({Key key}) : super(key: key);
+  TSOtherButtonsPage({Key? key}) : super(key: key);
 
   @override
   _TSOtherButtonsPageState createState() => new _TSOtherButtonsPageState();

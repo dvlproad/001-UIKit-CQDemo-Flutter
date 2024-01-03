@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_baseui_kit/cq-uikit/textfield/prefixIcon_textField.dart';
 
 class TSIconTextFieldPage extends StatefulWidget {
-  TSIconTextFieldPage({Key key, this.title, this.username}) : super(key: key);
-
-  final String title;
-  final String username;
+  final String? title;
+  final String? username;
+  TSIconTextFieldPage({
+    Key? key,
+    this.title,
+    this.username,
+  }) : super(key: key);
 
   @override
   _TSIconTextFieldPageState createState() => new _TSIconTextFieldPageState();

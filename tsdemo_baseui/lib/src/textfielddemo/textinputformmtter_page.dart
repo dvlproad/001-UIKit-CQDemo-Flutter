@@ -4,7 +4,7 @@ import 'package:flutter_baseui_kit/cq-uikit/textfield/prefixText_textField.dart'
 import 'package:flutter_baseui_kit/cq-uikit/textfield/textInputFormatter/textinputformatter_util.dart';
 
 class TSTextInputFormmaterPage extends StatefulWidget {
-  TSTextInputFormmaterPage({Key key}) : super(key: key);
+  TSTextInputFormmaterPage({Key? key}) : super(key: key);
 
   @override
   _TSTextInputFormmaterPageState createState() =>
