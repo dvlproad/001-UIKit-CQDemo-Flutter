@@ -82,17 +82,37 @@ class ErrOptions {
     return requestOptions.fullUrl;
   }
 
-  Map<String, dynamic> get detailLogJsonMap {
+  String get apiSpendTime {
+    Duration duration = errorTime.difference(requestOptions.requestTime);
+    int milliseconds = duration.inMilliseconds;
+    String startTime = requestOptions.requestTime.toString().substring(11);
+    String endTime = errorTime.toString().substring(11);
+    if (milliseconds > 0) {
+      return "$milliseconds毫秒($startTime---$endTime)";
+    } else {
+      int microseconds = duration.inMicroseconds;
+      return "0毫秒$microseconds微秒($startTime---$endTime)";
+    }
+  }
+
+  Map<String, dynamic> get detailLogJsonMap => logJsonMap["detail"];
+
+  Map<String, dynamic> get logJsonMap {
     Map<String, dynamic> detailLogJsonMap = {};
+    Map<String, dynamic> shortLogJsonMap = {};
 
     ErrOptions err = this;
 
     bool? isErrorFromCache = err.isErrorFromCache;
     if (isErrorFromCache == true) {
       detailLogJsonMap.addAll({"isRealApi": "====此次api结果为缓存数据，而不是后台实际结果===="});
+      shortLogJsonMap.addAll({"isRealApi": "====此次api结果为缓存数据，而不是后台实际结果===="});
     }
 
+    detailLogJsonMap.addAll({"apiSpendTime": apiSpendTime});
+    shortLogJsonMap.addAll({"apiSpendTime": apiSpendTime});
     detailLogJsonMap.addAll({"URL": err.fullUrl});
+    shortLogJsonMap.addAll({"URL": err.fullUrl});
 
     detailLogJsonMap.addAll({"METHOD": err.requestOptions.method});
 
@@ -113,6 +133,7 @@ class ErrOptions {
     detailLogJsonMap.addAll({"BODY": bodyJsonMap});
 
     detailLogJsonMap.addAll({"ERRORTYPE": err.type.toString()}); // 错误类型
+    shortLogJsonMap.addAll({"ERRORTYPE": err.type.toString()}); // 错误类型
     detailLogJsonMap.addAll({"MSG": err.message});
 
     if (err.response != null) {
@@ -125,7 +146,11 @@ class ErrOptions {
         if ((response.data as String).isEmpty) {
           responseMap = {};
         } else {
-          responseMap = convert.jsonDecode(response.data);
+          try {
+            responseMap = convert.jsonDecode(response.data);
+          } on FormatException catch (e) {
+            responseMap = response.data;
+          }
         }
       } else {
         responseMap = response.data;
@@ -136,6 +161,9 @@ class ErrOptions {
       });
     }
 
-    return detailLogJsonMap;
+    return {
+      "short": shortLogJsonMap,
+      "detail": detailLogJsonMap,
+    };
   }
 }

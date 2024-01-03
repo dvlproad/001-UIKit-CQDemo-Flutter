@@ -52,17 +52,37 @@ class ResOptions {
     return requestOptions.fullUrl;
   }
 
-  Map<String, dynamic> get detailLogJsonMap {
+  String get apiSpendTime {
+    Duration duration = responseTime.difference(requestOptions.requestTime);
+    int milliseconds = duration.inMilliseconds;
+    String startTime = requestOptions.requestTime.toString().substring(11);
+    String endTime = responseTime.toString().substring(11);
+    if (milliseconds > 0) {
+      return "$milliseconds毫秒($startTime---$endTime)";
+    } else {
+      int microseconds = duration.inMicroseconds;
+      return "0毫秒$microseconds微秒($startTime---$endTime)";
+    }
+  }
+
+  Map<String, dynamic> get detailLogJsonMap => logJsonMap["detail"];
+
+  Map<String, dynamic> get logJsonMap {
     Map<String, dynamic> detailLogJsonMap = {};
+    Map<String, dynamic> shortLogJsonMap = {};
 
     ResOptions response = this;
 
     bool? isResponseFromCache = response.isResponseFromCache;
     if (isResponseFromCache == true) {
       detailLogJsonMap.addAll({"isRealApi": "====此次api结果为缓存数据，而不是后台实际结果===="});
+      shortLogJsonMap.addAll({"isRealApi": "====此次api结果为缓存数据，而不是后台实际结果===="});
     }
 
+    detailLogJsonMap.addAll({"apiSpendTime": apiSpendTime});
+    shortLogJsonMap.addAll({"apiSpendTime": apiSpendTime});
     detailLogJsonMap.addAll({"URL": response.fullUrl});
+    shortLogJsonMap.addAll({"URL": response.fullUrl});
 
     Map<String, dynamic>? requestHeadersMap = response.requestOptions.headers;
     if (requestHeadersMap != null) {
@@ -108,6 +128,9 @@ class ResOptions {
       "RESPONSE_Data": responseMap,
     });
 
-    return detailLogJsonMap;
+    return {
+      "short": shortLogJsonMap,
+      "detail": detailLogJsonMap,
+    };
   }
 }

@@ -30,7 +30,12 @@ enum ApiProcessType {
  *  @return 数据模型
  */
 typedef CJNetworkClientGetSuccessResponseModelBlock = ResponseModel Function(
-    String fullUrl, int statusCode, dynamic responseObject, bool? isCacheData);
+  String fullUrl,
+  int statusCode,
+  dynamic responseObject,
+  bool? isCacheData, {
+  required ResOptions resOptions,
+});
 
 /*
  *  必须实现：将"网络请求失败返回的数据error"转换为"模型"的方法
@@ -42,9 +47,18 @@ typedef CJNetworkClientGetSuccessResponseModelBlock = ResponseModel Function(
  */
 // typedef CJResponseModel * _Nullable (^CJNetworkClientGetFailureResponseModelBlock)(NSError * _Nullable error, NSString * _Nullable errorMessage);
 typedef CJNetworkClientGetFailureResponseModelBlock = ResponseModel Function(
-    String fullUrl, int statusCode, dynamic responseObject, bool? isCacheData);
+  String fullUrl,
+  int statusCode,
+  dynamic responseObject,
+  bool? isCacheData, {
+  required ResOptions resOptions,
+});
 typedef CJNetworkClientGetDioErrorResponseModelBlock = ResponseModel Function(
-    String fullUrl, ErrOptions errorModel, bool? isCacheData);
+  String fullUrl,
+  ErrOptions errorModel,
+  bool? isCacheData, {
+  required ErrOptions errOptions,
+});
 
 ///需要的网络数据类
 class NetOptions {
@@ -115,6 +129,7 @@ class NetOptions {
         response.statusCode ?? HttpStatusCode.Unknow,
         response.data,
         response.isResponseFromCache,
+        resOptions: response,
       );
 
       // shortMessage

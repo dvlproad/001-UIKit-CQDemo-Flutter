@@ -7,6 +7,7 @@
  */
 import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
+import '../bean/res_options.dart';
 import '../network_bean.dart';
 import '../url/append_path_extension.dart';
 import '../bean/net_options.dart';
@@ -28,21 +29,21 @@ class LocalMockUtil {
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
   }) async {
-    try {
-      if (localApiDirBlock == null) {
-        throw Exception("请先设置 localApiDirBlock");
-      }
-      String localApiFileDir = localApiDirBlock!(apiPath);
-      String localFileName = apiPath.splitMapJoin(
-        "/",
-        onMatch: (Match match) {
-          return ":";
-        },
-      );
+    if (localApiDirBlock == null) {
+      throw Exception("请先设置 localApiDirBlock");
+    }
 
-      String localFilePath =
-          localApiFileDir.appendPathString("$localFileName.json");
-      /* // 以下判断文件是否存在的方式，不准确
+    String localApiFileDir = localApiDirBlock!(apiPath);
+    String localFileName = apiPath.splitMapJoin(
+      "/",
+      onMatch: (Match match) {
+        return ":";
+      },
+    );
+
+    String localFilePath =
+        localApiFileDir.appendPathString("$localFileName.json");
+    /* // 以下判断文件是否存在的方式，不准确
       File pdf = File(localFilePath);
       bool exist = await pdf.exists();
       if (exist == false) {
@@ -52,10 +53,10 @@ class LocalMockUtil {
       }
       */
 
-      String responseString = await rootBundle.loadString(localFilePath);
+    String responseString = await rootBundle.loadString(localFilePath);
 
-      Map<String, dynamic> responseMap = json.decode(responseString);
-      /*
+    Map<String, dynamic> responseMap = json.decode(responseString);
+    /*
       var errorCode = responseMap['code'];
       var msg = responseMap['msg'];
       dynamic result = responseMap["data"];
@@ -66,17 +67,18 @@ class LocalMockUtil {
       );
       */
 
-      ReqOptions reqOptions = ReqOptions(
-        baseUrl: localApiHost,
-        path: apiPath,
-      );
-      /*
-      ResOptions resOpt = ResOptions(
-        statusCode: 0,
-        data: responseMap,
-        requestOptions: reqOptions,
-      );
+    ReqOptions reqOptions = ReqOptions(
+      baseUrl: localApiHost,
+      path: apiPath,
+      requestTime: DateTime.now(),
+    );
 
+    ResOptions resOptions = ResOptions(
+      statusCode: 0,
+      data: responseMap,
+      requestOptions: reqOptions,
+    );
+    /*
       NetOptions apiInfo = NetOptions(
         reqOptions: reqOptions,
         resOptions: resOpt,
@@ -84,9 +86,16 @@ class LocalMockUtil {
       );
       */
 
-      String fullUrl = reqOptions.fullUrl;
-      ResponseModel responseModel =
-          getSuccessResponseModelBlock(fullUrl, 200, responseMap, false);
+    String fullUrl = reqOptions.fullUrl;
+
+    try {
+      ResponseModel responseModel = getSuccessResponseModelBlock(
+        fullUrl,
+        200,
+        responseMap,
+        false,
+        resOptions: resOptions,
+      );
       // 此类不会走拦截器，也就不会有 headers 等信息
       // String responseLogString =
       //     FormatterUtil.convert(responseMap, 0, isObject: true);
@@ -124,7 +133,11 @@ class LocalMockUtil {
       */
       // DioLogInterceptor.logApi(apiInfo, ApiProcessType.error);
 
-      return ResponseModel.tryCatchErrorResponseModel(message);
+      return ResponseModel.tryCatchErrorResponseModel(
+        message,
+        requestTime: reqOptions.requestTime,
+        errorTime: DateTime.now(),
+      );
     }
   }
 }

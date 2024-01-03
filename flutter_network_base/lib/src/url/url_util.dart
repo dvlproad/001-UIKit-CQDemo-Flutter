@@ -12,6 +12,9 @@ import '../bean/err_options.dart';
 import 'append_path_extension.dart';
 
 class UrlUtil {
+  static String getFullUrl(String? baseUrl, String path) =>
+      _fullUrl(baseUrl, path);
+
   static String _fullUrl(String? baseUrl, String path) {
     String url;
     if (path.startsWith(RegExp(r'https?:'))) {

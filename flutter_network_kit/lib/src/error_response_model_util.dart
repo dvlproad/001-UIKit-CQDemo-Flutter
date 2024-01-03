@@ -11,8 +11,9 @@ class ErrorResponseUtil {
   static ResponseModel getErrorResponseModel(
     String fullUrl,
     ErrOptions err,
-    bool? isFromCache,
-  ) {
+    bool? isFromCache, {
+    required ErrOptions errOptions,
+  }) {
     NetworkErrorType errorType = err.type;
     // cancel
     if (errorType == NetworkErrorType.cancel) {
@@ -21,6 +22,7 @@ class ErrorResponseUtil {
         message: '请求已取消',
         result: null,
         isCache: isFromCache,
+        dateModel: ResponseDateModel.fromErrOptions(errOptions),
       );
     }
 
@@ -33,6 +35,7 @@ class ErrorResponseUtil {
         message: err.message,
         result: null,
         isCache: isFromCache,
+        dateModel: ResponseDateModel.fromErrOptions(errOptions),
       );
     }
 
@@ -43,6 +46,7 @@ class ErrorResponseUtil {
         message: err.response?.statusMessage ?? '服务器开小差',
         result: null,
         isCache: isFromCache,
+        dateModel: ResponseDateModel.fromErrOptions(errOptions),
       );
     }
 
@@ -51,9 +55,10 @@ class ErrorResponseUtil {
     // String errorMessage = err.message;
     return ResponseModel(
       statusCode: HttpStatusCode.ErrorDioOther,
-      message: '网络系统错误',
+      message: '网络开小差了，请检查下网络再试！',
       result: null,
       isCache: isFromCache,
+      dateModel: ResponseDateModel.fromErrOptions(errOptions),
     );
   }
 }

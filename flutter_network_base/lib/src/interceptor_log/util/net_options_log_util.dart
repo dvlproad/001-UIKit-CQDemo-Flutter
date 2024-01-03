@@ -73,11 +73,6 @@ class ApiInfoGetter {
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
   }) {
-    // detailLogJsonMap
-    Map<String, dynamic> detailLogJsonMap = err.detailLogJsonMap;
-
-    DateTime dateTime = err.errorTime;
-
     ApiLogLevel apiErroLogLevel;
     if (err.type == NetworkErrorType.connectTimeout ||
         err.type == NetworkErrorType.sendTimeout ||
@@ -87,13 +82,10 @@ class ApiInfoGetter {
       apiErroLogLevel = ApiLogLevel.error_other;
     }
 
-    // shortMessage
-    Map<String, dynamic> shortLogJsonMap = {};
-    if (detailLogJsonMap['isRealApi'] != null) {
-      shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
-    }
-    shortLogJsonMap.addAll({"URL": detailLogJsonMap['URL']});
-    shortLogJsonMap.addAll({"ERRORTYPE": detailLogJsonMap['ERRORTYPE']});
+    // detailLogJsonMap
+    Map<String, dynamic> detailLogJsonMap = err.logJsonMap["detail"] ?? {};
+    // shortLogJsonMap
+    Map<String, dynamic> shortLogJsonMap = err.logJsonMap["short"] ?? {};
     if (err.response != null) {
       int statusCode = err.response!.statusCode ?? HttpStatusCode.Unknow;
       String responseCodeMessage = "Response:statusCode:$statusCode";
@@ -110,9 +102,10 @@ class ApiInfoGetter {
     //   apiShortMessge += "Response:statusCode:${statusCode}";
     // }
 
+    DateTime endTime = err.errorTime;
     ApiMessageModel apiMessageModel = ApiMessageModel(
       apiProcessType: ApiProcessType.error,
-      dateTime: dateTime,
+      dateTime: endTime,
       detailLogJsonMap: detailLogJsonMap,
       shortLogJsonMap: shortLogJsonMap,
       apiLogLevel: apiErroLogLevel,
@@ -128,9 +121,6 @@ class ApiInfoGetter {
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
   }) {
-    // detailLogJsonMap
-    Map<String, dynamic> detailLogJsonMap = response.detailLogJsonMap;
-
     // 真正的 statusCode
     int statusCode = response.statusCode ?? HttpStatusCode.Unknow;
     ResponseModel responseModel = getSuccessResponseModelBlock(
@@ -138,16 +128,13 @@ class ApiInfoGetter {
       statusCode,
       response.data,
       response.isResponseFromCache,
+      resOptions: response,
     );
 
-    // shortMessage
-    ApiLogLevel apiLogLevel = responseModel.apiLogLevel;
-
-    Map<String, dynamic> shortLogJsonMap = {};
-    if (detailLogJsonMap['isRealApi'] != null) {
-      shortLogJsonMap.addAll({"isRealApi": detailLogJsonMap['isRealApi']});
-    }
-    shortLogJsonMap.addAll({"URL": detailLogJsonMap['URL']});
+    // detailLogJsonMap
+    Map<String, dynamic> detailLogJsonMap = response.logJsonMap["detail"] ?? {};
+    // shortLogJsonMap
+    Map<String, dynamic> shortLogJsonMap = response.logJsonMap["short"] ?? {};
     String responseCodeMessage = "Response:statusCode:$statusCode";
     int businessCode = responseModel
         .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
@@ -166,11 +153,11 @@ class ApiInfoGetter {
     // if (businessCode != null) {
     //   apiShortMessge += "_code:${businessCode}";
     // }
-
-    DateTime dateTime = response.responseTime;
+    ApiLogLevel apiLogLevel = responseModel.apiLogLevel;
+    DateTime endTime = response.responseTime;
     ApiMessageModel apiMessageModel = ApiMessageModel(
       apiProcessType: ApiProcessType.response,
-      dateTime: dateTime,
+      dateTime: endTime,
       detailLogJsonMap: detailLogJsonMap,
       shortLogJsonMap: shortLogJsonMap,
       apiLogLevel: apiLogLevel,

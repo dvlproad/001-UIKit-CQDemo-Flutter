@@ -9,6 +9,8 @@
  */
 
 import './interceptor_log/util/net_options_log_bean.dart';
+import 'bean/err_options.dart';
+import 'bean/res_options.dart';
 
 class HttpStatusCode {
   static int Unknow = -500; // 未知错误
@@ -38,12 +40,89 @@ class HttpStatusCode {
   //static int Error505; // （HTTP 版本不受支持）服务器不支持请求中所用的 HTTP 协议版本。
 }
 
+class ResponseDateModel {
+  final DateTime requestTime;
+  final DateTime endTime; //ms
+
+  ResponseDateModel({
+    required this.requestTime, // 请求开始的时间
+    required this.endTime, // 请求结束的时间
+  });
+
+  static ResponseDateModel fromErrOptions(ErrOptions errOptions) {
+    return ResponseDateModel(
+      requestTime: errOptions.requestOptions.requestTime,
+      endTime: errOptions.errorTime,
+    );
+  }
+
+  static ResponseDateModel fromResOptions(ResOptions resOptions) {
+    return ResponseDateModel(
+      requestTime: resOptions.requestOptions.requestTime,
+      endTime: resOptions.responseTime,
+    );
+  }
+
+  static String getApiSpendTime(List<ResponseDateModel> dateModels) {
+    ResponseDateModel firstDateModel = dateModels.first;
+    ResponseDateModel lastDateModel = dateModels.last;
+
+    String allItemSpendTime = "";
+    int count = dateModels.length;
+
+    DateTime? lastEndTime;
+    for (int i = 0; i < count; i++) {
+      ResponseDateModel dateModel = dateModels[i];
+
+      String spendTime = "${i + 1}";
+      spendTime += "、${dateModel.apiSpendTime}";
+      spendTime +=
+          "${dateModel.requestTime.toString().substring(11)}--${dateModel.endTime.toString().substring(11)}";
+      if (i > 0) {
+        allItemSpendTime += "====";
+
+        if (lastEndTime != null) {
+          Duration skipDuration = dateModel.requestTime.difference(lastEndTime);
+          allItemSpendTime += "${skipDuration.inMilliseconds}毫秒====";
+        }
+      }
+      allItemSpendTime += "$spendTime";
+
+      lastEndTime = dateModel.endTime;
+    }
+
+    Duration totalDuration =
+        lastDateModel.endTime.difference(firstDateModel.requestTime);
+    int seconds = totalDuration.inSeconds;
+    int milliseconds = totalDuration.inMilliseconds;
+    // return apiDuration.toString();
+    String spendTime = "$milliseconds毫秒($allItemSpendTime)";
+
+    return spendTime;
+  }
+
+  String get apiSpendTime {
+    Duration duration = endTime.difference(requestTime);
+
+    int seconds = duration.inSeconds;
+    int milliseconds = duration.inMilliseconds;
+    if (milliseconds > 0) {
+      return "$milliseconds毫秒";
+    } else {
+      int microseconds = duration.inMicroseconds;
+      return "0毫秒$microseconds微秒";
+    }
+  }
+}
+
 class ResponseModel {
   int statusCode;
   String? message;
   dynamic result;
   bool? isCache;
   bool? isSameToBefore; // 网络新数据是否和之前数据一样(重试/缓存)
+  final ResponseDateModel dateModel;
+  List<ResponseDateModel>? dateModels; // 有时候得到一个结果是不仅经过一次，而是多次请求才得到的（如缓存）
 
   ResponseModel({
     required this.statusCode,
@@ -51,6 +130,7 @@ class ResponseModel {
     this.result,
     this.isCache,
     this.isSameToBefore,
+    required this.dateModel,
   });
 
   @override
@@ -94,13 +174,36 @@ class ResponseModel {
   }
 
   bool get isSuccess => statusCode == 0;
+  // 是否是错误的response（http错误、网络错误)
+  bool get isErrorResponse {
+    List<int> httpCodes = [
+      HttpStatusCode.NoNetwork,
+      HttpStatusCode.ErrorDioCancel,
+      HttpStatusCode.ErrorTimeout,
+      HttpStatusCode.ErrorDioResponse,
+      HttpStatusCode.ErrorTryCatch,
+      HttpStatusCode.Unknow,
+      500,
+      503,
+      401,
+      20030,
+    ];
+    return httpCodes.contains(statusCode);
+  }
 
   /// 获取错误时候的 responseModel
-  static ResponseModel nonetworkResponseModel() {
+  static ResponseModel nonetworkResponseModel({
+    required DateTime requestTime,
+    required DateTime errorTime,
+  }) {
     ResponseModel responseModel = ResponseModel(
       statusCode: HttpStatusCode.NoNetwork,
       message: "目前无网络可用",
       result: null,
+      dateModel: ResponseDateModel(
+        requestTime: requestTime,
+        endTime: errorTime,
+      ),
     );
     return responseModel;
   }
@@ -108,12 +211,18 @@ class ResponseModel {
   static ResponseModel tryCatchErrorResponseModel(
     String message, {
     bool? isCache,
+    required DateTime requestTime,
+    required DateTime errorTime,
   }) {
     ResponseModel responseModel = ResponseModel(
       statusCode: HttpStatusCode.ErrorTryCatch,
       message: message,
       result: null,
       isCache: isCache,
+      dateModel: ResponseDateModel(
+        requestTime: requestTime,
+        endTime: errorTime,
+      ),
     );
     return responseModel;
   }

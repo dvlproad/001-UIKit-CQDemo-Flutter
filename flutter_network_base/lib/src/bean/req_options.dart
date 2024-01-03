@@ -14,7 +14,7 @@ class ReqOptions {
 
   String? method;
   String? contentType;
-  late DateTime requestTime;
+  final DateTime requestTime;
   Map<String, dynamic>? params;
   dynamic data;
   Map<String, dynamic>? headers;
@@ -30,9 +30,8 @@ class ReqOptions {
     this.params,
     this.data,
     this.isRequestCache,
-  }) {
-    requestTime = DateTime.now();
-  }
+    required this.requestTime,
+  });
 
   /// generate uri
   Uri get uri {

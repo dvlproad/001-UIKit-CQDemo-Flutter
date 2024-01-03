@@ -73,6 +73,7 @@ class CacheNetworkClient extends NetworkClient {
     String? mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
     String Function(String apiPath)?
         localApiDirBlock, // 本地网络所在的目录,需要本地模拟时候才需要设置
+    void Function()? startCompleteBlock, // 初始化完成的回调
   }) {
     List<Interceptor> extraInterceptors = [
       getCacheManager(baseUrl: baseUrl).interceptor,
@@ -95,6 +96,7 @@ class CacheNetworkClient extends NetworkClient {
         );
       },
       localApiDirBlock: localApiDirBlock,
+      startCompleteBlock: startCompleteBlock,
     );
 
     DioCacheUtil.initDioCacheUtil(
@@ -123,6 +125,7 @@ class CacheNetworkClient extends NetworkClient {
     Map<String, dynamic>? customParams,
     bool? ifNoAuthorizationForceGiveUpRequest, // 没有 Authorization 的时候是否强制放弃请求
     int retryCount = 0,
+    bool? toastIfMayNeed,
     NetworkCacheLevel cacheLevel = NetworkCacheLevel.none,
     required void Function(ResponseModel responseModel) completeCallBack,
     ResponseModel? cacheResponseModel,
@@ -149,6 +152,7 @@ class CacheNetworkClient extends NetworkClient {
       retryCount: retryCount,
       options: CacheHelper.buildOptions(cacheLevel),
       beforeResponseModel: cacheResponseModel,
+      toastIfMayNeed: toastIfMayNeed,
     );
 
     // 不是真正的网络请求返回的Response\Error结果(eg:比如是取缓存的结果时候)
@@ -176,8 +180,14 @@ class CacheNetworkClient extends NetworkClient {
       // 2、请求结果是之前缓存的数据返回的(即结果是真正的网络请求返回的Response\Error结果)的时候，
       // ①先把缓存返回回去，
       // ②再继续发起实际的请求，且新请求为后台实际请求并且其要会保存请求成功的数据
+      DateTime doCallbackBefore = DateTime.now();
       completeCallBack(responseModel);
+      DateTime doCallbackAfter = DateTime.now();
 
+      ResponseDateModel callbackDateModel = ResponseDateModel(
+        requestTime: doCallbackBefore,
+        endTime: doCallbackAfter,
+      );
       late NetworkCacheLevel newCacheLevel;
       if (cacheLevel == NetworkCacheLevel.one) {
         newCacheLevel = NetworkCacheLevel.forceRefreshAndCacheOne;
@@ -193,7 +203,18 @@ class CacheNetworkClient extends NetworkClient {
         requestMethod: requestMethod,
         customParams: customParams,
         cacheLevel: newCacheLevel,
-        completeCallBack: completeCallBack,
+        completeCallBack: (ResponseModel newResponseModel) {
+          List<ResponseDateModel> dateModels = [
+            responseModel.dateModel,
+            callbackDateModel,
+            newResponseModel.dateModel
+          ];
+          newResponseModel.dateModels = dateModels;
+          String totalSpendTime = ResponseDateModel.getApiSpendTime(dateModels);
+          debugPrint('===============$totalSpendTime');
+          completeCallBack(newResponseModel);
+        },
+        toastIfMayNeed: toastIfMayNeed,
         cacheResponseModel: responseModel, // 缓存数据
       );
     }

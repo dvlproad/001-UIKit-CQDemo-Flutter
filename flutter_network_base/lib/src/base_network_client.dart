@@ -72,6 +72,9 @@ class BaseNetworkClient {
   /// body 中公共但可变的参数
   Map<String, dynamic> Function()? _bodyCommonChangeParamsGetBlock;
 
+  Map<String, dynamic> Function()?
+      _headerCommonChangeParamsGetBlock; // header 中公共但会变的参数
+
   Dio? dio;
 
   CJNetworkClientGetSuccessResponseModelBlock
@@ -127,6 +130,8 @@ class BaseNetworkClient {
     String?
         contentType, // "application/json""application/x-www-form-urlencoded"
     Map<String, dynamic>? headers,
+    Map<String, dynamic> Function()?
+        headerCommonChangeParamsGetBlock, // header 中公共但会变的参数
     required Map<String, dynamic> bodyCommonFixParams,
     Map<String, dynamic> Function()? bodyCommonChangeParamsGetBlock,
     List<Interceptor>? interceptors,
@@ -136,6 +141,7 @@ class BaseNetworkClient {
     String Function(String apiPath)?
         localApiDirBlock, // 本地网络所在的目录,需要本地模拟时候才需要设置
     void Function(RequestOptions options)? dealRequestOptionsAction,
+    void Function()? startCompleteBlock, // 初始化完成的回调
   }) {
     // DioLogUtil.initDioLogUtil(logApiInfoAction: logApiInfoAction);
 
@@ -143,6 +149,8 @@ class BaseNetworkClient {
 
     _bodyCommonFixParams = bodyCommonFixParams;
     _bodyCommonChangeParamsGetBlock = bodyCommonChangeParamsGetBlock;
+
+    _headerCommonChangeParamsGetBlock = headerCommonChangeParamsGetBlock;
 
     if (_hasStart == true) {
       //debugPrint('本方法只能执行一遍，前面已执行过,防止如initState调用多遍的时候,重复添加interceptors');
@@ -187,6 +195,10 @@ class BaseNetworkClient {
     _hasStart = true;
     _initCompleter.complete('NetworkClient:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
     debugPrint('NetworkClient:初始化(设置baseUrl等)完成，此时才可以进行实际请求');
+
+    if (startCompleteBlock != null) {
+      startCompleteBlock();
+    }
   }
 
   // ignore: non_constant_identifier_names
@@ -245,6 +257,8 @@ class BaseNetworkClient {
       requestMethod: requestMethod,
       customParams: allParams,
       options: options,
+      optionsHeaderCommonChangeParamsGetBlock:
+          _headerCommonChangeParamsGetBlock,
       cancelToken: cancelToken,
       getSuccessResponseModelBlock: _getSuccessResponseModelBlock,
       getFailureResponseModelBlock: _getFailureResponseModelBlock,
@@ -267,11 +281,20 @@ class BaseNetworkClient {
 
   /// 添加/修改/删除token(登录成功/退出成功后调用)
   void updateToken(String? token) {
-    String tokenKey = 'Authorization';
-    if (token == null || token.isEmpty) {
-      DioChangeUtil.removeHeadersKey(dio!, tokenKey);
+    updateHeaderKeyWithValue('Authorization', token);
+  }
+
+  void updateDeviceId(String deviceId) async {
+    updateHeaderKeyWithValue('deviceId', deviceId);
+    updateHeaderKeyWithValue('dynamicDeviceId', deviceId);
+  }
+
+  /// 添加/修改/删除 header 中的 key 值
+  void updateHeaderKeyWithValue(String key, String? value) {
+    if (value == null || value.isEmpty) {
+      DioChangeUtil.removeHeadersKey(dio!, key);
     } else {
-      Map<String, dynamic> requestHeaders = {tokenKey: token};
+      Map<String, dynamic> requestHeaders = {key: value};
       DioChangeUtil.changeHeaders(dio!, headers: requestHeaders);
     }
   }

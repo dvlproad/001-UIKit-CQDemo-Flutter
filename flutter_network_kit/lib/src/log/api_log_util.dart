@@ -34,6 +34,30 @@ class LogApiUtil {
     _initCompleter.complete('log初始化完成，后续 logMessage 才可以正常使用回调判断如何打印log');
   }
 
+  static void _logMessage({
+    required LogObjectType logType,
+    required LogLevel logLevel,
+    String? title,
+    required Map<String, dynamic> shortMap,
+    required Map<String, dynamic> detailMap,
+    Map<String, dynamic>? extraLogInfo, // log 的 额外信息
+    RobotPostType? postType,
+    List<String>? mentionedList,
+  }) {
+    if (_logMessageBlock != null) {
+      _logMessageBlock!(
+        logType: logType,
+        logLevel: logLevel,
+        title: title,
+        shortMap: shortMap,
+        detailMap: detailMap,
+        extraLogInfo: extraLogInfo,
+        postType: postType,
+        mentionedList: mentionedList,
+      );
+    }
+  }
+
   // 打印请求各阶段出现的不同等级的日志信息
   static void logApiInfo(
     NetOptions apiInfo,
@@ -87,6 +111,9 @@ class LogApiUtil {
     });
 
     LogObjectType logObjectType = LogObjectType.api_app;
+    if (apiPath.contains("checkPushSystemMessages")) {
+      logObjectType = LogObjectType.heartbeat;
+    }
     if (isCacheApiLog) {
       logObjectType = LogObjectType.api_cache;
     }
@@ -155,7 +182,7 @@ class LogApiUtil {
     }
     title += apiPath;
 
-    _logMessageBlock!(
+    _logMessage(
       logType: logObjectType,
       logLevel: logLevel,
       title: title,
@@ -173,7 +200,7 @@ class LogApiUtil {
     String message =
         '该请求必须登录后才能调用,但上层业务缺少判断给调用了,为防止报401错误,导致界面上弹出token不能不空的toast,底层直接将该请求请求代码return取消掉(若不需要登录,请在白名单headerAuthorizationWhiteList中添加;若要去掉此行警告提示,请上层业务判断是否登录了)';
 
-    _logMessageBlock!(
+    _logMessage(
       logType: LogObjectType.api_app,
       logLevel: LogLevel.warning,
       title: '此时token为空，且该请求又不在token为空可继续请求的白名单中,估直接放弃请求',
@@ -197,7 +224,7 @@ class LogApiUtil {
   }) async {
     await _initCompleter.future;
 
-    _logMessageBlock!(
+    _logMessage(
       logType: LogObjectType.monitor_network,
       logLevel: LogLevel.success,
       title: null,

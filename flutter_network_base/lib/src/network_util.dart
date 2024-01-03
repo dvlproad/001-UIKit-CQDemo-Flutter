@@ -14,6 +14,8 @@ import './mock/local_mock_util.dart';
 
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
+import 'bean/req_options.dart';
+import 'bean/res_options.dart';
 
 typedef JsonParse<T> = T Function(dynamic data);
 
@@ -25,6 +27,8 @@ class NetworkUtil {
     RequestMethod requestMethod = RequestMethod.post,
     Map<String, dynamic>? customParams,
     Options? options,
+    Map<String, dynamic> Function()?
+        optionsHeaderCommonChangeParamsGetBlock, // header 中公共但会变的参数
     CancelToken? cancelToken,
     required CJNetworkClientGetSuccessResponseModelBlock
         getSuccessResponseModelBlock,
@@ -43,33 +47,41 @@ class NetworkUtil {
 
     cancelToken ??= CancelToken();
 
-    try {
       customParams ??= {};
 
       DioLogUtil.debugApiWithLog(url, "请求开始...");
       Response response;
+
+    DateTime myRequestTime = DateTime.now();
+      options ??= Options(
+        receiveTimeout: dio.options.receiveTimeout,
+        contentType: dio.options.contentType,
+        headers: dio.options.headers,
+      );
+    options.extra ??= {};
+    options.extra?.addAll({'requestStartTime': myRequestTime});
+
+      if (options.headers != null) {
+        if (optionsHeaderCommonChangeParamsGetBlock != null) {
+          Map<String, dynamic> customHeaders =
+              optionsHeaderCommonChangeParamsGetBlock();
+          options.headers!.addAll(customHeaders);
+        }
+      }
+
+    try {
       if (requestMethod == RequestMethod.post) {
         response = await dio.post(
           url,
           data: customParams,
-          options: options ??
-              Options(
-                receiveTimeout: dio.options.receiveTimeout,
-                contentType: dio.options.contentType,
-                headers: dio.options.headers,
-              ),
+          options: options,
           cancelToken: cancelToken,
         );
       } else {
         response = await dio.get(
           url,
           queryParameters: customParams,
-          options: options ??
-              Options(
-                receiveTimeout: dio.options.receiveTimeout,
-                contentType: dio.options.contentType,
-                headers: dio.options.headers,
-              ),
+          options: options,
           cancelToken: cancelToken,
         );
       }
@@ -89,12 +101,15 @@ class NetworkUtil {
       } else {
         fullUrl = UrlUtil.fullUrlFromDioResponse(response);
       }
+
+      ResOptions resOptions = NetworkModelConvertUtil.newResponse(response);
       if (response.statusCode == 200) {
         responseModel = getSuccessResponseModelBlock(
           fullUrl,
           response.statusCode ?? HttpStatusCode.Unknow,
           response.data,
           isFromCache,
+          resOptions: resOptions,
         );
       } else {
         responseModel = getFailureResponseModelBlock(
@@ -102,6 +117,7 @@ class NetworkUtil {
           response.statusCode ?? HttpStatusCode.Unknow,
           response.data,
           isFromCache,
+          resOptions: resOptions,
         );
       }
       DioLogUtil.debugApiWithLog(url, "请求后解析结束...");
@@ -115,6 +131,8 @@ class NetworkUtil {
         return ResponseModel.tryCatchErrorResponseModel(
           message,
           isCache: null,
+          requestTime: myRequestTime,
+          errorTime: DateTime.now(),
         );
       }
 
@@ -139,8 +157,19 @@ class NetworkUtil {
       if (DioCacheUtil.isCacheErrorCheckFunction != null) {
         isFromCache = DioCacheUtil.isCacheErrorCheckFunction!(err);
       }
-      ResponseModel responseModel =
-          getDioErrorResponseModelBlock(fullUrl, newErrorModel, isFromCache);
+
+      ErrOptions errOptions = NetworkModelConvertUtil.newError(err);
+      // NetOptions netOptions = NetOptions(
+      //   reqOptions: reqOptions,
+      //   errOptions: errOptions,
+      //   getSuccessResponseModelBlock: getSuccessResponseModelBlock,
+      // );
+      ResponseModel responseModel = getDioErrorResponseModelBlock(
+        fullUrl,
+        newErrorModel,
+        isFromCache,
+        errOptions: errOptions,
+      );
       return responseModel;
     }
   }

@@ -32,13 +32,16 @@ class NetworkClient extends BaseNetworkClient {
     String Function(String apiPath)?
         localApiDirBlock, // 本地网络所在的目录,需要本地模拟时候才需要设置
     void Function(RequestOptions options)? dealRequestOptionsAction,
+    void Function()? startCompleteBlock, // 初始化完成的回调
   }) {
     Map<String, dynamic> headers = {};
     headers.addAll(headerCommonFixParams);
-    if (headerCommonChangeParamsGetBlock != null) {
-      headers.addAll(headerCommonChangeParamsGetBlock());
-    }
+
+    // if (headerCommonChangeParamsGetBlock != null) {
+    //   headers.addAll(headerCommonChangeParamsGetBlock()); // 这只是一次性取值，后面的没法变化
+    // }
     if (headerAuthorization != null && headerAuthorization.isNotEmpty) {
+      // 这只是一次性取值，后面的没法自动变化，需要调用update接口
       headers.addAll({'Authorization': headerAuthorization});
     }
     _headerAuthorizationWhiteList = headerAuthorizationWhiteList;
@@ -46,6 +49,7 @@ class NetworkClient extends BaseNetworkClient {
     super.base_start(
       baseUrl: baseUrl,
       headers: headers,
+      headerCommonChangeParamsGetBlock: headerCommonChangeParamsGetBlock,
       connectTimeout: 15000,
       receiveTimeout: 15000,
       contentType: contentType,
@@ -64,6 +68,7 @@ class NetworkClient extends BaseNetworkClient {
       },
       dealRequestOptionsAction: dealRequestOptionsAction,
       localApiDirBlock: localApiDirBlock,
+      startCompleteBlock: startCompleteBlock,
     );
   }
 

@@ -20,6 +20,9 @@ class NetworkModelConvertUtil {
     if (DioCacheUtil.isRequestCacheCheckFunction != null) {
       isRequestCache = DioCacheUtil.isRequestCacheCheckFunction!(options);
     }
+
+    DateTime? requestTime = options.extra['requestStartTime'];
+    requestTime ??= DateTime.now();
     var reqOpt = ReqOptions(
       baseUrl: options.baseUrl,
       path: options.path,
@@ -30,6 +33,7 @@ class NetworkModelConvertUtil {
       data: options.data, // 参数params放Request模型的位置:GET请求时params中,POST请求时data中
       headers: options.headers,
       isRequestCache: isRequestCache,
+      requestTime: requestTime,
     );
 
     return reqOpt;
