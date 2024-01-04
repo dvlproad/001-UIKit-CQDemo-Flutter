@@ -2,24 +2,30 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-24 13:53:28
+ * @LastEditTime: 2024-01-04 11:29:38
  * @Description: Alert弹窗工具类
  */
 import 'package:flutter/material.dart';
+import 'package:flutter_theme_helper/flutter_theme_helper.dart';
+import '../flutter_overlay_kit_adapt.dart';
 import './message_alert_view.dart';
+
 // import 'package:flutter_button_base/flutter_button_base.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 
 class AlertUtil {
-  // 我知道了
+  /// 我知道了 [context]可空
   static Future showIKnowAlert(
     BuildContext context, {
     bool barrierDismissible = false,
     String? title,
     String? message,
+    RichText? richTextWidget,
     String? confirmText,
     TextAlign? messageAlign,
+    bool showCloseButton = true,
     void Function()? iKnowHandle,
+    bool? scrollable,
   }) {
     // double height = MediaQuery.of(context).size.height;
     // double containerHeight = height ??
@@ -197,5 +203,80 @@ class AlertUtil {
       ),
     );
     */
+  }
+
+  static Future showAddressAlert({
+    required BuildContext context,
+    bool barrierDismissible = false,
+    required String limitArea,
+  }) {
+    return showAlert(
+      context,
+      barrierDismissible: barrierDismissible,
+      alertViewBulider: (context) {
+        return Container(
+          width: 266.w_pt_cj,
+          height: 171.h_pt_cj,
+          padding: EdgeInsets.symmetric(horizontal: 20.w_pt_cj),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14.w_pt_cj),
+          ),
+          child: Column(
+            children: [
+              SizedBox(height: 20.h_pt_cj),
+              Text(
+                '很抱歉，当前【收货地址】不符合活动条件！',
+                style: BoldTextStyle(
+                    color: Color(0xFF404040), fontSize: 15.w_pt_cj),
+              ),
+              SizedBox(
+                height: 15.h_pt_cj,
+              ),
+              RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                      text: '当前活动仅限【收货地址】在',
+                      style: RegularTextStyle(
+                          color: Color(0xFF333333), fontSize: 13.w_pt_cj)),
+                  TextSpan(
+                      text: limitArea,
+                      style: RegularTextStyle(
+                          color: const Color(0xFFE47E4E),
+                          fontSize: 13.w_pt_cj)),
+                  TextSpan(
+                      text: '开放;',
+                      style: RegularTextStyle(
+                          color: Color(0xFF333333), fontSize: 13.w_pt_cj))
+                ]),
+              ),
+              SizedBox(height: 10.h_pt_cj),
+              InkWell(
+                child: Container(
+                  width: 197.w_pt_cj,
+                  height: 38.h_pt_cj,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE47E4E),
+                    borderRadius: BorderRadius.circular(19.w_pt_cj),
+                  ),
+                  child: Text(
+                    "好的，知道了",
+                    style: BoldTextStyle(
+                      fontSize: 13.w_pt_cj,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              )
+              // _renderButton(context, likeUnreadModel),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

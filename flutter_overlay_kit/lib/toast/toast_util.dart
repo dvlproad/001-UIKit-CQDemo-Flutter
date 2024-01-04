@@ -2,98 +2,150 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-24 14:24:09
+ * @LastEditTime: 2024-01-04 11:57:39
  * @Description: Toast工具类
  */
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:synchronized/synchronized.dart';
+import 'package:toast/toast.dart' as old;
 
 class ToastUtil {
-  static bool _showing = false;
+  static final Lock _lock = Lock();
+  // 2个相同的文案的toast之间间隔至少需要x秒
+  static final double _interval = 2.0;
+  // 管理正在展示中的文案
+  static final Set<String> _messages = {};
 
-  /// 接口请求超时调用这个提示
-  static showTimeoutMsg() {
-    showMessageOnlyOnce('网络开小差');
-  }
-
+  ///需在游戏中展示/调用toast请使用 forceShowMessage 方法
   static showMessage(
-    String message, {
+    String? message, {
     int duration = 1,
     bool needCancelOld = false, // 是否要取消旧的，避免视图一直叠加
+    String? key, // 用来判断这个toast是否正在展示
+    ToastGravity gravity = ToastGravity.CENTER, // toast展示位置，默认屏幕中间
+    bool needForceShow = false, //是否要在游戏中展示
   }) {
-    if (message.isNotEmpty) {
-      debugPrint(message);
+    if (message == null || message.isEmpty) {
+      return;
+    }
 
-      if (needCancelOld == true) {
-        Fluttertoast.cancel();
+    if (_hopeNoShowCheckHandle == null) {
+      debugPrint("🚗🚗🚗:请设置 ToastUtil.init ");
+    } else {
+      bool isShow = _hopeNoShowCheckHandle!();
+      if (isShow && needForceShow == false) {
+        return;
       }
+    }
+
+    if (needCancelOld == true) {
+      Fluttertoast.cancel();
+    }
+    _lock.synchronized(() {
+      // 1.这个文案是否正在展示
+      if (key != null) {
+        if (_messages.contains(key)) {
+          return;
+        }
+      } else {
+        if (_messages.contains(message)) {
+          return;
+        }
+      }
+      // 2.记录正在展示
+      if (key != null) {
+        _messages.add(key);
+      } else {
+        _messages.add(message);
+      }
+      // 3.在指定时间过后移出列表
+      Future.delayed(Duration(milliseconds: (_interval * 1000).toInt()), () {
+        if (key != null) {
+          _messages.remove(key);
+        } else {
+          _messages.remove(message);
+        }
+      });
 
       Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
+        gravity: gravity,
         timeInSecForIosWeb: duration,
         backgroundColor: Color(0xAA000000),
         textColor: Colors.white,
         fontSize: 16.0,
       );
-    }
+    });
   }
 
-  // 同时只显示一次toast
-  static showMessageOnlyOnce(String message, {int duration = 1}) async {
-    if (message.isNotEmpty && _showing == false) {
-      debugPrint(message);
-      _showing = true;
-      await Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: duration,
-        backgroundColor: Color(0xAA000000),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      _showing = false;
-    }
+  ///此方法为 游戏中调用APP的Toast方法/APP提供给游戏调用的方法中，触发toast，
+  ///需在游戏中展示
+  static forceShowMessage(
+    String? message, {
+    int duration = 1,
+    bool needCancelOld = false, // 是否要取消旧的，避免视图一直叠加
+    String? key, // 用来判断这个toast是否正在展示
+    ToastGravity gravity = ToastGravity.CENTER, // toast展示位置，默认屏幕中间
+  }) {
+    showMessage(
+      message,
+      duration: duration,
+      needCancelOld: needCancelOld,
+      key: key,
+      gravity: gravity,
+      needForceShow: true,
+    );
   }
 
-  static List<String> onlyOnceShowingToastKeys = [];
-  static showMessageOnlyOnceWithKey(
+  ///因百度键盘导致Fluttertoast库toast无法弹出，故使用Toast
+  static showToastMessage(
     String message, {
-    required String toastKey,
-    Duration duration = const Duration(milliseconds: 1000),
-  }) async {
-    if (message.isEmpty) {
-      return;
+    int? gravity = old.Toast.center,
+    int? duration,
+    bool needForceShow = false, //是否要在游戏中展示
+  }) {
+    ///游戏中，不显示APP内的toast，除非该路由本身调用
+    if (_hopeNoShowCheckHandle == null) {
+      debugPrint("🚗🚗🚗:请设置 ToastUtil.init ");
+    } else {
+      bool isShow = _hopeNoShowCheckHandle!();
+      if (isShow && needForceShow == false) {
+        return;
+      }
     }
 
-    bool isToastKeyShowing = onlyOnceShowingToastKeys.contains(toastKey);
-    debugPrint(
-        "1======toastKey=$toastKey,onlyOnceShowingToastKeys=$onlyOnceShowingToastKeys,message=$message");
-    if (isToastKeyShowing == false) {
-      onlyOnceShowingToastKeys.add(toastKey);
-      await Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: duration.inSeconds,
-        backgroundColor: Color(0xAA000000),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-
-      Future.delayed(duration).then((value) {
-        onlyOnceShowingToastKeys.remove(toastKey);
-        debugPrint(
-            "2======toastKey=$toastKey,onlyOnceShowingToastKeys=$onlyOnceShowingToastKeys");
-      });
-    }
+    old.Toast.show(
+      message,
+      gravity: gravity,
+      duration: duration,
+    );
   }
 
   // 此方法为为了替换项目中的 Toast.show 方法，临时增加了一个无用变量(此方法最后要删掉)
-  static showMsg(String message, BuildContext context, {int duration = 1}) {
+  static showMsg(String? message, BuildContext context, {int duration = 1}) {
+    if (message == null) {
+      return;
+    }
     showMessage(message);
+  }
+
+  static showErrorMsg(String? message) {
+    if (message == null) {
+      showMessage('非常抱歉！服务器开小差了～');
+    } else {
+      showMessage(message);
+    }
+  }
+
+  /// 接口请求超时调用这个提示
+  static showTimeoutMsg() {
+    showMessage('网络开小差');
+  }
+
+  static showSubmitSuccessMsg() {
+    showMessage('提交成功!');
   }
 
   // 开发中
@@ -126,11 +178,13 @@ class ToastUtil {
   static FToast? timeoutToast;
   static bool timeoutToastShowing = false;
   static BuildContext? Function()? _contextGetBlock;
-
+  static bool Function()? _hopeNoShowCheckHandle;
   static init({
     required BuildContext? Function() contextGetBlock,
+    required bool Function() hopeNoShowCheckHandle,
   }) {
     _contextGetBlock = contextGetBlock;
+    _hopeNoShowCheckHandle = hopeNoShowCheckHandle;
   }
 
   static showUniqueMessage(

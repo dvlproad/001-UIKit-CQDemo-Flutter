@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+
 // import './components/alert_closed_buttons.dart';
 import './components/alert_spaced_buttons.dart';
 import './components/flex_width_buttons.dart';
 import './components/alert_container.dart';
+
 // import 'package:flutter_button_base/flutter_button_base.dart';
 // import 'package:flutter_button_base/flutter_button_base_adapt.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
@@ -13,18 +15,26 @@ class CJBaseMessageAlertView extends StatelessWidget {
 
   final String? title;
   final String? message;
+  final RichText? richTextWidget;
   final TextAlign? messageAlign;
   final bool isCloseButton; // button按钮是否是紧密的，如果是的话底部间隔是0
   final Function? closeHandle;
+  final bool? scrollable;
+  final bool barrierDismissible;
+  final bool showCloseButton;
 
   CJBaseMessageAlertView({
     Key? key,
     this.height,
     this.title,
     this.message,
+    this.richTextWidget,
     this.messageAlign,
     this.isCloseButton = false,
     this.closeHandle,
+    this.scrollable,
+    this.barrierDismissible = true,
+    this.showCloseButton = true,
   });
 
   Widget renderButtons() {
@@ -37,7 +47,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
     Map allAlertMarginVertical = {
       // alert 竖直上的间距
       "title_buttons": [30.0, 30.0, 20.0, buttonToBottomDistance],
-      "title_message_buttons": [44.0, 10.0, 42.0, buttonToBottomDistance],
+      "title_message_buttons": [30.0, 20.0, 20.0, buttonToBottomDistance],
       "message_buttons": [20.0, 20.0, 0.0, buttonToBottomDistance],
     };
 
@@ -46,7 +56,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
     int messageVerticalIndex = 0;
     int buttonsVerticalIndex = 0;
     if (this.title != null) {
-      if (this.message != null) {
+      if (this.message != null || this.richTextWidget != null) {
         alertMarginVerticals = allAlertMarginVertical["title_message_buttons"];
         titleVerticalIndex = 0;
         messageVerticalIndex = 1;
@@ -58,7 +68,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
         buttonsVerticalIndex = 1;
       }
     } else {
-      if (this.message != null) {
+      if (this.message != null || this.richTextWidget != null) {
         alertMarginVerticals = allAlertMarginVertical["message_buttons"];
         titleVerticalIndex = -1;
         messageVerticalIndex = 0;
@@ -88,19 +98,32 @@ class CJBaseMessageAlertView extends StatelessWidget {
     Widget? alertMessageComponent;
     if (this.message != null) {
       alertMessageComponent = Container(
-        margin:
-            EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Text(
-          this.message ?? '',
-          textAlign: messageAlign,
-          style: TextStyle(
-            fontSize: 13.f_pt_cj,
-            color: Color(0xff8b8b8b),
-            decoration: TextDecoration.none,
-          ),
-        ),
-      );
+          margin:
+              EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
+          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.h_pt_cj),
+          child: scrollable == true
+              ? Container(
+                  height: 350.h_pt_cj,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: _getMessageWidget(this.message, messageAlign),
+                  ),
+                )
+              : _getMessageWidget(this.message, this.messageAlign));
+    } else if (this.richTextWidget != null) {
+      alertMessageComponent = Container(
+          margin:
+              EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
+          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.h_pt_cj),
+          child: scrollable == true
+              ? Container(
+                  height: 350.h_pt_cj,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: richTextWidget,
+                  ),
+                )
+              : richTextWidget);
     }
 
     double marginTop = alertMarginVerticals[buttonsVerticalIndex];
@@ -125,6 +148,20 @@ class CJBaseMessageAlertView extends StatelessWidget {
         child: renderButtons(),
       ),
       closeHandle: closeHandle,
+      barrierDismissible: barrierDismissible,
+      showCloseButton: showCloseButton,
+    );
+  }
+
+  Widget _getMessageWidget(String? msg, TextAlign? align) {
+    return Text(
+      msg ?? '',
+      textAlign: align,
+      style: TextStyle(
+        fontSize: 13.f_pt_cj,
+        color: const Color(0xff8b8b8b),
+        decoration: TextDecoration.none,
+      ),
     );
   }
 }
@@ -136,20 +173,30 @@ class IKnowMessageAlertView extends CJBaseMessageAlertView {
   final String iKnowTitle;
   final Function iKnowHandle;
 
-  IKnowMessageAlertView({
-    Key? key,
-    double? height,
-    String? title,
-    String? message,
-    TextAlign? messageAlign,
-    this.iKnowTitle = '我知道了',
-    required this.iKnowHandle,
-  }) : super(
+  IKnowMessageAlertView(
+      {Key? key,
+      double? height,
+      String? title,
+      String? message,
+      RichText? richTextWidget,
+      TextAlign? messageAlign,
+      Function? closeHandle,
+      bool showCloseButton = true,
+      bool barrierDismissible = true,
+      this.iKnowTitle = '我知道了',
+      required this.iKnowHandle,
+      bool? scrollable})
+      : super(
           key: key,
           height: height,
           title: title,
           message: message,
+          richTextWidget: richTextWidget,
           messageAlign: messageAlign,
+          scrollable: scrollable,
+          closeHandle: closeHandle,
+          barrierDismissible: barrierDismissible,
+          showCloseButton: showCloseButton,
         );
 
   @override
@@ -181,6 +228,7 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
     double? heiht,
     String? title,
     String? message,
+    RichText? richTextWidget,
     TextAlign? messageAlign,
     this.cancelTitle = '取消',
     this.cancelStyleType = ThemeStateBGType.theme_gray,
@@ -188,7 +236,8 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
     this.closeHandle,
     this.okTitle = '确认',
     this.okHandle,
-  })  : assert(title != null || message != null), // 不同同时为空
+  })  : assert(title != null || message != null),
+        // 不同同时为空
         super(
           key: key,
           height: heiht,

@@ -5,6 +5,7 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 import '../flutter_overlay_kit_adapt.dart';
 
+// ignore: must_be_immutable
 class BasePopupWidget extends StatefulWidget {
   static double toolbarHeight = 40.h_pt_cj;
 
@@ -15,11 +16,14 @@ class BasePopupWidget extends StatefulWidget {
   final Widget Function(BuildContext bContext) customViewBuilder;
   final Widget Function(BuildContext bContext)? bottomButtonBuilder;
 
+  bool? centerTitle;
+
   BasePopupWidget({
     Key? key,
     this.height,
     this.leftMargin,
     this.title,
+    this.centerTitle,
     required this.customViewBuilder, // 由 Expanded 包裹，如果高度不够，会自动被拉伸
     this.bottomButtonBuilder,
   }) : super(key: key);
@@ -51,9 +55,9 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
       automaticallyImplyLeading: false,
       leftMargin: widget.leftMargin ?? 0,
       title: widget.title ?? '',
+      centerTitle: widget.centerTitle,
       actions: [
         ToolBarImageActionWidget(
-          width: 60.w_pt_cj,
           image: Image(
             image: AssetImage(
               'assets/icon_close.png',
@@ -86,7 +90,10 @@ class _BasePopupWidgetState extends State<BasePopupWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(child: _toolbar, height: 52.w_pt_cj,),
+          SizedBox(
+            child: _toolbar,
+            height: 52.w_pt_cj,
+          ),
           Expanded(child: widget.customViewBuilder(context)),
           widget.bottomButtonBuilder == null
               ? Container()

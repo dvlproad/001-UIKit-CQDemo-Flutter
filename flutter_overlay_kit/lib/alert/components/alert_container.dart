@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 15:14:42
+ * @LastEditTime: 2024-01-04 11:16:39
  * @Description: 基础的 MessageAlert 部分
  */
 import 'package:flutter/material.dart';
@@ -15,6 +15,8 @@ class CQAlertContainer extends StatelessWidget {
   final double? buttonsWidgetHeight;
   final Widget? buttonsWidget;
   final Function? closeHandle;
+  final bool barrierDismissible;
+  final bool showCloseButton;
 
   CQAlertContainer({
     Key? key,
@@ -23,6 +25,8 @@ class CQAlertContainer extends StatelessWidget {
     this.buttonsWidgetHeight,
     this.buttonsWidget,
     this.closeHandle,
+    this.barrierDismissible = true,
+    this.showCloseButton = true,
   });
 
   @override
@@ -32,7 +36,13 @@ class CQAlertContainer extends StatelessWidget {
     double contentWidth = 290.w_pt_cj;
     return GestureDetector(
       onTap: () {
-        Navigator.pop(context);
+        if (barrierDismissible) {
+          if (closeHandle != null) {
+            closeHandle!();
+          } else {
+            Navigator.of(context).pop();
+          }
+        }
       },
       child: Container(
         width: width,
@@ -78,21 +88,24 @@ class CQAlertContainer extends StatelessWidget {
                       Positioned(
                         top: 10.w_pt_cj,
                         right: 10.w_pt_cj,
-                        child: GestureDetector(
-                          onTap: () {
-                            if (closeHandle != null) {
-                              closeHandle!();
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: Image(
-                            image: AssetImage(
-                              'assets/icon_close2.png',
-                              package: 'flutter_overlay_kit',
+                        child: Visibility(
+                          visible: showCloseButton,
+                          child: GestureDetector(
+                            onTap: () {
+                              if (closeHandle != null) {
+                                closeHandle!();
+                              } else {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: Image(
+                              image: AssetImage(
+                                'assets/icon_close2.png',
+                                package: 'flutter_overlay_kit',
+                              ),
+                              width: 21.w_pt_cj,
+                              fit: BoxFit.cover,
                             ),
-                            width: 21.w_pt_cj,
-                            fit: BoxFit.cover,
                           ),
                         ),
                       ),

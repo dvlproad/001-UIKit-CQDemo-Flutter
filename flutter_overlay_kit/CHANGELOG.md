@@ -1,3 +1,8 @@
-## [0.0.1] - TODO: Add release date.
+## 0.0.1
 
-* TODO: Describe initial release.
+* Toast + alert + actionsheet
+
+
+## 0.0.2
+
+* Toast增加可设置什么情况不显示

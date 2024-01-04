@@ -2,13 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-04-06 10:09:31
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-14 11:20:24
+ * @LastEditTime: 2023-05-17 11:44:50
  * @Description: 弹出视图
  */
 library flutter_overlay_kit;
 
 // toast
 export './toast/toast_util.dart';
+export './toast/toast.dart';
 
 // alert
 export './alert/alert_util.dart';
