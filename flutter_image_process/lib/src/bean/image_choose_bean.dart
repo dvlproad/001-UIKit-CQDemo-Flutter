@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 14:01:08
+ * @LastEditTime: 2024-01-04 14:52:26
  * @Description: 图片选择器的数据模型
  */
 
@@ -46,6 +46,7 @@ UploadMediaType getMediaType(String localPathOrNetworkUrl) {
     'png',
     'gif',
     "webp",
+    "avif",
   ];
   List<String> videoTypes = [
     'mp4',
@@ -81,6 +82,14 @@ enum UploadMediaType {
   image,
   audio,
   video,
+  imlog,
+  appLog,
+  livelog,
+}
+
+enum UploadMediaScene {
+  unkonw,
+  selfie, //自拍
 }
 
 class ImageChooseBean {
@@ -97,7 +106,6 @@ class ImageChooseBean {
 
   double frameDuration = -1; // 选中视频帧时间位置
   double videoDuration = 0; // 视频时长
-  String assetEntityId = ""; // assetEntity的id
   Completer<bool> assetEntityCompleter = Completer<bool>();
 
   ImageChooseBean({
@@ -110,7 +118,6 @@ class ImageChooseBean {
   }) {
     if (assetEntity != null && assetEntity!.type == AssetType.video) {
       videoDuration = assetEntity!.duration.toDouble();
-      assetEntityId = assetEntity!.id;
       width = _getRealWidthForAssetEntity(assetEntity!);
       height = _getRealHeightForAssetEntity(assetEntity!);
 
@@ -150,11 +157,9 @@ class ImageChooseBean {
     height = json["height"];
     videoDuration = json["videoDuration"] ?? 0;
     frameDuration = json["frameDuration"] ?? -1;
-    assetEntityId = json["assetEntityId"];
-    AssetEntity.fromId(assetEntityId).then((value) {
-      assetEntity = value;
-      assetEntityCompleter.complete(true);
-    });
+    networkUrl = json["networkUrl"];
+    networkThumbnailUrl = json["networkThumbnailUrl"];
+
     if (json["compressImageBean"] != null) {
       compressImageBean = ImageCompressBean.fromJson(json["compressImageBean"]);
     }
@@ -180,6 +185,7 @@ class ImageChooseBean {
           longitude: asset["longitude"],
           mimeType: asset["mimeType"],
           subtype: asset["subtype"]);
+      assetEntityCompleter.complete(true);
     }
   }
 
@@ -197,7 +203,8 @@ class ImageChooseBean {
 
     data['videoDuration'] = videoDuration;
     data['frameDuration'] = frameDuration;
-    data['assetEntityId'] = assetEntityId;
+    data['networkThumbnailUrl'] = networkThumbnailUrl;
+    data['networkUrl'] = networkUrl;
 
     if (compressImageBean != null) {
       data["compressImageBean"] = compressImageBean!.toJson();
@@ -331,6 +338,7 @@ class ImageChooseBean {
 
   Future<String?> lastUploadThumbnailImagePath() async {
     _log("image choose bean hashCode = $hashCode");
+
     // 草稿里的图片已有压缩数据
     if (_compressImageBean != null &&
         _compressImageBean!.compressInfoProcess ==
@@ -529,14 +537,6 @@ class ImageChooseBean {
       _log('_compressCompleter.isCompleted');
     }
     return _videoFrameBeans;
-  }
-
-  Future loadAssetEntity(String assetId) async {
-    if (assetEntity == null) {
-      assetEntityId = assetId;
-      assetEntity = await AssetEntity.fromId(assetId);
-      assetEntityCompleter.complete(true);
-    }
   }
 
   /*

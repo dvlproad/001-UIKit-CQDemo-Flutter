@@ -1,6 +1,6 @@
 name: flutter_image_process
 description: 一个图片处理的库.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_image_process
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_image_process
 
@@ -11,14 +11,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   extended_image: ^7.0.2
+  cached_network_image: ^3.2.3
   video_thumbnail: ^0.5.3
-  photo_manager: ^2.6.0
+  photo_manager: ^2.7.0
   path_provider: ^2.0.14
 
   # 压缩
-  flutter_image_compress: ^1.1.3
+  flutter_image_compress: ^2.0.4
   video_compress: ^3.1.2
 
 dev_dependencies:

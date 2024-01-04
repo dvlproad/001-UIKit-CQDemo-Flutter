@@ -54,19 +54,27 @@ class BaseImageCompressUtil {
     // if (mediaType == UploadMediaType.image) {
     String fileType = filePath.split('.').last;
     if (['jpg', 'jpeg', 'png'].contains(fileType)) {
-      final File? result = await FlutterImageCompress.compressAndGetFile(
-        file.absolute.path,
-        targetCompressPath,
-        quality: 90,
-        minWidth: 1024,
-        minHeight: 1024,
-        rotate: 0,
+      CompressFormat format =
+          'png' == fileType ? CompressFormat.png : CompressFormat.jpeg;
+      final XFile? result = await FlutterImageCompress.compressAndGetFile(
+          file.absolute.path,
+          targetCompressPath,
+          quality: 90,
+          minWidth: 1024,
+          minHeight: 1024,
+          rotate: 0,
+          format: format
       );
 
-      debugPrint("原图大小:${file.lengthSync()}");
-      debugPrint("新图大小:${result?.lengthSync() ?? 0}");
+      if (result == null) return file;
 
-      return result;
+      debugPrint("原图大小:${file.lengthSync()}");
+      debugPrint("新图大小:${await result.length()}");
+      File resultFile = File(result.path);
+      if (resultFile.existsSync()) {
+        return resultFile;
+      }
+      return file;
     } else {
       return file;
     }

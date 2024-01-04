@@ -2,10 +2,13 @@
  * @Author: dvlproad
  * @Date: 2023-03-17 20:48:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 14:18:01
+ * @LastEditTime: 2024-01-04 14:51:57
  * @Description: 
  */
 library flutter_image_process;
+
+// data_vientiane
+export './src/data_vientiane/data_vientiane.dart';
 
 export './src/images_compress_util.dart';
 

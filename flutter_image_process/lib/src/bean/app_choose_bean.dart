@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-18 15:06:49
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 12:04:01
+ * @LastEditTime: 2024-01-04 14:52:44
  * @Description: 
  */
 import 'package:photo_manager/photo_manager.dart' show AssetEntity;
@@ -83,6 +83,7 @@ class AppImageChooseBean extends ImageChooseBean {
     assetEntity = baseBean.assetEntity;
 
     networkUrl = baseBean.networkUrl;
+    networkThumbnailUrl = baseBean.networkThumbnailUrl;
     width = baseBean.width;
     height = baseBean.height;
 
