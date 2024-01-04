@@ -32,7 +32,7 @@ class PackageCheckUpdateTargetUtil {
       //   );
     } else {
       // 设置界面里
-      _checkNetworkNoStartForPackage(
+      _checkTargetNoStartForPackage(
         originPackageTargetModel: originPackageTargetModel,
         currentPackageTargetModel: currentPackageTargetModel,
         goChangeHandle: goChangeHandle,
@@ -85,7 +85,7 @@ class PackageCheckUpdateTargetUtil {
   }
 
   /// 设置页点击切换环境的时候，检查包的环境
-  static _checkNetworkNoStartForPackage({
+  static _checkTargetNoStartForPackage({
     required PackageTargetModel originPackageTargetModel,
     required PackageTargetModel currentPackageTargetModel,
     void Function()?

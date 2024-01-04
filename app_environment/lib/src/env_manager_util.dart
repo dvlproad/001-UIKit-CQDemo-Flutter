@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 00:45:40
+ * @LastEditTime: 2023-06-05 14:31:00
  * @Description: 环境初始化类
  */
 
@@ -27,23 +27,46 @@ class EnvManagerUtil {
   }) async {
     // 环境初始化
     // network:api host
+
+    DateTime networkPageDataInitDateStart = DateTime.now();
+    // ResponseDateModel responseDateModel =
     await _initNetworkEnvironmentManager(originPackageNetworkType);
     await NetworkPageDataManager().initCompleter.future;
+    DateTime networkPageDataInitDateEnd = DateTime.now();
     // TSEnvNetworkModel selectedNetworkModel = NetworkPageDataManager().selectedNetworkModel;
 
     // proxy:
+    DateTime proxyPageDataInitDateStart = DateTime.now();
     await _initProxyEnvironmentManager(originPackageNetworkType);
     await ProxyPageDataManager().initCompleter.future;
+    DateTime proxyPageDataInitDateEnd = DateTime.now();
     // TSEnvProxyModel selectedProxyModel = ProxyPageDataManager().selectedProxyModel;
 
     // target:
+    DateTime targetPageDataInitDateStart = DateTime.now();
     await _initPackageTargetManager(
         originPackageNetworkType, originPackageTargetType);
     await PackageTargetPageDataManager().initCompleter.future;
+    DateTime targetPageDataInitDateEnd = DateTime.now();
     // PackageTargetModel selectedTargetModel = PackageTargetPageDataManager().selectedTargetModel;
 
     hasInitCompleter_Env = true;
-    environmentEventBus.fire(EnvironmentInitCompleteEvent());
+    environmentEventBus.fire(
+      EnvironmentInitCompleteEvent(
+        networkPageDataSpendModel: SpendDateModel(
+          startTime: networkPageDataInitDateStart,
+          endTime: networkPageDataInitDateEnd,
+        ),
+        proxyPageDataSpendModel: SpendDateModel(
+          startTime: proxyPageDataInitDateStart,
+          endTime: proxyPageDataInitDateEnd,
+        ),
+        targetPageDataSpendModel: SpendDateModel(
+          startTime: targetPageDataInitDateStart,
+          endTime: targetPageDataInitDateEnd,
+        ),
+      ),
+    );
   }
 
   // network
@@ -64,6 +87,9 @@ class EnvManagerUtil {
       canUseCacheNetwork = true;
     } else if (packageNetworkType == PackageNetworkType.test1) {
       defaultNetworkId_whenNull = TSEnvironmentDataUtil.testNetworkId1;
+      canUseCacheNetwork = true;
+    } else if (packageNetworkType == PackageNetworkType.test2) {
+      defaultNetworkId_whenNull = TSEnvironmentDataUtil.testNetworkId2;
       canUseCacheNetwork = true;
     } else if (packageNetworkType == PackageNetworkType.preproduct) {
       defaultNetworkId_whenNull = TSEnvironmentDataUtil.preproductNetworkId;
@@ -141,9 +167,12 @@ class EnvManagerUtil {
       TSEnvNetworkModel toNetworkEnvModel,
     ) {
       if (toNetworkEnvModel.envId == TSEnvironmentDataUtil.mockNetworkId) {
-        return false;
+        return ChangeEnvPermission.AllowButNeedExit;
       }
-      return true;
+      if (toNetworkEnvModel.envId != TSEnvironmentDataUtil.productNetworkId) {
+        return ChangeEnvPermission.AllowButNeedExit;
+      }
+      return ChangeEnvPermission.Forbid;
     };
   }
 

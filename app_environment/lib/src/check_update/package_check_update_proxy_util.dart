@@ -1,14 +1,15 @@
+// ignore_for_file: unused_local_variable
+
 /*
  * @Author: dvlproad
  * @Date: 2022-09-09 10:58:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-10-10 14:54:59
+ * @LastEditTime: 2024-01-04 17:34:25
  * @Description: 
  */
 import 'package:flutter/material.dart';
 
 import 'package:flutter_environment_base/flutter_environment_base.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './env_page_util.dart';
 
@@ -28,12 +29,6 @@ class PackageCheckUpdateProxyUtil {
     BuildContext? currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {
       throw Exception('界面获取失败，请检查');
-    }
-
-    if (originNetworkModel.type == PackageNetworkType.product) {
-      ToastUtil.showMsg(
-          '温馨提示：您当前包为${originNetworkModel.des}，不支持添加代理。', currentContext);
-      return;
     }
 
     goChangeHandle();

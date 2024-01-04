@@ -43,6 +43,8 @@ class TSEnvNetworkModelExtension {
       return TSEnvironmentDataUtil.networkModel_preProduct;
     } else if (networkType == PackageNetworkType.test1) {
       return TSEnvironmentDataUtil.networkModel_test1;
+    } else if (networkType == PackageNetworkType.test2) {
+      return TSEnvironmentDataUtil.networkModel_test2;
     } else if (networkType == PackageNetworkType.develop1) {
       return TSEnvironmentDataUtil.networkModel_dev1;
     } else if (networkType == PackageNetworkType.develop2) {

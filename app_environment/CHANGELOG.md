@@ -1,3 +1,8 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* app的环境库
+
+
+## 0.0.2
+
+* app的环境变量支持外部设置

@@ -43,7 +43,8 @@ class PackageCheckUpdateNetworkUtil {
   ) {
     BuildContext? currentContext = EnvPageUtil.navigatorKey.currentContext;
     if (currentContext == null) {
-      throw Exception('界面获取失败，请检查');
+      debugPrint('界面获取失败，请检查');
+      return;
     }
 
     String defaultEnvId = defaultNetworkModel.envId;
@@ -72,7 +73,11 @@ class PackageCheckUpdateNetworkUtil {
     TSEnvNetworkModel defaultNetworkModel, {
     required BuildContext context,
   }) {
-    EnvPageUtil.changeEnv(defaultNetworkModel, true, context: context);
+    EnvPageUtil.changeEnv(
+      defaultNetworkModel,
+      ChangeEnvPermission.AllowButNeedExit,
+      context: context,
+    );
     EnvPageUtil.changeProxyToNone();
   }
 

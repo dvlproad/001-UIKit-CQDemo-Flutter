@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-10-13 10:53:02
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 00:44:52
+ * @LastEditTime: 2024-01-04 17:34:03
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -13,8 +13,8 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:provider/provider.dart';
-import './package_check_update_network_util.dart';
-import './package_check_update_target_util.dart';
+// import './package_check_update_network_util.dart';
+// import './package_check_update_target_util.dart';
 import './package_check_update_proxy_util.dart';
 
 import './env_page_util.dart';
@@ -113,15 +113,15 @@ class _EnvWidgetState extends State<EnvWidget> {
       title: "切换环境",
       textValue: selectedNetworkModel.name,
       textSubValue: selectedNetworkModel.apiHost,
-      onTap: () {
-        PackageCheckUpdateNetworkUtil.checkShouldResetNetwork(
-          goChangeHandle: () {
-            EnvPageUtil.goChangeEnvironmentNetwork(context).then((value) {
-              setState(() {});
-            });
-          },
-        );
-      },
+      // onTap: () {
+      //   PackageCheckUpdateNetworkUtil.checkShouldResetNetwork(
+      //     goChangeHandle: () {
+      //       EnvPageUtil.goChangeEnvironmentNetwork(context).then((value) {
+      //         setState(() {});
+      //       });
+      //     },
+      //   );
+      // },
     );
   }
 
@@ -135,15 +135,15 @@ class _EnvWidgetState extends State<EnvWidget> {
       title: "切换平台",
       textValue: packageTargetModel.name,
       textSubValue: packageTargetModel.des,
-      onTap: () {
-        PackageCheckUpdateTargetUtil.checkShouldResetTarget(
-          goChangeHandle: () {
-            EnvPageUtil.goChangeEnvironmentTarget(context).then((value) {
-              setState(() {});
-            });
-          },
-        );
-      },
+      // onTap: () {
+      //   PackageCheckUpdateTargetUtil.checkShouldResetTarget(
+      //     goChangeHandle: () {
+      //       EnvPageUtil.goChangeEnvironmentTarget(context).then((value) {
+      //         setState(() {});
+      //       });
+      //     },
+      //   );
+      // },
     );
   }
 

@@ -58,8 +58,9 @@ class EnvPageUtil {
           _onPressTestApiCallback!(TestApiScene.changeNetworkEnv);
         }
       },
-      updateNetworkCallback: (bNetworkModel, {required bool shouldExit}) {
-        changeEnv(bNetworkModel, shouldExit, context: context);
+      updateNetworkCallback: (bNetworkModel,
+          {required ChangeEnvPermission permission}) {
+        changeEnv(bNetworkModel, permission, context: context);
       },
     );
   }
@@ -102,7 +103,7 @@ class EnvPageUtil {
 
   static void changeEnv(
     TSEnvNetworkModel bNetworkModel,
-    bool shouldExit, {
+    ChangeEnvPermission permission, {
     required BuildContext context,
   }) {
     /// ①修改网络环境_页面数据
@@ -112,7 +113,7 @@ class EnvPageUtil {
     _updateNetworkCallback(bNetworkModel);
 
     /// ③修改网络环境_更改完数据后，是否退出应用
-    if (shouldExit == true) {
+    if (permission == ChangeEnvPermission.AllowButNeedExit) {
       exitApp(context);
     }
   }
