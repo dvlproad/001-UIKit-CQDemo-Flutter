@@ -1,6 +1,6 @@
 name: flutter_network_kit
 description: flutter_network_base + dio_http_cache + flutter_effect_kit(LoadingUtil) + flutter_log_base + flutter_robot_base + event_bus + connectivity_plus.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_kit
 
@@ -14,15 +14,15 @@ dependencies:
 
   
   dio: ^4.0.6
-  flutter_network_base: #^0.0.1
-    path: ../flutter_network_base/
-  flutter_log_base: #^0.0.1
-    path: ../flutter_log_base/
-  flutter_robot_base: #^0.0.3
-    path: ../flutter_robot_base/
+  flutter_network_base: ^0.0.3
+    # path: ../flutter_network_base/
+  flutter_log_base: ^0.0.1
+    # path: ../flutter_log_base/
+  flutter_robot_base: ^0.0.3
+    # path: ../flutter_robot_base/
 
-  flutter_effect_kit: #^0.0.1
-    path: ../flutter_effect_kit/  # 为了引入 LoadingUtil
+  flutter_effect_kit: ^0.0.1
+    # path: ../flutter_effect_kit/  # 为了引入 LoadingUtil
     
   dio_http_cache: ^0.3.0
   event_bus: ^2.0.0

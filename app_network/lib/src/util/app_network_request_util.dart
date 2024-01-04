@@ -1,6 +1,8 @@
 import 'package:app_network/app_network.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 class AppNetworkRequestUtil {
   /// 通用的GET请求
@@ -171,6 +173,19 @@ class AppNetworkRequestUtil {
       showToastForNoNetwork: false,
     );
   }
+
+  static Future<bool> isNetWorkAvailable({bool needShowToast = true}) async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      if (needShowToast) {
+        ToastUtil.showMessage('网络开小差了，请检查下网络再试！');
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 
   /*
   List<String>? _getHeaderAuthorizationWhiteList() async {

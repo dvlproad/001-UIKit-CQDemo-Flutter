@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class ApplicationDraggableManager {
   static late GlobalKey<NavigatorState> _globalKey; // 用来处理悬浮按钮的展示
@@ -11,6 +12,8 @@ class ApplicationDraggableManager {
   static late void Function() _onTap; // 点击事件
   static late void Function() _onLongPress; // 长按事件
   static late void Function() _onDoubleTap; // 双击事件
+
+  static String _app_drag_floating_button_key = '';
 
   static Future init({
     required GlobalKey<NavigatorState> navigatorKey,
@@ -34,9 +37,14 @@ class ApplicationDraggableManager {
     _onLongPress = onLongPress;
     _onDoubleTap = onDoubleTap;
 
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+
+    _app_drag_floating_button_key =
+        "_app_drag_floating_button_should_show_${version}";
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    _overlayEntryIsShow =
-        prefs.getBool("_app_drag_floating_button_should_show");
+    _overlayEntryIsShow = prefs.getBool(_app_drag_floating_button_key);
     if (_overlayEntryIsShow == null) {
       _overlayEntryIsShow = overlayEntryShouldShowIfNil;
     }
@@ -68,7 +76,7 @@ class ApplicationDraggableManager {
 
   static _updateShowState(bool shouldShow) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("_app_drag_floating_button_should_show", shouldShow);
+    prefs.setBool(_app_drag_floating_button_key, shouldShow);
   }
 
   static void showEasyOverlayEntry({

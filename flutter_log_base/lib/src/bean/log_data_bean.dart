@@ -10,17 +10,25 @@
 
 import 'package:flutter/material.dart'; // 需要使用颜色 Color
 import 'package:flutter_foundation_base/flutter_foundation_base.dart';
-// import '../string_format_util/formatter_object_util.dart';
 
 enum LogObjectType {
   api_app, // app中的网络请求
   api_cache, // 网络缓存请求
   api_sdk, // sdk中的网络请求
+  api_buriedPoint, // 埋点
   dart, // 语法
   widget, // 视图
+  sdk_other,
+  buriedPoint_other,
   route, // 路由
-  api_buriedPoint, // 埋点
-  monitor_network, // 监控(埋点、网络类型变化等)
+  monitor_network, // 监控：网络类型变化
+  monitor_lifecycle, // 监控：生命周期变化
+  click_other,
+  click_share,
+  h5_route, // 路由(与网页跳转有关)
+  h5_js, // js交互
+  heartbeat, // 心跳
+  im, // IM
   other, // 其他
 }
 
@@ -29,6 +37,7 @@ enum LogLevel {
   success, // 成功信息(目前用于请求结束：成功)
   warning, // 警告信息(目前用于请求结束：报错)
   error, // 错误日志(目前用于请求结束：失败)
+  dangerous, // 危险错误(如白屏等)，会上报企业微信
 }
 
 // log分类
@@ -65,13 +74,10 @@ class LogModel {
 
   String get shortMapString {
     String shortMapString = '';
-    if (logType == LogObjectType.api_app ||
-        logType == LogObjectType.api_cache ||
-        logType == LogObjectType.api_buriedPoint ||
-        logType == LogObjectType.monitor_network) {
-      shortMapString = _joinLogJsonString(shortMap);
+    if (logType == LogObjectType.other) {
+      shortMapString = shortMap.map2StringWitKey();
     } else {
-      shortMapString = _getLogJsonString(shortMap);
+      shortMapString = shortMap.map2StringWithoutKey(); // 不需要key
     }
 
     return shortMapString;
@@ -79,7 +85,7 @@ class LogModel {
 
   String get detailMapString {
     Map<dynamic, dynamic> detailMap = detailLogModel;
-    String detailMapString = _getLogJsonString(detailMap);
+    String detailMapString = detailMap.map2StringWitKey();
 
     String detailString = detailMapString;
     if (logType == LogObjectType.api_app && extraLogInfo != null) {
@@ -89,49 +95,6 @@ class LogModel {
     }
 
     return detailString;
-  }
-
-  static String _joinLogJsonString(Map<dynamic, dynamic> logJsonMap) {
-    if (logJsonMap.isEmpty) {
-      return '';
-    }
-    String logJsonString = '';
-    for (var key in logJsonMap.keys) {
-      Object keyValue = logJsonMap[key];
-      String keyValueString = keyValue.toString();
-
-      logJsonString += "$keyValueString\n";
-    }
-    logJsonString =
-        logJsonString.substring(0, logJsonString.length - "\n".length);
-    return logJsonString;
-  }
-
-  static String _getLogJsonString(Map<dynamic, dynamic> logJsonMap) {
-    if (logJsonMap.isEmpty) {
-      return '';
-    }
-    String logJsonString = '';
-
-    // if (detailLogJsonMap["METHOD"] == "GET") {
-    //   // debug;
-    // }
-    // int keyCount = logJsonMap.keys.length;
-    // for (var i = 0; i < keyCount; i++) {
-    //   String key = logJsonMap.keys[i];
-    for (var key in logJsonMap.keys) {
-      Object keyValue = logJsonMap[key];
-      String keyValueString =
-          FormatterUtil.convert(keyValue, 0, isObject: true);
-      // if (i > 0) {
-      //   logJsonString += "\n";
-      // }
-      logJsonString += "- $key:\n$keyValueString\n";
-      logJsonString += "\n";
-    }
-    logJsonString =
-        logJsonString.substring(0, logJsonString.length - "\n".length - 1);
-    return logJsonString;
   }
 
   // json 与 model 转换

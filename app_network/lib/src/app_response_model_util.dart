@@ -29,11 +29,11 @@ class SpecialCodeRuleBean {
 */
 
 class CheckResponseModelUtil {
-  static late void Function() _needReloginHandle; // 401等需要重新登录时候，执行的操作
+  static late void Function(ResponseModel responseModel) _needReloginHandle; // 401等需要重新登录时候，执行的操作
   static List<int>? Function()? _forceNoToastStatusCodesGetFunction;
 
   static init({
-    required void Function() needReloginHandle,
+    required void Function(ResponseModel responseModel) needReloginHandle,
     List<int>? Function()?
         forceNoToastStatusCodesGetFunction, // 获取哪些真正的statusCode药强制不弹 toast
   }) {
@@ -48,51 +48,33 @@ class CheckResponseModelUtil {
         toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
     String? serviceProxyIp,
   }) {
-    if (responseModel.isSuccess) {
-      return responseModel;
-    }
-
-    int errorCode = responseModel.statusCode;
-    String? responseMessage = responseModel.message;
-    if (errorCode == HttpStatusCode.NoNetwork) {
-      responseMessage = '目前无可用网络';
-    } else if (errorCode == HttpStatusCode.ErrorTimeout) {
-      responseMessage = '请求超时';
-    } else if (errorCode == HttpStatusCode.ErrorDioCancel) {
-      responseMessage = '请求取消';
-    } else if (errorCode == HttpStatusCode.ErrorDioResponse) {
-      responseMessage = "非常抱歉！服务器开小差了～";
-    } else if (errorCode == 500 || errorCode == 503) {
-      // statusCode 200, 但 errorCode 500 网络框架问题
-      responseMessage = "非常抱歉！服务器开小差了～";
-      // toastIfMayNeed = true; // 先强制弹出toast,需要关闭的时候，再由后台通过全局网络配置处理成不弹
-    } else if (errorCode == 401) {
-      if (responseModel.message == '暂未登录或token已经过期') {
-        responseMessage = "登录失效，请重新登录";
-        if (responseModel.isCache != true) {
-          _needReloginHandle();
+    bool needToast = false;
+    // 1、http 的 toast 设置与修改
+    if (responseModel.isErrorResponse) {
+      bool shouldShowHttpError = toastIfMayNeed ?? true;
+      int errorCode = responseModel.statusCode;
+      String? responseMessage = responseModel.message;
+      responseMessage =
+          showErrorMessageToast(errorCode, responseMessage, needToast: false);
+      if (errorCode == 401) {
+        if (responseModel.message == '暂未登录或token已经过期') {
+          if (responseModel.isCache != true) {
+            _needReloginHandle(responseModel);
+          }
+          shouldShowHttpError = true;
         }
-        toastIfMayNeed = true;
-      } else {
-        responseMessage = responseModel.message ?? "Token不能为空或Token过期，请重新登录";
+      } else if (errorCode == 20030) {
+        toastIfMayNeed = false;
+        if (responseModel.isCache != true) {
+          _needReloginHandle(responseModel);
+        }
+      } else if (errorCode == HttpStatusCode.Unknow) {
+        if (serviceProxyIp != null) {
+          responseMessage = '$responseMessage:建议先关闭代理$serviceProxyIp再检查';
+        }
       }
-    } else if (errorCode == HttpStatusCode.ErrorTryCatch) {
-      responseMessage = "非常抱歉！系统请求发生错误了～";
-    } else if (errorCode == HttpStatusCode.Unknow) {
-      responseMessage = "非常抱歉！服务器开小差了～";
-
-      if (serviceProxyIp != null) {
-        responseMessage = '$responseMessage:建议先关闭代理$serviceProxyIp再检查';
-      }
-    } else {
-      responseMessage = responseModel.message ?? "非常抱歉！业务发生错误了～";
-      toastIfMayNeed ??= true;
-    }
-    responseModel.message = responseMessage; //强制转成想要的文案，避免外部的业务方拿该值去显示
-
-    // 不为空的时候不能/无法实现修改
-    if (toastIfMayNeed == null && _forceNoToastStatusCodesGetFunction != null) {
-      /*
+      if (_forceNoToastStatusCodesGetFunction != null) {
+        /*
       List<SpecialCodeRuleBean>? specialCodeRuleBeans =
           _forceNoToastStatusCodesGetFunction!();
       if (specialCodeRuleBeans != null) {
@@ -104,18 +86,70 @@ class CheckResponseModelUtil {
         }
       }
       */
-      List<int>? forceNoToastStatusCodes =
-          _forceNoToastStatusCodesGetFunction!();
-      if (forceNoToastStatusCodes != null &&
-          forceNoToastStatusCodes.contains(errorCode)) {
-        toastIfMayNeed = false;
+        List<int>? forceNoToastStatusCodes =
+            _forceNoToastStatusCodesGetFunction!();
+        if (forceNoToastStatusCodes != null &&
+            forceNoToastStatusCodes.contains(errorCode)) {
+          shouldShowHttpError = false;
+        }
+      }
+
+      needToast = shouldShowHttpError;
+      responseModel.message = responseMessage ?? "非常抱歉！服务器开小差了～";
+    } else {
+      // 2、业务失败 code 处理
+      // 2.②、业务失败，未设置默认都要toast，如创建失败
+      if (responseModel.isSuccess != true) {
+        bool errorBusinessShouldToast = toastIfMayNeed ?? true;
+
+        needToast = errorBusinessShouldToast;
+        responseModel.message ??= "非常抱歉！业务发生错误了～";
       }
     }
 
-    if (responseModel.isCache != true && toastIfMayNeed == true) {
-      ToastUtil.showMessageOnlyOnce(responseMessage); // 避免无网络时候，每个接口都弹一遍
+    // 3、toast的信息整合
+    if (responseModel.isCache != true && needToast == true) {
+      ToastUtil.showMessage(responseModel.message ?? ''); // 避免无网络时候，每个接口都弹一遍
     }
 
     return responseModel;
+  }
+
+  ///请求失败toast提示
+  static String showErrorMessageToast(int errorCode, String? message,
+      {bool needToast = true}) {
+    String errorMessage = '';
+    if (errorCode == HttpStatusCode.NoNetwork) {
+      errorMessage = '目前无可用网络';
+    } else if (errorCode == HttpStatusCode.ErrorDioOther) {
+      errorMessage = '目前无可用网络';
+    } else if (errorCode == HttpStatusCode.ErrorTimeout) {
+      errorMessage = '请求超时';
+    } else if (errorCode == HttpStatusCode.ErrorDioCancel) {
+      errorMessage = '请求取消';
+    } else if (errorCode == HttpStatusCode.ErrorDioResponse) {
+      errorMessage = "非常抱歉！服务器开小差了～";
+    } else if (errorCode == 500 || errorCode == 503) {
+      errorMessage = "非常抱歉！服务器开小差了～";
+    } else if (errorCode == 401) {
+      errorMessage = "登录失效，请重新登录";
+      if (message == '暂未登录或token已经过期') {
+        errorMessage = "登录失效，请重新登录";
+      } else {
+        errorMessage = message ?? "Token不能为空或Token过期，请重新登录";
+      }
+    } else if (errorCode == 20030) {
+      errorMessage = "";
+    } else if (errorCode == HttpStatusCode.ErrorTryCatch) {
+      errorMessage = "非常抱歉！系统请求发生错误了～";
+    } else if (errorCode == HttpStatusCode.Unknow) {
+      errorMessage = "非常抱歉！服务器开小差了～";
+    } else {
+      errorMessage = "非常抱歉！服务器开小差了～";
+    }
+    if (needToast == true) {
+      ToastUtil.showMessage(errorMessage); // 避免无网络时候，每个接口都弹一遍
+    }
+    return errorMessage;
   }
 }

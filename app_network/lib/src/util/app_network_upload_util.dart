@@ -41,6 +41,7 @@ class UploadApiUtil {
     required bool multipart,
     required List<ImageChooseBean> imageChooseModels,
     required UploadMediaType mediaType,
+    required UploadMediaScene mediaScene,
     void Function({
       required double totalProgressValue, // 总的下载进度
       required int needUploadNumber, // 需要上传的个数
@@ -56,6 +57,7 @@ class UploadApiUtil {
       multipart: multipart,
       imageChooseModels: imageChooseModels,
       mediaType: mediaType,
+      mediaScene: mediaScene,
       uploadProgress: uploadProgress,
       uploadSuccess: () {
         completer.complete(UploadMediaResultType.UploadSuccess);
@@ -92,14 +94,16 @@ class UploadApiUtil {
   }
 
   static Future<String?> channel_uploadQCloud(
-    String localPath, {
+    String? localPath, {
     UploadMediaType mediaType = UploadMediaType.unkonw,
+    UploadMediaScene mediaScene = UploadMediaScene.unkonw,
     void Function({required double progressValue})? uploadProgress, // 上传进度监听
   }) async {
     return AppNetworkManager().channel_uploadQCloud(
-      localPath,
+      localPath ?? "",
       false,
       mediaType: mediaType,
+      mediaScene: mediaScene,
       uploadProgress: uploadProgress,
     );
   }
@@ -128,7 +132,7 @@ extension UploadApi on AppNetworkManager {
       voiceModel.networkUrl = uploadResultBean.url;
       return true;
     } else {
-      ToastUtil.showMsg("抱歉！语音上传失败！", context);
+      ToastUtil.forceShowMessage("抱歉！语音上传失败！");
       return false;
     }
   }
@@ -240,6 +244,7 @@ extension UploadApi on AppNetworkManager {
     required bool multipart,
     required List<ImageChooseBean> imageChooseModels,
     required UploadMediaType mediaType,
+    required UploadMediaScene mediaScene,
     void Function({
       required double totalProgressValue, // 总的下载进度
       required int needUploadNumber, // 需要上传的个数
@@ -277,12 +282,13 @@ extension UploadApi on AppNetworkManager {
         }
       } else {
         if (multipart) {
-          await AppNetworkManager().initQCloudCredential(mediaType);
+          await AppNetworkManager().initQCloudCredential(mediaType, mediaScene);
         }
         for (var i = 0; i < needUploadNumber; i++) {
           ImageChooseBean imageChooseModel = needUploadImageChooseModels[i];
           _compressAndUploadLocalMediaPath(
             mediaType: mediaType,
+            mediaScene: mediaScene,
             multipart: multipart,
             imageChooseModel: imageChooseModel,
             uploadProgress: ({required double progressValue}) {
@@ -345,6 +351,7 @@ extension UploadApi on AppNetworkManager {
         // double currentProgressValue = 0.0;
         UploadMediaResultBean bean = await _compressAndUploadLocalMediaPath(
           mediaType: mediaType,
+          mediaScene: mediaScene,
           multipart: multipart,
           imageChooseModel: imageChooseModel,
           uploadProgress: ({required double progressValue}) {
@@ -418,6 +425,7 @@ extension UploadApi on AppNetworkManager {
           multipart: multipart,
           mediaPath: uploadVideoPath,
           mediaType: mediaType,
+          mediaScene: UploadMediaScene.unkonw,
         );
         if (uploadVideoResultBean.uploadResultType !=
             UploadResultType.UploadSuccess) {
@@ -436,6 +444,7 @@ extension UploadApi on AppNetworkManager {
           multipart: multipart,
           mediaPath: uploadVideoThumbnailImagePath,
           mediaType: UploadMediaType.image,
+          mediaScene: UploadMediaScene.unkonw,
         );
         if (uploadVideoThumbnailImageResultBean.uploadResultType !=
             UploadResultType.UploadSuccess) {
@@ -455,6 +464,7 @@ extension UploadApi on AppNetworkManager {
           multipart: multipart,
           mediaPath: uploadImageThumbnailImagePath,
           mediaType: UploadMediaType.image,
+          mediaScene: UploadMediaScene.unkonw,
         );
 
         if (uploadImageThumbnailImageResultBean.uploadResultType !=
@@ -507,6 +517,7 @@ extension UploadApi on AppNetworkManager {
   Future<UploadMediaResultBean> _compressAndUploadLocalMediaPath({
     required bool multipart,
     required UploadMediaType mediaType,
+    required UploadMediaScene mediaScene,
     required ImageChooseBean imageChooseModel,
     void Function({required double progressValue})? uploadProgress, // 上传进度监听
   }) async {
@@ -537,6 +548,7 @@ extension UploadApi on AppNetworkManager {
         multipart: multipart,
         mediaPath: uploadVideoPath,
         mediaType: mediaType,
+        mediaScene: mediaScene,
         uploadProgress: uploadProgress,
       );
       if (onlyUploadResultBean.uploadResultType !=
@@ -549,7 +561,8 @@ extension UploadApi on AppNetworkManager {
 
       /// 视频的缩略图
       if (multipart) {
-        await AppNetworkManager().initQCloudCredential(UploadMediaType.image);
+        await AppNetworkManager()
+            .initQCloudCredential(UploadMediaType.image, mediaScene);
       }
       String? uploadVideoThumbnailImagePath =
           await imageChooseModel.lastUploadThumbnailImagePath();
@@ -562,6 +575,7 @@ extension UploadApi on AppNetworkManager {
         multipart: multipart,
         mediaPath: uploadVideoThumbnailImagePath,
         mediaType: UploadMediaType.image,
+        mediaScene: mediaScene,
         uploadProgress: uploadProgress,
       );
       if (uploadVideoThumbnailImageResultBean.uploadResultType !=
@@ -588,6 +602,7 @@ extension UploadApi on AppNetworkManager {
         multipart: multipart,
         mediaPath: uploadImageThumbnailImagePath,
         mediaType: UploadMediaType.image,
+        mediaScene: mediaScene,
         uploadProgress: uploadProgress,
       );
 
@@ -608,6 +623,7 @@ extension UploadApi on AppNetworkManager {
     required bool multipart,
     required String mediaPath,
     required UploadMediaType mediaType,
+    required UploadMediaScene mediaScene,
     void Function({required double progressValue})? uploadProgress, // 上传进度监听
   }) async {
     Completer<UploadResultBean> completer = Completer();
@@ -631,8 +647,8 @@ extension UploadApi on AppNetworkManager {
         if (complete) {
           final cos = map["complete_cos$key"];
           uploadResultBean.uploadResultType = UploadResultType.UploadSuccess;
-          final pre =
-              AppNetworkManager().cosFileUrlPrefixGetFunction(mediaType);
+          final pre = AppNetworkManager()
+              .cosFileUrlPrefixGetFunction(mediaType, mediaScene);
           uploadResultBean.url = "$pre$cos";
           if (uploadProgress != null) {
             uploadProgress(progressValue: 100);

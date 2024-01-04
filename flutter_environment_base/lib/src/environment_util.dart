@@ -22,13 +22,19 @@ import './apimock/manager/api_manager.dart';
 
 import './device/device_info_util.dart';
 
+enum ChangeEnvPermission {
+  Forbid, // 禁止切换环境
+  AllowButNeedExit, // 允许切换环境，但切换后必须退出app
+  // AllowAndKeepCurrent,
+}
+
 class EnvironmentUtil {
   // 进入切换环境页面
   static Future goChangeEnvironmentNetwork(
     BuildContext context, {
     Function()? onPressTestApiCallback,
     required Function(TSEnvNetworkModel bNetworkModel,
-            {required bool shouldExit})
+            {required ChangeEnvPermission permission})
         updateNetworkCallback,
   }) {
     return Navigator.of(context).push(
@@ -112,7 +118,7 @@ class EnvironmentUtil {
   }
 
   /// 从from网络环境切换到to网络环境，是否需要自动关闭app.(且如果已登录则重启后需要重新登录)
-  static bool Function(TSEnvNetworkModel fromNetworkEnvModel,
+  static ChangeEnvPermission Function(TSEnvNetworkModel fromNetworkEnvModel,
       TSEnvNetworkModel toNetworkEnvModel)? shouldExitWhenChangeNetworkEnv;
   static bool Function(
           PackageTargetModel fromTargetModel, PackageTargetModel toTargetModel)?

@@ -8,6 +8,7 @@
  * @Description: 正常请求管理中心+埋点请求管理中心
  */
 import 'dart:convert' as convert;
+import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
@@ -52,16 +53,19 @@ class AppNetworkManager extends MockNetworkManager {
 
       normal_setup(
         getSuccessResponseModelBlock: (String fullUrl, int statusCode,
-            dynamic responseMap, bool? isFromCache) {
+            dynamic responseMap, bool? isFromCache,
+            {required ResOptions resOptions}) {
           return _getResponseModel(
             fullUrl: fullUrl,
             statusCode: 200,
             responseData: responseMap,
             isResponseFromCache: isFromCache,
+            resOptions: resOptions,
           );
         },
         getFailureResponseModelBlock: (String fullUrl, int statusCode,
-            dynamic responseObject, bool? isCacheData) {
+            dynamic responseObject, bool? isCacheData,
+            {required ResOptions resOptions}) {
           String errorMessage = '后端接口出现异常';
           String message = '请求$fullUrl的时候，发生网络错误:$errorMessage';
           ResponseModel responseModel = ResponseModel(
@@ -69,16 +73,19 @@ class AppNetworkManager extends MockNetworkManager {
             message: message,
             result: null,
             isCache: isCacheData,
+            dateModel: ResponseDateModel.fromResOptions(resOptions),
           );
 
           return responseModel;
         },
         getDioErrorResponseModelBlock:
-            (String url, ErrOptions errorModel, bool? isCacheData) {
+            (String url, ErrOptions errorModel, bool? isCacheData,
+                {required ErrOptions errOptions}) {
           return ErrorResponseUtil.getErrorResponseModel(
             url,
             errorModel,
             isCacheData,
+            errOptions: errOptions,
           );
         },
         checkResponseModelHandel: (ResponseModel responseModel,
@@ -124,14 +131,20 @@ class AppNetworkManager extends MockNetworkManager {
 
   // late String Function() uidGetFunction;
 
-  late String Function(UploadMediaType mediaType) bucketGetFunction;
-  late String Function() regionGetFunction;
+  static void Function(String localPath, bool multipart)?
+      assetUploadMonitorFunction;
+
+  late String Function(
+    UploadMediaType mediaType,
+    UploadMediaScene? mediaScene,
+  ) bucketGetFunction;
+  late String Function(UploadMediaScene? mediaScene) regionGetFunction;
   late String Function() cosFilePrefixGetFunction;
   late String Function(
     String localPath, {
     UploadMediaType mediaType,
   }) cosFileRelativePathGetFunction;
-  late String Function(UploadMediaType mediaType)
+  late String Function(UploadMediaType mediaType, UploadMediaScene? mediaScene)
       cosFileUrlPrefixGetFunction; // cos文件的网络地址前缀
 
   void start({
@@ -147,21 +160,42 @@ class AppNetworkManager extends MockNetworkManager {
     String? mockApiHost, // 允许 mock api 的情况下，mock 到哪个地址
     // 应用层信息的获取
     required String Function() uidGetBlock,
+    required String Function() accountIdGetBlock,
+    required String Function() nicknameGetBlock,
+    void Function()? startCompleteBlock, // 初始化完成的回调
+    void Function(String localPath, bool multipart)?
+        assetUploadMonitorHandle, // 待上传资源文件的埋点
   }) {
+    assetUploadMonitorFunction = assetUploadMonitorHandle;
+
     // uidGetFunction = uidGetBlock;
-    regionGetFunction = () {
+    regionGetFunction = (UploadMediaScene? mediaScene) {
       TSEnvNetworkModel currentNetworkModel =
           NetworkPageDataManager().selectedNetworkModel;
-      return currentNetworkModel.cosParamModel.region;
+      String region;
+      if (mediaScene == UploadMediaScene.selfie) {
+        region = currentNetworkModel.cosParamModel.region_selfie;
+      } else {
+        region = currentNetworkModel.cosParamModel.region;
+      }
+      return region;
     };
 
-    bucketGetFunction = (UploadMediaType mediaType) {
+    bucketGetFunction =
+        (UploadMediaType mediaType, UploadMediaScene? mediaScene) {
       String bucket = "";
       // 环境
       TSEnvNetworkModel currentNetworkModel =
           NetworkPageDataManager().selectedNetworkModel;
       if (mediaType == UploadMediaType.image) {
-        bucket = currentNetworkModel.cosParamModel.bucket_image;
+        if (mediaScene == UploadMediaScene.selfie) {
+          bucket = currentNetworkModel.cosParamModel.bucket_selfie_image;
+        } else {
+          bucket = currentNetworkModel.cosParamModel.bucket_image;
+        }
+      } else if (mediaType == UploadMediaType.imlog ||
+          mediaType == UploadMediaType.livelog || mediaType == UploadMediaType.appLog) {
+        bucket = currentNetworkModel.cosParamModel.bucket_static;
       } else {
         bucket = currentNetworkModel.cosParamModel.bucket_other;
       }
@@ -183,21 +217,18 @@ class AppNetworkManager extends MockNetworkManager {
 
       String fileOriginNameAndExtensionType = localPath.split('/').last;
 
-      // String str = " Hello Word! ";
-      RegExp regExp = RegExp(r"\s+\b|\b\s"); // 去除字符串中的所有空格
+      RegExp regExp = RegExp(r"\s+\b|\b\s");
       fileOriginNameAndExtensionType =
           fileOriginNameAndExtensionType.replaceAll(regExp, "");
 
-      /*
+      // 后缀
       String fileExtensionType = fileOriginNameAndExtensionType.split('.').last;
-      String fileOriginName = fileOriginNameAndExtensionType.substring(
-          0, fileOriginNameAndExtensionType.length - fileExtensionType.length);
-      fileOriginNameAndExtensionType = 'test.$fileExtensionType';
-      */
 
-      int nowTime = DateTime.now().microsecondsSinceEpoch;
-      String cosFileName = "${nowTime.toString()}";
-      cosFileName += "_$fileOriginNameAndExtensionType";
+      // 生成随机文件名
+      var random = Random.secure();
+      var values = List<int>.generate(12, (i) => random.nextInt(256));
+      String fileOriginName = base64Url.encode(values);
+      String cosFileName = "${fileOriginName}_${DateTime.now().microsecondsSinceEpoch}.$fileExtensionType";
 
       // 头
       String cosPath = cosFilePrefixGetFunction();
@@ -205,6 +236,18 @@ class AppNetworkManager extends MockNetworkManager {
       // 类别
       if (mediaType == UploadMediaType.image) {
         // 图片有自己的桶
+      } else if (mediaType == UploadMediaType.imlog) {
+        String accountId = accountIdGetBlock();
+        String nickname = nicknameGetBlock();
+        return '$cosPath/imlog/${accountId}_${nickname}_$fileOriginNameAndExtensionType';
+      } else if (mediaType == UploadMediaType.livelog) {
+        String accountId = accountIdGetBlock();
+        String nickname = nicknameGetBlock();
+        return '$cosPath/livelog/${accountId}_${nickname}_$fileOriginNameAndExtensionType';
+      } else if (mediaType == UploadMediaType.appLog) {
+        String accountId = accountIdGetBlock();
+        String nickname = nicknameGetBlock();
+        return '$cosPath/appLog/${accountId}_${nickname}_$fileOriginNameAndExtensionType';
       } else {
         // 视频、音频共用一个桶，需要再区分
         if (mediaType == UploadMediaType.audio) {
@@ -231,15 +274,23 @@ class AppNetworkManager extends MockNetworkManager {
 
       return cosPath;
     };
-    cosFileUrlPrefixGetFunction = (UploadMediaType mediaType) {
+    cosFileUrlPrefixGetFunction =
+        (UploadMediaType mediaType, UploadMediaScene? mediaScene) {
       TSEnvNetworkModel currentNetworkModel =
           NetworkPageDataManager().selectedNetworkModel;
       if (mediaType == UploadMediaType.image) {
-        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
+        if (mediaScene == UploadMediaScene.selfie) {
+          return currentNetworkModel
+              .cosParamModel.cosFileUrlPrefix_selfie_image;
+        } else {
+          return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
+        }
       } else if (mediaType == UploadMediaType.video) {
         return currentNetworkModel.cosParamModel.cosFileUrlPrefix_video;
       } else if (mediaType == UploadMediaType.audio) {
         return currentNetworkModel.cosParamModel.cosFileUrlPrefix_audio;
+      } else if (mediaType == UploadMediaType.appLog) {
+        return currentNetworkModel.cosParamModel.cosFileUrlPrefix_static;
       } else {
         return currentNetworkModel.cosParamModel.cosFileUrlPrefix_image;
       }
@@ -268,6 +319,7 @@ class AppNetworkManager extends MockNetworkManager {
       localApiDirBlock: (String apiPath) {
         return "asset/data";
       },
+      startCompleteBlock: startCompleteBlock,
     );
   }
 
@@ -276,6 +328,7 @@ class AppNetworkManager extends MockNetworkManager {
     required int statusCode,
     dynamic responseData,
     bool? isResponseFromCache,
+    required ResOptions resOptions,
   }) {
     if (responseData == null) {
       ResponseModel responseModel = ResponseModel(
@@ -283,6 +336,7 @@ class AppNetworkManager extends MockNetworkManager {
         message: "responseData == null",
         result: null,
         isCache: isResponseFromCache,
+        dateModel: ResponseDateModel.fromResOptions(resOptions),
       );
       return responseModel;
     }
@@ -300,6 +354,7 @@ class AppNetworkManager extends MockNetworkManager {
           "msg": errorMessage,
         },
         isCache: isResponseFromCache,
+        dateModel: ResponseDateModel.fromResOptions(resOptions),
       );
       return responseModel;
     }
@@ -345,6 +400,7 @@ class AppNetworkManager extends MockNetworkManager {
       message: msg,
       result: result,
       isCache: isResponseFromCache,
+      dateModel: ResponseDateModel.fromResOptions(resOptions),
     );
 
     return responseModel;

@@ -105,17 +105,12 @@ extension Cache on AppNetworkManager {
       cacheLevel: cacheLevel == AppNetworkCacheLevel.one
           ? NetworkCacheLevel.one
           : NetworkCacheLevel.none,
+      toastIfMayNeed: showToastForNoNetwork,
       completeCallBack: (ResponseModel responseModel) {
         if (withLoading == true && responseModel.isCache != true) {
           LoadingUtil.dismiss();
         }
-
-        ResponseModel newResponseModel = checkResponseModelFunction(
-          responseModel,
-          toastIfMayNeed: showToastForNoNetwork,
-        );
-
-        completeCallBack(newResponseModel);
+        completeCallBack(responseModel);
       },
     );
 

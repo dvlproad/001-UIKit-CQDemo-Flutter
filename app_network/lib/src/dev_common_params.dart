@@ -4,18 +4,21 @@
  * @Author: dvlproad
  * @Date: 2022-06-11 02:39:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 01:30:44
+ * @LastEditTime: 2023-08-10 17:56:59
  * @Description: 公共参数获取帮助类
  */
 import 'dart:io' show Platform;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:android_id/android_id.dart';
 
 class CommonParamsHelper {
   static double? monitor_latitude;
@@ -25,16 +28,91 @@ class CommonParamsHelper {
   static String? channelName;
   // 包信息
   static PackageInfo? packageInfo;
+  // 是否模拟器
+  static bool? isEmulator;
+
+  /// 是否已经同意隐私协议
+  static bool hasAgreePrivacy = false;
+
+  static const storage = FlutterSecureStorage();
+  static const _flutterDeviceIdStorageKey = "flutter_device_id_storage_key";
+
+  static final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+
+  static const String _deviceIdPrefix = "WISH-";
+
+  static String? _wishDeviceId;
+  static String? _dynamicDeviceId;
+
+  /// 获取缓存的设备id，优先获取存储在keyChain中的值
+  static Future<String> getDeviceId() async {
+    if (_wishDeviceId?.isNotEmpty == true &&
+        _wishDeviceId?.contains(_deviceIdPrefix) == true) {
+      return _wishDeviceId!;
+    }
+    String deviceId = "";
+    try {
+      deviceId = await storage.read(key: _flutterDeviceIdStorageKey) ?? "";
+      if (deviceId.isNotEmpty && deviceId.contains(_deviceIdPrefix)) {
+        _wishDeviceId = deviceId;
+        return deviceId;
+      }
+    } on PlatformException catch (_) {
+      // Workaround for https://github.com/mogol/flutter_secure_storage/issues/43
+      await storage.deleteAll();
+    }
+    return await _getDeviceIdFromPlugin();
+  }
+
+  /// 获取会变化的设备id，iOS为 UUID，安卓为androidId
+  static Future<String> getDynamicDeviceId() async {
+    if (_dynamicDeviceId == null || _dynamicDeviceId?.isEmpty == true) {
+      _dynamicDeviceId = await _getDeviceIdFromPlugin();
+    }
+    return _dynamicDeviceId!;
+  }
+
+  /// 直接从Plugin获取deviceId
+  static Future<String> _getDeviceIdFromPlugin() async {
+    String deviceId = "";
+    if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
+      deviceId = _deviceIdPrefix + (iosInfo.identifierForVendor ?? '');
+    } else {
+      if (hasAgreePrivacy) {
+        try {
+          const androidIdPlugin = AndroidId();
+          deviceId = await androidIdPlugin.getId() ?? '';
+          deviceId = _deviceIdPrefix + deviceId;
+        } on PlatformException {
+          deviceId = 'FailToGetAndroidId';
+        }
+      } else {
+        deviceId = "NotAgreePrivacy";
+      }
+    }
+    if (deviceId.isNotEmpty &&
+        deviceId != "FailToGetAndroidId" &&
+        deviceId != "NotAgreePrivacy") {
+      _wishDeviceId = deviceId;
+      await storage.write(key: _flutterDeviceIdStorageKey, value: deviceId);
+    }
+    return deviceId;
+  }
+
   static Future<Map<String, dynamic>> commonHeaderParams({
     required String appFeatureType,
     String? channel,
   }) async {
+    // isEmulator ??= await IsEmulatorUtil.isRunningOnEmulator();
     packageInfo ??= await PackageInfo.fromPlatform();
     channelName ??= channel;
     // String appName = packageInfo.appName;
     // String packageName = packageInfo.packageName;
     String packageVersion = packageInfo!.version;
     String packagebuildNumber = packageInfo!.buildNumber;
+    String deviceId = await CommonParamsHelper.getDeviceId();
+    String dynamicDeviceId = await CommonParamsHelper.getDynamicDeviceId();
 
     Map<String, dynamic> commonHeaderParams = {
       'version': packageVersion,
@@ -42,42 +120,42 @@ class CommonParamsHelper {
       'platform': Platform.isIOS ? "iOS" : "Android",
       'appType': 'wish',
       'appFeatureType': appFeatureType,
-      'channel': channelName,
+      'packageChannel': channelName,
+      'deviceId': deviceId,
+      'dynamicDeviceId': dynamicDeviceId,
     };
 
     return commonHeaderParams;
   }
 
-  static Future<Map<String, dynamic>> fixedCommonParams() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  static Future<Map<String, dynamic>> monitor_bodyCommonFixedParams(
+      {String? channel}) async {
+    packageInfo ??= await PackageInfo.fromPlatform();
+    channelName ??= channel;
 
-    String appName = packageInfo.appName;
-    String packageName = packageInfo.packageName;
-    String packageVersion = packageInfo.version;
-    String packagebuildNumber = packageInfo.buildNumber;
+    String appName = packageInfo!.appName;
+    String packageName = packageInfo!.packageName;
+    String packageVersion = packageInfo!.version;
+    String packagebuildNumber = packageInfo!.buildNumber;
 
     // [device_info_plus 信息整理](https://www.csdn.net/tags/NtzaQgzsNDY0ODAtYmxvZwO0O0OO0O0O.html)
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-
-    String uuid = '';
+    String uuid = await getDeviceId();
     String systemName = '';
     String systemVersion = '';
     String brand = '';
     String model = '';
     String machine = '';
     if (Platform.isIOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      IosDeviceInfo iosInfo = await _deviceInfo.iosInfo;
       debugPrint('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-      uuid = iosInfo.identifierForVendor ?? '';
       systemName = iosInfo.systemName ?? '';
       systemVersion = iosInfo.systemVersion ?? '';
       brand = iosInfo.model ?? '';
       model = iosInfo.model ?? '';
       machine = iosInfo.utsname.machine ?? '';
     } else {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
       debugPrint('Running on ${androidInfo.model ?? ''}'); // e.g. "Moto G (4)"
-      uuid = androidInfo.id ?? '';
       // String incremental = androidInfo.version.incremental; // 手机具体的固件型号/Ui版本
       systemName = androidInfo.version.baseOS ?? '';
       systemVersion = androidInfo.version.release ?? '';
@@ -115,6 +193,7 @@ class CommonParamsHelper {
       "app_name": appName,
       'app_version': packageVersion,
       'app_buildNumber': packagebuildNumber,
+      'packageChannel': channelName,
 
       'platform': Platform.isIOS ? "iOS" : "Android",
       'lib': Platform.isIOS ? "iOS" : "Android",
@@ -139,7 +218,7 @@ class CommonParamsHelper {
     return commonBodyParams;
   }
 
-  static Future<Map<String, dynamic>> extraBodyParams() async {
+  static Future<Map<String, dynamic>> monitor_bodyCommonChangeParams() async {
     ConnectivityResult connectionStatus =
         await Connectivity().checkConnectivity();
     String connectionStatusString = connectionStatus.toString().split('.').last;
@@ -157,7 +236,7 @@ class CommonParamsHelper {
       'timezone_offset': timezoneOffsetMinutes, // 时区偏移值(单位分钟)
       'latitude': monitor_latitude ?? 0.0,
       'longitude': monitor_longitude ?? 0.0,
-      'request_time': DateTime.now().millisecondsSinceEpoch, // 单条记录生成时间，精确到毫秒
+      "request_time": DateTime.now().millisecondsSinceEpoch, // 单次上报生成时间，精确到毫秒
     };
 
     // 用户唯一标识(用户没有登录时，客户端自动生成唯一标识)

@@ -23,6 +23,10 @@ class WishUrlPath {
 
   static String getTagListAll = "wish/tag/listTagsWithTree"; //获取所有标签
 
+  static String getPublishImageTemplate = "wish/getTagImages"; //获取发布愿望单图片模板
+
+  static String wishBirthdayInfo = "/wish/getBirthWishInfo";//获取生日愿望信息
+
   // 愿望单创建增删改
   static String wishClear = "wish/clear"; //愿望屋-清空愿望单
   static String wishDeleteWish = "/wish/deleteWish"; //删除愿望单
@@ -42,7 +46,12 @@ class WishUrlPath {
   static String listRecommendWish = "/wish/recommendWishList"; //获取推荐心愿列表
   static String listWishSelectionInfo = "wish/listWishSelectionInfo"; //获取百愿精选
 
+  
   static String listWatchWish = "wish/listWatchWish"; //获取好友愿望清单
+
+  static String listTopicWish = "wish/topicRecommendWish"; //获取话题愿望单
+  static String getWishTopicInfo = "front-node/topic/info"; //获取话题信息
+  static String searchTopic = "front-node/topic/list"; // 搜索话题
 
   static String newRecommendWishList =
       "/wish/newRecommendWishList"; //推荐愿望单列表(新)
@@ -58,4 +67,24 @@ class WishUrlPath {
   static String commentAnchorPoint =
       "front-node/comment/anchor-point"; //获取评论所在位置
   static String wishCostSendMsg = "imCustomer/sendMsg"; //打赏后给用户发im消息
+
+
+  //愿望单-校园活动-报名活动并注册
+  static String wishJoinCampusEvent = "/user/account/applyActivityAndRegister";
+  
+  //愿望单-校园活动-检查活动参加状态
+  static String wishCampusEventCheckStatus = "/user/account/checkAccountActivityState";
+  //愿望单-校园活动-活动信息
+  static String wishActivityInfo = "/wish/activityInfo";
+  //愿望单-校园活动-我的作品
+  static String wishActivityMyWishList = "/wish/campusWorks";
+  //愿望单-校园活动-榜单数据
+  static String wishActivityRankList = "/wish/campusBillboard";
+  //愿望单-校园活动-校园活动话题列表
+  static String wishActivityTopicList = "/wish/getCampusTopic";
+  //愿望单-校园活动-话题愿望单
+  static String wishActivityTopicShit = "/wish/topicRecommendWish";
+  //愿望单-愿望单地址校验
+  static String checkWishAddressValid = "/wish/wishAddressValid";
+
 }

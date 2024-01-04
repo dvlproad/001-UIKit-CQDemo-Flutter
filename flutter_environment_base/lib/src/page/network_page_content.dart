@@ -16,7 +16,8 @@ class NetworkPageContent extends StatefulWidget {
   final Function()? onPressTestApiCallback;
   final Function(
     TSEnvNetworkModel bNetworkModel, {
-    required bool shouldExit, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
+    required ChangeEnvPermission
+        permission, // 切换环境的时候，是否要退出app(如果已登录,重启后是否要重新登录)
   }) updateNetworkCallback;
 
   NetworkPageContent({
@@ -135,13 +136,19 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
     // String oldNetwork = _selectedNetworkModel.name;
     String newNetwork = bNetworkModel.name;
 
-    bool shouldExit = true;
+    ChangeEnvPermission permission = ChangeEnvPermission.Forbid;
     if (EnvironmentUtil.shouldExitWhenChangeNetworkEnv != null) {
-      shouldExit = EnvironmentUtil.shouldExitWhenChangeNetworkEnv!(
+      permission = EnvironmentUtil.shouldExitWhenChangeNetworkEnv!(
           _selectedNetworkModel, bNetworkModel);
     }
+    if (permission == ChangeEnvPermission.Forbid) {
+      ToastUtil.showMessage(
+          "不允许从【${_selectedNetworkModel.des}】切换到】${bNetworkModel.des}】环境");
+      return;
+    }
+
     String message;
-    if (shouldExit) {
+    if (permission == ChangeEnvPermission.AllowButNeedExit) {
       message = '温馨提示:如确认切换,则将自动关闭app.(且如果已登录则重启后需要重新登录)';
     } else {
       message = '温馨提示:切换到该环境，您已设置为不退出app也不重新登录';
@@ -152,7 +159,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
       title: '切换到"$newNetwork"',
       message: message,
       okHandle: () {
-        _confirmUpdateToNetworkModel(bNetworkModel, shouldExit: shouldExit);
+        _confirmUpdateToNetworkModel(bNetworkModel, permission: permission);
       },
     );
   }
@@ -160,13 +167,13 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
   /// 确认切换环境
   void _confirmUpdateToNetworkModel(
     TSEnvNetworkModel bNetworkModel, {
-    bool shouldExit = true,
+    ChangeEnvPermission permission = ChangeEnvPermission.Forbid,
   }) {
     _selectedNetworkModel = bNetworkModel;
 
     widget.updateNetworkCallback(
       bNetworkModel,
-      shouldExit: shouldExit,
+      permission: permission,
     );
 
     setState(() {});

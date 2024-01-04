@@ -14,7 +14,6 @@ import './mock/local_mock_util.dart';
 
 import './log/dio_log_util.dart';
 import './cache/dio_cache_util.dart';
-import 'bean/req_options.dart';
 import 'bean/res_options.dart';
 
 typedef JsonParse<T> = T Function(dynamic data);

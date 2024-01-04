@@ -10,6 +10,7 @@ enum PackageNetworkType {
   develop1, // 开发环境1
   develop2, // 开发环境2
   test1, // 测试环境1
+  test2, // 测试环境2
   preproduct, // 预生产环境
   product, // 正式环境
 }
@@ -139,6 +140,7 @@ class TSEnvNetworkModel {
       PackageNetworkType.develop1, // 开发环境1
       PackageNetworkType.develop2, // 开发环境2
       PackageNetworkType.test1, // 测试环境1
+      PackageNetworkType.test2, // 测试环境1
       PackageNetworkType.preproduct, // 预生产环境
       PackageNetworkType.product, // 正式环境
     ];

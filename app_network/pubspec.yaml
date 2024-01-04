@@ -27,6 +27,7 @@ dependencies:
   flutter_image_process: ^0.0.1
     # path: ../flutter_image_process/
 
+  android_id: ^0.3.3
   tencent_cos: ^1.0.6
 
 dev_dependencies:

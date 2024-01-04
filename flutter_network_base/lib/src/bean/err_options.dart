@@ -6,6 +6,8 @@
  * @Description: 网络请求Error错误的信息模型
  */
 import 'dart:convert' as convert;
+import 'package:flutter/foundation.dart';
+
 import './req_options.dart';
 import './res_options.dart';
 
@@ -149,6 +151,7 @@ class ErrOptions {
           try {
             responseMap = convert.jsonDecode(response.data);
           } on FormatException catch (e) {
+            debugPrint("$e");
             responseMap = response.data;
           }
         }

@@ -4,27 +4,27 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 01:31:35
- * @Description: 正常请求管理中心+埋点请求管理中心
+ * @LastEditTime: 2023-04-18 17:58:47
+ * @Description: 数美请求管理中心 https://help.ishumei.com/docs/tx/deviceRisk/newest/developDoc/
  */
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-
+import 'dart:convert';
 import '../base/mock_network_manager.dart';
 
-class MonitorNetworkManager extends MockNetworkManager {
+class SMNetworkManager extends MockNetworkManager {
   static const int CONNECT_TIMEOUT = 3000;
   static const int RECEIVE_TIMEOUT = 10000;
 
   // 单例
-  factory MonitorNetworkManager() => _getInstance();
-  static MonitorNetworkManager get instance => _getInstance();
-  static MonitorNetworkManager? _instance;
-  static MonitorNetworkManager _getInstance() {
-    _instance ??= MonitorNetworkManager._internal();
+  factory SMNetworkManager() => _getInstance();
+  static SMNetworkManager get instance => _getInstance();
+  static SMNetworkManager? _instance;
+  static SMNetworkManager _getInstance() {
+    _instance ??= SMNetworkManager._internal();
     return _instance!;
   }
 
-  MonitorNetworkManager._internal() {
+  SMNetworkManager._internal() {
     //debugPrint('这个单例里的初始化方法只会执行一次');
 
     _init();
@@ -35,7 +35,7 @@ class MonitorNetworkManager extends MockNetworkManager {
       BaseOptions options = BaseOptions(
         connectTimeout: CONNECT_TIMEOUT,
         receiveTimeout: RECEIVE_TIMEOUT,
-        contentType: "application/x-www-form-urlencoded",
+        contentType: "application/json",
       );
       dio = Dio(options);
 
@@ -43,7 +43,7 @@ class MonitorNetworkManager extends MockNetworkManager {
         getSuccessResponseModelBlock: (String fullUrl, int statusCode,
             dynamic responseObject, bool? isFromCache,
             {required ResOptions resOptions}) {
-          if (responseObject is String) {
+          if (responseObject is! String) {
             return ResponseModel(
               statusCode: statusCode,
               message: "失败",
@@ -51,17 +51,14 @@ class MonitorNetworkManager extends MockNetworkManager {
               dateModel: ResponseDateModel.fromResOptions(resOptions),
             );
           }
-          Map<String, dynamic> responseMap = responseObject;
-          bool isSuccess = responseMap["Response"] != null &&
-              responseMap["Response"]["Error"] == null;
-
+          Map<String, dynamic> responseMap = json.decode(responseObject);
+          bool isSuccess = responseMap["code"] == 1100;
           var errorCode = isSuccess ? 0 : -1;
           var msg = isSuccess ? "成功" : "失败";
-          dynamic result = responseMap["Response"];
           ResponseModel responseModel = ResponseModel(
             statusCode: errorCode,
             message: msg,
-            result: result,
+            result: responseMap,
             isCache: isFromCache,
             dateModel: ResponseDateModel.fromResOptions(resOptions),
           );

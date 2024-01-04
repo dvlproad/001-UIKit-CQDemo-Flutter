@@ -86,14 +86,14 @@ class ResponseDateModel {
           allItemSpendTime += "${skipDuration.inMilliseconds}毫秒====";
         }
       }
-      allItemSpendTime += "$spendTime";
+      allItemSpendTime += spendTime;
 
       lastEndTime = dateModel.endTime;
     }
 
     Duration totalDuration =
         lastDateModel.endTime.difference(firstDateModel.requestTime);
-    int seconds = totalDuration.inSeconds;
+    // int seconds = totalDuration.inSeconds;
     int milliseconds = totalDuration.inMilliseconds;
     // return apiDuration.toString();
     String spendTime = "$milliseconds毫秒($allItemSpendTime)";
@@ -104,7 +104,7 @@ class ResponseDateModel {
   String get apiSpendTime {
     Duration duration = endTime.difference(requestTime);
 
-    int seconds = duration.inSeconds;
+    // int seconds = duration.inSeconds;
     int milliseconds = duration.inMilliseconds;
     if (milliseconds > 0) {
       return "$milliseconds毫秒";

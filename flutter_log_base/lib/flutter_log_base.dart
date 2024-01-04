@@ -8,6 +8,7 @@
 library flutter_log_base;
 
 export './src/bean/log_data_bean.dart';
+export './src/bean/user_log_config_bean.dart';
 
 // ui
 export './src/log_ui/detail/log_detail_widget.dart';
@@ -18,3 +19,5 @@ export './src/util/dev_log_util.dart';
 export './src/util/popup_logview_manager.dart';
 
 export './src/log_console/print_console_log_util.dart';
+
+export './src/util/log_get_util.dart';

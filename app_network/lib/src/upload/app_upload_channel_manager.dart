@@ -23,6 +23,7 @@ extension UploadByChannel on AppNetworkManager {
     String localPath,
     bool multipart, {
     UploadMediaType mediaType = UploadMediaType.unkonw,
+    UploadMediaScene mediaScene = UploadMediaScene.unkonw,
     void Function({required double progressValue})? uploadProgress, // 上传进度监听
     // required void Function(String mediaUrl) uploadSuccess,
     // required void Function() uploadFailure,
@@ -31,8 +32,12 @@ extension UploadByChannel on AppNetworkManager {
       mediaType = getMediaType(localPath);
     }
 
-    String bucket = bucketGetFunction(mediaType);
-    String region = regionGetFunction();
+    if (AppNetworkManager.assetUploadMonitorFunction != null) {
+      AppNetworkManager.assetUploadMonitorFunction!(localPath, multipart);
+    }
+
+    String bucket = bucketGetFunction(mediaType, mediaScene);
+    String region = regionGetFunction(mediaScene);
     // String cosFilePrefix = cosFilePrefixGetFunction();
     String cosPath;
     String? uploadId;
@@ -59,7 +64,8 @@ extension UploadByChannel on AppNetworkManager {
         localPath,
         mediaType: mediaType,
       );
-      bool initSuccess = await initQCloudCredential(mediaType);
+      bool initSuccess = await initQCloudCredential(mediaType, mediaScene,
+          localPath: localPath, multipart: multipart);
       if (initSuccess != true) {
         return null;
       }
@@ -69,6 +75,7 @@ extension UploadByChannel on AppNetworkManager {
       localPath,
       multipart,
       mediaType,
+      mediaScene,
       cosPath: cosPath,
       bucket: bucket,
       uploadId: uploadId,
@@ -98,17 +105,25 @@ extension UploadByChannel on AppNetworkManager {
     return map["hasBreakPoint$key"] ?? false;
   }
 
-  Future<bool> initQCloudCredential(UploadMediaType mediaType) async {
+  Future<bool> initQCloudCredential(
+    UploadMediaType mediaType,
+    UploadMediaScene mediaScene, {
+    String? localPath,
+    bool? multipart,
+  }) async {
     //获取腾讯云上传相关
     int startTime = 0; // 安卓会用到(搜 "bucket" 可以定位到)
     int expiredTime = 0; // 安卓会用到(搜 "bucket" 可以定位到)
     // 此处加判断的话
     final cosFilePrefix = cosFilePrefixGetFunction();
-    final bucket = bucketGetFunction(mediaType);
-    final region = regionGetFunction();
+    final bucket = bucketGetFunction(mediaType, mediaScene);
+    final region = regionGetFunction(mediaScene);
+    print(region);
     ResponseModel responseModel = await AppNetworkManager().post(
       "oos/getOosCredential",
       customParams: {
+        "localPath": localPath ?? "unpost", // 仅是为了查看请求参数，排查本地资源上传的桶是否异常
+        "multipart": multipart ?? "unpost", // 仅是为了查看请求参数，排查本地资源上传的桶是否异常
         "allowPrefix": ['${cosFilePrefix}/*'],
         "bucket": bucket,
         "durationSeconds": 1800,
@@ -147,7 +162,8 @@ extension UploadByChannel on AppNetworkManager {
   Future<String?> _channel_uploadQCloud(
     String localPath,
     bool multipart,
-    UploadMediaType mediaType, {
+    UploadMediaType mediaType,
+    UploadMediaScene mediaScene, {
     required String cosPath,
     String? uploadId,
     required String bucket,
@@ -160,7 +176,7 @@ extension UploadByChannel on AppNetworkManager {
       "localPath": localPath,
       "cosPath": cosPath,
       "bucket": bucket,
-      "uploadId": uploadId,
+      "uploadId": uploadId
     };
     NetOptions apiInfo = NetOptions(
       reqOptions: ReqOptions(
@@ -169,13 +185,16 @@ extension UploadByChannel on AppNetworkManager {
         // params: params,
         method: 'POST',
         data: params, // 参数params放Request模型的位置:GET请求时params中,POST请求时data中
+        requestTime: DateTime.now(),
       ),
       getSuccessResponseModelBlock: (String fullUrl, int statusCode,
-          dynamic responseObject, bool? isCacheData) {
+          dynamic responseObject, bool? isCacheData,
+          {required ResOptions resOptions}) {
         return ResponseModel(
           statusCode: responseObject["code"],
           message: responseObject["message"],
           result: responseObject["result"],
+          dateModel: ResponseDateModel.fromResOptions(resOptions),
         );
       },
     );
@@ -254,7 +273,8 @@ extension UploadByChannel on AppNetworkManager {
       );
 
       if (errorCode == 0) {
-        String cosFileUrlPrefix = cosFileUrlPrefixGetFunction(mediaType);
+        String cosFileUrlPrefix =
+            cosFileUrlPrefixGetFunction(mediaType, mediaScene);
         String fullNetworkUrl = "$cosFileUrlPrefix$cosPath";
         debugPrint("上传结果成功:fullNetworkUrl=$fullNetworkUrl");
 

@@ -13,6 +13,7 @@ export './src/hud/loading_util.dart';
 
 // progress
 export './src/hud/process_widget.dart';
+export './src/hud/loading_widget.dart';
 
 // refresh
 export './src/refresh/app_refresh_container.dart';

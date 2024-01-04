@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_reuse_view/flutter_reuse_view.dart';
+import 'package:get/get.dart';
 
 import '../log_cell.dart';
 import '../log_change_notifiter.dart';
@@ -33,15 +34,14 @@ class LogList extends StatefulWidget {
 }
 
 class _LogListState extends State<LogList> {
-  bool _reverse = false;
-
-  List<LogModel> _logModels = [];
+  final _logModels = <LogModel>[].obs;
   final ApiLogChangeNotifier _environmentChangeNotifier =
       ApiLogChangeNotifier();
-
+  final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
+    _logModels.value = widget.logModels;
 
     debugPrint("_LogListState initState");
 
@@ -70,16 +70,19 @@ class _LogListState extends State<LogList> {
     );
   }
 
-  void updateLogModels(List<LogModel> logModels) {
-    _logModels = logModels;
-    setState(() {});
+  @override
+  void didUpdateWidget(LogList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.logModels.length != widget.logModels.length) {
+      _logModels.value = widget.logModels;
+      _handleSearchTextChanged(_controller.text);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     // print(
     //     '成功执行 overlay 的 child 视图内部的 build 方法..._logModels的个数为${_logModels.length}');
-    _logModels = widget.logModels; // 写在这里用来临时修复外部传进来的数据改变的情况
 
     return Container(
       color: widget.color,
@@ -116,21 +119,48 @@ class _LogListState extends State<LogList> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                _buildButton('清空', onPressed: widget.onPressedClear),
-                _buildButton(
-                  _reverse ? '正序' : '逆序',
-                  onPressed: () {
-                    setState(() {
-                      _reverse = !_reverse;
-                    });
-                  },
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    color: Colors.white,
+                    child: TextField(
+                      controller: _controller,
+                      // focusNode: _focusNode,
+                      autofocus: false,
+                      style: const TextStyle(fontSize: 16),
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '搜索',
+                        hintStyle: TextStyle(fontSize: 16),
+                        isDense: true,
+                      ),
+                      onChanged: (String value) {
+                        _handleSearchTextChanged(value);
+                        // _environmentChangeNotifier.searchText = value;
+                      },
+                    ),
+                  ),
                 ),
-                _buildButton(
-                  '复制所有',
-                  onPressed: () {
-                    widget.onPressedCopyAll(_logModels);
-                  },
-                ),
+                _buildButton('清空', onPressed: () {
+                  _logModels.value = [];
+                  widget.onPressedClear();
+                }),
+                // _buildButton(
+                //   _reverse ? '正序' : '逆序',
+                //   onPressed: () {
+                //     setState(() {
+                //       _reverse = !_reverse;
+                //     });
+                //   },
+                // ),
+                // _buildButton(
+                //   '复制所有',
+                //   onPressed: () {
+                //     widget.onPressedCopyAll(_logModels);
+                //   },
+                // ),
               ],
             ),
           ),
@@ -172,49 +202,62 @@ class _LogListState extends State<LogList> {
   }
 
   Widget _searchResultWidget(BuildContext context) {
-    int sectionCount = 1;
+    return Obx(() {
+      int sectionCount = 1;
+      var length = _logModels.toList().length;
+      return SectionTableView(
+        // controller: _controller,
+        // reverse: _reverse,
+        sectionCount: sectionCount,
+        numOfRowInSection: (section) {
+          return length;
+        },
+        headerInSection: (section) {
+          // return EnvironmentTableViewHeader(title: 'api log');
+          return Container();
+        },
+        cellAtIndexPath: (section, row) {
+          LogModel logModel = _logModels[row];
+          return ApiLogTableViewCell(
+            maxLines: 5,
+            apiLogModel: logModel,
+            section: section,
+            row: row,
+            clickApiLogCellCallback: ({
+              required BuildContext context,
+              int? section,
+              int? row,
+              required LogModel bLogModel,
+            }) {
+              // print('点击选中 log');
+              // setState(() {}); // 请在外部执行
 
-    int numOfRowInSection(section) {
-      return _logModels.length;
+              widget.clickLogCellCallback(
+                context: context,
+                section: section,
+                row: row,
+                bLogModel: bLogModel,
+              );
+            },
+          );
+        },
+        divider: Container(color: Colors.green, height: 1.0),
+      );
+    });
+  }
+
+  void _handleSearchTextChanged(String value) {
+    if (value.isEmpty) {
+      _logModels.value = widget.logModels;
+      return;
     }
-
-    return SectionTableView(
-      // controller: _controller,
-      // reverse: _reverse,
-      sectionCount: sectionCount,
-      numOfRowInSection: (section) {
-        return numOfRowInSection(section);
-      },
-      headerInSection: (section) {
-        // return EnvironmentTableViewHeader(title: 'api log');
-        return Container();
-      },
-      cellAtIndexPath: (section, row) {
-        LogModel logModel = _logModels[row];
-        return ApiLogTableViewCell(
-          maxLines: 5,
-          apiLogModel: logModel,
-          section: section,
-          row: row,
-          clickApiLogCellCallback: ({
-            required BuildContext context,
-            int? section,
-            int? row,
-            required LogModel bLogModel,
-          }) {
-            // print('点击选中 log');
-            // setState(() {}); // 请在外部执行
-
-            widget.clickLogCellCallback(
-              context: context,
-              section: section,
-              row: row,
-              bLogModel: bLogModel,
-            );
-          },
-        );
-      },
-      divider: Container(color: Colors.green, height: 1.0),
-    );
+    var list = _logModels
+        .toList()
+        .where((element) => element.shortMap.values
+            .join()
+            .toLowerCase()
+            .contains(value.toLowerCase()))
+        .toList();
+    _logModels.value = list;
   }
 }

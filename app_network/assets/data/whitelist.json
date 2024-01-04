@@ -39,7 +39,6 @@
         "oos/getOosCredential",
         "user/account/getCity",
         "config/home",
-        "recommend/getRecommendGoodsTag",
         "gift/getSocialGiftInfoPage",
         "config/getWishGiftPageInfo",
         "wishLotteryActivity/listActivities",
