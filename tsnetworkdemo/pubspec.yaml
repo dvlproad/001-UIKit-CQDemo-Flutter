@@ -33,20 +33,18 @@ dependencies:
   dio: ^4.0.6
 
   flutter_easyloading: any
-  
-  flutter_demo_kit:
-    path: ../flutter_demo_kit/
+
     
   tsdemo_network:
     path: ../tsdemo_network/
-  flutter_network_kit:
-    path: ../flutter_network_kit/
-  flutter_network_base:
-    path: ../flutter_network_base/
-  flutter_log_base:
-    path: ../flutter_log_base/
-  flutter_baseui_kit:
-    path: ../flutter_baseui_kit/
+  # flutter_network_kit:
+  #   path: ../flutter_network_kit/
+  # flutter_network_base:
+  #   path: ../flutter_network_base/
+  # flutter_log_base:
+  #   path: ../flutter_log_base/
+  # flutter_baseui_kit:
+  #   path: ../flutter_baseui_kit/
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
