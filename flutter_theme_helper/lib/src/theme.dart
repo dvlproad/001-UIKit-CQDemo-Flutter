@@ -19,23 +19,14 @@ class ColorHelper {
 
 // Regular 的文本样式
 class RegularTextStyle extends TextStyle {
-  final double fontSize;
-  final Color? color;
-  final double? height;
-  final TextOverflow? overflow;
-  final TextDecoration? decoration;
-  final double? letterSpacing;
-
-  RegularTextStyle({
-    required this.fontSize,
-    this.color,
-    this.height,
-    this.overflow,
-    this.decoration,
-    this.letterSpacing,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  const RegularTextStyle({
+    required double fontSize,
+    Color? color,
+    double? height,
+    TextOverflow? overflow,
+    TextDecoration? decoration,
+    double? letterSpacing,
+  }) : super(
           fontFamily: 'PingFang SC',
           overflow: overflow,
           decoration: decoration,
@@ -50,27 +41,16 @@ class RegularTextStyle extends TextStyle {
 
 // bold 的文本样式
 class BoldTextStyle extends TextStyle {
-  final double fontSize;
-  final Color? color;
-  final double? height;
-  final TextOverflow? overflow;
-  final TextDecoration? decoration;
-  final double? letterSpacing;
-  final Color? decorationColor;
-  final TextBaseline? textBaseline;
-
-  BoldTextStyle({
-    required this.fontSize,
-    this.color,
-    this.height,
-    this.overflow,
-    this.decoration,
-    this.letterSpacing,
-    this.decorationColor,
-    this.textBaseline,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  const BoldTextStyle({
+    required double fontSize,
+    Color? color,
+    double? height,
+    TextOverflow? overflow,
+    TextDecoration? decoration,
+    double? letterSpacing,
+    Color? decorationColor,
+    TextBaseline? textBaseline,
+  }) : super(
           fontFamily: 'PingFang SC',
           overflow: overflow,
           decoration: decoration,
@@ -86,27 +66,16 @@ class BoldTextStyle extends TextStyle {
 
 // medium 的文本样式
 class MediumTextStyle extends TextStyle {
-  final double fontSize;
-  final Color? color;
-  final double? height;
-  final TextOverflow? overflow;
-  final TextDecoration? decoration;
-  final double? letterSpacing;
-  final Color? decorationColor;
-  final TextBaseline? textBaseline;
-
-  MediumTextStyle({
-    required this.fontSize,
-    this.color,
-    this.height,
-    this.overflow,
-    this.decoration,
-    this.letterSpacing,
-    this.decorationColor,
-    this.textBaseline,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  const MediumTextStyle({
+    required double fontSize,
+    Color? color,
+    double? height,
+    TextOverflow? overflow,
+    TextDecoration? decoration,
+    double? letterSpacing,
+    Color? decorationColor,
+    TextBaseline? textBaseline,
+  }) : super(
           fontFamily: 'PingFang SC',
           overflow: overflow,
           decoration: decoration,
@@ -122,27 +91,16 @@ class MediumTextStyle extends TextStyle {
 
 // DDINPRO字体
 class DDINPROBoldTextStyle extends TextStyle {
-  final double fontSize;
-  final Color? color;
-  final double? height;
-  final TextOverflow? overflow;
-  final TextDecoration? decoration;
-  final double? letterSpacing;
-  final Color? decorationColor;
-  final TextBaseline? textBaseline;
-
-  DDINPROBoldTextStyle({
-    required this.fontSize,
-    this.color,
-    this.height,
-    this.overflow,
-    this.decoration,
-    this.letterSpacing,
-    this.decorationColor,
-    this.textBaseline,
-  })  : assert(fontSize != null),
-        // assert(color != null),
-        super(
+  const DDINPROBoldTextStyle({
+    required double fontSize,
+    Color? color,
+    double? height,
+    TextOverflow? overflow,
+    TextDecoration? decoration,
+    double? letterSpacing,
+    Color? decorationColor,
+    TextBaseline? textBaseline,
+  }) : super(
           fontFamily: 'DDINPRO',
           overflow: overflow,
           decoration: decoration,

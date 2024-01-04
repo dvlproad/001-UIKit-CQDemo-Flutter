@@ -1,7 +1,8 @@
 name: flutter_theme_helper
-description: A new Flutter package project.
+description: 颜色color 和 textStyle.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_theme_helper
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_theme_helper
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
