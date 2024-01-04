@@ -16,7 +16,7 @@ dependencies:
   dio: ^4.0.6
   flutter_network_base: ^0.0.3
     # path: ../flutter_network_base/
-  flutter_log_base: ^0.0.1
+  flutter_log_base: ^0.0.4
     # path: ../flutter_log_base/
   flutter_robot_base: ^0.0.3
     # path: ../flutter_robot_base/
