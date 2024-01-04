@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 15:54:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-11 15:20:47
+ * @LastEditTime: 2024-01-04 16:19:10
  * @Description: 正常请求管理中心+埋点请求管理中心
  */
-import 'package:meta/meta.dart';
 import 'package:flutter_network_kit/flutter_network_kit.dart';
 import '../mock/app_api_mock_manager.dart';
 
@@ -59,6 +58,7 @@ class MockNetworkManager extends CacheNetworkClient {
   }
 
   /// 通用的GET/POST请求(即使设置缓存，只要从缓存中取到了数据，那想要执行的正常请求会被跳过，不会执行)
+  // ignore: non_constant_identifier_names
   Future<ResponseModel> mock_requestUrl(
     String api, {
     RequestMethod requestMethod = RequestMethod.post,
@@ -81,7 +81,7 @@ class MockNetworkManager extends CacheNetworkClient {
       customParams: customParams,
       options: options,
       retryCount: retryCount,
-      retryDuration: retryDuration ?? Duration(milliseconds: 1000),
+      retryDuration: retryDuration ?? const Duration(milliseconds: 1000),
       retryStopConditionConfigBlock: retryStopConditionConfigBlock,
       withLoading: withLoading,
       toastIfMayNeed: showToastForNoNetwork,

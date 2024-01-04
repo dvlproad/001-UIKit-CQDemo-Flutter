@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-25 01:31:22
+ * @LastEditTime: 2024-01-04 16:17:21
  * @Description: ResponseModel 的处理方式
  */
 import 'package:flutter_network_base/flutter_network_base.dart';
@@ -29,7 +29,8 @@ class SpecialCodeRuleBean {
 */
 
 class CheckResponseModelUtil {
-  static late void Function(ResponseModel responseModel) _needReloginHandle; // 401等需要重新登录时候，执行的操作
+  static late void Function(ResponseModel responseModel)
+      _needReloginHandle; // 401等需要重新登录时候，执行的操作
   static List<int>? Function()? _forceNoToastStatusCodesGetFunction;
 
   static init({
@@ -95,7 +96,7 @@ class CheckResponseModelUtil {
       }
 
       needToast = shouldShowHttpError;
-      responseModel.message = responseMessage ?? "非常抱歉！服务器开小差了～";
+      responseModel.message = responseMessage;
     } else {
       // 2、业务失败 code 处理
       // 2.②、业务失败，未设置默认都要toast，如创建失败

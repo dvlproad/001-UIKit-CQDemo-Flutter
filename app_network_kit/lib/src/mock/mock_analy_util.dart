@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-14 11:31:20
+ * @LastEditTime: 2024-01-04 16:19:40
  * @Description: 网络请求模拟工具类
  */
 
@@ -27,7 +27,7 @@ class MockAnalyUtil {
     dynamic responseObject,
     String url,
   ) {
-    Map<String, dynamic> responseMap = Map();
+    Map<String, dynamic> responseMap = {};
 
     if (responseObject is Map) {
       //print('responseObject.keys=${responseObject.keys}');

@@ -3,12 +3,11 @@
 /*
  * @Author: allen
  * @Date: 2022-06-01 15:54:52
- * @LastEditors: allen
- * @LastEditTime: 2023-04-18 17:58:47
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-04 16:19:17
  * @Description: 同盾请求管理中心 https://cn-doc.trustdecision.com/reference/docs-navigation-cn
  */
 import 'package:flutter_network_kit/flutter_network_kit.dart';
-import 'dart:convert';
 import '../base/mock_network_manager.dart';
 
 class TDNetworkManager extends MockNetworkManager {
@@ -36,7 +35,6 @@ class TDNetworkManager extends MockNetworkManager {
         connectTimeout: CONNECT_TIMEOUT,
         receiveTimeout: RECEIVE_TIMEOUT,
         contentType: "application/json",
-
       );
       dio = Dio(options);
 

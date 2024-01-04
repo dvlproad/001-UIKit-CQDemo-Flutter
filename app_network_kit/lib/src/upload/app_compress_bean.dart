@@ -1,8 +1,10 @@
+// ignore_for_file: constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-05-18 15:06:49
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-23 17:21:51
+ * @LastEditTime: 2024-01-04 16:19:56
  * @Description: 压缩
  */
 

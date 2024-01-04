@@ -1,8 +1,8 @@
-name: app_network
+name: app_network_kit
 description: 利用网络环境即可完成初始化的网络库.
 version: 0.0.1
-repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network
-homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network_kit
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -12,20 +12,32 @@ dependencies:
   flutter:
     sdk: flutter
 
-  package_info_plus: any
-  device_info_plus: any
-  connectivity_plus: any
-  flutter_native_timezone: any
-  flutter_network_kit: ^0.0.1
+  package_info_plus:  ^1.4.2
+  connectivity_plus: ^3.0.3
+  shared_preferences: ^2.0.13
+  path_provider: ^2.0.4
+  dio: ^4.0.0
+  flutter_network_base: ^0.0.2
+  flutter_foundation_base: ^0.0.2
+  flutter_overlay_kit: ^0.0.2
+  flutter_effect_kit: ^0.0.1
+
+  device_info_plus: ^8.1.0
+  flutter_secure_storage: ^8.0.0
+
+  flutter_native_timezone: ^2.0.0
+  flutter_network_kit: ^0.0.2
     # path: ../flutter_network_kit/
 
-  flutter_environment_base: ^0.0.1
+  flutter_environment_base: ^0.0.2
     # path: ../flutter_environment_base/ # 为了引入 ApiManager
   
-  flutter_overlay_kit: ^0.0.1
+  # flutter_overlay_kit: ^0.0.2
     # path: ../flutter_overlay_kit/ # 为了引入 ToastUtil
-  flutter_image_process: ^0.0.1
+  flutter_image_process: ^0.0.2
     # path: ../flutter_image_process/
+  flutter_log_with_env:  ^0.0.1
+    # path: ../flutter_log_with_env/
 
   android_id: ^0.3.3
   tencent_cos: ^1.0.6

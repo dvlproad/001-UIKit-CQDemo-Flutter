@@ -2,11 +2,10 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-04-18 02:14:50
+ * @LastEditTime: 2024-01-04 16:19:45
  * @Description: 追踪id生成工具
  */
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 
 class TraceUtil {
   static String traceId() {

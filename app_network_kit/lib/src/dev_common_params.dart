@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-11 02:39:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-08-10 17:56:59
+ * @LastEditTime: 2024-01-04 16:17:47
  * @Description: 公共参数获取帮助类
  */
 import 'dart:io' show Platform;
@@ -155,12 +155,12 @@ class CommonParamsHelper {
       machine = iosInfo.utsname.machine ?? '';
     } else {
       AndroidDeviceInfo androidInfo = await _deviceInfo.androidInfo;
-      debugPrint('Running on ${androidInfo.model ?? ''}'); // e.g. "Moto G (4)"
+      debugPrint('Running on ${androidInfo.model}'); // e.g. "Moto G (4)"
       // String incremental = androidInfo.version.incremental; // 手机具体的固件型号/Ui版本
       systemName = androidInfo.version.baseOS ?? '';
-      systemVersion = androidInfo.version.release ?? '';
-      brand = "${androidInfo.brand ?? ''}${androidInfo.model ?? ''}"; // 手机品牌加型号
-      model = androidInfo.model ?? '';
+      systemVersion = androidInfo.version.release;
+      brand = "${androidInfo.brand}${androidInfo.model}"; // 手机品牌加型号
+      model = androidInfo.model;
       // machine = androidInfo.utsname.machine;
     }
     if (brand.length > 200) {

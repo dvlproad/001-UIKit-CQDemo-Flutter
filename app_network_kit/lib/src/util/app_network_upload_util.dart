@@ -632,7 +632,7 @@ extension UploadApi on AppNetworkManager {
       uploadResultType: UploadResultType.Unknow,
     );
 
-    if (mediaPath == null || mediaPath.isEmpty) {
+    if (mediaPath.isEmpty) {
       uploadResultBean.uploadResultType = UploadResultType.UploadNone;
       uploadResultBean.url = null;
       completer.complete(uploadResultBean);

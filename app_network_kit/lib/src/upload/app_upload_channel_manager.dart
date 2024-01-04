@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-20 18:46:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-04-06 13:01:53
+ * @LastEditTime: 2024-01-04 16:44:26
  * @Description: 应用层网络上抽离的管理上传方法的类
  */
 import 'dart:convert';
@@ -85,7 +85,7 @@ extension UploadByChannel on AppNetworkManager {
         //
       },
       uploadFailure: () {
-        return null;
+        return;
       },
     );
   }
@@ -118,7 +118,7 @@ extension UploadByChannel on AppNetworkManager {
     final cosFilePrefix = cosFilePrefixGetFunction();
     final bucket = bucketGetFunction(mediaType, mediaScene);
     final region = regionGetFunction(mediaScene);
-    print(region);
+    // debugPrint(region);
     ResponseModel responseModel = await AppNetworkManager().post(
       "oos/getOosCredential",
       customParams: {
@@ -143,7 +143,7 @@ extension UploadByChannel on AppNetworkManager {
     expiredTime = credentialMap["expiredTime"];
 
     if (tencent_cos_credentials == null) {
-      return Future.value(null);
+      return Future.value(false);
     }
     const platform = MethodChannel('tencent_cos');
     final map = HashMap<String, String>();
