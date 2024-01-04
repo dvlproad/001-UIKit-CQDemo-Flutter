@@ -12,11 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_foundation_base: #^0.0.2
-    path: ../flutter_foundation_base/
+  flutter_foundation_base: ^0.0.3
+    # path: ../flutter_foundation_base/
 
-  flutter_overlay_kit: #^0.0.1
-    path: ../flutter_overlay_kit/
+  flutter_overlay_kit: ^0.0.1
+    # path: ../flutter_overlay_kit/
 
 dev_dependencies:
   flutter_test:

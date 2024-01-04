@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_reuse_view/flutter_reuse_view.dart';
-import 'package:get/get.dart';
 
 import '../log_cell.dart';
 import '../log_change_notifiter.dart';
@@ -34,14 +33,14 @@ class LogList extends StatefulWidget {
 }
 
 class _LogListState extends State<LogList> {
-  final _logModels = <LogModel>[].obs;
+  late List<LogModel> _logModels;
   final ApiLogChangeNotifier _environmentChangeNotifier =
       ApiLogChangeNotifier();
   final TextEditingController _controller = TextEditingController();
   @override
   void initState() {
     super.initState();
-    _logModels.value = widget.logModels;
+    _logModels = widget.logModels;
 
     debugPrint("_LogListState initState");
 
@@ -74,7 +73,7 @@ class _LogListState extends State<LogList> {
   void didUpdateWidget(LogList oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.logModels.length != widget.logModels.length) {
-      _logModels.value = widget.logModels;
+      _logModels = widget.logModels;
       _handleSearchTextChanged(_controller.text);
     }
   }
@@ -144,7 +143,7 @@ class _LogListState extends State<LogList> {
                   ),
                 ),
                 _buildButton('清空', onPressed: () {
-                  _logModels.value = [];
+                  _logModels = [];
                   widget.onPressedClear();
                 }),
                 // _buildButton(
@@ -202,53 +201,52 @@ class _LogListState extends State<LogList> {
   }
 
   Widget _searchResultWidget(BuildContext context) {
-    return Obx(() {
-      int sectionCount = 1;
-      var length = _logModels.toList().length;
-      return SectionTableView(
-        // controller: _controller,
-        // reverse: _reverse,
-        sectionCount: sectionCount,
-        numOfRowInSection: (section) {
-          return length;
-        },
-        headerInSection: (section) {
-          // return EnvironmentTableViewHeader(title: 'api log');
-          return Container();
-        },
-        cellAtIndexPath: (section, row) {
-          LogModel logModel = _logModels[row];
-          return ApiLogTableViewCell(
-            maxLines: 5,
-            apiLogModel: logModel,
-            section: section,
-            row: row,
-            clickApiLogCellCallback: ({
-              required BuildContext context,
-              int? section,
-              int? row,
-              required LogModel bLogModel,
-            }) {
-              // print('点击选中 log');
-              // setState(() {}); // 请在外部执行
+    int sectionCount = 1;
+    var length = _logModels.toList().length;
+    return SectionTableView(
+      // controller: _controller,
+      // reverse: _reverse,
+      sectionCount: sectionCount,
+      numOfRowInSection: (section) {
+        return length;
+      },
+      headerInSection: (section) {
+        // return EnvironmentTableViewHeader(title: 'api log');
+        return Container();
+      },
+      cellAtIndexPath: (section, row) {
+        LogModel logModel = _logModels[row];
+        return ApiLogTableViewCell(
+          maxLines: 5,
+          apiLogModel: logModel,
+          section: section,
+          row: row,
+          clickApiLogCellCallback: ({
+            required BuildContext context,
+            int? section,
+            int? row,
+            required LogModel bLogModel,
+          }) {
+            // print('点击选中 log');
+            // setState(() {}); // 请在外部执行
 
-              widget.clickLogCellCallback(
-                context: context,
-                section: section,
-                row: row,
-                bLogModel: bLogModel,
-              );
-            },
-          );
-        },
-        divider: Container(color: Colors.green, height: 1.0),
-      );
-    });
+            widget.clickLogCellCallback(
+              context: context,
+              section: section,
+              row: row,
+              bLogModel: bLogModel,
+            );
+          },
+        );
+      },
+      divider: Container(color: Colors.green, height: 1.0),
+    );
   }
 
   void _handleSearchTextChanged(String value) {
     if (value.isEmpty) {
-      _logModels.value = widget.logModels;
+      _logModels = widget.logModels;
+      setState(() {});
       return;
     }
     var list = _logModels
@@ -258,6 +256,7 @@ class _LogListState extends State<LogList> {
             .toLowerCase()
             .contains(value.toLowerCase()))
         .toList();
-    _logModels.value = list;
+    _logModels = list;
+    setState(() {});
   }
 }

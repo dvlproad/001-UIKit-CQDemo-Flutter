@@ -2,13 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-04-03 18:00:57
+ * @LastEditTime: 2024-01-04 13:30:20
  * @Description: 日志库(包含网络日志)
  */
 library flutter_log_base;
 
 export './src/bean/log_data_bean.dart';
-export './src/bean/user_log_config_bean.dart';
 
 // ui
 export './src/log_ui/detail/log_detail_widget.dart';

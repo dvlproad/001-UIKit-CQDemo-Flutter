@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 
 import '../list/log_list.dart';
@@ -37,7 +39,6 @@ class _LogHomePageState extends State<LogHomePage>
   late TabController _tabController;
 
   List<LogModel> _logModels = [];
-  // ignore: non_constant_identifier_names
   List<LogModel> _api_logModels = []; // 所有的请求结果(包含成功、警告、失败)
   List<LogModel> _warningLogModels = [];
   List<LogModel> _errorLogModels = [];
@@ -46,9 +47,6 @@ class _LogHomePageState extends State<LogHomePage>
   List<LogModel> _sdkApiLogModels = [];
   List<LogModel> _dart_or_widgetLogModels = [];
   List<LogModel> _clickLogModels = [];
-  List<LogModel> _appRouteLogModels = [];
-  List<LogModel> _h5RouteLogModels = [];
-  List<LogModel> _h5jsLogModels = [];
   List<LogModel> _routeLogModels = []; // 路由
   List<LogModel> _h5LogModels = []; // H5
   List<LogModel> _monitorLogModels = []; // 监控(网络类型变化等)
@@ -86,6 +84,8 @@ class _LogHomePageState extends State<LogHomePage>
     _api_logModels = [];
     _h5LogModels = [];
     _sdkLogModels = [];
+    _sdkApiLogModels = [];
+    _dart_or_widgetLogModels = [];
     _clickLogModels = [];
     _routeLogModels = [];
     _buriedPointLogModels = [];
@@ -93,7 +93,7 @@ class _LogHomePageState extends State<LogHomePage>
     _monitorLogModels = [];
     _otherLogModels = [];
     _apiResultLogModels = [];
-     _imResultLogModels = [];
+    _imResultLogModels = [];
     _heartbeatResultLogModels = [];
     for (var i = 0; i < allCount; i++) {
       LogModel logModel = _logModels[i];
