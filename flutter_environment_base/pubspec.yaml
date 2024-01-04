@@ -1,6 +1,6 @@
 name: flutter_environment_base
 description: 各种环境基础管理库(core+kit).
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
 
@@ -18,15 +18,14 @@ dependencies:
   connectivity_plus: ^3.0.0
   http_proxy: ^1.2.1
   provider: ^6.0.5
+  package_info_plus: ^1.4.2
 
-  flutter_network_base: #^0.0.1
-    path: ../flutter_network_base/
-  flutter_reuse_view: #^0.0.2
-    path: ../flutter_reuse_view/
-  flutter_overlay_kit: #^0.0.1
-    path: ../flutter_overlay_kit/ # 切换环境时候的alert确认
-  flutter_baseui_kit: #^0.0.1
-    path: ../flutter_baseui_kit/
+  flutter_reuse_view: ^0.0.3
+    # path: ../flutter_reuse_view/
+  flutter_overlay_kit: ^0.0.2
+    # path: ../flutter_overlay_kit/ # 切换环境时候的alert确认
+  flutter_baseui_kit: ^0.0.2
+    # path: ../flutter_baseui_kit/
 
 dev_dependencies:
   flutter_test:

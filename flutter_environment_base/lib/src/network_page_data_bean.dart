@@ -17,69 +17,35 @@ enum PackageNetworkType {
 
 /// cos 上传的参数
 class CosParamModel {
-  String region;
-  String bucket_image;
-  String bucket_other;
-  String cosFilePrefix;
-  String cosFileUrlPrefix_image;
-  String cosFileUrlPrefix_video;
-  String cosFileUrlPrefix_audio;
+  static const String kRegion = String.fromEnvironment('region');
+  static const String kRegion_selfie = String.fromEnvironment('region_selfie');
+  static const String kBucket_image = String.fromEnvironment('bucket_image');
+  static const String kBucket_selfie_image = String.fromEnvironment('bucket_selfie_image');
+  static const String kBucket_other = String.fromEnvironment('bucket_other');
+  static const String kBucket_static = String.fromEnvironment('bucket_static');
+  static const String kCosFilePrefix = String.fromEnvironment('cosFilePrefix');
+  static const String kCosFileUrlPrefix_image = String.fromEnvironment('cosFileUrlPrefix_image');
+  static const String kCosFileUrlPrefix_video = String.fromEnvironment('cosFileUrlPrefix_video');
+  static const String kCosFileUrlPrefix_audio = String.fromEnvironment('cosFileUrlPrefix_audio');
+  static const String kCosFileUrlPrefix_static = String.fromEnvironment('cosFileUrlPrefix_static');
+  static const String kCosFileUrlPrefix_selfie_image = String.fromEnvironment('cosFileUrlPrefix_selfie_image');
 
-  CosParamModel({
-    required this.region,
-    required this.bucket_image,
-    required this.bucket_other,
-    required this.cosFilePrefix,
-    required this.cosFileUrlPrefix_image,
-    required this.cosFileUrlPrefix_video,
-    required this.cosFileUrlPrefix_audio,
-  });
+  
 
-  static CosParamModel get product {
-    return CosParamModel(
-      region: 'ap-shanghai',
-      bucket_image: 'prod-xhw-image-1302324914',
-      bucket_other: 'prod-xhw-media-1302324914',
-      cosFilePrefix: 'wish',
-      cosFileUrlPrefix_image: 'https://images.xxx.com/',
-      cosFileUrlPrefix_video: 'https://media.xxx.com/',
-      cosFileUrlPrefix_audio: 'https://media.xxx.com/',
-    );
-  }
+  String region = kRegion;
+  String region_selfie = kRegion_selfie;
+  String bucket_image = kBucket_image;
+  String bucket_selfie_image = kBucket_selfie_image;
+  String bucket_other = kBucket_other;
+  String bucket_static = kBucket_static;
+  String cosFilePrefix = kCosFilePrefix;
+  String cosFileUrlPrefix_image = kCosFileUrlPrefix_image;
+  String cosFileUrlPrefix_video = kCosFileUrlPrefix_video;
+  String cosFileUrlPrefix_audio = kCosFileUrlPrefix_audio;
+  String cosFileUrlPrefix_static = kCosFileUrlPrefix_static;
+  String cosFileUrlPrefix_selfie_image = kCosFileUrlPrefix_selfie_image;
 
-  static String _test_bucket_image = 'xxx-image-1302324914';
-  static String _test_bucket_other = 'xxx-media-1302324914';
-  static CosParamModel get preproduct {
-    return product;
-  }
-
-  static CosParamModel get test1 {
-    return CosParamModel(
-      region: 'ap-guangzhou',
-      bucket_image: _test_bucket_image,
-      bucket_other: _test_bucket_other,
-      cosFilePrefix: 'wish_test',
-      cosFileUrlPrefix_image: 'http://image.xxx.com/',
-      cosFileUrlPrefix_video: 'http://tape.xxx.com/',
-      cosFileUrlPrefix_audio: 'http://tape.xxx.com/',
-    );
-  }
-
-  static CosParamModel get dev {
-    return CosParamModel(
-      region: 'ap-guangzhou',
-      bucket_image: _test_bucket_image,
-      bucket_other: _test_bucket_other,
-      cosFilePrefix: 'wish_dev',
-      cosFileUrlPrefix_image: 'http://image.xxx.com/',
-      cosFileUrlPrefix_video: 'http://tape.xxx.com/',
-      cosFileUrlPrefix_audio: 'http://tape.xxx.com/',
-    );
-  }
-
-  static CosParamModel get other {
-    return dev;
-  }
+  
 }
 
 class TSEnvNetworkModel {
@@ -131,7 +97,7 @@ class TSEnvNetworkModel {
       gameHost: '',
       monitorApiHost: '',
       monitorDataHubId: '',
-      cosParamModel: CosParamModel.other,
+      cosParamModel: CosParamModel(),
     );
   }
 
