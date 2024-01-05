@@ -1,15 +1,27 @@
 name: flutter_buried_point
-description: A new Flutter package project.
+description: 埋点基础库.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_buried_point
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_buried_point
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
-  flutter: ">=1.16.0"
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_exposure_kit: ^0.0.1
+    # path: ../flutter_exposure_kit/
+
+  flutter_cache_kit: ^0.0.1
+    # path: ../flutter_cache_kit/
+
+  flutter_log_with_env: ^0.0.2
+    # path: ../flutter_log_with_env/
+  flutter_foundation_base: ^0.0.2
+    # path: ../flutter_foundation_base/
 
 dev_dependencies:
   flutter_test:

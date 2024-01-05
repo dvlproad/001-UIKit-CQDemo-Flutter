@@ -7,4 +7,7 @@
  */
 library flutter_buried_point;
 
-export './src//buried_point_manager.dart';
+export 'src/buried_point_manager.dart';
+export 'src/widget_expourse_extension.dart';
+
+export 'src/position_enum.dart';
