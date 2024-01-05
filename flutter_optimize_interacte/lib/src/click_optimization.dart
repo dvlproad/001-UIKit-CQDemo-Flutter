@@ -1,8 +1,10 @@
+// ignore_for_file: prefer_function_declarations_over_variables
+
 /*
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-07-20 16:59:49
+ * @LastEditTime: 2024-01-05 18:14:27
  * @Description: 函数防抖(停止后执行)、函数节流(立即执行)
  */
 import 'dart:async';

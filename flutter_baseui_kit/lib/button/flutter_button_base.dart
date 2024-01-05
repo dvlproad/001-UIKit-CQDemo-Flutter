@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-03-24 11:32:14
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-27 14:38:20
+ * @LastEditTime: 2024-01-05 18:16:56
  * @Description: 
  */
 // library flutter_button_base;
@@ -16,6 +16,3 @@ export './button/button_child_widget.dart';
 
 // inkWelll
 export './button/ink_well.dart';
-
-// 点击优化
-export './opt/click_optimization.dart';

@@ -6,7 +6,7 @@
  * @Description: 已添加防抖的按钮
  */
 import 'package:flutter/material.dart';
-import '../opt/click_optimization.dart';
+import 'package:flutter_optimize_interacte/flutter_optimize_interacte.dart';
 
 class BJHInkWell extends InkWell {
   BJHInkWell({

@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2023-12-18 10:06:06
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-03 17:14:47
+ * @LastEditTime: 2024-01-05 18:16:46
  * @Description: 
  */
 import 'package:flutter/cupertino.dart';
-import './extensions.dart';
+import 'package:flutter_optimize_interacte/flutter_optimize_interacte.dart';
 
 enum TapType { none, throttle, debounce }
 
