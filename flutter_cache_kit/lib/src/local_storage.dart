@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_null_comparison, dead_code, unnecessary_type_check, unused_local_variable
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
