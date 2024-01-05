@@ -1,12 +1,17 @@
-import 'dart:math' show min;
-import 'package:flutter/material.dart';
+/*
+ * @Author: dvlproad
+ * @Date: 2023-12-06 11:34:27
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-04 18:34:18
+ * @Description: 
+ */
 import 'package:date_format/date_format.dart';
 
 class TimeStringUtil {
   static String timeString(int targetMilliseconds) {
     String targetTimeString = "";
 
-    var millisecondsSinceEpoch = new DateTime.now().millisecondsSinceEpoch;
+    var millisecondsSinceEpoch = DateTime.now().millisecondsSinceEpoch;
     int i = (millisecondsSinceEpoch - targetMilliseconds) ~/ 1000;
     if (60 < i && i <= 3600) {
       targetTimeString = "${i ~/ 60}分钟前";

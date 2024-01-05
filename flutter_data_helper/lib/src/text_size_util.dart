@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2023-12-06 11:34:27
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-04 18:29:57
+ * @Description: 
+ */
 import 'dart:math' show min;
 import 'package:flutter/material.dart';
 // import 'package:flutter/material.dart' show TextPainter, Size, Localizations;
@@ -7,7 +14,7 @@ class TextSizeUtil {
   static double lastTextWidth(
     String text,
     TextStyle style, {
-    BuildContext context,
+    BuildContext? context,
     int maxLines = 2 ^ 31,
     double maxWidth = double.infinity,
   }) {
@@ -27,15 +34,15 @@ class TextSizeUtil {
   static Size boundingTextSize(
     String text,
     TextStyle style, {
-    BuildContext context,
+    BuildContext? context,
     int maxLines = 2 ^ 31,
     double maxWidth = double.infinity,
   }) {
-    if (text == null || text.isEmpty) {
+    if (text.isEmpty) {
       return Size.zero;
     }
 
-    Locale locale = null;
+    Locale? locale;
     if (context != null) {
       locale = Localizations.localeOf(context);
     }
@@ -54,28 +61,28 @@ class TextSizeUtil {
   }
 }
 
+// ignore: must_be_immutable
 class TextSizeWidget extends StatelessWidget {
-  Color backgroundColor;
+  Color? backgroundColor;
 
   String textString;
   TextStyle textStyle;
-  BuildContext context;
+  BuildContext? context;
   int maxLines;
   double maxWidth;
 
   TextSizeWidget({
-    Key key,
+    Key? key,
     this.backgroundColor,
-    @required this.textString,
-    @required this.textStyle,
+    required this.textString,
+    required this.textStyle,
     this.context,
     this.maxLines = 2 ^ 31,
-    @required this.maxWidth = double.infinity,
+    this.maxWidth = double.infinity,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    textString ??= '';
     Size textSize = TextSizeUtil.boundingTextSize(
       textString,
       textStyle,
@@ -85,7 +92,7 @@ class TextSizeWidget extends StatelessWidget {
 
     return Container(
       width: textSize.width,
-      color: this.backgroundColor ?? Colors.transparent,
+      color: backgroundColor ?? Colors.transparent,
       child: Text(
         textString,
         maxLines: maxLines,

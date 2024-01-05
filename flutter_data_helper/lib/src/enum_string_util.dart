@@ -1,12 +1,17 @@
-import 'dart:math' show min;
-import 'package:flutter/material.dart';
+/*
+ * @Author: dvlproad
+ * @Date: 2023-12-06 11:34:27
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-04 18:32:23
+ * @Description: 
+ */
 
 class EnumStringUtil {
   ///枚举类型转string
   static String enumToString(o) => o.toString().split('.').last;
 
   ///string转枚举类型
-  static T enumFromString<T>(Iterable<T> values, String value) {
+  static T? enumFromString<T>(Iterable<T?> values, String value) {
     // return values.firstWhere((type) => type.toString().split('.').last == value, orElse: () => null);
     return values.firstWhere((type) {
       return type.toString().split('.').last == value;
