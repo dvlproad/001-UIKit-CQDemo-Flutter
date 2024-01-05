@@ -1,11 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-17 17:43:57
+ * @LastEditTime: 2024-01-05 16:26:49
  * @Description: 内置曝光事件的listView
  */
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_exposure_kit/flutter_exposure_kit.dart';
@@ -46,8 +47,8 @@ class AppExposureList extends ExposureList {
           exposureStartCallback: (exposureModel) {},
           exposureEndCallback: (exposureModel) {
             Map<String, dynamic> eventAttr =
-                exposureEventAttrGetBlock(exposureModel.itemIndex!);
+                exposureEventAttrGetBlock(exposureModel.itemIndex);
             BuriedPointManager().addExposureEventAttr(eventAttr);
           },
-        ) {}
+        );
 }
