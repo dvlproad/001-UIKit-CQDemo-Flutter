@@ -41,7 +41,7 @@ class CQPartEmptyView extends StatelessWidget {
     return CJBGImageWidget(
       backgroundImage: AssetImage(
         'assets/empty/empty_bgForText_default.png',
-        package: 'flutter_effect',
+        package: 'flutter_base_page',
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,

@@ -13,7 +13,7 @@ import '../pagetype_error/state_error_widget.dart';
 import '../pagetype_nodata/nodata_widget.dart';
 
 //class BJHDefaultPage extends StatefulWidget {
-abstract class BJHDefaultPage extends BJHBasePage {
+abstract class BJHDefaultPage extends AppBasePage {
   final String? title;
 
   BJHDefaultPage({Key? key, this.title}) : super(key: key);

@@ -2,11 +2,12 @@
  * @Author: dvlproad
  * @Date: 2023-03-21 17:53:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-04-03 14:12:00
+ * @LastEditTime: 2024-01-05 18:24:30
  * @Description: 
  */
 // 图片+文字:图片在上，文字显示在图片下边
 import 'package:flutter/material.dart';
+import '../../flutter_base_page_adapt.dart';
 
 class EmptyWithImageAboveTextWidget extends StatefulWidget {
   final Color? color; // 背景颜色，用于有些页面有设置背景图片，需要对此视图设成透明色
@@ -45,18 +46,18 @@ class _EmptyWithImageAboveTextWidgetState
         image: widget.image ??
             AssetImage(
               'assets/empty/empty_aboveText_default.png',
-              package: 'flutter_effect',
+              package: 'flutter_base_page',
             ),
-        width: 130,
-        height: 102,
+        width: 130.w_pt_cj,
+        height: 101.5.h_pt_cj,
         fit: BoxFit.cover,
       ),
-      Container(height: 24),
+      Container(height: 15.w_pt_cj),
       Text(
         widget.mainTitle,
         style: TextStyle(
-          color: Color(0xffafafaf),
-          fontSize: 13,
+          color: const Color(0xffafafaf),
+          fontSize: 13.f_pt_cj,
         ),
       ),
       // Text(
@@ -68,7 +69,7 @@ class _EmptyWithImageAboveTextWidgetState
       //     fontSize: 13,
       //   ),
       // ),
-      Container(height: 28),
+      Container(height: 40.w_pt_cj),
     ];
 
     if (widget.buttonWidget != null) {
@@ -78,7 +79,7 @@ class _EmptyWithImageAboveTextWidgetState
     }
 
     return Container(
-      color: widget.color ?? Color(0xFFF0F0F0),
+      color: widget.color ?? const Color(0xFFF0F0F0),
       width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

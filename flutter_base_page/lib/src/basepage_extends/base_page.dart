@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_lifecycle_kit/flutter_lifecycle_kit.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart'
     show StateLoadingWidget;
+import 'package:flutter_log_with_env/flutter_log_with_env.dart';
 
-import './lifecycle_base_page.dart';
 import '../pagetype_change/pagetype_loadstate_change_widget.dart';
 import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetType
 
@@ -13,40 +14,72 @@ import '../pagetype_change/pagetype_change_widget.dart'; // 为了引入WidgetTy
 
 import 'package:flutter_error_catch/flutter_error_catch.dart';
 
-import 'package:app_buried_point/app_buried_point.dart';
+import 'package:flutter_buried_point/flutter_buried_point.dart';
 
 import 'package:flutter_network_base/flutter_network_base.dart'; // 网络 HttpStatusCode
-export 'package:app_devtool_framework/app_devtool_framework.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
-//class BJHBasePage extends StatefulWidget {
-abstract class BJHBasePage extends LifeCyclePage {
-  BJHBasePage({
+//class AppBasePage extends StatefulWidget {
+abstract class AppBasePage extends LifeCyclePage {
+  final VoidCallback? onScrollToTop;
+  final Map<String, dynamic>? arguments;
+
+  const AppBasePage({
     Key? key,
+    this.onScrollToTop,
+    this.arguments,
   }) : super(key: key);
 
-  // @override
-  // // BJHBasePageState createState() => BJHBasePageState();
-  // BJHBasePageState createState() => getState();
-  // ///子类实现
-  // BJHBasePageState getState() {
-  //   print('请在子类中实现');
-  // }
+// @override
+// // BJHBasePageState createState() => BJHBasePageState();
+// BJHBasePageState createState() => getState();
+// ///子类实现
+// BJHBasePageState getState() {
+//   print('请在子类中实现');
+// }
 }
 
-//class BJHBasePageState extends State<BJHBasePage> {
-abstract class BJHBasePageState<V extends BJHBasePage>
+//class BJHBasePageState extends State<AppBasePage> {
+abstract class BJHBasePageState<V extends AppBasePage>
     extends LifeCycleBasePageState<V> with AutomaticKeepAliveClientMixin {
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
 
   Widget? _initWidget;
 
+  // 用于记录页面停留时长
+  DateTime? _pageAppearTime;
+
+  late String _routeClassString;
+
+  Map<String, dynamic>? _pageInfo;
+
+  Map<String, dynamic>? _arguments;
+
+  String? _currentRoutePath;
+  bool enableVAPM = false;
+  late String _pageKey;
+
   @override
   bool get wantKeepAlive => true;
 
+  /// 额外的埋点参数
+  /// 用于[viewDidAppear]和[viewDidDisappear]的埋点事件
+  Map<String, dynamic> _extraParameters = {};
+  // ignore: unused_field
+  bool _isVisible = false;
+  String? pageCode;
+  String? networkUrls = '';
+
+  bool _useVisibilityDetector = false;
+
   @override
   void initState() {
+    _routeClassString = widget.runtimeType.toString();
+
     super.initState();
+
+    pageCode = "${_routeClassString}_$hashCode";
   }
 
   @override
@@ -59,41 +92,84 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     super.didChangeDependencies();
   }
 
+  void addExtraParameter(String key, dynamic value) {
+    _extraParameters[key] = value;
+  }
+
   @override
   void viewDidAppear(AppearBecause appearBecause) {
-    String routeClassString = widget.runtimeType.toString();
-
-    String? currentRoutePath;
+    super.viewDidAppear(appearBecause);
+    _isVisible = true;
+    // 注意：_currentRoutePath 不和 _routeClassString 一起写在 initState 是因为 ModalRoute.of(context) 不能写在该方法里。
     ModalRoute? route = ModalRoute.of(context);
     if (route != null) {
-      currentRoutePath = route.settings.name;
+      _currentRoutePath = route.settings.name;
     }
 
-    AppCatchError.currentPageClassString = routeClassString;
-    AppCatchError.currentPageRoutePath = currentRoutePath;
+    AppCatchError.currentPageClassString = _routeClassString;
+    AppCatchError.currentPageRoutePath = _currentRoutePath;
 
     // if (appearBecause == AppearBecause.newCreate) {}
+
     String appearBecauseString = appearBecause.toString().split('.').last;
-    BuriedPointManager().addEvent('viewDidAppear_newCreate', {
-      "page": routeClassString,
-      "appearBC": appearBecauseString,
-    });
+    Map<String, dynamic> parameters = {
+      "page": _routeClassString,
+      "pageKey": _pageKey,
+      "cause": appearBecauseString,
+    };
+    parameters.addAll(_extraParameters);
+    // 埋点上报
+    _pageAppearTime = DateTime.now();
+    BuriedPointManager().addEvent('viewDidAppear', parameters);
+
+    if (_pageInfo?["pageShowType"] != 'tab' &&
+        _pageInfo?["pageShowType"] != 'normal') return;
+    _arguments = getArguments();
+    AppLogUtil.logMessage(
+      needTackTrace: false,
+      logType: LogObjectType.route,
+      logLevel: LogLevel.success,
+      shortMap: getAppearShortMap(),
+      detailMap: {
+        "arguments": _arguments,
+        "pageKey": _pageKey,
+      },
+    );
   }
 
   @override
   void viewDidDisappear(DisAppearBecause disAppearBecause) {
     super.viewDidDisappear(disAppearBecause);
+    _isVisible = false;
 
-    String routeClassString = widget.runtimeType.toString();
+    String disAppearBecauseString = disAppearBecause.toString().split('.').last;
 
-    String? currentRoutePath;
-    ModalRoute? route = ModalRoute.of(context);
-    if (route != null) {
-      currentRoutePath = route.settings.name;
-    }
+    Map<String, dynamic> parameters = {
+      "page": _routeClassString,
+      "pageKey": _pageKey,
+      "cause": disAppearBecauseString,
+      "duration": DateTime.now().millisecondsSinceEpoch -
+          _pageAppearTime!.millisecondsSinceEpoch,
+    };
+    parameters.addAll(_extraParameters);
+    // 埋点上报
+    BuriedPointManager().addEvent('viewDidDisappear', parameters);
 
-    AppCatchError.beforePageClassString = routeClassString;
-    AppCatchError.beforePageRoutePath = currentRoutePath;
+    AppCatchError.beforePageClassString = _routeClassString;
+    AppCatchError.beforePageRoutePath = _currentRoutePath;
+
+    if (_pageInfo?["pageShowType"] != 'tab' &&
+        _pageInfo?["pageShowType"] != 'normal') return;
+    AppLogUtil.logMessage(
+      needTackTrace: false,
+      logType: LogObjectType.route,
+      logLevel: LogLevel.success,
+      shortMap: getDisappearShortMap(),
+      detailMap: {
+        "arguments": _arguments,
+        "pageKey": _pageKey,
+      },
+    );
   }
 
   @override
@@ -111,6 +187,22 @@ abstract class BJHBasePageState<V extends BJHBasePage>
       }
     }
 
+    return VisibilityDetector(
+        key: Key(pageCode ?? ""),
+        onVisibilityChanged: (VisibilityInfo info) {
+          if (info.visibleFraction > 0) {
+            /// 页面真正的显示面积大于 0
+          }
+        },
+        child: Listener(
+          child: _getBodyWeight(context),
+          onPointerDown: (_) {
+            //
+          },
+        ));
+  }
+
+  Widget _getBodyWeight(BuildContext context) {
     return shouldGiveUpScaffold()
         ? _bodyWidget(context)
         : Scaffold(
@@ -143,7 +235,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   PreferredSizeWidget? appBar() {
     return null; // 要有导航栏，请在子类中实现
     // return AppBar(
-    //   title: Text('BJHBasePage'),
+    //   title: Text('AppBasePage'),
     // );
   }
 
@@ -179,16 +271,27 @@ abstract class BJHBasePageState<V extends BJHBasePage>
     // );
   }
 
+  /// 覆盖整个页面的视图
+  Widget? centerAbsorbWidget(BuildContext context) {
+    return null;
+  }
+
   /// 是否不添加 Scaffold 层
   bool shouldGiveUpScaffold() {
     return false;
+  }
+
+  bool shouldUseBackGroundColor() {
+    return true;
   }
 
   // 背景视图(常用来设置背景图片)
   Widget backgroundWidget(BuildContext context) {
     // 设置背景色
     return Container(
-      color: Color(0xFFF7F7F7),
+      color: shouldUseBackGroundColor()
+          ? const Color(0xFFF7F7F7)
+          : Colors.transparent,
     );
 
     // eg1:设置铺满的背景图片
@@ -225,12 +328,11 @@ abstract class BJHBasePageState<V extends BJHBasePage>
 
     MediaQueryData mediaQuery =
         MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
-    double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
-    //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
+    double statusBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
+    //或者 double statusBarHeight = MediaQuery.of(context).padding.top;
     double appBarHeight =
-        appBarWidget(context) != null ? stautsBarHeight + 44 : 0;
+        appBarWidget(context) != null ? statusBarHeight + 44 : 0;
     double screenBottomHeight = mediaQuery.padding.bottom;
-
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -239,7 +341,10 @@ abstract class BJHBasePageState<V extends BJHBasePage>
       },
       child: Stack(
         children: [
-          backgroundWidget(context),
+          _useVisibilityDetector
+              ? visibilityDetectorWidget(context,
+                  child: backgroundWidget(context))
+              : backgroundWidget(context),
           // appBarWidget(context) ?? Container(height: 0),
           Column(
             children: [
@@ -275,6 +380,14 @@ abstract class BJHBasePageState<V extends BJHBasePage>
             right: 0,
             child: bottomAdsorbWidget(context, screenBottomHeight) ??
                 Container(height: 0),
+          ),
+          // 全局视图
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            top: 0,
+            child: centerAbsorbWidget(context) ?? Container(height: 0),
           ),
         ],
       ),
@@ -401,7 +514,7 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   }
 
   Widget buildSelfLoadingWidgetWidget(BuildContext context) {
-    return Container(
+    return const SizedBox(
       height: 242,
       // color: Color.fromRGBO(22, 17, 175, 0.5),
       child: StateLoadingWidget(),
@@ -409,6 +522,59 @@ abstract class BJHBasePageState<V extends BJHBasePage>
   }
 
   popPage() {
-    Navigator.of(context).pop();
+    Navigator.pop(context);
   }
+
+  @override
+  bool useVisibilityDetector() {
+    return _useVisibilityDetector;
+  }
+
+  String getPageType() {
+    return "";
+  }
+
+  Map<String, dynamic>? getArguments() {
+    return null;
+  }
+
+  Map<dynamic, dynamic> getAppearShortMap() {
+    String routeNameCN = _pageInfo?["pageDesc"] ?? "";
+    if (routeNameCN.isNotEmpty) {
+      if (_pageInfo?["pageShowType"] == 'tab') {
+        return {
+          "routeNameCN": "进入Tab页面:$routeNameCN",
+        };
+      } else {
+        return {
+          "routeNameCN": "进入页面:$routeNameCN",
+        };
+      }
+    } else {
+      return {
+        "routePath": "进入页面:$_routeClassString",
+      };
+    }
+  }
+
+  Map<dynamic, dynamic> getDisappearShortMap() {
+    String routeNameCN = _pageInfo?["pageDesc"] ?? "";
+    if (routeNameCN.isNotEmpty) {
+      if (_pageInfo?["pageShowType"] == 'tab') {
+        return {
+          "routeNameCN": "离开Tab页面:$routeNameCN",
+        };
+      } else {
+        return {
+          "routeNameCN": "离开页面:$routeNameCN",
+        };
+      }
+    } else {
+      return {
+        "routePath": "离开页面:$_routeClassString",
+      };
+    }
+  }
+
+  void scrollToTop() {}
 }

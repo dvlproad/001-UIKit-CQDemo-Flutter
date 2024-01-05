@@ -51,11 +51,12 @@ class _PageTypeLoadStateWidgetState extends State<PageTypeLoadStateWidget> {
         Positioned(
           left: 40,
           right: 40,
-          child: Offstage(
-            offstage: widget.showSelfLoading == false,
-            // 当offstage为true，控件隐藏； 当offstage为false，显示；
-            // 当Offstage不可见的时候，如果child有动画等，需要手动停掉，Offstage并不会停掉动画等操作。
-            child: widget.selfLoadingWidget,
+          // 本来这里用的是 Offstage ，会引起频繁渲染，导致页面掉帧。
+          // Offstage，隐藏时，其隐藏的子 Widget 不会进行绘制和事件处理，但它们仍然存在于树中，可以保持其内部状态。
+          // Visibility，隐藏时，其隐藏的子 Widget 不会进行绘制、事件处理，并且不会占用布局空间。
+          child: Visibility(
+            visible: widget.showSelfLoading == true,
+            child: widget.selfLoadingWidget ?? Container(),
           ),
         ),
       ],

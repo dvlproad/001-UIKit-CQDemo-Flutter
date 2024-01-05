@@ -2,12 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-04-03 14:42:19
+ * @LastEditTime: 2024-01-05 18:24:28
  * @Description: 错误视图
  */
 import 'package:flutter/material.dart';
 import '../pagetype_nodata/empty_imageAboveText_widget.dart';
 import '../appbar/appbar.dart';
+import '../../flutter_base_page_adapt.dart';
 
 class StateErrorWidget extends StatefulWidget {
   final bool needAppBar;
@@ -24,7 +25,7 @@ class StateErrorWidget extends StatefulWidget {
     this.needAppBar = false, // 是否需要为你补充上导航栏(默认不需要)
     this.onNavBackTap, //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
     this.color, // 背景颜色
-    this.image, // 默认值:AssetImage('assets/empty/no_network.png',package: 'flutter_effect',)
+    this.image, // 默认值:AssetImage('assets/empty/no_network.png',package: 'flutter_base_page',)
     required this.errorRetry, // 错误事件处理
   }) : super(key: key);
 
@@ -64,11 +65,11 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
     return EmptyWithImageAboveTextWidget(
       color: widget.color,
       image: widget.image ??
-          AssetImage(
+          const AssetImage(
             'assets/empty/no_network.png',
-            package: 'flutter_effect',
+            package: 'flutter_base_page',
           ),
-      mainTitle: '网络开小差了，刷新一下试试！',
+      mainTitle: '网络开小差了，请检查下网络再试！',
       // subTitle: '点击下方按钮帮你叫醒它！',
       // buttonWidget: ThemeBorderButton(
       //   width: 88, // 不设置会根据内容自适应
@@ -83,16 +84,16 @@ class _StateErrorWidgetState extends State<StateErrorWidget> {
         onTap: () => widget.errorRetry(),
         child: Container(
           alignment: Alignment.center,
-          width: 88,
-          height: 26,
+          width: 88.w_pt_cj,
+          height: 26.h_pt_cj,
           decoration: BoxDecoration(
             color: themeColor(ThemeBGType.theme),
-            borderRadius: BorderRadius.all(Radius.circular(13)),
+            borderRadius: BorderRadius.all(Radius.circular(26.w_pt_cj)),
           ),
           child: Text(
             "刷新一下",
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12.f_pt_cj,
               color: Colors.white,
               fontFamily: 'PingFang SC',
               fontWeight: FontWeight.w500,

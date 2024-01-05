@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_optimize_interacte/flutter_optimize_interacte.dart';
 export 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 // 一个可以快速设置 导航栏标题 和 导航栏返回按钮 的导航栏视图
@@ -53,7 +54,7 @@ class QuickAppBar extends CommonAppBar {
                     } else {
                       customOnPressedBack();
                     }
-                  },
+                  }.debounce(),
                 )
               : QuickToolBarImageActionWidget(
                   imageType: leadingImageType != null
@@ -73,7 +74,7 @@ class QuickAppBar extends CommonAppBar {
                     } else {
                       customOnPressedBack();
                     }
-                  },
+                  }.debounce(),
                 ),
           leadingPositionedLeft: leadingText != null ? 10 : 0,
           automaticallyImplyLeading: automaticallyImplyLeading,

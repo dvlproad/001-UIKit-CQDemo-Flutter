@@ -40,7 +40,7 @@ class StateNodataWidget extends StatefulWidget {
     this.needAppBar = false, // 是否需要为你补充上导航栏(默认不需要)
     this.onNavBackTap, //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
     this.color, // 背景颜色
-    this.image, // 默认值:AssetImage('assets/empty/no_data.png',package: 'flutter_effect',)
+    this.image, // 默认值:AssetImage('assets/empty/no_data.png',package: 'flutter_base_page',)
     this.mainTitle, // 默认值:'很抱歉，您暂无相关数据'
     this.subTitle, // 默认值:'去其他逛逛吧'
     this.buttonWidget,
@@ -85,7 +85,7 @@ class _StateNodataWidgetState extends State<StateNodataWidget> {
       image: widget.image ??
           AssetImage(
             'assets/empty/no_data.png',
-            package: 'flutter_effect',
+            package: 'flutter_base_page',
           ),
       mainTitle: widget.mainTitle ?? '很抱歉，您暂无相关数据',
       subTitle: widget.subTitle ?? '去其他逛逛吧',

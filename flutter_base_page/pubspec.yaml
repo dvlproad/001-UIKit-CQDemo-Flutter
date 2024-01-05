@@ -1,8 +1,8 @@
-name: flutter_effect
-description: A new Flutter package project.
+name: flutter_base_page
+description: 项目页面和视图的基类.
 version: 0.0.1
-repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect
-homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_effect
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -12,30 +12,43 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cached_network_image: any
-  flutter_theme_helper: #^0.1.0
-    path: ../flutter_theme_helper/
-  flutter_error_catch: #^0.1.0
-    path: ../flutter_error_catch/
+  flutter_lifecycle_kit: ^0.0.1
+    # path: ../flutter_lifecycle_kit/
 
-  flutter_baseui_kit: #^0.1.0     # 为了引入 ThemeBorderButton
-    path: ../flutter_baseui_kit/ 
+  flutter_theme_helper: ^0.0.1
 
-  flutter_overlay_kit: #^0.1.0
-    path: ../flutter_overlay_kit/
+  visibility_detector: ^0.4.0+2
+  # cached_network_image: any
+  # flutter_theme_helper: #^0.1.0
+  #   path: ../flutter_theme_helper/
+  flutter_error_catch: ^0.0.1
+  #   path: ../flutter_error_catch/
 
-  flutter_effect_kit: #^0.1.0
-    path: ../flutter_effect_kit/
+  flutter_baseui_kit: ^0.0.2     # 为了引入 ThemeBorderButton
+  #   path: ../flutter_baseui_kit/ 
 
-  app_buried_point: #^0.1.0
-    path: ../app_buried_point/
+  flutter_overlay_kit: ^0.0.2
+  #   # path: ../flutter_overlay_kit/
 
-  app_devtool_framework: #^0.1.0
-    path: ../app_devtool_framework/
-  flutter_network_base: #^0.1.0
-    path: ../flutter_network_base/
+  flutter_effect_kit: ^0.0.1
+  #   path: ../flutter_effect_kit/
 
+  flutter_log_with_env: ^0.0.2
+
+  flutter_buried_point: ^0.0.1
+  #   path: ../flutter_buried_point/
+
+  flutter_optimize_interacte: ^0.0.1
+
+  flutter_network_base: ^0.0.1
   
+  #   path: ../flutter_network_base/
+  # app_gated_launch:
+  #   path: ../app_gated_launch/
+  # app_common:
+  #   path: ../app_common/
+  # app_page_load:
+  #   path: ../app_page_load/
 
 dev_dependencies:
   flutter_test:

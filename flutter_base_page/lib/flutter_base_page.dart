@@ -2,13 +2,10 @@
  * @Author: dvlproad
  * @Date: 2021-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-05-13 16:03:56
+ * @LastEditTime: 2024-01-05 18:30:16
  * @Description: 页面框架
  */
-library flutter_effect;
-
-export './src/util/stack_trace_util.dart';
-export './src/basepage_extends/lifecycle_base_page.dart';
+library flutter_base_page;
 
 // pagetype_nodata:无数据视图组件
 export './src/pagetype_nodata/empty_imageBGForText_widget.dart';
@@ -30,6 +27,7 @@ export './src/basepage_combination/pagetype_loadstate_default_widget.dart';
 
 // basepage_extends 继承形式
 export './src/basepage_extends/base_page.dart';
+export './src/basepage_extends/base_view.dart';
 export './src/basepage_extends/default_page.dart';
 
 export 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
