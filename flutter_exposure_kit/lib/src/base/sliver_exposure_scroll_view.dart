@@ -1,5 +1,10 @@
-import 'dart:math';
-
+/*
+ * @Author: dvlproad
+ * @Date: 2022-06-01 16:12:12
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-05 15:17:18
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import '../model/exposure_model.dart';
@@ -25,7 +30,7 @@ class SliverExposureScrollView extends StatefulWidget {
     this.scrollCallback,
     this.exposureReferee,
     required this.child,
-    this.scrollDirection: Axis.vertical,
+    this.scrollDirection = Axis.vertical,
     this.exposureStartCallback,
     this.exposureEndCallback,
     this.scrollController,
@@ -39,8 +44,8 @@ class SliverExposureScrollView extends StatefulWidget {
 
 class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
     with ExposureMixin {
-  Set<_Point> visibleSet = Set();
-  Set<_Point> oldSet = Set();
+  Set<_Point> visibleSet = {};
+  Set<_Point> oldSet = {};
 
   @override
   void initState() {
@@ -51,7 +56,7 @@ class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
           widget.scrollController!.position.didStartScroll();
           widget.scrollController!.position.didEndScroll();
         } else {
-          Future.delayed(Duration(milliseconds: 1500)).then((value) {
+          Future.delayed(const Duration(milliseconds: 1500)).then((value) {
             _scroll();
           });
         }
@@ -71,8 +76,8 @@ class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
   @override
   Widget build(BuildContext context) {
     return NotificationListener(
-      child: widget.child,
       onNotification: _onNotification,
+      child: widget.child,
     );
   }
 
@@ -146,12 +151,13 @@ class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
     // 根据上次曝光的元素集合找出当前已不可见的元素，进行曝光结束事件通过
     _dispatchExposureEndEvent(oldSet, exposureTime);
     // 调用scrollCallback返回当前可见元素位置
+    // ignore: unnecessary_null_comparison
     if (indexRanges != null) {
       String indexRangesString = '';
       for (IndexRange indexRange in indexRanges) {
         indexRangesString += '${indexRange.firstIndex}-${indexRange.lastIndex}';
       }
-      print('indexRange_willFullShow:$indexRangesString');
+      debugPrint('indexRange_willFullShow:$indexRangesString');
     }
     widget.scrollCallback?.call(indexRanges, notice);
     return false;
@@ -192,7 +198,7 @@ class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
 
   void _dispatchExposureEndEvent(Set<_Point> set, int exposureTime) {
     if (widget.exposureEndCallback == null) return;
-    set.forEach((item) {
+    for (var item in set) {
       ExposureEndIndex exposureModel = ExposureEndIndex(
         parentIndex: item.parentIndex,
         itemIndex: item.itemIndex,
@@ -202,7 +208,7 @@ class _SliverExposureScrollViewState extends State<SliverExposureScrollView>
       debugPrint('end exposure ${exposureModel.message}');
 
       widget.exposureEndCallback!(exposureModel);
-    });
+    }
     if (visibleSet == set) {
       visibleSet.clear();
     } else {
@@ -230,10 +236,10 @@ class _Point {
     if (other is! _Point) {
       return false;
     }
-    return this.parentIndex == other.parentIndex &&
-        this.itemIndex == other.itemIndex;
+    return parentIndex == other.parentIndex && itemIndex == other.itemIndex;
   }
 
   @override
+  // ignore: deprecated_member_use
   int get hashCode => hashValues(parentIndex, itemIndex);
 }

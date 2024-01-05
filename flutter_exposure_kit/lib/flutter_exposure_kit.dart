@@ -11,8 +11,8 @@ library flutter_exposure_kit;
 // base
 export './src/model/exposure_model.dart';
 export './src/base/exposure_mixin.dart';
-export './src/base/single_exposure_scrollView.dart';
-export './src/base/sliver_exposure_scrollView.dart';
+export 'src/base/single_exposure_scroll_view.dart';
+export 'src/base/sliver_exposure_scroll_view.dart';
 
 // widget
 export './src/widget/exposure_list.dart';

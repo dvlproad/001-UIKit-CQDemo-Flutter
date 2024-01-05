@@ -2,15 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-16 23:08:16
+ * @LastEditTime: 2024-01-05 15:10:17
  * @Description: 内置曝光事件的listView
  */
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../base/scroll_detail_provider.dart';
 import '../base/exposure_widget.dart';
-import '../base/exposure_helper.dart';
 
 import '../../src/model/exposure_model.dart';
 import '../base/base_exposure_scroll_container.dart'
@@ -26,7 +24,7 @@ class ExposureScrollContainer extends StatefulWidget {
   final ExposureStartCallback? exposureStartCallback;
   final ExposureEndCallback? exposureEndCallback;
 
-  ExposureScrollContainer({
+  const ExposureScrollContainer({
     Key? key,
     // required Widget child,
     // bool lazy = false,
@@ -46,7 +44,7 @@ class ExposureScrollContainer extends StatefulWidget {
 }
 
 class _ExposureScrollContainerState extends State<ExposureScrollContainer> {
-  List<ExposureStartIndex> _exposureModels = [];
+  final List<ExposureStartIndex> _exposureModels = [];
 
   @override
   void dispose() {
@@ -81,7 +79,7 @@ class _ExposureScrollContainerState extends State<ExposureScrollContainer> {
     required int index,
   }) {
     return Exposure(
-      exposeFactor: 0,
+      exposeFactor: 0.5,
       onExpose: (DateTime exposureDateTimeStart) {
         ExposureStartIndex exposureModel = ExposureStartIndex(
           parentIndex: 0,

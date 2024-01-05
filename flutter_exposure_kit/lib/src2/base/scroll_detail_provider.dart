@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 18:40:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-16 19:49:45
+ * @LastEditTime: 2024-01-05 15:11:06
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ class ScrollDetailProvider extends StatefulWidget {
   }) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ScrollDetailProviderState createState() => _ScrollDetailProviderState();
 }
 
@@ -30,6 +31,7 @@ class _ScrollDetailProviderState extends State<ScrollDetailProvider>
   }
 
   @override
+  // ignore: unnecessary_overrides
   void initState() {
     super.initState();
   }
@@ -76,6 +78,7 @@ class _ScrollDetailProviderState extends State<ScrollDetailProvider>
   // 为了避免 listener 还没有监听上从而丢失第一次消息，延迟 500 ms
   void postStartPosition(BuildContext context) async {
     await Future.delayed(const Duration(microseconds: 500));
+    // ignore: use_build_context_synchronously
     final fakeScrollNotification = ScrollStartNotification(
       context: context,
       metrics: FixedScrollMetrics(

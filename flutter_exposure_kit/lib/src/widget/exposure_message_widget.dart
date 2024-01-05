@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-07 10:43:35
+ * @LastEditTime: 2024-01-05 15:15:12
  * @Description: 展示exposure曝光信息的message视图
  */
 
@@ -29,13 +31,13 @@ class ExposureMessageWidgetState extends State<ExposureMessageWidget> {
 
   void updateNewExposureModel(ExposureStartIndex newExposureModel) {
     setState(() {
-      this._newExposureModel = newExposureModel;
+      _newExposureModel = newExposureModel;
     });
   }
 
   void updateNewNoFullExposureModel(ExposureEndIndex newNoFullExposureModel) {
     setState(() {
-      this._newNoFullExposureModel = newNoFullExposureModel;
+      _newNoFullExposureModel = newNoFullExposureModel;
     });
   }
 
@@ -48,11 +50,9 @@ class ExposureMessageWidgetState extends State<ExposureMessageWidget> {
   void updateExposureData_None() {}
 
   void updateExposureData(int first, int last) {
-    assert(first != null && last != null);
-
     if (first < last) {
       for (int i = first; i <= last; i++) {
-        if (this.first == null || i < this.first || i > this.last) {
+        if (i < this.first || i > this.last) {
           export.add(i); // 新曝光的元素(①没曝光过、②有更小的曝光值，③有更大的曝光值)
         }
       }
@@ -71,46 +71,44 @@ class ExposureMessageWidgetState extends State<ExposureMessageWidget> {
     Widget content = Container(
       height:
           180, // 使用固定值，修复header视图因 ExposureModel!.message 自动变长，导致给列表所占的高度自动变短，从而引起原本正确计算出来的可见头和可见尾，因没在重新计算导致显示错误
-      margin: EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 5),
       alignment: Alignment.topLeft,
       child: Text.rich(
         TextSpan(
           children: <InlineSpan>[
-            TextSpan(text: '当前第一个完全可见元素下标:'),
+            const TextSpan(text: '当前第一个完全可见元素下标:'),
             TextSpan(
               text: '$first\n',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.red,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextSpan(text: '当前最后一个完全可见元素下标:'),
+            const TextSpan(text: '当前最后一个完全可见元素下标:'),
             TextSpan(
               text: '$last\n',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.red,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextSpan(text: '新开始曝光(完全可见)的元素:'),
+            const TextSpan(text: '新开始曝光(完全可见)的元素:'),
             TextSpan(
-              text: _newExposureModel == null
-                  ? ''
-                  : '${_newExposureModel!.message}',
-              style: TextStyle(
+              text: _newExposureModel == null ? '' : _newExposureModel!.message,
+              style: const TextStyle(
                 color: Colors.red,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            TextSpan(text: '新结束曝光(非完全可见)元素:'),
+            const TextSpan(text: '新结束曝光(非完全可见)元素:'),
             TextSpan(
               text: _newNoFullExposureModel == null
                   ? ''
-                  : '${_newNoFullExposureModel!.message}',
-              style: TextStyle(
+                  : _newNoFullExposureModel!.message,
+              style: const TextStyle(
                 color: Colors.red,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

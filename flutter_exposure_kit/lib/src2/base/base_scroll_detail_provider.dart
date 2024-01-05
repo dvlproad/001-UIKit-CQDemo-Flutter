@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 18:40:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-16 22:04:10
+ * @LastEditTime: 2024-01-05 15:12:23
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -32,6 +32,7 @@ abstract class BaseScrollDetailProviderState<V extends BaseScrollDetailProvider>
   }
 
   @override
+  // ignore: unnecessary_overrides
   void initState() {
     super.initState();
   }
@@ -82,6 +83,7 @@ abstract class BaseScrollDetailProviderState<V extends BaseScrollDetailProvider>
   // 为了避免 listener 还没有监听上从而丢失第一次消息，延迟 500 ms
   void postStartPosition(BuildContext context) async {
     await Future.delayed(const Duration(microseconds: 500));
+    // ignore: use_build_context_synchronously
     final fakeScrollNotification = ScrollStartNotification(
       context: context,
       metrics: FixedScrollMetrics(
@@ -92,6 +94,7 @@ abstract class BaseScrollDetailProviderState<V extends BaseScrollDetailProvider>
         axisDirection: AxisDirection.down,
       ),
     );
+    // ignore: use_build_context_synchronously
     ScrollNotificationPublisher.of(context).add(fakeScrollNotification);
   }
 

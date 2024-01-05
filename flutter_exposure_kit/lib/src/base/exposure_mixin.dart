@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-07 19:13:49
+ * @LastEditTime: 2023-05-17 14:08:35
  * @Description: 
  */
 import 'dart:math';
@@ -21,13 +21,14 @@ mixin ExposureMixin {
     required int exposureTime,
     required int parentIndex,
   }) {
-    if (sliverMultiBoxAdaptorElement == null) return null;
+    if (sliverMultiBoxAdaptorElement == null) {
+      return null;
+    }
     int firstIndex = sliverMultiBoxAdaptorElement.childCount;
-    assert(firstIndex != null);
     int endIndex = -1;
     void onVisitChildren(Element element) {
       final SliverMultiBoxAdaptorParentData? parentData =
-          element.renderObject?.parentData as SliverMultiBoxAdaptorParentData;
+          element.renderObject?.parentData as SliverMultiBoxAdaptorParentData?;
       if (parentData != null) {
         double boundF = parentData.layoutOffset ?? 0;
         double itemLength = axis == Axis.vertical
@@ -36,11 +37,11 @@ mixin ExposureMixin {
         double boundE = itemLength + boundF;
         double paintExtent = max(min(boundE, portE) - max(boundF, portF), 0);
         double maxPaintExtent = itemLength;
-        bool isExposure = exposureReferee != null
+        bool isExposure = exposureReferee != null && parentData.index != null
             ? exposureReferee(
                 ExposureStartIndex(
                   parentIndex: parentIndex,
-                  itemIndex: parentData.index,
+                  itemIndex: parentData.index!,
                   startExposureTimeStamp: exposureTime,
                 ),
                 paintExtent,

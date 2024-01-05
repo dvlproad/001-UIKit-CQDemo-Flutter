@@ -1,14 +1,14 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, must_be_immutable
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-17 17:44:17
+ * @LastEditTime: 2024-01-05 15:07:16
  * @Description: 内置曝光事件的listView
  */
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import '../base/single_exposure_scrollView.dart';
+import '../base/single_exposure_scroll_view.dart';
 import '../model/exposure_model.dart';
 
 class ExposureList extends StatelessWidget {
@@ -44,7 +44,6 @@ class ExposureList extends StatelessWidget {
 
     return SingleExposureScrollView(
       scrollController: _scrollController,
-      child: child,
       scrollDirection: axis,
       scrollCallback: (
         IndexRange? _indexRange,
@@ -70,6 +69,7 @@ class ExposureList extends StatelessWidget {
         double abs = maxPaintExtent - paintExtent;
         return abs < 1; // 避免paintExtent与maxPaintExtent有小数点误差,如204.666和204.669
       },
+      child: child,
     );
   }
 }

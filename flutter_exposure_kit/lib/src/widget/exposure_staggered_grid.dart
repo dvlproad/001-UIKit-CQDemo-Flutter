@@ -1,16 +1,16 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers, must_be_immutable
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-07 19:05:25
+ * @LastEditTime: 2024-01-05 15:13:31
  * @Description: 内置曝光事件的listView
  */
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import '../base/single_exposure_scrollView.dart';
-import '../base/sliver_exposure_scrollView.dart';
+import '../base/single_exposure_scroll_view.dart';
 import '../model/exposure_model.dart';
 
 class ExposureStaggeredGrid extends StatelessWidget {
@@ -86,9 +86,9 @@ class ExposureStaggeredGrid extends StatelessWidget {
     );
 
     return child;
+    // ignore: dead_code
     return SingleExposureScrollView(
       scrollController: _scrollController,
-      child: child,
       scrollDirection: axis,
       // scrollCallback: (List<IndexRange> indexRanges,
       //     ScrollNotification scrollNotification) {
@@ -123,6 +123,7 @@ class ExposureStaggeredGrid extends StatelessWidget {
         double abs = maxPaintExtent - paintExtent;
         return abs < 1; // 避免paintExtent与maxPaintExtent有小数点误差,如204.666和204.669
       },
+      child: child,
     );
   }
 }

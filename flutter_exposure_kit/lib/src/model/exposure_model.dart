@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-08 14:41:19
+ * @LastEditTime: 2024-01-05 15:16:41
  * @Description: 
  */
 
@@ -36,8 +36,8 @@ class IndexRange {
   });
 
   IndexRange.parentIndex(this.parentIndex, IndexRange other)
-      : this.firstIndex = other.firstIndex,
-        this.lastIndex = other.lastIndex;
+      : firstIndex = other.firstIndex,
+        lastIndex = other.lastIndex;
 }
 
 class ExposureStartIndex {
@@ -45,7 +45,7 @@ class ExposureStartIndex {
   final int parentIndex;
 
   // 曝光子节点下标
-  final int? itemIndex;
+  final int itemIndex;
 
   // 曝光开始时间
   final int startExposureTimeStamp;
@@ -61,9 +61,9 @@ class ExposureStartIndex {
         DateTime.fromMillisecondsSinceEpoch(startExposureTimeStamp);
     String startDateTimeString = startDateTime.toString().substring(5, 19);
 
-    String indexString = this.itemIndex.toString().padLeft(2, '0');
+    String indexString = itemIndex.toString().padLeft(2, '0');
     // return 'parentIndex=${this.parentIndex},\n下标:${indexString},曝光开始于:${startDateTimeString}';
-    return 'parentIndex=${this.parentIndex},下标:${indexString},曝光开始于:${startDateTimeString}';
+    return 'parentIndex=$parentIndex,下标:$indexString,曝光开始于:$startDateTimeString';
   }
 }
 
@@ -72,7 +72,7 @@ class ExposureEndIndex {
   final int parentIndex;
 
   // 曝光子节点下标
-  final int? itemIndex;
+  final int itemIndex;
 
   // 曝光开始时间
   final int startExposureTimeStamp;
@@ -103,9 +103,9 @@ class ExposureEndIndex {
 
     double seconds = exposureDuration.toDouble() / 1000.0;
 
-    String indexString = this.itemIndex.toString().padLeft(2, '0');
+    String indexString = itemIndex.toString().padLeft(2, '0');
 
-    return 'parentIndex=${this.parentIndex}下标:${indexString},曝光时长:${seconds}s,曝光开始于:${startDateTimeString},曝光结束于:${endDateTimeString}.';
+    return 'parentIndex=$parentIndex下标:$indexString,曝光时长:${seconds}s,曝光开始于:$startDateTimeString,曝光结束于:$endDateTimeString.';
     // return 'parentIndex=${this.parentIndex}\n下标:${indexString},曝光时长:${seconds}s\n曝光开始于:${startDateTimeString},\n曝光结束于:${endDateTimeString}.';
   }
 }

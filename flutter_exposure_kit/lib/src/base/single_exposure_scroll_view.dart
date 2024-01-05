@@ -1,11 +1,14 @@
-import 'dart:math';
-
+/*
+ * @Author: dvlproad
+ * @Date: 2022-06-01 16:12:12
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-01-05 15:22:54
+ * @Description: 
+ */
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+
 import '../model/exposure_model.dart';
 import './exposure_mixin.dart';
-
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 /// Scrollable中仅包含一个SliverList或SliverGrid等元素时使用
 /// 返回滑动中可见元素下标范围和ScrollNotification
@@ -28,7 +31,7 @@ class SingleExposureScrollView extends StatefulWidget {
     this.exposureStartCallback,
     this.exposureEndCallback,
     required this.child,
-    this.scrollDirection: Axis.vertical,
+    this.scrollDirection = Axis.vertical,
     this.scrollController,
   }) : super(key: key);
 
@@ -58,8 +61,8 @@ class _SingleExposureScrollView extends State<SingleExposureScrollView>
   @override
   Widget build(BuildContext context) {
     return NotificationListener(
-      child: widget.child,
       onNotification: _onNotification,
+      child: widget.child,
     );
   }
 
@@ -111,10 +114,10 @@ class _SingleExposureScrollView extends State<SingleExposureScrollView>
     _dispatchExposureEnd(exposureTime,
         firstIndex: indexRange.firstIndex, lastIndex: indexRange.lastIndex);
 
-    this._firstExposureIndex = indexRange.firstIndex <= indexRange.lastIndex
+    _firstExposureIndex = indexRange.firstIndex <= indexRange.lastIndex
         ? indexRange.firstIndex
         : -1;
-    this._lastExposureIndex = indexRange.lastIndex;
+    _lastExposureIndex = indexRange.lastIndex;
   }
 
   @override
@@ -130,6 +133,7 @@ class _SingleExposureScrollView extends State<SingleExposureScrollView>
     bool dispose = false,
   }) {
     if (_firstExposureIndex != -1)
+      // ignore: curly_braces_in_flow_control_structures
       for (int i = _firstExposureIndex; i <= _lastExposureIndex; i++) {
         if (dispose ||
             firstIndex > lastIndex ||

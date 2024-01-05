@@ -1,14 +1,14 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 /*
  * @Author: dvlproad
  * @Date: 2022-06-01 16:12:12
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-06-07 19:03:32
+ * @LastEditTime: 2024-01-05 15:16:10
  * @Description: 内置曝光事件的listView
  */
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import '../base/single_exposure_scrollView.dart';
+import '../base/single_exposure_scroll_view.dart';
 import '../model/exposure_model.dart';
 
 class ExposureGrid extends StatelessWidget {
@@ -27,7 +27,7 @@ class ExposureGrid extends StatelessWidget {
   // final Axis scrollDirection;
   // final ScrollController scrollController;
 
-  ExposureGrid({
+  const ExposureGrid({
     Key? key,
     required this.gridDelegate,
     this.itemCount,
@@ -54,7 +54,6 @@ class ExposureGrid extends StatelessWidget {
 
     return SingleExposureScrollView(
       scrollController: _scrollController,
-      child: child,
       scrollDirection: axis,
       scrollCallback: (
         IndexRange? _indexRange,
@@ -79,6 +78,7 @@ class ExposureGrid extends StatelessWidget {
         double abs = maxPaintExtent - paintExtent;
         return abs < 1; // 避免paintExtent与maxPaintExtent有小数点误差,如204.666和204.669
       },
+      child: child,
     );
   }
 }
