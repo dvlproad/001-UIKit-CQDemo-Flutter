@@ -31,16 +31,16 @@ abstract class AppBaseView extends LifeCycleView {
   }) : super(key: key);
 
 // @override
-// // BJHBaseViewState createState() => BJHBaseViewState();
-// BJHBaseViewState createState() => getState();
+// // AppBaseViewState createState() => AppBaseViewState();
+// AppBaseViewState createState() => getState();
 // ///子类实现
-// BJHBaseViewState getState() {
+// AppBaseViewState getState() {
 //   print('请在子类中实现');
 // }
 }
 
-//class BJHBaseViewState extends State<AppBaseView> {
-abstract class BJHBaseViewState<V extends AppBaseView>
+//class AppBaseViewState extends State<AppBaseView> {
+abstract class AppBaseViewState<V extends AppBaseView>
     extends LifeCycleViewState<V> with AutomaticKeepAliveClientMixin {
   WidgetType _currentWidgetType = WidgetType.Unknow; // 要显示的界面类型
   bool _showSelfLoading = false; // 默认不显示本视图自身的加载动画
