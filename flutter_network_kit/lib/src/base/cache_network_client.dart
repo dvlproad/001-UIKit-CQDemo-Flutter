@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_network_base/flutter_network_base.dart';
 import 'package:dio/dio.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_http_cache_cjfork/dio_http_cache_cjfork.dart';
 // network client
 import './network_client.dart';
 // cache

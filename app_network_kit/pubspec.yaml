@@ -1,6 +1,6 @@
 name: app_network_kit
 description: 利用网络环境即可完成初始化的网络库.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_network_kit
 
@@ -26,7 +26,7 @@ dependencies:
   flutter_secure_storage: ^8.0.0
 
   flutter_native_timezone: ^2.0.0
-  flutter_network_kit: ^0.0.2
+  flutter_network_kit: ^0.0.3
     # path: ../flutter_network_kit/
 
   flutter_environment_base: ^0.0.2

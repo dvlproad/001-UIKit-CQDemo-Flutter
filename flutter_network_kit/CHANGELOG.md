@@ -5,3 +5,8 @@
 ## 0.0.2
 
 * 增加网络请求时刻及时长信息.
+
+
+## 0.0.3
+
+* 为了升级 json_serializable: ^4.1.4 -- ^6.6.2 和 json_annotation: ^4.0.1 --^4.4.0 使用 dio_http_cache_cjfork

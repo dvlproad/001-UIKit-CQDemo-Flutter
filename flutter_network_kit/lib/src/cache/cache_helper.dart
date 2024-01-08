@@ -1,7 +1,7 @@
 /*
  * @Author: dvlproad
  * @Date: 2022-03-10 21:45:38
- * @LastEditTime: 2023-03-24 22:58:21
+ * @LastEditTime: 2024-01-08 17:53:16
  * @LastEditors: dvlproad
  * @Description: 网络缓存帮助类
  */
@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 // ignore: implementation_imports
 import 'package:flutter_network_base/src/url/url_util.dart';
-import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_http_cache_cjfork/dio_http_cache_cjfork.dart';
 
 // ignore: constant_identifier_names
 const DIO_CACHE_KEY_CACHE_LEVEL = "dio_cache_cache_level";
