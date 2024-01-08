@@ -1,8 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 /*
  * @Author: dvlproad
  * @Date: 2022-07-22 15:26:15
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-04-07 18:13:26
+ * @LastEditTime: 2024-01-08 15:58:33
  * @Description: 图片过度(TODO:暂未实现)
  */
 import 'package:flutter/material.dart';

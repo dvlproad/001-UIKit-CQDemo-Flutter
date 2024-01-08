@@ -1,7 +1,9 @@
 // 兼容错误的 图片视图
+// ignore_for_file: must_be_immutable
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import './data_vientiane.dart';
 
@@ -22,6 +24,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
     Duration? fadeOutDuration,
     Duration fadeInDuration = Duration.zero,
     bool gaplessPlayback = true,
+    void Function(ExtendedImageState? state, String imageUrl)? loadStateChanged,
     ProgressIndicatorBuilder? progressIndicatorBuilder,
   }) : super(
           key: key,
@@ -41,6 +44,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
           fadeOutDuration: fadeOutDuration,
           fadeInDuration: fadeInDuration,
           progressIndicatorBuilder: progressIndicatorBuilder,
+          loadStateChanged: loadStateChanged,
           gaplessPlayback: gaplessPlayback,
         );
 }
@@ -70,7 +74,10 @@ class BaseTolerantNetworkImage extends StatelessWidget {
 
   final bool? gaplessPlayback;
 
-  const BaseTolerantNetworkImage({
+  final void Function(ExtendedImageState? state, String imageUrl)?
+      loadStateChanged;
+
+  BaseTolerantNetworkImage({
     Key? key,
     this.width,
     this.height,
@@ -83,7 +90,10 @@ class BaseTolerantNetworkImage extends StatelessWidget {
     this.fadeInDuration,
     this.progressIndicatorBuilder,
     this.gaplessPlayback,
+    this.loadStateChanged,
   }) : super(key: key);
+
+  double visibleFraction = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +124,9 @@ class BaseTolerantNetworkImage extends StatelessWidget {
         gaplessPlayback: gaplessPlayback ?? true,
         // clearMemoryCacheWhenDispose: true,
         loadStateChanged: (ExtendedImageState state) {
+          if (loadStateChanged != null) {
+            loadStateChanged!(state, imageUrl);
+          }
           return FadeWidget(
             state: state,
             duration: fadeInDuration ?? const Duration(milliseconds: 500),
@@ -252,8 +265,6 @@ class _FadeWidgetState extends State<FadeWidget>
             ) ??
             Container();
     }
-    // ignore: dead_code
-    return const SizedBox.shrink();
   }
 
   @override
