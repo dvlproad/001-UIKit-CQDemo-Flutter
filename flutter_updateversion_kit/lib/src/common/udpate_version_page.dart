@@ -4,12 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 import './download_file.dart';
+import './download_util.dart';
 import './update_version_notifier.dart';
 import './flex_width_buttons.dart';
 
@@ -154,6 +152,9 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
     final screenSize = MediaQuery.of(context).size;
     double width = screenSize.width - 86;
     var _maxContentHeight = width * 1.1;
+    if (_maxContentHeight > screenSize.height * 0.35) {
+      _maxContentHeight = screenSize.height * 0.35;
+    }
     return Column(
       children: [
         Container(
@@ -193,13 +194,16 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
       bottom: 0,
       left: 0,
       right: 0,
-      child: Container(
-        height: 67,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
+      child: IgnorePointer(
+        child: Container(
+          height: 67,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Color(0x00FFFFFF), Colors.white]),
+              colors: [Color(0x00FFFFFF), Colors.white],
+            ),
+          ),
         ),
       ),
     );
@@ -294,12 +298,12 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: widget.forceUpdate
             ? [
-                _updateButton(context),
+                Expanded(child: _updateButton(context)),
               ]
             : [
-                _closeButton(context),
+                Expanded(child: _closeButton(context)),
                 Container(width: 10),
-                _updateButton(context),
+                Expanded(child: _updateButton(context)),
               ],
       ),
     );
@@ -308,8 +312,7 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
   Widget _updateButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        _updateNotifier.setIsClickAble(false);
-        _update();
+        _updateNow(context);
       },
       child: Container(
         alignment: Alignment.center,
@@ -319,7 +322,6 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
           borderRadius: BorderRadius.circular(20),
         ),
         height: 36,
-        width: 116,
         child: const Text(
           "马上更新",
           style: TextStyle(
@@ -336,8 +338,8 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
   Widget _closeButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pop(context);
         widget.notNowBlock();
+        UpdateVersionPage.isUpdateWindowShowing = false;
       },
       child: Container(
         alignment: Alignment.center,
@@ -351,7 +353,6 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
           ),
         ),
         height: 36,
-        width: 116,
         child: const Text(
           "暂不更新",
           style: TextStyle(
@@ -366,7 +367,7 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
   }
 
   // ignore: unused_element
-  Widget _downloadBtn(double w) {
+  Widget _downloadBtn(BuildContext context, double w) {
     return Consumer<UpdateNotifier>(
       builder: (context, value, child) => InkWell(
         child: Container(
@@ -380,9 +381,7 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
         onTap: () {
           if (value.isClickAble) {
             // todo 判断点击与否
-            _updateNotifier.setIsClickAble(false);
-            _update();
-            debugPrint("立即升级");
+            _updateNow(context);
           }
         },
       ),
@@ -391,14 +390,13 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
 
   /// 旧版按钮
   // ignore: unused_element
-  Widget _old_bottomMenu(double w) {
+  Widget _old_bottomMenu(BuildContext context, double w) {
     if (widget.forceUpdate == true) {
       return FlexWidthButtons(
         titles: const ['立即升级'],
         onPressed: (int buttonIndex) {
-          debugPrint("$buttonIndex");
-          _updateNotifier.setIsClickAble(false);
-          _update();
+          // debugPrint("$buttonIndex");
+          _updateNow(context);
         },
       );
     }
@@ -409,98 +407,68 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
         debugPrint("$buttonIndex");
 
         if (buttonIndex == 0) {
-          Navigator.pop(context);
           widget.closeUpdateBlock();
+          UpdateVersionPage.isUpdateWindowShowing = false;
         } else if (buttonIndex == 1) {
-          Navigator.pop(context);
-          widget.skipUpdateBlock();
+          _skipUpdate(context);
         } else if (buttonIndex == 2) {
-          _updateNotifier.setIsClickAble(false);
-          _update();
+          _updateNow(context);
         }
       },
     );
   }
 
-  void _update() async {
-    widget.updateVersionBlock();
-    return;
-    // ignore: dead_code
+  void _skipUpdate(BuildContext context) {
     String url = widget.downloadUrl;
-    // ignore: unnecessary_null_comparison
-    if (url != null || url != "") {
-      if (Platform.isIOS) {
-        _downloadIos(url);
-      } else {
-        _downloadAndroid(url);
-      }
-    }
+    DownloadUtil.skipUpdateAndroid(url);
+
+    widget.skipUpdateBlock();
+    UpdateVersionPage.isUpdateWindowShowing = false;
   }
 
-  void _downloadIos(String url) async {
-    Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  void _updateNow(BuildContext context) async {
+    _updateNotifier.setIsClickAble(false);
+    widget.updateVersionBlock();
+    debugPrint("立即升级");
+
+    String url = widget.downloadUrl;
+    if (Platform.isIOS) {
+      DownloadUtil.launchAppDownloadUrl(url);
     } else {
-      throw 'Could not launch $url';
+      DownloadUtil.downloadAndroid(
+        url,
+        forceUpdate: widget.forceUpdate,
+        version: widget.version,
+        buildNumber: widget.buildNumber,
+        /*
+        onReceiveProgress: (int progress) {
+          _updateNotifier.setProgress(progress);
+          _updateNotifier.setIsHideProgress(false);
+        },
+        done: (String savePath) {
+          // NotificationsManger.getInstance(context)
+          //     .showNotificationWithNoSound("1440更新", "下载完成", _savePath);
+          _updateNotifier.setUpdateBtn("立即升级");
+          _updateNotifier.setIsClickAble(true);
+          _updateNotifier.setIsHideProgress(true);
+
+          _downloadDialogBuild(context, savePath, "");
+        },
+        failed: () {
+          // NotificationsManger.getInstance(context)
+          //     .showNotificationWithNoSound("1440更新", "下载失败", "");
+          _updateNotifier.setProgress(0);
+          _updateNotifier.setUpdateBtn("重新下载");
+          _updateNotifier.setIsClickAble(true);
+          _updateNotifier.setIsHideProgress(true);
+        },
+        */
+      );
     }
   }
 
-  void _downloadAndroid(String url) async {
-    Directory? dir = await getExternalStorageDirectory();
-    if (dir == null) {
-      return;
-    }
-    String _storePath = dir.path.toString();
-    String _fileName = "dvlproad_" + widget.version + ".apk";
-    String _savePath = _storePath + _fileName;
-    File file = File(_savePath);
-    if (await file.exists()) {
-      _delFile(_savePath);
-    }
-    File tmpF = File(_storePath);
-    if (!await tmpF.exists()) {
-      Directory(_storePath).createSync();
-    }
-    await DownLoadFile().download(url, _savePath,
-        onReceiveProgress: (received, total) {
-      if (total != -1) {
-        var progress = (received / total * 100).floor();
-        if (progress == 0) {
-          // todo loading判断
-        }
-        debugPrint(
-            "下载已接收:${received.toString()}，总共：${total.toString()}，进度：+$progress%");
-        _updateNotifier.setProgress(progress);
-        _updateNotifier.setIsHideProgress(false);
-      }
-    }, done: () {
-      // NotificationsManger.getInstance(context)
-      //     .showNotificationWithNoSound("1440更新", "下载完成", _savePath);
-      _updateNotifier.setUpdateBtn("立即升级");
-      _updateNotifier.setIsClickAble(true);
-      _updateNotifier.setIsHideProgress(true);
-
-      _downloadDialogBuild(_savePath, "");
-    }, failed: (e) {
-      // NotificationsManger.getInstance(context)
-      //     .showNotificationWithNoSound("1440更新", "下载失败", "");
-      _updateNotifier.setProgress(0);
-      _updateNotifier.setUpdateBtn("重新下载");
-      _updateNotifier.setIsClickAble(true);
-      _updateNotifier.setIsHideProgress(true);
-    });
-  }
-
-  void _delFile(String path) {
-    Directory(path)
-        .delete(recursive: true)
-        .then((FileSystemEntity fileSystemEntity) {
-      debugPrint('删除path' + fileSystemEntity.path);
-    });
-  }
-
-  void _downloadDialogBuild(String path, String taskId) {
+  // ignore: unused_element
+  void _downloadDialogBuild(BuildContext context, String path, String taskId) {
     showDialog(
       context: context,
       builder: (context) {
@@ -514,7 +482,6 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
                 _updateNotifier.setUpdateBtn("立即升级");
                 _updateNotifier.setIsClickAble(true);
                 _updateNotifier.setIsHideProgress(true);
-                Navigator.of(context).pop();
               },
               child: const Text("取消"),
             ),
@@ -525,7 +492,6 @@ class UpdateVersionPageState extends State<UpdateVersionPage> {
                 _updateNotifier.setIsClickAble(true);
                 _updateNotifier.setIsHideProgress(true);
                 OpenFile.open(path);
-                Navigator.of(context).pop();
               },
               child: const Text("确认"),
             )

@@ -17,3 +17,6 @@ export './src/common/check_version_common_util.dart';
 export './src/common/version_base_bean.dart';
 
 export './src/common/cancel_version_page.dart';
+
+// ui
+export './src/common/udpate_version_page.dart';

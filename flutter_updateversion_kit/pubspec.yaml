@@ -14,13 +14,12 @@ dependencies:
 
   package_info_plus:  ^1.4.2
   provider: ^6.0.5
-  flutter_html: ^2.2.1
+  flutter_html: ^3.0.0-alpha.3
   url_launcher: ^6.1.5
   path_provider: ^2.0.11
-  open_file: ^3.2.1
+  open_file: ^3.3.1
   shared_preferences: ^2.0.20
   flutter_overlay_kit: ^0.0.1
-    # path: ../flutter_overlay_kit/
   dio: ^4.0.6
   
 
