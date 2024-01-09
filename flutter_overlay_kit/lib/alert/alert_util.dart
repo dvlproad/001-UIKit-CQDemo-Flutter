@@ -40,14 +40,18 @@ class AlertUtil {
         return IKnowMessageAlertView(
           title: title,
           message: message,
+          richTextWidget: richTextWidget,
           messageAlign: messageAlign,
           iKnowTitle: confirmText ?? "我知道了",
+          barrierDismissible: barrierDismissible,
+          showCloseButton: showCloseButton,
           iKnowHandle: () {
             Navigator.pop(context);
             if (iKnowHandle != null) {
               iKnowHandle();
             }
           },
+          scrollable: scrollable,
         );
       },
     );

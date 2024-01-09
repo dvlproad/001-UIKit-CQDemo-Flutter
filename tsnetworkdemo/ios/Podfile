@@ -42,7 +42,7 @@ post_install do |installer|
     deployment_target_key = 'IPHONEOS_DEPLOYMENT_TARGET'
     deployment_targets = pods_project.build_configurations.map{ |config| config.build_settings[deployment_target_key] }
     minimal_deployment_target = deployment_targets.min_by{ |version| Gem::Version.new(version) }
-    # 所得 minimal_deployment_target 为本文件顶部设置的 platform :ios, '9.0' ，下面打印的log可在执行pod install的终端上查看
+    # 所得 minimal_deployment_target 为本文件顶部设置的 platform :ios, '11.0' ，下面打印的log可在执行pod install的终端上查看
 
     puts 'Minimal deployment target is ' + minimal_deployment_target.to_s # 添加了 .to_s，将值转换为字符串
     puts 'Setting each pod deployment target to ' + minimal_deployment_target.to_s # 添加了 .to_s，将值转换为字符串

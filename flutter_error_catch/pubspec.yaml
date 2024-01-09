@@ -13,8 +13,8 @@ dependencies:
     sdk: flutter
 
   # flutter_bugly: any
-  flutter_log_with_env: #^0.0.1
-    path: ../flutter_log_with_env/
+  flutter_log_with_env: ^0.0.1
+    # path: ../flutter_log_with_env/
 
 dev_dependencies:
   flutter_test:
