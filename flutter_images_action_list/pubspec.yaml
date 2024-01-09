@@ -1,8 +1,9 @@
 name: flutter_images_action_list
-description: A new Flutter package project.
+description: 可操作的图片列表库.
 version: 0.0.1
-author:
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_images_action_list
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_images_action_list
+
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -12,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_staggered_grid_view: any
-  reorderables: any
+  flutter_staggered_grid_view: ^0.6.2
+  reorderables: ^0.6.0
 
 dev_dependencies:
   flutter_test:

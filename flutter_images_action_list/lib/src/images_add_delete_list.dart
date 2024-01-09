@@ -52,7 +52,7 @@ class CQImagesAddDeleteList extends StatefulWidget {
 
   @override
   _CQImagesAddDeleteListState createState() =>
-      new _CQImagesAddDeleteListState();
+       _CQImagesAddDeleteListState();
 }
 
 class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {

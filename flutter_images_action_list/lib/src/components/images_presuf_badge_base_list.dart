@@ -2,12 +2,12 @@
  * @Author: dvlproad
  * @Date: 2022-04-22 15:05:47
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 14:24:12
+ * @LastEditTime: 2024-01-09 18:04:08
  * @Description: 可添加头尾的列表
  */
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ImagesPreSufBadgeBaseList extends StatefulWidget {
   final double? width;
   final double? height;
@@ -34,8 +34,7 @@ class ImagesPreSufBadgeBaseList extends StatefulWidget {
     this.customGridDelegate, // null时候,默认3列，间隔10
 
     required this.imageItemBuilder,
-  })  : assert(imageItemBuilder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _ImagesPreSufBadgeBaseListState createState() =>

@@ -2,10 +2,9 @@
  * @Author: dvlproad
  * @Date: 2022-04-22 15:05:47
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 14:36:35
+ * @LastEditTime: 2024-01-09 18:04:02
  * @Description: 列表 增加 maxAddCount 设置
  */
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import './fix_grid_view.dart';
 
@@ -36,10 +35,10 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
   final double? columnSpacing;
   final double? rowSpacing;
 
-  /**< 通过每行可显示的最多列数来设置每个cell的宽度*/
+  /// < 通过每行可显示的最多列数来设置每个cell的宽度
   final int? cellWidthFromPerRowMaxShowCount;
 
-  /**< 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5) */
+  /// < 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
   final double? itemWidthHeightRatio;
 
   CQImagesPreSufBadgeList({
@@ -61,8 +60,7 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     this.cellWidthFromPerRowMaxShowCount,
     this.itemWidthHeightRatio,
     required this.imageItemBuilder,
-  })  : assert(imageItemBuilder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _CQImagesPreSufBadgeListState createState() =>
@@ -79,6 +77,7 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
   Widget build(BuildContext context) {
     int maxShowCount = widget.maxAddCount;
     bool allowAddPrefixWidget = false;
+    // ignore: unused_local_variable
     bool allowAddSuffixWidget = false;
 
     int imageCount = widget.imageCount;

@@ -1,6 +1,5 @@
-import 'dart:math';
+// ignore_for_file: unused_local_variable
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 import './images_presuf_badge_base_list.dart';
@@ -32,10 +31,10 @@ class FixGridView extends StatefulWidget {
   final double? columnSpacing;
   final double? rowSpacing;
 
-  /**< 通过每行可显示的最多列数来设置每个cell的宽度*/
+  /// < 通过每行可显示的最多列数来设置每个cell的宽度
   final int? cellWidthFromPerRowMaxShowCount;
 
-  /**< 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5) */
+  /// < 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
   final double? itemWidthHeightRatio;
 
   FixGridView({
@@ -57,8 +56,7 @@ class FixGridView extends StatefulWidget {
     required this.itemBuilder,
     this.prefixWidget,
     this.suffixWidget,
-  })  : assert(itemBuilder != null),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   FixGridViewState createState() => FixGridViewState();
