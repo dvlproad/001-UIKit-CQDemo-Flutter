@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-03-17 20:48:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-04 14:51:57
+ * @LastEditTime: 2024-01-09 10:17:02
  * @Description: 
  */
 library flutter_image_process;
@@ -11,8 +11,6 @@ library flutter_image_process;
 export './src/data_vientiane/data_vientiane.dart';
 
 export './src/images_compress_util.dart';
-
-export './src/bean/app_choose_bean.dart';
 
 export './src/bean/image_choose_bean.dart';
 export './src/bean/image_compress_bean.dart';
