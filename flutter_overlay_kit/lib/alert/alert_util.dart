@@ -2,12 +2,13 @@
  * @Author: dvlproad
  * @Date: 2022-07-25 19:38:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-04 11:29:38
+ * @LastEditTime: 2024-01-09 11:26:57
  * @Description: Alert弹窗工具类
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import '../flutter_overlay_kit_adapt.dart';
+import '../overlay_init.dart';
 import './message_alert_view.dart';
 
 // import 'package:flutter_button_base/flutter_button_base.dart';
@@ -16,7 +17,7 @@ import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 class AlertUtil {
   /// 我知道了 [context]可空
   static Future showIKnowAlert(
-    BuildContext context, {
+    BuildContext? context, {
     bool barrierDismissible = false,
     String? title,
     String? message,
@@ -54,7 +55,7 @@ class AlertUtil {
 
   // 可点击背景关闭
   static Future showTwoActionAlert({
-    required BuildContext context,
+    BuildContext? context,
     String? title,
     String? message,
     String? cancelTitle,
@@ -76,7 +77,7 @@ class AlertUtil {
 
   // 取消 + 确定
   static Future showCancelOKAlert({
-    required BuildContext context,
+    BuildContext? context,
     bool barrierDismissible = false,
     String? title,
     String? message,
@@ -124,7 +125,7 @@ class AlertUtil {
 
   // '等宽均分的 Buttons' AlertView
   static Future showFlexWidthButtonsAlert({
-    required BuildContext context,
+    BuildContext? context,
     bool barrierDismissible = false,
     String? title,
     String? message,
@@ -146,10 +147,19 @@ class AlertUtil {
   }
 
   static Future showAlert(
-    BuildContext context, {
+    BuildContext? context, {
     bool barrierDismissible = false,
     required Widget Function(BuildContext context) alertViewBulider,
   }) {
+    if (context == null && OverlayInit.overlayContextNullHandle != null) {
+      context = OverlayInit.overlayContextNullHandle!();
+    }
+
+    if (context == null) {
+      debugPrint('🚗🚗🚗 alert context is null');
+      return Future(() => false);
+    }
+
     return showDialog(
       context: context,
       barrierDismissible: barrierDismissible,
@@ -157,7 +167,7 @@ class AlertUtil {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          alertViewBulider(context),
+          alertViewBulider(context!),
         ],
       ),
     );
@@ -206,7 +216,7 @@ class AlertUtil {
   }
 
   static Future showAddressAlert({
-    required BuildContext context,
+    BuildContext? context,
     bool barrierDismissible = false,
     required String limitArea,
   }) {
