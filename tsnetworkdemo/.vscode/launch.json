@@ -1,0 +1,32 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    // [以调试 (debug)、性能 (profile) 或发布 (release) 模式运行应用](https://flutter.cn/docs/development/tools/vs-code)
+    // 运行方式2：终端直接运行：flutter run --dart-define-from-file=../lib/test1.json
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "tsnetworkdemo",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "args":[
+                // "--no-sound-null-safety",
+                "--dart-define-from-file=../lib/test1.json",// 测试1
+            ],
+        },
+        {
+            "name": "tsnetworkdemo (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "tsnetworkdemo (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

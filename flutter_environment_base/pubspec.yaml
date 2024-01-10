@@ -1,6 +1,6 @@
 name: flutter_environment_base
 description: 各种环境基础管理库(core+kit).
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_base
 

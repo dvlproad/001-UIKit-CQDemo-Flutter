@@ -8,6 +8,8 @@
 // 创建一个单例的Manager类
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 import './network_page_data_cache.dart';
 import './network_page_data_bean.dart';
 export './network_page_data_bean.dart';
@@ -17,7 +19,7 @@ class NetworkPageDataManager {
   Completer initCompleter = Completer<String>();
 
   List<TSEnvNetworkModel> _networkModels = [];
-  late TSEnvNetworkModel originNetworkModel;
+  TSEnvNetworkModel originNetworkModel = TSEnvNetworkModel.none();
   TSEnvNetworkModel _selectedNetworkModel = TSEnvNetworkModel.none();
 
   List<TSEnvNetworkModel> get networkModels => _networkModels;
@@ -93,6 +95,11 @@ class NetworkPageDataManager {
         originNetworkModel = networkModel;
       }
     }
+
+    if (originNetworkModel.envId == TSEnvNetworkModel.none().envId) {
+      debugPrint("🚗🚗🚗未找到匹配 $defaultNetworkId 的网络模型");
+    }
+    // debugPrint("🚗🚗🚗找到的网络模型为 ${originNetworkModel.envId}");
 
     initCompleter.complete('NetworkPageDataManager:初始化完成，此时才可以进行实际环境获取');
     print('NetworkPageDataManager:初始化完成，此时才可以进行实际环境获取');
