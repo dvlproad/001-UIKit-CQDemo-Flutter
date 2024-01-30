@@ -3,7 +3,7 @@
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
  * @LastEditTime: 2023-09-13 17:05:01
- * @Description: url操作的方法(从url中获取参数、对url添加参数)
+ * @Description: 
  */
 import 'dart:convert';
 
@@ -23,6 +23,50 @@ class WebUrlUtil {
       }
     }
     return boolValue;
+  }
+
+  static String? getIdFromArguments(
+      Map<String, dynamic> arguments, String key) {
+    if (arguments[key] == null) {
+      return null;
+    }
+
+    var element = arguments[key];
+    if (element is String) {
+      return element;
+    }
+
+    return element.toString(); // 避免后台传int
+  }
+
+  // 从 '[1, 2, 3]' 中获取id数组
+  static List<String>? getIdsFromArguments(
+      Map<String, dynamic> arguments, String key) {
+    if (arguments[key] == null) {
+      return null;
+    }
+
+    List taskIdMaps = [];
+    if (arguments[key] is List) {
+      taskIdMaps = arguments[key];
+    } else if (arguments[key] is String) {
+      String pTaskIds = arguments[key];
+      if (pTaskIds.startsWith("[") && pTaskIds.endsWith("]")) {
+        pTaskIds = pTaskIds.substring(1, pTaskIds.length - 1);
+      }
+      taskIdMaps = pTaskIds.split(",");
+    }
+
+    List<String> taskIds = [];
+    for (var element in taskIdMaps) {
+      if (element is int) {
+        taskIds.add(element.toString()); // 避免后台传int
+      } else {
+        taskIds.add(element);
+      }
+    }
+
+    return taskIds;
   }
 
   static String addH5CustomParams(

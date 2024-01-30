@@ -61,6 +61,8 @@ extension List2StringExtension on List {
           result += "\n$indentationStr" "\"$temp\",";
         } else if (value is List) {
           result += value.listToStructureString(indentation: indentation + 2);
+        } else if (value is int) {
+          result += "\n$indentationStr" "$value,";
         } else {
           result += "\n$indentationStr" "\"$value\",";
         }
