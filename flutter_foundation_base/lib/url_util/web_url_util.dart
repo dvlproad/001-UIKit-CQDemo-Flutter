@@ -48,7 +48,7 @@ class WebUrlUtil {
     return paramMap;
   }
 
-  /// 获取指定web地址的所有参数
+  /// 将字符串value按需求转成 string 或者 object(如果可以转的情况下)
   ///
   /// [value]：要处理的参数的值。
   ///
@@ -57,7 +57,7 @@ class WebUrlUtil {
   /// 返回参数值的处理结果。
   static dynamic getValueFromWebParamValueString(
     String value, {
-    bool paramToObjectIfOK = false,
+    required bool paramToObjectIfOK,
   }) {
     try {
       value = Uri.decodeComponent(value);
