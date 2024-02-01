@@ -15,3 +15,7 @@
 
 * 修复int值输出为string形式
 * 增加从web的url中提取id和id数组的方法
+
+## 0.0.5
+
+* 使用try catch 兼容web 的url 的数据异常

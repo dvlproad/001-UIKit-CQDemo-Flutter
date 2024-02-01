@@ -25,7 +25,7 @@ class WebUrlUtil {
     return boolValue;
   }
 
-  static String? getIdFromArguments(
+  static String? getStringFromArguments(
       Map<String, dynamic> arguments, String key) {
     if (arguments[key] == null) {
       return null;
@@ -39,8 +39,34 @@ class WebUrlUtil {
     return element.toString(); // 避免后台传int
   }
 
-  // 从 '[1, 2, 3]' 中获取id数组
-  static List<String>? getIdsFromArguments(
+  static Map? getMapFromArguments(Map<String, dynamic> arguments, String key) {
+    if (arguments[key] == null) {
+      return null;
+    }
+
+    var element = arguments[key];
+    if (element is String) {
+      try {
+        element = Uri.decodeComponent(element); // 避免之前已解码过
+      } catch (e) {
+        //
+      }
+
+      try {
+        element = jsonDecode(element);
+      } catch (e) {
+        //
+      }
+
+      return element;
+    } else if (element is Map) {
+      return element;
+    } else {
+      return null;
+    }
+  }
+
+  static List<String>? getStringListFromArguments(
       Map<String, dynamic> arguments, String key) {
     if (arguments[key] == null) {
       return null;
@@ -67,6 +93,32 @@ class WebUrlUtil {
     }
 
     return taskIds;
+  }
+
+  static List? getListFromArguments(
+      Map<String, dynamic> arguments, String key) {
+    if (arguments[key] == null) {
+      return null;
+    }
+
+    List elements = [];
+    if (arguments[key] is List) {
+      elements = arguments[key];
+    } else if (arguments[key] is String) {
+      String elementsString = arguments[key];
+      try {
+        elementsString = Uri.decodeComponent(elementsString);
+      } catch (e) {
+        //
+      }
+
+      try {
+        elements = jsonDecode(elementsString);
+      } catch (e) {
+        //
+      }
+    }
+    return elements;
   }
 
   static String addH5CustomParams(
@@ -114,7 +166,12 @@ class WebUrlUtil {
       if (paramKeyValueComponents.length == 2) {
         String key = paramKeyValueComponents[0];
         String value = paramKeyValueComponents[1];
-        value = Uri.decodeComponent(value);
+        try {
+          value = Uri.decodeComponent(value);
+        } catch (e) {
+          //
+        }
+
         arguments[key] = value;
       }
     }
