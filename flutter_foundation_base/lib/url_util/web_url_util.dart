@@ -7,7 +7,78 @@
  */
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 class WebUrlUtil {
+  /// 获取指定web地址的所有参数
+  ///
+  /// [webUrl]：要获取参数的地址。
+  ///
+  /// [paramToObjectIfOK]：一个布尔值，指示是否将参数值转换为对象（如果可能）。默认为false。
+  ///
+  /// 返回包含地址参数的Map对象，其中参数名作为键，参数值作为值。
+  ///
+  /// 例如：https://www.baidu.com/?a=1&b=2
+  /// 返回：{a: 1, b: 2}
+  static Map<String, dynamic>? getAllParamsFromWebUrl(
+    String webUrl, {
+    bool paramToObjectIfOK = false,
+  }) {
+    var paramStartIndex = webUrl.indexOf('?');
+    if (paramStartIndex == -1) {
+      return null;
+    }
+
+    Map<String, dynamic> paramMap = {};
+    var str = webUrl.substring(paramStartIndex + 1);
+    var strs = str.split('&');
+
+    for (var i = 0; i < strs.length; i++) {
+      var keyValueComponent = strs[i].split('=');
+      var key = keyValueComponent[0];
+      String value = keyValueComponent[1];
+      dynamic element = getValueFromWebParamValueString(
+        value,
+        paramToObjectIfOK: paramToObjectIfOK,
+      );
+
+      paramMap[key] = element;
+    }
+
+    return paramMap;
+  }
+
+  /// 获取指定web地址的所有参数
+  ///
+  /// [value]：要处理的参数的值。
+  ///
+  /// [paramToObjectIfOK]：一个布尔值，指示是否将参数值转换为对象（如果可能）。默认为false。
+  ///
+  /// 返回参数值的处理结果。
+  static dynamic getValueFromWebParamValueString(
+    String value, {
+    bool paramToObjectIfOK = false,
+  }) {
+    try {
+      value = Uri.decodeComponent(value);
+    } catch (error) {
+      // value = value;
+      debugPrint("不用解码");
+    }
+
+    if (paramToObjectIfOK != true) {
+      return value;
+    }
+
+    dynamic element; // 如果 json.decode 成功，返回类型会变化，所以需另声明变量
+    try {
+      element = json.decode(value);
+    } catch (error) {
+      element = value;
+    }
+    return element;
+  }
+
   static bool? getBoolFromArguments(
       Map<String, dynamic> arguments, String key) {
     bool? boolValue;
