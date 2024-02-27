@@ -1,98 +1,41 @@
-// ignore_for_file: unnecessary_getters_setters
-
 /*
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-04 14:52:26
+ * @LastEditTime: 2024-02-27 13:57:31
  * @Description: 图片选择器的数据模型
  */
 
 import 'dart:ui' show Size;
 import 'dart:async';
-import 'dart:io';
 
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 
-import '../image_compress_util/entity_image_compress_util.dart';
-import '../image_compress_util/entity_video_thumb_util.dart';
-import '../image_compress_util/entity_info_getter.dart';
+import '../asset_entity_compress_protocol.dart';
+import '../asset_entity_frame_protocol.dart';
+import '../get_image_info_util/asset_entity_size_util.dart';
+import '../get_image_info_util/image_provider_size_util.dart';
+import '../get_image_info_util/media_type_util.dart';
 
-import './image_compress_bean.dart';
-import './video_compress_bean.dart';
 import './base_compress_bean.dart';
 import './image_info_bean.dart';
 
 // ImageProvider
-import 'package:flutter/material.dart' show ImageProvider, Image;
+import 'package:flutter/material.dart' show ImageProvider;
 import 'package:photo_manager/photo_manager.dart'
     show AssetEntity, AssetEntityImageProvider, AssetType;
 
 import 'package:extended_image/extended_image.dart';
-
-UploadMediaType getMediaType(String localPathOrNetworkUrl) {
-  // if (localPathOrNetworkUrl == null) {
-  //   throw Exception("localPath 不能为空");
-  // }
-  String fileExtensionType = localPathOrNetworkUrl.split('.').last;
-  fileExtensionType = fileExtensionType.toLowerCase();
-
-  UploadMediaType mediaType = UploadMediaType.unkonw;
-  List<String> imageTypes = [
-    'jpg',
-    'jpeg',
-    'png',
-    'gif',
-    "webp",
-    "avif",
-  ];
-  List<String> videoTypes = [
-    'mp4',
-    'mov',
-    'm4v',
-    'rm',
-    'wmv',
-    'asf',
-    'asx',
-    'avi',
-    'dat',
-    'mkv',
-    'flv',
-    'vob',
-    'm3u8',
-  ];
-  List<String> audioTypes = ['aar'];
-
-  if (imageTypes.contains(fileExtensionType) == true) {
-    mediaType = UploadMediaType.image;
-  } else if (videoTypes.contains(fileExtensionType) == true) {
-    mediaType = UploadMediaType.video;
-  } else if (audioTypes.contains(fileExtensionType) == true) {
-    mediaType = UploadMediaType.audio;
-  } else {
-    mediaType = UploadMediaType.unkonw;
-  }
-  return mediaType;
-}
-
-enum UploadMediaType {
-  unkonw,
-  image,
-  audio,
-  video,
-  imlog,
-  appLog,
-  livelog,
-}
 
 enum UploadMediaScene {
   unkonw,
   selfie, //自拍
 }
 
-class ImageChooseBean {
+class ImageChooseBean
+    with AssetEntityCompressProtocol, AssetEntityFrameProtocol {
   String? networkUrl; // 图片的网络地址
   AssetEntity? assetEntity;
 
@@ -118,37 +61,11 @@ class ImageChooseBean {
   }) {
     if (assetEntity != null && assetEntity!.type == AssetType.video) {
       videoDuration = assetEntity!.duration.toDouble();
-      width = _getRealWidthForAssetEntity(assetEntity!);
-      height = _getRealHeightForAssetEntity(assetEntity!);
+      width = AssetEntitySizeUtil.getRealWidthForAssetEntity(assetEntity!);
+      height = AssetEntitySizeUtil.getRealHeightForAssetEntity(assetEntity!);
 
       assetEntityCompleter.complete(true);
     }
-  }
-
-  int _getRealWidthForAssetEntity(AssetEntity assetEntity) {
-    int width = assetEntity.width;
-
-    bool isLandscape =
-        assetEntity.orientation == 90 || assetEntity.orientation == 270;
-    if (Platform.isAndroid && !isLandscape) {
-      // 注意:安卓宽高有时候会相反，有些机子又是正确的，所以使用不传的方案，让后台去腾讯云判断
-      // width = assetEntity.height;
-    }
-
-    return width;
-  }
-
-  int _getRealHeightForAssetEntity(AssetEntity assetEntity) {
-    int height = assetEntity.height;
-
-    bool isLandscape =
-        assetEntity.orientation == 90 || assetEntity.orientation == 270;
-    if (Platform.isAndroid && !isLandscape) {
-      // 注意:安卓宽高有时候会相反，有些机子又是正确的，所以使用不传的方案，让后台去腾讯云判断
-      // height = assetEntity.width;
-    }
-
-    return height;
   }
 
   ImageChooseBean.fromJson(Map<String, dynamic> json) {
@@ -160,13 +77,20 @@ class ImageChooseBean {
     networkUrl = json["networkUrl"];
     networkThumbnailUrl = json["networkThumbnailUrl"];
 
-    if (json["compressImageBean"] != null) {
-      compressImageBean = ImageCompressBean.fromJson(json["compressImageBean"]);
+    if (json["compressedImage"] != null) {
+      imageCompressResponseBean =
+          CompressResponseBean.fromJson(json["compressedImage"]);
+    }
+    if (json["compressedVideo"] != null) {
+      videoCompressResponseBean =
+          CompressResponseBean.fromJson(json["compressedVideo"]);
     }
 
-    if (json["compressVideoBean"] != null) {
-      compressVideoBean = VideoCompressBean.fromJson(json["compressVideoBean"]);
+    if (json["videoThumb"] != null) {
+      videoThumbResponseBean =
+          CompressResponseBean.fromJson(json["videoThumb"]);
     }
+
     Map<String, dynamic>? asset = json["assetEntity"];
     if (asset != null) {
       assetEntity = AssetEntity(
@@ -206,20 +130,25 @@ class ImageChooseBean {
     data['networkThumbnailUrl'] = networkThumbnailUrl;
     data['networkUrl'] = networkUrl;
 
-    if (compressImageBean != null) {
-      data["compressImageBean"] = compressImageBean!.toJson();
+    if (imageCompressResponseBean != null) {
+      data["compressedImage"] = imageCompressResponseBean!.toJson();
     }
 
-    if (compressVideoBean != null) {
-      data["compressVideoBean"] = compressVideoBean!.toJson();
+    if (videoCompressResponseBean != null) {
+      data["compressedVideo"] = videoCompressResponseBean!.toJson();
+    }
+
+    if (videoThumbResponseBean != null) {
+      data["videoThumb"] = videoThumbResponseBean!.toJson();
     }
 
     if (assetEntity != null) {
       Map<String, dynamic> asset = HashMap();
       asset["id"] = assetEntity!.id;
       asset["typeInt"] = assetEntity!.typeInt;
-      int width = _getRealWidthForAssetEntity(assetEntity!);
-      int height = _getRealHeightForAssetEntity(assetEntity!);
+      int width = AssetEntitySizeUtil.getRealWidthForAssetEntity(assetEntity!);
+      int height =
+          AssetEntitySizeUtil.getRealHeightForAssetEntity(assetEntity!);
       asset["width"] = width;
       asset["height"] = height;
       asset["duration"] = assetEntity!.duration;
@@ -242,14 +171,10 @@ class ImageChooseBean {
   /// 获取图片
   ImageProvider? get imageProvider {
     ImageProvider? imageProvider;
-    if (compressImageBean != null && compressImageBean!.compressPath != null) {
-      String imagePath = compressImageBean!.compressPath!;
-      final file = File(imagePath);
-      if (file.existsSync()) {
-        Image image = Image.file(file);
-        imageProvider = image.image;
-        return imageProvider;
-      }
+
+    if (compressedImageOrVideoThumbnailProvider != null) {
+      imageProvider = compressedImageOrVideoThumbnailProvider;
+      return imageProvider;
     }
     if (assetEntity != null) {
       imageProvider = AssetEntityImageProvider(
@@ -264,32 +189,19 @@ class ImageChooseBean {
   }
 
   UploadMediaType get mediaType {
-    if (assetEntity != null) {
-      AssetType assetType = assetEntity!.type;
-      if (assetType == AssetType.video) {
-        return UploadMediaType.video;
-      } else if (assetType == AssetType.image) {
-        return UploadMediaType.image;
-      } else {
-        return UploadMediaType.unkonw;
-      }
+    if (compressAssetEntity != null) {
+      return MediaTypeUtil.getByAssetEntity(compressAssetEntity!);
+    } else if (assetEntity != null) {
+      return MediaTypeUtil.getByAssetEntity(assetEntity!);
     } else if (networkUrl != null) {
-      UploadMediaType mediaType = getMediaType(networkUrl!);
+      UploadMediaType mediaType = MediaTypeUtil.getByPathOrUrl(networkUrl!);
       return mediaType;
     } else {
-      if (compressVideoBean != null) {
-        return UploadMediaType.video;
-      } else if (compressImageBean != null) {
-        UploadMediaType mediaType =
-            getMediaType(compressImageBean!.originPathOrUrl);
-        return mediaType;
-      } else {
-        return UploadMediaType.unkonw;
-      }
+      return UploadMediaType.unkonw;
     }
   }
 
-  Size get lastShowSize {
+  Future<Size?> get lastShowSize async {
     late int uploadImageWidth;
     late int uploadImageHeight;
 
@@ -297,278 +209,39 @@ class ImageChooseBean {
     if (width != null && height != null) {
       uploadImageWidth = width!;
       uploadImageHeight = height!;
-    } else if (compressImageBean != null &&
-        compressImageBean!.width != null &&
-        compressImageBean!.height != null) {
+    } else if (compressedImageOrVideoThumbnailProvider != null) {
       // 本地缩略图
-      uploadImageWidth = compressImageBean!.width!;
-      uploadImageHeight = compressImageBean!.height!;
+      Size imageSize = await ImageProviderSizeUtil.getWidthAndHeight(
+          compressedImageOrVideoThumbnailProvider!);
+      return imageSize;
     } else if (assetEntity != null) {
       uploadImageWidth = assetEntity!.width;
       uploadImageHeight = assetEntity!.height;
-    } else {
-      uploadImageWidth = 103;
-      uploadImageHeight = 103;
     }
 
     return Size(uploadImageWidth.toDouble(), uploadImageHeight.toDouble());
   }
 
-  Future<String?> lastUploadThumbnailVideoPath() async {
-    // 草稿里的图片已有压缩数据
-    if (_compressVideoBean != null &&
-        _compressVideoBean!.compressInfoProcess ==
-            CompressInfoProcess.finishAll) {
-      return _compressVideoBean!.compressPath;
-    }
-
-    await _compressCompleter.future; // 优化压缩流程，上传时候未完成压缩会自动等待，并在完成压缩后，自动继续
-    if (mediaType == UploadMediaType.video) {
-      //
-    } else {
-      //
-    }
-
-    if (_compressVideoBean == null) {
-      return null; // 获取缩略图失败(发现获取安卓视频缩略图失败过)
-    }
-
-    return _compressVideoBean!.compressPath;
-  }
-
-  Future<String?> lastUploadThumbnailImagePath() async {
-    _log("image choose bean hashCode = $hashCode");
-
-    // 草稿里的图片已有压缩数据
-    if (_compressImageBean != null &&
-        _compressImageBean!.compressInfoProcess ==
-            CompressInfoProcess.finishAll) {
-      return _compressImageBean!.compressPath;
-    }
-
-    await _compressCompleter.future; // 优化压缩流程，上传时候未完成压缩会自动等待，并在完成压缩后，自动继续
-    if (mediaType == UploadMediaType.video) {
-      //
-    } else {
-      //
-    }
-
-    if (_compressImageBean == null) {
-      return null; // 获取缩略图失败(发现获取安卓视频缩略图失败过)
-    }
-
-    return _compressImageBean!.compressPath;
-  }
-
-  // 图片压缩后的信息(本地路径、宽、高)
-  ImageCompressBean? get compressImageBean => _compressImageBean;
-  ImageCompressBean? _compressImageBean;
-
-  set compressImageBean(ImageCompressBean? compressImageBean) {
-    _compressImageBean = compressImageBean;
-  }
-
-  // 视频压缩后的信息(本地路径、宽、高)
-  VideoCompressBean? get compressVideoBean => _compressVideoBean;
-  VideoCompressBean? _compressVideoBean;
-  CompressResultType compressVideoResultType = CompressResultType.unknow;
-
-  set compressVideoBean(VideoCompressBean? compressVideoBean) {
-    _compressVideoBean = compressVideoBean;
-  }
-
-  final Completer _compressCompleter = Completer<String>();
-
   Future checkAndBeginCompressAssetEntity({bool force = false}) async {
-    _log("image choose bean hashCode111 = $hashCode");
-    if ((_compressImageBean != null || _compressVideoBean != null) && !force) {
-      // 已经开始异步压缩、异步请求宽高等的时候，直接返回，即使未结束，也慢慢等待，防止重复创建
+    if (assetEntity == null) {
+      debugPrint("该资源不是来源于相册(即可能是网络)");
       return;
     }
-
-    if (assetEntity != null) {
-      if (assetEntity!.type == AssetType.video) {
-        File? videoFile =
-            await AssetEntityInfoGetter.getAssetEntityFile(assetEntity!);
-        if (videoFile == null) {
-          _log("file null 了");
-          return;
-        }
-        CompressResponseBean compressResponseBean =
-            await AssetEntityVideoThumbUtil.getVideoComppressBean(
-                videoFile, assetEntity!);
-        _compressVideoBean = compressResponseBean.reslut;
-        compressVideoResultType = compressResponseBean.type;
-        try {
-          _compressImageBean =
-              await AssetEntityVideoThumbUtil.getVideoThumbnailBean(videoFile);
-        } catch (err) {
-          _log("Error:获取视频缩略图失败");
-        }
-      } else {
-        _compressImageBean =
-            await AssetEntityImageCompressUtil.getCompressImageBean(
-                assetEntity!);
-      }
-      if (!_compressCompleter.isCompleted) {
-        _compressCompleter.complete('压缩:压缩完成，此时才可以进行上传压缩视频及其缩略图、或图片请求');
-      }
-      if (_compressCompleter.isCompleted != true) {
-        _log('_compressCompleter.isCompleted');
-      }
-    }
+    checkAndBeginCompress(assetEntity!);
   }
 
   Future reCompressAssetEntity() async {
     if (networkUrl != null) {
       return;
     }
-    if (assetEntity != null) {
-      if (assetEntity!.type == AssetType.video) {
-        if (_compressVideoBean != null &&
-            _compressVideoBean!.compressPath != null) {
-          bool exist = await File(_compressVideoBean!.compressPath!).exists();
-          if (exist) {
-            return;
-          }
-        }
-        File? videoFile =
-            await AssetEntityInfoGetter.getAssetEntityFile(assetEntity!);
-        if (videoFile == null) {
-          _log("file null 了");
-          return;
-        }
-        CompressResponseBean compressResponseBean =
-            await AssetEntityVideoThumbUtil.getVideoComppressBean(
-                videoFile, assetEntity!);
-        _compressVideoBean = compressResponseBean.reslut;
-        compressVideoResultType = compressResponseBean.type;
-        try {
-          _compressImageBean =
-              await AssetEntityVideoThumbUtil.getVideoThumbnailBean(videoFile);
-        } catch (err) {
-          _log("Error:获取视频缩略图失败");
-        }
-      } else {
-        if (_compressImageBean != null &&
-            _compressImageBean!.compressPath != null) {
-          bool exist = await File(_compressImageBean!.compressPath!).exists();
-          if (exist) {
-            return;
-          }
-        }
-        _compressImageBean =
-            await AssetEntityImageCompressUtil.getCompressImageBean(
-                assetEntity!);
-      }
-      if (!_compressCompleter.isCompleted) {
-        _compressCompleter.complete('压缩:压缩完成，此时才可以进行上传压缩视频及其缩略图、或图片请求');
-      }
-      if (_compressCompleter.isCompleted != true) {
-        _log('_compressCompleter.isCompleted');
-      }
-    }
+    checkAndBeginCompressAssetEntity();
   }
 
-  /// 视频帧获取
-  bool isGettingVideoFrames = false;
-
-  List<ImageCompressBean>? _videoFrameBeans;
-
-  Future<List<ImageCompressBean>> getVideoFrameBeans({
-    int maxFrameCount = 6, // 因为编辑视频帧时，最多只能显示6张视频帧
-  }) async {
-    if (_videoFrameBeans != null && _videoFrameBeans!.isNotEmpty) {
-      return _videoFrameBeans ?? [];
-    }
-    File? file;
-    if (assetEntity != null) {
-      file = await assetEntity!.file;
-    } else {
-      file = File(compressVideoBean?.compressPath ??
-          compressVideoBean?.originPath ??
-          "");
-    }
-    _videoFrameBeans = await AssetEntityVideoThumbUtil.getVideoFrameBeans(
-      file!,
-      assetEntity: assetEntity,
-      maxFrameCount: maxFrameCount,
-    );
-    return _videoFrameBeans ?? [];
-  }
-
-  final Completer _videoFramesCompleter = Completer<String>();
-
-  Future<List<ImageCompressBean>?> checkAndBeginGetVideoFrames() async {
-    _log("image choose bean hashCode111 = $hashCode");
-
-    if (assetEntity == null || assetEntity!.type != AssetType.video) {
-      return null;
-    }
-
-    File? videoFile =
-        await AssetEntityInfoGetter.getAssetEntityFile(assetEntity!);
-    if (videoFile == null) {
-      _log("file null 了");
-      return null;
-    }
-
-    if (_videoFrameBeans != null) {
-      // 已经开始异步压缩、异步请求宽高等的时候，直接返回，即使未结束，也慢慢等待，防止重复创建
-      return null;
-    }
-
-    try {
-      _log("视频帧:获取视频帧列表开始");
-      isGettingVideoFrames = true;
-      _videoFrameBeans = await AssetEntityVideoThumbUtil.getVideoFrameBeans(
-        videoFile,
-        assetEntity: assetEntity,
-        maxFrameCount: 6, // 因为编辑视频帧时，最多只能显示6张视频帧
-      );
-      isGettingVideoFrames = false;
-      _log("视频帧:获取视频帧列表完成");
-    } catch (err) {
-      _log("Error:获取视频帧列表失败");
-    }
-
-    _videoFramesCompleter.complete('视频帧列表:获取视频帧列表完成，此时才可以进行');
-    if (_videoFramesCompleter.isCompleted != true) {
-      _log('_compressCompleter.isCompleted');
-    }
-    return _videoFrameBeans;
-  }
-
-  /*
-  void checkAndBeginCompressAppLocalPath() {
-    print("image choose bean hashCode111 = ${this.hashCode}");
-    if (_compressImageBean != null) {
-      // 已经开始异步压缩、异步请求宽高等的时候，直接返回，即使未结束，也慢慢等待，防止重复创建
+  Future<void> checkAndBeginGetVideoFrames() async {
+    if (assetEntity == null) {
+      debugPrint("该资源不是来源于相册(即可能是网络)");
       return;
     }
-
-    _compressImageBean = ImageCompressBean();
-    _compressImageBean.infoBean = ImageInfoBean();
-    _compressImageBean.infoBean.localPath = assetEntityPath;
-    if (assetEntity != null) {
-      AssetEntityImageCompressUtil.getCompressImageBean(assetEntity)
-          .then((ImageCompressBean imageCompressBean) {
-        _compressImageBean = imageCompressBean;
-
-        print("image choose bean hashCode222 = ${this.hashCode}");
-        if (_compressImageBean == null) {}
-
-        // _compressCompleter.complete('图片:本地压缩并获取宽高完成，此时才可以进行上传请求');
-        // if (_compressCompleter.isCompleted != true) {
-        //   print('_compressCompleter.isCompleted');
-        // }
-      });
-    }
-  }
-  */
-
-  void _log(String message) {
-    String dateTimeString = DateTime.now().toString().substring(0, 19);
-    debugPrint('$dateTimeString:$message');
+    checkAndBeginGetAssetEntityVideoFrames(assetEntity!);
   }
 }

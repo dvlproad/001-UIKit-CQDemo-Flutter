@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-05-09 19:06:15
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-05-11 10:53:08
+ * @LastEditTime: 2024-02-27 13:37:56
  * @Description: 
  */
 import 'dart:io' show File;
@@ -10,8 +10,13 @@ import 'dart:async';
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-class GetImageInfoUtil {
-  static ImageProvider getImageProvider(String imageUrlOrPath) {
+class ImageProviderSizeUtil {
+  static Future<Size> getImageWidthAndHeight(String imageUrlOrPath) async {
+    ImageProvider imageProvider = _getImageProvider(imageUrlOrPath);
+    return getWidthAndHeight(imageProvider);
+  }
+
+  static ImageProvider _getImageProvider(String imageUrlOrPath) {
     Image image;
     if (imageUrlOrPath.startsWith('http')) {
       image = Image.network(imageUrlOrPath);
@@ -25,15 +30,9 @@ class GetImageInfoUtil {
     return imageProvider;
   }
 
-  static Future<Map<String, dynamic>> getImageWidthAndHeight(
-      String imageUrlOrPath) async {
-    ImageProvider imageProvider = getImageProvider(imageUrlOrPath);
-    return getWidthAndHeight(imageProvider);
-  }
-
-  static Future<Map<String, dynamic>> getWidthAndHeight(
+  static Future<Size> getWidthAndHeight(
       ImageProvider<Object> imageProvider) async {
-    Completer<Map<String, dynamic>> completer = Completer();
+    Completer<Size> completer = Completer();
 
     imageProvider.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
@@ -41,12 +40,9 @@ class GetImageInfoUtil {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
           debugPrint('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          Size imageSize = Size(imageWidth.toDouble(), imageHeight.toDouble());
 
-          Map<String, dynamic> imageWithHeight = {
-            "width": imageWidth,
-            "height": imageHeight,
-          };
-          completer.complete(imageWithHeight);
+          completer.complete(imageSize);
         },
       ),
     );

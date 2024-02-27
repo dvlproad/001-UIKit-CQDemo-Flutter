@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-11-15 16:23:10
+ * @LastEditTime: 2024-02-27 14:02:54
  * @Description: 视频是否可以使用的检查(是否会太长或者太大)
  */
 
@@ -71,7 +71,7 @@ class VideoCheckResponseBean {
   }
 }
 
-class AssetEntityVideoCheckUtil {
+class AppVideoCompressCheckUtil {
   static Future<VideoCheckResponseBean> getVideoCheckResponseBean(
     File file,
   ) async {

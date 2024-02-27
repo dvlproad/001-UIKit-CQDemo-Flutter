@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-28 12:04:18
+ * @LastEditTime: 2024-02-27 11:13:55
  * @Description: 图片选择器的数据模型
  */
 
@@ -28,13 +28,14 @@ CompressInfoProcess compressInfoProcessFromString(String value) {
   ];
 
   return values.firstWhere((type) {
-    return type.toString().split('.').last == value;
+    return type.toString().split(".").last == value;
   });
 }
 
 enum CompressResultType {
   unknow, //未知
   success_get, // 成功因为获取到了缩略视频
+  success_get_by_compressBefore,
   success_useOrigin, // 成功因为使用了原图
   failure_tooBig, // 太大不压缩
   failure_tooLong, // 太长不压缩
@@ -55,7 +56,7 @@ CompressResultType compressResultTypeFromString(String value) {
   ];
 
   return values.firstWhere((type) {
-    return type.toString().split('.').last == value;
+    return type.toString().split(".").last == value;
   });
 }
 
@@ -72,25 +73,30 @@ class CompressResponseBean {
   });
 
   static CompressResponseBean fromJson(dynamic json) {
-    String message = json['message'] ?? '';
+    String message = json["message"] ?? "";
 
     CompressResultType type = CompressResultType.unknow;
-    if (json['type'] != null) {
-      type = compressResultTypeFromString(json['type']);
+    if (json["type"] != null) {
+      type = compressResultTypeFromString(json["type"]);
     }
+
+    dynamic reslut = json["result"];
 
     return CompressResponseBean(
       message: message,
       type: type,
+      reslut: reslut,
     );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> map = {};
 
-    map['message'] = message;
+    map["message"] = message;
 
-    map['type'] = type.toString().split('.').last;
+    map["type"] = type.toString().split(".").last;
+
+    map["result"] = reslut;
 
     return map;
   }

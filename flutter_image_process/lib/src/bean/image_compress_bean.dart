@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 18:45:57
+ * @LastEditTime: 2024-02-27 09:37:32
  * @Description: 图片选择器的数据模型
  */
 import './base_compress_bean.dart';

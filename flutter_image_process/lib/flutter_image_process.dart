@@ -23,7 +23,7 @@ export './src/bean/base_compress_bean.dart'
 export './src/voice/voice_base_bean.dart';
 
 // util-compress
-export './src/image_compress_util/entity_info_getter.dart';
-export './src/image_compress_util/entity_video_thumb_util.dart';
-export './src/image_compress_util/entity_video_check_util.dart';
-export './src/image_compress_util/entity_image_compress_util.dart';
+export 'src/get_image_info_util/asset_entity_info_getter.dart';
+export 'src/image_compress_util/app_video_frame_util.dart';
+export 'src/image_compress_util/app_video_compress_check_util.dart';
+export 'src/image_compress_util/app_image_compress_util.dart';
