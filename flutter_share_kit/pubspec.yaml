@@ -1,7 +1,9 @@
 name: flutter_share_kit
-description: A new Flutter package project.
-version: 0.0.1
-homepage:
+description: 基础的分享 share 库.
+version: 0.0.2
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_share_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_share_kit
+
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -12,12 +14,16 @@ dependencies:
     sdk: flutter
 
   fluwx: any
-  flutter_overlay_kit:
-    path: ../flutter_overlay_kit/
-  app_global_config:
-    path: ../app_global_config/
-  app_network:
-    path: ../app_network/
+
+  # 海报、截屏、保存到相册
+  flutter_permission_manager: ^0.0.1
+  image_gallery_saver: ^2.0.3
+
+  flutter_overlay_kit: ^0.0.3
+    # path: ../flutter_overlay_kit/
+  flutter_effect_kit: ^0.0.2
+    # path: ../flutter_effect_kit/
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

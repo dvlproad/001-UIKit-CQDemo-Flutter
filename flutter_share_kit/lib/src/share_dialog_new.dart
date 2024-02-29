@@ -92,11 +92,11 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(32.w_cj),
-          topLeft: Radius.circular(32.h_cj),
+          topRight: Radius.circular(32.w_pt_cj),
+          topLeft: Radius.circular(32.h_pt_cj),
         ),
       ),
-      height: 484.h_cj,
+      height: 484.h_pt_cj,
       child: Column(
         children: [
           Stack(
@@ -130,10 +130,10 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
   Widget get _titleWidget {
     return Container(
       padding: EdgeInsets.only(
-        left: 30.w_cj,
-        top: 36.h_cj,
-        right: 30.w_cj,
-        bottom: 30.h_cj,
+        left: 30.w_pt_cj,
+        top: 36.h_pt_cj,
+        right: 30.w_pt_cj,
+        bottom: 30.h_pt_cj,
       ),
       alignment: Alignment.center,
       // width: Adapt.screenW(),
@@ -153,19 +153,19 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
   Widget get _closeWidget {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pop();
+        Navigator.pop(context);
       },
       child: Container(
         color: Colors.transparent,
         padding: EdgeInsets.only(
-          left: 30.w_cj,
-          top: 30.h_cj,
-          right: 30.w_cj,
-          bottom: 30.h_cj,
+          left: 30.w_pt_cj,
+          top: 30.h_pt_cj,
+          right: 30.w_pt_cj,
+          bottom: 30.h_pt_cj,
         ),
         child: Image.asset(
           "images/hope/close_icon2.png",
-          width: 30.w_cj,
+          width: 30.w_pt_cj,
           color: const Color(0xff595959),
           fit: BoxFit.fitWidth,
         ),
@@ -186,11 +186,11 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
           children: [
             Image.asset(
               imageName,
-              width: 78.w_cj,
+              width: 78.w_pt_cj,
               fit: BoxFit.fitWidth,
               package: 'flutter_share_kit',
             ),
-            Container(height: 14.h_cj),
+            Container(height: 14.h_pt_cj),
             Text(
               text,
               style: const TextStyle(
@@ -201,7 +201,7 @@ class _CommonShareWidgetState extends State<CommonShareWidget> {
           ],
           crossAxisAlignment: CrossAxisAlignment.center,
         ),
-        padding: EdgeInsets.all(20.w_cj),
+        padding: EdgeInsets.all(20.w_pt_cj),
         color: Colors.transparent,
       ),
       onTap: onTap,
