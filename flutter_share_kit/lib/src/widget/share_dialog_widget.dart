@@ -9,7 +9,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_theme_helper/flutter_theme_helper.dart';
-import '../flutter_share_kit_adapt.dart';
+import '../../flutter_share_kit_adapt.dart';
+
 import './share_action_model.dart';
 
 class ShareDialogWidget extends StatefulWidget {

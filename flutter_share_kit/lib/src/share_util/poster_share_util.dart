@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 16:44:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-02-29 10:30:12
+ * @LastEditTime: 2024-03-08 17:04:32
  * @Description: 海报(截屏、保存到相册)
  */
 
@@ -17,7 +17,30 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:flutter_permission_manager/flutter_permission_manager.dart';
 
-class SharePosterUtil {
+class PosterShareUtil {
+  /// 获取并保存海报
+  static Future<void> getAndSaveScreensShot(
+    BuildContext context, {
+    required GlobalKey screenRepaintBoundaryGlobalKey,
+    required void Function(bool isSuccess) completeBlock,
+  }) async {
+    Uint8List? screenshotBytes =
+        await PosterShareUtil.getScreensShot(screenRepaintBoundaryGlobalKey);
+
+    if (screenshotBytes == null) {
+      return completeBlock(false);
+    }
+
+    PosterShareUtil.saveScreensShot(
+      context,
+      pngBytes: screenshotBytes,
+      saveCompleteBlock: () {
+        completeBlock(true);
+      },
+    );
+  }
+
+  /// 保存海报
   static saveScreensShot(
     BuildContext context, {
     required Uint8List pngBytes,
@@ -38,7 +61,14 @@ class SharePosterUtil {
   }
 
   // 对页面进行截图
-  static Future<Uint8List?> getScreensShot(BuildContext buildContext) async {
+  static Future<Uint8List?> getScreensShot(
+    GlobalKey screenRepaintBoundaryGlobalKey,
+  ) async {
+    BuildContext? buildContext = screenRepaintBoundaryGlobalKey.currentContext;
+    if (buildContext == null) {
+      return null;
+    }
+
     RenderRepaintBoundary? boundary =
         buildContext.findRenderObject() as RenderRepaintBoundary?;
     if (boundary == null) {

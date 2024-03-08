@@ -1,7 +1,7 @@
 import 'package:fluwx/fluwx.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-class ShareUtil {
+class WechatShareUtil {
   /// 分享到微信
   /// [type] text-文字 image-图片 webPage-网页
   /// [source] 当[type]为text时，source为文字内容 当[type]为image时，source为图片地址 当[type]为webPage时，source为网页地址

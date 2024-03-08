@@ -2,46 +2,16 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 13:47:54
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-02-28 15:50:20
- * @Description: 
+ * @LastEditTime: 2024-03-08 17:09:32
+ * @Description: 分享面板弹出方法。（使用示例 参见 TSShareHomePage 类中的 ShareDialogUtil.show 调用)
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-import 'share_action_model.dart';
-import 'share_dialog_widget.dart';
+import 'widget/share_action_model.dart';
+import 'widget/share_dialog_widget.dart';
 
 class ShareDialogUtil {
-  /*
-  // 示例
-  _clickShare() {
-    ShareDialogUtil.show(
-      context,
-      shareActionModels: [
-        ShareActionFactory.imActionModel(context, handle: () {
-          ToastUtil.showDoing();
-        }),
-        ShareActionFactory.wechatActionModel(context, "webPage"),
-        ShareActionFactory.timelineActionModel(context, "webPage"),
-        ShareActionFactory.posterActionModel(
-          context,
-          contentWidgetGetBlock: () {
-            return Container(color: Colors.green);
-          },
-        ),
-      ],
-      operateActionModels: [
-        ShareActionFactory.copyLinkActionModel(
-          context,
-          getShareTextBlock: () async {
-            return Future.value("abc");
-          },
-        ),
-      ],
-    );
-  }
-  */
-
   static show(
     BuildContext context, {
     required List<BaseActionModel> shareActionModels,

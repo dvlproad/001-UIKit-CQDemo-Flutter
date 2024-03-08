@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../flutter_share_kit_adapt.dart';
+import '../../flutter_share_kit_adapt.dart';
 
 class CommonShareWidget extends StatefulWidget {
   final Function(int) onClick;
