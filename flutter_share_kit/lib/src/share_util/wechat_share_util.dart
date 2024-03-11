@@ -71,7 +71,7 @@ class WechatShareUtil {
   /// [shareTo] 分享渠道
   static shareH5ImageByWeChatImage(
     WeChatImage weChatImage, {
-    String shareTo = "WeChatScene.SESSION",
+    required WeChatScene scene,
     String shareTitle = '',
     String? shareDescription,
   }) async {
@@ -79,14 +79,6 @@ class WechatShareUtil {
     if (!isInstalled) {
       ToastUtil.forceShowMessage("未安装微信");
       return;
-    }
-    WeChatScene scene = WeChatScene.SESSION;
-    if (shareTo == "WeChatScene.TIMELINE") {
-      scene = WeChatScene.TIMELINE;
-    } else if (shareTo == "WeChatScene.FAVORITE") {
-      scene = WeChatScene.FAVORITE;
-    } else {
-      scene = WeChatScene.SESSION;
     }
 
     final weChatShareImageModel = WeChatShareImageModel(

@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
 
   fluwx: any
+  qr_flutter: 4.1.0 # 二维码生成 https://pub.dev/packages/qr_flutter
 
   # 海报、截屏、保存到相册
   flutter_permission_manager: ^0.0.1

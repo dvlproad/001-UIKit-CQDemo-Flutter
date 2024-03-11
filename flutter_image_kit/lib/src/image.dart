@@ -15,6 +15,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
     ImageDealType? imageDealType,
     double? width,
     double? height,
+    BorderRadiusGeometry? borderRadius,
     required String imageUrl,
     void Function(String lastImageUrl)? lastImageUrlGetBlock, // 获取最后显示的url(打印用)
     BoxFit? fit,
@@ -30,6 +31,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
           key: key,
           width: width,
           height: height,
+          borderRadius: borderRadius,
           imageUrl: DataVientiane.newImageUrl(
             imageUrl,
             imageDealType ?? ImageDealType.default2,
@@ -52,6 +54,7 @@ class TolerantNetworkImage extends BaseTolerantNetworkImage {
 class BaseTolerantNetworkImage extends StatelessWidget {
   final double? width;
   final double? height;
+  final BorderRadiusGeometry? borderRadius;
 
   final String imageUrl;
 
@@ -81,6 +84,7 @@ class BaseTolerantNetworkImage extends StatelessWidget {
     Key? key,
     this.width,
     this.height,
+    this.borderRadius,
     required this.imageUrl,
     this.fit = BoxFit.cover,
     this.placeholder,
@@ -97,6 +101,16 @@ class BaseTolerantNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (borderRadius != null) {
+      return ClipRRect(
+        borderRadius: borderRadius,
+        child: buildImage(context),
+      );
+    }
+    return buildImage(context);
+  }
+
+  Widget buildImage(BuildContext context) {
     bool urlValid = imageUrl.isEmpty == false;
     if (urlValid == true) {
       bool isNetworkUrl = imageUrl.startsWith(RegExp(r'https?:'));

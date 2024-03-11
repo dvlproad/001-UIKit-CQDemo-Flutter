@@ -8,6 +8,7 @@
 library flutter_share_kit;
 
 export 'package:fluwx/src/wechat_file.dart' show WeChatImage;
+export 'package:fluwx/src/wechat_enums.dart' show WeChatScene;
 
 // 分享各个平台的方法
 export 'src/share_util/wechat_share_util.dart'; // 微信
@@ -19,6 +20,7 @@ export 'src/share_dialog_util.dart';
 export 'src/widget/share_action_model.dart';
 
 // 海报
+export './src/widget/poster_page.dart';
 export './src/widget/base_poster_widget.dart';
 
 // test
