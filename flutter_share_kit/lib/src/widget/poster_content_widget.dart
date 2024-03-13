@@ -102,7 +102,7 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
           bottom: bottomPadding + appLogoWidgetHeight,
         ),
         decoration: BoxDecoration(
-          color: Colors.amber,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(15.w_pt_cj),
             bottomRight: Radius.circular(15.w_pt_cj),

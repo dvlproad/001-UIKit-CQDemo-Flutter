@@ -7,19 +7,20 @@ import '../../flutter_share_kit_adapt.dart';
 import './poster_buttons_widget.dart';
 import 'poster_content_widget.dart';
 
-class PosterPage extends StatefulWidget {
+// ignore: must_be_immutable
+class PosterWithButtonPage extends StatefulWidget {
   final PreferredSizeWidget? Function() appbarWidgetBuilder;
   final String posterBgImageUrl;
   late Widget Function() posterContentWidgetBuilder;
 
-  PosterPage({
+  PosterWithButtonPage({
     Key? key,
     required this.appbarWidgetBuilder,
     required this.posterBgImageUrl,
     required this.posterContentWidgetBuilder,
   }) : super(key: key);
 
-  PosterPage.easy({
+  PosterWithButtonPage.easy({
     Key? key,
     required this.appbarWidgetBuilder,
     required this.posterBgImageUrl,
@@ -57,10 +58,10 @@ class PosterPage extends StatefulWidget {
   }
 
   @override
-  State<PosterPage> createState() => _PosterPageState();
+  State<PosterWithButtonPage> createState() => _PosterWithButtonPageState();
 }
 
-class _PosterPageState extends State<PosterPage> {
+class _PosterWithButtonPageState extends State<PosterWithButtonPage> {
   final GlobalKey _repaintBoundaryGlobalKey = GlobalKey();
   ScrollPhysics _scrollPhysics = const AlwaysScrollableScrollPhysics();
 

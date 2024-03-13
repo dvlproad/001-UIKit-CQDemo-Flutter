@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 17:34:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-08 16:34:14
+ * @LastEditTime: 2024-03-12 16:48:08
  * @Description: 
  */
 
@@ -75,12 +75,12 @@ class TSPosterCustomPainter extends CustomPainter {
       // );
     }
 
-    double rectSize = 300;
-    canvas.drawRect(
-      Rect.fromLTWH((size.width - rectSize) / 2.0, (size.height - rectSize) / 2,
-          rectSize, rectSize),
-      paint,
-    );
+    // double rectSize = 300;
+    // canvas.drawRect(
+    //   Rect.fromLTWH((size.width - rectSize) / 2.0, (size.height - rectSize) / 2,
+    //       rectSize, rectSize),
+    //   paint,
+    // );
 
     // 头像居中显示
     if (avatarImage != null) {
@@ -124,7 +124,7 @@ class TSPosterCustomPainter extends CustomPainter {
         ),
       )
       ..addText("苹果手机数据线")
-      ..pushStyle(ui.TextStyle(color: Colors.red, fontSize: 14))
+      ..pushStyle(ui.TextStyle(color: Colors.green, fontSize: 14))
       ..addText('¥19.90');
 
     /// 3.通过 build 取到 Paragraph，并根据宽高进行布局layout
@@ -215,12 +215,13 @@ class TSPosterBackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawColor(const Color(0xFFF1F1F1), BlendMode.color);
-    var center = size / 2;
     var paint = Paint()..color = const Color(0xFF2080E5);
     paint.strokeWidth = 2.0;
 
+    double rectSize = 240;
     canvas.drawRect(
-      Rect.fromLTWH(center.width - 120, center.height - 120, 240, 240),
+      Rect.fromLTWH((size.width - rectSize) / 2, (size.height - rectSize) / 2,
+          rectSize, rectSize),
       paint,
     );
   }
@@ -234,12 +235,11 @@ class TSPosterBackgroundPainter extends CustomPainter {
 class TSPosterForegroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var center = size / 2;
-    var paint = Paint()..color = const Color(0x80F53010);
+    var paint = Paint()..color = Colors.cyan;
     paint.strokeWidth = 2.0;
 
     canvas.drawCircle(
-      Offset(center.width, center.height),
+      Offset(size.width / 2, size.height / 2),
       100,
       paint,
     );

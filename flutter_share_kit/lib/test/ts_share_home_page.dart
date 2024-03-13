@@ -2,23 +2,21 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 17:34:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-08 17:20:30
+ * @LastEditTime: 2024-03-13 14:15:48
  * @Description: 
  */
-
 import 'package:flutter/material.dart';
 
 import 'package:flutter_share_kit/flutter_share_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-import 'ts_share_popup_container.dart';
-
 class TSShareHomePage extends StatefulWidget {
+  final bool currentIsPosterPage;
   const TSShareHomePage({
     Key? key,
+    required this.currentIsPosterPage,
   }) : super(key: key);
 
   @override
@@ -28,102 +26,83 @@ class TSShareHomePage extends StatefulWidget {
 class _TSShareHomePageState extends State<TSShareHomePage> {
   final GlobalKey _posterRepaintBoundaryGlobalKey = GlobalKey();
 
+  late bool currentIsPosterPage;
+
   @override
   void initState() {
     super.initState();
+
+    currentIsPosterPage = widget.currentIsPosterPage;
   }
 
   @override
   Widget build(BuildContext context) {
-    return NormalPosterWidget(
+    return NormalPosterWidget.currentIsPosterPage(
+      qrCodeWebUrl: "https://www.baidu.com/",
+      qrCodePromptText: "扫码进入XXXAPP\n一起分享你的【YYYY】",
       posterRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
       posterWidgetGetBlock: (BuildContext context) {
         return buildPosterWidget(context);
       },
       noposterWidgetGetBlock: (context, {required}) {
-        return buildButtonsWidget(context);
+        return buildNoposterWidget(context);
       },
     );
   }
 
   Widget buildPosterWidget(BuildContext context) {
-    return TSSharePopupContainer(
-      contentWidgetGetBlock: () {
-        // 获取屏幕的宽度和高度
-        double screenWidth = MediaQuery.of(context).size.width;
-        // double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
-        return Container(
-          color: Colors.green,
-          child: Image.asset(
-            "images/wish/wish_rank_bg.png",
-            fit: BoxFit.cover,
-            width: screenWidth - 2 * 30,
+    return Container(
+      color: Colors.red,
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Container(
+              color: Colors.blue,
+              alignment: Alignment.center,
+              padding: EdgeInsets.only(top: 40.h_pt_cj, bottom: 40.h_pt_cj),
+              child: Container(
+                color: Colors.green,
+                child: Image.asset(
+                  "assets/poster_qrcode.png",
+                  package: "flutter_share_kit",
+                  fit: BoxFit.cover,
+                  width: screenWidth - 2 * 30,
+                ),
+              ),
+            ),
           ),
-        );
-      },
-    );
-  }
-
-  Positioned buildButtonsWidget(BuildContext context) {
-    MediaQueryData mediaData = MediaQuery.of(context);
-    double screenWidth = mediaData.size.width;
-    // double screenHeight = mediaData.size.height;
-    // double screenPaddingTop = mediaData.padding.top;
-    double screenPaddingBottom = mediaData.padding.bottom;
-
-    return Positioned(
-      bottom: screenPaddingBottom + 140.h_pt_cj,
-      child: Container(
-        width: screenWidth,
-        padding: EdgeInsets.only(left: 26.w_pt_cj, right: 26.w_pt_cj),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _shareButton(context),
-            _savePosterButton(context),
-          ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _shareButton(BuildContext context) {
-    return ThemeBGButton(
-      width: 150.w_pt_cj,
-      height: 44.h_pt_cj,
-      cornerRadius: 22.h_pt_cj,
-      bgColorType: ThemeBGType.theme,
-      title: "分享XXX",
-      // titleStyle: RegularTextStyle(fontSize: 12),
-      onPressed: _clickShare,
+  Widget buildNoposterWidget(BuildContext context) {
+    return TSShareHomeButtons(
+      saveHandle: _clickShare,
+      button2Text: "保存",
+      button2Handle: _clickSave,
     );
   }
 
-  Widget _savePosterButton(BuildContext context) {
-    return ThemeBGButton(
-      width: 150.w_pt_cj,
-      height: 44.h_pt_cj,
-      cornerRadius: 22.h_pt_cj,
-      bgColorType: ThemeBGType.pink,
-      title: "保存海报",
-      // titleStyle: RegularTextStyle(fontSize: 12),
-      onPressed: () async {
-        // await _screenshotCompleter.future;
+  _clickSave() {
+    // await _screenshotCompleter.future;
 
-        PosterShareUtil.getAndSaveScreensShot(
-          context,
-          screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
-          completeBlock: (bool isSuccess) {
-            Navigator.pop(context);
-          },
-        );
-        // BuildContext context = globalKey.currentContext!;
-        // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-        //   return pageWidget;
-        // }));
-      },
-    );
+    PosterShareUtil.getAndSaveScreensShot(
+      context,
+      screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
+    ).then((value) {
+      Navigator.pop(context);
+    });
+    // BuildContext context = globalKey.currentContext!;
+    // Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+    //   return pageWidget;
+    // }));
   }
 
   _clickShare() {
@@ -145,51 +124,11 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
           Navigator.pop(context);
           //
         }),
-        BaseActionModel.poster(handle: () {
-          Navigator.pop(context);
-
-          PopupUtil.popupInBottom(
-            context,
-            popupViewBulider: (context) {
-              return TSSharePopupContainer(
-                contentWidgetGetBlock: () {
-                  // 获取屏幕的宽度和高度
-                  double screenWidth = MediaQuery.of(context).size.width;
-                  // double screenHeight = MediaQuery.of(context).size.height;
-
-                  return Container(
-                    color: Colors.green,
-                    child: Image.asset(
-                      "images/wish/wish_rank_bg.png",
-                      fit: BoxFit.cover,
-                      width: screenWidth - 2 * 30,
-                    ),
-                  );
-                },
-              );
-            },
-          );
-        }),
-        BaseActionModel.poster(handle: () {
-          Navigator.pop(context);
-
-          PosterShareUtil.getAndSaveScreensShot(
-            context,
-            screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
-            completeBlock: (bool isSuccess) {
-              Navigator.pop(context);
-            },
-          );
-        }),
+        posterActionModel,
       ],
       operateActionModels: [
         BaseActionModel.copyLink(handle: () {
-          CopyLinkShareUtil.copyLink(
-            context,
-            getShareTextBlock: () async {
-              return Future.value("abc");
-            },
-          );
+          CopyLinkShareUtil.copyLink(context, lastShareString: "abc");
         }),
         BaseActionModel.block(
           isBlock: isBlock,
@@ -203,5 +142,64 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
         ),
       ],
     );
+  }
+
+  /// 分享海报的按钮
+  BaseActionModel get posterActionModel {
+    if (currentIsPosterPage) {
+      return BaseActionModel.poster(
+        title: "保存海报",
+        handle: () {
+          Navigator.pop(context);
+
+          PosterShareUtil.getAndSaveScreensShot(
+            context,
+            screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
+          ).then((value) {
+            Navigator.pop(context);
+          });
+        },
+      );
+    }
+    return BaseActionModel.poster(handle: () {
+      Navigator.pop(context);
+
+      PopupUtil.popupInBottom(
+        context,
+        popupViewBulider: (context) {
+          String posterBgImageUrl =
+              "https://img0.baidu.com/it/u=3316636492,2799302396&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800";
+
+          return PosterWithButtonPage.easy(
+            appbarWidgetBuilder: () {
+              return AppBar();
+              // MediaQueryData mediaQueryData =
+              //     MediaQueryData.fromWindow(window);
+
+              // return PreferredSizeWidget();
+              // return Container(
+              //   padding: EdgeInsets.only(top: mediaQueryData.padding.top),
+              //   child: AppBar(),
+              // );
+            },
+            posterBgImageUrl: posterBgImageUrl,
+            userImageUrl: posterBgImageUrl,
+            posterTextContainerBuilder: (
+                {required double halfAvatarHeight,
+                required double qrCodeWidgetWidth}) {
+              return Container(
+                color: Colors.red,
+                margin: EdgeInsets.only(
+                  top: halfAvatarHeight,
+                  right: qrCodeWidgetWidth,
+                ),
+              );
+            },
+            appLogoPath: 'images/share/logo_icon.png',
+            qrCodeWebUrl: posterBgImageUrl,
+          );
+        },
+      );
+    });
   }
 }

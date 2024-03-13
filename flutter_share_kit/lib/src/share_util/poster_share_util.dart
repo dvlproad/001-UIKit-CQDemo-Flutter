@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 16:44:28
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-08 17:04:32
+ * @LastEditTime: 2024-03-13 14:29:03
  * @Description: 海报(截屏、保存到相册)
  */
 
-import 'dart:ui';
+import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,53 +15,56 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 // import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:flutter_permission_manager/flutter_permission_manager.dart';
+import 'package:flutter_images_picker/flutter_images_picker.dart';
 
 class PosterShareUtil {
   /// 获取并保存海报
-  static Future<void> getAndSaveScreensShot(
+  static Future<bool> getAndSaveScreensShot(
     BuildContext context, {
     required GlobalKey screenRepaintBoundaryGlobalKey,
-    required void Function(bool isSuccess) completeBlock,
   }) async {
-    Uint8List? screenshotBytes =
+    ui.Image? screenshotImage =
         await PosterShareUtil.getScreensShot(screenRepaintBoundaryGlobalKey);
-
-    if (screenshotBytes == null) {
-      return completeBlock(false);
+    if (screenshotImage == null) {
+      ToastUtil.showMessage("海报绘制出错1");
+      return false;
     }
 
-    PosterShareUtil.saveScreensShot(
+    return PosterShareUtil.saveScreensShot(
       context,
-      pngBytes: screenshotBytes,
-      saveCompleteBlock: () {
-        completeBlock(true);
-      },
+      image: screenshotImage,
     );
   }
 
   /// 保存海报
-  static saveScreensShot(
+  static Future<bool> saveScreensShot(
     BuildContext context, {
-    required Uint8List pngBytes,
-    required void Function() saveCompleteBlock,
+    required ui.Image image,
+    int quality = 100,
   }) async {
     bool isGranted = await PermissionsManager.storage();
     if (!isGranted) {
-      return;
+      return false;
     }
 
+    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    if (byteData == null) {
+      ToastUtil.showMessage("海报绘制出错2");
+      return false;
+    }
+
+    Uint8List pngBytes = byteData.buffer.asUint8List(); // 图片byte数据转化unit8
     await ImageGallerySaver.saveImage(
       pngBytes,
-      quality: 100,
+      quality: quality,
     );
     ToastUtil.showMsg('已保存到手机相册', context);
 
-    saveCompleteBlock();
+    return true;
   }
 
   // 对页面进行截图
-  static Future<Uint8List?> getScreensShot(
+  static Future<ui.Image?> getScreensShot(
     GlobalKey screenRepaintBoundaryGlobalKey,
   ) async {
     BuildContext? buildContext = screenRepaintBoundaryGlobalKey.currentContext;
@@ -75,13 +78,8 @@ class PosterShareUtil {
       return null;
     }
 
-    var image = await boundary.toImage(pixelRatio: window.devicePixelRatio);
-    ByteData? byteData = await image.toByteData(format: ImageByteFormat.png);
-    if (byteData == null) {
-      return null;
-    }
-
-    Uint8List? pngBytes = byteData.buffer.asUint8List(); // 图片byte数据转化unit8
-    return pngBytes;
+    ui.Image image =
+        await boundary.toImage(pixelRatio: ui.window.devicePixelRatio);
+    return image;
   }
 }

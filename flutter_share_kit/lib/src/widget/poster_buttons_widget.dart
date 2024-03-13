@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
@@ -23,7 +23,7 @@ class PosterButtonsWidget extends StatefulWidget {
 }
 
 class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
-  Uint8List? _posterBytes;
+  ui.Image? _posterImage;
 
   @override
   void initState() {
@@ -31,17 +31,17 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
   }
 
   void _getPoster() async {
-    if (_posterBytes != null) {
+    if (_posterImage != null) {
       return;
     }
 
-    _posterBytes = await PosterShareUtil.getScreensShot(
+    _posterImage = await PosterShareUtil.getScreensShot(
         widget.posterRepaintBoundaryGlobalKey);
   }
 
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQuery = MediaQueryData.fromWindow(window);
+    MediaQueryData mediaQuery = MediaQueryData.fromWindow(ui.window);
     double _botbarH = mediaQuery.padding.bottom;
 
     return Container(
@@ -87,15 +87,13 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
   _shareToWechat({required WeChatScene scene}) async {
     LoadingUtil.show();
     _getPoster();
-    if (_posterBytes == null) {
+    if (_posterImage == null) {
       LoadingUtil.dismiss();
       widget.completeBlock(true);
       return;
     }
 
-    WeChatImage weChatImage =
-        WeChatImage.binary(Uint8List.fromList(_posterBytes!));
-    WechatShareUtil.shareH5ImageByWeChatImage(weChatImage, scene: scene);
+    WechatShareUtil.shareH5ImageByUIImage(_posterImage!, scene: scene);
     LoadingUtil.dismiss();
     widget.completeBlock(true);
   }
@@ -107,7 +105,7 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
       onTap: () {
         LoadingUtil.show();
         _getPoster();
-        if (_posterBytes == null) {
+        if (_posterImage == null) {
           LoadingUtil.dismiss();
           widget.completeBlock(true);
           return;
@@ -115,12 +113,11 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
 
         PosterShareUtil.saveScreensShot(
           context,
-          pngBytes: _posterBytes!,
-          saveCompleteBlock: () {
-            LoadingUtil.dismiss();
-            widget.completeBlock(true);
-          },
-        );
+          image: _posterImage!,
+        ).then((value) {
+          LoadingUtil.dismiss();
+          widget.completeBlock(true);
+        });
       },
     );
   }

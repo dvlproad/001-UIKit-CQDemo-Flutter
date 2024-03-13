@@ -49,11 +49,12 @@ class BaseActionModel {
     );
   }
 
-  static BaseActionModel poster({required void Function() handle}) {
+  static BaseActionModel poster(
+      {String? title, required void Function() handle}) {
     return BaseActionModel(
       imageName: 'assets/share_poster.png',
       imagePackage: "flutter_share_kit",
-      title: '生成海报',
+      title: title ?? '生成海报',
       handle: handle,
     );
   }
