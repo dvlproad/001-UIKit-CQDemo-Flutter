@@ -15,7 +15,7 @@ import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 // import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:flutter_images_picker/flutter_images_picker.dart';
+import 'package:flutter_permission_manager/flutter_permission_manager.dart';
 
 class PosterShareUtil {
   /// 获取并保存海报

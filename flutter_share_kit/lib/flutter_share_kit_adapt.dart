@@ -72,7 +72,7 @@ class AdaptCJHelper {
   static double setWidth(num width) => width * scaleWidth;
   static double setHeight(num height) => height * scaleHeight;
 
-  static bool _minTextAdapt = false;
+  static const bool _minTextAdapt = false;
   static double get scaleText =>
       _minTextAdapt ? min(scaleWidth, scaleHeight) : scaleWidth;
 

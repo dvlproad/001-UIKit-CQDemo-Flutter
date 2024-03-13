@@ -1,7 +1,9 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter_theme_helper/flutter_theme_helper.dart';
-import 'package:flutter_image_kit/flutter_image_kit.dart';
+import 'package:flutter_image_basekit/flutter_image_kit.dart';
 import 'package:extended_image/extended_image.dart';
 
 import '../../flutter_share_kit_adapt.dart';

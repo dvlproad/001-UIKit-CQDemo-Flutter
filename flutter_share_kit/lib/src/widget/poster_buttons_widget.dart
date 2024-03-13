@@ -1,4 +1,5 @@
-import 'dart:typed_data';
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_effect_kit/flutter_effect_kit.dart';

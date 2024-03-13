@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_image_kit/flutter_image_kit.dart';
+import 'package:flutter_image_basekit/flutter_image_kit.dart';
 import '../../flutter_share_kit_adapt.dart';
 
 import './poster_buttons_widget.dart';

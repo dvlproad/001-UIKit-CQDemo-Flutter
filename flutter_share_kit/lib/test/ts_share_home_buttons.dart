@@ -2,14 +2,12 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 17:34:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-12 14:21:53
+ * @LastEditTime: 2024-03-13 17:58:43
  * @Description: 
  */
 import 'package:flutter/material.dart';
 
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
-
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
 class TSShareHomeButtons extends StatelessWidget {
   final void Function() saveHandle;
@@ -48,26 +46,38 @@ class TSShareHomeButtons extends StatelessWidget {
   }
 
   Widget _shareButton(BuildContext context) {
-    return ThemeBGButton(
-      width: 150.w_pt_cj,
-      height: 44.h_pt_cj,
-      cornerRadius: 22.h_pt_cj,
-      bgColorType: ThemeBGType.theme,
-      title: "分享XXX",
-      // titleStyle: RegularTextStyle(fontSize: 12),
+    return TextButton(
       onPressed: saveHandle,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.amber,
+          borderRadius: BorderRadius.circular(22.h_pt_cj),
+        ),
+        width: 150.w_pt_cj,
+        height: 44.h_pt_cj,
+        child: const Text(
+          "分享XXX",
+          style: TextStyle(fontSize: 12),
+        ),
+      ),
     );
   }
 
   Widget _savePosterButton(BuildContext context) {
-    return ThemeBGButton(
-      width: 150.w_pt_cj,
-      height: 44.h_pt_cj,
-      cornerRadius: 22.h_pt_cj,
-      bgColorType: ThemeBGType.pink,
-      title: button2Text,
-      // titleStyle: RegularTextStyle(fontSize: 12),
+    return TextButton(
       onPressed: button2Handle,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.pink,
+          borderRadius: BorderRadius.circular(22.h_pt_cj),
+        ),
+        width: 150.w_pt_cj,
+        height: 44.h_pt_cj,
+        child: Text(
+          button2Text,
+          style: const TextStyle(fontSize: 12),
+        ),
+      ),
     );
   }
 }

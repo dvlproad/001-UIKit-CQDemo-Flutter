@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, avoid_unnecessary_containers
+
 /*
  * @Author: dvlproad
  * @Date: 2024-02-28 17:34:18
