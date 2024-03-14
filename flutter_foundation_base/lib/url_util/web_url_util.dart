@@ -56,9 +56,10 @@ class WebUrlUtil {
   ///
   /// 返回参数值的处理结果。
   static dynamic getValueFromWebParamValueString(
-    String value, {
-    required bool paramToObjectIfOK,
+    String? value, {
+    bool paramToObjectIfOK = false,
   }) {
+    if (value == null) return null;
     try {
       value = Uri.decodeComponent(value);
     } catch (error) {
@@ -72,7 +73,7 @@ class WebUrlUtil {
 
     dynamic element; // 如果 json.decode 成功，返回类型会变化，所以需另声明变量
     try {
-      element = json.decode(value);
+      element = json.decode(value!);
     } catch (error) {
       element = value;
     }

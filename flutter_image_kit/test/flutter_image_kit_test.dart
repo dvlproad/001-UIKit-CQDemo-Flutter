@@ -7,7 +7,7 @@
  */
 import 'package:flutter_test/flutter_test.dart';
 
-// import 'package:flutter_image_kit/flutter_image_kit.dart';
+// import 'package:flutter_image_basekit/flutter_image_kit.dart';
 
 void main() {
   test('adds one to input values', () {
