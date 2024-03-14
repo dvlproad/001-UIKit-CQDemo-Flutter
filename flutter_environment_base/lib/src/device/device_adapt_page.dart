@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-17 18:04:30
+ * @LastEditTime: 2024-03-14 18:14:23
  * @Description: 设备信息适配验证
  */
 
@@ -10,12 +10,7 @@ import 'dart:ui' show window;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-
-// import './device_info_util.dart';
-
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 class DeviceAdaptPage extends StatefulWidget {
   const DeviceAdaptPage({Key? key}) : super(key: key);
@@ -67,26 +62,26 @@ class _DeviceInfoPageState extends State<DeviceAdaptPage> {
     textValue += 'height:${mediaQuery.size.height}\n';
     textValue += 'top:${mediaQuery.viewPadding.top}\n';
     textValue += 'bottom:${mediaQuery.viewPadding.bottom}\n';
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "设备屏幕",
       textValue: textValue,
       textValueMaxLines: 10,
       textValueFontSize: 14,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('设备屏幕信息拷贝成功');
+        CJTSToastUtil.showMessage('设备屏幕信息拷贝成功');
       },
     );
   }
 
   // ignore: non_constant_identifier_names
   Widget _adapt_method_all_cell() {
-    double width1 = AdaptCJHelper.setWidth(30);
-    double height1 = AdaptCJHelper.setHeight(30);
-    double fontsize1 = AdaptCJHelper.setSp(30);
+    double width1 = AdaptDemoHelper.setWidth(30);
+    double height1 = AdaptDemoHelper.setHeight(30);
+    double fontsize1 = AdaptDemoHelper.setSp(30);
     print("适配 width1:$width1 height1:$height1 fontsize1:$fontsize1");
     Widget view1 = _adapt_method_cell(
-      adaptMethod: 'AdaptCJHelper.setXXX',
+      adaptMethod: 'AdaptDemoHelper.setXXX',
       adaptResultMap: {
         'width': width1,
         'height': height1,
@@ -94,12 +89,12 @@ class _DeviceInfoPageState extends State<DeviceAdaptPage> {
       },
     );
 
-    double width2 = 30.w_pt_cj;
-    double height2 = 30.h_pt_cj;
-    double fontsize2 = 30.f_pt_cj;
+    double width2 = 30.w_pt_demo;
+    double height2 = 30.h_pt_demo;
+    double fontsize2 = 30.f_pt_demo;
     print("适配 width2:$width2 height2:$height2 fontsize2:$fontsize2");
     Widget view2 = _adapt_method_cell(
-      adaptMethod: '.xxx_pt_cj',
+      adaptMethod: '.xxx_pt_demo',
       adaptResultMap: {
         'width': width2,
         'height': height2,
@@ -165,14 +160,14 @@ class _DeviceInfoPageState extends State<DeviceAdaptPage> {
       textValue += '$key:$keyValue\n';
     }
 
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "$adaptMethod",
       textValue: textValue,
       textValueMaxLines: 10,
       textValueFontSize: 14,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('设备适配结果拷贝成功');
+        CJTSToastUtil.showMessage('设备适配结果拷贝成功');
       },
     );
   }

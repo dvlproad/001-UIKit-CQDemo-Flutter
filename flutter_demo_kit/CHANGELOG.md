@@ -1,3 +1,8 @@
-## [0.0.1] - TODO: Add release date.
+## [0.0.1] - Add release date.
 
-* TODO: Describe initial release.
+* Describe initial release.
+
+
+## [0.0.2] - Add release date.
+
+* 补充更多控件.

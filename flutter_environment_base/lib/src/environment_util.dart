@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 // 网络 network
 import './network_page_data_manager.dart';
@@ -78,21 +78,21 @@ class EnvironmentUtil {
       ProxyPageDataManager().addOrUpdateEnvProxyModel(
         newProxyModel: TSEnvProxyModel.noneProxyModel(),
       );
-      ToastUtil.showMessage("恭喜成功切换到【无代理】上");
+      CJTSToastUtil.showMessage("恭喜成功切换到【无代理】上");
       return true;
     }
 
     // 如果app当前无代理，则查看是否有手机代理，有则切，没则不变
     TSEnvProxyModel? phoneProxyModel = await DeviceInfoUtil.getPhoneProxy();
     if (phoneProxyModel == null) {
-      ToastUtil.showMessage("未检测到您手机有设置代理，无法切换，请检查");
+      CJTSToastUtil.showMessage("未检测到您手机有设置代理，无法切换，请检查");
       return false;
     }
 
     ProxyPageDataManager().addOrUpdateEnvProxyModel(
       newProxyModel: phoneProxyModel,
     );
-    ToastUtil.showMessage("恭喜成功切换到【手机代理】上");
+    CJTSToastUtil.showMessage("恭喜成功切换到【手机代理】上");
     return true;
   }
 

@@ -2,31 +2,27 @@ library flutter_json_widget;
 
 import 'package:flutter/material.dart';
 import './json_text_widget.dart';
-import './copy_clipboard.dart';
 
-class JsonViewer extends StatefulWidget {
+class BaseJsonViewer extends StatefulWidget {
   final dynamic jsonObj;
 
-  JsonViewer(
+  BaseJsonViewer(
     this.jsonObj, {
     super.key,
-    void Function(dynamic value)? onTap,
-    void Function(dynamic value)? onDoubleTap,
-    void Function(dynamic value)? onLongPress,
+    required void Function(dynamic value) onTap,
+    required void Function(dynamic value) onDoubleTap,
+    required void Function(dynamic value) onLongPress,
   }) {
-    // JSONText.onTap = onTap;
-    // JSONText.onDoubleTap = onDoubleTap;
-    // JSONText.onLongPress = onLongPress;
-    // JSONText.onTap = (dynamic value) => clipboardValue(value: value);
-    JSONText.onDoubleTap = (dynamic value) => clipboardValue(value: value);
-    // JSONText.onLongPress = (dynamic value) => clipboardValue(value: value);
+    JSONText.onTap = onTap;
+    JSONText.onDoubleTap = onDoubleTap;
+    JSONText.onLongPress = onLongPress;
   }
 
   @override
-  _JsonViewerState createState() => _JsonViewerState();
+  _BaseJsonViewerState createState() => _BaseJsonViewerState();
 }
 
-class _JsonViewerState extends State<JsonViewer> {
+class _BaseJsonViewerState extends State<BaseJsonViewer> {
   @override
   Widget build(BuildContext context) {
     return getContentWidget(widget.jsonObj);

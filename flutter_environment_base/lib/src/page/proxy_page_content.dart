@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 // import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './actionsheet_footer.dart';
 import './environment_add_util.dart';
 
@@ -183,7 +183,7 @@ class _ProxyPageContentState extends State<ProxyPageContent> {
     } else {
       message = '温馨提示:你将切换为使用代理，请确认该代理正常，否则所有接口都将失败';
     }
-    AlertUtil.showCancelOKAlert(
+    CJTSAlertUtil.showCancelOKAlert(
       context: context,
       title: '使用"$newProxy"',
       message: message,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 // import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import './actionsheet_footer.dart';
 
 import '../network_page_data_manager.dart';
@@ -142,7 +142,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
           _selectedNetworkModel, bNetworkModel);
     }
     if (permission == ChangeEnvPermission.Forbid) {
-      ToastUtil.showMessage(
+      CJTSToastUtil.showMessage(
           "不允许从【${_selectedNetworkModel.des}】切换到】${bNetworkModel.des}】环境");
       return;
     }
@@ -154,7 +154,7 @@ class _NetworkPageContentState extends State<NetworkPageContent> {
       message = '温馨提示:切换到该环境，您已设置为不退出app也不重新登录';
     }
 
-    AlertUtil.showCancelOKAlert(
+    CJTSAlertUtil.showCancelOKAlert(
       context: context,
       title: '切换到"$newNetwork"',
       message: message,

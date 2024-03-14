@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_foundation_base: #^0.0.2
-    path: ../flutter_foundation_base/
+  flutter_foundation_base: ^0.0.7
+    # path: ../flutter_foundation_base/
   dio: ^4.0.4
 
 dev_dependencies:

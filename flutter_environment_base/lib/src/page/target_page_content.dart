@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 // import 'package:cj_monitor_flutter/cj_monitor_flutter.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 // import './actionsheet_footer.dart';
 // import './environment_add_util.dart';
 
@@ -115,7 +115,7 @@ class _TargetPageContentState extends State<TargetPageContent> {
       message = '温馨提示:切换到该环境，您已设置为不退出app也不重新登录';
     }
 
-    AlertUtil.showCancelOKAlert(
+    CJTSAlertUtil.showCancelOKAlert(
       context: context,
       title: '切换到"$newTarget"',
       message: message,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './prefixText_textField.dart';
 import './env_button.dart';
 
@@ -165,7 +165,7 @@ class _EnvironmentAddNetworkPageState extends State<EnvironmentAddNetworkPage> {
 
         String proxyIp = '$userName:$port';
         if (IsIPAddress(proxyIp) == false) {
-          ToastUtil.showMessage('代理ip格式出错,请先修改');
+          CJTSToastUtil.showMessage('代理ip格式出错,请先修改');
         } else {
           Navigator.pop(context);
           if (widget.callBack != null) {

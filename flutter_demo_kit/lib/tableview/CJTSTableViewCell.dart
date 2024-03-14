@@ -1,13 +1,7 @@
 // 包含主文本main，且可选定制副文本、箭头 的视图
 import 'package:flutter/material.dart';
 
-typedef ClickCellCallback = void Function(int? section, int? row);
-
-enum CJTSTableViewCellArrowImageType {
-  none, // 无箭头
-  arrowRight, // 右箭头
-  arrowTopBottom, // 上下箭头
-}
+import 'cell_enum.dart';
 
 class CJTSTableViewCell extends StatelessWidget {
   final String text; // 主文本
@@ -42,7 +36,7 @@ class CJTSTableViewCell extends StatelessWidget {
 
   void _onTapCell() {
     if (null != this.clickCellCallback) {
-      this.clickCellCallback!(this.section, this.row);
+      this.clickCellCallback!(section: this.section, row: this.row);
     }
   }
 

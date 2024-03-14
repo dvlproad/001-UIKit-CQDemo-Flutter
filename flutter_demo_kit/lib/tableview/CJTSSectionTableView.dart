@@ -55,7 +55,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
           detailText: subTitle,
           section: section,
           row: row,
-          clickCellCallback: (int? section, int? row) =>
+          clickCellCallback: ({int? section, int? row}) =>
               {this.__dealDataModel(moduleModel, section, row)},
         );
       },

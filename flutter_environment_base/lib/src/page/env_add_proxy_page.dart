@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import './prefixText_textField.dart';
 import './env_button.dart';
 
@@ -193,7 +193,7 @@ class _EnvironmentAddProxyPageState extends State<EnvironmentAddProxyPage> {
 
         String proxyIp = '$userName:$port';
         if (IsIPAddress(proxyIp) == false) {
-          ToastUtil.showMessage('代理ip格式出错,请先修改成形如192.168.1.1');
+          CJTSToastUtil.showMessage('代理ip格式出错,请先修改成形如192.168.1.1');
         } else {
           Navigator.pop(context);
           widget.callBack(bProxyName: proxyName, bProxyIp: proxyIp);

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-24 16:01:07
+ * @LastEditTime: 2024-03-14 19:01:51
  * @Description: 设备自身ip、代理等信息
  */
 
@@ -15,8 +15,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http_proxy/http_proxy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import './device_info_util.dart';
 import './device_adapt_page.dart';
@@ -111,14 +110,14 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
       dynamic dTextValue = _monitorPublicParamsMap![key];
       String textValue = dTextValue.toString();
 
-      Widget widget = ImageTitleTextValueCell(
+      Widget widget = CJTSImageTitleTextValueCell(
         title: title,
         textValue: textValue,
         textValueMaxLines: 3,
         textValueFontSize: 12,
         onTap: () {
           Clipboard.setData(ClipboardData(text: textValue));
-          ToastUtil.showMessage('设备网络信息拷贝成功');
+          CJTSToastUtil.showMessage('设备网络信息拷贝成功');
         },
       );
       infoWidgets.add(widget);
@@ -177,13 +176,13 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   // ignore: non_constant_identifier_names
   Widget _networkType_cell() {
     String textValue = _connectionStatus.toString().split('.').last;
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: '网络类型',
       textValue: textValue,
       textValueFontSize: 12,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('设备网络信息拷贝成功');
+        CJTSToastUtil.showMessage('设备网络信息拷贝成功');
       },
     );
   }
@@ -199,24 +198,24 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
     }
     return Column(
       children: [
-        ImageTitleTextValueCell(
+        CJTSImageTitleTextValueCell(
           title: "设备网络(all)",
           textValue: textvalueAll,
           textValueMaxLines: 20,
           textValueFontSize: 10,
           onTap: () {
             Clipboard.setData(ClipboardData(text: textvalueAll));
-            ToastUtil.showMessage('设备网络信息拷贝成功');
+            CJTSToastUtil.showMessage('设备网络信息拷贝成功');
           },
         ),
-        ImageTitleTextValueCell(
+        CJTSImageTitleTextValueCell(
           title: "设备网络(ip)",
           textValue: textvalueIp,
           textValueMaxLines: 10,
           textValueFontSize: 12,
           onTap: () {
             Clipboard.setData(ClipboardData(text: textvalueIp));
-            ToastUtil.showMessage('设备网络信息拷贝成功');
+            CJTSToastUtil.showMessage('设备网络信息拷贝成功');
           },
         ),
       ],
@@ -226,13 +225,13 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   // ignore: non_constant_identifier_names
   Widget _phoneProxyIpAndPort_cell() {
     String textValue = _phoneProxyIpAndPort ?? '关闭/获取失败(可能断网了)';
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "设备自身代理",
       textValue: textValue,
       textValueFontSize: 12,
       onTap: () {
         Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('设备自身代理信息拷贝成功');
+        CJTSToastUtil.showMessage('设备自身代理信息拷贝成功');
       },
     );
   }
@@ -250,7 +249,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
     textValue += 'height:${mediaQuery.size.height}\n';
     textValue += 'top:${mediaQuery.viewPadding.top}\n';
     textValue += 'bottom:${mediaQuery.viewPadding.bottom}\n';
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "设备屏幕(点击验证适配)",
       textValue: textValue,
       textValueMaxLines: 10,
@@ -264,7 +263,7 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
       },
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: textValue));
-        ToastUtil.showMessage('设备屏幕信息拷贝成功');
+        CJTSToastUtil.showMessage('设备屏幕信息拷贝成功');
       },
     );
   }
