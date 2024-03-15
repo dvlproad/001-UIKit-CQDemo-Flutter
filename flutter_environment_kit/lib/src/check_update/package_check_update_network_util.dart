@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import 'package:flutter_environment_base/flutter_environment_base.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './env_page_util.dart';
 
@@ -55,7 +55,7 @@ class PackageCheckUpdateNetworkUtil {
       String title = '是否恢复默认的【${defaultNetworkModel.name}】';
       String message =
           '您当前${defaultNetworkModel.des}不是默认环境，而是[${currentEnvNetworkModel.name}]，建议切回默认，以免影响使用！';
-      AlertUtil.showCancelOKAlert(
+      CJTSAlertUtil.showCancelOKAlert(
         context: currentContext,
         barrierDismissible: true,
         title: title,
@@ -98,8 +98,8 @@ class PackageCheckUpdateNetworkUtil {
     }
 
     if (defaultNetworkModel.type == PackageNetworkType.product) {
-      ToastUtil.showMsg(
-          '温馨提示：您当前包为${defaultNetworkModel.des}，不支持切换环境。', currentContext);
+      CJTSToastUtil.showMessage(
+          '温馨提示：您当前包为${defaultNetworkModel.des}，不支持切换环境。');
       return;
     }
 
@@ -123,7 +123,7 @@ class PackageCheckUpdateNetworkUtil {
           '您当前${defaultNetworkModel.des}已是默认的【${defaultNetworkModel.shortName}】，不建议切换，以免影响使用！';
     }
 
-    AlertUtil.showFlexWidthButtonsAlert(
+    CJTSAlertUtil.showFlexWidthButtonsAlert(
       context: currentContext,
       barrierDismissible: true,
       title: title,

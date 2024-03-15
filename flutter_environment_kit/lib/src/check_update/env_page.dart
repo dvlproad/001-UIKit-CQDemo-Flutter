@@ -5,10 +5,10 @@ class EnvPage extends StatefulWidget {
   const EnvPage({Key? key}) : super(key: key);
 
   @override
-  _DevPageState createState() => _DevPageState();
+  _EnvPageState createState() => _EnvPageState();
 }
 
-class _DevPageState extends State<EnvPage> {
+class _EnvPageState extends State<EnvPage> {
   @override
   void dispose() {
     super.dispose();

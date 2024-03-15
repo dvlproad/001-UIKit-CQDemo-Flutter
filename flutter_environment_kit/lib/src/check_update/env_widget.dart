@@ -1,20 +1,19 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, unused_import
 
 /*
  * @Author: dvlproad
  * @Date: 2022-10-13 10:53:02
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-04 17:34:03
+ * @LastEditTime: 2024-03-15 23:54:32
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:provider/provider.dart';
-// import './package_check_update_network_util.dart';
-// import './package_check_update_target_util.dart';
+import './package_check_update_network_util.dart';
+import './package_check_update_target_util.dart';
 import './package_check_update_proxy_util.dart';
 
 import './env_page_util.dart';
@@ -108,7 +107,7 @@ class _EnvWidgetState extends State<EnvWidget> {
     //   throw Exception(
     //       '未设置选中的网络环境，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
     // }
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换环境",
       textValue: selectedNetworkModel.name,
@@ -130,7 +129,7 @@ class _EnvWidgetState extends State<EnvWidget> {
     PackageTargetModel packageTargetModel =
         PackageTargetPageDataManager().selectedTargetModel;
 
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       height: envCellHeight,
       title: "切换平台",
       textValue: packageTargetModel.name,
@@ -172,13 +171,13 @@ class _EnvWidgetState extends State<EnvWidget> {
           BrnToast.show('密码错误', context);
           return;
         }
-        Navigator.pop(context);
+        RouteManager.pop(context);
         if (passwordCorrectAction != null) {
           passwordCorrectAction();
         }
       },
       onCancel: () {
-        Navigator.pop(context);
+        RouteManager.pop(context);
       },
     ).show(context);
   }
@@ -193,7 +192,7 @@ class _EnvWidgetState extends State<EnvWidget> {
     //   throw Exception(
     //       '未设置选中的代理，请检查是否调用过 EnvironmentUtil.completeEnvInternal_whenNull');
     // }
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       height: envCellHeight,
       leftMaxWidth: 80,
       title: "添加代理",
@@ -221,7 +220,7 @@ class _EnvWidgetState extends State<EnvWidget> {
   Widget _devtool_apimock_cell(BuildContext context) {
     int mockCount = ApiManager.mockCount();
     String mockCountString = '已mock:$mockCount个';
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       height: envCellHeight,
       title: "Mock工具",
       textValue: mockCountString,
@@ -236,7 +235,7 @@ class _EnvWidgetState extends State<EnvWidget> {
         } else {
           String message =
               "您当前包为${NetworkPageDataManager().originNetworkModel.name}，不支持Mock";
-          ToastUtil.showMsg(message, context);
+          CJTSToastUtil.showMessage(message);
         }
       },
     );

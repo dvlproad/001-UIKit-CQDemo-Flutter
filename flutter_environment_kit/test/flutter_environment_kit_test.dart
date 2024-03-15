@@ -7,7 +7,7 @@
  */
 import 'package:flutter_test/flutter_test.dart';
 
-// import 'package:app_environment/app_environment.dart';
+// import 'package:flutter_environment_kit/flutter_environment_kit.dart';
 
 void main() {
   test('adds one to input values', () {

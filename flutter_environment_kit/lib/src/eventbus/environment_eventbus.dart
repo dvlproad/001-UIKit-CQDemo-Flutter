@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-04 17:35:30
+ * @LastEditTime: 2024-03-16 00:01:19
  * @Description: 开发工具的各种事件
  */
 import 'package:event_bus/event_bus.dart';
@@ -60,7 +60,7 @@ class SpendDateModel {
 
     Duration totalDuration =
         lastDateModel.endTime.difference(firstDateModel.startTime);
-    // int seconds = totalD.gitignoreuration.inSeconds;
+    // int seconds = totalDuration.inSeconds;
     int milliseconds = totalDuration.inMilliseconds;
     // return apiDuration.toString();
     String spendTime = "$milliseconds毫秒($allItemSpendTime)";

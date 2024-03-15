@@ -1,4 +1,4 @@
-# app_environment
+# flutter_environment_kit
 
 通用的app的环境设置库.
 

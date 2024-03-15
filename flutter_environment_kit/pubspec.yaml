@@ -1,8 +1,8 @@
-name: app_environment
+name: flutter_environment_kit
 description: app的环境切换.
-version: 0.0.2
-repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_environment
-homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/app_environment
+version: 0.0.1
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_kit
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_environment_kit
 
 
 environment:
@@ -13,15 +13,14 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_demo_kit: ^0.0.3
+
   provider: ^6.0.5
   event_bus: ^2.0.0
-  flutter_overlay_kit: ^0.0.2
-  flutter_baseui_kit: ^0.0.2
-
-  flutter_environment_base: ^0.0.1
+  flutter_environment_base: ^0.0.3
     # path: ../flutter_environment_base/
+    
   flutter_effect_kit: ^0.0.1
-    # path: ../flutter_effect_kit/
 
 dev_dependencies:
   flutter_test:

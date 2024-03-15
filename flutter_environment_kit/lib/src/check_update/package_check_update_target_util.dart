@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
 import 'package:flutter_environment_base/flutter_environment_base.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './env_page_util.dart';
 
@@ -118,7 +118,7 @@ class PackageCheckUpdateTargetUtil {
       message = '您当前$currentTargetDes已是默认的平台，不建议切换，以免影响使用！';
     }
 
-    AlertUtil.showFlexWidthButtonsAlert(
+    CJTSAlertUtil.showFlexWidthButtonsAlert(
       context: currentContext,
       barrierDismissible: true,
       title: title,
