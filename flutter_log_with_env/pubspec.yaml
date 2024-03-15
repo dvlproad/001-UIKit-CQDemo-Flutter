@@ -1,6 +1,6 @@
 name: flutter_log_with_env
 description: 应用的log库(已根据环境内置必备的log输出情况).
-version: 0.0.4
+version: 0.0.5
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_with_env
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_with_env
 
@@ -12,11 +12,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_demo_kit: ^0.0.2
+  flutter_demo_kit: ^0.0.3
     # path: ../flutter_demo_kit/
 
   # 底层Log库
-  flutter_log_base: ^0.0.4
+  flutter_log_base: ^0.0.5
 
   # 机器人
   flutter_robot_base: ^0.0.1

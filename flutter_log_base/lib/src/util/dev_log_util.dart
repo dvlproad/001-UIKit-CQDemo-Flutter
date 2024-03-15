@@ -7,10 +7,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'popup_logview_manager.dart';
 import '../bean/log_data_bean.dart';
-
-import '../log_ui/dev_log_toast_util.dart';
 
 class DevLogUtil {
   static List<LogModel> logModels = [];

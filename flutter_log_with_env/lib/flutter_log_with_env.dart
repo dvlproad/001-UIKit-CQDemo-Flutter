@@ -10,4 +10,6 @@ library flutter_log_with_env;
 export './src/app_log_util.dart';
 export './src/log_test_page.dart';
 
-export 'package:flutter_log_base/flutter_log_base.dart';
+export 'package:flutter_log_base/flutter_log_base.dart'; // 需要 LogObjectType \ LogLevel
+export 'package:flutter_robot_base/flutter_robot_base.dart'; // 需要 RobotPostType
+export 'package:flutter_environment_base/flutter_environment_base.dart'; // 需要 PackageNetworkType \ PackageTargetType

@@ -41,6 +41,9 @@ class AppLogUtil {
         isForceNoUploadEnvGetBlock, // 是否是强制不上报的环境(正式上生产的时候就不要上报了)
     required String Function(String apiHost) getRobotUrlByApiHostBlock,
     required void Function(LogModel gLogModel) logGenerateBlock, // 产生日志的回调
+    required void Function(dynamic) jsonViewOnTap,
+    required void Function(dynamic) jsonViewOnDoubleTap,
+    required void Function(dynamic) jsonViewOnLongPress,
   }) async {
     _logGenerateBlock = logGenerateBlock;
     LogUtil.init(
@@ -140,7 +143,12 @@ class AppLogUtil {
       },
       logDetailPageBuilder: (LogModel logModel) {
         if (logModel.detailLogModel is Map) {
-          return _mapDetailWidget(logModel);
+          return _mapDetailWidget(
+            logModel,
+            jsonViewOnTap: jsonViewOnTap,
+            jsonViewOnDoubleTap: jsonViewOnDoubleTap,
+            jsonViewOnLongPress: jsonViewOnLongPress,
+          );
         } else {
           return Container();
         }
@@ -264,7 +272,12 @@ class AppLogUtil {
     }
   }
 
-  static Widget _mapDetailWidget(LogModel logModel) {
+  static Widget _mapDetailWidget(
+    LogModel logModel, {
+    required void Function(dynamic) jsonViewOnTap,
+    required void Function(dynamic) jsonViewOnDoubleTap,
+    required void Function(dynamic) jsonViewOnLongPress,
+  }) {
     return LogDetailWidget(
       apiLogModel: logModel,
       clickApiLogCellCallback: ({
@@ -280,6 +293,9 @@ class AppLogUtil {
       },
       onPressedClose: () => ApplicationLogViewManager.dismissLogOverlayEntry(
           ApplicationLogViewManager.logDetailOverlayKey),
+      jsonViewOnTap: jsonViewOnTap,
+      jsonViewOnDoubleTap: jsonViewOnDoubleTap,
+      jsonViewOnLongPress: jsonViewOnLongPress,
     );
   }
 
