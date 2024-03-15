@@ -5,6 +5,7 @@ import './components/bg_border_widget.dart';
 class CQImagesAddDeleteList extends StatefulWidget {
   final double width;
   final double? height;
+  final EdgeInsets? padding;
   final Color? color;
 
   final Axis direction;
@@ -34,6 +35,7 @@ class CQImagesAddDeleteList extends StatefulWidget {
     Key? key,
     required this.width,
     this.height,
+    this.padding,
     this.color,
     this.direction = Axis.horizontal,
     this.scrollDirection = Axis.vertical,
@@ -71,6 +73,7 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
     return CQImagesPreSufBadgeList(
       width: widget.width,
       height: widget.height,
+      padding: widget.padding,
       color: widget.color,
       direction: widget.direction,
       scrollDirection: widget.scrollDirection,
@@ -140,12 +143,12 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
       // ),
       child: Container(
         // color: Colors.red,
-        width: imageWith + 4,
-        height: imageWith + 4,
+        width: imageWith + 0,
+        height: imageWith + 0,
         child: Center(
           child: Image(
             image: AssetImage(
-              'assets/icon_delete.png',
+              'assets/icon_delete_new.png',
               package: 'flutter_images_action_list',
             ),
             width: imageWith,

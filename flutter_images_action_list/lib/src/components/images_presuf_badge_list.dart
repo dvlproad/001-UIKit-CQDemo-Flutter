@@ -11,6 +11,7 @@ import './fix_grid_view.dart';
 class CQImagesPreSufBadgeList extends StatefulWidget {
   final double width;
   final double? height;
+  final EdgeInsets? padding;
   final Color? color;
 
   final Axis direction;
@@ -45,6 +46,7 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     Key? key,
     required this.width,
     this.height,
+    this.padding,
     this.color,
     this.direction = Axis.horizontal,
     this.scrollDirection = Axis.vertical,
@@ -97,6 +99,7 @@ class _CQImagesPreSufBadgeListState extends State<CQImagesPreSufBadgeList> {
     return FixGridView(
       width: widget.width,
       height: widget.height,
+      padding: widget.padding,
       color: widget.color,
       direction: widget.direction,
       scrollDirection: widget.scrollDirection,

@@ -7,6 +7,7 @@ import './images_presuf_badge_base_list.dart';
 class FixGridView extends StatefulWidget {
   final double width;
   final double? height; // 未设置时候将自动适应高度
+  final EdgeInsets? padding;
   final Color? color;
 
   final Axis direction;
@@ -41,6 +42,7 @@ class FixGridView extends StatefulWidget {
     Key? key,
     required this.width,
     this.height,
+    this.padding,
     this.color,
     this.direction = Axis.horizontal,
     this.scrollDirection = Axis.vertical,
@@ -125,7 +127,7 @@ class FixGridViewState extends State<FixGridView> {
         spacing: mainSpacing,
         runSpacing: crossSpacing,
         scrollAnimationDuration: Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(0),
+        padding: widget.padding,
         direction: widget.direction,
         scrollDirection: widget.scrollDirection,
         scrollPhysics: widget.physics,
