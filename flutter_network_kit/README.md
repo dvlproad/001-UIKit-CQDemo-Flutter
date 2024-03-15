@@ -1,6 +1,6 @@
 # flutter_network_kit
 
-flutter_network_base + dio_http_cache + flutter_effect_kit(LoadingUtil) + flutter_log_base + flutter_robot_base + event_bus + connectivity_plus.
+flutter_network_base + dio_http_cache_cjfork + flutter_log_base + flutter_robot_base + event_bus + connectivity_plus.
 
 ## Features
 

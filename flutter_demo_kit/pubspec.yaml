@@ -1,6 +1,6 @@
 name: flutter_demo_kit
 description: Help you introduce as few demo libraries from other third-party libraries as possible(帮你尽可能少引入其他三方库的demo库).
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_demo_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_demo_kit
 

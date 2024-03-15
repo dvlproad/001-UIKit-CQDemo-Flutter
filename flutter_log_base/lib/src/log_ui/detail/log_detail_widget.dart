@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 
-import 'package:flutter_reuse_view/flutter_reuse_view.dart';
 // import '../evvironment_header.dart';
 // import '../log_change_notifiter.dart';
 
@@ -24,6 +24,10 @@ class LogDetailWidget extends StatefulWidget {
   final void Function()? onPressedClear; // 点击清空按钮的事件
   final void Function() onPressedClose; // 点击关闭按钮的事件
 
+  final void Function(dynamic) jsonViewOnTap;
+  final void Function(dynamic) jsonViewOnDoubleTap;
+  final void Function(dynamic) jsonViewOnLongPress;
+
   const LogDetailWidget({
     Key? key,
     this.color,
@@ -32,6 +36,9 @@ class LogDetailWidget extends StatefulWidget {
     this.onPressedCopyAll,
     this.onPressedClear,
     required this.onPressedClose,
+    required this.jsonViewOnTap,
+    required this.jsonViewOnDoubleTap,
+    required this.jsonViewOnLongPress,
   }) : super(key: key);
 
   @override
@@ -249,6 +256,9 @@ class _LogDetailWidgetState extends State<LogDetailWidget> {
               bLogModel: bLogModel,
             );
           },
+          jsonViewOnTap: widget.jsonViewOnTap,
+          jsonViewOnDoubleTap: widget.jsonViewOnDoubleTap,
+          jsonViewOnLongPress: widget.jsonViewOnLongPress,
         );
       },
       divider: Container(color: Colors.green, height: 1.0),

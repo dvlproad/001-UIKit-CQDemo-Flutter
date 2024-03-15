@@ -12,6 +12,7 @@ export 'basepage/CJTSBaseTabBarPage.dart';
 export 'tableview/cell_enum.dart' show CJTSTableViewCellArrowImageType;
 export 'tableview/CJTSTableViewCell.dart';
 export 'tableview/CJTSSectionTableView.dart';
+export 'tableview/flutter_section_table_view.dart';
 
 export 'baseuikit/cqts_button_factory.dart';
 export 'baseuikit/title_textValue_cell.dart';

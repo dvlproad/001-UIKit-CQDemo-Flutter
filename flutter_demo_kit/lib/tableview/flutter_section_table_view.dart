@@ -1,7 +1,20 @@
 library flutter_section_table_view;
 
 import 'dart:math';
+/*
+ * section_table_view.dart
+ *
+ * @Description: 分组列表实现方法测试2：以只一个 list 来实现，即将分组 sectionHeader 作为row==-1 的 cell 来在 list 中绘制
+ *
+ * @author      ciyouzen
+ * @email       dvlproad@163.com
+ * @date        2020/7/30 17:01
+ *
+ * Copyright (c) dvlproad. All rights reserved.
+ */
 import 'package:flutter/material.dart';
+import './index_path.dart';
+export './index_path.dart';
 
 typedef int RowCountInSectionCallBack(int section);
 typedef Widget CellAtIndexPathCallBack(int section, int row);
@@ -12,35 +25,13 @@ typedef double CellHeightAtIndexPathCallBack(int section, int row);
 typedef void SectionTableViewScrollToCallBack(
     int section, int row, bool isScrollDown);
 
-class IndexPath {
-  final int section;
-  final int row;
-  IndexPath({required this.section, required this.row});
-  @override
-  String toString() {
-    return 'section_${section}_row_$row';
-  }
-
-  @override
-  int get hashCode => super.hashCode;
-  @override
-  bool operator ==(other) {
-    if (other.runtimeType != IndexPath) {
-      return false;
-    }
-    // ignore: test_types_in_equals
-    IndexPath otherIndexPath = other as IndexPath;
-    return section == otherIndexPath.section && row == otherIndexPath.row;
-  }
-}
-
-class SectionTableController extends ChangeNotifier {
+class SectionChangeNotifier extends ChangeNotifier {
   IndexPath topIndex = IndexPath(section: 0, row: -1);
   bool dirty = false;
   bool animate = false;
   SectionTableViewScrollToCallBack? sectionTableViewScrollTo;
 
-  SectionTableController({this.sectionTableViewScrollTo});
+  SectionChangeNotifier({this.sectionTableViewScrollTo});
 
   void jumpTo(int section, int row) {
     topIndex = IndexPath(section: section, row: row);
@@ -69,22 +60,22 @@ class SectionTableView extends StatefulWidget {
   final Widget? divider;
 
   //tell me cell & header & divider height, so that I can scroll to specific index path
-  //work with SectionTableController
+  //work with SectionChangeNotifier
   final SectionHeaderHeightCallBack?
-      sectionHeaderHeight; // must set when use SectionTableController
+      sectionHeaderHeight; // must set when use SectionChangeNotifier
   final DividerHeightCallBack?
-      dividerHeightBlock; // must set when use SectionTableController
+      dividerHeightBlock; // must set when use SectionChangeNotifier
   final CellHeightAtIndexPathCallBack?
-      cellHeightAtIndexPath; // must set when use SectionTableController
-  final SectionTableController?
-      controller; //you can use this controller to scroll section table view
+      cellHeightAtIndexPath; // must set when use SectionChangeNotifier
+  final SectionChangeNotifier?
+      sectionChangeNotifier; //you can use this sectionChangeNotifier to scroll section table view
 
-  final ScrollController _scrollController;
-  ScrollController get scrollController => _scrollController;
+  final ScrollController? controller;
   final bool reverse;
 
   SectionTableView({
     Key? key,
+    this.controller,
     required this.sectionCount,
     required this.numOfRowInSection,
     required this.cellAtIndexPath,
@@ -93,10 +84,9 @@ class SectionTableView extends StatefulWidget {
     this.sectionHeaderHeight,
     this.dividerHeightBlock,
     this.cellHeightAtIndexPath,
-    this.controller,
+    this.sectionChangeNotifier,
     this.reverse = false,
-  })  : _scrollController = ScrollController(),
-        super(key: key);
+  }) : super(key: key);
   @override
   _SectionTableViewState createState() => new _SectionTableViewState();
 }
@@ -159,19 +149,20 @@ class _SectionTableViewState extends State<SectionTableView> {
       }
     }
 
-    if (widget.controller == null) {
+    if (widget.sectionChangeNotifier == null) {
       return;
     }
 
     //only execute below when user want count height and scroll to specific index path
     //calculate indexPath to offset mapping
     indexPathToOffsetSearch = {};
-    final SectionTableController? sectionController = widget.controller;
+    final SectionChangeNotifier? sectionController =
+        widget.sectionChangeNotifier;
     if ((showSectionHeader && widget.sectionHeaderHeight == null) ||
         (showDivider && widget.dividerHeightBlock == null) ||
         widget.cellHeightAtIndexPath == null) {
       print(
-          '''error: if you want to use controller to scroll SectionTableView to wanted index path, 
+          '''error: if you want to use sectionChangeNotifier to scroll SectionTableView to wanted index path, 
                you need to pass parameters: 
                [sectionHeaderHeight][dividerHeight][cellHeightAtIndexPath]''');
     } else {
@@ -195,7 +186,7 @@ class _SectionTableViewState extends State<SectionTableView> {
     }
 
     //calculate initial scroll offset
-//      double initialOffset = scrollOffsetFromIndex(widget.controller.topIndex);
+//      double initialOffset = scrollOffsetFromIndex(widget.sectionChangeNotifier.topIndex);
 //      if (initialOffset == null) {
 //        initialOffset = 0.0;
 //      }
@@ -230,9 +221,9 @@ class _SectionTableViewState extends State<SectionTableView> {
     preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
     nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
 
-    //init scroll controller
-    widget.controller!.addListener(() {
-      //listen section table controller to scroll the list view
+    //init scroll sectionChangeNotifier
+    widget.sectionChangeNotifier!.addListener(() {
+      //listen section table sectionChangeNotifier to scroll the list view
       if (sectionController!.dirty) {
         sectionController.dirty = false;
         double? offset = scrollOffsetFromIndex(sectionController.topIndex);
@@ -240,16 +231,16 @@ class _SectionTableViewState extends State<SectionTableView> {
           return;
         }
         if (sectionController.animate) {
-          widget.scrollController.animateTo(offset,
+          widget.controller?.animateTo(offset,
               duration: Duration(milliseconds: 250), curve: Curves.decelerate);
         } else {
-          widget.scrollController.jumpTo(offset);
+          widget.controller?.jumpTo(offset);
         }
       }
     });
-    //listen scroll controller to feedback current index path
-    widget.scrollController.addListener(() {
-      double currentOffset = widget.scrollController.offset;
+    //listen scroll sectionChangeNotifier to feedback current index path
+    widget.controller?.addListener(() {
+      double currentOffset = widget.controller?.offset ?? 0;
 //        print('scroll offset $currentOffset');
       if (currentOffset < preIndexOffset!) {
         //go previous cell
@@ -260,8 +251,8 @@ class _SectionTableViewState extends State<SectionTableView> {
           preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
           nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
 //            print('go previous index $currentIndexPath');
-          if (widget.controller!.sectionTableViewScrollTo != null) {
-            widget.controller!.sectionTableViewScrollTo!(
+          if (widget.sectionChangeNotifier!.sectionTableViewScrollTo != null) {
+            widget.sectionChangeNotifier!.sectionTableViewScrollTo!(
                 currentIndexPath.section, currentIndexPath.row, false);
           }
         }
@@ -275,8 +266,8 @@ class _SectionTableViewState extends State<SectionTableView> {
           preIndexOffset = indexPathToOffsetSearch[currentIndexPath.toString()];
           nextIndexOffset = indexPathToOffsetSearch[nextIndexPath.toString()];
 //            print('go next index $currentIndexPath');
-          if (widget.controller!.sectionTableViewScrollTo != null) {
-            widget.controller!.sectionTableViewScrollTo!(
+          if (widget.sectionChangeNotifier!.sectionTableViewScrollTo != null) {
+            widget.sectionChangeNotifier!.sectionTableViewScrollTo!(
                 currentIndexPath.section, currentIndexPath.row, true);
           }
         }
@@ -333,7 +324,7 @@ class _SectionTableViewState extends State<SectionTableView> {
     return ListView.builder(
       key: listViewKey,
       physics: AlwaysScrollableScrollPhysics(),
-      controller: widget.scrollController,
+      controller: widget.controller,
       reverse: widget.reverse,
       itemBuilder: (context, index) {
         return _buildCell(context, index);

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_reuse_view/flutter_reuse_view.dart';
 
 import '../log_cell.dart';
 import '../log_change_notifiter.dart';

@@ -25,6 +25,9 @@ class ApiLogDetailCell extends StatefulWidget {
     required LogModel bLogModel,
   }) clickApiLogCellCallback; // logCell 的点击
   final void Function()? onLongPress;
+  final void Function(dynamic) jsonViewOnTap;
+  final void Function(dynamic) jsonViewOnDoubleTap;
+  final void Function(dynamic) jsonViewOnLongPress;
 
   const ApiLogDetailCell({
     Key? key,
@@ -34,6 +37,9 @@ class ApiLogDetailCell extends StatefulWidget {
     this.row = 0,
     required this.clickApiLogCellCallback,
     this.onLongPress,
+    required this.jsonViewOnTap,
+    required this.jsonViewOnDoubleTap,
+    required this.jsonViewOnLongPress,
   }) : super(key: key);
 
   @override
@@ -108,7 +114,12 @@ class _ApiLogDetailCellState extends State<ApiLogDetailCell> {
                     },
                     onLongPress: widget.onLongPress,
                   ),
-                  JsonViewer(jsonMap),
+                  BaseJsonViewer(
+                    jsonMap,
+                    onTap: widget.jsonViewOnTap,
+                    onDoubleTap: widget.jsonViewOnDoubleTap,
+                    onLongPress: widget.jsonViewOnLongPress,
+                  ),
                 ],
               )
             : LogBaseTableViewCell(

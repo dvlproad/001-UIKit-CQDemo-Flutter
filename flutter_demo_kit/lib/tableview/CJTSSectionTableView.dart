@@ -63,7 +63,7 @@ class _CJTSSectionTableViewState extends State<CJTSSectionTableView> {
         color: Colors.green,
         height: 1.0,
       ),
-      //SectionTableController
+      //SectionChangeNotifier
       sectionHeaderHeight: (section) => 25.0,
       dividerHeightBlock: () => 1.0,
       cellHeightAtIndexPath: (section, row) => 44.0,

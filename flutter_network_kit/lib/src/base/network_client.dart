@@ -1,5 +1,4 @@
 import 'package:flutter_network_base/flutter_network_base.dart';
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:dio/dio.dart';
 // log
 import '../log/api_log_util.dart';
@@ -147,7 +146,7 @@ class NetworkClient extends BaseNetworkClient {
     bool Function(ResponseModel responseModel)?
         retryStopConditionConfigBlock, // 是否请求停止的判断条件(为空时候,默认请求成功即停止)
     Options? options,
-    bool withLoading = false,
+    void Function({required bool show})? loadingHandle,
     bool?
         toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
 
@@ -158,7 +157,7 @@ class NetworkClient extends BaseNetworkClient {
       requestMethod: requestMethod,
       customParams: customParams,
       options: options,
-      withLoading: withLoading,
+      loadingHandle: loadingHandle,
       toastIfMayNeed: toastIfMayNeed,
     ).then((ResponseModel responseModel) {
       if (beforeResponseModel != null) {
@@ -193,7 +192,7 @@ class NetworkClient extends BaseNetworkClient {
             retryDuration: retryDuration,
             retryStopConditionConfigBlock: retryStopConditionConfigBlock,
             options: options,
-            withLoading: withLoading,
+            loadingHandle: loadingHandle,
             toastIfMayNeed: toastIfMayNeed,
             beforeResponseModel: responseModel,
           );
@@ -208,7 +207,7 @@ class NetworkClient extends BaseNetworkClient {
     RequestMethod requestMethod = RequestMethod.post,
     Map<String, dynamic>? customParams,
     Options? options,
-    bool withLoading = false,
+    void Function({required bool show})? loadingHandle,
     bool?
         toastIfMayNeed, // 应该弹出toast的地方是否要弹出toast(如网络code为500的时候),必须可为空是,不为空的时候无法实现修改
   }) async {
@@ -225,8 +224,8 @@ class NetworkClient extends BaseNetworkClient {
     }
     */
 
-    if (withLoading == true) {
-      LoadingUtil.show();
+    if (loadingHandle != null) {
+      loadingHandle(show: true);
     }
 
     return base_requestUrl(
@@ -235,8 +234,8 @@ class NetworkClient extends BaseNetworkClient {
       customParams: customParams,
       options: options,
     ).then((ResponseModel responseModel) {
-      if (withLoading == true) {
-        LoadingUtil.dismiss();
+      if (loadingHandle != null) {
+        loadingHandle(show: false);
       }
 
       return checkResponseModelFunction(
