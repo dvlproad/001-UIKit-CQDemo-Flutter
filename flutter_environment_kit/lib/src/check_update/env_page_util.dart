@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
 
 /// 测试API的场景类型
@@ -137,7 +137,7 @@ class EnvPageUtil {
     _logoutHandleWhenExitAppByChangeNetwork();
 
     // Future.delayed(const Duration(milliseconds: 500), () {
-    LoadingUtil.showDongingTextInContext(
+    CJTSLoadingUtil.showDongingTextInContext(
       context,
       '退出中...',
       milliseconds: 500,

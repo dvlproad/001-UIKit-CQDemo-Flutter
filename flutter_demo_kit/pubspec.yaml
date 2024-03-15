@@ -1,6 +1,6 @@
 name: flutter_demo_kit
 description: Help you introduce as few demo libraries from other third-party libraries as possible(帮你尽可能少引入其他三方库的demo库).
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_demo_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_demo_kit
 
@@ -29,6 +29,8 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages

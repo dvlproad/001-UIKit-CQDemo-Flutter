@@ -19,6 +19,7 @@ export 'baseuikit/title_textValue_cell.dart';
 
 export 'baseutil/cjts_toast_util.dart';
 export 'baseutil/alert/cjts_alert_util.dart';
+export 'baseutil/hud/cjts_loading_util.dart';
 
 export './Demo_RipeView/CQTSRipeButton.dart';
 export './Demo_Resources/CQTSRandomUtil.dart';
