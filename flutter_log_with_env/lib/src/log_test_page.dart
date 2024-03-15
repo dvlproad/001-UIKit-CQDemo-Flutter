@@ -9,10 +9,9 @@
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_optimize_interacte/flutter_optimize_interacte.dart';
 import 'package:flutter_robot_base/flutter_robot_base.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
 import './log_util.dart';
 
@@ -58,25 +57,30 @@ class _LogTestPageState extends State<LogTestPage> {
           color: Colors.white,
           child: Column(
             children: [
-              ImageTitleTextValueCell(
+              CJTSImageTitleTextValueCell(
                 height: 40,
                 title: "log信息",
                 textValue: '',
-                arrowImageType: TableViewCellArrowImageType.none,
+                arrowImageType: CJTSTableViewCellArrowImageType.none,
               ),
               _robotUrl_cell(),
               _logTitle_cell(),
               _logCustomMessage_cell(),
               _logRobot_cell(),
               Container(height: 40),
-              RowPaddingButton(
+              Container(
                 height: 44,
-                leftRightPadding: 20,
-                title: '发送',
-                bgColorType: ThemeBGType.theme,
-                onPressed: throttle(() async {
-                  _sendLog();
-                }),
+                color: Colors.orange,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: TextButton(
+                  onPressed: throttle(() async {
+                    _sendLog();
+                  }),
+                  child: const Text(
+                    "发送",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
               ),
             ],
           ),
@@ -97,11 +101,11 @@ class _LogTestPageState extends State<LogTestPage> {
     );
 
     String message = sendSuccess ? "日志上报成功" : "日志上报失败";
-    ToastUtil.showMessage(message);
+    CJTSToastUtil.showMessage(message);
   }
 
   Widget _robotUrl_cell() {
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "企业微信地址",
       textValue: _logRobotKey,
       textValueMaxLines: 4,
@@ -109,46 +113,46 @@ class _LogTestPageState extends State<LogTestPage> {
       onTap: () {},
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: _logRobotKey));
-        ToastUtil.showMessage('企业微信地址拷贝成功');
+        CJTSToastUtil.showMessage('企业微信地址拷贝成功');
       },
     );
   }
 
   Widget _logTitle_cell() {
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "日志标题",
       textValue: _logTitle,
       textValueMaxLines: 4,
       onTap: () {},
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: _logTitle));
-        ToastUtil.showMessage('日志标题拷贝成功');
+        CJTSToastUtil.showMessage('日志标题拷贝成功');
       },
     );
   }
 
   Widget _logCustomMessage_cell() {
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "日志正文",
       textValue: _logCustomMessage,
       textValueMaxLines: 30,
       onTap: () {},
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: _logCustomMessage));
-        ToastUtil.showMessage('日志正文拷贝成功');
+        CJTSToastUtil.showMessage('日志正文拷贝成功');
       },
     );
   }
 
   Widget _logRobot_cell() {
-    return ImageTitleTextValueCell(
+    return CJTSImageTitleTextValueCell(
       title: "日志接收地址",
       textValue: _logRobotKey,
       textValueMaxLines: 30,
       onTap: () {},
       onLongPress: () {
         Clipboard.setData(ClipboardData(text: _logRobotKey));
-        ToastUtil.showMessage('日志接收地址拷贝成功');
+        CJTSToastUtil.showMessage('日志接收地址拷贝成功');
       },
     );
   }

@@ -1,7 +1,15 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2023-04-07 14:59:02
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-03-14 19:09:19
+ * @Description: 
+ */
 library flutter_demo_kit;
 
 export 'basepage/CJTSBasePage.dart';
 export 'basepage/CJTSBaseTabBarPage.dart';
+export 'tableview/cell_enum.dart' show CJTSTableViewCellArrowImageType;
 export 'tableview/CJTSTableViewCell.dart';
 export 'tableview/CJTSSectionTableView.dart';
 

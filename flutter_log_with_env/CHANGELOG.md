@@ -9,3 +9,7 @@
 ## 0.0.3
 
 * 依赖 flutter_optimize_interacte.
+
+## 0.0.4
+
+* 优化：去除不必要的其他依赖库

@@ -11,7 +11,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+import 'package:flutter_demo_kit/flutter_demo_kit.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
 import 'package:flutter_robot_base/flutter_robot_base.dart';
 import 'package:flutter_environment_base/flutter_environment_base.dart';
@@ -276,7 +276,7 @@ class AppLogUtil {
         String detailLogJsonString = bLogModel.detailMapString;
 
         Clipboard.setData(ClipboardData(text: detailLogJsonString));
-        ToastUtil.showMessage('复制当行到粘贴板成功');
+        CJTSToastUtil.showMessage('复制当行到粘贴板成功');
       },
       onPressedClose: () => ApplicationLogViewManager.dismissLogOverlayEntry(
           ApplicationLogViewManager.logDetailOverlayKey),
@@ -398,7 +398,7 @@ class AppLogUtil {
       extraLogInfo: extraLogInfo,
     );
     if (shouldShowToast) {
-      ToastUtil.showMessage('发现错误了，快打开日志查看');
+      CJTSToastUtil.showMessage('发现错误了，快打开日志查看');
     }
 
     bool shouldShowToPage = LogUtil.shouldShowToPageFunction(
