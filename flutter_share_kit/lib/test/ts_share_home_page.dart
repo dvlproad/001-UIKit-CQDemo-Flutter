@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-02-28 17:34:18
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-13 14:15:48
+ * @LastEditTime: 2024-03-15 18:37:01
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -11,6 +11,8 @@ import 'package:flutter_share_kit/flutter_share_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+
+import 'tsapp_share_singleton.dart';
 
 class TSShareHomePage extends StatefulWidget {
   final bool currentIsPosterPage;
@@ -109,97 +111,81 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
     bool isBlock = 0 % 2 == 0 ? true : false;
     // String imUserId = "imUserId";
 
-    ShareDialogUtil.show(
+    String posterBgImageUrl =
+        "https://img0.baidu.com/it/u=3316636492,2799302396&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800";
+
+    TSAppShareSingleton().showEasyShareBoard(
       context,
-      shareActionModels: [
-        BaseActionModel.im(handle: () {
+      bizId: "123",
+      bizType: TSAppShareBizType.improveResult,
+      title: "我有一个新的flag！",
+      description: "第一行\n第二行\n第三行",
+      imHandle: () {
+        ToastUtil.showDoing();
+      },
+      showCopyLink: true,
+      thumbnailImage: WeChatImage.network(posterBgImageUrl),
+      posterHandle: posterActionHandle,
+      blockModel: BaseActionModel.block(
+        isBlock: isBlock,
+        handle: () {
           Navigator.pop(context);
-          ToastUtil.showDoing();
-        }),
-        BaseActionModel.wechat(handle: () {
-          Navigator.pop(context);
-          //
-        }),
-        BaseActionModel.timeline(handle: () {
-          Navigator.pop(context);
-          //
-        }),
-        posterActionModel,
-      ],
-      operateActionModels: [
-        BaseActionModel.copyLink(handle: () {
-          CopyLinkShareUtil.copyLink(context, lastShareString: "abc");
-        }),
-        BaseActionModel.block(
-          isBlock: isBlock,
-          handle: () {
-            // if (isBlock) {
-            //   ChatUtil.unblock(imUserId);
-            // } else {
-            //   ChatUtil.unblock(imUserId);
-            // }
-          },
-        ),
-      ],
+          setState(() {
+            isBlock = 0 % 2 == 0 ? true : false;
+          });
+        },
+      ),
     );
   }
 
   /// 分享海报的按钮
-  BaseActionModel get posterActionModel {
+  void Function() get posterActionHandle {
     if (currentIsPosterPage) {
-      return BaseActionModel.poster(
-        title: "保存海报",
-        handle: () {
-          Navigator.pop(context);
+      return () {
+        Navigator.pop(context);
 
-          PosterShareUtil.getAndSaveScreensShot(
-            context,
-            screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
-          ).then((value) {
-            Navigator.pop(context);
-          });
-        },
-      );
+        PosterShareUtil.getAndSaveScreensShot(
+          context,
+          screenRepaintBoundaryGlobalKey: _posterRepaintBoundaryGlobalKey,
+        ).then((value) {
+          Navigator.pop(context);
+        });
+      };
     }
-    return BaseActionModel.poster(handle: () {
+    return () {
       Navigator.pop(context);
 
-      PopupUtil.popupInBottom(
-        context,
-        popupViewBulider: (context) {
-          String posterBgImageUrl =
-              "https://img0.baidu.com/it/u=3316636492,2799302396&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800";
-
-          return PosterWithButtonPage.easy(
-            appbarWidgetBuilder: () {
-              return AppBar();
-              // MediaQueryData mediaQueryData =
-              //     MediaQueryData.fromWindow(window);
-
-              // return PreferredSizeWidget();
-              // return Container(
-              //   padding: EdgeInsets.only(top: mediaQueryData.padding.top),
-              //   child: AppBar(),
-              // );
-            },
-            posterBgImageUrl: posterBgImageUrl,
-            userImageUrl: posterBgImageUrl,
-            posterTextContainerBuilder: (
-                {required double halfAvatarHeight,
-                required double qrCodeWidgetWidth}) {
-              return Container(
-                color: Colors.red,
-                margin: EdgeInsets.only(
-                  top: halfAvatarHeight,
-                  right: qrCodeWidgetWidth,
-                ),
-              );
-            },
-            appLogoPath: 'images/share/logo_icon.png',
-            qrCodeWebUrl: posterBgImageUrl,
+      String posterBgImageUrl =
+          "https://img0.baidu.com/it/u=3316636492,2799302396&fm=253&fmt=auto&app=120&f=JPEG?w=1280&h=800";
+      PosterWithButtonPage page = PosterWithButtonPage.easy(
+        appbarWidgetBuilder: () {
+          return AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
           );
         },
+        posterBgImageUrl: posterBgImageUrl,
+        userImageUrl: posterBgImageUrl,
+        posterTextContainerBuilder: (
+            {required double halfAvatarHeight,
+            required double qrCodeWidgetWidth}) {
+          return Container(
+            color: Colors.red,
+            margin: EdgeInsets.only(
+              top: halfAvatarHeight,
+              right: qrCodeWidgetWidth,
+            ),
+          );
+        },
+        appLogoPath: 'images/share/logo_icon.png',
+        qrCodeWebUrl: posterBgImageUrl,
       );
-    });
+
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return page;
+        },
+      ));
+    };
   }
 }

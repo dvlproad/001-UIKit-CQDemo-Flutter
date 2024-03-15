@@ -53,11 +53,12 @@ class TSShareHomeButtons extends StatelessWidget {
           color: Colors.amber,
           borderRadius: BorderRadius.circular(22.h_pt_cj),
         ),
-        width: 150.w_pt_cj,
+        width: 140.w_pt_cj,
         height: 44.h_pt_cj,
+        alignment: Alignment.center,
         child: const Text(
           "分享XXX",
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(fontSize: 16, color: Colors.black),
         ),
       ),
     );
@@ -68,14 +69,15 @@ class TSShareHomeButtons extends StatelessWidget {
       onPressed: button2Handle,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.pink,
+          color: Colors.indigo,
           borderRadius: BorderRadius.circular(22.h_pt_cj),
         ),
-        width: 150.w_pt_cj,
+        width: 140.w_pt_cj,
         height: 44.h_pt_cj,
+        alignment: Alignment.center,
         child: Text(
           button2Text,
-          style: const TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 16, color: Colors.white),
         ),
       ),
     );

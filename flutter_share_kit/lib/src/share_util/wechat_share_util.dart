@@ -46,7 +46,7 @@ class WechatShareUtil {
 
   static shareWebPageUrl(
     String webPage, {
-    String title = "",
+    String? title,
     String? description,
     WeChatImage? thumbnail,
     required WeChatScene scene,
@@ -56,7 +56,7 @@ class WechatShareUtil {
     // print("title=$title ,description=$description, thumbnail=$thumbnail");
     var model = WeChatShareWebPageModel(
       webPage,
-      title: title,
+      title: title ?? "",
       description: description,
       thumbnail: thumbnail,
       scene: scene,

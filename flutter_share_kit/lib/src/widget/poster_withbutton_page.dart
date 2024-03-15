@@ -129,7 +129,7 @@ class _PosterWithButtonPageState extends State<PosterWithButtonPage> {
                 _renderPosterBackground(),
                 Container(
                   alignment: Alignment.topCenter,
-                  margin: EdgeInsets.only(top: 54.h_pt_cj + screenPaddingTop),
+                  margin: EdgeInsets.only(top: screenPaddingTop + 54.h_pt_cj),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

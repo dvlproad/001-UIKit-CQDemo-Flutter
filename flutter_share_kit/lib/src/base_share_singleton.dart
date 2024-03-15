@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-03-07 16:39:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-13 16:44:41
+ * @LastEditTime: 2024-03-15 18:33:21
  * @Description: 
  */
 import 'dart:async';
@@ -10,9 +10,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:fluwx/fluwx.dart';
 
-import 'share_dialog_util.dart';
 import 'share_util/copylink_share_util.dart';
-import 'share_util/poster_share_util.dart';
+// import 'share_util/poster_share_util.dart';
 import 'share_util/wechat_share_util.dart';
 import 'widget/share_action_model.dart';
 
@@ -23,7 +22,17 @@ class AppShareTo {
   static int copylink = 4; // 分享复制链接
 }
 
+abstract class AppShareShow {
+  /// 展示UI
+  void showUIByModel(
+    BuildContext context, {
+    required List<BaseActionModel> shareActionModels,
+    List<BaseActionModel>? operateActionModels,
+  });
+}
+
 abstract class AppShareRequest {
+  /// 请求分享的信息
   Future<ShareDataModel?> requestShare({
     String? bizId,
     required int bizType,
@@ -31,57 +40,39 @@ abstract class AppShareRequest {
   });
 }
 
-abstract class ShareSingleton implements AppShareRequest {
-  /// 弹出常见的分享面板
-  void showEasyShareBoard2(
-    BuildContext context, {
-    GlobalKey? posterRepaintBoundaryGlobalKey,
-    bool showCopyLink = false, // 是否显示分享复制链接的入口
-    String? bizId,
-    required int bizType, // 请使用 AppShareBizType
-    String title = "",
-    String? description,
-    String thumbnail = '',
-  }) {
-    showEasyShareBoard(
-      context,
-      posterHandle: posterRepaintBoundaryGlobalKey == null
-          ? null
-          : () {
-              PosterShareUtil.getAndSaveScreensShot(
-                context,
-                screenRepaintBoundaryGlobalKey: posterRepaintBoundaryGlobalKey,
-              ).then((value) {
-                Navigator.pop(context);
-              });
-            },
-      showCopyLink: showCopyLink,
-      bizId: bizId,
-      bizType: bizType,
-      title: title,
-      description: description,
-      thumbnail: thumbnail,
-    );
-  }
+abstract class AppShareHandel {
+  /// 举报 的事件
+  void report(BuildContext context, {String? bizId, required int bizType});
 
+  // /// 拉黑/取消拉黑 的事件(不需要，而是直接传model,因为拉黑操作结束需要更新isBlock)
+  // void block(BuildContext context, {String? bizId, required int bizType});
+}
+
+abstract class ShareSingleton
+    implements AppShareShow, AppShareRequest, AppShareHandel {
   /// 弹出常见的分享面板
   void showEasyShareBoard(
     BuildContext context, {
+    void Function()? imHandle,
     void Function()? posterHandle,
     bool showCopyLink = false, // 是否显示分享复制链接的入口
+    bool showReport = false, // 是否显示举报的入口
+    BaseActionModel? blockModel, // 是否显示拉黑的入口，操作完需要刷新bool值
     String? bizId,
     required int bizType, // 请使用 AppShareBizType
-    String title = "",
+    String? title,
     String? description,
-    String thumbnail = '',
+    WeChatImage? thumbnailImage,
   }) {
     List<BaseActionModel> shareActionModels = [];
 
     // 私信
-    shareActionModels.add(BaseActionModel.im(handle: () {
-      Navigator.pop(context);
-      ToastUtil.showDoing();
-    }));
+    if (imHandle != null) {
+      shareActionModels.add(BaseActionModel.im(handle: () {
+        Navigator.pop(context);
+        imHandle();
+      }));
+    }
 
     // 微信
     shareActionModels.add(BaseActionModel.wechat(handle: () {
@@ -93,7 +84,7 @@ abstract class ShareSingleton implements AppShareRequest {
         shareType: AppShareTo.wechat,
         title: title,
         description: description,
-        thumbnail: thumbnail,
+        thumbnailImage: thumbnailImage,
       );
     }));
 
@@ -107,7 +98,7 @@ abstract class ShareSingleton implements AppShareRequest {
         shareType: AppShareTo.timeline,
         title: title,
         description: description,
-        thumbnail: thumbnail,
+        thumbnailImage: thumbnailImage,
       );
     }));
 
@@ -119,6 +110,7 @@ abstract class ShareSingleton implements AppShareRequest {
       }));
     }
 
+    // 复制链接
     List<BaseActionModel> operateActionModels = [];
     if (showCopyLink) {
       operateActionModels.add(BaseActionModel.copyLink(handle: () {
@@ -126,7 +118,20 @@ abstract class ShareSingleton implements AppShareRequest {
       }));
     }
 
-    ShareDialogUtil.show(
+    // 举报
+    if (showReport) {
+      shareActionModels.add(BaseActionModel.report(handle: () {
+        Navigator.pop(context);
+        report(context, bizId: bizId, bizType: bizType);
+      }));
+    }
+
+    // 拉黑
+    if (blockModel != null) {
+      shareActionModels.add(blockModel);
+    }
+
+    showUIByModel(
       context,
       shareActionModels: shareActionModels,
       operateActionModels: operateActionModels,
@@ -139,9 +144,9 @@ abstract class ShareSingleton implements AppShareRequest {
     String? bizId,
     required int bizType,
     required int shareType,
-    String title = "",
+    String? title,
     String? description,
-    String thumbnail = '',
+    WeChatImage? thumbnailImage,
   }) async {
     ShareDataModel? shareDataModel = await requestShare(
       bizId: bizId,
@@ -158,13 +163,17 @@ abstract class ShareSingleton implements AppShareRequest {
     }
     String webPage = shareDataModel.landingUrl!;
 
+    WeChatImage? remoteWechatImage;
+    String? thumbnailUrl = shareDataModel.thumbnailUrl;
+    if (thumbnailUrl != null) {
+      remoteWechatImage = WeChatImage.network(thumbnailUrl, suffix: ".png");
+    }
+
     WechatShareUtil.shareWebPageUrl(
       webPage,
-      title: title,
-      description: description,
-      thumbnail: thumbnail.isEmpty
-          ? null
-          : WeChatImage.network(thumbnail, suffix: ".png"),
+      title: shareDataModel.title ?? title,
+      description: shareDataModel.description ?? description,
+      thumbnail: remoteWechatImage ?? thumbnailImage,
       scene: shareType == AppShareTo.timeline
           ? WeChatScene.TIMELINE
           : WeChatScene.SESSION,
@@ -198,11 +207,17 @@ abstract class ShareSingleton implements AppShareRequest {
 
 class ShareDataModel {
   final String? landingUrl;
+  final String? title;
+  final String? description;
+  final String? thumbnailUrl;
   final String? qrCode;
   final String? paramContent;
 
   ShareDataModel({
     this.landingUrl,
+    this.title,
+    this.description,
+    this.thumbnailUrl,
     this.qrCode,
     this.paramContent,
   });
