@@ -16,6 +16,7 @@ enum QuickToolBarImageType {
   white_bgClear,
   black,
   black_bgClear,
+  black_white,
 }
 
 class QuickToolBarImageActionWidget extends StatelessWidget {
@@ -32,6 +33,24 @@ class QuickToolBarImageActionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // if (imageType == QuickToolBarImageType.black_white) {
+    return ToolBarImageActionWidget(
+      width: width,
+      color: Colors.transparent,
+      padding: EdgeInsets.only(left: 8.w_pt_cj),
+      image: Image(
+        image: const AssetImage(
+          "assets/appbar/nav_back_black_white.png", // 愿望星球
+          package: 'flutter_baseui_kit',
+        ),
+        fit: BoxFit.cover,
+        width: 32.w_pt_cj,
+        height: 32.h_pt_cj,
+      ),
+      onPressed: onPressed,
+    );
+    // }
+
     String imageName;
     Color? imageColor;
     if (imageType == QuickToolBarImageType.white_bgClear) {

@@ -68,6 +68,7 @@ class RichThemeStateButton extends CJStateTextButton {
     double? height,
     EdgeInsetsGeometry? margin,
     EdgeInsetsGeometry? padding,
+    MainAxisAlignment childMainAxisAlignment = MainAxisAlignment.center,
     required RichThemeStateBGType richBGColorType,
     bool needHighlight = false, // 是否需要高亮样式(默认false)
     double cornerRadius = 5.0,
@@ -86,6 +87,7 @@ class RichThemeStateButton extends CJStateTextButton {
           height: height,
           margin: margin,
           padding: padding,
+          childMainAxisAlignment: childMainAxisAlignment,
           childBuider: (bSelected) {
             String _currentTitle = normalTitle;
             if (selected) {

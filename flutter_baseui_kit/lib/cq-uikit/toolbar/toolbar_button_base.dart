@@ -20,6 +20,7 @@ class ToolBarEnum {
 class ToolBarImageActionWidget extends StatelessWidget {
   final double? width;
   final Color? color;
+  final EdgeInsets? padding;
 
   final Image? image;
   final VoidCallback? onPressed;
@@ -27,6 +28,7 @@ class ToolBarImageActionWidget extends StatelessWidget {
   const ToolBarImageActionWidget({
     Key? key,
     this.width,
+    this.padding,
     this.color,
     required this.image,
     required this.onPressed,
@@ -41,7 +43,8 @@ class ToolBarImageActionWidget extends StatelessWidget {
       child: Container(
         width: width ?? 44.w_pt_cj,
         height: 44.h_pt_cj,
-        color: color ?? Colors.white, // 如果不给默认颜色，container的点击响应区域只有中间的图片
+        color: color ?? Colors.white, /// 如果不给默认颜色，container的点击响应区域只有中间的图片
+        padding: padding,
         alignment: Alignment.center,
         child: image,
       ),

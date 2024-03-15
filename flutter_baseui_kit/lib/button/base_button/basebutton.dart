@@ -11,6 +11,7 @@ class CJStateButton extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
   final Widget child;
+  final MainAxisAlignment childMainAxisAlignment;
   final VoidCallback? onPressed;
   final bool? enable;
   final double disableOpacity;
@@ -36,6 +37,7 @@ class CJStateButton extends StatelessWidget {
     this.margin,
     this.padding,
     required this.child,
+    this.childMainAxisAlignment = MainAxisAlignment.center,
     this.onPressed, // 不是必传(为了使其null时候，能够自动透传点击事件)
     this.enable = true,
     this.disableOpacity = 0.5, // disable 时候，颜色的透明度
@@ -219,7 +221,7 @@ class CJStateButton extends StatelessWidget {
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: childMainAxisAlignment,
           children: <Widget>[
             child,
           ],

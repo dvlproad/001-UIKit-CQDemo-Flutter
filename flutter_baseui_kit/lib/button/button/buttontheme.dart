@@ -26,6 +26,10 @@ final Map theme = {
     "themeColor": Color(0xff8b8b8b),
     "themeOppositeColor": Colors.white,
   },
+  "black": {
+    "themeColor": Colors.black,
+    "themeOppositeColor": Colors.white,
+  },
 };
 
 // 颜色分类
@@ -35,6 +39,7 @@ enum ThemeBGType {
   purple,
   blue,
   grey, //灰色背景白色字
+  black,
 }
 
 Color themeColor(ThemeBGType? type) {

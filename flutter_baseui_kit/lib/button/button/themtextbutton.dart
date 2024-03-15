@@ -63,6 +63,7 @@ class ThemeBGButton extends CJStateTextButton {
     required String title,
     TextStyle? titleStyle,
     Image? imageWidget, // 图片
+    ButtonImagePosition? imagePosition,
     double imageTitleGap = 5, // 图片和文字之间的距离(imageWidget存在的时候才有效)
     double? cornerRadius,
     bool enable = true,
@@ -73,11 +74,13 @@ class ThemeBGButton extends CJStateTextButton {
           key: key,
           width: width,
           height: height,
+          childMainAxisAlignment: MainAxisAlignment.center,
           childBuider: (bSelected) {
             return ButtonChildWidget(
               title: title,
               titleStyle: titleStyle,
               imageWidget: imageWidget,
+              imagePosition: imagePosition,
               imageTitleGap: imageTitleGap,
             );
           },

@@ -62,6 +62,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
   final EdgeInsetsGeometry? padding; // 图片与边缘一般都有一定距离
   final Color? bgColor;
   final double? cornerRadius;
+  final BoxBorder? border;
   final double? iconHeight; // icon的高度(宽度等于高度)
   final double? iconTitleSpace; // icon与文字之间的间距
   final double? titleHeight; // 文字高度
@@ -85,6 +86,7 @@ class LeftImageTextDeleteButton extends StatelessWidget {
     this.padding,
     this.bgColor,
     this.cornerRadius,
+    this.border,
     this.iconHeight,
     this.iconTitleSpace,
     this.titleHeight,
@@ -185,11 +187,12 @@ class LeftImageTextDeleteButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(cornerRadius ?? 0),
-          border: Border.all(
-            color: Color(0xFFF0F0F0),
-            width: 1.w_pt_cj,
-            style: BorderStyle.solid,
-          ),
+          border: border ??
+              Border.all(
+                color: Color(0xFFF0F0F0),
+                width: 1.w_pt_cj,
+                style: BorderStyle.solid,
+              ),
         ),
         alignment: Alignment.center,
         child: Row(
