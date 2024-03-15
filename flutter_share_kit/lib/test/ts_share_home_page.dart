@@ -164,6 +164,9 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
             elevation: 0,
           );
         },
+        loadingForButtonHandle: ({required bool show}) {
+          debugPrint("loading show = $show");
+        },
         posterBgImageUrl: posterBgImageUrl,
         userImageUrl: posterBgImageUrl,
         posterTextContainerBuilder: (

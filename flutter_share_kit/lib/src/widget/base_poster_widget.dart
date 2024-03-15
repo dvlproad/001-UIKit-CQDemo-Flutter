@@ -11,7 +11,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -103,7 +102,9 @@ class NormalPosterWidget extends StatelessWidget {
               Text(
                 qrCodePromptText,
                 textAlign: TextAlign.end,
-                style: RegularTextStyle(
+                style: TextStyle(
+                  fontFamily: 'PingFang SC',
+                  fontWeight: FontWeight.w400,
                   fontSize: 11.w_pt_cj,
                   color: const Color(0xFF8b8b8b),
                 ),

@@ -13,9 +13,12 @@ class PosterWithButtonPage extends StatefulWidget {
   final String posterBgImageUrl;
   late Widget Function() posterContentWidgetBuilder;
 
+  final void Function({required bool show}) loadingForButtonHandle;
+
   PosterWithButtonPage({
     Key? key,
     required this.appbarWidgetBuilder,
+    required this.loadingForButtonHandle,
     required this.posterBgImageUrl,
     required this.posterContentWidgetBuilder,
   }) : super(key: key);
@@ -23,6 +26,7 @@ class PosterWithButtonPage extends StatefulWidget {
   PosterWithButtonPage.easy({
     Key? key,
     required this.appbarWidgetBuilder,
+    required this.loadingForButtonHandle,
     required this.posterBgImageUrl,
     required String userImageUrl,
     required String appLogoPath,
@@ -83,6 +87,7 @@ class _PosterWithButtonPageState extends State<PosterWithButtonPage> {
             Expanded(child: buildPosterWidget(context)),
             PosterButtonsWidget(
               posterRepaintBoundaryGlobalKey: _repaintBoundaryGlobalKey,
+              loadingHandle: widget.loadingForButtonHandle,
               completeBlock: (isSuccess) {
                 //
               },

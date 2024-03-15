@@ -2,7 +2,6 @@
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 import 'package:fluwx/fluwx.dart';
 
@@ -11,10 +10,12 @@ import '../share_util/wechat_share_util.dart';
 
 class PosterButtonsWidget extends StatefulWidget {
   final GlobalKey posterRepaintBoundaryGlobalKey;
+  final void Function({required bool show}) loadingHandle;
   final void Function(bool isSuccess) completeBlock;
 
   const PosterButtonsWidget({
     required this.posterRepaintBoundaryGlobalKey,
+    required this.loadingHandle,
     required this.completeBlock,
     Key? key,
   }) : super(key: key);
@@ -83,19 +84,27 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
     );
   }
 
+  _loadingShow() {
+    widget.loadingHandle(show: true);
+  }
+
+  _loadingDismiss() {
+    widget.loadingHandle(show: false);
+  }
+
   /// 分享到微信
   /// scene: 微信好友/朋友圈
   _shareToWechat({required WeChatScene scene}) async {
-    LoadingUtil.show();
+    _loadingShow();
     _getPoster();
     if (_posterImage == null) {
-      LoadingUtil.dismiss();
+      _loadingDismiss();
       widget.completeBlock(true);
       return;
     }
 
     WechatShareUtil.shareH5ImageByUIImage(_posterImage!, scene: scene);
-    LoadingUtil.dismiss();
+    _loadingDismiss();
     widget.completeBlock(true);
   }
 
@@ -104,10 +113,10 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
       buttonImageName: "assets/save_icon.png",
       buttonText: "保存",
       onTap: () {
-        LoadingUtil.show();
+        _loadingShow();
         _getPoster();
         if (_posterImage == null) {
-          LoadingUtil.dismiss();
+          _loadingDismiss();
           widget.completeBlock(true);
           return;
         }
@@ -116,7 +125,7 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
           context,
           image: _posterImage!,
         ).then((value) {
-          LoadingUtil.dismiss();
+          _loadingDismiss();
           widget.completeBlock(true);
         });
       },

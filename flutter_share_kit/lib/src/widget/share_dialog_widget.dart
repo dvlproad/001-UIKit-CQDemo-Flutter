@@ -8,7 +8,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import '../../flutter_share_kit_adapt.dart';
 
 import './share_action_model.dart';
@@ -115,7 +114,9 @@ class _ShareDialogWidgetState extends State<ShareDialogWidget> {
         children: [
           Text(
             '分享至',
-            style: BoldTextStyle(
+            style: TextStyle(
+              fontFamily: 'PingFang SC',
+              fontWeight: FontWeight.w700,
               color: const Color(0xff404040),
               fontSize: 16.w_pt_cj,
             ),
@@ -188,7 +189,9 @@ class _ShareDialogWidgetState extends State<ShareDialogWidget> {
               child: Text(
                 shareActionModel.title,
                 textAlign: TextAlign.center,
-                style: RegularTextStyle(
+                style: TextStyle(
+                  fontFamily: 'PingFang SC',
+                  fontWeight: FontWeight.w400,
                   fontSize: 14,
                   color: shareActionModel.titleColor,
                 ),

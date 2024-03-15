@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:flutter_theme_helper/flutter_theme_helper.dart';
 import 'package:flutter_image_basekit/flutter_image_kit.dart';
 import 'package:extended_image/extended_image.dart';
 
@@ -191,7 +190,9 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
             SizedBox(height: 4.w_pt_cj),
             Text(
               '扫码查看',
-              style: RegularTextStyle(
+              style: TextStyle(
+                fontFamily: 'PingFang SC',
+                fontWeight: FontWeight.w400,
                 fontSize: 13.w_pt_cj,
                 color: const Color(0xFF8b8b8b),
               ),

@@ -21,13 +21,10 @@ dependencies:
   image_gallery_saver: ^2.0.3
   extended_image: ^7.0.2
   
-  flutter_theme_helper: ^0.0.1
   flutter_image_basekit: ^0.0.2
 
   flutter_overlay_kit: ^0.0.3
     # path: ../flutter_overlay_kit/
-  flutter_effect_kit: ^0.0.2
-    # path: ../flutter_effect_kit/
   
 dev_dependencies:
   flutter_test:
