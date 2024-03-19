@@ -2,11 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-27 16:50:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-04 13:36:13
+ * @LastEditTime: 2024-03-18 11:42:17
  * @Description: 图片集合视图单元的基类
  */
 import 'package:flutter/material.dart';
-import './bg_border_widget.dart';
+import '../components/bg_border_widget.dart';
 
 class CQImageBaseGridCell extends StatelessWidget {
   final double? width;
@@ -97,15 +97,15 @@ class CQImageBaseGridCell extends StatelessWidget {
 
   Widget _messageLabel(message) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
+      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 5.0),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(.3),
+        color: Colors.red.withOpacity(.3),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         message,
         textAlign: TextAlign.end,
-        style: TextStyle(fontSize: 10.0),
+        style: TextStyle(fontSize: 10.0, color: Colors.green),
       ),
     );
   }

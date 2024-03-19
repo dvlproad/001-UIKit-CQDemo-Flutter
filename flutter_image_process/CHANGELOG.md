@@ -9,3 +9,7 @@
 ## [0.0.3] - Add release date.
 
 * 移除 app_choose_bean
+
+## [0.0.5] - Add release date.
+
+* 额外 `export 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType, AssetEntityImageProvider;`

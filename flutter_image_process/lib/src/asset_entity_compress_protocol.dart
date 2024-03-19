@@ -76,6 +76,32 @@ mixin AssetEntityCompressProtocol {
 
   // 选择完显示时候
   // 获取用于显示在列表上的图片
+  /*
+  File? get compressedImageOrVideoThumbnailFile {
+    File? resultFile;
+
+    if (imageCompressResponseBean != null &&
+        imageCompressResponseBean!.reslut != null) {
+      File resultCompressImageFile = imageCompressResponseBean!.reslut!;
+      if (resultCompressImageFile.existsSync()) {
+        resultFile = resultCompressImageFile;
+        return resultFile;
+      }
+    }
+
+    if (videoThumbResponseBean != null &&
+        videoThumbResponseBean!.reslut != null) {
+      File resultVideoImageFile = videoThumbResponseBean!.reslut!;
+      if (resultVideoImageFile.existsSync()) {
+        resultFile = resultVideoImageFile;
+        return resultFile;
+      }
+    }
+
+    return resultFile;
+  }
+  */
+
   ImageProvider? get compressedImageOrVideoThumbnailProvider {
     ImageProvider? imageProvider;
 

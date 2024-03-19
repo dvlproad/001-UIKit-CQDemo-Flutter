@@ -16,6 +16,7 @@ dependencies:
   extended_image: ^7.0.2
 
   flutter_image_process: ^0.0.3
+    # path: ../flutter_image_process/
 
   
 dev_dependencies:

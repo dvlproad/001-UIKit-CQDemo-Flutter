@@ -7,6 +7,9 @@
  */
 library flutter_image_process;
 
+export 'package:photo_manager/photo_manager.dart'
+    show AssetEntity, AssetType, AssetEntityImageProvider;
+
 // data_vientiane
 export './src/data_vientiane/data_vientiane.dart';
 

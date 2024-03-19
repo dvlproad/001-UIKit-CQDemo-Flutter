@@ -1,8 +1,9 @@
+// 纯净的列表：model的操作需要自己依赖，自己控制
 import 'package:flutter/material.dart';
 import './components/images_presuf_badge_list.dart';
 import './components/bg_border_widget.dart';
 
-class CQImagesAddDeleteList extends StatefulWidget {
+class CQImagesAddDeleteList extends StatelessWidget {
   final double width;
   final double? height;
   final EdgeInsets? padding;
@@ -31,7 +32,7 @@ class CQImagesAddDeleteList extends StatefulWidget {
   final Widget Function()? addCellBuilder; // 默认null，null时候使用默认样式
   final VoidCallback onPressedAdd; // "添加"按钮的点击事件
 
-  CQImagesAddDeleteList({
+  const CQImagesAddDeleteList({
     Key? key,
     required this.width,
     this.height,
@@ -53,40 +54,24 @@ class CQImagesAddDeleteList extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CQImagesAddDeleteListState createState() =>
-       _CQImagesAddDeleteListState();
-}
-
-class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return CQImagesPreSufBadgeList(
-      width: widget.width,
-      height: widget.height,
-      padding: widget.padding,
-      color: widget.color,
-      direction: widget.direction,
-      scrollDirection: widget.scrollDirection,
-      physics: widget.physics,
-      dragEnable: widget.dragEnable,
-      dragCompleteBlock: widget.dragCompleteBlock,
+      width: width,
+      height: height,
+      padding: padding,
+      color: color,
+      direction: direction,
+      scrollDirection: scrollDirection,
+      physics: physics,
+      dragEnable: dragEnable,
+      dragCompleteBlock: dragCompleteBlock,
       cellWidthFromPerRowMaxShowCount: 4,
       columnSpacing: 6,
       rowSpacing: 6,
-      maxAddCount: widget.maxAddCount,
-      imageCount: widget.imageCount,
+      maxAddCount: maxAddCount,
+      imageCount: imageCount,
       suffixWidget: _addCell(),
-      itemWidthHeightRatio: widget.itemWidthHeightRatio,
+      itemWidthHeightRatio: itemWidthHeightRatio,
       imageItemBuilder: ({
         required BuildContext context,
         required int imageIndex,
@@ -112,14 +97,14 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
   }) {
     return Stack(
       children: [
-        widget.itemImageContentBuilder(
+        itemImageContentBuilder(
           context: context,
           imageIndex: imageIndex,
           itemWidth: itemWidth,
           itemHeight: itemHeight,
         ),
         Visibility(
-          visible: !widget.hideDeleteIcon,
+          visible: !hideDeleteIcon,
           child: Positioned(
             right: 0,
             top: 0,
@@ -134,7 +119,7 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
     double imageWith = 24;
     return GestureDetector(
       onTap: () {
-        widget.onPressedDelete(imageIndex);
+        onPressedDelete(imageIndex);
       },
       // child: Icon(
       //   Icons.close,
@@ -147,7 +132,7 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
         height: imageWith + 0,
         child: Center(
           child: Image(
-            image: AssetImage(
+            image: const AssetImage(
               'assets/icon_delete_new.png',
               package: 'flutter_images_action_list',
             ),
@@ -162,20 +147,20 @@ class _CQImagesAddDeleteListState extends State<CQImagesAddDeleteList> {
 
   /// 添加图片的 cell
   Widget _addCell() {
-    if (widget.addCellBuilder != null) {
+    if (addCellBuilder != null) {
       return GestureDetector(
-        child: widget.addCellBuilder!(),
-        onTap: widget.onPressedAdd,
+        child: addCellBuilder!(),
+        onTap: onPressedAdd,
       );
     }
 
     return CJBGImageWidget(
-      backgroundImage: AssetImage(
+      backgroundImage: const AssetImage(
         'assets/icon_images_add.png',
         package: 'flutter_images_action_list',
       ),
       child: Container(),
-      onTap: widget.onPressedAdd,
+      onTap: onPressedAdd,
     );
   }
 }
