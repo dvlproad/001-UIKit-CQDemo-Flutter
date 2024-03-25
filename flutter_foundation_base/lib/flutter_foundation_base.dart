@@ -9,6 +9,7 @@ library flutter_foundation_base;
 
 export './string_format_util/formatter_object_util.dart';
 export './string_format_util/object2string_extension.dart';
+export './string_format_util/num2string_extension.dart';
 export './string_format_util/object_intercept2_string_extension.dart';
 
 export './url_util/web_url_util.dart';
