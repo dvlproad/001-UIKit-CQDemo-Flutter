@@ -76,6 +76,20 @@ class LogModel {
     String shortMapString = '';
     if (logType == LogObjectType.other) {
       shortMapString = shortMap.map2StringWitKey();
+    } else if (logType == LogObjectType.api_app ||
+        logType == LogObjectType.api_cache) {
+      if (shortMap["ApiPurpose"] != null && shortMap["ApiPurpose"].isNotEmpty) {
+        Map<String, dynamic> purposeJson = shortMap["ApiPurpose"];
+        String apiCaller = purposeJson["caller"] ?? "未知页";
+        String apiPurpose = purposeJson["purpose"] ?? "未知用途";
+        shortMapString += "$apiCaller -> $apiPurpose";
+      }
+      if (shortMapString.isNotEmpty) {
+        shortMapString += "\n";
+      }
+      shortMapString += shortMap.map2StringWithoutKey(
+        withoutkeys: ["ApiPurpose"],
+      );
     } else {
       shortMapString = shortMap.map2StringWithoutKey(); // 不需要key
     }

@@ -13,3 +13,7 @@
 ## 0.0.5
 
 * 优化
+
+## 0.0.6
+
+* 增加处理 flutter_network_base 添加的网络用途信息，参数 params.addPurpose(caller: "商城页", purpose: "商品推荐");

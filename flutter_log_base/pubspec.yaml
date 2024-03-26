@@ -1,6 +1,6 @@
 name: flutter_log_base
 description: flutter的log基础库.
-version: 0.0.5
+version: 0.0.6
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_base
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_log_base
 
@@ -17,7 +17,7 @@ dependencies:
 
   provider: ^6.0.5
 
-  flutter_foundation_base: ^0.0.3
+  flutter_foundation_base: ^0.0.9
     # path: ../flutter_foundation_base/
     # git:
     #   url: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter

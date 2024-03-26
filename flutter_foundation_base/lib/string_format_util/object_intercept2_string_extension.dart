@@ -14,6 +14,7 @@ class MapsIntercept2StringUtil {
   /// 将maps数组转换为string，并设置截取的最大长度
   static String maps2String(
     List<Map<String, dynamic>> maps, {
+    List<String>? onlyKeys, // 只获取哪些key
     int? maxLength,
   }) {
     String mapsString = '';
@@ -21,7 +22,10 @@ class MapsIntercept2StringUtil {
     int mapCount = maps.length;
     for (int i = 0; i < mapCount; i++) {
       Map<String, dynamic> item = maps[i];
-      String mapString = item.map2StringWithoutKey(keyLineBreakString: " ");
+      String mapString = item.map2StringWithoutKey(
+        keyLineBreakString: " ",
+        onlyKeys: onlyKeys,
+      );
 
       if (maxLength != null && maxLength > 0) {
         mapString = mapString.substring(0, min(mapString.length, maxLength));
@@ -39,13 +43,22 @@ extension MapIntercept2StringExtension on Map {
   /// 只提取map中的value值(key值没需要)
   String map2StringWithoutKey({
     String keyLineBreakString = "\n", // 换行符
+    List<String> withoutkeys = const [], // 不获取哪些key
+    List<String>? onlyKeys, // 只获取哪些key
   }) {
     Map<dynamic, dynamic> logJsonMap = this;
     if (logJsonMap.isEmpty) {
       return '';
     }
     String logJsonString = '';
-    for (var key in logJsonMap.keys) {
+    Iterable requestKeys = logJsonMap.keys;
+    if (onlyKeys != null) {
+      requestKeys = onlyKeys;
+    }
+    for (var key in requestKeys) {
+      if (withoutkeys.contains(key)) {
+        continue;
+      }
       Object keyValue = logJsonMap[key];
       String keyValueString = keyValue.toString();
 
