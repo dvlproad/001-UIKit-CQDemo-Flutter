@@ -39,23 +39,27 @@ extension ParamAddPeopleExtension on Map<String, dynamic> {
     return newMap;
   }
 
-  // 2、从 api 请求的 body 中获取 ApiPeople
+  String get logPeopleKey {
+    return "ApiPeople";
+  }
+
+  // 2、从 api 请求的 body 中获取 ApiPeople, 添加到新map的指定字段中
   Map<String, dynamic> addPeopleFromBodyMap(Map<String, dynamic> bodyJsonMap) {
     Map<String, dynamic> newMap = this;
     if (bodyJsonMap['ApiPeople'] != null) {
-      newMap.addAll({"ApiPeople": bodyJsonMap['ApiPeople']});
+      newMap.addAll({logPeopleKey: bodyJsonMap['ApiPeople']});
     }
 
     return newMap;
   }
 
-  // 3、对从 api 请求的 body 中获取到的 ApiPeople 进行输出
-  String? get peopleString {
-    if (this["ApiPeople"] == null || this["ApiPeople"].isEmpty) {
+  // 3、对从 api 请求的 body 中获取并添加的指定字段进行输出
+  String? get logPeopleString {
+    if (this[logPeopleKey] == null || this[logPeopleKey].isEmpty) {
       return null;
     }
 
-    Map<String, dynamic> peopleJson = this["ApiPeople"];
+    Map<String, dynamic> peopleJson = this[logPeopleKey];
     String? pid = peopleJson["pid"];
     if (pid == null || pid.isEmpty) {
       return null;

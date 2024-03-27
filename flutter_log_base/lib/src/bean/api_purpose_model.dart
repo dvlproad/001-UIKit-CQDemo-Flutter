@@ -46,23 +46,27 @@ extension ParamAddPurposeExtension on Map<String, dynamic> {
     return newMap;
   }
 
-  // 2、从 api 请求的 body 中获取 ApiPurpose
+  String get logPurposeKey {
+    return "ApiPurpose";
+  }
+
+  // 2、从 api 请求的 body 中获取 ApiPurpose, 添加到新map的指定字段中
   Map<String, dynamic> addPurposeFromBodyMap(Map<String, dynamic> bodyJsonMap) {
     Map<String, dynamic> newMap = this;
     if (bodyJsonMap['ApiPurpose'] != null) {
-      newMap.addAll({"ApiPurpose": bodyJsonMap['ApiPurpose']});
+      newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
     }
 
     return newMap;
   }
 
-  // 3、对从 api 请求的 body 中获取到的 ApiPurpose 进行输出
-  String? get purposeString {
-    if (this["ApiPurpose"] == null || this["ApiPurpose"].isEmpty) {
+  // 3、对从 api 请求的 body 中获取并添加的指定字段进行输出
+  String? get logPurposeString {
+    if (this[logPurposeKey] == null || this[logPurposeKey].isEmpty) {
       return null;
     }
 
-    Map<String, dynamic> purposeJson = this["ApiPurpose"];
+    Map<String, dynamic> purposeJson = this[logPurposeKey];
     String apiCaller = purposeJson["caller"] ?? "未知页";
     String apiPurpose = purposeJson["purpose"] ?? "未知用途";
     return "$apiCaller -> $apiPurpose";

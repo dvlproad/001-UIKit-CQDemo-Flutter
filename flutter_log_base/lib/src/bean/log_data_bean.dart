@@ -80,16 +80,28 @@ class LogModel {
       shortMapString = shortMap.map2StringWitKey();
     } else if (logType == LogObjectType.api_app ||
         logType == LogObjectType.api_cache) {
+      List<String> withoutkeys = const [];
       if (shortMap is Map<String, dynamic>) {
         Map<String, dynamic> _shortMap = shortMap as Map<String, dynamic>;
-        shortMapString += (_shortMap.purposeString ?? "");
-        shortMapString += (_shortMap.peopleString ?? "");
+        // log purpose
+        String? logPurposeString = _shortMap.logPurposeString;
+        if (logPurposeString != null || logPurposeString!.isNotEmpty) {
+          shortMapString += logPurposeString;
+          withoutkeys.add(_shortMap.logPurposeKey);
+        }
+        // log people
+        String? logPeopleString = _shortMap.logPeopleString;
+        if (logPeopleString != null || logPeopleString!.isNotEmpty) {
+          shortMapString += logPeopleString;
+          withoutkeys.add(_shortMap.logPeopleKey);
+        }
+
         if (shortMapString.isNotEmpty) {
           shortMapString += "\n";
         }
       }
       shortMapString += shortMap.map2StringWithoutKey(
-        withoutkeys: ["ApiPurpose"],
+        withoutkeys: withoutkeys,
       );
     } else {
       shortMapString = shortMap.map2StringWithoutKey(); // 不需要key
@@ -103,11 +115,6 @@ class LogModel {
     String detailMapString = detailMap.map2StringWitKey();
 
     String detailString = detailMapString;
-    if (logType == LogObjectType.api_app && extraLogInfo != null) {
-      // List<String> robotUrls = ApiPostUtil.getRobotUrlsByApiHost(apiHost);
-      String logFotterMessage = extraLogInfo!["logFotterMessage"] ?? '';
-      detailString += '\n$logFotterMessage';
-    }
 
     return detailString;
   }
