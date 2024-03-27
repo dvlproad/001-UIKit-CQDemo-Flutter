@@ -37,12 +37,17 @@ class ApiPurposeModel {
   }
 }
 
-extension ParamAddPurposeExtension on Map<String, dynamic> {
+extension ParamAddPurposeExtension on Map {
   // 1、会添加到 api 请求的 body 中
-  void addPurpose({required String caller, required String purpose}) {
-    addAll({
+  Map<String, dynamic> addPurpose({
+    required String caller,
+    required String purpose,
+  }) {
+    Map<String, dynamic> newMap = cast<String, dynamic>();
+    newMap.addAll({
       "ApiPurpose": {"caller": caller, "purpose": purpose}
     });
+    return newMap;
   }
 
   String get logPurposeKey {
@@ -51,7 +56,7 @@ extension ParamAddPurposeExtension on Map<String, dynamic> {
 
   // 2、从 api 请求的 body 中获取 ApiPurpose, 添加到新map的指定字段中
   Map<String, dynamic> addPurposeFromBodyMap(Map<String, dynamic> bodyJsonMap) {
-    Map<String, dynamic> newMap = this;
+    Map<String, dynamic> newMap = cast<String, dynamic>();
     if (bodyJsonMap['ApiPurpose'] != null) {
       newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
     }

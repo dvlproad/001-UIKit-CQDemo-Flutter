@@ -31,14 +31,18 @@ class ApiPeopleBean {
   }
 }
 
-extension ParamAddPeopleExtension on Map<String, dynamic> {
+extension ParamAddPeopleExtension on Map {
   // 1、会添加到 api 请求的 body 中
-  void addApier(ApiPeopleBean apier) {
-    addAll({"ApiPeople": apier.toMap()});
+  Map<String, dynamic> addApier(ApiPeopleBean apier) {
+    Map<String, dynamic> newMap = cast<String, dynamic>();
+    newMap.addAll({"ApiPeople": apier.toMap()});
+    return newMap;
   }
 
-  void addApper(ApiPeopleBean apper) {
-    addAll({"AppPeople": apper.toMap()});
+  Map<String, dynamic> addApper(ApiPeopleBean apper) {
+    Map<String, dynamic> newMap = cast<String, dynamic>();
+    newMap.addAll({"AppPeople": apper.toMap()});
+    return newMap;
   }
 
   String get logApierKey {
@@ -51,7 +55,7 @@ extension ParamAddPeopleExtension on Map<String, dynamic> {
 
   // 2、从 api 请求的 body 中获取 ApiPeople, 添加到新map的指定字段中
   Map<String, dynamic> addPeopleFromBodyMap(Map<String, dynamic> bodyJsonMap) {
-    Map<String, dynamic> newMap = this;
+    Map<String, dynamic> newMap = cast<String, dynamic>();
     if (bodyJsonMap['ApiPeople'] != null) {
       newMap.addAll({logApierKey: bodyJsonMap['ApiPeople']});
     }
