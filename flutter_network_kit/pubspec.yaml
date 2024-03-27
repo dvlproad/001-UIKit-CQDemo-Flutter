@@ -1,6 +1,6 @@
 name: flutter_network_kit
 description: flutter_network_base + dio_http_cache_cjfork + flutter_log_base + flutter_robot_base + event_bus + connectivity_plus.
-version: 0.0.4
+version: 0.0.5
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_network_kit
 
@@ -14,9 +14,9 @@ dependencies:
 
   
   dio: ^4.0.6
-  flutter_network_base: ^0.0.3
+  flutter_network_base: ^0.0.5
     # path: ../flutter_network_base/
-  flutter_log_base: ^0.0.4
+  flutter_log_base: ^0.0.7
     # path: ../flutter_log_base/
   flutter_robot_base: ^0.0.3
     # path: ../flutter_robot_base/

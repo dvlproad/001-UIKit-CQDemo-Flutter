@@ -31,6 +31,3 @@ export './src/cache/dio_cache_util.dart';
 
 // url
 export './src/url/append_path_extension.dart';
-
-// purpose
-export './src/purpose/api_purpose_model.dart';

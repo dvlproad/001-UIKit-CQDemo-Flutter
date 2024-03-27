@@ -5,7 +5,8 @@
  * @LastEditTime: 2023-03-23 18:11:39
  * @Description: Api的描述信息模型(含 接口描述、api负责人、app负责人)
  */
-import './api_user_bean.dart';
+
+import 'package:flutter_log_base/flutter_log_base.dart';
 
 class ApiErrorDesBean {
   final String? des;

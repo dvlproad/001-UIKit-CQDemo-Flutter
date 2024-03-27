@@ -10,8 +10,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_log_base/flutter_log_base.dart';
 import 'package:flutter_robot_base/flutter_robot_base.dart';
 import 'package:flutter_network_base/flutter_network_base.dart';
-import './bean/api_describe_bean.dart';
-import './util/api_describe_util.dart';
 import '../networkStatus/network_status_manager.dart';
 
 typedef LogMessageBlock = void Function({
@@ -22,7 +20,6 @@ typedef LogMessageBlock = void Function({
   required Map<String, dynamic> detailMap,
   Map<String, dynamic>? extraLogInfo, // log 的 额外信息
   RobotPostType? postType,
-  List<String>? mentionedList,
 });
 
 class LogApiUtil {
@@ -42,7 +39,6 @@ class LogApiUtil {
     required Map<String, dynamic> detailMap,
     Map<String, dynamic>? extraLogInfo, // log 的 额外信息
     RobotPostType? postType,
-    List<String>? mentionedList,
   }) {
     if (_logMessageBlock != null) {
       _logMessageBlock!(
@@ -53,7 +49,6 @@ class LogApiUtil {
         detailMap: detailMap,
         extraLogInfo: extraLogInfo,
         postType: postType,
-        mentionedList: mentionedList,
       );
     }
   }
@@ -147,18 +142,15 @@ class LogApiUtil {
     //要上报的必须是完整信息，不能是日志列表里的简略信息
 
     Map<String, dynamic> shortMap = apiMessageModel.shortLogJsonMap;
+    // 从 api 请求的 body 中获取 ApiPurpose
+    Map<String, dynamic> bodyJsonMap = apiMessageModel.detailLogJsonMap["BODY"];
+    shortMap.addPurposeFromBodyMap(bodyJsonMap);
+    shortMap.addPeopleFromBodyMap(bodyJsonMap);
     shortMap.addAll({
       "connectionStatus": 'connectionStatus:${connectionStatus.toString()}'
     });
 
     Map<String, dynamic> detailMap = apiMessageModel.detailLogJsonMap;
-
-    // 需要通过其path判断接口负责人
-    // logFotterMessage
-    ApiErrorDesBean apiErrorDesBean =
-        ApiDescirbeUtil.apiDescriptionBeanByApiPath(apiPath);
-    extraLogInfo.addAll({"logFotterMessage": apiErrorDesBean.des});
-    List<String> mentionedList = apiErrorDesBean.allPids();
 
     String title = '';
     RobotPostType postType; // 日志等级(决定上报方式:超时的请求错误上报使用文件折叠,其他用纯文本铺开)
@@ -190,7 +182,6 @@ class LogApiUtil {
       detailMap: detailMap,
       extraLogInfo: extraLogInfo,
       postType: postType,
-      mentionedList: mentionedList,
     );
   }
 
@@ -214,7 +205,6 @@ class LogApiUtil {
       },
       extraLogInfo: null,
       postType: null,
-      mentionedList: null,
     );
   }
 
@@ -237,7 +227,6 @@ class LogApiUtil {
       },
       extraLogInfo: null,
       postType: null,
-      mentionedList: null,
     );
   }
 

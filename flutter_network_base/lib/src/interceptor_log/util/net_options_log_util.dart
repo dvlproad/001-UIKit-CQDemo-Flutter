@@ -15,8 +15,6 @@ import '../../network_bean.dart';
 
 import './net_options_log_bean.dart';
 
-import '../../purpose/api_purpose_model.dart';
-
 class ApiInfoGetter {
   static ApiMessageModel apiMessageModel(
       NetOptions options, ApiProcessType apiProcessType) {
@@ -49,7 +47,6 @@ class ApiInfoGetter {
     }
     shortLogJsonMap.addAll({"fullUrl": options.fullUrl});
     shortLogJsonMap.addAll({"Request": "Request:${options.method}"});
-    shortLogJsonMap.tryAddPurposeFromDetailMap(detailLogJsonMap);
 
     // String apiShortMessge = '';
     // if (detailLogJsonMap.containsKey('isRealApi')) {
@@ -95,7 +92,6 @@ class ApiInfoGetter {
       String responseCodeMessage = "Response:statusCode:$statusCode";
       shortLogJsonMap.addAll({"Response": responseCodeMessage});
     }
-    shortLogJsonMap.tryAddPurposeFromDetailMap(detailLogJsonMap);
     // String apiShortMessge = '';
     // if (detailLogJsonMap.containsKey('isRealApi')) {
     //   apiShortMessge += "isRealApi:${detailLogJsonMap['isRealApi']}\n";
@@ -145,7 +141,6 @@ class ApiInfoGetter {
         .statusCode; // 有些项目里把500等错误的statusCode,下沉到最后的responseModel里
     responseCodeMessage += "_code:$businessCode";
     shortLogJsonMap.addAll({"Response": responseCodeMessage});
-    shortLogJsonMap.tryAddPurposeFromDetailMap(detailLogJsonMap);
 
     // String apiShortMessge = '';
     // if (detailLogJsonMap.containsKey('isRealApi')) {

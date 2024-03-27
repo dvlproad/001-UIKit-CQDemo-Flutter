@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart'; // 需要使用颜色 Color
 import 'package:flutter_foundation_base/flutter_foundation_base.dart';
+import './api_purpose_model.dart';
+import './api_user_bean.dart';
 
 enum LogObjectType {
   api_app, // app中的网络请求
@@ -78,14 +80,13 @@ class LogModel {
       shortMapString = shortMap.map2StringWitKey();
     } else if (logType == LogObjectType.api_app ||
         logType == LogObjectType.api_cache) {
-      if (shortMap["ApiPurpose"] != null && shortMap["ApiPurpose"].isNotEmpty) {
-        Map<String, dynamic> purposeJson = shortMap["ApiPurpose"];
-        String apiCaller = purposeJson["caller"] ?? "未知页";
-        String apiPurpose = purposeJson["purpose"] ?? "未知用途";
-        shortMapString += "$apiCaller -> $apiPurpose";
-      }
-      if (shortMapString.isNotEmpty) {
-        shortMapString += "\n";
+      if (shortMap is Map<String, dynamic>) {
+        Map<String, dynamic> _shortMap = shortMap as Map<String, dynamic>;
+        shortMapString += (_shortMap.purposeString ?? "");
+        shortMapString += (_shortMap.peopleString ?? "");
+        if (shortMapString.isNotEmpty) {
+          shortMapString += "\n";
+        }
       }
       shortMapString += shortMap.map2StringWithoutKey(
         withoutkeys: ["ApiPurpose"],
