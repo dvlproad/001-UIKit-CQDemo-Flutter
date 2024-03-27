@@ -17,7 +17,14 @@ class ApiPurposeModel {
 
   @override
   String toString() {
-    return "{caller:$caller,purpose:$purpose}";
+    return "$caller -> $purpose";
+  }
+
+  static ApiPurposeModel formJson(Map<String, dynamic> json) {
+    return ApiPurposeModel(
+      caller: json["caller"] ?? "",
+      purpose: json["purpose"] ?? "",
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -32,18 +39,10 @@ class ApiPurposeModel {
 
 extension ParamAddPurposeExtension on Map<String, dynamic> {
   // 1、会添加到 api 请求的 body 中
-  Map<String, dynamic> addPurpose({
-    required String caller,
-    required String purpose,
-  }) {
-    Map<String, dynamic> newMap = this;
-    newMap.addAll({
-      "ApiPurpose": {
-        "caller": caller,
-        "purpose": purpose,
-      }
+  void addPurpose({required String caller, required String purpose}) {
+    addAll({
+      "ApiPurpose": {"caller": caller, "purpose": purpose}
     });
-    return newMap;
   }
 
   String get logPurposeKey {
@@ -56,7 +55,6 @@ extension ParamAddPurposeExtension on Map<String, dynamic> {
     if (bodyJsonMap['ApiPurpose'] != null) {
       newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
     }
-
     return newMap;
   }
 

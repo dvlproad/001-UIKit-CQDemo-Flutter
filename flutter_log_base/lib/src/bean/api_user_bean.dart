@@ -17,6 +17,12 @@ class ApiPeopleBean {
     return "{pid:$pid}";
   }
 
+  static ApiPeopleBean formJson(Map<String, dynamic> json) {
+    return ApiPeopleBean(
+      pid: json["pid"],
+    );
+  }
+
   Map<String, dynamic> toMap() {
     Map<String, dynamic> responseMap = {};
     responseMap.addAll({"pid": pid});
@@ -27,17 +33,12 @@ class ApiPeopleBean {
 
 extension ParamAddPeopleExtension on Map<String, dynamic> {
   // 1、会添加到 api 请求的 body 中
-  Map<String, dynamic> addPeople({
-    required ApiPeopleBean apier,
-    ApiPeopleBean? apper,
-  }) {
-    Map<String, dynamic> newMap = this;
+  void addApier(ApiPeopleBean apier) {
+    addAll({"ApiPeople": apier.toMap()});
+  }
 
-    newMap.addAll({"ApiPeople": apier.toMap()});
-    if (apper != null) {
-      newMap.addAll({"AppPeople": apper.toMap()});
-    }
-    return newMap;
+  void addApper(ApiPeopleBean apper) {
+    addAll({"AppPeople": apper.toMap()});
   }
 
   String get logApierKey {
@@ -80,5 +81,22 @@ extension ParamAddPeopleExtension on Map<String, dynamic> {
       return null;
     }
     return _logPeopleString;
+  }
+
+  // 发送到企业微信等时候，一般需要从此model中拿id
+  ApiPeopleBean? get logApier {
+    if (this[logApierKey] == null || this[logApierKey].isEmpty) {
+      return null;
+    }
+    Map<String, dynamic> peopleJson = this[logApierKey];
+    return ApiPeopleBean.formJson(peopleJson);
+  }
+
+  ApiPeopleBean? get logApper {
+    if (this[logApperKey] == null || this[logApperKey].isEmpty) {
+      return null;
+    }
+    Map<String, dynamic> peopleJson = this[logApperKey];
+    return ApiPeopleBean.formJson(peopleJson);
   }
 }
