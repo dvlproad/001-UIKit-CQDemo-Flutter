@@ -20,7 +20,8 @@ export './src/log/util/api_post_util.dart';
 export './src/log/bean/apihost_robot_bean.dart';
 
 export './src/log/api_log_util.dart';
-export 'package:flutter_log_base/flutter_log_base.dart' show LogLevel;
+export 'package:flutter_log_base/flutter_log_base.dart'
+    show LogLevel, ParamAddPurposeExtension, ParamAddPeopleExtension;
 
 // network status
 export './src/networkStatus/network_eventbus.dart';

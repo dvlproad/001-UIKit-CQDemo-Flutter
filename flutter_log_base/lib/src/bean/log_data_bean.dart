@@ -90,10 +90,10 @@ class LogModel {
           withoutkeys.add(_shortMap.logPurposeKey);
         }
         // log people
-        String? logPeopleString = _shortMap.logPeopleString;
+        String? logPeopleString = _shortMap.logPeoplesString;
         if (logPeopleString != null || logPeopleString!.isNotEmpty) {
           shortMapString += logPeopleString;
-          withoutkeys.add(_shortMap.logPeopleKey);
+          withoutkeys.addAll([_shortMap.logApierKey, _shortMap.logApperKey]);
         }
 
         if (shortMapString.isNotEmpty) {
