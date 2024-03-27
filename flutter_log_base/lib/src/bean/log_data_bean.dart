@@ -80,18 +80,18 @@ class LogModel {
       shortMapString = shortMap.map2StringWitKey();
     } else if (logType == LogObjectType.api_app ||
         logType == LogObjectType.api_cache) {
-      List<String> withoutkeys = const [];
+      List<String> withoutkeys = [];
       if (shortMap is Map<String, dynamic>) {
         Map<String, dynamic> _shortMap = shortMap as Map<String, dynamic>;
         // log purpose
         String? logPurposeString = _shortMap.logPurposeString;
-        if (logPurposeString != null || logPurposeString!.isNotEmpty) {
+        if (logPurposeString != null && logPurposeString.isNotEmpty) {
           shortMapString += logPurposeString;
           withoutkeys.add(_shortMap.logPurposeKey);
         }
         // log people
         String? logPeopleString = _shortMap.logPeoplesString;
-        if (logPeopleString != null || logPeopleString!.isNotEmpty) {
+        if (logPeopleString != null && logPeopleString.isNotEmpty) {
           shortMapString += logPeopleString;
           withoutkeys.addAll([_shortMap.logApierKey, _shortMap.logApperKey]);
         }

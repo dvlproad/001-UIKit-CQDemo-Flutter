@@ -131,7 +131,7 @@ class _LogListState extends State<LogList> {
                       style: const TextStyle(fontSize: 16),
                       decoration: const InputDecoration(
                         border: InputBorder.none,
-                        hintText: '搜索',
+                        hintText: '请输入要搜索的日志',
                         hintStyle: TextStyle(fontSize: 16),
                         isDense: true,
                       ),
