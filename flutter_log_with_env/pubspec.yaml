@@ -16,7 +16,7 @@ dependencies:
     # path: ../flutter_demo_kit/
 
   # 底层Log库
-  flutter_log_base: ^0.0.11
+  flutter_log_base: ^0.0.13
 
   # 机器人
   flutter_robot_base: ^0.0.3

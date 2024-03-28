@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-28 11:47:40
+ * @LastEditTime: 2024-03-28 15:04:38
  * @Description: Api负责人模型
  */
 import 'package:flutter/foundation.dart';
@@ -40,7 +40,10 @@ extension ParamAddPeopleExtension on Map {
   // 1、会添加到 api 请求的 body 中
   Map<String, dynamic> addApier(LogPeopleBean apier) {
     try {
-      Map<String, dynamic> newMap = cast<String, dynamic>();
+      // 创建一个新的 Map，该 Map 保留原始 Map 的键值对和类型
+      Map<String, dynamic> newMap = Map<String, dynamic>.from(this);
+      // 创建一个新的 Map，将 Map 中的键和值强制转换为指定类型。经常引起错误
+      // Map<String, dynamic> newMap = cast<String, dynamic>();
       newMap.addAll({"ApiPeople": apier.toMap()});
       return newMap;
     } catch (err) {
@@ -52,7 +55,10 @@ extension ParamAddPeopleExtension on Map {
 
   Map<String, dynamic> addApper(LogPeopleBean apper) {
     try {
-      Map<String, dynamic> newMap = cast<String, dynamic>();
+      // 创建一个新的 Map，该 Map 保留原始 Map 的键值对和类型
+      Map<String, dynamic> newMap = Map<String, dynamic>.from(this);
+      // 创建一个新的 Map，将 Map 中的键和值强制转换为指定类型。经常引起错误
+      // Map<String, dynamic> newMap = cast<String, dynamic>();
       newMap.addAll({"AppPeople": apper.toMap()});
       return newMap;
     } catch (err) {
@@ -72,7 +78,10 @@ extension ParamAddPeopleExtension on Map {
   // 2、从 api 请求的 body 中获取 ApiPeople, 添加到新map的指定字段中
   Map<String, dynamic> addPeopleFromBodyMap(Map<String, dynamic> bodyJsonMap) {
     try {
-      Map<String, dynamic> newMap = cast<String, dynamic>();
+      // 创建一个新的 Map，该 Map 保留原始 Map 的键值对和类型
+      Map<String, dynamic> newMap = Map<String, dynamic>.from(this);
+      // 创建一个新的 Map，将 Map 中的键和值强制转换为指定类型。经常引起错误
+      // Map<String, dynamic> newMap = cast<String, dynamic>();
       if (bodyJsonMap['ApiPeople'] != null) {
         newMap.addAll({logApierKey: bodyJsonMap['ApiPeople']});
       }

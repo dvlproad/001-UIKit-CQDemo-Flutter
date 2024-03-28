@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-28 11:48:25
+ * @LastEditTime: 2024-03-28 14:55:14
  * @Description: API的用途模型
  */
 
@@ -46,10 +46,11 @@ extension ParamAddPurposeExtension on Map {
     required String purpose,
   }) {
     try {
-      Map<String, dynamic> newMap = cast<String, dynamic>();
-      newMap.addAll({
-        "ApiPurpose": {"caller": caller, "purpose": purpose}
-      });
+      // 创建一个新的 Map，该 Map 保留原始 Map 的键值对和类型
+      Map<String, dynamic> newMap = Map<String, dynamic>.from(this);
+      // 创建一个新的 Map，将 Map 中的键和值强制转换为指定类型。经常引起错误
+      // Map<String, dynamic> newMap = cast<String, dynamic>();
+      newMap["ApiPurpose"] = {"caller": caller, "purpose": purpose};
       return newMap;
     } catch (err) {
       // 避免类似转换错误
@@ -65,7 +66,10 @@ extension ParamAddPurposeExtension on Map {
   // 2、从 api 请求的 body 中获取 ApiPurpose, 添加到新map的指定字段中
   Map<String, dynamic> addPurposeFromBodyMap(Map<String, dynamic> bodyJsonMap) {
     try {
-      Map<String, dynamic> newMap = cast<String, dynamic>();
+      // 创建一个新的 Map，该 Map 保留原始 Map 的键值对和类型
+      Map<String, dynamic> newMap = Map<String, dynamic>.from(this);
+      // 创建一个新的 Map，将 Map 中的键和值强制转换为指定类型。经常引起错误
+      // Map<String, dynamic> newMap = cast<String, dynamic>();
       if (bodyJsonMap['ApiPurpose'] != null) {
         newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
       }
