@@ -18,6 +18,6 @@
 
 * 增加处理 flutter_network_base 添加的网络用途信息，参数 params.addPurpose(caller: "商城页", purpose: "商品推荐");
 
-## 0.0.12
+## 0.0.13
 
 * 增加处理 flutter_network_base 添加的负责人信息，参数 params.addPeople(pid: "qian");

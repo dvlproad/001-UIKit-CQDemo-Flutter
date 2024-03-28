@@ -2,9 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-28 09:44:36
+ * @LastEditTime: 2024-03-28 11:47:40
  * @Description: Api负责人模型
  */
+import 'package:flutter/foundation.dart';
+
 class LogPeopleBean {
   final String pid;
   final String name;
@@ -37,15 +39,26 @@ class LogPeopleBean {
 extension ParamAddPeopleExtension on Map {
   // 1、会添加到 api 请求的 body 中
   Map<String, dynamic> addApier(LogPeopleBean apier) {
-    Map<String, dynamic> newMap = cast<String, dynamic>();
-    newMap.addAll({"ApiPeople": apier.toMap()});
-    return newMap;
+    try {
+      Map<String, dynamic> newMap = cast<String, dynamic>();
+      newMap.addAll({"ApiPeople": apier.toMap()});
+      return newMap;
+    } catch (err) {
+      // 避免类似转换错误
+      debugPrint("addApier error:$err");
+      return this as Map<String, dynamic>;
+    }
   }
 
   Map<String, dynamic> addApper(LogPeopleBean apper) {
-    Map<String, dynamic> newMap = cast<String, dynamic>();
-    newMap.addAll({"AppPeople": apper.toMap()});
-    return newMap;
+    try {
+      Map<String, dynamic> newMap = cast<String, dynamic>();
+      newMap.addAll({"AppPeople": apper.toMap()});
+      return newMap;
+    } catch (err) {
+      debugPrint("addApper error:$err");
+      return this as Map<String, dynamic>;
+    }
   }
 
   String get logApierKey {
@@ -58,15 +71,19 @@ extension ParamAddPeopleExtension on Map {
 
   // 2、从 api 请求的 body 中获取 ApiPeople, 添加到新map的指定字段中
   Map<String, dynamic> addPeopleFromBodyMap(Map<String, dynamic> bodyJsonMap) {
-    Map<String, dynamic> newMap = cast<String, dynamic>();
-    if (bodyJsonMap['ApiPeople'] != null) {
-      newMap.addAll({logApierKey: bodyJsonMap['ApiPeople']});
+    try {
+      Map<String, dynamic> newMap = cast<String, dynamic>();
+      if (bodyJsonMap['ApiPeople'] != null) {
+        newMap.addAll({logApierKey: bodyJsonMap['ApiPeople']});
+      }
+      if (bodyJsonMap['AppPeople'] != null) {
+        newMap.addAll({logApperKey: bodyJsonMap['AppPeople']});
+      }
+      return newMap;
+    } catch (err) {
+      debugPrint("addPeopleFromBodyMap error:$err");
+      return this as Map<String, dynamic>;
     }
-    if (bodyJsonMap['AppPeople'] != null) {
-      newMap.addAll({logApperKey: bodyJsonMap['AppPeople']});
-    }
-
-    return newMap;
   }
 
   // 3、对从 api 请求的 body 中获取并添加的指定字段进行输出

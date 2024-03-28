@@ -2,9 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-27 11:41:57
+ * @LastEditTime: 2024-03-28 11:48:25
  * @Description: API的用途模型
  */
+
+import 'package:flutter/foundation.dart';
 
 class ApiPurposeModel {
   final String caller;
@@ -43,11 +45,17 @@ extension ParamAddPurposeExtension on Map {
     required String caller,
     required String purpose,
   }) {
-    Map<String, dynamic> newMap = cast<String, dynamic>();
-    newMap.addAll({
-      "ApiPurpose": {"caller": caller, "purpose": purpose}
-    });
-    return newMap;
+    try {
+      Map<String, dynamic> newMap = cast<String, dynamic>();
+      newMap.addAll({
+        "ApiPurpose": {"caller": caller, "purpose": purpose}
+      });
+      return newMap;
+    } catch (err) {
+      // 避免类似转换错误
+      debugPrint("addPurpose error:$err");
+      return this as Map<String, dynamic>;
+    }
   }
 
   String get logPurposeKey {
@@ -56,11 +64,16 @@ extension ParamAddPurposeExtension on Map {
 
   // 2、从 api 请求的 body 中获取 ApiPurpose, 添加到新map的指定字段中
   Map<String, dynamic> addPurposeFromBodyMap(Map<String, dynamic> bodyJsonMap) {
-    Map<String, dynamic> newMap = cast<String, dynamic>();
-    if (bodyJsonMap['ApiPurpose'] != null) {
-      newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
+    try {
+      Map<String, dynamic> newMap = cast<String, dynamic>();
+      if (bodyJsonMap['ApiPurpose'] != null) {
+        newMap.addAll({logPurposeKey: bodyJsonMap['ApiPurpose']});
+      }
+      return newMap;
+    } catch (err) {
+      debugPrint("addPurposeFromBodyMap error:$err");
+      return this as Map<String, dynamic>;
     }
-    return newMap;
   }
 
   // 3、对从 api 请求的 body 中获取并添加的指定字段进行输出
