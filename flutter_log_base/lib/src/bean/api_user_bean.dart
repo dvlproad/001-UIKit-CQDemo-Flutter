@@ -2,30 +2,33 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-27 12:38:00
+ * @LastEditTime: 2024-03-28 09:44:36
  * @Description: Api负责人模型
  */
-class ApiPeopleBean {
-  String pid;
+class LogPeopleBean {
+  final String pid;
+  final String name;
 
-  ApiPeopleBean({
+  LogPeopleBean({
     required this.pid,
+    required this.name,
   });
 
   @override
   String toString() {
-    return "{pid:$pid}";
+    return "{pid:$pid,name:$name}";
   }
 
-  static ApiPeopleBean formJson(Map<String, dynamic> json) {
-    return ApiPeopleBean(
-      pid: json["pid"],
+  static LogPeopleBean formJson(Map<String, dynamic> json) {
+    return LogPeopleBean(
+      pid: json["pid"] ?? "",
+      name: json["name"] ?? "",
     );
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> responseMap = {};
-    responseMap.addAll({"pid": pid});
+    responseMap.addAll({"pid": pid, "name": name});
 
     return responseMap;
   }
@@ -33,13 +36,13 @@ class ApiPeopleBean {
 
 extension ParamAddPeopleExtension on Map {
   // 1、会添加到 api 请求的 body 中
-  Map<String, dynamic> addApier(ApiPeopleBean apier) {
+  Map<String, dynamic> addApier(LogPeopleBean apier) {
     Map<String, dynamic> newMap = cast<String, dynamic>();
     newMap.addAll({"ApiPeople": apier.toMap()});
     return newMap;
   }
 
-  Map<String, dynamic> addApper(ApiPeopleBean apper) {
+  Map<String, dynamic> addApper(LogPeopleBean apper) {
     Map<String, dynamic> newMap = cast<String, dynamic>();
     newMap.addAll({"AppPeople": apper.toMap()});
     return newMap;
@@ -71,14 +74,14 @@ extension ParamAddPeopleExtension on Map {
     String _logPeopleString = "";
     if (this[logApierKey] != null && this[logApierKey].isNotEmpty) {
       Map<String, dynamic> peopleJson = this[logApierKey];
-      String pid = peopleJson["pid"] ?? "";
-      _logPeopleString += "-> $pid";
+      String uname = peopleJson["name"] ?? "";
+      _logPeopleString += "-> $uname";
     }
 
     if (this[logApperKey] != null && this[logApperKey].isNotEmpty) {
       Map<String, dynamic> peopleJson = this[logApperKey];
-      String pid = peopleJson["pid"] ?? "";
-      _logPeopleString += "-> $pid";
+      String uname = peopleJson["name"] ?? "";
+      _logPeopleString += "-> $uname";
     }
 
     if (_logPeopleString.isEmpty) {
@@ -88,19 +91,19 @@ extension ParamAddPeopleExtension on Map {
   }
 
   // 发送到企业微信等时候，一般需要从此model中拿id
-  ApiPeopleBean? get logApier {
+  LogPeopleBean? get logApier {
     if (this[logApierKey] == null || this[logApierKey].isEmpty) {
       return null;
     }
     Map<String, dynamic> peopleJson = this[logApierKey];
-    return ApiPeopleBean.formJson(peopleJson);
+    return LogPeopleBean.formJson(peopleJson);
   }
 
-  ApiPeopleBean? get logApper {
+  LogPeopleBean? get logApper {
     if (this[logApperKey] == null || this[logApperKey].isEmpty) {
       return null;
     }
     Map<String, dynamic> peopleJson = this[logApperKey];
-    return ApiPeopleBean.formJson(peopleJson);
+    return LogPeopleBean.formJson(peopleJson);
   }
 }

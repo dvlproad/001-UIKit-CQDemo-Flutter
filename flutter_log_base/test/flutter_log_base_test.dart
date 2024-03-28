@@ -16,8 +16,8 @@ void main() {
     Map<String, dynamic> bodyJsonMap = {
       "ApiPurpose":
           ApiPurposeModel(caller: "caller21", purpose: "purpose21").toMap(),
-      "ApiPeople": ApiPeopleBean(pid: "body_apier21").toMap(),
-      "AppPeople": ApiPeopleBean(pid: "body_apier21").toMap(),
+      "ApiPeople": LogPeopleBean(pid: "body_apier21").toMap(),
+      "AppPeople": LogPeopleBean(pid: "body_apier21").toMap(),
     };
 
     // 这是正确的
@@ -30,8 +30,8 @@ void main() {
         "accountId": accountId,
       }
           .addPurpose(caller: "广场页", purpose: "查询频道内容数据")
-          .addApier(ApiPeopleBean(pid: "apier11"))
-          .addApper(ApiPeopleBean(pid: "apper11"))
+          .addApier(LogPeopleBean(pid: "apier11"))
+          .addApper(LogPeopleBean(pid: "apper11"))
           .addPurposeFromBodyMap(bodyJsonMap)
           .addPeopleFromBodyMap(bodyJsonMap),
     };
@@ -53,8 +53,8 @@ void main() {
     dd12.addAll({"newKey1": "newValue1"});
     debugPrint("");
 
-    dd12.addApier(ApiPeopleBean(pid: "apier11"));
-    dd12.addApper(ApiPeopleBean(pid: "apper11"));
+    dd12.addApier(LogPeopleBean(pid: "apier11"));
+    dd12.addApper(LogPeopleBean(pid: "apper11"));
     debugPrint("===== people更改前=$dd12");
     dd12.addPeopleFromBodyMap(bodyJsonMap);
     debugPrint("===== people更改后=$dd12");
