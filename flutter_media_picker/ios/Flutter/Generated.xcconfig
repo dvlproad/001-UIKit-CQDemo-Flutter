@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Applications/flutter
-FLUTTER_APPLICATION_PATH=/Users/qian/Project/Bojue/mobile_flutter_wish/flutter_media_picker
+FLUTTER_ROOT=/Users/qian/.fvm/versions/3.7.10
+FLUTTER_APPLICATION_PATH=/Users/qian/Project/Github/001-UIKit-CQDemo-Flutter/flutter_media_picker
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

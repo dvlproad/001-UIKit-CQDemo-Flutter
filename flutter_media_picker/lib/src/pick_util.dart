@@ -6,18 +6,11 @@
  * @Description: 图片/视频等选择方法
  */
 
-import 'dart:io' show File, Directory;
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-// import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_images_picker/flutter_images_picker.dart'
-    show PermissionsManager;
-import 'package:flutter_effect_kit/flutter_effect_kit.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+import 'package:flutter_permission_manager/flutter_permission_manager.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
 
 import './pick_util/pick_asset_util.dart';
-import './pick_util/pick_media_util.dart';
 
 class PickUtil {
   static void chooseOneMedia(
@@ -58,7 +51,7 @@ class PickUtil {
         imagePickerCallBack,
   }) async {
     // 图片
-    print('PickUtil 01:${DateTime.now().toString()}');
+    debugPrint('PickUtil 01:${DateTime.now().toString()}');
 
     /*
     PickMediaUtil.pickPhoto(

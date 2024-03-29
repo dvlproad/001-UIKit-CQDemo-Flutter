@@ -9,8 +9,8 @@
 import 'dart:io' show File, Directory;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_images_picker/flutter_images_picker.dart'
-    show PermissionsManager;
+import 'package:flutter_permission_manager/flutter_permission_manager.dart';
+
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 import 'package:wechat_camera_picker/wechat_camera_picker.dart';
 

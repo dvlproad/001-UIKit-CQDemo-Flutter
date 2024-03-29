@@ -4,10 +4,8 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
-import 'package:flutter_media_picker/flutter_media_picker.dart';
 
 import './images_add_delete_list.dart';
-import './widgets/image_or_photo_grid_base_cell.dart';
 
 abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
     extends StatefulWidget {
@@ -25,32 +23,10 @@ abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
 
   final List<TBean>? imageChooseModels;
   final bool showCenterIconIfVideo;
-  final Widget? Function({
-    required ImageChooseBean imageChooseModel,
-    double? width,
-    double? height,
-  })? customImageWidgetGetBlock;
+
   // final Widget Function(dynamic imageChooseModel) badgeWidgetSetupBlock; // 可以返回为'删除'按钮 或者 '选中'按钮等任意
-  final void Function({
-    required List<TBean> imageChooseModels,
-    required PickPhotoAllowType newPickPhotoAllowType,
-    required bool isUpdateAction,
-  }) imageChooseModelsChangeBlock; // 当前选中的相册信息
-  final void Function(List<TBean> imageChooseModels, int imageIndex)?
-      onPressedImage;
 
-  final bool Function(PickPhotoAllowType pickAllowType)?
-      hideDeleteIconGetBlock; // 是否隐藏删除按钮
-  final Widget Function()? shouldRerenderAddCellBuilder;
-
-  final PickPhotoAllowType Function(List<TBean> currentImageChooseModels)?
-      pickAllowTypeGetBlock;
-  final int Function(PickPhotoAllowType pickPhotoAllowType)?
-      maxAddCountGetBlock;
-
-  final String? Function(
-      {required TBean imageChooseModel,
-      required int imageIndex})? flagTextBuilder;
+  final int maxAddCount; // 默认null,null时候默认9个
 
   // 视频帧
   final bool needVideoFrames;
@@ -73,14 +49,7 @@ abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
     this.dragCompleteBlock,
     this.imageChooseModels,
     this.showCenterIconIfVideo = true, // 是视频文件的时候是否在中间显示icon播放图标,
-    this.customImageWidgetGetBlock,
-    this.flagTextBuilder,
-    required this.imageChooseModelsChangeBlock,
-    this.onPressedImage, // 自定义点击图片的事件(默认是浏览)
-    this.hideDeleteIconGetBlock,
-    this.shouldRerenderAddCellBuilder,
-    this.pickAllowTypeGetBlock,
-    this.maxAddCountGetBlock, // 最大选择数(未设置则图片9张，视频1张，互斥)
+    required this.maxAddCount, // 最大选择数(未设置则图片9张，视频1张，互斥)
     this.needVideoFrames = false,
     this.onChangeCover,
     this.placeHolderKey,
@@ -91,14 +60,14 @@ abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
   // ImageAddDeletePickListState createState() => ImageAddDeletePickListState();
 }
 
-abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
-    extends State<ImageAddDeleteModelList> {
+// 重点：将 <ImageAddDeleteModelList<TBean> 抽象为 TList
+abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean,
+    TList extends ImageAddDeleteModelList<TBean>> extends State<TList> {
+// abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
+//     extends State<ImageAddDeleteModelList<TBean>> {
   List<TBean> _imageChooseModels = [];
-  int _maxAddCount = 9;
+  late int _maxAddCount;
 
-  PickPhotoAllowType _pickAllowType = PickPhotoAllowType.imageOnly;
-
-  PickPhotoAllowType get pickAllowType => _pickAllowType;
   List<TBean> get imageChooseModels => _imageChooseModels;
 
   @override
@@ -110,10 +79,8 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
   void initState() {
     super.initState();
 
-    _imageChooseModels = (widget.imageChooseModels as List<TBean>?) ?? [];
-
-    // 更新 _pickAllowType
-    _updatePickAllowTypeAndMaxAddCountByMediaModels();
+    _imageChooseModels = widget.imageChooseModels ?? [];
+    _maxAddCount = widget.maxAddCount;
   }
 
   @override
@@ -135,9 +102,7 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
       scrollDirection: widget.scrollDirection,
       physics: widget.physics,
       dragEnable: widget.dragEnable,
-      hideDeleteIcon: widget.hideDeleteIconGetBlock == null
-          ? false
-          : widget.hideDeleteIconGetBlock!(_pickAllowType),
+      hideDeleteIcon: shouldHideDeleteIcon(),
       dragCompleteBlock: (int oldIndex, int newIndex) {
         if (widget.dragCompleteBlock != null) {
           widget.dragCompleteBlock!(oldIndex, newIndex);
@@ -156,6 +121,8 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
         required double itemHeight,
         required double itemWidth,
       }) {
+        return imageContentWidget(context, imageIndex, itemWidth, itemHeight);
+        /*
         TBean imageChooseModel = _imageChooseModels[imageIndex];
         // print("list path111=$imageIndex:${imageChooseModel.localPath}");
 
@@ -176,61 +143,77 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
           flagText: flagText,
           onPressed: () {
             FocusScope.of(context).requestFocus(FocusNode());
-            _log('点击imageIndex=$imageIndex的图片');
+            logImageActionList('点击imageIndex=$imageIndex的图片');
             // _focusNode.unfocus();
-            if (widget.onPressedImage != null) {
-              widget.onPressedImage!(_imageChooseModels, imageIndex);
-            }
+            image_onPressed(context, _imageChooseModels, imageIndex);
           },
           networkVideoWidgetBuilder: (context) =>
-              cell_shouldRerenderCustomImageWidget(context, imageChooseModel),
+              cell_networkVideoWidget(context, imageChooseModel),
           shouldRerenderCustomImageWidgetBuilder: (context) =>
               cell_shouldRerenderCustomImageWidget(context, imageChooseModel),
           renderPositionedInfoWidgetBuilder: (context) =>
               cell_renderPositionedInfoWidget(context, imageChooseModel),
           renderPositionedStatusWidgetBuilder: (context) =>
-              cell_renderPositionedInfoWidget(context, imageChooseModel),
+              cell_renderPositionedStatusWidget(context, imageChooseModel),
         );
+        */
       },
       onPressedDelete: (imageIndex) {
         TBean imageChooseModel = _imageChooseModels[imageIndex];
         _imageChooseModels.remove(imageChooseModel);
 
-        _imageChooseModelsChange(isUpdateAction: false);
+        imageChooseModelsChange(isUpdateAction: false);
       },
-      addCellBuilder: widget.shouldRerenderAddCellBuilder == null
-          ? null
-          : () {
-              return widget.shouldRerenderAddCellBuilder!();
-            },
+      renderAddCellBuilder: () {
+        return addWidgetRerender(context);
+      },
       onPressedAdd: () {
-        addCell_onPressed(context);
+        addCellOnPressed(context);
       },
     );
   }
 
+  Widget imageContentWidget(BuildContext context, int imageIndex,
+      double itemHeight, double itemWidth);
+
+  /// 添加按钮
+  Widget? addWidgetRerender(BuildContext context) {
+    return null;
+  }
+
+  void addCellOnPressed(BuildContext context); // 实现时会调用到 valueChangedAfterPick
+
+  // 是否隐藏删除按钮
+  bool shouldHideDeleteIcon() {
+    return false;
+  }
+  /*
   Widget? cell_shouldRerenderCustomImageWidget(
       BuildContext context, TBean imageChooseModel);
 
+  Widget? cell_networkVideoWidget(BuildContext context, TBean imageChooseModel);
+  
   Widget? cell_renderPositionedInfoWidget(
       BuildContext context, TBean imageChooseModel);
-
-  Widget? cell_networkVideoWidget(BuildContext context, TBean imageChooseModel);
 
   Widget? cell_renderPositionedStatusWidget(
       BuildContext context, TBean imageChooseModel);
 
-  void addCell_onPressed(BuildContext context); // 实现时会调用到 valueChangedAfterPick
+  void image_onPressed(
+      BuildContext context, List<TBean> imageChooseModels, int imageIndex);
+  */
+  // 自定义点击图片的事件(默认是浏览)
 
+  /*
   /// 供子类调用的方法:所选中的值有效，即可以使用(在此之前可能需要先检查是否可进行此操作，所添加的文件是否可以使用(是否太长，是否太大))
   pickedValueVailid({
     List<ImageChooseBean>? newAddedImageChooseModels,
     List<ImageChooseBean>? newCancelImageChooseModels,
     required TBean Function(ImageChooseBean item) createTInstance,
-    void Function({List<TBean> addedMeidaBeans})?
+    void Function({required List<TBean> addedMeidaBeans})?
         extraThingToAddedMeidaBeans, // 其他额外需要对所添加媒体处理的事情（图片压缩、视频帧获取等）
   }) async {
-    _log('PickUtil 03');
+    logImageActionList('PickUtil 03');
 
     // 新取消的图片
     if (newCancelImageChooseModels != null) {
@@ -268,73 +251,33 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
       }
     }
 
-    _log('PickUtil 04');
-    _imageChooseModelsChange(isUpdateAction: false);
+    logImageActionList('PickUtil 04');
+    imageChooseModelsChange(isUpdateAction: false);
   }
 
   /// 图片/视频更新自身接口(目前使用于：'更换视频'按钮的点击)
-  updateMediaSelf(
+  pickMediaReplaceSelf(
     int mediaIndex, {
     required ImageChooseBean item,
     required TBean Function(ImageChooseBean item) createTInstance,
-    void Function({List<TBean> addedMeidaBeans})?
+    void Function({required List<TBean> addedMeidaBeans})?
         extraThingToAddedMeidaBeans, // 其他额外需要对所添加媒体处理的事情（图片压缩、视频帧获取等）
   }) {
     TBean newBean = createTInstance(item);
     extraThingToAddedMeidaBeans?.call(addedMeidaBeans: [newBean]);
 
     _imageChooseModels[mediaIndex] = newBean;
-    _imageChooseModelsChange(isUpdateAction: true);
+    imageChooseModelsChange(isUpdateAction: true);
   }
+  */
 
-  void _imageChooseModelsChange({required bool isUpdateAction}) {
-    // setState(() {
-    //   // _dealAddedImageChooseModels(_imageChooseModels);
-    // });
-    _log('PickUtil 05}');
-    _updatePickAllowTypeAndMaxAddCountByMediaModels();
-    widget.imageChooseModelsChangeBlock(
-      isUpdateAction: isUpdateAction,
-      imageChooseModels: _imageChooseModels,
-      newPickPhotoAllowType: _pickAllowType,
-    );
-    _log('PickUtil 06');
-    setState(() {}); // 直接在本类中更新视图
-  }
-
-  _updatePickAllowTypeAndMaxAddCountByMediaModels() {
-    if (widget.pickAllowTypeGetBlock != null) {
-      _pickAllowType = widget.pickAllowTypeGetBlock!(_imageChooseModels);
-    } else {
-      _pickAllowType = _getNewPickAllowTypeByImageChooseModels();
-    }
-
-    if (widget.maxAddCountGetBlock != null) {
-      _maxAddCount = widget.maxAddCountGetBlock!(_pickAllowType);
-    } else {
-      _maxAddCount = _pickAllowType == PickPhotoAllowType.videoOnly ? 1 : 9;
-    }
-  }
-
-  PickPhotoAllowType _getNewPickAllowTypeByImageChooseModels() {
-    // PickPhotoAllowType newPickPhotoAllowType = _pickAllowType;
-    if (_imageChooseModels.isEmpty) {
-      return PickPhotoAllowType.imageOrVideo;
-    }
-
-    ImageChooseBean firstImageChooseModel = _imageChooseModels.first;
-    UploadMediaType firstAddAssetType = firstImageChooseModel.mediaType;
-    if (firstAddAssetType == UploadMediaType.video) {
-      return PickPhotoAllowType.videoOnly;
-    } else {
-      return PickPhotoAllowType.imageOnly;
-    }
-  }
+  // 当前选中的相册信息发生变化
+  void imageChooseModelsChange({required bool isUpdateAction});
 
   /*
   Future<bool> _dealAddedImageChooseModels(
       List<TBean> addedImageChooseModels) async {
-    _log('获取所选择的所有图片的宽高开始...');
+    logImageActionList('获取所选择的所有图片的宽高开始...');
     int count = addedImageChooseModels.length;
 
     List<Future<Map<String, dynamic>>> futures = [];
@@ -391,7 +334,7 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
         addedImageChooseModel.height = imageHeight;
       }
 
-      _log('获取所选择的所有图片的宽高结束...');
+      logImageActionList('获取所选择的所有图片的宽高结束...');
 
       return true;
     });
@@ -407,7 +350,7 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
         (ImageInfo info, bool _) {
           int imageWidth = info.image.width;
           int imageHeight = info.image.height;
-          _log('imageWidth=$imageWidth, imageHeight=$imageHeight');
+          logImageActionList('imageWidth=$imageWidth, imageHeight=$imageHeight');
 
           Map<String, dynamic> imageWithHeight = {
             "width": imageWidth,
@@ -421,7 +364,7 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean>
     return completer.future;
   }
   */
-  _log(String message) {
+  logImageActionList(String message) {
     String dateTimeString = DateTime.now().toString().substring(0, 19);
     debugPrint('$dateTimeString:$message');
   }

@@ -16,12 +16,8 @@ dependencies:
   flutter_staggered_grid_view: ^0.6.2
   reorderables: ^0.6.0
 
-  flutter_image_process:
-    path: ../flutter_image_process/
-  flutter_media_picker:
-    path: ../flutter_media_picker/
-  flutter_image_basekit: #^0.0.2
-    path: ../flutter_image_kit/
+  flutter_image_process: ^0.0.5
+  flutter_image_basekit: ^0.0.2
 
 dev_dependencies:
   flutter_test:

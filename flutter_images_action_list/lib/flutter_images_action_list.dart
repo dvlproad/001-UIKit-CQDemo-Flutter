@@ -20,3 +20,6 @@ export 'package:flutter_image_process/flutter_image_process.dart'
 
 // list widget
 export './src/images_add_delete_model_list.dart';
+
+// model
+export './src/images_picker_model_base_util.dart';

@@ -11,7 +11,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-// import 'package:flutter_image_basekit/flutter_image_kit.dart';
+import 'package:flutter_image_basekit/flutter_image_kit.dart';
 
 import 'package:flutter_image_process/flutter_image_process.dart';
 

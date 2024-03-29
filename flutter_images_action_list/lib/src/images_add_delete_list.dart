@@ -29,7 +29,7 @@ class CQImagesAddDeleteList extends StatelessWidget {
 
   final bool hideDeleteIcon; // 隐藏删除按钮
   final void Function(int imageIndex) onPressedDelete; // "删除"按钮的点击事件
-  final Widget Function()? addCellBuilder; // 默认null，null时候使用默认样式
+  final Widget? Function()? renderAddCellBuilder; // 默认null，null时候使用默认样式
   final VoidCallback onPressedAdd; // "添加"按钮的点击事件
 
   const CQImagesAddDeleteList({
@@ -49,7 +49,7 @@ class CQImagesAddDeleteList extends StatelessWidget {
     required this.itemImageContentBuilder,
     this.hideDeleteIcon = false,
     required this.onPressedDelete,
-    this.addCellBuilder,
+    this.renderAddCellBuilder,
     required this.onPressedAdd,
   }) : super(key: key);
 
@@ -147,11 +147,14 @@ class CQImagesAddDeleteList extends StatelessWidget {
 
   /// 添加图片的 cell
   Widget _addCell() {
-    if (addCellBuilder != null) {
-      return GestureDetector(
-        child: addCellBuilder!(),
-        onTap: onPressedAdd,
-      );
+    if (renderAddCellBuilder != null) {
+      Widget? addCell = renderAddCellBuilder!();
+      if (addCell != null) {
+        return GestureDetector(
+          child: renderAddCellBuilder!(),
+          onTap: onPressedAdd,
+        );
+      }
     }
 
     return CJBGImageWidget(

@@ -13,12 +13,12 @@ dependencies:
 
 
   image_picker: any
-  flutter_images_picker:
-    path: ../flutter_images_picker/
+  flutter_permission_manager:
+    path: ../flutter_permission_manager/
   wechat_assets_picker: any
   wechat_camera_picker: any
-  flutter_image_process:
-    path: ../flutter_image_process/
+  flutter_image_process: ^0.0.5
+    # path: ../flutter_image_process/
   flutter_effect_kit:
     path: ../flutter_effect_kit/
   path: any
