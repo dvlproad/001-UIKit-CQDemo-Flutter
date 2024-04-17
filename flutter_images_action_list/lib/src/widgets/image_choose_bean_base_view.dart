@@ -46,9 +46,11 @@ class ImageChooseBeanBaseView<T extends ImageChooseBean>
     } else if (imageChooseModel.networkUrl != null &&
         imageChooseModel.networkUrl!.isNotEmpty) {
       return _getCustomImageWidget_networkUrl(context);
-    } else if (imageChooseModel.compressedImageOrVideoThumbnailProvider !=
+    } else if (imageChooseModel
+            .currentCompressedImageOrVideoThumbnailProvider !=
         null) {
-      return _getCustomImageWidget_compressPath(context);
+      return _getCustomImageWidget_compressImageProvider(
+          imageChooseModel.currentCompressedImageOrVideoThumbnailProvider!);
     } else {
       // String imagePath = imageChooseModel.assetEntityPath;
       // Image image = Image.file(File(imagePath));
@@ -76,10 +78,8 @@ class ImageChooseBeanBaseView<T extends ImageChooseBean>
     );
   }
 
-  Widget _getCustomImageWidget_compressPath(BuildContext context) {
-    ImageProvider compressImageProvider =
-        imageChooseModel.compressedImageOrVideoThumbnailProvider!;
-
+  Widget _getCustomImageWidget_compressImageProvider(
+      ImageProvider compressImageProvider) {
     return Image(
       image: compressImageProvider,
       fit: BoxFit.cover,

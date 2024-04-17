@@ -1,6 +1,6 @@
 name: flutter_images_action_list
 description: 可操作的图片列表库.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_images_action_list
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_images_action_list
 
@@ -16,7 +16,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.6.2
   reorderables: ^0.6.0
 
-  flutter_image_process: ^0.0.5
+  flutter_image_process: ^0.0.6
   flutter_image_basekit: ^0.0.2
 
 dev_dependencies:
