@@ -14,6 +14,6 @@
 
 * 额外 `export 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType, AssetEntityImageProvider;`
 
-## [0.0.6] - Add release date.
+## [0.0.7] - Add release date.
 
 * 优化提供的接口

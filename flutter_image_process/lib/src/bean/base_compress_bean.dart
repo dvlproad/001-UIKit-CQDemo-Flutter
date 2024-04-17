@@ -50,6 +50,7 @@ CompressResultType compressResultTypeFromString(String value) {
   Iterable<CompressResultType> values = [
     CompressResultType.unknow, //未知
     CompressResultType.success_get, // 成功因为获取到了缩略视频
+    CompressResultType.success_get_by_compressBefore,
     CompressResultType.success_useOrigin, // 成功因为使用了原图
     CompressResultType.failure_tooBig, // 太大不压缩
     CompressResultType.failure_get, // 压缩失败

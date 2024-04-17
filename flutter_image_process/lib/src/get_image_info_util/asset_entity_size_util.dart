@@ -1,7 +1,22 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2024-04-17 16:06:51
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-04-17 18:21:49
+ * @Description: 
+ */
 import 'dart:io';
 
 import 'package:photo_manager/photo_manager.dart';
 
+/// 扩展方法
+extension SizeUtil on AssetEntity {
+  int get realWidth => AssetEntitySizeUtil.getRealWidthForAssetEntity(this);
+
+  int get realHeight => AssetEntitySizeUtil.getRealHeightForAssetEntity(this);
+}
+
+/// 类方法
 class AssetEntitySizeUtil {
   static int getRealWidthForAssetEntity(AssetEntity assetEntity) {
     int width = assetEntity.width;

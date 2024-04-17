@@ -12,6 +12,13 @@ import 'package:flutter/foundation.dart';
 
 import 'package:photo_manager/photo_manager.dart' show AssetEntity;
 
+/// 扩展方法
+extension InfoGetter on AssetEntity {
+  // ignore: non_constant_identifier_names
+  Future<File?> get file_cj => AssetEntityInfoGetter.getAssetEntityFile(this);
+}
+
+/// 类方法
 class AssetEntityInfoGetter {
   /// 危险！！！！获取相册的文件流，此方法会产生极大的内存开销，请勿连续调用比如在for中
   static Future<File?> getAssetEntityFile(
