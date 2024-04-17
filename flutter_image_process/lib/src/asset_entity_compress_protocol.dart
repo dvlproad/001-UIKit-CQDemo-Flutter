@@ -32,6 +32,15 @@ mixin AssetEntityCompressProtocol {
   // 私有变量
   final Completer _compressCompleter = Completer<String>();
 
+  /// 是否执行过压缩
+  bool get _beenExecCompress {
+    if (compressAssetEntity == null) {
+      debugPrint("该资源不是来源于相册(即可能是网络)，不曾进行过压缩");
+      return false;
+    }
+    return true;
+  }
+
   // 选择完图片的时候就处理，避免进行上传的时候才去压缩导致时长增加
   Future<void> checkAndBeginCompress(AssetEntity assetEntity) async {
     _log("image choose bean hashCode111 = $hashCode");
@@ -75,62 +84,38 @@ mixin AssetEntityCompressProtocol {
   }
 
   // 选择完显示时候
-  // 获取用于显示在列表上的图片
-  /*
-  File? get compressedImageOrVideoThumbnailFile {
+  // 如果有压缩，获取可用于显示在列表上的压缩图片数据
+  ImageProvider? get currentCompressedImageOrVideoThumbnailProvider {
+    if (!_beenExecCompress) return null;
+
     File? resultFile;
-
-    if (imageCompressResponseBean != null &&
-        imageCompressResponseBean!.reslut != null) {
-      File resultCompressImageFile = imageCompressResponseBean!.reslut!;
-      if (resultCompressImageFile.existsSync()) {
-        resultFile = resultCompressImageFile;
-        return resultFile;
+    if (compressAssetEntity!.type == AssetType.video) {
+      // 如果是视频
+      if (currentVideoFrameFile != null &&
+          currentVideoFrameFile!.existsSync()) {
+        resultFile = currentVideoFrameFile;
+      }
+    } else {
+      // 如果是图片
+      if (currentImageCompressFile != null &&
+          currentImageCompressFile!.existsSync()) {
+        resultFile = currentImageCompressFile;
       }
     }
 
-    if (videoThumbResponseBean != null &&
-        videoThumbResponseBean!.reslut != null) {
-      File resultVideoImageFile = videoThumbResponseBean!.reslut!;
-      if (resultVideoImageFile.existsSync()) {
-        resultFile = resultVideoImageFile;
-        return resultFile;
-      }
+    if (resultFile == null) {
+      return null;
     }
 
-    return resultFile;
-  }
-  */
-
-  ImageProvider? get compressedImageOrVideoThumbnailProvider {
-    ImageProvider? imageProvider;
-
-    if (imageCompressResponseBean != null &&
-        imageCompressResponseBean!.reslut != null) {
-      File resultCompressImageFile = imageCompressResponseBean!.reslut!;
-      if (resultCompressImageFile.existsSync()) {
-        Image image = Image.file(resultCompressImageFile);
-        imageProvider = image.image;
-        return imageProvider;
-      }
-    }
-
-    if (videoThumbResponseBean != null &&
-        videoThumbResponseBean!.reslut != null) {
-      File resultVideoImageFile = videoThumbResponseBean!.reslut!;
-      if (resultVideoImageFile.existsSync()) {
-        Image image = Image.file(resultVideoImageFile);
-        imageProvider = image.image;
-        return imageProvider;
-      }
-    }
-
+    Image image = Image.file(resultFile);
+    ImageProvider imageProvider = image.image;
     return imageProvider;
   }
 
   // 获取最后要上传的图片的大小
   Future<Size?> get lastUploadCompressedImageOrVideoThumbnailSize async {
-    ImageProvider? imageProvider = compressedImageOrVideoThumbnailProvider;
+    ImageProvider? imageProvider =
+        currentCompressedImageOrVideoThumbnailProvider;
     if (imageProvider == null) {
       return null;
     }
@@ -140,8 +125,34 @@ mixin AssetEntityCompressProtocol {
     return imageSize;
   }
 
+  /// 如果有压缩，当前(不一定压缩完)视频的压缩文件
+  File? get currentVideoCompressFile {
+    if (!_beenExecCompress) return null;
+
+    File? resultFile = videoCompressResponseBean?.reslut;
+    return resultFile;
+  }
+
+  /// 如果有压缩，当前(不一定压缩完)视频的压缩帧文件
+  File? get currentVideoFrameFile {
+    if (!_beenExecCompress) return null;
+
+    File? resultFile = videoThumbResponseBean?.reslut;
+    return resultFile;
+  }
+
+  /// 如果有压缩，当前(不一定压缩完)图片的压缩文件
+  File? get currentImageCompressFile {
+    if (!_beenExecCompress) return null;
+
+    File? resultFile = imageCompressResponseBean?.reslut;
+    return resultFile;
+  }
+
   // 获取最后要上传的视频文件(会自动等待前面的压缩结束)
   Future<String?> lastUploadVideoSelfPath() async {
+    if (!_beenExecCompress) return null;
+
     // 草稿里的图片已有压缩数据
     if (compressInfoProcess == CompressInfoProcess.finishCompress) {
       File resultFile = videoCompressResponseBean?.reslut;
@@ -155,6 +166,8 @@ mixin AssetEntityCompressProtocol {
 
   // 获取最后要上传的视频帧图文件(会自动等待前面的压缩结束)
   Future<String?> lastUploadVideoFramePath() async {
+    if (!_beenExecCompress) return null;
+
     // 草稿里的图片已有压缩数据
     if (compressInfoProcess == CompressInfoProcess.finishCompress) {
       File resultFile = videoThumbResponseBean?.reslut;
@@ -168,6 +181,8 @@ mixin AssetEntityCompressProtocol {
 
   // 获取最后要上传的图片文件(会自动等待前面的压缩结束)
   Future<String?> lastUploadImagePath() async {
+    if (!_beenExecCompress) return null;
+
     _log("image choose bean hashCode = $hashCode");
     // 草稿里的图片已有压缩数据
     if (compressInfoProcess == CompressInfoProcess.finishCompress) {

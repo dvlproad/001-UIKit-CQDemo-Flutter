@@ -26,6 +26,7 @@ export './src/bean/base_compress_bean.dart'
 export './src/voice/voice_base_bean.dart';
 
 // util-compress
+export 'src/bean/base_compress_bean.dart';
 export 'src/get_image_info_util/media_type_util.dart'; // 需要 UploadMediaType
 export 'src/get_image_info_util/asset_entity_info_getter.dart';
 export 'src/image_compress_util/app_video_frame_util.dart';

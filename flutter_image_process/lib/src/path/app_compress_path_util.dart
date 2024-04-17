@@ -21,8 +21,7 @@ class AppCompressPathUtil {
     String targetCompressPath = await _getTargetCompressPathForFile(
       file,
       compressDirName: "compressImage",
-      compressFileNameGetBlock:
-          (String folderPath, String fileName, String fileExtension) {
+      compressFileNameGetBlock: (String fileName, String fileExtension) {
         String comprssFileName = "${fileName}_$imageQulatity.$fileExtension";
         return comprssFileName;
       },
@@ -38,8 +37,7 @@ class AppCompressPathUtil {
     String targetCompressPath = await _getTargetCompressPathForFile(
       file,
       compressDirName: "compressVideo",
-      compressFileNameGetBlock:
-          (String folderPath, String fileName, String fileExtension) {
+      compressFileNameGetBlock: (String fileName, String fileExtension) {
         String comprssFileName = "${fileName}_$videoQulatity.$fileExtension";
         return comprssFileName;
       },
@@ -56,8 +54,7 @@ class AppCompressPathUtil {
     String targetCompressPath = await _getTargetCompressPathForFile(
       file,
       compressDirName: "video_thumb",
-      compressFileNameGetBlock:
-          (String folderPath, String fileName, String fileExtension) {
+      compressFileNameGetBlock: (String fileName, String fileExtension) {
         String videoFramePositionString = _formatDuration(videoFramePosition);
         String comprssFileName =
             "${fileName}_${videoFramePositionString}_$frameQuality.$fileExtension";
@@ -82,41 +79,48 @@ class AppCompressPathUtil {
   static Future<String> _getTargetCompressPathForFile(
     File file, {
     required String compressDirName,
-    required String Function(
-            String folderPath, String fileName, String fileExtension)
+    required String Function(String fileName, String fileExtension)
         compressFileNameGetBlock,
   }) async {
     // 1.1 压缩目录
     String dirPath = await BasePathUtil.getAppCompressDirPath(file);
 
-    // 1.2 压缩目录的子目录
-    String compressDirPath = dirPath.appendPathString(compressDirName);
-    Directory compressDir = Directory(compressDirPath);
-    bool exists = await compressDir.exists();
-    if (!exists) {
-      await compressDir.create();
-    }
+    // 1.2 压缩目录的主目录
+    String compressMainDirPath = dirPath.appendPathString(compressDirName);
 
     // 2.1 获取文件名的各种信息（用于等下生成新的压缩文件名）
     String relativePath = BasePathUtil.getFieRelativePath(file);
+
+    String originRelativeFolderPath = "";
     int lastSlashIndex = relativePath.lastIndexOf('/');
-    String folderPath = relativePath.substring(0, lastSlashIndex);
-    debugPrint('文件夹路径: $folderPath');
+    if (lastSlashIndex != -1) {
+      originRelativeFolderPath = relativePath.substring(0, lastSlashIndex);
+    }
+    debugPrint('文件原始存放相对路径: $originRelativeFolderPath');
+
     int lastDotIndex = relativePath.lastIndexOf('.');
-    String fileName = relativePath.substring(lastSlashIndex + 1, lastDotIndex);
-    debugPrint('文件名: $fileName');
+    String originFileName =
+        relativePath.substring(lastSlashIndex + 1, lastDotIndex);
+    debugPrint('文件名: $originFileName');
     String fileExtension = relativePath.substring(lastDotIndex + 1);
     debugPrint('文件扩展名: $fileExtension');
 
     // 2.2 压缩文件相对路径
+    // 2.2.1 真正的存放目录
+    String targetCompressDirPath =
+        compressMainDirPath.appendPathString(originRelativeFolderPath);
+    Directory compressDir = Directory(targetCompressDirPath);
+    bool exists = await compressDir.exists();
+    if (!exists) {
+      await compressDir.create();
+    }
+    // 2.2.2 真正使用的文件名
     String comprssFileName =
-        compressFileNameGetBlock(folderPath, fileName, fileExtension);
-    String compressFileRelativePath =
-        folderPath.appendPathString(comprssFileName);
+        compressFileNameGetBlock(originFileName, fileExtension);
 
     // 3 目标完整路径
     String targetCompressPath =
-        compressDirPath.appendPathString(compressFileRelativePath);
+        targetCompressDirPath.appendPathString(comprssFileName);
     return targetCompressPath;
   }
 }

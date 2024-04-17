@@ -172,8 +172,8 @@ class ImageChooseBean
   ImageProvider? get imageProvider {
     ImageProvider? imageProvider;
 
-    if (compressedImageOrVideoThumbnailProvider != null) {
-      imageProvider = compressedImageOrVideoThumbnailProvider;
+    if (currentCompressedImageOrVideoThumbnailProvider != null) {
+      imageProvider = currentCompressedImageOrVideoThumbnailProvider;
       return imageProvider;
     }
     if (assetEntity != null) {
@@ -209,10 +209,10 @@ class ImageChooseBean
     if (width != null && height != null) {
       uploadImageWidth = width!;
       uploadImageHeight = height!;
-    } else if (compressedImageOrVideoThumbnailProvider != null) {
+    } else if (currentCompressedImageOrVideoThumbnailProvider != null) {
       // 本地缩略图
       Size imageSize = await ImageProviderSizeUtil.getWidthAndHeight(
-          compressedImageOrVideoThumbnailProvider!);
+          currentCompressedImageOrVideoThumbnailProvider!);
       return imageSize;
     } else if (assetEntity != null) {
       uploadImageWidth = assetEntity!.width;
@@ -223,11 +223,17 @@ class ImageChooseBean
   }
 
   Future checkAndBeginCompressAssetEntity({bool force = false}) async {
-    if (assetEntity == null) {
-      debugPrint("该资源不是来源于相册(即可能是网络)");
-      return;
-    }
+    if (!_enableCompress) return;
+
     checkAndBeginCompress(assetEntity!);
+  }
+
+  bool get _enableCompress {
+    if (assetEntity == null) {
+      debugPrint("该资源不是来源于相册(即可能是网络)，无法进行压缩");
+      return false;
+    }
+    return true;
   }
 
   Future reCompressAssetEntity() async {

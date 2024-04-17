@@ -13,7 +13,7 @@ import './base_append_path_extension.dart';
 class BasePathUtil {
   // 获取相对路径（适配app重启后目录变化）
   static String getFieRelativePath(File file) {
-    const String appImageRelativeDir = "localImage";
+    const String appImageRelativeDir = "cq_localImage";
 
     List<String> filePathComponents = file.path.split("/");
     String fileName = filePathComponents.last;

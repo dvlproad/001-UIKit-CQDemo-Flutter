@@ -1,14 +1,15 @@
 # This is a generated file; do not edit or check into version control.
-flutter_image_compress=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress-2.1.0/
-flutter_image_compress_common=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_common-1.0.4/
-flutter_image_compress_macos=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_macos-1.0.1/
-flutter_image_compress_web=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_web-0.1.4/
+flutter_image_compress=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress-2.2.0/
+flutter_image_compress_common=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_common-1.0.5/
+flutter_image_compress_macos=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_macos-1.0.2/
+flutter_image_compress_ohos=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_ohos-0.0.2/
+flutter_image_compress_web=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/flutter_image_compress_web-0.1.4+1/
 path_provider=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider-2.1.1/
 path_provider_android=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_android-2.2.1/
 path_provider_foundation=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_foundation-2.3.1/
 path_provider_linux=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_linux-2.2.1/
 path_provider_windows=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/path_provider_windows-2.2.1/
-photo_manager=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/photo_manager-2.8.1/
+photo_manager=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/photo_manager-2.8.2/
 sqflite=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/sqflite-2.2.8+4/
 video_compress=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/video_compress-3.1.2/
 video_thumbnail=/Users/qian/.pub-cache/hosted/pub.flutter-io.cn/video_thumbnail-0.5.3/
