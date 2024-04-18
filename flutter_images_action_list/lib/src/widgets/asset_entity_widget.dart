@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2022-04-12 23:04:04
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-18 15:05:32
+ * @LastEditTime: 2024-04-18 10:12:00
  * @Description: 图片选择器的单元视图
  */
 import 'package:flutter/material.dart';
-import 'package:photo_manager/photo_manager.dart'
-    show AssetEntity, AssetEntityImageProvider, AssetType;
+import 'package:flutter_image_process/flutter_image_process.dart';
 
 class AssetEntityWidget extends StatelessWidget {
   final double? width;

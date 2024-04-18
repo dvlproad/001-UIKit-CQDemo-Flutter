@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-03-29 12:57:58
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-29 15:12:03
+ * @LastEditTime: 2024-04-18 10:11:10
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_image_process/flutter_image_process.dart';
-import 'package:photo_manager/photo_manager.dart' show AssetEntity, AssetType;
 
 class BasePickModelUtil {
   /// 供子类调用的方法:所选中的值有效，即可以使用(在此之前可能需要先检查是否可进行此操作，所添加的文件是否可以使用(是否太长，是否太大))

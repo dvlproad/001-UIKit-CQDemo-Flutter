@@ -15,8 +15,7 @@ dependencies:
   cached_network_image: ^3.2.1
   extended_image: ^7.0.2
 
-  flutter_image_process: ^0.0.3
-    # path: ../flutter_image_process/
+  flutter_image_process: ^0.0.7
 
   
 dev_dependencies:
