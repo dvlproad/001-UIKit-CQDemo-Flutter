@@ -112,7 +112,11 @@ class AppCompressPathUtil {
     Directory compressDir = Directory(targetCompressDirPath);
     bool exists = await compressDir.exists();
     if (!exists) {
-      await compressDir.create();
+      try {
+        await compressDir.create(recursive: true);
+      } catch (e) {
+        debugPrint('创建压缩目录失败: $e');
+      }
     }
     // 2.2.2 真正使用的文件名
     String comprssFileName =
