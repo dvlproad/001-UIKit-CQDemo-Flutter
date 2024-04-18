@@ -2,20 +2,20 @@
 
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 import 'package:fluwx/fluwx.dart';
 
+import '../base_share_singleton.dart';
 import '../share_util/poster_share_util.dart';
 import '../share_util/wechat_share_util.dart';
 
+import '../../flutter_share_kit_adapt.dart';
+
 class PosterButtonsWidget extends StatefulWidget {
   final GlobalKey posterRepaintBoundaryGlobalKey;
-  final void Function({required bool show}) loadingHandle;
   final void Function(bool isSuccess) completeBlock;
 
   const PosterButtonsWidget({
     required this.posterRepaintBoundaryGlobalKey,
-    required this.loadingHandle,
     required this.completeBlock,
     Key? key,
   }) : super(key: key);
@@ -32,7 +32,7 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
     super.initState();
   }
 
-  void _getPoster() async {
+  Future _getPoster() async {
     if (_posterImage != null) {
       return;
     }
@@ -84,27 +84,19 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
     );
   }
 
-  _loadingShow() {
-    widget.loadingHandle(show: true);
-  }
-
-  _loadingDismiss() {
-    widget.loadingHandle(show: false);
-  }
-
   /// 分享到微信
   /// scene: 微信好友/朋友圈
   _shareToWechat({required WeChatScene scene}) async {
-    _loadingShow();
-    _getPoster();
+    BaseShareSingleton.loadingShowHandle?.call();
+    await _getPoster();
     if (_posterImage == null) {
-      _loadingDismiss();
-      widget.completeBlock(true);
+      BaseShareSingleton.loadingDismissHandle?.call();
+      widget.completeBlock(false);
       return;
     }
 
     WechatShareUtil.shareH5ImageByUIImage(_posterImage!, scene: scene);
-    _loadingDismiss();
+    BaseShareSingleton.loadingDismissHandle?.call();
     widget.completeBlock(true);
   }
 
@@ -112,12 +104,12 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
     return buildButtonWidget(
       buttonImageName: "assets/save_icon.png",
       buttonText: "保存",
-      onTap: () {
-        _loadingShow();
-        _getPoster();
+      onTap: () async {
+        BaseShareSingleton.loadingShowHandle?.call();
+        await _getPoster();
         if (_posterImage == null) {
-          _loadingDismiss();
-          widget.completeBlock(true);
+          BaseShareSingleton.loadingDismissHandle?.call();
+          widget.completeBlock(false);
           return;
         }
 
@@ -125,7 +117,7 @@ class _PosterButtonsWidgetState extends State<PosterButtonsWidget> {
           context,
           image: _posterImage!,
         ).then((value) {
-          _loadingDismiss();
+          BaseShareSingleton.loadingDismissHandle?.call();
           widget.completeBlock(true);
         });
       },

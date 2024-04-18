@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-03-07 16:39:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-15 18:32:22
+ * @LastEditTime: 2024-04-18 11:40:31
  * @Description: 
  */
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit.dart';
 
 class TSAppShareBizType {
@@ -16,8 +15,36 @@ class TSAppShareBizType {
   static int improveResult = 2; // 完善结果页的分享
 }
 
-class TSAppShareSingleton extends ShareSingleton {
-  TSAppShareSingleton._();
+class TSAppShareSingleton extends BaseShareSingleton {
+  TSAppShareSingleton._() {
+    BaseShareSingleton.placeholderImageName = 'images/common/placeholder.png';
+    /*
+    BaseShareSingleton.loadingShowHandle = () {
+      LoadingUtil.show();
+    };
+    BaseShareSingleton.loadingDismissHandle = () {
+      LoadingUtil.dismiss();
+    };
+    BaseShareSingleton.toastHandle = (message) {
+      ToastUtil.showMessage(message);
+    };
+    BaseShareSingleton.copySuccessHandle = (BuildContext context,
+        {required String lastShareString, required void Function() okHandle}) {
+      AlertUtil.showCancelOKAlert(
+        context: context,
+        title: "已复制到粘贴板",
+        message: "快去分享给好友吧!\n",
+        cancelTitle: "好的",
+        okTitle: "去微信分享",
+        okHandle: okHandle,
+      );
+    };
+    BaseShareSingleton.checkStoragePermissionHandle = () async {
+      bool isGranted = await PermissionsManager.storage();
+      return isGranted;
+    };
+    */
+  }
   static final TSAppShareSingleton _instance = TSAppShareSingleton._();
   factory TSAppShareSingleton() => _instance;
 
@@ -27,10 +54,22 @@ class TSAppShareSingleton extends ShareSingleton {
     required List<BaseActionModel> shareActionModels,
     List<BaseActionModel>? operateActionModels,
   }) {
-    ShareDialogUtil.show(
-      context,
-      shareActionModels: shareActionModels,
-      operateActionModels: operateActionModels,
+    showModalBottomSheet(
+      context: context,
+      enableDrag: true,
+      // useSafeArea: false, // 要设成false，否则底部有间隙
+      // backgroundColor: Colors.black.withOpacity(0.3),
+      backgroundColor: Colors.transparent,
+      // 背景色
+      // barrierColor: Colors.blue, // 遮盖背景颜色
+      isScrollControlled: true,
+      // 解决 showDialog/showModalBottomSheet时高度限制问题
+      builder: (BuildContext context) {
+        return ShareDialogWidget(
+          shareActionModels: shareActionModels,
+          operateActionModels: operateActionModels,
+        );
+      },
     );
   }
 
@@ -55,8 +94,10 @@ class TSAppShareSingleton extends ShareSingleton {
   }
 
   @override
-  void report(BuildContext context, {String? bizId, required int bizType}) {
-    ToastUtil.showMessage("进入举报页面:bizId=$bizId, bizType=$bizType");
+  void report(BuildContext context,
+      {String? bizId, required int bizType, required String bizOwnerId}) {
+    BaseShareSingleton.toastHandle
+        ?.call("进入举报页面:bizId=$bizId, bizType=$bizType, bizOwnerId=$bizOwnerId");
   }
 
   /// 弹出常见的分享面板(+海报根据key快捷获取)

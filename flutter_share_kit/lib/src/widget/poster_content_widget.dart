@@ -6,6 +6,19 @@ import 'package:flutter_image_basekit/flutter_image_kit.dart';
 import 'package:extended_image/extended_image.dart';
 
 import '../../flutter_share_kit_adapt.dart';
+import '../base_share_singleton.dart';
+
+class PosterDataModel {
+  final String? posterImageUrl;
+  final String? userImageUrl;
+  final String qrCodeUrl;
+
+  const PosterDataModel({
+    this.posterImageUrl,
+    this.userImageUrl,
+    required this.qrCodeUrl, // 后台一定要返回二维码
+  });
+}
 
 class PosterContentWidget extends StatefulWidget {
   final String posterImageUrl;
@@ -14,14 +27,14 @@ class PosterContentWidget extends StatefulWidget {
       {required double halfAvatarHeight,
       required double qrCodeWidgetWidth}) textContainerBuilder;
   final String appLogoPath;
-  final String qrCodeWebUrl;
+  final Future<PosterDataModel?> Function() netPosterDataGetter;
 
   const PosterContentWidget({
     required this.posterImageUrl,
     required this.userImageUrl,
     required this.textContainerBuilder,
     required this.appLogoPath,
-    required this.qrCodeWebUrl,
+    required this.netPosterDataGetter,
     Key? key,
   }) : super(key: key);
 
@@ -37,9 +50,34 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
   double leftOrRightPadding = 16.w_pt_cj;
   double bottomPadding = 16.h_pt_cj;
 
+  String _userImageUrl = "";
+  String _posterImageUrl = "";
+  String? _qrCodeWebUrl;
   @override
   void initState() {
     super.initState();
+
+    _userImageUrl = widget.userImageUrl;
+    _posterImageUrl = widget.posterImageUrl;
+
+    widget.netPosterDataGetter().then((PosterDataModel? posterDataModel) {
+      if (posterDataModel == null) {
+        return;
+      }
+      setState(() {
+        if (posterDataModel.userImageUrl != null &&
+            posterDataModel.userImageUrl!.isNotEmpty) {
+          _userImageUrl = posterDataModel.userImageUrl!;
+        }
+
+        if (posterDataModel.posterImageUrl != null &&
+            posterDataModel.posterImageUrl!.isNotEmpty) {
+          _posterImageUrl = posterDataModel.posterImageUrl!;
+        }
+
+        _qrCodeWebUrl = posterDataModel.qrCodeUrl;
+      });
+    });
   }
 
   @override
@@ -64,33 +102,64 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
   }
 
   _renderPosterImageWidget() {
+    bool isNetworkImage = _posterImageUrl.startsWith("http");
+
     return ClipRRect(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(15.w_pt_cj),
         topRight: Radius.circular(15.w_pt_cj),
       ),
-      child: ExtendedImage.network(
-        widget.posterImageUrl,
-        width: posterImageWidth,
-        height: posterImageHeight,
-        fit: BoxFit.cover,
-        borderRadius: BorderRadius.all(
-          Radius.circular(5.w_pt_cj),
-        ),
-        loadStateChanged: (ExtendedImageState value) {
-          if (value.extendedImageLoadState == LoadState.loading) {
-            Widget loadingWidget = Container(
-              alignment: Alignment.center,
-              color: Colors.white,
-            );
-            return loadingWidget;
-          } else if (value.extendedImageLoadState == LoadState.completed) {
-            //
-          }
-          return null;
-        },
-      ),
+      // clipBehavior: Clip.hardEdge,
+      child: isNetworkImage
+          ? ExtendedImage.network(
+              _posterImageUrl,
+              width: posterImageWidth,
+              height: posterImageHeight,
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.w_pt_cj),
+              ),
+              loadStateChanged: (ExtendedImageState value) {
+                return _loadStateChanged(value);
+              },
+            )
+          : ExtendedImage.asset(
+              _posterImageUrl,
+              width: posterImageWidth,
+              height: posterImageHeight,
+              fit: BoxFit.cover,
+              borderRadius: BorderRadius.all(
+                Radius.circular(5.w_pt_cj),
+              ),
+              loadStateChanged: (ExtendedImageState value) {
+                return _loadStateChanged(value);
+              },
+            ),
     );
+  }
+
+  Widget? _loadStateChanged(ExtendedImageState state) {
+    if (state.extendedImageLoadState == LoadState.loading) {
+      Widget loadingWidget = Container(
+        alignment: Alignment.center,
+        color: Colors.white,
+      );
+      return loadingWidget;
+    } else if (state.extendedImageLoadState == LoadState.completed) {
+      //
+    } else if (state.extendedImageLoadState == LoadState.failed) {
+      return Container(
+        alignment: Alignment.center,
+        // color: Colors.red,
+        child: Image.asset(
+          BaseShareSingleton.placeholderImageName ?? "",
+          width: posterImageWidth,
+          height: posterImageHeight,
+          fit: BoxFit.cover,
+        ),
+      );
+    }
+    return null;
   }
 
   _renderPosterContent() {
@@ -136,7 +205,7 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
           borderRadius: BorderRadius.all(Radius.circular(avatarSize / 2.0)),
         ),
         child: TolerantNetworkImage(
-          imageUrl: widget.userImageUrl,
+          imageUrl: _userImageUrl,
           width: innerAvatarSize,
           height: innerAvatarSize,
           fit: BoxFit.cover,
@@ -179,13 +248,16 @@ class _PosterContentWidgetState extends State<PosterContentWidget> {
                 borderRadius: BorderRadius.all(Radius.circular(3.w_pt_cj)),
                 color: Colors.white,
               ),
-              child: QrImageView(
-                data: widget.qrCodeWebUrl,
-                padding: EdgeInsets.zero,
-                errorStateBuilder: (BuildContext context, Object? object) {
-                  return Container();
-                },
-              ),
+              child: _qrCodeWebUrl == null
+                  ? Container()
+                  : QrImageView(
+                      data: _qrCodeWebUrl!,
+                      padding: EdgeInsets.zero,
+                      errorStateBuilder:
+                          (BuildContext context, Object? object) {
+                        return Container();
+                      },
+                    ),
             ),
             SizedBox(height: 4.w_pt_cj),
             Text(

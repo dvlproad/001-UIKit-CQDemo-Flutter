@@ -11,30 +11,29 @@ import 'poster_content_widget.dart';
 class PosterWithButtonPage extends StatefulWidget {
   final PreferredSizeWidget? Function() appbarWidgetBuilder;
   final String posterBgImageUrl;
+  final void Function({String? errorMessage})? shareCompleteBlock;
   late Widget Function() posterContentWidgetBuilder;
-
-  final void Function({required bool show}) loadingForButtonHandle;
 
   PosterWithButtonPage({
     Key? key,
     required this.appbarWidgetBuilder,
-    required this.loadingForButtonHandle,
     required this.posterBgImageUrl,
     required this.posterContentWidgetBuilder,
+    required this.shareCompleteBlock,
   }) : super(key: key);
 
   PosterWithButtonPage.easy({
     Key? key,
     required this.appbarWidgetBuilder,
-    required this.loadingForButtonHandle,
     required this.posterBgImageUrl,
     required String userImageUrl,
     required String appLogoPath,
-    required String qrCodeWebUrl,
+    required Future<PosterDataModel?> Function() netPosterDataGetter,
     required Widget Function(
             {required double halfAvatarHeight,
             required double qrCodeWidgetWidth})
         posterTextContainerBuilder,
+    required this.shareCompleteBlock,
   }) : super(key: key) {
     posterContentWidgetBuilder = () {
       return PosterContentWidget(
@@ -56,7 +55,7 @@ class PosterWithButtonPage extends StatefulWidget {
           // );
         },
         appLogoPath: appLogoPath,
-        qrCodeWebUrl: qrCodeWebUrl,
+        netPosterDataGetter: netPosterDataGetter,
       );
     };
   }
@@ -76,24 +75,47 @@ class _PosterWithButtonPageState extends State<PosterWithButtonPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.transparent,
-      appBar: widget.appbarWidgetBuilder(),
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Expanded(child: buildPosterWidget(context)),
-            PosterButtonsWidget(
-              posterRepaintBoundaryGlobalKey: _repaintBoundaryGlobalKey,
-              loadingHandle: widget.loadingForButtonHandle,
-              completeBlock: (isSuccess) {
-                //
-              },
-            ),
-          ],
-        ),
+    // 为了适配同时支持 showModalBottomSheet 和 Navigator.push ，所以放弃 extendBodyBehindAppBar， 使用自定义的方式
+    // return Scaffold(
+    //   extendBodyBehindAppBar: true,
+    //   backgroundColor: Colors.transparent,
+    //   appBar: widget.appbarWidgetBuilder(),
+    //   body: _renderBody(context),
+    // );
+
+    Widget? appBarWidget = widget.appbarWidgetBuilder();
+
+    MediaQueryData mediaQuery =
+        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    double statusBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
+    //或者 double statusBarHeight = MediaQuery.of(context).padding.top;
+    double appBarHeight = appBarWidget != null ? statusBarHeight + 44 : 0;
+    // double screenBottomHeight = mediaQuery.padding.bottom;
+
+    return Stack(
+      children: [
+        _renderBody(context),
+        if (appBarWidget != null)
+          SizedBox(height: appBarHeight, child: appBarWidget),
+      ],
+    );
+  }
+
+  _renderBody(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          Expanded(child: buildPosterWidget(context)),
+          PosterButtonsWidget(
+            posterRepaintBoundaryGlobalKey: _repaintBoundaryGlobalKey,
+            completeBlock: (isSuccess) {
+              if (!isSuccess && widget.shareCompleteBlock != null) {
+                widget.shareCompleteBlock!(errorMessage: "分享海报失败了");
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -151,16 +173,25 @@ class _PosterWithButtonPageState extends State<PosterWithButtonPage> {
   }
 
   Widget _renderPosterBackground() {
+    String posterBgImageUrl = widget.posterBgImageUrl;
+    bool isNetworkImage = posterBgImageUrl.startsWith("http");
     Widget contentWidget = SizedBox(
       height: 733.h_pt_cj,
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
-        child: TolerantNetworkImage(
-          imageUrl: widget.posterBgImageUrl,
-          width: 375.w_pt_cj,
-          height: 733.h_pt_cj,
-          fit: BoxFit.cover,
-        ),
+        child: isNetworkImage
+            ? TolerantNetworkImage(
+                imageUrl: posterBgImageUrl,
+                width: 375.w_pt_cj,
+                height: 733.h_pt_cj,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                posterBgImageUrl,
+                width: 375.w_pt_cj,
+                height: 733.h_pt_cj,
+                fit: BoxFit.cover,
+              ),
       ),
     );
 

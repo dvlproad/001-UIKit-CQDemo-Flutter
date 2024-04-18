@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-03-07 16:39:55
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-03-15 18:33:21
+ * @LastEditTime: 2024-04-18 11:36:54
  * @Description: 
  */
 import 'dart:async';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 import 'package:fluwx/fluwx.dart';
 
 import 'share_util/copylink_share_util.dart';
@@ -42,14 +41,24 @@ abstract class AppShareRequest {
 
 abstract class AppShareHandel {
   /// 举报 的事件
-  void report(BuildContext context, {String? bizId, required int bizType});
+  void report(BuildContext context,
+      {String? bizId, required int bizType, required String bizOwnerId});
 
   // /// 拉黑/取消拉黑 的事件(不需要，而是直接传model,因为拉黑操作结束需要更新isBlock)
   // void block(BuildContext context, {String? bizId, required int bizType});
 }
 
-abstract class ShareSingleton
+abstract class BaseShareSingleton
     implements AppShareShow, AppShareRequest, AppShareHandel {
+  static String? placeholderImageName; // 图片加载失败的占位图
+  static void Function()? loadingShowHandle;
+  static void Function()? loadingDismissHandle;
+  static void Function(String message)? toastHandle;
+  static void Function(BuildContext context,
+      {required String lastShareString,
+      required void Function() okHandle})? copySuccessHandle;
+  static Future<bool> Function()? checkStoragePermissionHandle;
+
   /// 弹出常见的分享面板
   void showEasyShareBoard(
     BuildContext context, {
@@ -60,6 +69,7 @@ abstract class ShareSingleton
     BaseActionModel? blockModel, // 是否显示拉黑的入口，操作完需要刷新bool值
     String? bizId,
     required int bizType, // 请使用 AppShareBizType
+    String? bizOwnerId,
     String? title,
     String? description,
     WeChatImage? thumbnailImage,
@@ -120,15 +130,19 @@ abstract class ShareSingleton
 
     // 举报
     if (showReport) {
-      shareActionModels.add(BaseActionModel.report(handle: () {
+      operateActionModels.add(BaseActionModel.report(handle: () {
         Navigator.pop(context);
-        report(context, bizId: bizId, bizType: bizType);
+        if (bizOwnerId == null) {
+          BaseShareSingleton.toastHandle?.call("举报时候不能缺少 bizOwnerId");
+          return;
+        }
+        report(context, bizId: bizId, bizType: bizType, bizOwnerId: bizOwnerId);
       }));
     }
 
     // 拉黑
     if (blockModel != null) {
-      shareActionModels.add(blockModel);
+      operateActionModels.add(blockModel);
     }
 
     showUIByModel(
@@ -158,7 +172,7 @@ abstract class ShareSingleton
     }
 
     if (shareDataModel.landingUrl == null) {
-      ToastUtil.showMessage("分享失败");
+      BaseShareSingleton.toastHandle?.call("分享失败");
       return;
     }
     String webPage = shareDataModel.landingUrl!;
@@ -196,7 +210,7 @@ abstract class ShareSingleton
     }
 
     if (shareDataModel.landingUrl == null) {
-      ToastUtil.showMessage("复制链接失败");
+      BaseShareSingleton.toastHandle?.call("复制链接失败");
       return;
     }
     String webPage = shareDataModel.landingUrl!;
@@ -217,7 +231,7 @@ class ShareDataModel {
     this.landingUrl,
     this.title,
     this.description,
-    this.thumbnailUrl,
+    this.thumbnailUrl, // 图片地址
     this.qrCode,
     this.paramContent,
   });

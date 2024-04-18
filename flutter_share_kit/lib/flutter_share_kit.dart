@@ -17,12 +17,13 @@ export 'src/share_util/poster_share_util.dart'; // 海报
 export 'src/share_util/copylink_share_util.dart'; // 复制链接
 
 // 弹出分享面板
-export 'src/share_dialog_util.dart';
+export 'src/widget/share_dialog_widget.dart';
 export 'src/widget/share_action_model.dart';
 
 // 海报
-export 'src/widget/poster_withbutton_page.dart';
+export './src/widget/poster_withbutton_page.dart';
 export './src/widget/base_poster_widget.dart';
+export './src/widget/poster_content_widget.dart' show PosterDataModel;
 
 // test
 export './test/ts_share_home_page.dart';

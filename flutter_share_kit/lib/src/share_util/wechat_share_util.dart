@@ -2,14 +2,15 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:fluwx/fluwx.dart';
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
+
+import '../base_share_singleton.dart';
 
 class WechatShareUtil {
   /// 检查是否可以进行分享(若不行，则弹出对应提示)
   static Future<bool> get checkWeChatInstalled async {
     var isInstalled = await isWeChatInstalled;
     if (!isInstalled) {
-      ToastUtil.forceShowMessage("未安装微信");
+      BaseShareSingleton.toastHandle?.call("未安装微信");
       return false;
     }
     return true;
@@ -88,7 +89,7 @@ class WechatShareUtil {
   }) async {
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     if (byteData == null) {
-      ToastUtil.showMessage("海报绘制出错21");
+      BaseShareSingleton.toastHandle?.call("海报绘制出错21");
       return false;
     }
 

@@ -116,7 +116,7 @@ class _ShareDialogWidgetState extends State<ShareDialogWidget> {
             '分享至',
             style: TextStyle(
               fontFamily: 'PingFang SC',
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.bold,
               color: const Color(0xff404040),
               fontSize: 16.w_pt_cj,
             ),

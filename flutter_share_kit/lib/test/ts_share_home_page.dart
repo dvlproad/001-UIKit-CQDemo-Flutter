@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share_kit/flutter_share_kit.dart';
 import 'package:flutter_share_kit/flutter_share_kit_adapt.dart';
 
-import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
-
 import 'tsapp_share_singleton.dart';
 
 class TSShareHomePage extends StatefulWidget {
@@ -118,10 +116,11 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
       context,
       bizId: "123",
       bizType: TSAppShareBizType.improveResult,
+      bizOwnerId: "owner456",
       title: "我有一个新的flag！",
       description: "第一行\n第二行\n第三行",
       imHandle: () {
-        ToastUtil.showDoing();
+        BaseShareSingleton.toastHandle?.call("im 正在开发中");
       },
       showCopyLink: true,
       thumbnailImage: WeChatImage.network(posterBgImageUrl),
@@ -164,9 +163,6 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
             elevation: 0,
           );
         },
-        loadingForButtonHandle: ({required bool show}) {
-          debugPrint("loading show = $show");
-        },
         posterBgImageUrl: posterBgImageUrl,
         userImageUrl: posterBgImageUrl,
         posterTextContainerBuilder: (
@@ -181,7 +177,16 @@ class _TSShareHomePageState extends State<TSShareHomePage> {
           );
         },
         appLogoPath: 'images/share/logo_icon.png',
-        qrCodeWebUrl: posterBgImageUrl,
+        netPosterDataGetter: () async {
+          return PosterDataModel(
+            qrCodeUrl: posterBgImageUrl,
+          );
+        },
+        shareCompleteBlock: ({String? errorMessage}) {
+          if (errorMessage != null) {
+            BaseShareSingleton.toastHandle?.call(errorMessage);
+          }
+        },
       );
 
       Navigator.push(context, MaterialPageRoute(
