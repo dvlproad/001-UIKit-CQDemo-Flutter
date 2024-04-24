@@ -1,6 +1,6 @@
 name: flutter_permission_manager
 description: 权限管理库.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_permission_manager
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_permission_manager
 
@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  permission_handler: ^11.0.1
+  permission_handler: ^10.2.0
   device_info_plus: ^8.1.0
 
 dev_dependencies:
