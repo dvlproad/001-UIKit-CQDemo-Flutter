@@ -6,13 +6,9 @@
  * @Description: Alert弹窗工具类
  */
 import 'package:flutter/material.dart';
-import 'package:flutter_theme_helper/flutter_theme_helper.dart';
-import '../flutter_overlay_kit_adapt.dart';
-import '../overlay_init.dart';
-import './message_alert_view.dart';
+import 'package:flutter_overlay_kit/flutter_overlay_kit.dart';
 
-// import 'package:flutter_button_base/flutter_button_base.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
+import './message_alert_view.dart';
 
 class AlertUtil {
   /// 我知道了 [context]可空
@@ -28,11 +24,14 @@ class AlertUtil {
     void Function()? iKnowHandle,
     bool? scrollable,
   }) {
-    // double height = MediaQuery.of(context).size.height;
-    // double containerHeight = height ??
-    //     height -
-    //         AdaptCJHelper.stautsBarHeight -
-    //         AdaptCJHelper.screenBottomHeight;
+    if (context == null) {
+      context = OverlayInit.contextGetBlock?.call();
+    }
+    if (context == null) {
+      debugPrint('🚗🚗🚗 alert context is null, 请插入context或者执行OverlayInit');
+      return Future(() => false);
+    }
+
     return showAlert(
       context,
       barrierDismissible: barrierDismissible,
@@ -101,10 +100,6 @@ class AlertUtil {
           message: message,
           messageAlign: messageAlign,
           cancelTitle: cancelTitle ?? "取消",
-          cancelStyleType:
-              cancelTitle == null || cancelTitle == '取消' || cancelTitle == '不保留'
-                  ? ThemeStateBGType.theme_gray
-                  : ThemeStateBGType.orange_orange,
           cancelHandle: () {
             Navigator.of(context).pop();
             if (cancelHandle != null) {
@@ -155,12 +150,11 @@ class AlertUtil {
     bool barrierDismissible = false,
     required Widget Function(BuildContext context) alertViewBulider,
   }) {
-    if (context == null && OverlayInit.overlayContextNullHandle != null) {
-      context = OverlayInit.overlayContextNullHandle!();
-    }
-
     if (context == null) {
-      debugPrint('🚗🚗🚗 alert context is null');
+      context = OverlayInit.contextGetBlock?.call();
+    }
+    if (context == null) {
+      debugPrint('🚗🚗🚗 alert context is null, 请插入context或者执行OverlayInit');
       return Future(() => false);
     }
 
@@ -217,80 +211,5 @@ class AlertUtil {
       ),
     );
     */
-  }
-
-  static Future showAddressAlert({
-    BuildContext? context,
-    bool barrierDismissible = false,
-    required String limitArea,
-  }) {
-    return showAlert(
-      context,
-      barrierDismissible: barrierDismissible,
-      alertViewBulider: (context) {
-        return Container(
-          width: 266.w_pt_cj,
-          height: 171.h_pt_cj,
-          padding: EdgeInsets.symmetric(horizontal: 20.w_pt_cj),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(14.w_pt_cj),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 20.h_pt_cj),
-              Text(
-                '很抱歉，当前【收货地址】不符合活动条件！',
-                style: BoldTextStyle(
-                    color: Color(0xFF404040), fontSize: 15.w_pt_cj),
-              ),
-              SizedBox(
-                height: 15.h_pt_cj,
-              ),
-              RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                      text: '当前活动仅限【收货地址】在',
-                      style: RegularTextStyle(
-                          color: Color(0xFF333333), fontSize: 13.w_pt_cj)),
-                  TextSpan(
-                      text: limitArea,
-                      style: RegularTextStyle(
-                          color: const Color(0xFFE47E4E),
-                          fontSize: 13.w_pt_cj)),
-                  TextSpan(
-                      text: '开放;',
-                      style: RegularTextStyle(
-                          color: Color(0xFF333333), fontSize: 13.w_pt_cj))
-                ]),
-              ),
-              SizedBox(height: 10.h_pt_cj),
-              InkWell(
-                child: Container(
-                  width: 197.w_pt_cj,
-                  height: 38.h_pt_cj,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE47E4E),
-                    borderRadius: BorderRadius.circular(19.w_pt_cj),
-                  ),
-                  child: Text(
-                    "好的，知道了",
-                    style: BoldTextStyle(
-                      fontSize: 13.w_pt_cj,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              )
-              // _renderButton(context, likeUnreadModel),
-            ],
-          ),
-        );
-      },
-    );
   }
 }

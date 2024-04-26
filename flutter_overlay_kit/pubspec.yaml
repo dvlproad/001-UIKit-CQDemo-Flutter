@@ -1,6 +1,6 @@
 name: flutter_overlay_kit
 description: toast + alert + actionsheet.
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_overlay_kit
 
@@ -15,14 +15,12 @@ dependencies:
   # toast
   fluttertoast: ^8.2.1
 
-  flutter_theme_helper: ^0.0.1
-    # path: ../flutter_theme_helper/
-  flutter_baseui_kit: ^0.0.2
-    # path: ../flutter_baseui_kit/
+  flutter_baseui_kit: ^0.0.4
   toast: ^0.3.0
   # flutter_button_base:
   #   path: ../flutter_baseui_kit/flutter_button_base/
-  synchronized: ^3.0.0
+  
+  synchronized: ^3.0.0+2 #同步锁
 
 dev_dependencies:
   flutter_test:

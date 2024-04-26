@@ -21,5 +21,4 @@ export './alert/alert_util.dart';
 export './actionsheet/actionsheet_util.dart';
 
 // popup
-export './popup/popup_util.dart';
-export './popup/base_popup_widget.dart';
+export './popup/base_popup_util.dart';

@@ -5,9 +5,6 @@ import './components/alert_spaced_buttons.dart';
 import './components/flex_width_buttons.dart';
 import './components/alert_container.dart';
 
-// import 'package:flutter_button_base/flutter_button_base.dart';
-// import 'package:flutter_button_base/flutter_button_base_adapt.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
 import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 
 class CJBaseMessageAlertView extends StatelessWidget {
@@ -100,7 +97,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       alertMessageComponent = Container(
           margin:
               EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
-          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.h_pt_cj),
+          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.w_pt_cj),
           child: scrollable == true
               ? Container(
                   height: 350.h_pt_cj,
@@ -114,7 +111,7 @@ class CJBaseMessageAlertView extends StatelessWidget {
       alertMessageComponent = Container(
           margin:
               EdgeInsets.only(top: alertMarginVerticals[messageVerticalIndex]),
-          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.h_pt_cj),
+          padding: EdgeInsets.only(left: 20.w_pt_cj, right: 20.w_pt_cj),
           child: scrollable == true
               ? Container(
                   height: 350.h_pt_cj,
@@ -216,7 +213,6 @@ class IKnowMessageAlertView extends CJBaseMessageAlertView {
  */
 class CancelOKMessageAlertView extends CJBaseMessageAlertView {
   final String cancelTitle;
-  final ThemeStateBGType cancelStyleType;
   final Function? cancelHandle;
 
   final String okTitle;
@@ -231,7 +227,6 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
     RichText? richTextWidget,
     TextAlign? messageAlign,
     this.cancelTitle = '取消',
-    this.cancelStyleType = ThemeStateBGType.theme_gray,
     this.cancelHandle,
     this.closeHandle,
     this.okTitle = '确认',
@@ -250,7 +245,6 @@ class CancelOKMessageAlertView extends CJBaseMessageAlertView {
   Widget renderButtons() {
     return AlertdCancelOKSpacedButtons(
       cancelTitle: this.cancelTitle,
-      cancelStyleType: this.cancelStyleType,
       cancelHandle: () {
         // print("点击Alert按钮:'取消'");
         if (this.cancelHandle != null) {

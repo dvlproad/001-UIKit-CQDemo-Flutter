@@ -1,28 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
+import 'package:flutter_overlay_kit/theme/overlay_theme_manager.dart';
 // import 'package:flutter_button_base/flutter_button_base.dart';
 // import 'package:flutter_button_base/flutter_button_base_adapt.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
+
+import '../../flutter_overlay_kit_adapt.dart';
+import '../../theme/overlay_alert_theme_model.dart';
 
 /*
  * 有间隔的'取消'+'确定' Buttons
  */
 class AlertdCancelOKSpacedButtons extends StatelessWidget {
-  final double? height;
-
   final String cancelTitle;
-  final ThemeStateBGType cancelStyleType;
   final void Function() cancelHandle;
-  // final Void Function(Void) cancelHandle;
 
   final String okTitle;
   final void Function() okHandle;
 
   AlertdCancelOKSpacedButtons({
     Key? key,
-    this.height,
     this.cancelTitle = '取消',
-    this.cancelStyleType = ThemeStateBGType.theme_gray,
     required this.cancelHandle,
     this.okTitle = '确认',
     required this.okHandle,
@@ -42,31 +39,36 @@ class AlertdCancelOKSpacedButtons extends StatelessWidget {
   }
 
   Widget _row() {
-    double buttonHeight = this.height ?? 36.w_pt_cj;
-
+    CJOverlayAlertThemeModel alertThemeModel =
+        CJBaseOverlayThemeManager().alertThemeModel;
+    TextStyle titleStyle = TextStyle(
+      fontFamily: 'PingFang SC',
+      fontWeight: FontWeight.bold,
+      fontSize: 14.f_pt_cj,
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        ThemeBorderButton(
+        CJButton(
           width: 116.w_pt_cj,
-          height: buttonHeight,
-          borderColorType: this.cancelStyleType,
+          height: alertThemeModel.actionButtonHeight,
+          childMainAxisAlignment: MainAxisAlignment.center,
           title: this.cancelTitle,
-          titleStyle: ButtonBoldTextStyle(fontSize: 14.w_pt_cj),
-          cornerRadius: 18.w_pt_cj,
-          enable: true, // 不设置,默认true
+          titleStyle: titleStyle,
+          cornerRadius: alertThemeModel.actionButtonCornerRadius,
+          normalConfig: alertThemeModel.cancelButtonConfig,
           onPressed: this.cancelHandle,
         ),
         Container(width: 10.w_pt_cj),
-        ThemeBGButton(
+        CJButton(
           width: 116.w_pt_cj,
-          height: buttonHeight,
-          bgColorType: ThemeBGType.theme,
+          height: alertThemeModel.actionButtonHeight,
+          childMainAxisAlignment: MainAxisAlignment.center,
           title: this.okTitle,
-          titleStyle: ButtonBoldTextStyle(fontSize: 14.w_pt_cj),
-          cornerRadius: 18.w_pt_cj,
-          enable: true, // 不设置,默认true
+          titleStyle: titleStyle,
+          cornerRadius: alertThemeModel.actionButtonCornerRadius,
+          normalConfig: alertThemeModel.okButtonConfig,
           onPressed: () {
             Future.delayed(Duration(milliseconds: 100), () {
               this.okHandle();
@@ -104,15 +106,25 @@ class AlertIKnowSpacedButton extends StatelessWidget {
   }
 
   Widget _row() {
+    CJOverlayAlertThemeModel alertThemeModel =
+        CJBaseOverlayThemeManager().alertThemeModel;
+    TextStyle titleStyle = TextStyle(
+      fontFamily: 'PingFang SC',
+      fontWeight: FontWeight.bold,
+      fontSize: 14.f_pt_cj,
+    );
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        ThemeBGButton(
+        CJButton(
+          width: 240.w_pt_cj,
+          height: alertThemeModel.actionButtonHeight,
+          childMainAxisAlignment: MainAxisAlignment.center,
           title: this.iKnowTitle,
-          bgColorType: ThemeBGType.theme,
-          height: 40,
-          width: 240,
-          cornerRadius: 20,
+          titleStyle: titleStyle,
+          cornerRadius: alertThemeModel.actionButtonCornerRadius,
+          normalConfig: alertThemeModel.iKnowButtonConfig,
           onPressed: () {
             Future.delayed(Duration(milliseconds: 100), () {
               this.iKnowHandle();

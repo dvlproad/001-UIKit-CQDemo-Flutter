@@ -9,8 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 // import 'package:flutter_button_base/flutter_button_base.dart';
 import 'package:flutter_baseui_kit/flutter_baseui_kit.dart'; // 为了取button
+
+import '../theme/overlay_sheet_theme_model.dart';
+import '../theme/overlay_theme_manager.dart';
 import './bottomwidget.dart';
 // import './components/actionsheet_item.dart';
+
+import '../../flutter_overlay_kit_adapt.dart';
 
 class ActionSheetWidget extends StatefulWidget {
   final String? title;
@@ -83,18 +88,22 @@ class _ActionSheetWidgetState extends State<ActionSheetWidget> {
 
   Widget _renderItem(int index) {
     String title = widget.itemTitles[index];
-    return ThemeStateButton(
-      normalTitle: title,
-      normalBGColorType: ThemeStateBGType.white_black,
-      titleStyle: TextStyle(
-        fontFamily: 'PingFang SC',
-        fontSize: 15,
-        fontWeight: FontWeight.w600,
-      ),
+
+    CJOverlaySheetThemeModel sheetThemeModel =
+        CJBaseOverlayThemeManager().sheetThemeModel;
+    TextStyle titleStyle = TextStyle(
+      fontFamily: 'PingFang SC',
+      fontWeight: FontWeight.bold,
+      fontSize: 15.f_pt_cj,
+    );
+    return CJButton(
+      height: sheetThemeModel.cellRowHeight,
+      childMainAxisAlignment: MainAxisAlignment.center,
+      title: title,
+      titleStyle: titleStyle,
+      normalConfig: sheetThemeModel.itemButtonConfig,
       onPressed: () {
-        if (widget.onItemTap != null) {
-          widget.onItemTap!(index);
-        }
+        widget.onItemTap?.call(index);
       },
     );
   }

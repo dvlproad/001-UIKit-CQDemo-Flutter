@@ -11,6 +11,7 @@ enum TableViewCellArrowImageType {
   arrowTopBottom, // 上下箭头
 }
 
+// ignore: non_constant_identifier_names
 double cell_constraints_minHeight =
     44.h_pt_cj; // cell的最小高度，如果未设置默认44pt，如果cell内容过长，则高度会自动增加
 

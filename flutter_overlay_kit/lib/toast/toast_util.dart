@@ -10,6 +10,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:synchronized/synchronized.dart';
 import 'package:toast/toast.dart' as old;
 
+import '../../flutter_overlay_kit_adapt.dart';
+import '../overlay_init.dart';
+
 class ToastUtil {
   static final Lock _lock = Lock();
   // 2个相同的文案的toast之间间隔至少需要x秒
@@ -29,16 +32,14 @@ class ToastUtil {
     if (message == null || message.isEmpty) {
       return;
     }
-
-    if (_hopeNoShowCheckHandle == null) {
-      debugPrint("🚗🚗🚗:请设置 ToastUtil.init ");
-    } else {
-      bool isShow = _hopeNoShowCheckHandle!();
-      if (isShow && needForceShow == false) {
-        return;
+    if (needForceShow == false) {
+      if (OverlayInit.shouldGiveupToastCheck != null) {
+        bool shouldGiveup = OverlayInit.shouldGiveupToastCheck!();
+        if (shouldGiveup == true) {
+          return;
+        }
       }
     }
-
     if (needCancelOld == true) {
       Fluttertoast.cancel();
     }
@@ -73,9 +74,9 @@ class ToastUtil {
         toastLength: Toast.LENGTH_SHORT,
         gravity: gravity,
         timeInSecForIosWeb: duration,
-        backgroundColor: Color(0xAA000000),
+        backgroundColor: Color(0xFF333333),
         textColor: Colors.white,
-        fontSize: 16.0,
+        fontSize: 13.0.w_pt_cj,
       );
     });
   }
@@ -107,12 +108,12 @@ class ToastUtil {
     bool needForceShow = false, //是否要在游戏中展示
   }) {
     ///游戏中，不显示APP内的toast，除非该路由本身调用
-    if (_hopeNoShowCheckHandle == null) {
-      debugPrint("🚗🚗🚗:请设置 ToastUtil.init ");
-    } else {
-      bool isShow = _hopeNoShowCheckHandle!();
-      if (isShow && needForceShow == false) {
-        return;
+    if (needForceShow == false) {
+      if (OverlayInit.shouldGiveupToastCheck != null) {
+        bool shouldGiveup = OverlayInit.shouldGiveupToastCheck!();
+        if (shouldGiveup == true) {
+          return;
+        }
       }
     }
 
@@ -177,15 +178,6 @@ class ToastUtil {
 
   static FToast? timeoutToast;
   static bool timeoutToastShowing = false;
-  static BuildContext? Function()? _contextGetBlock;
-  static bool Function()? _hopeNoShowCheckHandle;
-  static init({
-    required BuildContext? Function() contextGetBlock,
-    required bool Function() hopeNoShowCheckHandle,
-  }) {
-    _contextGetBlock = contextGetBlock;
-    _hopeNoShowCheckHandle = hopeNoShowCheckHandle;
-  }
 
   static showUniqueMessage(
     String message, {
@@ -196,9 +188,9 @@ class ToastUtil {
       return;
     }
 
-    if (timeoutToast == null && _contextGetBlock != null) {
+    if (timeoutToast == null && OverlayInit.contextGetBlock != null) {
       timeoutToast = FToast();
-      BuildContext? context = _contextGetBlock!();
+      BuildContext? context = OverlayInit.contextGetBlock!();
       if (context == null) {
         return;
       }

@@ -10,3 +10,7 @@
 ## 0.0.3
 
 * 增加overlay context 可为空的init设置
+
+## 0.0.4
+
+* 精简 overlay

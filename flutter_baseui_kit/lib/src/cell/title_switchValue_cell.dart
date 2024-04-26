@@ -9,8 +9,6 @@
 import 'package:flutter/cupertino.dart';
 import './title_commonValue_cell.dart';
 
-import '../../flutter_baseui_kit_adapt.dart';
-
 class ImageTitleSwitchValueCell extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final String title; // 标题
