@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-15 22:08:25
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-03-19 19:00:59
+ * @LastEditTime: 2024-04-24 17:20:52
  * @Description: button 中 childWidget 的创建
  */
 import 'package:flutter/material.dart';
@@ -16,21 +16,21 @@ enum ButtonImagePosition {
 class ButtonChildWidget extends StatelessWidget {
   final double? width;
   final double? height;
-  final String title;
+  final String? title;
   final TextStyle? titleStyle;
   final ButtonImagePosition? imagePosition;
   final Image? imageWidget; // 图片
-  final double imageTitleGap; // 图片和文字之间的距离(imageWidget存在的时候才有效)
+  final double? imageTitleGap; // 图片和文字之间的距离(imageWidget存在的时候才有效)
 
   ButtonChildWidget({
     Key? key,
-    required this.title,
+    this.title,
     this.width,
     this.height,
     this.titleStyle,
     this.imagePosition,
     this.imageWidget,
-    this.imageTitleGap = 5,
+    this.imageTitleGap,
   }) : super(key: key);
 
   @override
@@ -62,7 +62,7 @@ class ButtonChildWidget extends StatelessWidget {
   Widget get _childWidget_onlyText {
     return Center(
       child: Text(
-        title,
+        title ?? "",
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
         style: this.titleStyle ??
@@ -85,7 +85,7 @@ class ButtonChildWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             this.imageWidget!,
-            SizedBox(width: this.imageTitleGap),
+            SizedBox(width: this.imageTitleGap ?? 0),
             _childWidget_onlyText,
           ],
         ),
@@ -97,7 +97,7 @@ class ButtonChildWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _childWidget_onlyText,
-            SizedBox(width: this.imageTitleGap),
+            SizedBox(width: this.imageTitleGap ?? 0),
             this.imageWidget!,
           ],
         ),

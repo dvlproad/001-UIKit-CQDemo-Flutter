@@ -1,12 +1,12 @@
 // 包含标题文本title，值文本textValue(文本前可设置是否添加点来突出)、箭头类型固定为向右 的视图
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
 import './title_commonValue_cell.dart';
 export './title_commonValue_cell.dart' show TableViewCellArrowImageType;
-// import '../text/text.dart';
+
+import '../../flutter_baseui_kit_adapt.dart';
 
 class ImageTitleCommonValueWithHolderTableViewCell
-    extends BJHTitleCommonValueTableViewCell {
+    extends ImageTitleCommonValueTableViewCell {
   final String? valuePlaceHodler; // 值文本占位符(默认null，不显示)
   final TextStyle? valuePlaceHodlerTextStyle; // 值文本的style(默认字体大小16)
 
@@ -14,8 +14,10 @@ class ImageTitleCommonValueWithHolderTableViewCell
     Key? key,
     double? height, // cell 的高度(内部已限制最小高度为44,要更改请设置 constraints)
     BoxConstraints? constraints,
-    double? leftRightPadding, // cell 内容的左右间距(未设置时候，默认20)
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? margin,
     Color? color,
+    Decoration? decoration,
     double? leftMaxWidth,
     double? rightMaxWidth,
     double? leftRightSpacing,
@@ -28,7 +30,8 @@ class ImageTitleCommonValueWithHolderTableViewCell
     required String title, // 主文本
     String? titlePrompt, // 标题的说明语（此值为空时候，视图会自动隐藏）
     int? titlePromptMaxLines, // 标题的说明语的最大行数(为null时候，默认1)
-    double? titlePromptFontSize, // 标题的说明语的字体大小(默认30)
+    TextStyle? titleTextStyle, // 主文本的 TextStyle
+    TextStyle? titlePromptTextStyle, // 标题的说明语的 TextStyle
     // 右侧-值视图
     required Widget? Function(BuildContext context, {required bool canExpanded})
         valueWidgetBuilder, // 值视图（此值为空时候，视图会自动隐藏）
@@ -36,6 +39,7 @@ class ImageTitleCommonValueWithHolderTableViewCell
     this.valuePlaceHodlerTextStyle, // 值文本的style(默认字体大小16)
     // 右侧-箭头
     TableViewCellArrowImageType? arrowImageType, // 箭头类型(默认none)
+    Padding? Function()? arrowImagePaddingWidgetBuilder, // 箭头的自定义视图
 
     int? section,
     int? row,
@@ -46,8 +50,10 @@ class ImageTitleCommonValueWithHolderTableViewCell
           key: key,
           height: height,
           constraints: constraints,
-          leftRightPadding: leftRightPadding,
+          padding: padding,
+          margin: margin,
           color: color,
+          decoration: decoration,
           leftMaxWidth: leftMaxWidth,
           rightMaxWidth: rightMaxWidth,
           leftRightSpacing: leftRightSpacing,
@@ -57,7 +63,8 @@ class ImageTitleCommonValueWithHolderTableViewCell
           title: title,
           titlePrompt: titlePrompt,
           titlePromptMaxLines: titlePromptMaxLines,
-          titlePromptFontSize: titlePromptFontSize,
+          titleTextStyle: titleTextStyle,
+          titlePromptTextStyle: titlePromptTextStyle,
           valueWidgetBuilder: (BuildContext bContext,
               {required bool canExpanded}) {
             bool existTextValuePlaceHodler =
@@ -75,6 +82,7 @@ class ImageTitleCommonValueWithHolderTableViewCell
             }
           },
           arrowImageType: arrowImageType,
+          arrowImagePaddingWidgetBuilder: arrowImagePaddingWidgetBuilder,
           section: section,
           row: row,
           onTapCell: onTapCell,
@@ -104,8 +112,8 @@ class HolderTableViewCellHolderWidget extends StatelessWidget {
       if (valuePlaceHodlerTextStyle == null) {
         valuePlaceHodlerTextStyle = TextStyle(
           color: Color(0xff8b8b8b),
+          fontSize: 13.f_pt_cj,
           fontFamily: 'PingFang SC',
-          fontSize: fontSize_cellRight_default,
           fontWeight: FontWeight.w400,
           //height: 1,
         );

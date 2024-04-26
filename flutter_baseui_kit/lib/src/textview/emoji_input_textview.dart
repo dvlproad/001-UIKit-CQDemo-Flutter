@@ -2,13 +2,14 @@
  * @Author: dvlproad
  * @Date: 2022-08-07 16:54:38
  * @LastEditors: dvlproad
- * @LastEditTime: 2022-08-07 18:26:15
+ * @LastEditTime: 2024-04-24 18:08:34
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../cq-uikit/textview/emoji_lengthLimiting_textInputFormatter.dart';
-import '../../cq-uikit/textview/input_textview.dart';
+
+import '../textInputFormatter/emoji_lengthLimiting_textInputFormatter.dart';
+import './input_textview.dart';
 
 class CQEmojiInputTextView extends CQInputTextView {
   // final String text;

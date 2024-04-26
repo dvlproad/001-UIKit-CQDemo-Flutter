@@ -1,106 +1,84 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
 import 'package:flutter/material.dart';
-import '../bg_border_widget/bg_border_widget.dart';
+import '../bg_border_widget.dart';
 
-/// 底层按钮(已配置 Normal 和 Selected 风格的主题色按钮)
-class CJStateButton extends StatelessWidget {
+class CJButtonConfigModel {
+  final Color? bgColor; // 背景颜色
+  final Color textColor; // 文字颜色
+  final Color? borderColor; // 边框颜色
+  final double? borderWidth; // 边框大小
+  final Color? backgroundHighlightColor;
+
+  CJButtonConfigModel({
+    this.bgColor,
+    required this.textColor,
+    this.borderColor,
+    this.borderWidth,
+    this.backgroundHighlightColor,
+  });
+}
+
+/// 真正的底层按钮(和iOS原生一样可配置 Normal 和 Selected 风格的按钮)
+class CJBaseButton extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxConstraints? constraints;
   final EdgeInsetsGeometry? margin;
   final EdgeInsetsGeometry? padding;
-  final Widget child;
+  final Widget Function(bool bSelected) childBuider;
   final MainAxisAlignment childMainAxisAlignment;
   final VoidCallback? onPressed;
-  final bool? enable;
-  final double disableOpacity;
-  final bool? selected;
+  final VoidCallback? onPressedUnable;
+  final bool enable;
+  final bool selected;
   final double cornerRadius;
-  final Color normalBGColor;
-  final Color normalTextColor;
-  final Color? normalBorderColor;
-  final double normalBorderWidth;
-  final Color? normalBackgroundHighlightColor;
-  final Color? selectedBGColor;
-  final Color? selectedTextColor;
-  final Color? selectedBorderColor;
-  final double selectedBorderWidth;
-  final Color? selectedBackgroundHighlightColor;
-  final double? highlightOpacity; // 没有设置高亮 highlightColor 的时候，取原色的多少透明度值
+  final CJButtonConfigModel normalConfig;
+  final CJButtonConfigModel? normalDisableConfig;
+  final CJButtonConfigModel? selectedConfig;
+  final CJButtonConfigModel? selectedDisableConfig;
 
-  const CJStateButton({
+  CJBaseButton({
     Key? key,
     this.width,
     this.height,
     this.constraints,
     this.margin,
     this.padding,
-    required this.child,
+    required this.childBuider,
     this.childMainAxisAlignment = MainAxisAlignment.center,
     this.onPressed, // 不是必传(为了使其null时候，能够自动透传点击事件)
+    this.onPressedUnable, // unable的时候，可自定义点击事件（为了让unbale的时候点击能弹出toast)
     this.enable = true,
-    this.disableOpacity = 0.5, // disable 时候，颜色的透明度
     this.selected = false,
     this.cornerRadius = 5.0,
-    required this.normalBGColor,
-    required this.normalTextColor,
-    this.normalBorderColor,
-    this.normalBorderWidth = 0.0,
-    this.normalBackgroundHighlightColor,
-    this.selectedBGColor,
-    this.selectedTextColor,
-    this.selectedBorderColor,
-    this.selectedBorderWidth = 0.0, // 按钮选中时候的边框宽度
-    this.selectedBackgroundHighlightColor,
-    this.highlightOpacity,
+    required this.normalConfig,
+    this.normalDisableConfig,
+    this.selectedConfig,
+    this.selectedDisableConfig,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color _currentTextColor;
-    Color _currentBackgroundColor;
-    Color? _currentBackgroundHighlightColor;
-
-    Color _currentBorderColor;
-    double _currentBorderWidth;
+    CJButtonConfigModel _currentConfig = normalConfig;
     double _cornerRadius = cornerRadius;
-
-    double _highlightOpacity = 1.0; // 默认为1.0,即没直接设置高亮颜色的时候，高亮为原色
-    if (highlightOpacity != null) {
-      _highlightOpacity = highlightOpacity!;
-    }
 
     if (selected == true) {
       if (enable == true) {
-        _currentTextColor = selectedTextColor!;
-        _currentBackgroundColor = selectedBGColor!;
-        _currentBorderColor = selectedBorderColor ?? Colors.transparent;
-        _currentBackgroundHighlightColor = selectedBackgroundHighlightColor;
+        if (selectedConfig != null) {
+          _currentConfig = selectedConfig!;
+        }
       } else {
-        _currentTextColor = selectedTextColor!.withOpacity(disableOpacity);
-        _currentBackgroundColor = selectedBGColor!.withOpacity(disableOpacity);
-        _currentBorderColor = selectedBorderColor != null
-            ? selectedBorderColor!.withOpacity(disableOpacity)
-            : Colors.transparent;
+        if (selectedDisableConfig != null) {
+          _currentConfig = selectedDisableConfig!;
+        }
       }
-
-      _currentBorderWidth = selectedBorderWidth;
     } else {
       if (enable == true) {
-        _currentTextColor = normalTextColor;
-        _currentBackgroundColor = normalBGColor;
-        _currentBorderColor = normalBorderColor ?? Colors.transparent;
-        _currentBackgroundHighlightColor = normalBackgroundHighlightColor;
+        _currentConfig = normalConfig;
       } else {
-        _currentTextColor = normalTextColor.withOpacity(disableOpacity);
-        _currentBackgroundColor = normalBGColor.withOpacity(disableOpacity);
-        _currentBorderColor = normalBorderColor != null
-            ? normalBorderColor!.withOpacity(disableOpacity)
-            : Colors.transparent;
+        if (normalDisableConfig != null) {
+          _currentConfig = normalDisableConfig!;
+        }
       }
-
-      _currentBorderWidth = normalBorderWidth;
     }
     /*
     BorderSide borderSide = BorderSide(
@@ -119,18 +97,6 @@ class CJStateButton extends StatelessWidget {
     */
     //* // 使用新版 TextButton
     //[Flutter TextButton 详细使用配置、Flutter ButtonStyle概述实践](https://zhuanlan.zhihu.com/p/278330232)
-
-    // 检查 高亮颜色 的值(使用 FlatButton 的时候,空值会自动补上高亮效果)
-    if (_currentBackgroundHighlightColor == null) {
-      if (_currentBackgroundColor == Colors.transparent) {
-        //bugfix:修复透明时候的取值
-        _currentBackgroundHighlightColor = _currentBackgroundColor;
-      } else {
-        _currentBackgroundHighlightColor =
-            _currentBackgroundColor.withOpacity(_highlightOpacity);
-      }
-    }
-
     /*
     VoidCallback _onPressed = this.onPressed;
     if (this.enable == false) {
@@ -196,10 +162,7 @@ class CJStateButton extends StatelessWidget {
     );
     */
 
-    VoidCallback? _onPressed = onPressed;
-    if (enable == false) {
-      _onPressed = () {}; // 不能点击的时候，如果还是this.onPressed，则也会自行该操作
-    }
+    VoidCallback? _onPressed = enable == true ? onPressed : onPressedUnable;
 
     return CJBGBorderWidget(
       width: width,
@@ -207,9 +170,9 @@ class CJStateButton extends StatelessWidget {
       constraints: constraints,
       margin: margin,
       padding: padding,
-      backgroundColor: _currentBackgroundColor,
-      borderColor: _currentBorderColor,
-      borderWidth: _currentBorderWidth,
+      backgroundColor: _currentConfig.bgColor,
+      borderColor: _currentConfig.borderColor,
+      borderWidth: _currentConfig.borderWidth,
       cornerRadius: _cornerRadius,
       onPressed: _onPressed, // 非必传,null时候要且会自动结合behavior属性实现透传
       behavior: _onPressed == null
@@ -217,13 +180,13 @@ class CJStateButton extends StatelessWidget {
           : HitTestBehavior.deferToChild,
       child: DefaultTextStyle(
         style: TextStyle(
-          color: _currentTextColor,
+          color: _currentConfig.textColor,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: childMainAxisAlignment,
           children: <Widget>[
-            child,
+            childBuider(selected),
           ],
         ),
       ),

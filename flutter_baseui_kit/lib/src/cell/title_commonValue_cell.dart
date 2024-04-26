@@ -1,6 +1,7 @@
 // 包含标题文本title，值视图valueWidget、箭头类型 的视图
 import 'package:flutter/material.dart';
-import 'package:flutter_baseui_kit/flutter_baseui_kit_adapt.dart';
+
+import '../../flutter_baseui_kit_adapt.dart';
 
 typedef ClickCellCallback = void Function({int? section, int? row});
 
@@ -10,18 +11,16 @@ enum TableViewCellArrowImageType {
   arrowTopBottom, // 上下箭头
 }
 
-// ignore: non_constant_identifier_names
-double fontSize_cellLeft_default = 13.f_pt_cj;
-// ignore: non_constant_identifier_names
-double fontSize_cellRight_default = 13.f_pt_cj;
-// ignore: non_constant_identifier_names
-double fontSize_cellRight_textIconSpacing = 5.f_pt_cj; // cell右侧视图中文案与箭头等icon的间距
+double cell_constraints_minHeight =
+    44.h_pt_cj; // cell的最小高度，如果未设置默认44pt，如果cell内容过长，则高度会自动增加
 
-class BJHTitleCommonValueTableViewCell extends StatelessWidget {
+class ImageTitleCommonValueTableViewCell extends StatelessWidget {
   final double? height;
   final BoxConstraints? constraints;
-  final double? leftRightPadding; // cell 内容的左右间距(未设置时候，默认20)
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
   final Color? color;
+  final Decoration? decoration;
 
   final double? leftMaxWidth;
   final double? rightMaxWidth;
@@ -35,12 +34,14 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   final String title; // 主文本
   final String? titlePrompt; // 标题的说明语（此值为空时候，视图会自动隐藏）
   final int? titlePromptMaxLines; // 标题的说明语的最大行数(为null时候，默认1)
-  final double? titlePromptFontSize; // 标题的说明语的字体大小(默认30)
+  final TextStyle? titleTextStyle; // 主文本的 TextStyle
+  final TextStyle? titlePromptTextStyle; // 标题的说明语的 TextStyle
   // 右侧-值视图
   final Widget? Function(BuildContext context, {required bool canExpanded})
       valueWidgetBuilder; // 值视图（此值为空时候，视图会自动隐藏）
   // 右侧-箭头
   final TableViewCellArrowImageType? arrowImageType; // 箭头类型(默认none)
+  final Padding? Function()? arrowImagePaddingWidgetBuilder; // 箭头的自定义视图
 
   final int? section;
   final int? row;
@@ -48,12 +49,14 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   final ClickCellCallback? onDoubleTapCell; // cell 的双击
   final ClickCellCallback? onLongPressCell; // cell 的长按
 
-  const BJHTitleCommonValueTableViewCell({
+  const ImageTitleCommonValueTableViewCell({
     Key? key,
     this.height, // cell 的高度(内部已限制最小高度为44,要更改请设置 constraints)
     this.constraints,
-    this.leftRightPadding,
+    this.padding,
+    this.margin,
     this.color,
+    this.decoration,
     this.leftMaxWidth, // 限制左侧的最大宽度(左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边)
     this.rightMaxWidth, // 限制右侧的最大宽度(左右两侧都未设置最大宽度时候，默认左边给完，剩下全给右边)
     this.leftRightSpacing, // 左右两侧视图的间距(默认未未设置时候为0)
@@ -63,9 +66,11 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     required this.title,
     this.titlePrompt,
     this.titlePromptMaxLines,
-    this.titlePromptFontSize,
+    this.titleTextStyle,
+    this.titlePromptTextStyle,
     required this.valueWidgetBuilder,
     this.arrowImageType = TableViewCellArrowImageType.none,
+    this.arrowImagePaddingWidgetBuilder,
     this.section,
     this.row,
     this.onTapCell,
@@ -140,13 +145,11 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
     if (this.valueWidgetBuilder(context, canExpanded: canExpanded) != null) {
       Widget valueWidget =
           this.valueWidgetBuilder(context, canExpanded: canExpanded)!;
-      rightRowWidgets.add(SizedBox(width: fontSize_cellRight_textIconSpacing));
       if (canExpanded == true) {
         rightRowWidgets.add(Expanded(child: valueWidget));
       } else {
         rightRowWidgets.add(valueWidget);
       }
-
       // rightRowWidgets.add(Expanded(child: valueWidget));
       // rightRowWidgets.add(
       //   Expanded(
@@ -169,8 +172,7 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
     // 判断是否添加箭头，存在则添加到rowWidgets中
     if (this.arrowImageType != TableViewCellArrowImageType.none) {
-      rightRowWidgets.add(SizedBox(width: 5.w_pt_cj));
-      rightRowWidgets.add(_arrowImage());
+      rightRowWidgets.add(_arrowImagePaddingWidget(this.arrowImageType));
     }
     if (rightRowWidgets.length == 0) {
       rightRowWidgets.add(Container());
@@ -186,8 +188,6 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
   }
 
   Widget _cellContainer(BuildContext context) {
-    double leftRightPadding = this.leftRightPadding ?? 0.w_pt_cj;
-
     List<Widget> children = [];
     if (leftMaxWidth != null && leftMaxWidth! > 0) {
       children = [
@@ -218,9 +218,15 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
 
     return Container(
       height: this.height,
-      constraints: this.constraints ?? BoxConstraints(minHeight: 44.h_pt_cj),
-      padding: EdgeInsets.only(left: leftRightPadding, right: leftRightPadding),
-      color: this.color ?? Colors.white,
+      constraints: this.constraints ??
+          BoxConstraints(minHeight: cell_constraints_minHeight),
+      padding: this.padding,
+      margin: this.margin,
+      decoration: this.decoration ??
+          BoxDecoration(
+            color: this.color ?? Colors.white,
+            borderRadius: BorderRadius.circular(0),
+          ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -261,13 +267,14 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
         this.title,
         textAlign: TextAlign.left,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontFamily: 'PingFang SC',
-          color: Color(0xff404040),
-          fontSize: fontSize_cellLeft_default,
-          fontWeight: FontWeight.w400,
-          // height: 1,
-        ),
+        style: titleTextStyle ??
+            TextStyle(
+              fontFamily: 'PingFang SC',
+              fontWeight: FontWeight.w400,
+              color: Color(0xff404040),
+              fontSize: 13.f_pt_cj,
+              // height: 1,
+            ),
       ),
     );
   }
@@ -284,28 +291,33 @@ class BJHTitleCommonValueTableViewCell extends StatelessWidget {
       textAlign: TextAlign.left,
       maxLines: titlePromptMaxLines ?? 1,
       overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        color: Color(0xff404040),
-        fontFamily: 'PingFang SC',
-        fontSize: this.titlePromptFontSize ?? fontSize_cellRight_default,
-        fontWeight: FontWeight.w400,
-        // height: 1,
-      ),
+      style: titlePromptTextStyle ??
+          TextStyle(
+            fontFamily: 'PingFang SC',
+            fontWeight: FontWeight.w400,
+            color: Color(0xff404040),
+            fontSize: 13.f_pt_cj,
+            // height: 1,
+          ),
     );
   }
 
   // 箭头
-  Widget _arrowImage() {
-    return arrwoImageWidget();
+  Padding _arrowImagePaddingWidget(
+      TableViewCellArrowImageType? arrowImageType) {
+    Padding? customPadding = this.arrowImagePaddingWidgetBuilder?.call();
+    if (customPadding != null) {
+      return customPadding;
+    }
+    return arrwoImageWidget(arrowImageType: arrowImageType);
   }
 
-  static Widget arrwoImageWidget({
-    Color bgColor = Colors.transparent,
+  static Padding arrwoImageWidget({
+    TableViewCellArrowImageType? arrowImageType,
     Color? imageColor,
   }) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      color: bgColor,
+    return Padding(
+      padding: EdgeInsets.fromLTRB(5.w_pt_cj, 0, 0, 0),
       child: Image(
         image: AssetImage(
           'assets/arrow_right.png',
