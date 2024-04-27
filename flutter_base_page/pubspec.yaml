@@ -1,6 +1,6 @@
 name: flutter_base_page
 description: 项目页面和视图的基类.
-version: 0.0.2
+version: 0.0.3
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 
@@ -13,37 +13,11 @@ dependencies:
     sdk: flutter
 
   flutter_lifecycle_kit: ^0.0.1
-    # path: ../flutter_lifecycle_kit/
+  flutter_baseui_kit: ^0.0.4     # 为了引入 CJButton
 
-  flutter_theme_helper: ^0.0.1
-    # path: ../flutter_theme_helper/
-
-  visibility_detector: ^0.4.0+2
-  # cached_network_image: any
-  # flutter_theme_helper: #^0.1.0
-  #   path: ../flutter_theme_helper/
-  flutter_error_catch: ^0.0.1
-    # path: ../flutter_error_catch/
-
-  flutter_baseui_kit: ^0.0.2     # 为了引入 ThemeBorderButton
-    # path: ../flutter_baseui_kit/ 
-
-  flutter_overlay_kit: ^0.0.2
-    # path: ../flutter_overlay_kit/
-
-  flutter_effect_kit: ^0.0.1
-    # path: ../flutter_effect_kit/
-
-  flutter_log_with_env: ^0.0.2
-    # path: ../flutter_log_with_env/
-
+  flutter_error_catch: ^0.0.2
+  flutter_log_with_env: ^0.0.5
   flutter_buried_point: ^0.0.1
-    # path: ../flutter_buried_point/
-
-  flutter_optimize_interacte: ^0.0.1
-
-  flutter_network_base: ^0.0.1
-    # path: ../flutter_network_base/
 
 dev_dependencies:
   flutter_test:

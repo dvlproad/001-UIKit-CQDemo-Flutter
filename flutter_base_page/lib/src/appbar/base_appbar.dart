@@ -1,87 +1,16 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2024-04-26 22:51:45
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-04-27 20:08:05
+ * @Description: 
+ */
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
-import 'package:flutter_optimize_interacte/flutter_optimize_interacte.dart';
-export 'package:flutter_baseui_kit/flutter_baseui_kit.dart';
 
-// 一个可以快速设置 导航栏标题 和 导航栏返回按钮 的导航栏视图
-class QuickAppBar extends CommonAppBar {
-  QuickAppBar(
-    BuildContext context, {
-    Key? key,
-    Color? backgroundColor, // 导航栏背景色
-
-    SystemUiOverlayStyle? systemOverlayStyle,
-    dynamic title, // 中间导航栏标题文本或文本视图
-    final EdgeInsetsGeometry? titleMargin,
-    AppBarTextColorType? textColorType, // 左侧(返回)按钮视图的类型
-    bool? automaticallyImplyLeading, // 是否显示左侧(返回)按钮视图(默认true显示)
-
-    QuickToolBarImageType?
-        leadingImageType, // 返回按钮的样式(未设置的话，会自动根据标题颜色和导航栏背景色设置)
-    String? leadingText, // 左侧返回按钮不使用图片时候的文本(默认null时，使用图片)
-    double? leadingTextWidth, // 左侧返回按钮为文字时候所占宽度(未设置会取内容所占的最小宽度，其他为图片时候宽度固定)
-    void Function()? customOnPressedBack,
-    List<Widget>? actions, // 右侧操作按钮视图
-    double actionsPositionedRight = 10, // 右侧操作按钮视图离边缘的距离(如保存按钮时有距离)
-  })  : assert(title == null || (title is String) || (title is Widget)),
-        super(
-          key: key,
-          backgroundColor: backgroundColor,
-          systemOverlayStyle: systemOverlayStyle,
-          title: (title is String)
-              ? ToolBarTitleWidget(
-                  text: title,
-                  textColorType: textColorType,
-                )
-              : title,
-          titleMargin: titleMargin,
-          leading: leadingText != null
-              ? ToolBarTextActionWidget(
-                  width: leadingTextWidth,
-                  color: Colors.transparent,
-                  text: leadingText,
-                  textColor: textColorType == AppBarTextColorType.white
-                      ? Colors.white
-                      : Color(0xFF222222),
-                  onPressed: () {
-                    FocusScope.of(context)
-                        .requestFocus(FocusNode()); // 默认返回时候,关闭键盘
-                    if (customOnPressedBack == null) {
-                      Navigator.pop(context);
-                    } else {
-                      customOnPressedBack();
-                    }
-                  }.debounce(),
-                )
-              : QuickToolBarImageActionWidget(
-                  imageType: leadingImageType != null
-                      ? leadingImageType
-                      : textColorType == AppBarTextColorType.white
-                          ? (backgroundColor == Colors.transparent
-                              ? QuickToolBarImageType.white_bgClear
-                              : QuickToolBarImageType.white)
-                          : (backgroundColor == Colors.transparent
-                              ? QuickToolBarImageType.black_bgClear
-                              : QuickToolBarImageType.black),
-                  onPressed: () {
-                    FocusScope.of(context)
-                        .requestFocus(FocusNode()); // 默认返回时候,关闭键盘
-                    if (customOnPressedBack == null) {
-                      Navigator.pop(context);
-                    } else {
-                      customOnPressedBack();
-                    }
-                  }.debounce(),
-                ),
-          leadingPositionedLeft: leadingText != null ? 10 : 0,
-          automaticallyImplyLeading: automaticallyImplyLeading,
-          actions: actions,
-          actionsPositionedRight: actionsPositionedRight,
-        );
-}
+import '../toolbar/base_toolbar.dart';
 
 // 一个可 任意设置 的导航栏视图
 
