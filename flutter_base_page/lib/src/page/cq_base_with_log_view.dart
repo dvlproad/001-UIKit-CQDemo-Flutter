@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_lifecycle_kit/flutter_lifecycle_kit.dart';
 
-import 'package:flutter_log_with_env/flutter_log_with_env.dart';
-import 'package:flutter_error_catch/flutter_error_catch.dart';
-import 'package:flutter_buried_point/flutter_buried_point.dart';
-
 import 'cq_base_view.dart';
 
 enum PageShowType {
@@ -134,6 +130,59 @@ abstract class CJBaseWithLogPageState<V extends CJBaseWithLogPage>
     // String pageCode = "${pageClassString}_$hashCode";
   }
 
+  /// 子类重写监控信息
+  void updateCurrentAppCatchError(
+      String currentPageClassString, String? currentPageRoutePath);
+  void updateBeforeAppCatchError(
+      String beforePageClassString, String? beforePageRoutePath);
+
+  /// 子类重写埋点
+  void execBuriedPoint(String eventName, Map<String, dynamic> eventAttr);
+
+  /// 子类重写日志输出
+  void execLog({
+    required Map<dynamic, dynamic> shortMap,
+    required Map<dynamic, dynamic> detailMap,
+  });
+
+  /*
+  flutter_error_catch: ^0.0.2
+  flutter_log_with_env: ^0.0.5
+  flutter_buried_point: ^0.0.1
+  
+  import 'package:flutter_log_with_env/flutter_log_with_env.dart';
+  import 'package:flutter_error_catch/flutter_error_catch.dart';
+  import 'package:flutter_buried_point/flutter_buried_point.dart';
+  void updateCurrentAppCatchError(
+      String currentPageClassString, String? currentPageRoutePath) {
+    AppCatchError.currentPageClassString = currentPageClassString;
+    AppCatchError.currentPageRoutePath = currentPageRoutePath;
+  }
+
+  void updateBeforeAppCatchError(
+      String beforePageClassString, String? beforePageRoutePath) {
+    AppCatchError.beforePageClassString = beforePageClassString;
+    AppCatchError.beforePageRoutePath = beforePageRoutePath;
+  }
+
+  void execBuriedPoint(String eventName, Map<String, dynamic> eventAttr) {
+    BuriedPointManager().addEvent(eventName, eventAttr);
+  }
+
+  void execLog({
+    required Map<dynamic, dynamic> shortMap,
+    required Map<dynamic, dynamic> detailMap,
+  }) {
+    AppLogUtil.logMessage(
+      needTackTrace: false,
+      logType: LogObjectType.route,
+      logLevel: LogLevel.success,
+      shortMap: shortMap,
+      detailMap: detailMap,
+    );
+  }
+  */
+
   // 用于记录页面停留时长
   DateTime? _pageAppearTime;
   @override
@@ -141,9 +190,11 @@ abstract class CJBaseWithLogPageState<V extends CJBaseWithLogPage>
     super.viewDidAppear(appearBecause);
     _pageContextModel = getPageContextModel(context);
 
-    // 若出错的监控信息
-    AppCatchError.currentPageClassString = _pageInitModel.pageClassString;
-    AppCatchError.currentPageRoutePath = _pageContextModel.pageRoutePath;
+    // 若出错,提示【当前的】监控信息
+    updateCurrentAppCatchError(
+      _pageInitModel.pageClassString,
+      _pageContextModel.pageRoutePath,
+    );
 
     // if (appearBecause == AppearBecause.newCreate) {}
 
@@ -156,15 +207,12 @@ abstract class CJBaseWithLogPageState<V extends CJBaseWithLogPage>
       "cause": appearBecauseString,
     };
     parameters.addAll(_pageContextModel.buriedpointArgs ?? {});
-    BuriedPointManager().addEvent('viewDidAppear', parameters);
+    execBuriedPoint('viewDidAppear', parameters);
 
     // 日志输出
     if (_pageInitModel.pageShowType == PageShowType.tab ||
         _pageInitModel.pageShowType == PageShowType.normal) {
-      AppLogUtil.logMessage(
-        needTackTrace: false,
-        logType: LogObjectType.route,
-        logLevel: LogLevel.success,
+      execLog(
         shortMap: getAppearShortMap(),
         detailMap: {
           "pageKey": _pageInitModel.pageKey,
@@ -178,9 +226,11 @@ abstract class CJBaseWithLogPageState<V extends CJBaseWithLogPage>
   void viewDidDisappear(DisAppearBecause disAppearBecause) {
     super.viewDidDisappear(disAppearBecause);
 
-    // 若出错的监控信息
-    AppCatchError.beforePageClassString = _pageInitModel.pageClassString;
-    AppCatchError.beforePageRoutePath = _pageContextModel.pageRoutePath;
+    // 若出错,提示【之前的】监控信息
+    updateBeforeAppCatchError(
+      _pageInitModel.pageClassString,
+      _pageContextModel.pageRoutePath,
+    );
 
     // 埋点上报
     String disAppearBecauseString = disAppearBecause.toString().split('.').last;
@@ -192,15 +242,12 @@ abstract class CJBaseWithLogPageState<V extends CJBaseWithLogPage>
           _pageAppearTime!.millisecondsSinceEpoch,
     };
     parameters.addAll(_pageContextModel.buriedpointArgs ?? {});
-    BuriedPointManager().addEvent('viewDidDisappear', parameters);
+    execBuriedPoint('viewDidDisappear', parameters);
 
     // 日志输出
     if (_pageInitModel.pageShowType == PageShowType.tab ||
         _pageInitModel.pageShowType == PageShowType.normal) {
-      AppLogUtil.logMessage(
-        needTackTrace: false,
-        logType: LogObjectType.route,
-        logLevel: LogLevel.success,
+      execLog(
         shortMap: getDisappearShortMap(),
         detailMap: {
           "pageKey": _pageInitModel.pageKey,

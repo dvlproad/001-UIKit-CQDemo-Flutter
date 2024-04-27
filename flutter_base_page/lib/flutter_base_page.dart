@@ -15,3 +15,4 @@ export './src/toolbar/base_toolbar.dart';
 export './src/page/cq_base_with_log_view.dart';
 export './src/page/cq_base_view.dart';
 export './src/page/cj_base_view.dart';
+export './src/widget/pagetype_change_widget.dart' show WidgetType;

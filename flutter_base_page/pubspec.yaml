@@ -1,6 +1,6 @@
 name: flutter_base_page
-description: 项目页面和视图的基类(重新构造有appbar的视图，以使得继承此类的page可以从底部弹出).
-version: 0.0.4
+description: 项目页面和视图的基类(①可同时支持 showModalBottomSheet 和 Navigator.push；②重写基类方法可实现记录监控信息、日志、埋点).
+version: 0.0.5
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 
@@ -13,11 +13,6 @@ dependencies:
     sdk: flutter
 
   flutter_lifecycle_kit: ^0.0.1
-  flutter_baseui_kit: ^0.0.4     # 为了引入 CJButton
-
-  flutter_error_catch: ^0.0.2
-  flutter_log_with_env: ^0.0.5
-  flutter_buried_point: ^0.0.1
 
 dev_dependencies:
   flutter_test:
