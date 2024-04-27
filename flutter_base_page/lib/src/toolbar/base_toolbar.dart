@@ -1,3 +1,10 @@
+/*
+ * @Author: dvlproad
+ * @Date: 2024-04-26 17:07:39
+ * @LastEditors: dvlproad
+ * @LastEditTime: 2024-04-27 20:45:30
+ * @Description: 
+ */
 // toolbar 上 左侧返回视图 + 中间标题视图 + 右侧按钮视图
 import 'package:flutter/material.dart';
 
@@ -13,12 +20,6 @@ class CommonToolBar extends AppBar {
   final Widget? leading; // 左侧(返回)按钮视图
   final double? leadingPositionedLeft; // 左侧(返回)按钮视图离边缘的距离(如取消按钮时有距离)
   final bool automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图(默认true显示)
-  // final ImageProvider navbackImage;
-  // final String navbackTitle;
-  // // navbackImage: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
-  // // navbackImage: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
-  // final VoidCallback
-  //     onTapNavback; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
 
   final List<Widget>? actions; // 右侧操作按钮视图
   final double? actionsPositionedRight; // 右侧操作按钮视图离边缘的距离(如保存按钮时有距离)

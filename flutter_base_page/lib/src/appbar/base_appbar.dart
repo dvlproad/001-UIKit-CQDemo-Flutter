@@ -25,12 +25,6 @@ class CommonAppBar extends StatefulWidget implements PreferredSizeWidget {
   final Widget? leading; // 左侧(返回)按钮视图
   final double? leadingPositionedLeft;
   final bool? automaticallyImplyLeading; // 是否显示左侧(返回)按钮视图(默认true显示)
-  // final ImageProvider navbackImage;
-  // final String navbackTitle;
-  // // navbackImage: AssetImage('assets/images/emptyview/pic_搜索为空页面.png'),
-  // // navbackImage: NetworkImage('https://dss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3238317745,514710292&fm=26&gp=0.jpg'),
-  // final VoidCallback
-  //     onTapNavback; //导航栏返回按钮的点击事件(有设置此值的时候，才会有返回按钮.默认外部都要设置，因为要返回要填入context)
 
   final List<Widget>? actions; // 右侧操作按钮视图
   final double? actionsPositionedRight;
@@ -66,8 +60,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
   }
 
   Widget buildAppBarWidget(BuildContext context) {
-    MediaQueryData mediaQuery =
-        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     double stautsBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
     //或者 double stautsBarHeight = MediaQuery.of(context).padding.top;
 

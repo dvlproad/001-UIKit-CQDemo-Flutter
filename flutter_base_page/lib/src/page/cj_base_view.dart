@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_lifecycle_kit/flutter_lifecycle_kit.dart';
 
@@ -95,8 +94,7 @@ abstract class CJBasePageState<V extends CJBasePage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    MediaQueryData mediaQuery =
-        MediaQueryData.fromWindow(window); // 需 import 'dart:ui';
+    MediaQueryData mediaQuery = MediaQuery.of(context);
     double statusBarHeight = mediaQuery.padding.top; //这个就是状态栏的高度
     //或者 double statusBarHeight = MediaQuery.of(context).padding.top;
     double appBarHeight =

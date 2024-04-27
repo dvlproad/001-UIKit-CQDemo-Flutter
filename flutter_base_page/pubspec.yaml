@@ -1,6 +1,6 @@
 name: flutter_base_page
-description: 项目页面和视图的基类.
-version: 0.0.3
+description: 项目页面和视图的基类(重新构造有appbar的视图，以使得继承此类的page可以从底部弹出).
+version: 0.0.4
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_page
 
@@ -33,9 +33,6 @@ flutter:
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
-  assets:
-  - assets/
-  - assets/empty/
   #
   # For details regarding assets in packages, see
   # https://flutter.dev/assets-and-images/#from-packages
