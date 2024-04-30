@@ -1,6 +1,6 @@
 name: flutter_webview_kit
 description: 基础的网页视图（可快捷添加各种必备js，及常见的错误重试机制）.
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_webview_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_webview_kit
 

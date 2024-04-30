@@ -82,10 +82,20 @@ extension AddCheckRunJS on WebViewController {
     String jsMethodName, {
     Map? params,
   }) async {
-    String jsonParams = json.encode(params);
+    String jsParamJsonString = json.encode(params);
+    cj_runJsMethodWithParamString(
+      jsMethodName,
+      jsParamJsonString: jsParamJsonString,
+    );
+  }
+
+  Future<void> cj_runJsMethodWithParamString(
+    String jsMethodName, {
+    String? jsParamJsonString,
+  }) async {
     runJsMethodWithParamString(
       jsMethodName,
-      jsonParams: jsonParams,
+      jsParamJsonString: jsParamJsonString,
       logHandle: ({
         required bool runSuccess,
         required Map<dynamic, dynamic> shortMap,
@@ -122,7 +132,7 @@ extension AddCheckRunJS on WebViewController {
   /// 执行 js 方法
   Future<void> runJsMethodWithParamString(
     String jsMethodName, {
-    String? jsonParams,
+    String? jsParamJsonString,
     required void Function({
       required bool runSuccess,
       required Map<dynamic, dynamic> shortMap,
@@ -136,11 +146,11 @@ extension AddCheckRunJS on WebViewController {
         runSuccess: false,
         shortMap: {
           "app_call_js_method": 'app调h5: $jsMethodName',
-          "app_call_js_args": jsonParams,
+          "app_call_js_args": jsParamJsonString,
         },
         detailMap: {
           "app_call_js_method": jsMethodName,
-          "app_call_js_args": jsonParams,
+          "app_call_js_args": jsParamJsonString,
           "message": errorMessage,
         },
       );
@@ -152,11 +162,11 @@ extension AddCheckRunJS on WebViewController {
         runSuccess: true,
         shortMap: {
           "app_call_js_method": 'app调h5: $jsMethodName',
-          "app_call_js_args": jsonParams,
+          "app_call_js_args": jsParamJsonString,
         },
         detailMap: {
           "app_call_js_method": jsMethodName,
-          "app_call_js_args": jsonParams,
+          "app_call_js_args": jsParamJsonString,
           "javaScriptString": javaScript,
         },
       );
@@ -173,8 +183,8 @@ extension AddCheckRunJS on WebViewController {
     }
 
     String javaScript = "$jsMethodName()";
-    if (jsonParams is String) {
-      javaScript = "$jsMethodName('$jsonParams')";
+    if (jsParamJsonString is String) {
+      javaScript = "$jsMethodName('$jsParamJsonString')";
     }
 
     _logRunJsSuceess(javaScript);
