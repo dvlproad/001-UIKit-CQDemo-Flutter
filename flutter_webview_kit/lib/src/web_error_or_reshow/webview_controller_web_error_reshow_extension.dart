@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-04-29 13:36:09
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 12:07:36
+ * @LastEditTime: 2024-04-30 12:41:17
  * @Description: 
  */
 import 'dart:async';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../js_add_check_run/webview_controller_add_check_run_js.dart';
-import '../../flutter_webview_adapt.dart';
+import '../../flutter_webview_kit_adapt.dart';
 
 /// 解决iOS部分设备在游戏过程中挂起app，持续一段时间后，回到app出现白屏。
 extension ReshowReloadExtension on WebViewController {

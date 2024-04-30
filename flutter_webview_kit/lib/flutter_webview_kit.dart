@@ -5,7 +5,7 @@
  * @LastEditTime: 2024-04-30 12:12:30
  * @Description: 
  */
-library flutter_webview;
+library flutter_webview_kit;
 
 export 'package:webview_flutter/webview_flutter.dart';
 
