@@ -10,6 +10,12 @@ library flutter_overlay_kit;
 // init
 export './overlay_init.dart';
 
+export './theme/overlay_theme_manager.dart';
+export './theme/overlay_alert_theme_model.dart';
+export './theme/overlay_sheet_theme_model.dart';
+export 'package:flutter_baseui_kit/flutter_baseui_kit.dart'
+    show CJButtonConfigModel;
+
 // toast
 export './toast/toast_util.dart';
 export './toast/toast.dart';

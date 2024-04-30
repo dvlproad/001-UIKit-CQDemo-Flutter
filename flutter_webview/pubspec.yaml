@@ -1,7 +1,9 @@
 name: flutter_webview
-description: A new Flutter package project.
+description: 基础的网页视图（可快捷添加各种必备js，及常见的错误重试机制）.
 version: 0.0.1
-homepage:
+repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_webview
+homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_webview
+
 
 environment:
   sdk: '>=2.17.0 <3.0.0'
@@ -11,10 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  webview_flutter: any
-  flutter_webview_plugin: any
-  flutter_baseui_kit:       # 为了引入 ThemeBorderButton
-    path: ../flutter_baseui_kit/
+  webview_flutter: ^4.1.0
+  url_launcher: ^6.1.5
 
 
 dev_dependencies:
