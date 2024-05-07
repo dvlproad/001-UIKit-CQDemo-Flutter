@@ -12,7 +12,8 @@ class ImagesPreSufBadgeBaseList extends StatefulWidget {
   final double? width;
   final double? height;
   final Color? color;
-  ScrollPhysics? physics;
+  final EdgeInsetsGeometry? padding;
+  final ScrollPhysics? physics;
 
   final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
   final Widget? prefixWidget;
@@ -27,6 +28,7 @@ class ImagesPreSufBadgeBaseList extends StatefulWidget {
     this.width,
     this.height,
     this.color,
+    this.padding,
     this.physics,
     required this.imageCount,
     this.prefixWidget, // 可以为'添加'按钮
@@ -70,11 +72,12 @@ class _ImagesPreSufBadgeBaseListState extends State<ImagesPreSufBadgeBaseList> {
       color: widget.color,
       height: widget.height,
       child: GridView.builder(
-        shrinkWrap: true, //该属性表示是否根据子组件的总长度来设置ListView的长度，默认值为false
-        physics: widget.physics ?? NeverScrollableScrollPhysics(), // 不响应用户的滚动
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        // shrinkWrap: true, //该属性表示是否根据子组件的总长度来设置ListView的长度，默认值为false
+        physics: widget.physics, // 不响应用户的滚动
+        padding: widget.padding,
         gridDelegate: widget.customGridDelegate ??
             SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 1.0,
               crossAxisCount: 3,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,

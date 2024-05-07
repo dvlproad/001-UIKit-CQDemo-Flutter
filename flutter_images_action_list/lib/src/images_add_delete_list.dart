@@ -13,13 +13,16 @@ class CQImagesAddDeleteList extends StatelessWidget {
   final Axis scrollDirection;
   final ScrollPhysics? physics;
 
+  final double columnSpacing;
+  final double rowSpacing;
+  final int cellWidthFromPerRowMaxShowCount;
+  final double itemWidthHeightRatio;
+
   final bool dragEnable;
   final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
 
   final int maxAddCount; // 默认null,null时候默认9个
   final int imageCount; // 图片个数(不包括prefixWidget/suffixWidget)
-  final double?
-      itemWidthHeightRatio; // 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
   final Widget Function({
     required BuildContext context,
     required int imageIndex,
@@ -41,11 +44,16 @@ class CQImagesAddDeleteList extends StatelessWidget {
     this.direction = Axis.horizontal,
     this.scrollDirection = Axis.vertical,
     this.physics,
+    required this.columnSpacing, //水平列间距
+    required this.rowSpacing, // 竖直行间距
+    // 通过每行可显示的最多列数来设置每个cell的宽度
+    required this.cellWidthFromPerRowMaxShowCount,
+    // 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
+    required this.itemWidthHeightRatio,
     this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
     this.maxAddCount = 9,
     required this.imageCount,
-    this.itemWidthHeightRatio,
     required this.itemImageContentBuilder,
     this.hideDeleteIcon = false,
     required this.onPressedDelete,
@@ -63,15 +71,15 @@ class CQImagesAddDeleteList extends StatelessWidget {
       direction: direction,
       scrollDirection: scrollDirection,
       physics: physics,
+      columnSpacing: columnSpacing,
+      rowSpacing: rowSpacing,
+      cellWidthFromPerRowMaxShowCount: cellWidthFromPerRowMaxShowCount,
+      itemWidthHeightRatio: itemWidthHeightRatio,
       dragEnable: dragEnable,
       dragCompleteBlock: dragCompleteBlock,
-      cellWidthFromPerRowMaxShowCount: 4,
-      columnSpacing: 6,
-      rowSpacing: 6,
       maxAddCount: maxAddCount,
       imageCount: imageCount,
       suffixWidget: _addCell(),
-      itemWidthHeightRatio: itemWidthHeightRatio,
       imageItemBuilder: ({
         required BuildContext context,
         required int imageIndex,

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2022-04-22 15:05:47
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-01-09 18:04:02
+ * @LastEditTime: 2024-05-07 18:20:50
  * @Description: 列表 增加 maxAddCount 设置
  */
 import 'package:flutter/material.dart';
@@ -33,14 +33,10 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     required double itemHeight,
   }) imageItemBuilder;
 
-  final double? columnSpacing;
-  final double? rowSpacing;
-
-  /// < 通过每行可显示的最多列数来设置每个cell的宽度
-  final int? cellWidthFromPerRowMaxShowCount;
-
-  /// < 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
-  final double? itemWidthHeightRatio;
+  final double columnSpacing;
+  final double rowSpacing;
+  final int cellWidthFromPerRowMaxShowCount;
+  final double itemWidthHeightRatio;
 
   CQImagesPreSufBadgeList({
     Key? key,
@@ -57,10 +53,12 @@ class CQImagesPreSufBadgeList extends StatefulWidget {
     this.maxAddCount = 100000,
     this.prefixWidget, // 可以为'添加'按钮
     this.suffixWidget, // 可以为'添加'按钮
-    this.columnSpacing, //水平列间距
-    this.rowSpacing, // 竖直行间距
-    this.cellWidthFromPerRowMaxShowCount,
-    this.itemWidthHeightRatio,
+    required this.columnSpacing, //水平列间距
+    required this.rowSpacing, // 竖直行间距
+    // 通过每行可显示的最多列数来设置每个cell的宽度
+    required this.cellWidthFromPerRowMaxShowCount,
+    // 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
+    required this.itemWidthHeightRatio,
     required this.imageItemBuilder,
   }) : super(key: key);
 

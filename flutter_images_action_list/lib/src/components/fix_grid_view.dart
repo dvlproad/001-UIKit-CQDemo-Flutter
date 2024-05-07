@@ -1,5 +1,5 @@
 // ignore_for_file: unused_local_variable
-
+// import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:reorderables/reorderables.dart';
 import './images_presuf_badge_base_list.dart';
@@ -29,14 +29,11 @@ class FixGridView extends StatefulWidget {
   final Widget? prefixWidget;
   final Widget? suffixWidget;
 
-  final double? columnSpacing;
-  final double? rowSpacing;
+  final double columnSpacing;
+  final double rowSpacing;
 
-  /// < 通过每行可显示的最多列数来设置每个cell的宽度
-  final int? cellWidthFromPerRowMaxShowCount;
-
-  /// < 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
-  final double? itemWidthHeightRatio;
+  final int cellWidthFromPerRowMaxShowCount;
+  final double itemWidthHeightRatio;
 
   FixGridView({
     Key? key,
@@ -49,10 +46,12 @@ class FixGridView extends StatefulWidget {
     this.physics, // default is NeverScrollableScrollPhysics()
     this.dragEnable = false, // 是否可以拖动
     this.dragCompleteBlock,
-    this.columnSpacing, //水平列间距
-    this.rowSpacing, // 竖直行间距
-    this.cellWidthFromPerRowMaxShowCount,
-    this.itemWidthHeightRatio,
+    required this.columnSpacing, //水平列间距
+    required this.rowSpacing, // 竖直行间距
+    // 通过每行可显示的最多列数来设置每个cell的宽度
+    required this.cellWidthFromPerRowMaxShowCount,
+    // 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
+    required this.itemWidthHeightRatio,
     // this.itemDraggableFeedbackCornerRadius,
     required this.itemCount,
     required this.itemBuilder,
@@ -82,15 +81,18 @@ class FixGridViewState extends State<FixGridView> {
     double width = widget.width;
     double? height = widget.height;
 
-    double mainSpacing = widget.columnSpacing ?? 10;
-    double crossSpacing = widget.rowSpacing ?? 10;
-    int columnCount = widget.cellWidthFromPerRowMaxShowCount ?? 5;
+    double mainSpacing = widget.columnSpacing;
+    double crossSpacing = widget.rowSpacing;
+    int columnCount = widget.cellWidthFromPerRowMaxShowCount;
     // columnCount*itemWidth + (columnCount-1)*mainSpacing = width;
     double itemsWidth = width - (columnCount - 1) * mainSpacing;
+    if (widget.padding != null) {
+      itemsWidth = itemsWidth - widget.padding!.left - widget.padding!.right;
+    }
     double itemWidth = itemsWidth / columnCount;
     itemWidth = itemWidth.truncateToDouble(); //3.0 //向下取整(返回double)
 
-    double itemWidthHeightRatio = widget.itemWidthHeightRatio ?? 1.0;
+    double itemWidthHeightRatio = widget.itemWidthHeightRatio;
     double itemHeight = itemWidth / itemWidthHeightRatio;
     itemHeight = itemHeight.truncateToDouble(); //3.0 //向下取整(返回double)
 
@@ -252,8 +254,10 @@ class FixGridViewState extends State<FixGridView> {
       return ImagesPreSufBadgeBaseList(
         color: widget.color,
         height: widget.height,
+        padding: widget.padding,
         physics: widget.physics,
         customGridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          childAspectRatio: itemWidthHeightRatio,
           crossAxisCount: columnCount,
           mainAxisSpacing: mainSpacing,
           crossAxisSpacing: crossSpacing,
@@ -261,12 +265,20 @@ class FixGridViewState extends State<FixGridView> {
         imageCount: widget.itemCount,
         imageItemBuilder: (
             {required BuildContext context, required int imageIndex}) {
-          return widget.itemBuilder(
+          // Widget itemWidget = Container(
+          //   color: Color.fromRGBO(Random().nextInt(256), Random().nextInt(256),
+          //       Random().nextInt(256), 1),
+          //   width: itemWidth,
+          //   height: itemHeight,
+          //   child: Center(child: Text("第$imageIndex个")),
+          // );
+          Widget itemWidget = widget.itemBuilder(
             context: context,
             index: imageIndex,
             itemWidth: itemWidth,
             itemHeight: itemHeight,
           );
+          return itemWidget;
         },
         suffixWidget: widget.suffixWidget,
       );

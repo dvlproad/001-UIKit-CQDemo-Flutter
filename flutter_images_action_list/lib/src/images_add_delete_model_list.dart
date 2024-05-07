@@ -18,6 +18,12 @@ abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
   final Axis scrollDirection;
   // NeverScrollableScrollPhysics() \ ClampingScrollPhysics()\ AlwaysScrollableScrollPhysics(),
   final ScrollPhysics? physics; // default is NeverScrollableScrollPhysics()
+
+  final double columnSpacing;
+  final double rowSpacing;
+  final int cellWidthFromPerRowMaxShowCount;
+  final double itemWidthHeightRatio;
+
   final bool dragEnable;
   final void Function(int oldIndex, int newIndex)? dragCompleteBlock;
 
@@ -44,6 +50,12 @@ abstract class ImageAddDeleteModelList<TBean extends ImageChooseBean>
     this.direction = Axis.horizontal,
     this.scrollDirection = Axis.vertical,
     this.physics,
+    required this.columnSpacing, //水平列间距
+    required this.rowSpacing, // 竖直行间距
+    // 通过每行可显示的最多列数来设置每个cell的宽度
+    required this.cellWidthFromPerRowMaxShowCount,
+    // 宽高比(默认1:1,即1/1.0，请确保除数有小数点，否则1/2会变成0，而不是0.5)
+    required this.itemWidthHeightRatio,
     this.dragEnable = false, // 是否可以拖动
 
     this.dragCompleteBlock,
@@ -101,6 +113,10 @@ abstract class ImageAddDeleteModelListState<TBean extends ImageChooseBean,
       direction: widget.direction,
       scrollDirection: widget.scrollDirection,
       physics: widget.physics,
+      columnSpacing: widget.columnSpacing,
+      rowSpacing: widget.rowSpacing,
+      cellWidthFromPerRowMaxShowCount: widget.cellWidthFromPerRowMaxShowCount,
+      itemWidthHeightRatio: widget.itemWidthHeightRatio,
       dragEnable: widget.dragEnable,
       hideDeleteIcon: shouldHideDeleteIcon(),
       dragCompleteBlock: (int oldIndex, int newIndex) {
