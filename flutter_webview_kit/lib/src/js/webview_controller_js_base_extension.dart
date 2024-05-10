@@ -4,10 +4,10 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 11:56:32
+ * @LastEditTime: 2024-05-10 14:05:01
  * @Description: 
  */
-
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 // test
@@ -31,13 +31,14 @@ import './business/webview_controller_js_picker_extension.dart';
 extension AddJSChannel_CJBase on WebViewController {
   // test
   cjjs_test({
-    required Future Function() closeCurrentWebPageHandle,
+    required Future Function() closeWebToNativeBeforeOpenBrowserHandle,
     required Future Function(String errorMessage) openBrowserErrorHandle,
     required void Function(String? message) showMessageHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
     cjjs_test_openBrowser(
-      closeCurrentWebPageHandle: closeCurrentWebPageHandle,
+      closeWebToNativeBeforeOpenBrowserHandle:
+          closeWebToNativeBeforeOpenBrowserHandle,
       errorHandle: openBrowserErrorHandle,
     );
     cjjs_test_h5CallAppAndCallBackToH5(
@@ -48,19 +49,21 @@ extension AddJSChannel_CJBase on WebViewController {
 
   // base
   cjjs_base({
+    required BuildContext? Function() contextGetBlock,
     required Future<Map<String, dynamic>> Function() fixedAppInfoGetBlock,
     required Future<Map<String, dynamic>> Function() fixedMonitorInfoGetBlock,
-    required Future<String> Function() getCurrentUserToken,
-    required Future<void> Function(String message) showToastHandle,
-    required Future<void> Function(String url) jumpAppPageUrlHandle,
-    required Future<void> Function(
+    required String? Function() getCurrentUserToken,
+    required void Function(String message) showToastHandle,
+    required void Function(String url) jumpAppPageUrlHandle,
+    required void Function(
       String pageName, {
       Map<String, dynamic>? pageParams,
       // 进入到 app页面后，如果返回到当前页面，是否需要根据特殊参数做特殊处理。(eg: 从悬浮在window的游戏web进入app，要隐藏游戏；而从进入的页面返回时候，需要将隐藏的游戏再显示出来)
       Map<String, dynamic>? pageBackParams,
     })
         jumpAppPageNameHandle,
-    required Future<void> Function(int homeIndex) backToHomeIndexHandle,
+    required void Function(int homeIndex) backToHomeIndexHandle,
+    required void Function(bool shouldHide) hidesBottomBarHandle,
     required Function(SystemUiOverlayStyle systemUiOverlayStyle)
         updateAppStatusBarStyleHandle,
     required Function(bool? shouldResize) updateResizeToAvoidBottomInsetHandle,
@@ -82,9 +85,18 @@ extension AddJSChannel_CJBase on WebViewController {
     cjjs_jumpAppPageUrl(resultHandle: jumpAppPageUrlHandle);
     cjjs_jumpAppPageName(resultHandle: jumpAppPageNameHandle);
     cjjs_backToHomeIndex(resultHandle: backToHomeIndexHandle);
+    cjjs_hidesBottomBarWhenPushed(
+      webViewControllerGetBlock: webViewControllerGetBlock,
+      hidesBottomBarHandle: hidesBottomBarHandle,
+    );
     cjjs_updateAppStatusBarStyle(callBack: updateAppStatusBarStyleHandle);
     cjjs_updateResizeToAvoidBottomInset(
-        callBack: updateResizeToAvoidBottomInsetHandle);
+      callBack: updateResizeToAvoidBottomInsetHandle,
+    );
+    cjjs_getScreenInfo(
+      contextGetBlock: contextGetBlock,
+      webViewControllerGetBlock: webViewControllerGetBlock,
+    );
   }
 
   // business

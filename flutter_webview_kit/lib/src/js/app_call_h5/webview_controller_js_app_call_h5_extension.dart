@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2024-04-27 01:44:59
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 14:08:21
+ * @LastEditTime: 2024-05-10 13:35:55
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -15,7 +15,8 @@ import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 //webView的方法
 extension AppCallH5JSExtension on WebViewController {
-  sendAppLifecycleState(AppLifecycleState state) async {
+  /// 发送app生命周期状态
+  cj_sendAppLifecycleState(AppLifecycleState state) async {
     String stateString = _getAppLifecycleStateString(state);
     cj_runJsMethodWithParamString(
       '__on_did_change_app_lifecycle_state',

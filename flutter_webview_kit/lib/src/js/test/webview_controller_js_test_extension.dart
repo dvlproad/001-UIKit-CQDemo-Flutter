@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-04-29 18:14:46
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 10:57:26
+ * @LastEditTime: 2024-05-10 14:03:24
  * @Description: 
  */
 // ignore_for_file: non_constant_identifier_names, camel_case_extensions
@@ -17,7 +17,8 @@ import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 extension AddJSChannel_Test on WebViewController {
   /// 测试浏览器中的链接显示，且链接可打开app的_原生页面
   cjjs_test_openBrowser({
-    required Future Function() closeCurrentWebPageHandle,
+    // 关闭当前 web 以返回到原生页面，并打开浏览器用于测试浏览器上的链接能否直接打开app
+    required Future Function() closeWebToNativeBeforeOpenBrowserHandle,
     required Future Function(String errorMessage) errorHandle,
   }) {
     cj_addJavaScriptChannel(
@@ -35,7 +36,7 @@ extension AddJSChannel_Test on WebViewController {
         Uri Url = Uri.parse(url);
         bool canLaunch = await canLaunchUrl(Url);
         if (canLaunch) {
-          await closeCurrentWebPageHandle();
+          await closeWebToNativeBeforeOpenBrowserHandle();
           await launchUrl(
             Url,
             mode: LaunchMode.externalApplication,

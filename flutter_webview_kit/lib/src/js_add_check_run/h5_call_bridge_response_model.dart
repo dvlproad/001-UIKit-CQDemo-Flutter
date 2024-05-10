@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2023-09-20 11:54:57
+ * @LastEditTime: 2024-05-10 11:10:55
  * @Description: 
  */
 class JSResponseModel {
@@ -16,28 +16,28 @@ class JSResponseModel {
     this.result,
   });
 
-  static Map<String, dynamic> initMap({
+  static JSResponseModel init({
     String? message,
   }) {
     return JSResponseModel(
       resultCode: 0,
-    ).toMap();
+    );
   }
 
-  static Map<String, dynamic> errorMap({
+  static JSResponseModel error({
     String? message,
   }) {
-    return JSResponseModel(resultCode: 1, message: message).toMap();
+    return JSResponseModel(resultCode: 1, message: message);
   }
 
-  static Map<String, dynamic> successMap({
+  static JSResponseModel success({
     required bool isSuccess,
     dynamic result,
   }) {
     return JSResponseModel(
       resultCode: isSuccess ? 1 : 0,
       result: result,
-    ).toMap();
+    );
   }
 
   Map<String, dynamic> toMap() {

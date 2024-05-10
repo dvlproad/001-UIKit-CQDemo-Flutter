@@ -4,13 +4,15 @@
  * @Author: dvlproad
  * @Date: 2024-04-27 01:44:59
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 12:03:48
+ * @LastEditTime: 2024-05-10 14:42:59
  * @Description: 
  */
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
+import './h5_call_bridge_response_model.dart';
 
 // class CJJSInit {
 //   static void Function({
@@ -53,6 +55,82 @@ extension AddCheckRunJS on WebViewController {
   }) {
     AddCheckRunJS.callingLogHandle = callingLogHandle;
     AddCheckRunJS.resutlLogHandle = resutlLogHandle;
+  }
+
+  Future<void> cj2_addJavaScriptChannel(
+    String name, {
+    // 执行回调的 webViewController 是哪一个(场景：一个页面上画了两个 webView， webView1点击时候，希望webView2数字+1)
+    required WebViewController? Function() callBackWebViewControllerGetBlock,
+    required JSResponseModel? Function(Map<String, dynamic>? h5Params)
+        onMessageReceived,
+  }) {
+    return cj_addJavaScriptChannel(
+      name,
+      onMessageReceived: (JavaScriptMessage javaScriptMessage) {
+        String jsonString = javaScriptMessage.message.toString();
+        Map<String, dynamic>? h5Params;
+        try {
+          h5Params = jsonDecode(jsonString);
+        } catch (e) {
+          // 字符串不是有效的 JSON，处理错误情况
+          debugPrint('h5CallBridgeAction: Invalid JSON string');
+        }
+        JSResponseModel? jsResponseModel = onMessageReceived(h5Params);
+        if (h5Params != null) {
+          WebViewController? webViewController =
+              callBackWebViewControllerGetBlock(); // 避免另一个 controller 在某个时刻销毁了
+          String? jsMethodName = h5Params["callbackMethod"];
+          if (webViewController != null &&
+              jsMethodName != null &&
+              jsMethodName.isNotEmpty) {
+            // 此处假设执行的还是当前的 webViewController
+            Map<String, dynamic>? jsCallbackMap = jsResponseModel?.toMap();
+            webViewController.cj_runJsMethodWithParamMap(
+              jsMethodName,
+              params: jsCallbackMap,
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> cj2_addJavaScriptChannel_asyncReceived(
+    String name, {
+    // 执行回调的 webViewController 是哪一个(场景：一个页面上画了两个 webView， webView1点击时候，希望webView2数字+1)
+    required WebViewController? Function() callBackWebViewControllerGetBlock,
+    required Future<JSResponseModel>? Function(Map<String, dynamic>? h5Params)
+        onMessageReceived,
+  }) {
+    return cj_addJavaScriptChannel(
+      name,
+      onMessageReceived: (JavaScriptMessage javaScriptMessage) async {
+        String jsonString = javaScriptMessage.message.toString();
+        Map<String, dynamic>? h5Params;
+        try {
+          h5Params = jsonDecode(jsonString);
+        } catch (e) {
+          // 字符串不是有效的 JSON，处理错误情况
+          debugPrint('h5CallBridgeAction: Invalid JSON string');
+        }
+        JSResponseModel? jsResponseModel = await onMessageReceived(h5Params);
+        if (h5Params != null) {
+          WebViewController? webViewController =
+              callBackWebViewControllerGetBlock(); // 避免另一个 controller 在某个时刻销毁了
+          String? jsMethodName = h5Params["callbackMethod"];
+          if (webViewController != null &&
+              jsMethodName != null &&
+              jsMethodName.isNotEmpty) {
+            // 此处假设执行的还是当前的 webViewController
+            Map<String, dynamic>? jsCallbackMap = jsResponseModel?.toMap();
+            webViewController.cj_runJsMethodWithParamMap(
+              jsMethodName,
+              params: jsCallbackMap,
+            );
+          }
+        }
+      },
+    );
   }
 
   Future<void> cj_addJavaScriptChannel(

@@ -1,8 +1,10 @@
+// ignore_for_file: non_constant_identifier_names
+
 /*
  * @Author: dvlproad
  * @Date: 2024-04-29 13:36:09
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 12:41:17
+ * @LastEditTime: 2024-05-10 14:42:16
  * @Description: 
  */
 import 'dart:async';
@@ -18,13 +20,36 @@ import '../../flutter_webview_kit_adapt.dart';
 extension ReshowReloadExtension on WebViewController {
   static int? _lastDismissTimeStamp; // 上一次 web 消失的时间
 
+  /// 检查app生命周期期间 webView 白屏情况
+  cj_checkWebViewWhiteScreenInAppLifecycleState(
+    AppLifecycleState state, {
+    required int minDismissInterval,
+    // 最小消失时长（如果web进入后台时间大于[minDismissInterval]则进行reload。）
+    // 是否需要检查是否存活，如果为空则默认存活，不为空则通过检查该js方法是否存在来判断存活,常见的值为 '__on_alive',
+    String? checkAliveMethodName,
+  }) async {
+    // 解决iOS部分设备在游戏过程中挂起app，持续一段时间后，回到app出现白屏。
+    if (state == AppLifecycleState.inactive) {
+      //
+    } else if (state == AppLifecycleState.paused) {
+      _startDismiss();
+    } else if (state == AppLifecycleState.resumed) {
+      _reloadWhenReshowIfDismissInterval(
+        minDismissInterval,
+        checkAliveMethodName: checkAliveMethodName,
+      );
+    } else if (state == AppLifecycleState.detached) {
+      //
+    }
+  }
+
   /// web 开始不在当前页面的情况，记录下当前时间
-  void startDismiss() {
+  void _startDismiss() {
     DateTime now = DateTime.now();
     _lastDismissTimeStamp = now.millisecondsSinceEpoch;
   }
 
-  void reloadWhenReshowIfDismissInterval(
+  void _reloadWhenReshowIfDismissInterval(
     int minDismissInterval, {
     // 最小消失时长（如果web进入后台时间大于[minDismissInterval]则进行reload。）
     // 是否需要检查是否存活，如果为空则默认存活，不为空则通过检查该js方法是否存在来判断存活,常见的值为 '__on_alive',
@@ -68,7 +93,7 @@ extension ErrorReloadExtension on WebViewController {
     required List<String> shouldReloadWebResourceErrorTypes,
     // 最大的失败次数，超过则不能再重试，而是需要显示错误或者跳过了 （默认1次，后台配置）
     required int maxTargetErrorCount,
-    // 捕获到目标错误时要执行的动作,（如果超过最大次数，提示错误；不超过则可尝试重新加载)
+    // 捕获到目标错误时要执行的动作,（如果错误次数超过最大次数，提示错误；不超过则可尝试重新加载)
     required void Function(bool isBeyondMax) onCatchTargetError,
     // 尝试重新加载的间隔/间隔多长时间之后再重试，避免现在(如网络异常)立马执行还是错误
     Duration reloadRequestDuration = const Duration(milliseconds: 2000),
