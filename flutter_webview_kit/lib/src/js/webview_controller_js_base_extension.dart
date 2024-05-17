@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-10 14:05:01
+ * @LastEditTime: 2024-05-16 16:37:47
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -53,6 +53,8 @@ extension AddJSChannel_CJBase on WebViewController {
     required Future<Map<String, dynamic>> Function() fixedAppInfoGetBlock,
     required Future<Map<String, dynamic>> Function() fixedMonitorInfoGetBlock,
     required String? Function() getCurrentUserToken,
+    // required Future<Map<String, dynamic>> Function(bool? needFullAccuracy) userLocationInfoGetBlock,
+    required void Function(bool? needFullAccuracy, String callbackJSMethodName) getUserLocationInfoHandle,
     required void Function(String message) showToastHandle,
     required void Function(String url) jumpAppPageUrlHandle,
     required void Function(
@@ -80,6 +82,9 @@ extension AddJSChannel_CJBase on WebViewController {
     cjjs_getCurrentUserToken(
       getCurrentUserToken: getCurrentUserToken,
       webViewControllerGetBlock: webViewControllerGetBlock,
+    );
+    cjjs_getUserLocationInfo(
+      getUserLocationInfoHandle: getUserLocationInfoHandle,
     );
     cjjs_showAppToast(resultHandle: showToastHandle);
     cjjs_jumpAppPageUrl(resultHandle: jumpAppPageUrlHandle);

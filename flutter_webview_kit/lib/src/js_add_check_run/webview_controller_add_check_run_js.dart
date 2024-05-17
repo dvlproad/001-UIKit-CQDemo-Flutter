@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2024-04-27 01:44:59
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-10 14:42:59
+ * @LastEditTime: 2024-05-16 16:42:57
  * @Description: 
  */
 import 'dart:async';
@@ -129,6 +129,26 @@ extension AddCheckRunJS on WebViewController {
             );
           }
         }
+      },
+    );
+  }
+
+  Future<void> cj1_addJavaScriptChannel(
+    String name, {
+    required void Function(Map<String, dynamic>? h5Params) onMessageReceived,
+  }) {
+    return cj_addJavaScriptChannel(
+      name,
+      onMessageReceived: (JavaScriptMessage javaScriptMessage) {
+        String jsonString = javaScriptMessage.message.toString();
+        Map<String, dynamic>? h5Params;
+        try {
+          h5Params = jsonDecode(jsonString);
+        } catch (e) {
+          // 字符串不是有效的 JSON，处理错误情况
+          debugPrint('h5CallBridgeAction: Invalid JSON string');
+        }
+        onMessageReceived(h5Params);
       },
     );
   }
