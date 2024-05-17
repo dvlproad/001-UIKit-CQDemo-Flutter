@@ -7,6 +7,9 @@
  */
 library flutter_foundation_base;
 
+// convert
+export './value_convert_util.dart';
+
 export './string_format_util/formatter_object_util.dart';
 export './string_format_util/object2string_extension.dart';
 export './string_format_util/num2string_extension.dart';
