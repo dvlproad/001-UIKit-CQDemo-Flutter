@@ -175,45 +175,41 @@ class LocalStorage {
   // 保存自定义类
   static Future<bool> saveCustomBean<T>(
     String key,
-    value, {
-    required Map<String, dynamic> Function(dynamic bItem) valueToJson,
+    T? value, {
+    required Map<String, dynamic> Function(T bItem) valueToJson,
   }) async {
-    return _saveCustom(key, value, itemToJson: valueToJson);
-  }
-
-  static Future<bool> saveCustomBeans(
-    String key,
-    value, {
-    required Map<String, dynamic> Function(dynamic bItem) itemToJson,
-  }) async {
-    return _saveCustom(key, value, itemToJson: itemToJson);
-  }
-
-  static Future<bool> _saveCustom(
-    String key,
-    value, {
-    required Map<String, dynamic> Function(dynamic bItem) itemToJson,
-  }) async {
+    if (value == null) {
+      return false;
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (value is List) {
-      List<String> strings = [];
-      for (var item in value) {
-        Map map = itemToJson(item);
-        try {
-          String mapString = json.encode(map);
-          strings.add(mapString);
-        } catch (err) {
-          return false; // save failure
-        }
-      }
-      return prefs.setStringList(key, strings);
-    } else {
-      Map<String, dynamic> map = itemToJson(value);
-      String mapString = json.encode(map);
+    Map<String, dynamic> map = valueToJson(value);
+    String mapString = json.encode(map);
 
-      return prefs.setString(key, mapString);
+    return prefs.setString(key, mapString);
+  }
+
+  static Future<bool> saveCustomBeans<T>(
+    String key,
+    List<T>? value, {
+    required Map<String, dynamic> Function(T bItem) itemToJson,
+  }) async {
+    if (value == null) {
+      return false;
     }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> strings = [];
+    for (T item in value) {
+      Map map = itemToJson(item);
+      try {
+        String mapString = json.encode(map);
+        strings.add(mapString);
+      } catch (err) {
+        return false; // save failure
+      }
+    }
+    return prefs.setStringList(key, strings);
   }
 
   static Future<bool> _saveMapOrMaps(String key, value) async {
