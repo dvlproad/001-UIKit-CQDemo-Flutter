@@ -2,13 +2,24 @@
  * @Author: dvlproad
  * @Date: 2024-05-11 09:37:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-13 10:29:10
+ * @LastEditTime: 2024-05-17 13:12:05
  * @Description: 
  */
 library flutter_base_models;
 
 // base
 export './base_json_convert.dart';
+
+// user
+export './user/user_base_model.dart';
+export './user/user_enum_avatar.dart';
+export './user/user_enum_realname.dart';
+export './user/user_level_protocal.dart';
+
+// social
+export './social/base_comment_model.dart';
+export './social/enum_like_status.dart';
+export './social/social_count_protocal.dart';
 
 // location
 // location: base

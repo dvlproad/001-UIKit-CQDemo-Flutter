@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-01-26 15:29:54
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 18:15:27
+ * @LastEditTime: 2024-05-17 13:04:06
  * @Description: 
  */
 
@@ -22,11 +22,23 @@
 
 // Important: 实现泛型，子类的childList元素是子类，而不是 BaseCityModel
 abstract class BaseCityModel<T extends BaseCityModel<T>> {
-  final int regionId;
+  final String regionId;
   final String regionName;
+  final List<T>? children;
+
+  BaseCityModel({
+    required this.regionId,
+    required this.regionName,
+    this.children,
+  });
+}
+
+
+/*
+
+class AppCityModel extends BaseCityModel<AppCityModel> {
   final int? level;
   final int? parentId;
-  final List<T>? childList;
   final String? postCode;
   final String? shortName;
   final String? pinyinName;
@@ -34,69 +46,44 @@ abstract class BaseCityModel<T extends BaseCityModel<T>> {
   final int? isAvailable;
   final int? isDeleted;
 
-  BaseCityModel({
-    required this.regionId,
-    required this.regionName,
+  final int? createTime;
+  final int? updateTime;
+
+  AppCityModel({
+    required String regionId,
+    required String regionName,
+    List<AppCityModel>? children,
     this.level,
     this.parentId,
-    this.childList,
     this.postCode,
     this.shortName,
     this.pinyinName,
     this.pinyinShortName,
     this.isAvailable,
     this.isDeleted,
-  });
-}
-
-
-/*
-class AppCityModel extends BaseCityModel<AppCityModel> {
-  final int? createTime;
-  final int? updateTime;
-
-  AppCityModel({
-    required int regionId,
-    required String regionName,
-    int? level,
-    int? parentId,
-    List<AppCityModel>? childList,
-    String? postCode,
-    String? shortName,
-    String? pinyinName,
-    String? pinyinShortName,
-    int? isAvailable,
-    int? isDeleted,
     this.createTime,
     this.updateTime,
   }) : super(
           regionId: regionId,
           regionName: regionName,
-          level: level,
-          parentId: parentId,
-          childList: childList,
-          postCode: postCode,
-          shortName: shortName,
-          pinyinName: pinyinName,
-          pinyinShortName: pinyinShortName,
-          isAvailable: isAvailable,
-          isDeleted: isDeleted,
+          children: children,
         );
 
   static AppCityModel fromJson(dynamic json) {
-    List<AppCityModel>? childList;
+    List<AppCityModel>? children;
     if (json['childList'] != null) {
-      childList = [];
+      children = [];
       json['childList'].forEach((v) {
-        childList?.add(AppCityModel.fromJson(v));
+        children?.add(AppCityModel.fromJson(v));
       });
     }
+
     return AppCityModel(
-      regionId: json['regionId'],
+      regionId: ValueConvertUtil.stringFrom(json['regionId']),
       regionName: json['regionName'],
       level: json['level'],
       parentId: json['parentId'],
-      childList: childList,
+      children: children,
       postCode: json['postCode'],
       shortName: json['shortName'],
       pinyinName: json['pinyinName'],
@@ -112,16 +99,17 @@ class AppCityModel extends BaseCityModel<AppCityModel> {
     final map = <String, dynamic>{};
     map['regionId'] = regionId;
     map['regionName'] = regionName;
-    map['level'] = level;
-    map['parentId'] = parentId;
-    if (childList != null) {
+    if (children != null) {
       List<Map> childListMaps = [];
-      for (AppCityModel element in childList!) {
+      for (AppCityModel element in children!) {
         Map map = element.toJson();
         childListMaps.add(map);
       }
       map['childList'] = childListMaps;
     }
+
+    map['level'] = level;
+    map['parentId'] = parentId;
     map['postCode'] = postCode;
     map['shortName'] = shortName;
     map['pinyinName'] = pinyinName;
