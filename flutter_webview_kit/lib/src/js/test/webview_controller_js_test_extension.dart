@@ -11,6 +11,7 @@ import 'dart:convert';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../js_add_check_run/h5_call_bridge_response_model.dart';
 import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 /// 添加JSChannel
@@ -53,23 +54,19 @@ extension AddJSChannel_Test on WebViewController {
     required void Function(String? message) showMessageHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cj_addJavaScriptChannel(
+    cj2_addJavaScriptChannel(
       'h5CallBridgeAction_test_h5CallAppAndCallBackToH5',
-      onMessageReceived: (JavaScriptMessage message) {
-        Map map = json.decode(message.message.toString());
-        final String? msg = map["message"];
+      callBackWebViewControllerGetBlock: webViewControllerGetBlock,
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        final String? msg = h5Params?["message"];
         showMessageHandle(msg);
 
-        // Map map = json.decode(message.message.toString());
-        String jsMethodName = map["callbackMethod"];
         Map callbackMap = {
           "keyboardHeight": 123,
         };
-
-        WebViewController? webViewController = webViewControllerGetBlock();
-        webViewController?.cj_runJsMethodWithParamMap(
-          jsMethodName,
-          params: callbackMap,
+        return JSResponseModel.success(
+          isSuccess: true,
+          result: callbackMap,
         );
       },
     );

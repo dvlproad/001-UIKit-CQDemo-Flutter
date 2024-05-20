@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-16 16:37:47
+ * @LastEditTime: 2024-05-20 11:16:07
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -14,14 +14,16 @@ import 'package:webview_flutter/webview_flutter.dart';
 import './test/webview_controller_js_test_extension.dart';
 // base
 import './base/webview_controller_js_info_extension.dart';
+import './base/webview_controller_js_info_hardware_extension.dart';
 import './base/webview_controller_js_overlay_extension.dart';
 import './base/webview_controller_js_route_extension.dart';
+import './base/webview_controller_js_checkversion_extension.dart';
+import './base/webview_controller_js_logout_extension.dart';
 import './base/webview_controller_js_ui_extension.dart';
+// import './base/webview_controller_js_info_share_extension.dart';
 
 // business
 import './business/webview_controller_js_auth_extension.dart';
-import './business/webview_controller_js_checkversion_extension.dart';
-import './business/webview_controller_js_logout_extension.dart';
 import './business/webview_controller_js_mp_extension.dart';
 import './business/webview_controller_js_pay_extension.dart';
 import './business/webview_controller_js_picker_extension.dart';
@@ -53,8 +55,7 @@ extension AddJSChannel_CJBase on WebViewController {
     required Future<Map<String, dynamic>> Function() fixedAppInfoGetBlock,
     required Future<Map<String, dynamic>> Function() fixedMonitorInfoGetBlock,
     required String? Function() getCurrentUserToken,
-    // required Future<Map<String, dynamic>> Function(bool? needFullAccuracy) userLocationInfoGetBlock,
-    required void Function(bool? needFullAccuracy, String callbackJSMethodName) getUserLocationInfoHandle,
+    required Map<String, dynamic> Function() currentUserInfoGetBlock,
     required void Function(String message) showToastHandle,
     required void Function(String url) jumpAppPageUrlHandle,
     required void Function(
@@ -66,6 +67,12 @@ extension AddJSChannel_CJBase on WebViewController {
         jumpAppPageNameHandle,
     required void Function(int homeIndex) backToHomeIndexHandle,
     required void Function(bool shouldHide) hidesBottomBarHandle,
+    required Future<void> Function({
+      required bool isManualCheck,
+      required String callOwner,
+    })
+        checkVersion,
+    required Future<bool> Function() logoutHandle,
     required Function(SystemUiOverlayStyle systemUiOverlayStyle)
         updateAppStatusBarStyleHandle,
     required Function(bool? shouldResize) updateResizeToAvoidBottomInsetHandle,
@@ -83,9 +90,11 @@ extension AddJSChannel_CJBase on WebViewController {
       getCurrentUserToken: getCurrentUserToken,
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
-    cjjs_getUserLocationInfo(
-      getUserLocationInfoHandle: getUserLocationInfoHandle,
+    cjjs_getCurrentUserInfo(
+      callbackMapGetBlock: currentUserInfoGetBlock,
+      webViewControllerGetBlock: webViewControllerGetBlock,
     );
+
     cjjs_showAppToast(resultHandle: showToastHandle);
     cjjs_jumpAppPageUrl(resultHandle: jumpAppPageUrlHandle);
     cjjs_jumpAppPageName(resultHandle: jumpAppPageNameHandle);
@@ -94,6 +103,11 @@ extension AddJSChannel_CJBase on WebViewController {
       webViewControllerGetBlock: webViewControllerGetBlock,
       hidesBottomBarHandle: hidesBottomBarHandle,
     );
+    cjjs_checkVersion(
+      checkVersion: checkVersion,
+      webViewControllerGetBlock: webViewControllerGetBlock,
+    );
+    cjjs_logout(logoutHandle: logoutHandle);
     cjjs_updateAppStatusBarStyle(callBack: updateAppStatusBarStyleHandle);
     cjjs_updateResizeToAvoidBottomInset(
       callBack: updateResizeToAvoidBottomInsetHandle,
@@ -101,6 +115,20 @@ extension AddJSChannel_CJBase on WebViewController {
     cjjs_getScreenInfo(
       contextGetBlock: contextGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
+    );
+    // share
+  }
+
+  // hardware
+  cjjs_hardware({
+    required void Function() openAppSettingsHandle,
+    // required Future<Map<String, dynamic>> Function(bool? needFullAccuracy) userLocationInfoGetBlock,
+    required void Function(bool? needFullAccuracy, String callbackJSMethodName)
+        getUserLocationInfoHandle,
+  }) {
+    cjjs_openAppSettings(openAppSettingsHandle: openAppSettingsHandle);
+    cjjs_getUserLocationInfo(
+      getUserLocationInfoHandle: getUserLocationInfoHandle,
     );
   }
 
@@ -110,13 +138,11 @@ extension AddJSChannel_CJBase on WebViewController {
       required String certName,
       required String certNo,
     })
-        resultMapGetHandle,
-    required Future<void> Function({
-      required bool isManualCheck,
-      required String callOwner,
+        authRealPersonResultMapGetHandle,
+    required Future<Map<String, dynamic>?> Function({
+      required String avatarUrl,
     })
-        checkVersion,
-    required Future<bool> Function() logoutHandle,
+        authAvatarResultMapGetHandle,
     required Future<bool> Function(String mpPath) goMpHandle,
     required Future<bool> Function({
       required String payType,
@@ -131,15 +157,14 @@ extension AddJSChannel_CJBase on WebViewController {
         pickMediasHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cjjs_authRealName(
-      resultMapGetHandle: resultMapGetHandle,
+    cjjs_authRealPerson(
+      resultMapGetHandle: authRealPersonResultMapGetHandle,
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
-    cjjs_checkVersion(
-      checkVersion: checkVersion,
+    cjjs_authAvatar(
+      resultMapGetHandle: authAvatarResultMapGetHandle,
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
-    cjjs_logout(logoutHandle: logoutHandle);
     cjjs_callWeChatMiniProgram(
       goMpHandle: goMpHandle,
       webViewControllerGetBlock: webViewControllerGetBlock,

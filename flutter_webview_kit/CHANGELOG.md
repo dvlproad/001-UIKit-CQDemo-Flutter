@@ -13,3 +13,7 @@
 ## [0.0.4] - 2019-04-11
 
 * 添加 cjjs_getUserLocationInfo : 获取用户当前位置信息
+
+## [0.0.5] - 2019-04-12
+
+* 添加 cjjs_share : 分享(TEXT文本、IMAGE图片地址、VIDEO视频地址、WEBPAGE网页链接)到微信

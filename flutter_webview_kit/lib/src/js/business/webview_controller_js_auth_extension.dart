@@ -4,19 +4,18 @@
  * @Author: dvlproad
  * @Date: 2024-04-29 19:12:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 12:23:02
+ * @LastEditTime: 2024-05-20 10:51:46
  * @Description: 
  */
-import 'dart:convert';
-
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../js_add_check_run/h5_call_bridge_response_model.dart';
 import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 /// 添加JSChannel
 extension AddJSChannel_Auth on WebViewController {
-  ///实人认证
-  cjjs_authRealName({
+  ///实人认证(实名通过后，也要进行活体通过)
+  cjjs_authRealPerson({
     required Future<Map<String, dynamic>?> Function({
       required String certName,
       required String certNo,
@@ -24,28 +23,43 @@ extension AddJSChannel_Auth on WebViewController {
         resultMapGetHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cj_addJavaScriptChannel(
-      'h5CallBridgeAction_realPersonAuthentication',
-      onMessageReceived: (JavaScriptMessage message) async {
-        Map map = json.decode(message.message.toString());
-
-        String certName = map['certName'] ?? "";
-        String certNo = map['certNo'] ?? "";
-
-        String jsMethodName = map["callbackMethod"];
-
+    cj2_addJavaScriptChannel_asyncReceived(
+      'h5CallBridgeAction_auth_realPerson',
+      callBackWebViewControllerGetBlock: webViewControllerGetBlock,
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String certName = h5Params?['certName'] ?? "";
+        String certNo = h5Params?['certNo'] ?? "";
         Map<String, dynamic>? callbackMap = await resultMapGetHandle(
           certNo: certNo,
           certName: certName,
         );
-        if (callbackMap == null) {
-          return;
-        }
+        return JSResponseModel.success(
+          isSuccess: true,
+          result: callbackMap,
+        );
+      },
+    );
+  }
 
-        WebViewController? webViewController = webViewControllerGetBlock();
-        webViewController?.cj_runJsMethodWithParamMap(
-          jsMethodName,
-          params: callbackMap,
+  /// 头像认证
+  cjjs_authAvatar({
+    required Future<Map<String, dynamic>?> Function({
+      required String avatarUrl,
+    })
+        resultMapGetHandle,
+    required WebViewController? Function() webViewControllerGetBlock,
+  }) {
+    cj2_addJavaScriptChannel_asyncReceived(
+      'h5CallBridgeAction_auth_avatar',
+      callBackWebViewControllerGetBlock: webViewControllerGetBlock,
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String avatarUrl = h5Params?['avatarUrl'] ?? "";
+        Map<String, dynamic>? callbackMap = await resultMapGetHandle(
+          avatarUrl: avatarUrl,
+        );
+        return JSResponseModel.success(
+          isSuccess: true,
+          result: callbackMap,
         );
       },
     );

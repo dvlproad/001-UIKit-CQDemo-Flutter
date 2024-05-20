@@ -4,15 +4,13 @@
  * @Author: dvlproad
  * @Date: 2024-04-29 18:42:08
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-10 14:41:31
+ * @LastEditTime: 2024-05-20 10:57:23
  * @Description: 
  */
-import 'dart:convert';
-
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 // import '../../js_add_check_run/h5_call_bridge_response_model.dart';
+import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 /// 添加JSChannel
 extension AddJSChannel_Overlay on WebViewController {
@@ -20,11 +18,10 @@ extension AddJSChannel_Overlay on WebViewController {
   cjjs_showAppToast({
     required void Function(String message) resultHandle,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       'h5CallBridgeAction_showAppToast',
-      onMessageReceived: (JavaScriptMessage message) {
-        Map map = json.decode(message.message.toString());
-        final String? msg = map["message"];
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        final String? msg = h5Params?["message"];
         if (msg == null || msg.isEmpty) {
           return;
         }

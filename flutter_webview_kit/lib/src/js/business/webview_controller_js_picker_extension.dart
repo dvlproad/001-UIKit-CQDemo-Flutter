@@ -4,13 +4,12 @@
  * @Author: dvlproad
  * @Date: 2024-04-30 10:00:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 10:26:19
+ * @LastEditTime: 2024-05-20 10:47:09
  * @Description: 
  */
-import 'dart:convert';
-
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../js_add_check_run/h5_call_bridge_response_model.dart';
 import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 /// 添加JSChannel
@@ -25,17 +24,13 @@ extension AddJSChannel_Picker on WebViewController {
         pickMediasHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cj_addJavaScriptChannel(
+    cj2_addJavaScriptChannel_asyncReceived(
       'h5CallBridgeAction_pickMediasAndUpload',
-      onMessageReceived: (JavaScriptMessage message) async {
-        Map<String, dynamic>? map = json.decode(message.message.toString());
-        if (map == null) {
-          return;
-        }
-        String? jsMethodName = map["callbackMethod"];
-        String? allowMeidaTypeString = map["allowMeidaType"];
-        int maxCount = map["maxCount"] ?? 1;
-        bool showCamera = map["showCamera"] ?? true;
+      callBackWebViewControllerGetBlock: webViewControllerGetBlock,
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String? allowMeidaTypeString = h5Params?["allowMeidaType"];
+        int maxCount = h5Params?["maxCount"] ?? 1;
+        bool showCamera = h5Params?["showCamera"] ?? true;
 
         List<String> imageUrls = await pickMediasHandle(
           allowMeidaTypeString: allowMeidaTypeString,
@@ -45,13 +40,11 @@ extension AddJSChannel_Picker on WebViewController {
         Map<String, dynamic> jsCallbackMap = {
           "imageUrls": imageUrls, // 待考虑视频缩略图是否提供
         };
-        if (jsMethodName == null) {
-          WebViewController? webViewController = webViewControllerGetBlock();
-          webViewController?.cj_runJsMethodWithParamMap(
-            jsMethodName!,
-            params: jsCallbackMap,
-          );
-        }
+
+        return JSResponseModel.success(
+          isSuccess: true,
+          result: jsCallbackMap,
+        );
       },
     );
   }

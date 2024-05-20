@@ -4,11 +4,9 @@
  * @Author: dvlproad
  * @Date: 2024-04-29 18:36:52
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-04-30 11:36:50
+ * @LastEditTime: 2024-05-20 11:22:23
  * @Description: 
  */
-
-import 'dart:convert';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -25,18 +23,17 @@ extension AddJSChannel_CheckVersion on WebViewController {
     })
         checkVersion,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       'h5CallBridgeAction_checkVersion',
-      onMessageReceived: (JavaScriptMessage message) async {
-        Map map = json.decode(message.message.toString());
-        bool isManualCheck = map["isManualCheck"] ?? true;
-        String callOwner = map["callOwner"] ?? "h5";
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        bool isManualCheck = h5Params?["isManualCheck"] ?? true;
+        String callOwner = h5Params?["callOwner"] ?? "h5";
 
         checkVersion(
           isManualCheck: isManualCheck,
           callOwner: callOwner,
         ).then((value) {
-          String? jsMethodName = map["callbackMethod"];
+          String? jsMethodName = h5Params?["callbackMethod"];
 
           WebViewController? webViewController = webViewControllerGetBlock();
           if (jsMethodName != null) {
