@@ -17,3 +17,7 @@
 ## [0.0.5] - 2019-04-12
 
 * 添加 cjjs_share : 分享(TEXT文本、IMAGE图片地址、VIDEO视频地址、WEBPAGE网页链接)到微信
+  
+## [0.0.6] - 2019-04-13
+
+* 去除不应属于底层的冗余js，精简化底层。修复 JSResponseModel.success code错误问题

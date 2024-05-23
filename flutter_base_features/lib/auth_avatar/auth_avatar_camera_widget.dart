@@ -2,9 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-04-25 16:53:01
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-21 15:48:32
+ * @LastEditTime: 2024-05-22 18:44:42
  * @Description: 头像认证-2摄像头头像拍摄页
  */
+import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_log_with_env/flutter_log_with_env.dart';
@@ -120,8 +122,8 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
     MediaQueryData mediaQueryData = MediaQuery.of(context);
     final double screenWidth = mediaQueryData.size.width;
     final double screenHeight = mediaQueryData.size.height;
-    // final double paddingTop = mediaQueryData.padding.top;
-    final double paddingBottom = mediaQueryData.padding.bottom;
+    final double paddingTop = mediaQueryData.viewPadding.top;
+    final double paddingBottom = mediaQueryData.viewPadding.bottom;
 
     Widget cameraWidget = CameraPreview(controller!);
 
@@ -210,6 +212,7 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
                         ),
                         child: Image.asset(
                           'assets/auth_avatar/verify_icons.png',
+                          package: "flutter_base_features",
                           width: MediaQuery.of(context).size.width * 0.9,
                           fit: BoxFit.fitWidth,
                         ),
@@ -221,6 +224,7 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
             Positioned(
               left: 0,
               right: 0,
+              top: max(paddingTop, 40.h_pt_cj), // 避免安卓上取值为0，导致点击不了
               child: _renderAppbar(),
             ),
             Positioned(
@@ -257,8 +261,6 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
   }
 
   _renderAppbar() {
-    final double paddingTop = MediaQuery.of(context).padding.top;
-    // final double paddingTop = 40.h_pt_cj;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,7 +271,7 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
             width: 60.h_pt_cj,
             padding: EdgeInsets.only(
               left: 15.h_pt_cj,
-              top: paddingTop + 10.h_pt_cj,
+              top: 10.h_pt_cj,
               bottom: 15.h_pt_cj,
             ),
             child: Text(
@@ -286,7 +288,7 @@ class _AuthAvatarCameraWidgetState extends State<AuthAvatarCameraWidget> {
         ),
         Container(
           padding: EdgeInsets.only(
-            top: paddingTop + 10.h_pt_cj,
+            top: 10.h_pt_cj,
             bottom: 15.h_pt_cj,
           ),
           child: Text(

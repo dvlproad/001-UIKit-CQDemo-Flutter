@@ -153,6 +153,44 @@ extension AddCheckRunJS on WebViewController {
     );
   }
 
+  /// 用于处理所执行动作需要跨页面的事件（如实名认证、头像认证）
+  Future<void> cj1_addJavaScriptChannel_callback(
+    String name, {
+    // 执行回调的 webViewController 是哪一个(场景：一个页面上画了两个 webView， webView1点击时候，希望webView2数字+1)
+    required WebViewController? Function() callBackWebViewControllerGetBlock,
+    required void Function(Map<String, dynamic>? h5Params,
+            void Function(dynamic jsCallbackResult) callbackHandle)
+        onMessageReceived,
+  }) {
+    return cj1_addJavaScriptChannel(
+      name,
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        callbackHandle(dynamic jsCallbackResult) {
+          WebViewController? webViewController =
+              callBackWebViewControllerGetBlock(); // 避免另一个 controller 在某个时刻销毁了
+          if (webViewController == null) {
+            return;
+          }
+
+          String? jsMethodName = h5Params?["callbackMethod"];
+          if (jsMethodName == null || jsMethodName.isEmpty) {
+            return;
+          }
+          JSResponseModel jsResponseModel = JSResponseModel.success(
+            isSuccess: true,
+            result: jsCallbackResult,
+          );
+          webViewController.cj_runJsMethodWithParamMap(
+            jsMethodName,
+            params: jsResponseModel.toMap(),
+          );
+        }
+
+        onMessageReceived(h5Params, callbackHandle);
+      },
+    );
+  }
+
   Future<void> cj_addJavaScriptChannel(
     String name, {
     required void Function(JavaScriptMessage) onMessageReceived,

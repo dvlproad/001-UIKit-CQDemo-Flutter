@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-10 11:10:55
+ * @LastEditTime: 2024-05-23 11:44:35
  * @Description: 
  */
 class JSResponseModel {
@@ -11,7 +11,7 @@ class JSResponseModel {
   final dynamic result;
 
   JSResponseModel({
-    this.resultCode = 0,
+    this.resultCode = 0, // 0代表成功，其他值代表失败
     this.message,
     this.result,
   });
@@ -35,7 +35,7 @@ class JSResponseModel {
     dynamic result,
   }) {
     return JSResponseModel(
-      resultCode: isSuccess ? 1 : 0,
+      resultCode: isSuccess ? 0 : 1,
       result: result,
     );
   }

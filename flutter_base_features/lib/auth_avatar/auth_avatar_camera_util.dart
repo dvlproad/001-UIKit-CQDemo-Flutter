@@ -21,14 +21,16 @@ class AuthAvatarCameraUtil {
   /// 弹出 头像认证的摄像头页面，并回调获得摄像头图片的回调
   static showAvatarCamera({
     required BuildContext context,
+    bool useSafeArea = false,
     required String successResultTitle,
     // 对【拍照所得的】图片开始进行人脸识别（开始识别，和识别结果可能分开为两个接口)
     required void Function(String anyImagePath) startAuthTakePhotoHandle,
   }) {
     __showVerifyAvatarCamera(
       context: context,
+      useSafeArea: useSafeArea,
       onTapClose: (BuildContext cameraContext) {
-        Navigator.pop(context);
+        Navigator.pop(cameraContext);
       },
       takePhotoCompleteBlock: (
         cameraContext, {
@@ -57,8 +59,7 @@ class AuthAvatarCameraUtil {
   /// 弹出 头像认证-2摄像头头像拍摄页
   static __showVerifyAvatarCamera({
     required BuildContext context,
-    bool isDismissible = true,
-    bool enableDrag = true,
+    // bool isDismissible = true,
     bool useSafeArea = false,
     required void Function(BuildContext cameraContext) onTapClose,
     required void Function(BuildContext cameraContext,
@@ -68,8 +69,8 @@ class AuthAvatarCameraUtil {
     showModalBottomSheet(
       context: context,
       useSafeArea: useSafeArea,
-      isDismissible: isDismissible,
-      enableDrag: enableDrag,
+      // isDismissible: isDismissible,
+      // enableDrag: enableDrag,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.w_pt_cj),
       ),

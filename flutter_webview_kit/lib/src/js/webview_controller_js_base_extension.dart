@@ -4,7 +4,7 @@
  * @Author: dvlproad
  * @Date: 2023-01-13 18:54:24
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-20 11:16:07
+ * @LastEditTime: 2024-05-23 13:41:22
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -22,11 +22,10 @@ import './base/webview_controller_js_logout_extension.dart';
 import './base/webview_controller_js_ui_extension.dart';
 // import './base/webview_controller_js_info_share_extension.dart';
 
-// business
-import './business/webview_controller_js_auth_extension.dart';
-import './business/webview_controller_js_mp_extension.dart';
-import './business/webview_controller_js_pay_extension.dart';
-import './business/webview_controller_js_picker_extension.dart';
+// business 直接在 app 中设置
+// import './business/webview_controller_js_auth_extension.dart';
+// import './business/webview_controller_js_pay_extension.dart';
+// import './business/webview_controller_js_picker_extension.dart';
 // import './business/webview_controller_js_share_extension.dart';
 
 /// 添加JSChannel
@@ -73,6 +72,7 @@ extension AddJSChannel_CJBase on WebViewController {
     })
         checkVersion,
     required Future<bool> Function() logoutHandle,
+    required Future<bool> Function(String mpPath) goMpHandle,
     required Function(SystemUiOverlayStyle systemUiOverlayStyle)
         updateAppStatusBarStyleHandle,
     required Function(bool? shouldResize) updateResizeToAvoidBottomInsetHandle,
@@ -108,6 +108,11 @@ extension AddJSChannel_CJBase on WebViewController {
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
     cjjs_logout(logoutHandle: logoutHandle);
+    cjjs_launchWeChatMiniProgram(
+      goMpHandle: goMpHandle,
+      webViewControllerGetBlock: webViewControllerGetBlock,
+    );
+
     cjjs_updateAppStatusBarStyle(callBack: updateAppStatusBarStyleHandle);
     cjjs_updateResizeToAvoidBottomInset(
       callBack: updateResizeToAvoidBottomInsetHandle,
@@ -129,53 +134,6 @@ extension AddJSChannel_CJBase on WebViewController {
     cjjs_openAppSettings(openAppSettingsHandle: openAppSettingsHandle);
     cjjs_getUserLocationInfo(
       getUserLocationInfoHandle: getUserLocationInfoHandle,
-    );
-  }
-
-  // business
-  cjjs_business({
-    required Future<Map<String, dynamic>?> Function({
-      required String certName,
-      required String certNo,
-    })
-        authRealPersonResultMapGetHandle,
-    required Future<Map<String, dynamic>?> Function({
-      required String avatarUrl,
-    })
-        authAvatarResultMapGetHandle,
-    required Future<bool> Function(String mpPath) goMpHandle,
-    required Future<bool> Function({
-      required String payType,
-      required Map<String, dynamic> argsFromH5,
-    })
-        payHandle,
-    required Future<List<String>> Function({
-      String? allowMeidaTypeString,
-      required int maxCount,
-      required bool showCamera,
-    })
-        pickMediasHandle,
-    required WebViewController? Function() webViewControllerGetBlock,
-  }) {
-    cjjs_authRealPerson(
-      resultMapGetHandle: authRealPersonResultMapGetHandle,
-      webViewControllerGetBlock: webViewControllerGetBlock,
-    );
-    cjjs_authAvatar(
-      resultMapGetHandle: authAvatarResultMapGetHandle,
-      webViewControllerGetBlock: webViewControllerGetBlock,
-    );
-    cjjs_callWeChatMiniProgram(
-      goMpHandle: goMpHandle,
-      webViewControllerGetBlock: webViewControllerGetBlock,
-    );
-    cjjs_pay(
-      payHandle: payHandle,
-      webViewControllerGetBlock: webViewControllerGetBlock,
-    );
-    cjjs_pickMediasAndUpload(
-      pickMediasHandle: pickMediasHandle,
-      webViewControllerGetBlock: webViewControllerGetBlock,
     );
   }
 }

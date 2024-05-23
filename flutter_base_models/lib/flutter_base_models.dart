@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2024-05-11 09:37:42
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-17 13:12:05
+ * @LastEditTime: 2024-05-23 11:09:22
  * @Description: 
  */
 library flutter_base_models;
@@ -34,3 +34,16 @@ export './location/area_picker/base_area_picker_model.dart'; // area picker 数�
 export './location/area_picker/area_picker_address_model.dart'; // area picker 选择的结果集
 // location: both
 export './location/nearby_or_picker_adderss_model.dart';
+
+// auth
+export './auth/avatar_auth_service_info.dart';
+export './auth/avatar_first_must_auth_utiler.dart';
+
+// publish
+export './publish/jurisdiction_bean.dart';
+
+// pickers
+export './pickers/base_choose_item_model.dart';
+// pickers--date
+export './pickers/date/date_enum.dart';
+export './pickers/date/date_choose_rule_model.dart';

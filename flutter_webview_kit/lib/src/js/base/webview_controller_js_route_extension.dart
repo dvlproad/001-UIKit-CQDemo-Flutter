@@ -99,4 +99,24 @@ extension AddJSChannel_Route on WebViewController {
       },
     );
   }
+
+  /// 调起小程序，进入到指定界面(常用于：app中的h5页面，需要调起微信小程序执行支付等)
+  cjjs_launchWeChatMiniProgram({
+    required Future<bool> Function(String mpPath) goMpHandle,
+    required WebViewController? Function() webViewControllerGetBlock,
+  }) {
+    cj2_addJavaScriptChannel_asyncReceived(
+      'h5CallBridgeAction_goWechatMP',
+      callBackWebViewControllerGetBlock: webViewControllerGetBlock,
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String? path = h5Params?['path'];
+        if (path == null || path.isEmpty) {
+          return JSResponseModel.error(message: '缺少 path 参数');
+        }
+        // 返回值保持和微信sdk 的 launchWeChatMiniProgram 方法返回值一致，都是一个bool值
+        bool isSuccess = await goMpHandle(path);
+        return JSResponseModel.success(isSuccess: isSuccess);
+      },
+    );
+  }
 }
