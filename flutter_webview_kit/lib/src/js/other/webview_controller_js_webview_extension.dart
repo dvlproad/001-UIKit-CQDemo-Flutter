@@ -17,7 +17,7 @@ import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 extension AddJSChannel_WebView on WebViewController {
   /// 关闭webview
   cjjs_closeWebView({
-    required Function() closeWebViewHandle,
+    required void Function() closeWebViewHandle,
   }) {
     cj_addJavaScriptChannel(
       'h5CallBridgeAction_closeWebView',

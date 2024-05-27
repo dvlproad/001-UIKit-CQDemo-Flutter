@@ -62,7 +62,7 @@ extension AddJSChannel_Test on WebViewController {
         showMessageHandle(msg);
 
         Map callbackMap = {
-          "keyboardHeight": 123,
+          "userId": "123",
         };
         return JSResponseModel.success(
           isSuccess: true,

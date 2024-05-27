@@ -87,27 +87,4 @@ extension AddJSChannel_UI on WebViewController {
       },
     );
   }
-
-  /*
-  /// 获取键盘变化高度，并回调给h5
-  cjjs_getCurrentKeyboardHeight({
-    required WebViewController? Function() webViewControllerGetBlock,
-  }) {
-    cj_addJavaScriptChannel(
-      'h5CallBridgeAction_getCurrentKeyboardHeight',
-      onMessageReceived: (JavaScriptMessage message) async {
-        Map map = json.decode(message.message.toString());
-        String jsMethodName = map["callbackMethod"];
-        Map callbackMap = {
-          "keyboardHeight": 123,
-        };
-        WebViewController? webViewController = webViewControllerGetBlock();
-        webViewController?.cj_runJsMethodWithParamMap(
-          jsMethodName,
-          params: callbackMap,
-        );
-      },
-    );
-  }
-  */
 }

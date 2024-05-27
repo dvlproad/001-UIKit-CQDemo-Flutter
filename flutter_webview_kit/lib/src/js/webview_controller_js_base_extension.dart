@@ -28,6 +28,8 @@ import './base/webview_controller_js_ui_extension.dart';
 // import './business/webview_controller_js_picker_extension.dart';
 // import './business/webview_controller_js_share_extension.dart';
 
+import './other/webview_controller_js_webview_extension.dart';
+
 /// 添加JSChannel
 extension AddJSChannel_CJBase on WebViewController {
   // test
@@ -51,6 +53,7 @@ extension AddJSChannel_CJBase on WebViewController {
   // base
   cjjs_base({
     required BuildContext? Function() contextGetBlock,
+    required void Function() closeWebViewHandle,
     required Future<Map<String, dynamic>> Function() fixedAppInfoGetBlock,
     required Future<Map<String, dynamic>> Function() fixedMonitorInfoGetBlock,
     required String? Function() getCurrentUserToken,
@@ -78,6 +81,7 @@ extension AddJSChannel_CJBase on WebViewController {
     required Function(bool? shouldResize) updateResizeToAvoidBottomInsetHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
+    cjjs_closeWebView(closeWebViewHandle: closeWebViewHandle);
     cjjs_getFixedAppInfo(
       callbackMapGetBlock: fixedAppInfoGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
