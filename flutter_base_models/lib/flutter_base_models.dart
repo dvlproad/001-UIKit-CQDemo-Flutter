@@ -50,3 +50,9 @@ export './pickers/date/date_choose_rule_model.dart';
 
 // tree
 export './tree/base_tree_model.dart';
+
+// services
+export './services/user/base_user_singleton.dart';
+export './services/user/user_event.dart';
+export './services/user/user_cache_protocal.dart';
+export './services/user/user_update_protocal.dart';

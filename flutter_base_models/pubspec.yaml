@@ -1,6 +1,6 @@
 name: flutter_base_models
 description: 一个应用的所有基础模型.
-version: 0.0.3
+version: 0.0.4
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_models
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_base_models
 
@@ -12,12 +12,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_image_process: ^0.0.8
+  flutter_cache_kit: ^0.0.2       # service 保存数据需要使用
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-
-  flutter_image_process: ^0.0.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
