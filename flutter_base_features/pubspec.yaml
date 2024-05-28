@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_base_models: ^0.0.2
+  flutter_base_models: ^0.0.3
 
   flutter_optimize_interacte: ^0.0.1
   flutter_baseui_kit: ^0.0.4

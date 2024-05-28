@@ -47,3 +47,6 @@ export './pickers/base_choose_item_model.dart';
 // pickers--date
 export './pickers/date/date_enum.dart';
 export './pickers/date/date_choose_rule_model.dart';
+
+// tree
+export './tree/base_tree_model.dart';

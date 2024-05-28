@@ -21,6 +21,7 @@ class PersonModel {
   PersonModel({required this.name, required this.age, required this.email});
 }
 
+// 定义一个 converter 而不是 子类
 class PersonJsonConvert extends BaseJsonConvert<PersonModel> {
   @override
   PersonModel fromJson(Map<String, dynamic> json) {

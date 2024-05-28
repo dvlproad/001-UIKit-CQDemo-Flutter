@@ -6,6 +6,7 @@
  * @Description: 
  */
 
+// import '../tree/base_tree_model.dart';
 import '../user/user_base_model.dart';
 import './social_count_protocal.dart';
 import './enum_like_status.dart';
@@ -27,8 +28,10 @@ class AppReplyToModle {
   });
 }
 
-class BaseCommentModel<TUser extends UserBaseModel>
-    implements SocialLikeProtocal, SocialCommentProtocal {
+class BaseCommentModel<TUser extends UserBaseModel> //extends BaseTreeModel
+    implements
+        SocialLikeProtocal,
+        SocialCommentProtocal {
   final int levelIndex; // 层数索引
   TUser sender; // 发布人 信息(不能final，因为发布时候后台一般不返回数据，所以需要自己补充)
   TUser? receiver; // 接受者 信息(不能final，因为发布时候后台一般不返回数据，所以需要自己补充)
