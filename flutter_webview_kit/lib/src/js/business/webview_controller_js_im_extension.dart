@@ -16,9 +16,54 @@ import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
 /// 添加JSChannel
 extension AddJSChannel_IM on WebViewController {
   cjjs_im({
+    required BuildContext? Function() contextGetBlock,
     void Function()? sendIMCompleteBlock,
   }) {
     // WebViewController controller = this;
+    /// 根据用户的 userId ，进入用户私聊窗口
+    cj1_addJavaScriptChannel(
+      'h5CallBridgeAction_goChatByUserId',
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String? userId = h5Params?["userId"];
+        if (userId == null || userId.isEmpty) {
+          return; // JSResponseModel.error(message: '缺少 userId 参数');
+        }
+
+        BuildContext? context = contextGetBlock();
+        if (context == null) {
+          return;
+        }
+
+        ChatPageRouterUtil.openChatByUserId(
+          context,
+          uid: userId,
+          fromPageSource: ChatFromPageSource.h5appoint,
+        );
+      },
+    );
+
+    /// 根据用户的 im 会话 id，进入用户私聊窗口
+    cj1_addJavaScriptChannel(
+      'h5CallBridgeAction_goChatByConversationId',
+      onMessageReceived: (Map<String, dynamic>? h5Params) async {
+        String? conversationId = h5Params?["conversationId"];
+        if (conversationId == null || conversationId.isEmpty) {
+          return; // JSResponseModel.error(message: '缺少 conversationId 参数');
+        }
+
+        BuildContext? context = contextGetBlock();
+        if (context == null) {
+          return;
+        }
+
+        ChatPageRouterUtil.openChatByConversationId(
+          context,
+          conversationId: conversationId,
+          fromPageSource: ChatFromPageSource.h5appoint,
+        );
+      },
+    );
+    
     cj1_addJavaScriptChannel(
       'h5CallBridgeAction_sendIMText',
       onMessageReceived: (Map<String, dynamic>? h5Params) async {

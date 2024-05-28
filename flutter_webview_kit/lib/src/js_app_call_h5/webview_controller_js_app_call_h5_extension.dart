@@ -4,14 +4,14 @@
  * @Author: dvlproad
  * @Date: 2024-04-27 01:44:59
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-10 13:35:55
+ * @LastEditTime: 2024-05-28 16:24:28
  * @Description: 
  */
 import 'package:flutter/material.dart';
 
 import 'package:webview_flutter/webview_flutter.dart';
 
-import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
+import '../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 //webView的方法
 extension AppCallH5JSExtension on WebViewController {
@@ -39,12 +39,25 @@ extension AppCallH5JSExtension on WebViewController {
     }
   }
 
-  sendKeyboardHeight(double keyboardHeight) async {
+  /// 更新 键盘显示隐藏及高度变化
+  cj_sendKeyboardHeight(double keyboardHeight) async {
     cj_runJsMethodWithParamMap(
-      '__on_jsb_observeKeyboardHeight',
+      '__on_did_change_keyboard_height',
       params: {
         'keyboardHeight': keyboardHeight,
       },
     );
   }
+
+  /*
+  /// 更新 用户登录状态变化(浏览app页面时状态变化会直接退到登录页，浏览h5页面时状态变化调用 logout 的js方法也会退到登录页，所以不需要上报此状态)
+  cj_sendUserLoginState(bool isLogin) async {
+    cj_runJsMethodWithParamMap(
+      '__on_did_change_user_login_state',
+      params: {
+        'isLogin': isLogin,
+      },
+    );
+  }
+  */
 }

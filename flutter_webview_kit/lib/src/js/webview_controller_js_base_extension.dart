@@ -53,12 +53,15 @@ extension AddJSChannel_CJBase on WebViewController {
   // base
   cjjs_base({
     required BuildContext? Function() contextGetBlock,
-    required void Function() closeWebViewHandle,
+    required void Function()? closeWebViewHandle, // 自定义关闭事件
     required Future<Map<String, dynamic>> Function() fixedAppInfoGetBlock,
     required Future<Map<String, dynamic>> Function() fixedMonitorInfoGetBlock,
     required String? Function() getCurrentUserToken,
     required Map<String, dynamic> Function() currentUserInfoGetBlock,
     required void Function(String message) showToastHandle,
+    required void Function(String? title, String? message, {String? bizType})
+        showAlertHandle,
+    required void Function(bool show, bool onlyContext) showHudHandle,
     required void Function(String url) jumpAppPageUrlHandle,
     required void Function(
       String pageName, {
@@ -81,7 +84,28 @@ extension AddJSChannel_CJBase on WebViewController {
     required Function(bool? shouldResize) updateResizeToAvoidBottomInsetHandle,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cjjs_closeWebView(closeWebViewHandle: closeWebViewHandle);
+    cjjs_closeWebView(
+      closeWebViewHandle: () {
+        if (closeWebViewHandle != null) {
+          closeWebViewHandle();
+          return;
+        }
+
+        BuildContext? context = contextGetBlock();
+        if (context == null) {
+          return;
+        }
+        bool canPop = Navigator.canPop(context);
+        if (canPop) {
+          Navigator.pop(context); // 🚑：请先判断，避免白屏
+        } else {
+          showToastHandle(
+              "调用 h5CallBridgeAction_closeWebView 关闭网页失败。不能无脑执行 Navigator.pop(context); 否则会出现白屏");
+          // controller.goBack();
+          // Navigator.popUntil(context, ModalRoute.withName('/'));
+        }
+      },
+    );
     cjjs_getFixedAppInfo(
       callbackMapGetBlock: fixedAppInfoGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
@@ -99,7 +123,10 @@ extension AddJSChannel_CJBase on WebViewController {
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
 
-    cjjs_showAppToast(resultHandle: showToastHandle);
+    cjjs_showAppToast(showToastHandle: showToastHandle);
+    cjjs_showAppAlert(showAlertHandle: showAlertHandle);
+    cjjs_showAppHud(showHudHandle: showHudHandle);
+
     cjjs_jumpAppPageUrl(resultHandle: jumpAppPageUrlHandle);
     cjjs_jumpAppPageName(resultHandle: jumpAppPageNameHandle);
     cjjs_backToHomeIndex(resultHandle: backToHomeIndexHandle);

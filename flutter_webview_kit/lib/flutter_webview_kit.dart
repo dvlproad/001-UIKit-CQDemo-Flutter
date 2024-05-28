@@ -19,7 +19,7 @@ export './src/js_add_check_run/h5_call_bridge_response_model.dart'; // (调用 c
 export './src/js/webview_controller_js_base_extension.dart';
 export './src/js/base/webview_controller_js_share_extension.dart';
 // js: app_call_h5
-export './src/js/app_call_h5/webview_controller_js_app_call_h5_extension.dart';
+export './src/js_app_call_h5/webview_controller_js_app_call_h5_extension.dart';
 
 // webview: error / reshow
 export './src/web_error_or_reshow/webview_controller_web_error_reshow_extension.dart';

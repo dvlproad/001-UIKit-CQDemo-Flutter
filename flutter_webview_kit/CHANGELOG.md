@@ -22,7 +22,7 @@
 
 * 去除不应属于底层的冗余js，精简化底层。修复 JSResponseModel.success code错误问题
 
-## [0.0.7] - 2019-04-13
+## [0.0.8] - 2019-04-13
 
 * 添加遗漏的 cjjs_closeWebView 方法
 
