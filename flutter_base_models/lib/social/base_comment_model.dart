@@ -17,11 +17,11 @@ class AppReplyInfoProctocal {
   AppReplyInfoProctocal({required this.parentId, required this.rootId});
 }
 
-class AppReplyToModle {
+class AppReplyToModel {
   final String userId;
   final int parentId; // 父级id: 回复时候父级id即自身
   final int rootId; // 根级id: 回复时候根级id都一样
-  AppReplyToModle({
+  AppReplyToModel({
     required this.userId,
     required this.parentId,
     required this.rootId,
@@ -37,7 +37,7 @@ class BaseCommentModel<TUser extends UserBaseModel> //extends BaseTreeModel
   TUser? receiver; // 接受者 信息(不能final，因为发布时候后台一般不返回数据，所以需要自己补充)
   final String? sendTimeString; // 评论时间
   final String id;
-  final AppReplyToModle infoForReply; // 如果点击此条，进行回复的数据
+  final AppReplyToModel infoForReply; // 如果点击此条，进行回复的数据
   String content; // 评论内容
   final List<String>? atUserIds;
 

@@ -2,15 +2,16 @@
  * @Author: dvlproad
  * @Date: 2022-04-18 03:24:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-28 11:23:32
+ * @LastEditTime: 2024-05-28 12:54:17
  * @Description: 用户基类
  */
 import '../services/user/user_event.dart';
 // import '../services/user/user_update_protocal.dart';
 
+// 1、如果基类定义为 abstract 则子类无法使用 UserDetailModel.fromJson(Map<String, dynamic> json) 只能用 static UserDetailModel fromJson(Map<String, dynamic> json) 方法。
 // abstract class UserBaseModel<T extends UserBaseModel<T>> with UserUpdateProtocal<T> {
-abstract class UserBaseModel {
-  final String userId;
+class UserBaseModel {
+  String userId;
   String nickname;
   String? avatar; // 不使用 final 怕有些地方需要修改头像
   int? sex;

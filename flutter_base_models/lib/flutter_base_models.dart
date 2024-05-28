@@ -14,7 +14,9 @@ export './base_json_convert.dart';
 export './user/user_base_model.dart';
 export './user/user_enum_avatar.dart';
 export './user/user_enum_realname.dart';
-export './user/user_level_protocal.dart';
+export './user/protocal/user_level_protocal.dart';
+export './user/relation/user_relation_model.dart';
+export './user/relation/user_relation_tag_model.dart';
 
 // social
 export './social/base_comment_model.dart';
@@ -41,8 +43,13 @@ export './auth/avatar_first_must_auth_utiler.dart';
 
 // publish
 export './publish/jurisdiction_bean.dart';
+export './publish/base_publish_model.dart';
+
+// topic
+export './topic/base_topic_model.dart';
 
 // pickers
+export './pickers/base_choose_item_util.dart';
 export './pickers/base_choose_item_model.dart';
 // pickers--date
 export './pickers/date/date_enum.dart';
