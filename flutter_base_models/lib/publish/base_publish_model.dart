@@ -34,7 +34,9 @@ class BasePublishModel<
     TTopic,
     TUser> {
   // 内容id(更新的时候才有此值)
-  String? wishId;
+  String? publishId;
+  // 如果存在 publishId ，则其是否是用来做编辑的，默认 true编辑 false重新发布
+  bool publishIdAsEditIdIfExsit;
 
   /// 1、内容
   // 文本
@@ -66,7 +68,8 @@ class BasePublishModel<
   List<TUser>? selectUsers;
 
   BasePublishModel({
-    this.wishId,
+    this.publishId,
+    this.publishIdAsEditIdIfExsit = true,
     this.publishTitle,
     this.publishDescribe,
     this.messageAtUserIds,

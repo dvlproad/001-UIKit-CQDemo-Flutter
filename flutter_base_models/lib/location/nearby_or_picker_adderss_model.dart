@@ -69,6 +69,7 @@ class NearbyOrAreaPickerAddressModel extends BaseAddressModel {
       areaName: areaPickerAddressModel.areaName,
       areaCode: areaPickerAddressModel.areaCode,
       address: areaPickerAddressModel.address,
+      name: areaPickerAddressModel.address, // 区域的 name 设为和 address 同值
       provinceIndex: areaPickerAddressModel.provinceIndex,
       cityIndex: areaPickerAddressModel.cityIndex,
       areaIndex: areaPickerAddressModel.areaIndex,
