@@ -148,11 +148,20 @@ extension AddJSChannel_CJBase on WebViewController {
     cjjs_updateResizeToAvoidBottomInset(
       callBack: updateResizeToAvoidBottomInsetHandle,
     );
+  }
+
+  // ui
+  cjjs_ui({
+    required BuildContext? Function() contextGetBlock,
+    required WebViewController? Function() webViewControllerGetBlock,
+    required Future<String> Function()
+        platformDescriptionGetBlock, // 补充获取平台描述含①系统名称(iOS、Android等）、②是否有底部标签栏，避免h5提供的日志未说明设备环境
+  }) {
     cjjs_getScreenInfo(
       contextGetBlock: contextGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
+      platformDescriptionGetBlock: platformDescriptionGetBlock,
     );
-    // share
   }
 
   // hardware

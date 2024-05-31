@@ -6,8 +6,6 @@
  * @Description: 
  */
 // ignore_for_file: non_constant_identifier_names, camel_case_extensions
-import 'dart:convert';
-
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
@@ -19,15 +17,10 @@ extension AddJSChannel_Route on WebViewController {
   cjjs_jumpAppPageUrl({
     required void Function(String url) resultHandle,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       'h5CallBridgeAction_jumpAppPageUrl',
-      onMessageReceived: (JavaScriptMessage message) {
-        String jsonString = message.message.toString();
-        Map? map = json.decode(jsonString);
-        if (map == null) {
-          return;
-        }
-        String? url = map['url'];
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        String? url = h5Params?['url'];
         if (url == null || url.isEmpty) {
           return;
         }
@@ -46,13 +39,12 @@ extension AddJSChannel_Route on WebViewController {
     })
         resultHandle,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       "h5CallBridgeAction_jumpAppPageName",
-      onMessageReceived: (JavaScriptMessage message) {
-        Map map = json.decode(message.message);
-        String pageName = map["pageName"];
-        Map<String, dynamic>? pageParams = map["pageParams"];
-        Map<String, dynamic>? pageBackParams = map["pageBackParams"];
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        String pageName = h5Params?["pageName"];
+        Map<String, dynamic>? pageParams = h5Params?["pageParams"];
+        Map<String, dynamic>? pageBackParams = h5Params?["pageBackParams"];
         resultHandle(
           pageName,
           pageParams: pageParams,
@@ -66,14 +58,10 @@ extension AddJSChannel_Route on WebViewController {
   cjjs_backToHomeIndex({
     required void Function(int homeIndex) resultHandle,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       'h5CallBridgeAction_backToHomeIndex',
-      onMessageReceived: (JavaScriptMessage message) {
-        Map<String, dynamic>? map = json.decode(message.message.toString());
-        if (map == null) {
-          return;
-        }
-        int? homeIndex = map["homeIndex"];
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        int? homeIndex = h5Params?["homeIndex"];
         if (homeIndex != null) {
           resultHandle(homeIndex);
         }

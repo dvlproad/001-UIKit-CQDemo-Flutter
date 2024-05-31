@@ -19,7 +19,7 @@ extension AddJSChannel_Pickers on WebViewController {
     required BuildContext? Function() contextGetBlock,
   }) {
     WebViewController controller = this;
-    cj1_addJavaScriptChannel_callback(
+    cj1_addJavaScriptChannel_callbackResult(
       'h5CallBridgeAction_pickMediasAndUpload',
       callBackWebViewControllerGetBlock: () => controller,
       onMessageReceived: (

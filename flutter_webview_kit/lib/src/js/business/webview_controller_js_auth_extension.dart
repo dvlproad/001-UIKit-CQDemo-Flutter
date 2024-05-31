@@ -20,7 +20,7 @@ extension AddJSChannel_Auth on WebViewController {
     required Function(String message) showPermissionDialog,
   }) {
     WebViewController controller = this;
-    cj1_addJavaScriptChannel_callback(
+    cj1_addJavaScriptChannel_callbackResult(
       'h5CallBridgeAction_go_auth_realname',
       callBackWebViewControllerGetBlock: () => controller,
       onMessageReceived: (
@@ -45,7 +45,7 @@ extension AddJSChannel_Auth on WebViewController {
         );
       },
     );
-    cj1_addJavaScriptChannel_callback(
+    cj1_addJavaScriptChannel_callbackResult(
       'h5CallBridgeAction_go_auth_avatar',
       callBackWebViewControllerGetBlock: () => controller,
       onMessageReceived: (

@@ -7,8 +7,6 @@
  * @LastEditTime: 2024-04-30 11:35:30
  * @Description: 
  */
-import 'dart:convert';
-
 import 'package:webview_flutter/webview_flutter.dart';
 
 import '../../js_add_check_run/webview_controller_add_check_run_js.dart';
@@ -32,12 +30,10 @@ extension AddJSChannel_WebView on WebViewController {
     required Function() updateCompleteBlock,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
-    cj_addJavaScriptChannel(
+    cj1_addJavaScriptChannel(
       'h5CallBridgeAction_reloadAppWebView',
-      onMessageReceived: (JavaScriptMessage message) {
-        String jsonString = message.message.toString();
-        Map map = json.decode(jsonString);
-        String? url = map['url'];
+      onMessageReceived: (Map<String, dynamic>? h5Params) {
+        String? url = h5Params?['url'];
         if (url == null || url.isEmpty) {
           return;
         }

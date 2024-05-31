@@ -18,9 +18,11 @@ extension AppCallH5JSExtension on WebViewController {
   /// 发送app生命周期状态
   cj_sendAppLifecycleState(AppLifecycleState state) async {
     String stateString = _getAppLifecycleStateString(state);
-    cj_runJsMethodWithParamString(
+    cj_runJsMethodWithParamMap(
       '__on_did_change_app_lifecycle_state',
-      jsParamJsonString: stateString,
+      params: {
+        "state": stateString,
+      },
     );
   }
 

@@ -26,3 +26,7 @@
 
 * 添加遗漏的 cjjs_closeWebView 方法
 
+## [0.0.9] - 2019-04-15
+
+* 增加js运行到不存在的方法的时候也会提示，由外部过滤是否去掉提示；添加 platformDescriptionGetBlock 方法，告知ui边距来源的平台； 添加 h5 数据的持久化方法；并整理统一h5参数转为h5Params的方法
+

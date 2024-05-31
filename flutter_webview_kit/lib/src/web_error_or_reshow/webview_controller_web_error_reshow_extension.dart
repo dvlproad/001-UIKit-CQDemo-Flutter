@@ -66,7 +66,7 @@ extension ReshowReloadExtension on WebViewController {
 
     bool isAlive = true;
     if (checkAliveMethodName != null) {
-      bool exsitJSMethod = await exsitJsMethodName(checkAliveMethodName);
+      bool exsitJSMethod = await cj_exsitJsMethodName(checkAliveMethodName);
       isAlive = exsitJSMethod;
     }
 
