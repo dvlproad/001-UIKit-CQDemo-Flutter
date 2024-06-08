@@ -72,10 +72,10 @@ extension AddJSChannel_Pickers on WebViewController {
                   }
                 }
               }
-              Map<String, dynamic> jsCallbackMap = {
+              Map<String, dynamic> jsCallbackResult = {
                 "imageUrls": imageUrls,
               };
-              callbackHandle(jsCallbackMap);
+              callbackHandle(jsCallbackResult);
             });
           },
         );

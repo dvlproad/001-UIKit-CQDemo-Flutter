@@ -15,30 +15,51 @@ import '../js_add_check_run/webview_controller_add_check_run_js.dart';
 
 //webView的方法
 extension AppCallH5JSExtension on WebViewController {
-  /// 发送app生命周期状态
-  cj_sendAppLifecycleState(AppLifecycleState state) async {
-    String stateString = _getAppLifecycleStateString(state);
+  /// 发送 webview 页面是否显示的状态
+  cj_sendWebviewShowState(bool isShow) async {
     cj_runJsMethodWithParamMap(
-      '__on_did_change_app_lifecycle_state',
+      '__on_did_change_webview_show_state',
       params: {
-        "state": stateString,
+        "isShow": isShow,
       },
     );
   }
 
-  String _getAppLifecycleStateString(AppLifecycleState state) {
+  /// 发送app生命周期状态（不能用此状态来判断页面是否显示）
+  cj_sendAppLifecycleState(AppLifecycleState state) async {
+    String stateString;
+    String stateDescription;
+    // [Flutter的应用生命周期状态（lifecycleState）管理](https://blog.csdn.net/qq_28550263/article/details/134127670)
     switch (state) {
       case AppLifecycleState.inactive:
-        return 'inactive';
+        stateString = 'inactive';
+        stateDescription = '非活动状态：仍然位于前台，但不能响应用户交互。【执行一些暂停操作，例如停止定时器或保存应用程序状态】';
+        break;
       case AppLifecycleState.paused:
-        return 'paused';
+        stateString = 'paused';
+        stateDescription = '从前台进入后台/设备锁屏或进入睡眠模式';
+        break;
       case AppLifecycleState.resumed:
-        return 'resumed';
+        stateString = 'resumed';
+        stateDescription = '从后台返回到前台并可见时';
+        break;
       case AppLifecycleState.detached:
-        return 'detached';
+        stateString = 'detached';
+        stateDescription = '分离状态：表示应用程序尚未启动或已经被销毁';
+        break;
       default:
-        return state.toString().split('.').last;
+        stateString = state.toString().split('.').last;
+        stateDescription = '';
+        break;
     }
+
+    cj_runJsMethodWithParamMap(
+      '__on_did_change_app_lifecycle_state',
+      params: {
+        "state": stateString,
+        "stateDescription": stateDescription,
+      },
+    );
   }
 
   /// 更新 键盘显示隐藏及高度变化

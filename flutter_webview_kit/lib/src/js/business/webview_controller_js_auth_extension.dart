@@ -35,12 +35,12 @@ extension AddJSChannel_Auth on WebViewController {
         UserAuthRouterUtil.goAuthName(
           context: context,
           authPassCompleteBlock: () {
-            Map<String, dynamic> jsCallbackMap = {
+            Map<String, dynamic> jsCallbackResult = {
               // "newAvatarUrl": newAvatarUrl,
               // "newAvatarStatus": avatarNumber(newAvatarStatus),
             };
 
-            callbackHandle(jsCallbackMap);
+            callbackHandle(jsCallbackResult);
           },
         );
       },
@@ -61,11 +61,11 @@ extension AddJSChannel_Auth on WebViewController {
           successResultTitle: "头像认证成功",
           onValueChangeAvatarStatus:
               (String newAvatarUrl, AvatarStatus newAvatarStatus) {
-            Map<String, dynamic> jsCallbackMap = {
+            Map<String, dynamic> jsCallbackResult = {
               "newAvatarUrl": newAvatarUrl,
               "newAvatarStatus": avatarNumber(newAvatarStatus),
             };
-            callbackHandle(jsCallbackMap);
+            callbackHandle(jsCallbackResult);
           },
         );
       },
@@ -86,13 +86,13 @@ extension AddJSChannel_Auth on WebViewController {
             showPermissionDialog("无法使用摄像头，请在手机应用权限管理中打开摄像头权限");
           },
         );
-        Map<String, dynamic>? callbackMap = {
+        Map<String, dynamic>? jsCallbackResult = {
           "resultInfo": resultInfo?.toJson()
         };
 
         return JSResponseModel.success(
           isSuccess: true,
-          result: callbackMap,
+          result: jsCallbackResult,
         );
       },
     );
@@ -112,13 +112,13 @@ extension AddJSChannel_Auth on WebViewController {
   //     onMessageReceived: (Map<String, dynamic>? h5Params) async {
   //       String certName = h5Params?['certName'] ?? "";
   //       String certNo = h5Params?['certNo'] ?? "";
-  //       Map<String, dynamic>? callbackMap = await resultMapGetHandle(
+  //       Map<String, dynamic>? jsCallbackResult = await resultMapGetHandle(
   //         certNo: certNo,
   //         certName: certName,
   //       );
   //       return JSResponseModel.success(
   //         isSuccess: true,
-  //         result: callbackMap,
+  //         result: jsCallbackResult,
   //       );
   //     },
   //   );

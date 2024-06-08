@@ -7,6 +7,8 @@
  * @LastEditTime: 2024-05-23 13:41:22
  * @Description: 
  */
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -35,17 +37,23 @@ extension AddJSChannel_CJBase on WebViewController {
   // test
   cjjs_test({
     required Future Function() closeWebToNativeBeforeOpenBrowserHandle,
+    // 关闭当前 web 以返回到原生页面，并打开浏览器用于测试浏览器上的链接能否直接打开app
+    required void Function() closeWebviewHandle,
+    // 离开app，打开浏览器前在app上的停留时间
+    required Duration beforeGoBrowserNeedWaitDuration,
     required Future Function(String errorMessage) openBrowserErrorHandle,
     required void Function(String? message) showMessageHandle,
+    required dynamic Function() callbackResultGetBlock,
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
     cjjs_test_openBrowser(
-      closeWebToNativeBeforeOpenBrowserHandle:
-          closeWebToNativeBeforeOpenBrowserHandle,
+      closeWebviewHandle: closeWebviewHandle,
+      beforeGoBrowserNeedWaitDuration: beforeGoBrowserNeedWaitDuration,
       errorHandle: openBrowserErrorHandle,
     );
     cjjs_test_h5CallAppAndCallBackToH5(
       showMessageHandle: showMessageHandle,
+      callbackResultGetBlock: callbackResultGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
     );
   }
@@ -154,13 +162,20 @@ extension AddJSChannel_CJBase on WebViewController {
   cjjs_ui({
     required BuildContext? Function() contextGetBlock,
     required WebViewController? Function() webViewControllerGetBlock,
-    required Future<String> Function()
+    required Future<String> Function()?
         platformDescriptionGetBlock, // 补充获取平台描述含①系统名称(iOS、Android等）、②是否有底部标签栏，避免h5提供的日志未说明设备环境
   }) {
     cjjs_getScreenInfo(
       contextGetBlock: contextGetBlock,
       webViewControllerGetBlock: webViewControllerGetBlock,
-      platformDescriptionGetBlock: platformDescriptionGetBlock,
+      platformDescriptionGetBlock: () async {
+        if (platformDescriptionGetBlock != null) {
+          return await platformDescriptionGetBlock();
+        }
+        String des = Platform.operatingSystem;
+        des += "(${Platform.operatingSystemVersion})";
+        return des;
+      },
     );
   }
 
