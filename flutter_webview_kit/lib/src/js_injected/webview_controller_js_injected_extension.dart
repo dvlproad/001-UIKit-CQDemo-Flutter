@@ -14,14 +14,20 @@ extension AddJSChannel_InjectedJS on WebViewController {
   Future<bool> injectedJs({
     required String execJSMethod,
     required Map<String, dynamic> execJSParams,
+    Map<String, dynamic> Function()? execJSCallBackMapGetHandle,
+    String injectedTime = 'onload', // 注入时机 onload \ now
     String injectedUIPosition = 'none',
   }) async {
-    bool injectedSuccess = await _injectedJavaScript(jsMethod: execJSMethod);
+    bool injectedSuccess = await _injectedJavaScript(
+      jsMethod: execJSMethod,
+      execJSCallBackMapGetHandle: execJSCallBackMapGetHandle,
+    );
 
     if (['top', 'bottom', 'overlay'].contains(injectedUIPosition)) {
       // 如果不需要在html中注入UI来执行Js，而是原生按钮执行JS，请使用 testJSRunButton
       injectedJavaScript_UI_execJSWhenClick(
         addPosition: injectedUIPosition,
+        injectedTime: injectedTime,
         execJSMethod: execJSMethod,
         execJSParams: execJSParams,
       );
@@ -30,7 +36,65 @@ extension AddJSChannel_InjectedJS on WebViewController {
     return injectedSuccess;
   }
 
-  Future<bool> _injectedJavaScript({required String jsMethod}) async {
+  Future<bool> _injectedJavaScript({
+    required String jsMethod,
+    Map<String, dynamic> Function()? execJSCallBackMapGetHandle,
+  }) async {
+    String? execJSCallBackJson;
+    if (execJSCallBackMapGetHandle != null) {
+      Map<String, dynamic> execJSCallBackMap = execJSCallBackMapGetHandle();
+      execJSCallBackJson = json.encode(execJSCallBackMap);
+    }
+
+    String addJavaScript = """
+    // 测试方法带回调
+    // 方法一：
+    // window.testInjectedMethod_showJsonWithCallbackMethod = function(json) {
+    // 方法二：使用变量。📢:注意js中使用 外部变量 和 使用内部变量 的写法区别
+    // var injectedJSMethod = "testInjectedMethod_showJsonWithCallbackMethod"
+    var injectedJSMethod = `$jsMethod`;
+    window[`\${injectedJSMethod}`] = function(json) {
+      console.log(`正在执行:\${injectedJSMethod}`)
+      var arguments = JSON.parse(json);
+      var callbackMethod = arguments['callbackMethod'];
+      if (callbackMethod === undefined || callbackMethod === null) {
+        var errorMessage = "缺少 callbackMethod 参数";
+        alert(errorMessage);
+        return;
+      }
+      delete arguments.callbackMethod; // 删除键为 'callbackMethod' 的属性
+
+      var execMessage = `正在执行app调用h5，并返回回调:`
+      execMessage += `\n执行js方法:\${injectedJSMethod}`
+      execMessage += `\n执行js参数:\${JSON.stringify(arguments)}`
+      execMessage += `\n回调方法:\${callbackMethod}`
+      var sendMessageString = `$execJSCallBackJson`;
+      if (sendMessageString === undefined || sendMessageString === null) {
+        sendMessageString = "";
+      }
+      execMessage += `\n回调值:\${sendMessageString}`
+      console.log(execMessage)
+      alert(execMessage);
+      var funName = callbackMethod;
+      var sendMessage = sendMessageString;
+      try {
+        eval(funName).postMessage(sendMessage);
+      } catch (err) {
+        var evalErrorMessage = `【执行错误如下】\n方法：\${funName} \n原因：\${err}`;
+        console.log(evalErrorMessage);
+        alert(evalErrorMessage);
+      }
+    };
+  """;
+
+    await runJavaScript(addJavaScript);
+
+    await _injectedJavaScript_test();
+
+    return true;
+  }
+
+  Future<bool> _injectedJavaScript_test() async {
     String addJavaScript = """
     // 定义showToast方法
     window.showToastNone = function() {
@@ -65,47 +129,6 @@ extension AddJSChannel_InjectedJS on WebViewController {
     showToastBBB = function(message) {
       alert(message);
     };
-
-    // 测试方法带回调
-    // 方法一：
-    // window.testInjectedMethod_showJsonWithCallbackMethod = function(json) {
-    // 方法二：使用变量。📢:注意js中使用 外部变量 和 使用内部变量 的写法区别
-    // var injectedJSMethod = "testInjectedMethod_showJsonWithCallbackMethod"
-    var injectedJSMethod = `$jsMethod`;
-    window[`\${injectedJSMethod}`] = function(json) {
-      console.log(`正在执行:\${injectedJSMethod}`)
-      var arguments = JSON.parse(json);
-      var callbackMethod = arguments['callbackMethod'];
-      if (callbackMethod === undefined || callbackMethod === null) {
-        var errorMessage = "缺少 callbackMethod 参数";
-        alert(errorMessage);
-        return;
-      }
-      delete arguments.callbackMethod; // 删除键为 'callbackMethod' 的属性
-
-      var sendMessage = {
-        "h5Title": "这是h5内部返回的标题",
-        "h5Message": "这是h5内部返回的描述信息",
-        "message": "这是h5内部返回的描述信息message",
-      };
-      var sendMessageString = JSON.stringify(sendMessage)
-      var execMessage = `正在执行app调用h5，并返回回调:`
-      execMessage += `\n执行js方法:\${injectedJSMethod}`
-      execMessage += `\n执行js参数:\${JSON.stringify(arguments)}`
-      execMessage += `\n回调方法:\${callbackMethod}`
-      execMessage += `\n回调值:\${sendMessageString}`
-      console.log(execMessage)
-      alert(execMessage);
-      var funName = callbackMethod;
-      var sendMessage = sendMessageString;
-      try {
-        eval(funName).postMessage(sendMessage);
-      } catch (err) {
-        var evalErrorMessage = `【执行错误如下】\n方法：\${funName} \n原因：\${err}`;
-        console.log(evalErrorMessage);
-        alert(evalErrorMessage);
-      }
-    };
   """;
 
     await runJavaScript(addJavaScript);
@@ -115,6 +138,7 @@ extension AddJSChannel_InjectedJS on WebViewController {
 
   Future<void> injectedJavaScript_UI_execJSWhenClick({
     String addPosition = 'top', // top(默认) \ bottom \ overlay
+    String injectedTime = 'onload', // 注入时机 onload \ now
     required String execJSMethod,
     required Map<String, dynamic> execJSParams,
   }) async {
@@ -181,6 +205,43 @@ extension AddJSChannel_InjectedJS on WebViewController {
             document.body.insertBefore(newButton, document.body.firstChild);
           }
       """;
+
+    // injectedUIHtml = """
+    //     window.addEventListener('load', function() {
+    //       var newButton = document.createElement("button");
+    //       newButton.style.height = '200px';
+    //       newButton.style.width = '320px';
+    //       newButton.style.backgroundColor = '#4CAF50';
+    //       newButton.style.color = 'white';
+    //       newButton.textContent = '点击我啊';
+    //       document.body.insertBefore(newButton, document.body.firstChild);
+    //     });
+    //   """;
+    // load 事件: 在窗口（或页面）及其所有依赖资源（如图片、样式表、JavaScript文件等）加载完成时触发
+    if (injectedTime == 'onload') {
+      injectedUIHtml = """
+        window.addEventListener('load', function() {
+          $injectedUIHtml
+        });
+      """;
+    }
+
+    // injectedUIHtml = """
+    //   if (document.readyState !== 'loading') {
+    //     // 页面已经加载完成，可以直接更改内容
+    //     $injectedUIHtml
+    //   } else {
+    //     window.addEventListener('load', function() {
+    //       $injectedUIHtml
+    //     });
+    //     // 页面还在加载，设置一个setTimeout来稍后重试
+    //     // setTimeout(function() {
+    //     //   window.onload = function() {
+    //     //     $injectedUIHtml
+    //     //   };
+    //     // }, 100);
+    //   }
+    // """;
 
     return runJavaScript(injectedUIHtml);
   }
