@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_base_models/flutter_base_models.dart';
 import 'package:flutter_info_choose_kit/flutter_info_choose_kit_adapt.dart';
-
-import 'base_choose_item_model.dart';
 
 class BasePickerView<T extends BaseChooseItemModel> extends StatefulWidget {
   final double height;

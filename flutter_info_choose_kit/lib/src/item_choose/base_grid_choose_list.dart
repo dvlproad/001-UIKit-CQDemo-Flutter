@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 /*
  * @Author: dvlproad
  * @Date: 2024-05-06 17:58:47
@@ -9,7 +11,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_info_choose_kit/src/item_choose/base_grid_choose_list.dart';
 import 'package:flutter_images_action_list/src/components/images_presuf_badge_list.dart';
 
-import 'base_choose_item_model.dart';
+import 'package:flutter_base_models/flutter_base_models.dart';
 
 class BaseGridChooseList<T extends BaseChooseItemModel> extends StatefulWidget {
   final double width;

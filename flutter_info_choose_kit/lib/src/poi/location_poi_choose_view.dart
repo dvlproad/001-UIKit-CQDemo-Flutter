@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 /*
  * @Author: dvlproad
  * @Date: 2024-04-19 17:32:18

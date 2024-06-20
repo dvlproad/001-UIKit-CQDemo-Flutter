@@ -16,6 +16,12 @@ export './src/base/base_popup_widget.dart';
 export './src/area_picker/area_picker.dart';
 export './src/area_picker/base_area_picker_singleton.dart';
 
+// date_picker
+export './src/date_picker/datepicker_util.dart';
+export './src/date_picker/itempicker_list_util.dart';
+export './src/date_picker/itempicker_picker_util.dart';
+export './src/date_picker/time_picker_util.dart';
+
 // poi
 export './src/poi/location_poi_cell_widget.dart';
 export './src/poi/location_poi_choose_view.dart';
@@ -23,4 +29,3 @@ export './src/poi/location_poi_choose_view.dart';
 // grid choose view
 export './src/item_choose/ts_grid_or_table_choose_view.dart';
 export './src/item_choose/base_picker_view.dart';
-export './src/item_choose/base_choose_item_model.dart';

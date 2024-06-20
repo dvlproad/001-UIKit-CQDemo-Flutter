@@ -2,12 +2,11 @@
  * @Author: dvlproad
  * @Date: 2024-05-08 17:24:37
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-15 10:21:28
+ * @LastEditTime: 2024-06-20 18:32:14
  * @Description: 
  */
 import 'package:flutter/material.dart';
-
-import './base_choose_item_model.dart';
+import 'package:flutter_base_models/flutter_base_models.dart';
 
 import '../../flutter_info_choose_kit_adapt.dart';
 
@@ -71,6 +70,7 @@ class BaseChooseItemView<T extends BaseChooseItemModel>
       onTap: () {
         // onPressedDelete(imageIndex);
       },
+      // ignore: sized_box_for_whitespace
       child: Container(
         // color: Colors.red,
         width: imageWith + 0,

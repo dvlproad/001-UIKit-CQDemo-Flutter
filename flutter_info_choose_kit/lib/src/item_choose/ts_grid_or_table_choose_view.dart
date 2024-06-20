@@ -2,17 +2,18 @@
  * @Author: dvlproad
  * @Date: 2024-05-06 17:58:47
  * @LastEditors: dvlproad
- * @LastEditTime: 2024-05-15 10:33:39
+ * @LastEditTime: 2024-06-20 19:37:51
  * @Description: 
  */
 import 'package:flutter/material.dart';
-import '../../flutter_info_choose_kit_adapt.dart';
+import 'package:flutter_base_models/flutter_base_models.dart';
 // import 'package:flutter_info_choose_kit/src/item_choose/base_grid_choose_list.dart';
-import 'package:flutter_images_action_list/src/components/images_presuf_badge_list.dart';
+// import 'package:flutter_images_action_list/src/components/images_presuf_badge_list.dart';
 
-import 'base_choose_item_model.dart';
-import 'base_choose_item_view.dart';
-import 'base_grid_choose_list.dart';
+import './base_choose_item_view.dart';
+import './base_grid_choose_list.dart';
+
+import '../../flutter_info_choose_kit_adapt.dart';
 
 class TSChooseGridView<T extends BaseChooseItemModel> extends StatelessWidget {
   final List<T> itemModels;

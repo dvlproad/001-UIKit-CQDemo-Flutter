@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../flutter_info_choose_kit_adapt.dart';

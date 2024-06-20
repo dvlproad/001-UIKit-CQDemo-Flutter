@@ -1,6 +1,6 @@
 name: flutter_info_choose_kit
 description: 基础的信息选择面版（可进行各种定制).
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_info_choose_kit
 homepage: https://github.com/dvlproad/001-UIKit-CQDemo-Flutter/tree/master/flutter_info_choose_kit
 
@@ -15,7 +15,13 @@ dependencies:
   # 字体大小自适应
   auto_size_text: ^3.0.0
   flutter_images_action_list: ^0.0.4
-  flutter_base_models: ^0.0.2
+  flutter_base_models: ^0.0.6
+
+  # 日期选择器
+  intl: ^0.17.0
+  date_format: ^2.0.7
+  flutter_picker: ^2.0.2
+  flutter_pickers: ^2.1.9
 
 dev_dependencies:
   flutter_test:
