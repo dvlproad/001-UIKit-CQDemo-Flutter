@@ -22,6 +22,7 @@ export './user/relation/user_relation_tag_model.dart';
 export './social/base_comment_model.dart';
 export './social/enum_like_status.dart';
 export './social/social_count_protocal.dart';
+export './social/request_anchor_comment.dart'; // request
 
 // location
 // location: base

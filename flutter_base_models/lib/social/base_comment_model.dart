@@ -28,10 +28,10 @@ class AppReplyToModel {
   });
 }
 
-class BaseCommentModel<TUser extends UserBaseModel> //extends BaseTreeModel
-    implements
-        SocialLikeProtocal,
-        SocialCommentProtocal {
+//extends BaseTreeModel
+class BaseCommentModel<TUser extends UserBaseModel,
+        TReply extends BaseCommentModel<TUser, TReply>>
+    implements SocialLikeProtocal, SocialCommentProtocal {
   final int levelIndex; // 层数索引
   TUser sender; // 发布人 信息(不能final，因为发布时候后台一般不返回数据，所以需要自己补充)
   TUser? receiver; // 接受者 信息(不能final，因为发布时候后台一般不返回数据，所以需要自己补充)
@@ -40,6 +40,9 @@ class BaseCommentModel<TUser extends UserBaseModel> //extends BaseTreeModel
   final AppReplyToModel infoForReply; // 如果点击此条，进行回复的数据
   String content; // 评论内容
   final List<String>? atUserIds;
+
+  List<TReply>? replyModels;
+  int? replyPageIndex; // 评论的最后一条回复所在的页索引或者id （使用于 展开全部回复 的功能中）
 
   @override
   int commentCount;
@@ -59,6 +62,8 @@ class BaseCommentModel<TUser extends UserBaseModel> //extends BaseTreeModel
     required this.content,
     this.atUserIds,
     this.commentCount = 0,
+    this.replyModels,
+    this.replyPageIndex,
     this.likeType = LikeStatus.unknow,
     this.likeCount = 0,
   });
