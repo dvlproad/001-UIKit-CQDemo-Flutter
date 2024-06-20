@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:math';
 
 import '../user/user_base_model.dart';
@@ -40,6 +42,15 @@ abstract class CommentRequestAnchorInstance<TUser extends UserBaseModel,
     required String bizId,
     required int commentPageSize,
   });
+  /*
+  // 按每页多少进行分页，并进行获取指定索引页的评论
+  Future<CommentsResultInfo<TComment>?>
+      requestCommentModels_pageIndexWithSize({
+    required String bizId,
+    required int commentPageIndex,
+    required int commentPageSize,
+  });
+  */
 
   /// 请求指定评论下的回复（常用于：定位滚到到指定评论）
   Future<List<TComment>?> requestReplyModelsForComment({
@@ -47,28 +58,28 @@ abstract class CommentRequestAnchorInstance<TUser extends UserBaseModel,
     required int replyPageSize,
   });
 
-  // ignore: non_constant_identifier_names
-  /// 获取指定范围的所有 comments ，
-  Future<CommentsResultInfo<TComment>?> requestCommentModels_untilCommentId({
+  /// 从头获取指定到指定评论范围内的所有 comments ，
+  Future<CommentsResultInfo<TComment>?>
+      requestCommentModels_fromStartUntilCommentId({
     required String bizId,
     required String commentId,
   }) async {
     // commentId = "test"; // CQTODO: 测试代码
     List<CommentAnchorModel>? targetCommentAnchorModels;
-    int _commentIdInRootIndex = -1; // 该评论在第一层的位置
-    int _commentIdInReplyIndex = -1; // 该评论在第二层的位置
+    int commentIdInRootIndex = -1; // 该评论在第一层的位置
+    int commentIdInReplyIndex = -1; // 该评论在第二层的位置
     if (commentId.isNotEmpty) {
       targetCommentAnchorModels = await requestCommentAnchorPoint(commentId);
       if (targetCommentAnchorModels != null) {
         if (targetCommentAnchorModels.isNotEmpty) {
-          _commentIdInRootIndex = targetCommentAnchorModels[0].index;
+          commentIdInRootIndex = targetCommentAnchorModels[0].index;
         }
         if (targetCommentAnchorModels.length >= 2) {
-          _commentIdInReplyIndex = targetCommentAnchorModels[1].index;
+          commentIdInReplyIndex = targetCommentAnchorModels[1].index;
         }
       }
     }
-    int commentPageSize = max(_commentIdInRootIndex + 1, 20);
+    int commentPageSize = max(commentIdInRootIndex + 1, 20);
 
     CommentsResultInfo<TComment>? commentsResultInfo =
         await requestCommentModels_untilCommentSize(
@@ -85,7 +96,7 @@ abstract class CommentRequestAnchorInstance<TUser extends UserBaseModel,
       if (commentId == comment.id) {
         _prefectCommentWithReplies(
           comment,
-          commentIdInReplyIndex: _commentIdInReplyIndex,
+          commentIdInReplyIndex: commentIdInReplyIndex,
         );
       }
 

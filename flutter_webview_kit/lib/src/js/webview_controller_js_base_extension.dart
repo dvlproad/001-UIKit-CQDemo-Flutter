@@ -36,9 +36,8 @@ import './other/webview_controller_js_webview_extension.dart';
 extension AddJSChannel_CJBase on WebViewController {
   // test
   cjjs_test({
-    required Future Function() closeWebToNativeBeforeOpenBrowserHandle,
     // 关闭当前 web 以返回到原生页面，并打开浏览器用于测试浏览器上的链接能否直接打开app
-    required void Function() closeWebviewHandle,
+    required void Function() beforeGoBrowserCloseWebviewHandle,
     // 离开app，打开浏览器前在app上的停留时间
     required Duration beforeGoBrowserNeedWaitDuration,
     required Future Function(String errorMessage) openBrowserErrorHandle,
@@ -47,7 +46,7 @@ extension AddJSChannel_CJBase on WebViewController {
     required WebViewController? Function() webViewControllerGetBlock,
   }) {
     cjjs_test_openBrowser(
-      closeWebviewHandle: closeWebviewHandle,
+      closeWebviewHandle: beforeGoBrowserCloseWebviewHandle,
       beforeGoBrowserNeedWaitDuration: beforeGoBrowserNeedWaitDuration,
       errorHandle: openBrowserErrorHandle,
     );
