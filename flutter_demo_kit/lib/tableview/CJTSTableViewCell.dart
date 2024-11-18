@@ -111,7 +111,10 @@ class CJTSTableViewCell extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
       color: Colors.transparent,
       child: Image(
-        image: AssetImage('lib/Resources/report/arrow_right.png'),
+        image: AssetImage(
+          'asset/item_arrow_right.png',
+          package: 'flutter_demo_kit',
+        ),
         width: 8,
         height: 12,
       ),

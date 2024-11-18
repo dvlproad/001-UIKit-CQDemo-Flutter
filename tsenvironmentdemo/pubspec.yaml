@@ -32,14 +32,18 @@ dependencies:
 
   app_environment:
     path: ../app_environment/
+  # flutter_demo_kit:
+  #   path: ../flutter_demo_kit/
 
   provider: any
-  flutter_demo_kit:
-    path: ../flutter_demo_kit/
-  flutter_environment:
-    path: ../flutter_environment/
-  flutter_effect_kit:
-    path: ../flutter_effect_kit/
+  fluttertoast: 8.2.1
+
+  flutter_environment_kit: ^0.0.2
+    # path: ../flutter_environment_kit/
+  flutter_environment_base: ^0.0.3
+    # path: ../flutter_environment_base/
+  # flutter_effect_kit:
+  #   path: ../flutter_effect_kit/
     
 
 
