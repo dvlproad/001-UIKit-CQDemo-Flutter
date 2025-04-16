@@ -3,6 +3,7 @@ class DownloadRecord {
   final String videoUrl;
   final DateTime addTime;
   String? savedPath;
+  String? thumbnailPath;
   double progress = 0.0;
   DownloadStatus status = DownloadStatus.pending;
 
@@ -11,6 +12,7 @@ class DownloadRecord {
     required this.videoUrl,
     required this.addTime,
     this.savedPath,
+    this.thumbnailPath,
   });
 }
 

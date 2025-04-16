@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-16 22:41:07
+ * @LastEditTime: 2025-04-16 23:09:20
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -30,7 +30,14 @@ class ParsedVideosPage extends StatelessWidget {
               child: Text('暂无下载记录'),
             );
           }
-          return ListView.builder(
+          return GridView.builder(
+            padding: EdgeInsets.all(8),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 140/220.0,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+            ),
             itemCount: downloads.length,
             itemBuilder: (context, index) {
               final record = downloads[index];
@@ -44,76 +51,115 @@ class ParsedVideosPage extends StatelessWidget {
 
   Widget _buildDownloadItem(BuildContext context, DownloadRecord record) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: record.status == DownloadStatus.completed
             ? () => _playVideo(context, record)
             : null,
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            // 背景图片或占位符
+            if (record.status == DownloadStatus.completed && record.thumbnailPath != null)
+              Image.file(
+                File(record.thumbnailPath!),
+                fit: BoxFit.cover,
+              )
+            else
+              Container(
+                color: Colors.grey[300],
+                child: Icon(Icons.video_library, color: Colors.grey[600], size: 40),
+              ),
+            // 渐变遮罩，使文字更容易阅读
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.7),
+                  ],
+                ),
+              ),
+            ),
+            // 视频信息
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(Icons.video_library, color: Colors.blue),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '视频ID: ${record.videoId}',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '添加时间: ${record.addTime.toString()}',
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
-                        ),
-                      ],
+                  Text(
+                    '视频ID: ${record.videoId}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  _buildStatusIcon(record.status),
+                  SizedBox(height: 4),
+                  Text(
+                    '添加时间: ${_formatDate(record.addTime)}',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 10,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4),
+                  _buildProgressSection(context, record),
+                  if (record.status == DownloadStatus.failed)
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Row(
+                        children: [
+                          Icon(Icons.error_outline, color: Colors.red, size: 12),
+                          SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              '下载失败',
+                              style: TextStyle(color: Colors.red, fontSize: 10),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () => DownloadManager().retryDownload(record.videoId),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size(0, 0),
+                            ),
+                            child: Text(
+                              '重试',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
-              SizedBox(height: 8),
-              _buildProgressSection(context, record),
-              if (record.status == DownloadStatus.failed)
-                Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      Icon(Icons.error_outline, color: Colors.red, size: 16),
-                      SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          '下载失败',
-                          style: TextStyle(color: Colors.red, fontSize: 12),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () => DownloadManager().retryDownload(record.videoId),
-                        child: Text('重试'),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
-          ),
+            ),
+            // 状态图标
+            Positioned(
+              top: 8,
+              right: 8,
+              child: _buildStatusIcon(record.status),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  void _playVideo(BuildContext context, DownloadRecord record) {
-    if (record.savedPath == null) return;
-    
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(videoPath: record.savedPath!),
-      ),
-    );
+  String _formatDate(DateTime date) {
+    return '${date.month}-${date.day} ${date.hour}:${date.minute}';
   }
 
   Widget _buildStatusIcon(DownloadStatus status) {
@@ -139,26 +185,61 @@ class ParsedVideosPage extends StatelessWidget {
         break;
     }
 
-    return Icon(iconData, color: color);
+    return Container(
+      padding: EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Icon(iconData, color: color, size: 16),
+    );
   }
 
   Widget _buildProgressSection(BuildContext context, DownloadRecord record) {
     switch (record.status) {
       case DownloadStatus.pending:
-        return Text('等待下载...');
+        return Text(
+          '等待下载...',
+          style: TextStyle(color: Colors.white70, fontSize: 10),
+        );
       case DownloadStatus.downloading:
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LinearProgressIndicator(value: record.progress),
-            SizedBox(height: 4),
-            Text('${(record.progress * 100).toStringAsFixed(1)}%'),
+            LinearProgressIndicator(
+              value: record.progress,
+              backgroundColor: Colors.white24,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            ),
+            SizedBox(height: 2),
+            Text(
+              '${(record.progress * 100).toStringAsFixed(1)}%',
+              style: TextStyle(color: Colors.white70, fontSize: 10),
+            ),
           ],
         );
       case DownloadStatus.completed:
-        return Text('下载完成', style: TextStyle(color: Colors.green));
+        return Text(
+          '下载完成',
+          style: TextStyle(color: Colors.green, fontSize: 10),
+        );
       case DownloadStatus.failed:
-        return Text('下载失败', style: TextStyle(color: Colors.red));
+        return Text(
+          '下载失败',
+          style: TextStyle(color: Colors.red, fontSize: 10),
+        );
     }
+  }
+
+  void _playVideo(BuildContext context, DownloadRecord record) {
+    if (record.savedPath == null) return;
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(videoPath: record.savedPath!),
+      ),
+    );
   }
 }
 

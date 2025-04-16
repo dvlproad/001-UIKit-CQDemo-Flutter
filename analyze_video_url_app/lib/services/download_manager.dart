@@ -2,12 +2,13 @@
  * @Author: dvlproad
  * @Date: 2025-04-16 20:04:33
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-16 22:01:06
+ * @LastEditTime: 2025-04-16 23:01:03
  * @Description: 
  */
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import '../models/download_record.dart';
 import 'package:flutter/foundation.dart';
 
@@ -55,10 +56,39 @@ class DownloadManager extends ChangeNotifier {
 
       record.savedPath = savePath;
       record.status = DownloadStatus.completed;
+
+      // 生成缩略图
+      await _generateThumbnail(record);
+
       notifyListeners();
     } catch (e) {
       record.status = DownloadStatus.failed;
       notifyListeners();
+    }
+  }
+
+  Future<void> _generateThumbnail(DownloadRecord record) async {
+    if (record.savedPath == null) return;
+
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final thumbnailPath =
+          '${directory.path}/thumbnails/${record.videoId}.jpg';
+
+      await Directory('${directory.path}/thumbnails').create(recursive: true);
+
+      await VideoThumbnail.thumbnailFile(
+        video: record.savedPath!,
+        thumbnailPath: thumbnailPath,
+        imageFormat: ImageFormat.JPEG,
+        maxWidth: 200,
+        quality: 75,
+      );
+
+      record.thumbnailPath = thumbnailPath;
+      notifyListeners();
+    } catch (e) {
+      print('Error generating thumbnail: $e');
     }
   }
 
