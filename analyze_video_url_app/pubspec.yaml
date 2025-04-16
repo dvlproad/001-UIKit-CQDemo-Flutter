@@ -41,6 +41,8 @@ dependencies:
 
   path_provider: ^2.1.1
   provider: ^6.0.5
+  dio: ^5.4.0
+  video_player: ^2.8.1
 
 dev_dependencies:
   flutter_test:

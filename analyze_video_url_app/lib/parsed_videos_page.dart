@@ -2,62 +2,163 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-03-31 21:38:02
+ * @LastEditTime: 2025-04-16 22:41:07
  * @Description: 
  */
 import 'package:flutter/material.dart';
+import './services/download_manager.dart';
+import './models/download_record.dart';
+import 'package:video_player/video_player.dart';
+import 'dart:io';
 
-class ParsedVideosPage extends StatefulWidget {
-  @override
-  _ParsedVideosPageState createState() => _ParsedVideosPageState();
-}
-
-class _ParsedVideosPageState extends State<ParsedVideosPage> {
-  List<VideoItem> videos = [
-    VideoItem(url: "video1.mp4", size: "6.91M"),
-    VideoItem(url: "video2.mp4", size: "142.61M"),
-    VideoItem(url: "video3.mp4", size: "14.77M"),
-    VideoItem(url: "video4.mp4", size: "7.69M"),
-  ];
-
+class ParsedVideosPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("已解析", style: TextStyle(color: Colors.black)),
+        title: Text("已解析视频", style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        actions: [
-          TextButton(
-            onPressed: () => setState(() => videos.clear()),
-            child: Text("清空", style: TextStyle(color: Colors.blue)),
-          ),
-        ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 0.8,
-          ),
-          itemCount: videos.length,
-          itemBuilder: (context, index) {
-            return VideoCard(
-              video: videos[index],
-              onDelete: () {
-                setState(() {
-                  videos.removeAt(index);
-                });
-              },
+      body: AnimatedBuilder(
+        animation: DownloadManager(),
+        builder: (context, child) {
+          final downloads = DownloadManager().downloads;
+          if (downloads.isEmpty) {
+            return Center(
+              child: Text('暂无下载记录'),
             );
-          },
+          }
+          return ListView.builder(
+            itemCount: downloads.length,
+            itemBuilder: (context, index) {
+              final record = downloads[index];
+              return _buildDownloadItem(context, record);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildDownloadItem(BuildContext context, DownloadRecord record) {
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: InkWell(
+        onTap: record.status == DownloadStatus.completed
+            ? () => _playVideo(context, record)
+            : null,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.video_library, color: Colors.blue),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '视频ID: ${record.videoId}',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '添加时间: ${record.addTime.toString()}',
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _buildStatusIcon(record.status),
+                ],
+              ),
+              SizedBox(height: 8),
+              _buildProgressSection(context, record),
+              if (record.status == DownloadStatus.failed)
+                Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      Icon(Icons.error_outline, color: Colors.red, size: 16),
+                      SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          '下载失败',
+                          style: TextStyle(color: Colors.red, fontSize: 12),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => DownloadManager().retryDownload(record.videoId),
+                        child: Text('重试'),
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _playVideo(BuildContext context, DownloadRecord record) {
+    if (record.savedPath == null) return;
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => VideoPlayerPage(videoPath: record.savedPath!),
+      ),
+    );
+  }
+
+  Widget _buildStatusIcon(DownloadStatus status) {
+    IconData iconData;
+    Color color;
+
+    switch (status) {
+      case DownloadStatus.pending:
+        iconData = Icons.hourglass_empty;
+        color = Colors.orange;
+        break;
+      case DownloadStatus.downloading:
+        iconData = Icons.downloading;
+        color = Colors.blue;
+        break;
+      case DownloadStatus.completed:
+        iconData = Icons.check_circle;
+        color = Colors.green;
+        break;
+      case DownloadStatus.failed:
+        iconData = Icons.error;
+        color = Colors.red;
+        break;
+    }
+
+    return Icon(iconData, color: color);
+  }
+
+  Widget _buildProgressSection(BuildContext context, DownloadRecord record) {
+    switch (record.status) {
+      case DownloadStatus.pending:
+        return Text('等待下载...');
+      case DownloadStatus.downloading:
+        return Column(
+          children: [
+            LinearProgressIndicator(value: record.progress),
+            SizedBox(height: 4),
+            Text('${(record.progress * 100).toStringAsFixed(1)}%'),
+          ],
+        );
+      case DownloadStatus.completed:
+        return Text('下载完成', style: TextStyle(color: Colors.green));
+      case DownloadStatus.failed:
+        return Text('下载失败', style: TextStyle(color: Colors.red));
+    }
   }
 }
 
@@ -166,6 +267,92 @@ class _VideoCardState extends State<VideoCard> {
               child: Icon(video.isDownloading ? Icons.pause : Icons.play_arrow),
             ),
           ),
+      ],
+    );
+  }
+}
+
+class VideoPlayerPage extends StatefulWidget {
+  final String videoPath;
+
+  const VideoPlayerPage({Key? key, required this.videoPath}) : super(key: key);
+
+  @override
+  _VideoPlayerPageState createState() => _VideoPlayerPageState();
+}
+
+class _VideoPlayerPageState extends State<VideoPlayerPage> {
+  late VideoPlayerController _controller;
+  bool _isInitialized = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoPath))
+      ..initialize().then((_) {
+        setState(() {
+          _isInitialized = true;
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      body: Center(
+        child: _isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    VideoPlayer(_controller),
+                    _buildControls(),
+                  ],
+                ),
+              )
+            : CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  Widget _buildControls() {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        // 播放/暂停按钮
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _controller.value.isPlaying
+                  ? _controller.pause()
+                  : _controller.play();
+            });
+          },
+          child: Container(
+            color: Colors.transparent,
+            child: Center(
+              child: Icon(
+                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                size: 50.0,
+                color: Colors.white.withOpacity(0.7),
+              ),
+            ),
+          ),
+        ),
+        // 进度条
+        VideoProgressIndicator(_controller, allowScrubbing: true),
       ],
     );
   }
