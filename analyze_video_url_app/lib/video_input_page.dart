@@ -2,13 +2,17 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-03-31 20:51:44
+ * @LastEditTime: 2025-04-16 22:05:22
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_analyze_video_url/cq_video_url_analyze_tiktok.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
+import './services/download_manager.dart';
+import './pages/downloaded_videos_page.dart';
+import './parsed_videos_page.dart';
+import './tab_controller.dart';
 
 class VideoInputPage extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
@@ -74,9 +78,19 @@ class VideoInputPage extends StatelessWidget {
                       debugPrint("expandedUrl: $expandedUrl");
                       debugPrint("videoId: $videoId");
                       debugPrint("resultUrl: $resultUrl");
+
+                      // 添加到下载管理器
+                      DownloadManager().addDownload(videoId, resultUrl);
+
+                      // 切换到已解析tab页面
+                      AppTabController()
+                          .switchToTab(1); // 假设ParsedVideosPage是第二个tab（索引为1）
                     },
                     failure: (errorMessage) {
                       debugPrint("errorMessage: $errorMessage");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('解析失败: $errorMessage')),
+                      );
                     },
                   );
                   /*
