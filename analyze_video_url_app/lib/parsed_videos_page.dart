@@ -293,6 +293,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         setState(() {
           _isInitialized = true;
         });
+        // 初始化完成后自动播放
+        _controller.play();
+        // 设置循环播放
+        _controller.setLooping(true);
       });
   }
 
