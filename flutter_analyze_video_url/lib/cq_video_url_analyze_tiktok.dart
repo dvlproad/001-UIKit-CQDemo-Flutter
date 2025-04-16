@@ -16,22 +16,36 @@ enum CQAnalyzeVideoUrlType {
   imageCover, // 封面图片
 }
 
+extension UrlValueExtractor on String {
+  String? cjnetworkUrlValueForKey(String key) {
+    final pattern = RegExp("/$key/(\\d+)");
+    final match = pattern.firstMatch(this);
+    if (match != null && match.groupCount >= 1) {
+      return match.group(1);
+    }
+    return null;
+  }
+}
+
 class CQVideoUrlAnalyzeTiktok {
-  static const String baseUrl = "https://www.tikwm.com/video";
   static final Dio _dio = Dio(BaseOptions(
-    headers: {'User-Agent': 'Mozilla/5.0'},
-    followRedirects: false,
-    validateStatus: (status) {
-      return status != null && status < 500;
-    },
+    // headers: {'User-Agent': 'Mozilla/5.0'},
+    // followRedirects: false,
+    connectTimeout: Duration(seconds: 10),
+    receiveTimeout: Duration(seconds: 10),
+    // validateStatus: (status) {
+    //   return status != null && status < 500;
+    // },
   ));
 
   /// 从短链中获取指定类型的地址（先扩展短链，再获取id，再根据类型拼接得到最终地址）
   static Future<void> requestUrlFromShortenedUrl(
-      String shortenedUrl,
-      CQAnalyzeVideoUrlType type,
-      Function(String expandedUrl, String videoId, String resultUrl) success,
-      Function(String errorMessage) failure) async {
+    String shortenedUrl,
+    CQAnalyzeVideoUrlType type, {
+    required Function(String expandedUrl, String videoId, String resultUrl)
+        success,
+    required Function(String errorMessage) failure,
+  }) async {
     try {
       String? expandedUrl = await expandShortenedUrl(shortenedUrl);
       if (expandedUrl == null) {
@@ -39,8 +53,8 @@ class CQVideoUrlAnalyzeTiktok {
         return;
       }
 
-      Uri uri = Uri.parse(expandedUrl);
-      String? videoId = uri.queryParameters['video'];
+      String? videoId =
+          expandedUrl.cjnetworkUrlValueForKey("video"); // 输出：123456789
       if (videoId == null || videoId.isEmpty) {
         failure("无法解析 videoId");
         return;
@@ -54,6 +68,7 @@ class CQVideoUrlAnalyzeTiktok {
   }
 
   /// 获取不同类型的视频地址
+  static const String baseUrl = "https://www.tikwm.com/video";
   static String getVideoInfo(CQAnalyzeVideoUrlType type, String videoId) {
     switch (type) {
       case CQAnalyzeVideoUrlType.audio:
@@ -72,12 +87,19 @@ class CQVideoUrlAnalyzeTiktok {
   /// 扩展短链
   static Future<String?> expandShortenedUrl(String shortenedUrl) async {
     try {
-      final response = await _dio.get(shortenedUrl,
-          options: Options(followRedirects: false));
-      print("Response headers: ${response.headers}");
-      if (response.statusCode == 302 || response.statusCode == 301) {
-        return response.headers["location"]?.first ?? "";
+      final response = await Dio().get(shortenedUrl);
+      if (response.statusCode == 200) {
+        if (response.redirects.isNotEmpty) {
+          final redirectUrl = response.redirects.last.location.toString();
+          print('Redirected to: $redirectUrl');
+          return redirectUrl;
+        } else {
+          print('No redirects, using original shortenedUrl: $shortenedUrl');
+        }
+      } else {
+        print('No redirects, using original shortenedUrl: $shortenedUrl');
       }
+
       return shortenedUrl;
     } catch (e) {
       print("Error expanding URL: $e");
