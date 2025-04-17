@@ -2,13 +2,13 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-16 23:09:20
+ * @LastEditTime: 2025-04-17 17:01:48
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import './services/download_manager.dart';
 import './models/download_record.dart';
-import 'package:video_player/video_player.dart';
+import './video_player_page.dart';
 import 'dart:io';
 
 class ParsedVideosPage extends StatelessWidget {
@@ -34,7 +34,7 @@ class ParsedVideosPage extends StatelessWidget {
             padding: EdgeInsets.all(8),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 140/220.0,
+              childAspectRatio: 140 / 220.0,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
@@ -60,7 +60,8 @@ class ParsedVideosPage extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             // 背景图片或占位符
-            if (record.status == DownloadStatus.completed && record.thumbnailPath != null)
+            if (record.status == DownloadStatus.completed &&
+                record.thumbnailPath != null)
               Image.file(
                 File(record.thumbnailPath!),
                 fit: BoxFit.cover,
@@ -68,7 +69,8 @@ class ParsedVideosPage extends StatelessWidget {
             else
               Container(
                 color: Colors.grey[300],
-                child: Icon(Icons.video_library, color: Colors.grey[600], size: 40),
+                child: Icon(Icons.video_library,
+                    color: Colors.grey[600], size: 40),
               ),
             // 渐变遮罩，使文字更容易阅读
             Container(
@@ -117,7 +119,8 @@ class ParsedVideosPage extends StatelessWidget {
                       padding: EdgeInsets.only(top: 4),
                       child: Row(
                         children: [
-                          Icon(Icons.error_outline, color: Colors.red, size: 12),
+                          Icon(Icons.error_outline,
+                              color: Colors.red, size: 12),
                           SizedBox(width: 4),
                           Expanded(
                             child: Text(
@@ -126,7 +129,8 @@ class ParsedVideosPage extends StatelessWidget {
                             ),
                           ),
                           TextButton(
-                            onPressed: () => DownloadManager().retryDownload(record.videoId),
+                            onPressed: () =>
+                                DownloadManager().retryDownload(record.videoId),
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
                               minimumSize: Size(0, 0),
@@ -146,10 +150,49 @@ class ParsedVideosPage extends StatelessWidget {
                 ],
               ),
             ),
-            // 状态图标
+            // 删除按钮
             Positioned(
               top: 8,
               right: 8,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('确认删除'),
+                      content: Text('确定要删除这个视频吗？'),
+                      actions: [
+                        TextButton(
+                          child: Text('取消'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        TextButton(
+                          child: Text('删除'),
+                          onPressed: () {
+                            DownloadManager().deleteDownload(record.videoId);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child:
+                      Icon(Icons.delete_outline, color: Colors.white, size: 20),
+                ),
+              ),
+            ),
+
+            // 状态图标（移到左上角）
+            Positioned(
+              top: 8,
+              left: 8,
               child: _buildStatusIcon(record.status),
             ),
           ],
@@ -233,13 +276,19 @@ class ParsedVideosPage extends StatelessWidget {
 
   void _playVideo(BuildContext context, DownloadRecord record) {
     if (record.savedPath == null) return;
-    
-    Navigator.push(
+
+    // 打开视频时
+    Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => VideoPlayerPage(videoPath: record.savedPath!),
       ),
-    );
+    ).then((wasDeleted) {
+      if (wasDeleted == true) {
+        // 刷新视频列表
+        DownloadManager().notifyListeners(); // 通知下载管理器更新状态
+      }
+    });
   }
 }
 
@@ -348,96 +397,6 @@ class _VideoCardState extends State<VideoCard> {
               child: Icon(video.isDownloading ? Icons.pause : Icons.play_arrow),
             ),
           ),
-      ],
-    );
-  }
-}
-
-class VideoPlayerPage extends StatefulWidget {
-  final String videoPath;
-
-  const VideoPlayerPage({Key? key, required this.videoPath}) : super(key: key);
-
-  @override
-  _VideoPlayerPageState createState() => _VideoPlayerPageState();
-}
-
-class _VideoPlayerPageState extends State<VideoPlayerPage> {
-  late VideoPlayerController _controller;
-  bool _isInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.file(File(widget.videoPath))
-      ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
-        // 初始化完成后自动播放
-        _controller.play();
-        // 设置循环播放
-        _controller.setLooping(true);
-      });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      body: Center(
-        child: _isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    VideoPlayer(_controller),
-                    _buildControls(),
-                  ],
-                ),
-              )
-            : CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  Widget _buildControls() {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        // 播放/暂停按钮
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _controller.value.isPlaying
-                  ? _controller.pause()
-                  : _controller.play();
-            });
-          },
-          child: Container(
-            color: Colors.transparent,
-            child: Center(
-              child: Icon(
-                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 50.0,
-                color: Colors.white.withOpacity(0.7),
-              ),
-            ),
-          ),
-        ),
-        // 进度条
-        VideoProgressIndicator(_controller, allowScrubbing: true),
       ],
     );
   }

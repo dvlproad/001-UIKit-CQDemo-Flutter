@@ -2,15 +2,12 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-16 22:37:35
+ * @LastEditTime: 2025-04-17 16:01:58
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_analyze_video_url/cq_video_url_analyze_tiktok.dart';
-import 'package:dio/dio.dart';
-import 'dart:io';
 import './services/download_manager.dart';
-import './parsed_videos_page.dart';
 import './tab_controller.dart';
 
 class VideoInputPage extends StatelessWidget {
@@ -65,6 +62,17 @@ class VideoInputPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async {
+                  // 显示加载对话框
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
+                  );
+
                   // 解析视频逻辑
                   _controller.text =
                       "https://www.tiktok.com/t/ZT2mkNaFw/"; //nezha2 shengaongbao
@@ -74,6 +82,9 @@ class VideoInputPage extends StatelessWidget {
                     shortenedUrl,
                     CQAnalyzeVideoUrlType.videoWithoutWatermarkHD,
                     success: (expandedUrl, videoId, resultUrl) {
+                      // 关闭加载对话框
+                      Navigator.pop(context);
+
                       debugPrint("expandedUrl: $expandedUrl");
                       debugPrint("videoId: $videoId");
                       debugPrint("resultUrl: $resultUrl");
@@ -86,6 +97,9 @@ class VideoInputPage extends StatelessWidget {
                           .switchToTab(1); // 假设ParsedVideosPage是第二个tab（索引为1）
                     },
                     failure: (errorMessage) {
+                      // 关闭加载对话框
+                      Navigator.pop(context);
+
                       debugPrint("errorMessage: $errorMessage");
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('解析失败: $errorMessage')),

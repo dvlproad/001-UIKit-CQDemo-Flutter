@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>我们需要访问您的相册来保存图片或视频</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>应用需要访问您的照片库以保存和读取视频</string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 </dict>
 </plist>
