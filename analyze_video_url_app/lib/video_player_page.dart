@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-17 16:51:15
+ * @LastEditTime: 2025-04-18 19:03:53
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -10,12 +10,12 @@ import 'package:video_player/video_player.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:share_plus/share_plus.dart';
 import './services/download_manager.dart';
+import './models/download_record.dart';
 import 'dart:io';
 
 class VideoPlayerPage extends StatefulWidget {
-  final String videoPath;
-
-  const VideoPlayerPage({Key? key, required this.videoPath}) : super(key: key);
+  final DownloadRecord record;
+  const VideoPlayerPage({required this.record});
 
   @override
   _VideoPlayerPageState createState() => _VideoPlayerPageState();
@@ -24,18 +24,24 @@ class VideoPlayerPage extends StatefulWidget {
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
+  final DownloadManager _downloadManager = DownloadManager();
+  String? _absolutePath;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(File(widget.videoPath))
+    _initializePlayer();
+  }
+
+  Future<void> _initializePlayer() async {
+    _absolutePath =
+        await _downloadManager.getAbsolutePath(widget.record.savedPath!);
+    _controller = VideoPlayerController.file(File(_absolutePath!))
       ..initialize().then((_) {
         setState(() {
           _isInitialized = true;
         });
-        // 初始化完成后自动播放
         _controller.play();
-        // 设置循环播放
         _controller.setLooping(true);
       });
   }
@@ -48,6 +54,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
+    String videoPath = widget.record.savedPath!;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -57,9 +64,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           IconButton(
             icon: Icon(Icons.save_alt, color: Colors.white),
             onPressed: () async {
+              if (_absolutePath == null) return;
               try {
-                final result =
-                    await ImageGallerySaver.saveFile(widget.videoPath);
+                final result = await ImageGallerySaver.saveFile(_absolutePath!);
                 if (result['isSuccess']) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('视频已保存到相册')),
@@ -79,11 +86,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           IconButton(
             icon: Icon(Icons.share, color: Colors.white),
             onPressed: () async {
+              if (_absolutePath == null) return;
               try {
                 await Share.shareXFiles(
-                  [XFile(widget.videoPath)],
-                  sharePositionOrigin:
-                      Rect.fromLTWH(0, 0, 100, 100), // iOS 分享菜单的位置
+                  [XFile(_absolutePath!)],
+                  sharePositionOrigin: Rect.fromLTWH(0, 0, 100, 100),
                 );
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -95,29 +102,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
           IconButton(
             icon: Icon(Icons.delete, color: Colors.white),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('确认删除'),
-                  content: Text('确定要删除这个视频吗？'),
-                  actions: [
-                    TextButton(
-                      child: Text('取消'),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    TextButton(
-                      child: Text('删除'),
-                      onPressed: () {
-                        // 从下载管理器中删除记录
-                        DownloadManager()
-                            .removeDownloadByPath(widget.videoPath);
-                        Navigator.pop(context); // 关闭对话框
-                        Navigator.pop(context, true); // 返回上一页，并传递删除成功的标志
-                      },
-                    ),
-                  ],
-                ),
-              );
+              _deleteVideo();
             },
           ),
         ],
@@ -166,6 +151,34 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         // 进度条
         VideoProgressIndicator(_controller, allowScrubbing: true),
       ],
+    );
+  }
+
+  void _deleteVideo() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('确认删除'),
+        content: Text('确定要删除这个视频吗？'),
+        actions: [
+          TextButton(
+            child: Text('取消'),
+            onPressed: () => Navigator.pop(context),
+          ),
+          TextButton(
+            child: Text('删除'),
+            onPressed: () async {
+              // 先停止播放并释放资源
+              await _controller.pause();
+              await _controller.dispose();
+
+              await DownloadManager().deleteDownload(widget.record);
+              Navigator.pop(context); // 关闭对话框
+              Navigator.pop(context, true); // 返回上一页，并传递删除标记
+            },
+          ),
+        ],
+      ),
     );
   }
 }

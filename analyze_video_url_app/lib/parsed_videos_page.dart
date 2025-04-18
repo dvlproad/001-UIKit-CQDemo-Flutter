@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-17 17:01:48
+ * @LastEditTime: 2025-04-18 19:09:06
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -12,6 +12,8 @@ import './video_player_page.dart';
 import 'dart:io';
 
 class ParsedVideosPage extends StatelessWidget {
+  final DownloadManager _downloadManager = DownloadManager();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +24,9 @@ class ParsedVideosPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: AnimatedBuilder(
-        animation: DownloadManager(),
+        animation: _downloadManager,
         builder: (context, child) {
-          final downloads = DownloadManager().downloads;
+          final downloads = _downloadManager.downloads;
           if (downloads.isEmpty) {
             return Center(
               child: Text('暂无下载记录'),
@@ -62,9 +64,29 @@ class ParsedVideosPage extends StatelessWidget {
             // 背景图片或占位符
             if (record.status == DownloadStatus.completed &&
                 record.thumbnailPath != null)
-              Image.file(
-                File(record.thumbnailPath!),
-                fit: BoxFit.cover,
+              FutureBuilder<String>(
+                future: _downloadManager.getAbsolutePath(record.thumbnailPath!),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.hasError) {
+                    print('加载缩略图失败: ${snapshot.error}');
+                    return Container(color: Colors.grey[300]);
+                  }
+
+                  final file = File(snapshot.data!);
+                  if (!file.existsSync()) {
+                    print('缩略图文件不存在: ${snapshot.data!}');
+                    return Container(color: Colors.grey[300]);
+                  }
+
+                  return Image.file(
+                    file,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      print('显示缩略图失败: $error');
+                      return Container(color: Colors.grey[300]);
+                    },
+                  );
+                },
               )
             else
               Container(
@@ -169,7 +191,7 @@ class ParsedVideosPage extends StatelessWidget {
                         TextButton(
                           child: Text('删除'),
                           onPressed: () {
-                            DownloadManager().deleteDownload(record.videoId);
+                            DownloadManager().deleteDownload(record);
                             Navigator.pop(context);
                           },
                         ),
@@ -277,16 +299,14 @@ class ParsedVideosPage extends StatelessWidget {
   void _playVideo(BuildContext context, DownloadRecord record) {
     if (record.savedPath == null) return;
 
-    // 打开视频时
     Navigator.push<bool>(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoPlayerPage(videoPath: record.savedPath!),
+        builder: (context) => VideoPlayerPage(record: record),
       ),
     ).then((wasDeleted) {
       if (wasDeleted == true) {
-        // 刷新视频列表
-        DownloadManager().notifyListeners(); // 通知下载管理器更新状态
+        _downloadManager.notifyListeners();
       }
     });
   }
