@@ -51,6 +51,33 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.delete_sweep, color: Colors.black),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('确认清空'),
+                  content: Text('确定要清空所有已解析视频吗？此操作不可恢复。'),
+                  actions: [
+                    TextButton(
+                      child: Text('取消'),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    TextButton(
+                      child: Text('清空', style: TextStyle(color: Colors.red)),
+                      onPressed: () {
+                        _downloadManager.clearAllDownloads();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: AnimatedBuilder(
         animation: _downloadManager,

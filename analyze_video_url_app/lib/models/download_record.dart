@@ -6,6 +6,7 @@
  * @Description: 
  */
 import 'package:path_provider/path_provider.dart';
+import 'package:dio/dio.dart';
 
 class DownloadRecord {
   String videoId;
@@ -33,6 +34,8 @@ class DownloadRecord {
       onStatusChanged?.call(newStatus);
     }
   }
+
+  CancelToken? cancelToken;
 
   DownloadRecord({
     required this.videoId,

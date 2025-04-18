@@ -299,4 +299,24 @@ class DownloadManager extends ChangeNotifier {
       _startDownload(record);
     }
   }
+
+  void _cancelDownload(DownloadRecord record) {
+    // 取消下载任务
+    record.cancelToken?.cancel('用户取消下载');
+    record.status = DownloadStatus.failed;
+    notifyListeners();
+  }
+
+  void clearAllDownloads() {
+    // 停止所有正在进行的下载
+    for (var record in _downloads) {
+      if (record.status == DownloadStatus.downloading) {
+        _cancelDownload(record);
+      }
+    }
+
+    // 清空下载列表
+    _downloads.clear();
+    notifyListeners();
+  }
 }
