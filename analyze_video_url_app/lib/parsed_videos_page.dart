@@ -2,17 +2,46 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-18 20:57:38
+ * @LastEditTime: 2025-04-19 01:16:18
  * @Description: 
  */
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import './services/download_manager.dart';
 import './models/download_record.dart';
 import './video_player_page.dart';
 import 'dart:io';
 
-class ParsedVideosPage extends StatelessWidget {
+class ParsedVideosPage extends StatefulWidget {
+  ParsedVideosPage();
+
+  @override
+  _ParsedVideosPageState createState() => _ParsedVideosPageState();
+}
+
+class _ParsedVideosPageState extends State<ParsedVideosPage> {
   final DownloadManager _downloadManager = DownloadManager();
+  Map<String, bool> _processedDownloads = {};
+
+  @override
+  void initState() {
+    super.initState();
+    // 为每个下载添加状态变化回调
+    for (var record in _downloadManager.downloads) {
+      _addStatusChangeCallback(record);
+    }
+  }
+
+  void _addStatusChangeCallback(DownloadRecord record) {
+    record.onStatusChanged = (status) {
+      if (status == DownloadStatus.completed &&
+          !_processedDownloads.containsKey(record.videoId)) {
+        _processedDownloads[record.videoId] = true;
+        _showSaveToGalleryDialog(record);
+      }
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +72,58 @@ class ParsedVideosPage extends StatelessWidget {
             itemCount: downloads.length,
             itemBuilder: (context, index) {
               final record = downloads[index];
+              if (record.onStatusChanged == null) {
+                _addStatusChangeCallback(record);
+              }
               return _buildDownloadItem(context, record);
             },
           );
         },
+      ),
+    );
+  }
+
+  void _showSaveToGalleryDialog(DownloadRecord record) async {
+    final absolutePath = await record.getVideoAbsolutePath();
+    if (absolutePath == null || !mounted) return;
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('保存到相册'),
+        content: Text('下载完成，是否立即保存到相册？'),
+        actions: [
+          TextButton(
+            child: Text('取消'),
+            onPressed: () {
+              Navigator.pop(dialogContext);
+            },
+          ),
+          TextButton(
+            child: Text('保存'),
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              try {
+                final result = await ImageGallerySaver.saveFile(absolutePath);
+                if (!mounted) return;
+
+                // 使用 ScaffoldMessenger 的全局 context
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      result['isSuccess'] ? '视频已保存到相册' : '保存失败',
+                    ),
+                  ),
+                );
+              } catch (e) {
+                if (!mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('保存失败: $e')),
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -63,7 +140,7 @@ class ParsedVideosPage extends StatelessWidget {
           children: [
             // 背景图片或占位符
             if (record.status == DownloadStatus.completed &&
-                record.thumbnailPath != null)
+                record.thumbnailRelativePath != null)
               FutureBuilder<String?>(
                 // 修改为 String?
                 future: record.getThumbnailAbsolutePath(),

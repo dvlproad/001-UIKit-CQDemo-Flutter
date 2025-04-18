@@ -48,6 +48,7 @@ class CQVideoUrlAnalyzeTiktok {
   }) async {
     try {
       String? expandedUrl = await expandShortenedUrl(shortenedUrl);
+      //String? expandedUrl = "https://www.tiktok.com/@vokhangg_/video/7473862728306674951?_t=ZT-8uEtlflgN8Y&_r=1";
       if (expandedUrl == null) {
         failure("获取短链重定向/扩展后的 videoId 失败");
         return;

@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-04-16 20:04:33
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-19 00:05:11
+ * @LastEditTime: 2025-04-19 01:14:39
  * @Description: 
  */
 import 'dart:io';
@@ -134,6 +134,7 @@ class DownloadManager extends ChangeNotifier {
 
           // 生成缩略图
           await _generateThumbnail(record);
+
           notifyListeners();
         } else {
           throw Exception('视频文件移动失败');
@@ -201,10 +202,10 @@ class DownloadManager extends ChangeNotifier {
       }
 
       // 删除缩略图
-      if (record.thumbnailPath != null) {
+      if (record.thumbnailRelativePath != null) {
         try {
           final thumbnailPath =
-              _getAbsolutePath(record.thumbnailPath!, basePath);
+              _getAbsolutePath(record.thumbnailRelativePath!, basePath);
           final thumbnailFile = File(thumbnailPath);
           if (await thumbnailFile.exists()) {
             await thumbnailFile.delete();
@@ -276,7 +277,7 @@ class DownloadManager extends ChangeNotifier {
         await record.saveThumbnailPath(thumbnail);
         await _saveDownloads();
         print('缩略图生成成功: $thumbnail'); // 添加日志
-        print('保存的相对路径: ${record.thumbnailPath}'); // 添加日志
+        print('保存的相对路径: ${record.thumbnailRelativePath}'); // 添加日志
         notifyListeners();
       } else {
         print('生成缩略图失败: thumbnail path = $thumbnail');
