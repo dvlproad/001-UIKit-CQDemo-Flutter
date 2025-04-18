@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-18 19:03:53
+ * @LastEditTime: 2025-04-18 20:37:26
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -34,27 +34,38 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   Future<void> _initializePlayer() async {
-    _absolutePath =
-        await _downloadManager.getAbsolutePath(widget.record.savedPath!);
-    _controller = VideoPlayerController.file(File(_absolutePath!))
-      ..initialize().then((_) {
-        setState(() {
-          _isInitialized = true;
-        });
-        _controller.play();
-        _controller.setLooping(true);
-      });
-  }
+    try {
+      final absolutePath = await widget.record.getVideoAbsolutePath();
+      if (absolutePath == null) {
+        throw Exception('视频文件路径不存在');
+      }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+      final file = File(absolutePath);
+      if (!await file.exists()) {
+        throw Exception('视频文件不存在');
+      }
+
+      _absolutePath = absolutePath; // 保存绝对路径
+      _controller = VideoPlayerController.file(file);
+      await _controller.initialize();
+      setState(() {
+        _isInitialized = true; // 设置初始化状态
+      });
+
+      // 自动开始播放
+      _controller.play();
+    } catch (e) {
+      print('视频初始化失败: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('视频加载失败，请稍后重试')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    String videoPath = widget.record.savedPath!;
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -63,41 +74,46 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         actions: [
           IconButton(
             icon: Icon(Icons.save_alt, color: Colors.white),
-            onPressed: () async {
-              if (_absolutePath == null) return;
-              try {
-                final result = await ImageGallerySaver.saveFile(_absolutePath!);
-                if (result['isSuccess']) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('视频已保存到相册')),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('保存失败')),
-                  );
-                }
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('保存失败: $e')),
-                );
-              }
-            },
+            onPressed: _absolutePath == null
+                ? null
+                : () async {
+                    // 禁用状态判断
+                    try {
+                      final result =
+                          await ImageGallerySaver.saveFile(_absolutePath!);
+                      if (result['isSuccess']) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('视频已保存到相册')),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('保存失败')),
+                        );
+                      }
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('保存失败: $e')),
+                      );
+                    }
+                  },
           ),
           IconButton(
             icon: Icon(Icons.share, color: Colors.white),
-            onPressed: () async {
-              if (_absolutePath == null) return;
-              try {
-                await Share.shareXFiles(
-                  [XFile(_absolutePath!)],
-                  sharePositionOrigin: Rect.fromLTWH(0, 0, 100, 100),
-                );
-              } catch (e) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('分享失败: $e')),
-                );
-              }
-            },
+            onPressed: _absolutePath == null
+                ? null
+                : () async {
+                    // 禁用状态判断
+                    try {
+                      await Share.shareXFiles(
+                        [XFile(_absolutePath!)],
+                        sharePositionOrigin: Rect.fromLTWH(0, 0, 100, 100),
+                      );
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('分享失败: $e')),
+                      );
+                    }
+                  },
           ),
           IconButton(
             icon: Icon(Icons.delete, color: Colors.white),
@@ -108,7 +124,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         ],
       ),
       body: Center(
-        child: _isInitialized
+        child: _isInitialized && _controller.value.isInitialized // 添加控制器初始化状态检查
             ? AspectRatio(
                 aspectRatio: _controller.value.aspectRatio,
                 child: Stack(
@@ -180,5 +196,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // 先暂停视频播放
+    _controller.pause();
+    // 释放视频控制器资源
+    _controller.dispose();
+    super.dispose();
   }
 }

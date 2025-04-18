@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-04-16 20:04:33
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-18 19:09:39
+ * @LastEditTime: 2025-04-19 00:05:11
  * @Description: 
  */
 import 'dart:io';
@@ -13,6 +13,7 @@ import '../models/download_record.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart' show dirname;
 
 class DownloadManager extends ChangeNotifier {
   static final DownloadManager _instance = DownloadManager._internal();
@@ -34,13 +35,117 @@ class DownloadManager extends ChangeNotifier {
       final String? recordsJson = prefs.getString(_storageKey);
       if (recordsJson != null) {
         final List<dynamic> records = json.decode(recordsJson);
-        _downloads.addAll(
-          records.map((record) => DownloadRecord.fromJson(record)).toList(),
-        );
+        _downloads.clear();
+
+        final basePath = await _getBasePath();
+        for (var record in records) {
+          final downloadRecord = DownloadRecord.fromJson(record);
+
+          // 检查临时文件和进度
+          if (downloadRecord.status == DownloadStatus.downloading) {
+            final tempPath =
+                '$basePath/videos/${downloadRecord.videoId}.mp4.temp';
+            final tempFile = File(tempPath);
+            if (await tempFile.exists()) {
+              final totalSize = downloadRecord.totalSize ?? 0;
+              if (totalSize > 0) {
+                final currentSize = await tempFile.length();
+                downloadRecord.progress = currentSize / totalSize;
+              }
+            }
+            downloadRecord.status = DownloadStatus.pending;
+          }
+
+          _downloads.add(downloadRecord);
+        }
+
+        await _saveDownloads();
         notifyListeners();
       }
     } catch (e) {
       print('加载下载记录失败: $e');
+    }
+  }
+
+  Future<void> _startDownload(DownloadRecord record) async {
+    try {
+      record.status = DownloadStatus.downloading;
+      notifyListeners();
+
+      final savePath = await record.getSaveVideoPath();
+      final tempPath = await record.getSaveTempPath();
+
+      // 确保目录存在
+      final saveDir = Directory(dirname(savePath));
+      if (!await saveDir.exists()) {
+        await saveDir.create(recursive: true);
+      }
+
+      // 检查临时文件
+      final tempFile = File(tempPath);
+      int startBytes = 0;
+      if (await tempFile.exists()) {
+        tempFile.delete(); // 注意：断点续传拼接的视频有问题，这里删除掉旧文件，以强制改成重新下载
+        //startBytes = await tempFile.length();
+      }
+
+      // 先获取文件总大小
+      final response = await _dio.head(record.videoUrl);
+      final totalSize =
+          int.parse(response.headers.value('content-length') ?? '0');
+      record.totalSize = totalSize;
+
+      await _dio.download(
+        record.videoUrl,
+        tempPath,
+        options: Options(
+          headers: {
+            if (startBytes > 0) 'Range': 'bytes=$startBytes-',
+          },
+        ),
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            record.progress = (startBytes + received) / (startBytes + total);
+            _saveDownloads();
+            notifyListeners();
+          }
+        },
+      );
+
+      // 下载完成后的处理
+      if (await tempFile.exists()) {
+        final downloadedSize = await tempFile.length();
+        if (downloadedSize != totalSize) {
+          throw Exception('下载的文件大小不正确，无法正确播放和获取视频预览图');
+        }
+        final videoFile = File(savePath);
+        if (await videoFile.exists()) {
+          await videoFile.delete();
+        }
+        await tempFile.rename(savePath);
+
+        // 确保视频文件存在并保存相对路径
+        if (await File(savePath).exists()) {
+          final basePath = await _getBasePath();
+          final relativePath = savePath.replaceFirst(basePath, '');
+          record.saveRelativePath = relativePath;
+          record.status = DownloadStatus.completed;
+          await _saveDownloads();
+
+          // 生成缩略图
+          await _generateThumbnail(record);
+          notifyListeners();
+        } else {
+          throw Exception('视频文件移动失败');
+        }
+      } else {
+        throw Exception('临时文件不存在');
+      }
+    } catch (e) {
+      print('下载失败: $e');
+      record.status = DownloadStatus.failed;
+      await _saveDownloads();
+      notifyListeners();
     }
   }
 
@@ -81,9 +186,11 @@ class DownloadManager extends ChangeNotifier {
       final basePath = await _getBasePath();
 
       // 删除视频文件
-      if (record.savedPath != null) {
+      if (record.saveRelativePath != null) {
+        // 更改字段名
         try {
-          final videoPath = _getAbsolutePath(record.savedPath!, basePath);
+          final videoPath =
+              _getAbsolutePath(record.saveRelativePath!, basePath); // 更改字段名
           final videoFile = File(videoPath);
           if (await videoFile.exists()) {
             await videoFile.delete();
@@ -120,93 +227,75 @@ class DownloadManager extends ChangeNotifier {
     return directory.path;
   }
 
-  String _getRelativePath(String absolutePath, String basePath) {
-    return absolutePath.replaceFirst(basePath, '');
-  }
-
   String _getAbsolutePath(String relativePath, String basePath) {
     return '$basePath$relativePath';
   }
 
-  Future<void> _startDownload(DownloadRecord record) async {
-    try {
-      record.status = DownloadStatus.downloading;
-      notifyListeners();
-
-      final basePath = await _getBasePath();
-      final savePath = '$basePath/videos/${record.videoId}.mp4';
-
-      await Directory('$basePath/videos').create(recursive: true);
-
-      await _dio.download(
-        record.videoUrl,
-        savePath,
-        onReceiveProgress: (received, total) {
-          if (total != -1) {
-            record.progress = received / total;
-            notifyListeners();
-          }
-        },
-      );
-
-      // 保存相对路径
-      record.savedPath = _getRelativePath(savePath, basePath);
-      record.status = DownloadStatus.completed;
-      await _saveDownloads();
-
-      await _generateThumbnail(record);
-      notifyListeners();
-    } catch (e) {
-      record.status = DownloadStatus.failed;
-      await _saveDownloads();
-      notifyListeners();
-    }
-  }
-
   Future<void> _generateThumbnail(DownloadRecord record) async {
-    if (record.savedPath == null) return;
+    if (record.saveRelativePath == null) return;
 
     try {
-      final basePath = await _getBasePath();
-      final absoluteVideoPath = _getAbsolutePath(record.savedPath!, basePath);
-      final thumbnailPath = '$basePath/thumbnails/${record.videoId}.jpg';
+      final absoluteVideoPath = await record.getVideoAbsolutePath();
+      if (absoluteVideoPath == null) {
+        print('获取视频绝对路径失败');
+        return;
+      }
 
-      // 确保目录存在
-      await Directory('$basePath/thumbnails').create(recursive: true);
+      final thumbnailPath = await record.getNewThumbnailPath();
 
+      // 确保缩略图目录存在
+      final thumbnailDir = Directory(dirname(thumbnailPath));
+      if (!await thumbnailDir.exists()) {
+        await thumbnailDir.create(recursive: true);
+      }
+
+      // 确保视频文件存在且可访问
+      final videoFile = File(absoluteVideoPath);
+      if (!await videoFile.exists()) {
+        print('视频文件不存在: $absoluteVideoPath');
+        return;
+      }
+
+      // 删除可能存在的旧缩略图
+      final thumbnailFile = File(thumbnailPath);
+      if (await thumbnailFile.exists()) {
+        await thumbnailFile.delete();
+      }
+
+      // 生成缩略图
       final String? thumbnail = await VideoThumbnail.thumbnailFile(
         video: absoluteVideoPath,
         thumbnailPath: thumbnailPath,
         imageFormat: ImageFormat.JPEG,
         maxWidth: 200,
         quality: 75,
+        timeMs: 1000, // 从视频开始1秒处截取缩略图
       );
 
-      if (thumbnail != null) {
-        // 保存相对路径
-        record.thumbnailPath = _getRelativePath(thumbnail, basePath);
+      if (thumbnail != null && await File(thumbnail).exists()) {
+        await record.saveThumbnailPath(thumbnail);
         await _saveDownloads();
+        print('缩略图生成成功: $thumbnail'); // 添加日志
+        print('保存的相对路径: ${record.thumbnailPath}'); // 添加日志
         notifyListeners();
       } else {
-        print('生成缩略图失败: thumbnail is null');
+        print('生成缩略图失败: thumbnail path = $thumbnail');
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('生成缩略图失败: $e');
+      print('堆栈信息: $stackTrace');
     }
   }
 
-  void retryDownload(String videoId) {
-    final record = _downloads.firstWhere((r) => r.videoId == videoId);
-    if (record.status == DownloadStatus.failed) {
+  void retryDownload(DownloadRecord record) {
+    if (record.status == DownloadStatus.failed ||
+        record.status == DownloadStatus.pending) {
+      if (record.status == DownloadStatus.failed) {
+        record.progress = 0.0;
+      }
       record.status = DownloadStatus.pending;
-      record.progress = 0.0;
       notifyListeners();
       _startDownload(record);
     }
-  }
-
-  Future<String> getAbsolutePath(String relativePath) async {
-    final directory = await getApplicationDocumentsDirectory();
-    return '${directory.path}$relativePath';
   }
 }

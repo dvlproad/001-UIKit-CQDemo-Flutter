@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-18 19:09:06
+ * @LastEditTime: 2025-04-18 20:57:38
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -64,10 +64,14 @@ class ParsedVideosPage extends StatelessWidget {
             // 背景图片或占位符
             if (record.status == DownloadStatus.completed &&
                 record.thumbnailPath != null)
-              FutureBuilder<String>(
-                future: _downloadManager.getAbsolutePath(record.thumbnailPath!),
+              FutureBuilder<String?>(
+                // 修改为 String?
+                future: record.getThumbnailAbsolutePath(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData || snapshot.hasError) {
+                  if (!snapshot.hasData ||
+                      snapshot.hasError ||
+                      snapshot.data == null) {
+                    // 添加 snapshot.data == null 的判断
                     print('加载缩略图失败: ${snapshot.error}');
                     return Container(color: Colors.grey[300]);
                   }
@@ -152,7 +156,7 @@ class ParsedVideosPage extends StatelessWidget {
                           ),
                           TextButton(
                             onPressed: () =>
-                                DownloadManager().retryDownload(record.videoId),
+                                DownloadManager().retryDownload(record),
                             style: TextButton.styleFrom(
                               padding: EdgeInsets.zero,
                               minimumSize: Size(0, 0),
@@ -224,7 +228,8 @@ class ParsedVideosPage extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.month}-${date.day} ${date.hour}:${date.minute}';
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return '${twoDigits(date.month)}-${twoDigits(date.day)} ${twoDigits(date.hour)}:${twoDigits(date.minute)}';
   }
 
   Widget _buildStatusIcon(DownloadStatus status) {
@@ -263,9 +268,70 @@ class ParsedVideosPage extends StatelessWidget {
   Widget _buildProgressSection(BuildContext context, DownloadRecord record) {
     switch (record.status) {
       case DownloadStatus.pending:
-        return Text(
-          '等待下载...',
-          style: TextStyle(color: Colors.white70, fontSize: 10),
+        if (record.progress > 0) {
+          // 如果有进度，显示进度条
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LinearProgressIndicator(
+                value: record.progress,
+                backgroundColor: Colors.white24,
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+              ),
+              SizedBox(height: 2),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '已下载 ${(record.progress * 100).toStringAsFixed(1)}%',
+                      style: TextStyle(color: Colors.white70, fontSize: 10),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => _downloadManager.retryDownload(record),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size(0, 0),
+                    ),
+                    child: Text(
+                      '继续下载',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 10,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        }
+        // 如果没有进度，显示原来的等待下载状态
+        return Row(
+          children: [
+            Expanded(
+              child: Text(
+                '等待下载...',
+                style: TextStyle(color: Colors.white70, fontSize: 10),
+              ),
+            ),
+            TextButton(
+              onPressed: () => _downloadManager.retryDownload(record),
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.zero,
+                minimumSize: Size(0, 0),
+              ),
+              child: Text(
+                '继续下载',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 10,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ],
         );
       case DownloadStatus.downloading:
         return Column(
@@ -296,19 +362,29 @@ class ParsedVideosPage extends StatelessWidget {
     }
   }
 
-  void _playVideo(BuildContext context, DownloadRecord record) {
-    if (record.savedPath == null) return;
+  void _playVideo(BuildContext context, DownloadRecord record) async {
+    final absolutePath = await record.getVideoAbsolutePath();
+    if (absolutePath == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('视频文件路径不存在')),
+      );
+      return;
+    }
+
+    final videoFile = File(absolutePath);
+    if (!await videoFile.exists()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('视频文件不存在')),
+      );
+      return;
+    }
 
     Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (context) => VideoPlayerPage(record: record),
       ),
-    ).then((wasDeleted) {
-      if (wasDeleted == true) {
-        _downloadManager.notifyListeners();
-      }
-    });
+    );
   }
 }
 
