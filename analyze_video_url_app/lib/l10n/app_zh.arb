@@ -1,0 +1,71 @@
+{
+  "appTitle": "视频链接解析器",
+  "parsedVideos": "已解析视频",
+  "noDownloadRecords": "暂无下载记录",
+  "videoId": "视频ID: {id}",
+  "@videoId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "addTime": "添加时间: {time}",
+  "@addTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingForDownload": "等待下载...",
+  "continueDownload": "继续下载",
+  "downloaded": "{progress}%",
+  "@downloaded": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadComplete": "下载完成",
+  "downloadFailed": "下载失败",
+  "retry": "重试",
+  "saveToGallery": "保存到相册",
+  "downloadCompleteSavePrompt": "下载完成，是否立即保存到相册？",
+  "cancel": "取消",
+  "save": "保存",
+  "videoSavedToGallery": "视频已保存到相册",
+  "saveFailed": "保存失败",
+  "saveError": "保存失败: {error}",
+  "@saveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoFileNotExist": "视频文件不存在",
+  "videoFilePathNotExist": "视频文件路径不存在",
+  "confirmDelete": "确认删除",
+  "confirmDeletePrompt": "确定要删除这个视频吗？",
+  "delete": "删除",
+  "confirmClear": "确认清空",
+  "confirmClearPrompt": "确定要清空所有已解析视频吗？此操作不可恢复。",
+  "clear": "清空",
+  "videoInput": "解析输入",
+  "pasteTiktokLink": "粘贴 TikTok 视频链接...",
+  "getVideo": "获取视频",
+  "parsingFailed": "解析失败: {error}",
+  "@parsingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "more": "更多",
+  "settings": "设置",
+  "openSettings": "打开设置",
+  "cannotOpenSettings": "无法打开设置"
+} 

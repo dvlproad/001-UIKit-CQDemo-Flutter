@@ -12,6 +12,9 @@ import 'package:share_plus/share_plus.dart';
 import './services/download_manager.dart';
 import './models/download_record.dart';
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:analyze_video_url_app/l10n/l10n.dart';
 
 class VideoPlayerPage extends StatefulWidget {
   final DownloadRecord record;
@@ -110,7 +113,9 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       );
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('分享失败: $e')),
+                        SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .saveError(e.toString()))),
                       );
                     }
                   },

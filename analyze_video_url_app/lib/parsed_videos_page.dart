@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-19 01:16:18
+ * @LastEditTime: 2025-04-19 01:35:27
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ import './services/download_manager.dart';
 import './models/download_record.dart';
 import './video_player_page.dart';
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ParsedVideosPage extends StatefulWidget {
   ParsedVideosPage();
@@ -47,7 +48,8 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("已解析视频", style: TextStyle(color: Colors.black)),
+        title: Text(AppLocalizations.of(context)!.parsedVideos,
+            style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -57,19 +59,23 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('确认清空'),
-                  content: Text('确定要清空所有已解析视频吗？此操作不可恢复。'),
+                builder: (dialogContext) => AlertDialog(
+                  title: Text(AppLocalizations.of(context)!.confirmClear),
+                  content:
+                      Text(AppLocalizations.of(context)!.confirmClearPrompt),
                   actions: [
                     TextButton(
-                      child: Text('取消'),
-                      onPressed: () => Navigator.pop(context),
+                      child: Text(AppLocalizations.of(context)!.cancel),
+                      onPressed: () => Navigator.pop(dialogContext),
                     ),
                     TextButton(
-                      child: Text('清空', style: TextStyle(color: Colors.red)),
+                      child: Text(
+                        AppLocalizations.of(context)!.clear,
+                        style: TextStyle(color: Colors.red),
+                      ),
                       onPressed: () {
                         _downloadManager.clearAllDownloads();
-                        Navigator.pop(context);
+                        Navigator.pop(dialogContext);
                       },
                     ),
                   ],
@@ -85,7 +91,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
           final downloads = _downloadManager.downloads;
           if (downloads.isEmpty) {
             return Center(
-              child: Text('暂无下载记录'),
+              child: Text(AppLocalizations.of(context)!.noDownloadRecords),
             );
           }
           return GridView.builder(
@@ -117,35 +123,40 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: Text('保存到相册'),
-        content: Text('下载完成，是否立即保存到相册？'),
+        title: Text(AppLocalizations.of(context)!.saveToGallery),
+        content: Text(AppLocalizations.of(context)!.downloadCompleteSavePrompt),
         actions: [
           TextButton(
-            child: Text('取消'),
+            child: Text(AppLocalizations.of(context)!.cancel),
             onPressed: () {
               Navigator.pop(dialogContext);
             },
           ),
           TextButton(
-            child: Text('保存'),
+            child: Text(AppLocalizations.of(context)!.save),
             onPressed: () async {
               Navigator.pop(dialogContext);
               try {
                 final result = await ImageGallerySaver.saveFile(absolutePath);
                 if (!mounted) return;
 
-                // 使用 ScaffoldMessenger 的全局 context
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      result['isSuccess'] ? '视频已保存到相册' : '保存失败',
+                      result['isSuccess']
+                          ? AppLocalizations.of(context)!.videoSavedToGallery
+                          : AppLocalizations.of(context)!.saveFailed,
                     ),
                   ),
                 );
               } catch (e) {
                 if (!mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('保存失败: $e')),
+                  SnackBar(
+                    content: Text(
+                      AppLocalizations.of(context)!.saveError(e.toString()),
+                    ),
+                  ),
                 );
               }
             },
@@ -169,25 +180,16 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
             if (record.status == DownloadStatus.completed &&
                 record.thumbnailRelativePath != null)
               FutureBuilder<String?>(
-                // 修改为 String?
                 future: record.getThumbnailAbsolutePath(),
                 builder: (context, snapshot) {
                   if (!snapshot.hasData ||
                       snapshot.hasError ||
                       snapshot.data == null) {
-                    // 添加 snapshot.data == null 的判断
                     print('加载缩略图失败: ${snapshot.error}');
                     return Container(color: Colors.grey[300]);
                   }
-
-                  final file = File(snapshot.data!);
-                  if (!file.existsSync()) {
-                    print('缩略图文件不存在: ${snapshot.data!}');
-                    return Container(color: Colors.grey[300]);
-                  }
-
                   return Image.file(
-                    file,
+                    File(snapshot.data!),
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       print('显示缩略图失败: $error');
@@ -223,7 +225,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    '视频ID: ${record.videoId}',
+                    AppLocalizations.of(context)!.videoId(record.videoId),
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -234,7 +236,8 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    '添加时间: ${_formatDate(record.addTime)}',
+                    AppLocalizations.of(context)!
+                        .addTime(_formatDate(record.addTime)),
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 10,
@@ -254,7 +257,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                           SizedBox(width: 4),
                           Expanded(
                             child: Text(
-                              '下载失败',
+                              AppLocalizations.of(context)!.downloadFailed,
                               style: TextStyle(color: Colors.red, fontSize: 10),
                             ),
                           ),
@@ -266,7 +269,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                               minimumSize: Size(0, 0),
                             ),
                             child: Text(
-                              '重试',
+                              AppLocalizations.of(context)!.retry,
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 10,
@@ -387,7 +390,8 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                 children: [
                   Expanded(
                     child: Text(
-                      '已下载 ${(record.progress * 100).toStringAsFixed(1)}%',
+                      AppLocalizations.of(context)!.downloaded(
+                          (record.progress * 100).toStringAsFixed(1)),
                       style: TextStyle(color: Colors.white70, fontSize: 10),
                     ),
                   ),
@@ -398,7 +402,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                       minimumSize: Size(0, 0),
                     ),
                     child: Text(
-                      '继续下载',
+                      AppLocalizations.of(context)!.continueDownload,
                       style: TextStyle(
                         color: Colors.blue,
                         fontSize: 10,
@@ -416,7 +420,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
           children: [
             Expanded(
               child: Text(
-                '等待下载...',
+                AppLocalizations.of(context)!.waitingForDownload,
                 style: TextStyle(color: Colors.white70, fontSize: 10),
               ),
             ),
@@ -427,7 +431,7 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                 minimumSize: Size(0, 0),
               ),
               child: Text(
-                '继续下载',
+                AppLocalizations.of(context)!.continueDownload,
                 style: TextStyle(
                   color: Colors.blue,
                   fontSize: 10,
@@ -448,19 +452,20 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
             ),
             SizedBox(height: 2),
             Text(
-              '${(record.progress * 100).toStringAsFixed(1)}%',
+              AppLocalizations.of(context)!
+                  .downloaded((record.progress * 100).toStringAsFixed(1)),
               style: TextStyle(color: Colors.white70, fontSize: 10),
             ),
           ],
         );
       case DownloadStatus.completed:
         return Text(
-          '下载完成',
+          AppLocalizations.of(context)!.downloadComplete,
           style: TextStyle(color: Colors.green, fontSize: 10),
         );
       case DownloadStatus.failed:
         return Text(
-          '下载失败',
+          AppLocalizations.of(context)!.downloadFailed,
           style: TextStyle(color: Colors.red, fontSize: 10),
         );
     }

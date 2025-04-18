@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-04-16 22:05:17
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-16 22:17:55
+ * @LastEditTime: 2025-04-19 01:45:11
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -10,6 +10,7 @@ import './video_input_page.dart';
 import './parsed_videos_page.dart';
 import './more_page.dart';
 import './tab_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -44,15 +45,15 @@ class _HomePageState extends State<HomePage> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: "解析输入",
+            label: AppLocalizations.of(context)!.videoInput,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_today),
-            label: "已解析",
+            label: AppLocalizations.of(context)!.parsedVideos,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: "更多",
+            label: AppLocalizations.of(context)!.more,
           ),
         ],
       ),

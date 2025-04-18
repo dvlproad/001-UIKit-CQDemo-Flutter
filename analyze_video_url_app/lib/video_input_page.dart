@@ -2,13 +2,14 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-17 16:01:58
+ * @LastEditTime: 2025-04-19 01:42:55
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:flutter_analyze_video_url/cq_video_url_analyze_tiktok.dart';
 import './services/download_manager.dart';
 import './tab_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VideoInputPage extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
@@ -17,7 +18,8 @@ class VideoInputPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("解析输入", style: TextStyle(color: Colors.black)),
+        title: Text(AppLocalizations.of(context)!.videoInput,
+            style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
@@ -38,7 +40,7 @@ class VideoInputPage extends StatelessWidget {
                 controller: _controller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: "粘贴 TikTok 视频链接...",
+                  hintText: AppLocalizations.of(context)!.pasteTiktokLink,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.paste, color: Colors.green),
                     onPressed: () {
@@ -102,7 +104,9 @@ class VideoInputPage extends StatelessWidget {
 
                       debugPrint("errorMessage: $errorMessage");
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('解析失败: $errorMessage')),
+                        SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .parsingFailed(errorMessage))),
                       );
                     },
                   );
@@ -150,7 +154,8 @@ class VideoInputPage extends StatelessWidget {
                   }
                   */
                 },
-                child: Text("获取视频", style: TextStyle(fontSize: 18)),
+                child: Text(AppLocalizations.of(context)!.getVideo,
+                    style: TextStyle(fontSize: 18)),
               ),
             ),
           ],

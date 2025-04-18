@@ -1,0 +1,71 @@
+{
+  "appTitle": "Video URL Analyzer",
+  "parsedVideos": "Parsed Videos",
+  "noDownloadRecords": "No download records",
+  "videoId": "Video ID: {id}",
+  "@videoId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "addTime": "Added: {time}",
+  "@addTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingForDownload": "Waiting for download...",
+  "continueDownload": "Continue download",
+  "downloaded": "{progress}%",
+  "@downloaded": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadComplete": "Download complete",
+  "downloadFailed": "Download failed",
+  "retry": "Retry",
+  "saveToGallery": "Save to Gallery",
+  "downloadCompleteSavePrompt": "Download complete, save to gallery now?",
+  "cancel": "Cancel",
+  "save": "Save",
+  "videoSavedToGallery": "Video saved to gallery",
+  "saveFailed": "Save failed",
+  "saveError": "Save error: {error}",
+  "@saveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoFileNotExist": "Video file does not exist",
+  "videoFilePathNotExist": "Video file path does not exist",
+  "confirmDelete": "Confirm Delete",
+  "confirmDeletePrompt": "Are you sure you want to delete this video?",
+  "delete": "Delete",
+  "confirmClear": "Confirm Clear",
+  "confirmClearPrompt": "Are you sure you want to clear all parsed videos? This action cannot be undone.",
+  "clear": "Clear",
+  "videoInput": "Video Input",
+  "pasteTiktokLink": "Paste TikTok video link...",
+  "getVideo": "Get Video",
+  "parsingFailed": "Parsing failed: {error}",
+  "@parsingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "more": "More",
+  "settings": "Settings",
+  "openSettings": "Open Settings",
+  "cannotOpenSettings": "Cannot open settings"
+} 
