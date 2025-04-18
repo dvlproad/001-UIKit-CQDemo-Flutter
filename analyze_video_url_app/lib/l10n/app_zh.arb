@@ -67,5 +67,8 @@
   "more": "更多",
   "settings": "设置",
   "openSettings": "打开设置",
-  "cannotOpenSettings": "无法打开设置"
+  "cannotOpenSettings": "无法打开设置",
+  "emptyInputRandomDownloadPrompt": "输入框为空，是否随机下载一个视频？",
+  "randomDownload": "随机下载",
+  "videoLoadFailed": "视频加载失败，请稍后重试"
 } 

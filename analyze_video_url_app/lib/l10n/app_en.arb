@@ -67,5 +67,8 @@
   "more": "More",
   "settings": "Settings",
   "openSettings": "Open Settings",
-  "cannotOpenSettings": "Cannot open settings"
+  "cannotOpenSettings": "Cannot open settings",
+  "emptyInputRandomDownloadPrompt": "Input is empty, would you like to download a random video?",
+  "randomDownload": "Random Download",
+  "videoLoadFailed": "Video loading failed, please try again later"
 } 

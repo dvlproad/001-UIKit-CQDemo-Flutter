@@ -292,15 +292,16 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: Text('确认删除'),
-                      content: Text('确定要删除这个视频吗？'),
+                      title: Text(AppLocalizations.of(context)!.confirmDelete),
+                      content: Text(
+                          AppLocalizations.of(context)!.confirmDeletePrompt),
                       actions: [
                         TextButton(
-                          child: Text('取消'),
+                          child: Text(AppLocalizations.of(context)!.cancel),
                           onPressed: () => Navigator.pop(context),
                         ),
                         TextButton(
-                          child: Text('删除'),
+                          child: Text(AppLocalizations.of(context)!.delete),
                           onPressed: () {
                             DownloadManager().deleteDownload(record);
                             Navigator.pop(context);
@@ -475,7 +476,8 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
     final absolutePath = await record.getVideoAbsolutePath();
     if (absolutePath == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('视频文件路径不存在')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.videoFilePathNotExist)),
       );
       return;
     }
@@ -483,7 +485,8 @@ class _ParsedVideosPageState extends State<ParsedVideosPage> {
     final videoFile = File(absolutePath);
     if (!await videoFile.exists()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('视频文件不存在')),
+        SnackBar(
+            content: Text(AppLocalizations.of(context)!.videoFileNotExist)),
       );
       return;
     }
