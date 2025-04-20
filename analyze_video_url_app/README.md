@@ -4,6 +4,32 @@ A new Flutter project.
 
 
 
+```shell
+flutter gen-l10n
+
+flutter run -d emulator-5554
+```
+
+
+
+
+
+```
+gradle.beforeProject { project ->
+    project.plugins.withId('com.android.library') { 
+        if (project.name == "image_gallery_saver") {
+            project.android.namespace = "com.example.imagegallerysaver"
+        } else if (project.name == "video_thumbnail") {
+            project.android.namespace = "xyz.justsoft.video_thumbnail"
+        }
+    }
+}
+```
+
+
+
+
+
 ## 下载器开发
 
 ### 1、下载对象

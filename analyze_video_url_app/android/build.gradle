@@ -1,3 +1,10 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 allprojects {
     repositories {
         google()
@@ -5,14 +12,60 @@ allprojects {
     }
 }
 
+subprojects { project ->
+    project.plugins.withId('com.android.library') { 
+        project.android {
+            compileSdk = 33
+            
+            defaultConfig {
+                minSdk = 21
+                targetSdk = 33
+            }
+            
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_17
+                targetCompatibility JavaVersion.VERSION_17
+                encoding = 'UTF-8'
+            }
+        }
+    }
+    
+    // 确保所有 Kotlin 编译任务使用相同的 JVM 目标版本
+    project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            jvmTarget = '17'
+            apiVersion = '1.8'
+            languageVersion = '1.8'
+        }
+    }
+    
+    // 确保 Java 编译任务使用相同的目标版本
+    project.tasks.withType(JavaCompile).all {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
 rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
     project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
