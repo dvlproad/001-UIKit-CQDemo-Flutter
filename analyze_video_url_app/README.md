@@ -30,6 +30,18 @@ gradle.beforeProject { project ->
 
 
 
+Firebase
+
+```
+dart pub global activate flutterfire_cli
+
+flutterfire configure --project=downloader-2513e
+```
+
+
+
+
+
 ## 下载器开发
 
 ### 1、下载对象
