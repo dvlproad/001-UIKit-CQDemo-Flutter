@@ -2,12 +2,13 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 15:27:36
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-21 20:50:56
+ * @LastEditTime: 2025-04-21 23:56:44
  * @Description: 
  */
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'firebase_options.dart'; // 添加这行
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'home_page.dart';
@@ -22,9 +23,12 @@ const _kTestingCrashlytics = true;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // 修改初始化方式
   await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   const fatalError = true;
   // Non-async exceptions
   FlutterError.onError = (errorDetails) {

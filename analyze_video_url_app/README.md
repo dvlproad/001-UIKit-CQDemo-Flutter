@@ -42,6 +42,20 @@ flutterfire configure --project=downloader-2513e
 
 
 
+![image-20250422233554731](README/image-20250422233554731.png)
+
+
+
+
+
+> flutter: Error expanding URL: DioException [connection error]: The connection errored: Connection reset by peer This indicates an error which most likely cannot be solved by the library.
+>
+> Error: SocketException: Connection reset by peer (OS Error: Connection reset by peer, errno = 54), address = www.tiktok.com, port = 61152
+>
+> 原因：未科学上网。
+
+
+
 ## 下载器开发
 
 ### 1、下载对象

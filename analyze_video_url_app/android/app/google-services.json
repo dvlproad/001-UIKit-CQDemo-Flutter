@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "506962201306",
+    "project_id": "my-downloader1",
+    "storage_bucket": "my-downloader1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506962201306:android:67cfb2ef1c3f98bcf673e3",
+        "android_client_info": {
+          "package_name": "com.example.analyze_video_url_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdyqZi6PmcPFwAbOWyH3tKn6HdvmUdgFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

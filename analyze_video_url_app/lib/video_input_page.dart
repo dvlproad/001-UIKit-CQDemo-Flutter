@@ -28,9 +28,9 @@ class _VideoInputPageState extends State<VideoInputPage>
   // 随机下载链接列表
   final List<String> _randomUrls = [
     "https://www.tiktok.com/t/ZT2mkNaFw/", // nezha2 shengaongbao
-    //"https://www.tiktok.com/t/ZT2VmD3sP/", // 蜜雪冰城
+    "https://www.tiktok.com/t/ZT2VmD3sP/", // 蜜雪冰城
     "https://www.tiktok.com/t/ZT2VmapkQ/", // 夕阳
-    "https://www.tiktok.com/t/ZT2VmapkQ/", // 云朵
+    "https://vt.tiktok.com/ZSrtL8exN/", // super idol
   ];
 
   @override
