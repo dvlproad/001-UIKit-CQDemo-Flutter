@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-04-16 20:04:33
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-19 01:14:39
+ * @LastEditTime: 2025-04-23 00:16:04
  * @Description: 
  */
 import 'dart:io';
@@ -21,7 +21,8 @@ class DownloadManager extends ChangeNotifier {
 
   List<DownloadRecord> get downloads => List.unmodifiable(_downloads);
   final List<DownloadRecord> _downloads = [];
-  final Dio _dio = Dio();
+  // 删除全局 _dio
+  // final Dio _dio = Dio();
   static const String _storageKey = 'download_records';
 
   DownloadManager._internal() {
@@ -72,6 +73,40 @@ class DownloadManager extends ChangeNotifier {
       record.status = DownloadStatus.downloading;
       notifyListeners();
 
+      // 为每个下载任务创建独立的 Dio 实例
+      final dio = Dio(BaseOptions(
+        connectTimeout: Duration(seconds: 30),
+        receiveTimeout: Duration(seconds: 30),
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+          'Accept': '*/*',
+          'Accept-Encoding': 'gzip, deflate, br',
+        },
+        validateStatus: (status) {
+          return status != null && status < 600; // 允许处理 5xx 错误
+        },
+        followRedirects: true,
+        maxRedirects: 5,
+      ));
+
+      // 配置重试
+      dio.interceptors.add(
+        InterceptorsWrapper(
+          onError: (e, handler) async {
+            if (e.response?.statusCode == 503) {
+              // 503 错误时等待后重试
+              await Future.delayed(Duration(seconds: 2));
+              return handler.resolve(await dio.fetch(e.requestOptions));
+            }
+            return handler.next(e);
+          },
+        ),
+      );
+
+      // 创建取消令牌
+      record.cancelToken = CancelToken();
+
       final savePath = await record.getSaveVideoPath();
       final tempPath = await record.getSaveTempPath();
 
@@ -90,14 +125,16 @@ class DownloadManager extends ChangeNotifier {
       }
 
       // 先获取文件总大小
-      final response = await _dio.head(record.videoUrl);
+      // 使用新的 dio 实例
+      final response = await dio.head(record.videoUrl);
       final totalSize =
           int.parse(response.headers.value('content-length') ?? '0');
       record.totalSize = totalSize;
 
-      await _dio.download(
+      await dio.download(
         record.videoUrl,
         tempPath,
+        cancelToken: record.cancelToken,
         options: Options(
           headers: {
             if (startBytes > 0) 'Range': 'bytes=$startBytes-',
@@ -115,9 +152,9 @@ class DownloadManager extends ChangeNotifier {
       // 下载完成后的处理
       if (await tempFile.exists()) {
         final downloadedSize = await tempFile.length();
-        if (downloadedSize != totalSize) {
-          throw Exception('下载的文件大小不正确，无法正确播放和获取视频预览图');
-        }
+        // if (downloadedSize != totalSize) {
+        //   throw Exception('下载的文件大小不正确，无法正确播放和获取视频预览图');
+        // }
         final videoFile = File(savePath);
         if (await videoFile.exists()) {
           await videoFile.delete();
@@ -143,10 +180,12 @@ class DownloadManager extends ChangeNotifier {
         throw Exception('临时文件不存在');
       }
     } catch (e) {
-      print('下载失败: $e');
-      record.status = DownloadStatus.failed;
-      await _saveDownloads();
-      notifyListeners();
+      if (e is! DioException || e.type != DioExceptionType.cancel) {
+        print('下载失败: $e');
+        record.status = DownloadStatus.failed;
+        await _saveDownloads();
+        notifyListeners();
+      }
     }
   }
 

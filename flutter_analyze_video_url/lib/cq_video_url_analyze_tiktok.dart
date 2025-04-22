@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 16:08:51
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-03-31 21:54:43
+ * @LastEditTime: 2025-04-23 01:05:22
  * @Description: Tiktok 的视频地址地址
  */
 import 'dart:convert';
@@ -104,6 +104,65 @@ class CQVideoUrlAnalyzeTiktok {
       return shortenedUrl;
     } catch (e) {
       print("Error expanding URL: $e");
+      return null;
+    }
+  }
+
+  /// 扩展短链
+  static Future<String?> expandShortenedUrl2(String shortenedUrl) async {
+    try {
+      final dio = Dio(BaseOptions(
+        headers: {
+          'User-Agent':
+              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+          'Accept': '*/*',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+          'Connection': 'keep-alive',
+          'sec-ch-ua':
+              '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+          'sec-ch-ua-mobile': '?0',
+          'sec-ch-ua-platform': '"macOS"',
+          'Sec-Fetch-Dest': 'document',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-Site': 'none',
+          'Sec-Fetch-User': '?1',
+        },
+        followRedirects: true,
+        validateStatus: (status) => status! < 500,
+        connectTimeout: Duration(seconds: 30),
+        receiveTimeout: Duration(seconds: 30),
+        contentType: 'application/json; charset=utf-8',
+      ));
+
+      // 添加代理配置（如果有的话）
+      // dio.httpClientAdapter = IOHttpClientAdapter(
+      //   createHttpClient: () {
+      //     final client = HttpClient();
+      //     client.findProxy = (uri) => 'PROXY 127.0.0.1:7890';
+      //     return client;
+      //   },
+      // );
+
+      final response = await dio.head(
+        // 使用 HEAD 请求替代 GET
+        shortenedUrl,
+        options: Options(
+          followRedirects: true,
+          maxRedirects: 5,
+          validateStatus: (status) => status! < 500,
+        ),
+      );
+
+      final finalUrl = response.realUri.toString();
+      print('Final URL: $finalUrl');
+      return finalUrl.isNotEmpty ? finalUrl : shortenedUrl;
+    } catch (e) {
+      print("Error expanding URL: $e");
+      // 如果请求失败，尝试从原始链接中提取视频ID
+      if (shortenedUrl.contains('video/')) {
+        return shortenedUrl;
+      }
       return null;
     }
   }
