@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-19 02:44:51
+ * @LastEditTime: 2025-04-27 22:23:07
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import './tab_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:math';
+import './services/analytics_service.dart';
 
 class VideoInputPage extends StatefulWidget {
   @override
@@ -168,6 +169,9 @@ class _VideoInputPageState extends State<VideoInputPage>
                   padding: EdgeInsets.symmetric(horizontal: 12),
                   child: TextField(
                     controller: _controller,
+                    maxLines: 10, // 允许多行
+                    minLines: 1, // 最小行数
+                    //textInputAction: TextInputAction.newline, // 支持换行
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: AppLocalizations.of(context)!.pasteTiktokLink,
@@ -210,6 +214,9 @@ class _VideoInputPageState extends State<VideoInputPage>
   }
 
   Future<void> _analyzeVideo() async {
+    final analytics = AnalyticsService();
+    await analytics.logStartAnalyze(_controller.text.trim());
+
     // 关闭键盘
     FocusScope.of(context).unfocus();
 
@@ -239,6 +246,7 @@ class _VideoInputPageState extends State<VideoInputPage>
         url,
         CQAnalyzeVideoUrlType.videoWithoutWatermark,
         success: (expandedUrl, videoId, resultUrl) {
+          analytics.logAnalyzeSuccess(videoId, url);
           // 关闭键盘
           FocusScope.of(context).unfocus();
           // 关闭加载对话框
@@ -255,6 +263,7 @@ class _VideoInputPageState extends State<VideoInputPage>
           AppTabController().switchToTab(1); // 假设ParsedVideosPage是第二个tab（索引为1）
         },
         failure: (errorMessage) {
+          analytics.logAnalyzeFailed(errorMessage, url);
           // 关闭加载对话框
           Navigator.pop(context);
 
@@ -266,6 +275,8 @@ class _VideoInputPageState extends State<VideoInputPage>
           );
         },
       );
+    } catch (e, stack) {
+      analytics.logError(e, stack, url);
     } finally {
       setState(() {
         _isAnalyzing = false;
