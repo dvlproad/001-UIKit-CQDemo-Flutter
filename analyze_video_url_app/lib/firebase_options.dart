@@ -50,13 +50,12 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBdyqZi6PmcPFwAbOWyH3tKn6HdvmUdgFA',
-    appId: '1:506962201306:android:67cfb2ef1c3f98bcf673e3',
-    messagingSenderId: '506962201306',
-    projectId: 'my-downloader1',
-    storageBucket: 'my-downloader1.firebasestorage.app',
+    apiKey: 'AIzaSyBiGlRYh9d6Ngf6AhL57SaWZ0jdiLfUkNk', // 使用新的值
+    appId: '1:947261366358:android:8040c32bedee60d92c9bf7', // 使用新的值
+    messagingSenderId: '947261366358', // 使用新的值
+    projectId: 'tksaver-afb58', // 使用新的值
+    storageBucket: 'tksaver-afb58.firebasestorage.app', // 使用新的值
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAN_55vRXcQNprWFTUn-9csrnrTG4ro-9Q',
     appId: '1:506962201306:ios:b9e135d8998c1c04f673e3',

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "506962201306",
-    "project_id": "my-downloader1",
-    "storage_bucket": "my-downloader1.firebasestorage.app"
+    "project_number": "947261366358",
+    "project_id": "tksaver-afb58",
+    "storage_bucket": "tksaver-afb58.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:506962201306:android:67cfb2ef1c3f98bcf673e3",
+        "mobilesdk_app_id": "1:947261366358:android:8040c32bedee60d92c9bf7",
         "android_client_info": {
-          "package_name": "com.example.analyze_video_url_app"
+          "package_name": "com.downloader.downloader"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBdyqZi6PmcPFwAbOWyH3tKn6HdvmUdgFA"
+          "current_key": "AIzaSyBiGlRYh9d6Ngf6AhL57SaWZ0jdiLfUkNk"
         }
       ],
       "services": {
