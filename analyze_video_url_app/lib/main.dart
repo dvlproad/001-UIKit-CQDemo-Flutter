@@ -107,7 +107,24 @@ class _MyAppState extends State<MyApp> {
       ],
       supportedLocales: L10n.all,
       locale: const Locale('en'),
-      home: HomePage(),
+      home: FutureBuilder(
+        future: _initializeFlutterFireFuture,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(child: Text('初始化失败，请重启应用')),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            return HomePage();
+          }
+
+          return Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        },
+      ),
     );
   }
 }
