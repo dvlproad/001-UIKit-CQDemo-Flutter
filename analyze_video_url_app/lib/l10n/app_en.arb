@@ -70,6 +70,7 @@
   "cannotOpenSettings": "Cannot open settings",
   "emptyInputRandomDownloadPrompt": "Input is empty, would you like to download a random video?",
   "randomDownload": "Random Download",
+  "videoLoadFailed": "Video loading failed, please try again later",
   "videoFilePathNotFound": "Video file path not found",
   "videoFileNotFound": "Video file not found",
   "videoInitializationFailed": "Video initialization failed: {error}",
@@ -89,5 +90,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "confirmDeleteVideo": "Confirm Delete",
+  "confirmDeleteVideoPrompt": "Are you sure you want to delete this video?"
 }
