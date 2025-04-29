@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:13
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-27 22:23:07
+ * @LastEditTime: 2025-04-29 10:25:16
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -268,10 +268,12 @@ class _VideoInputPageState extends State<VideoInputPage>
           Navigator.pop(context);
 
           debugPrint("errorMessage: $errorMessage");
+
+          String errorMessage2 = "解析失败";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content: Text(
-                    AppLocalizations.of(context)!.parsingFailed(errorMessage))),
+                content: Text(AppLocalizations.of(context)!
+                    .parsingFailed(errorMessage2))),
           );
         },
       );

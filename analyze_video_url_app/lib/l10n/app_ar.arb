@@ -1,0 +1,95 @@
+{
+  "appTitle": "محلل روابط الفيديو",
+  "parsedVideos": "مقاطع الفيديو المحللة",
+  "noDownloadRecords": "لا توجد سجلات تحميل",
+  "videoId": "معرف الفيديو: {id}",
+  "@videoId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "addTime": "تمت الإضافة: {time}",
+  "@addTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingForDownload": "في انتظار التحميل...",
+  "continueDownload": "متابعة التحميل",
+  "downloaded": "{progress}%",
+  "@downloaded": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadComplete": "اكتمل التحميل",
+  "downloadFailed": "فشل التحميل",
+  "retry": "إعادة المحاولة",
+  "saveToGallery": "حفظ في المعرض",
+  "downloadCompleteSavePrompt": "اكتمل التحميل، هل تريد الحفظ في المعرض الآن؟",
+  "cancel": "إلغاء",
+  "save": "حفظ",
+  "videoSavedToGallery": "تم حفظ الفيديو في المعرض",
+  "saveFailed": "فشل الحفظ",
+  "saveError": "خطأ في الحفظ: {error}",
+  "@saveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoFileNotExist": "ملف الفيديو غير موجود",
+  "videoFilePathNotExist": "مسار ملف الفيديو غير موجود",
+  "confirmDelete": "تأكيد الحذف",
+  "confirmDeletePrompt": "هل أنت متأكد من أنك تريد حذف هذا الفيديو؟",
+  "delete": "حذف",
+  "confirmClear": "تأكيد المسح",
+  "confirmClearPrompt": "هل أنت متأكد من أنك تريد مسح جميع مقاطع الفيديو المحللة؟ لا يمكن التراجع عن هذا الإجراء.",
+  "clear": "مسح",
+  "videoInput": "إدخال الفيديو",
+  "pasteTiktokLink": "الصق رابط تيك توك...",
+  "getVideo": "الحصول على الفيديو",
+  "parsingFailed": "فشل التحليل: {error}",
+  "@parsingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "more": "المزيد",
+  "settings": "الإعدادات",
+  "openSettings": "فتح الإعدادات",
+  "cannotOpenSettings": "لا يمكن فتح الإعدادات",
+  "emptyInputRandomDownloadPrompt": "الإدخال فارغ، هل تريد تحميل فيديو عشوائي؟",
+  "randomDownload": "تحميل عشوائي",
+  "videoLoadFailed": "فشل تحميل الفيديو، يرجى المحاولة لاحقاً",
+  "videoFilePathNotFound": "مسار ملف الفيديو غير موجود",
+  "videoFileNotFound": "ملف الفيديو غير موجود",
+  "videoInitializationFailed": "فشل تهيئة الفيديو: {error}",
+  "@videoInitializationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "saveFailedWithError": "فشل الحفظ: {error}",
+  "@saveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoSavedToAlbum": "تم حفظ الفيديو في الألبوم",
+  "confirmDeleteVideo": "تأكيد الحذف",
+  "confirmDeleteVideoPrompt": "هل أنت متأكد أنك تريد حذف هذا الفيديو؟"
+}

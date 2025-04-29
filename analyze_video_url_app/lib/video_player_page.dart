@@ -63,7 +63,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content: Text(AppLocalizations.of(context)!.videoLoadingFailed)),
+            content: Text(AppLocalizations.of(context)!.videoLoadFailed),
+          ),
         );
       }
     }

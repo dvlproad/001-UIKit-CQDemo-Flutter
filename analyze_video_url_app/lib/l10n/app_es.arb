@@ -1,0 +1,95 @@
+{
+  "appTitle": "Analizador de URL de video",
+  "parsedVideos": "Videos analizados",
+  "noDownloadRecords": "Sin registros de descarga",
+  "videoId": "ID del video: {id}",
+  "@videoId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "addTime": "Agregado: {time}",
+  "@addTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "waitingForDownload": "Esperando para descargar...",
+  "continueDownload": "Continuar descarga",
+  "downloaded": "{progress}%",
+  "@downloaded": {
+    "placeholders": {
+      "progress": {
+        "type": "String"
+      }
+    }
+  },
+  "downloadComplete": "Descarga completa",
+  "downloadFailed": "Descarga fallida",
+  "retry": "Reintentar",
+  "saveToGallery": "Guardar en galería",
+  "downloadCompleteSavePrompt": "Descarga completa, ¿guardar en galería ahora?",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "videoSavedToGallery": "Video guardado en galería",
+  "saveFailed": "Error al guardar",
+  "saveError": "Error al guardar: {error}",
+  "@saveError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoFileNotExist": "El archivo de video no existe",
+  "videoFilePathNotExist": "La ruta del archivo de video no existe",
+  "confirmDelete": "Confirmar eliminación",
+  "confirmDeletePrompt": "¿Estás seguro de que quieres eliminar este video?",
+  "delete": "Eliminar",
+  "confirmClear": "Confirmar limpieza",
+  "confirmClearPrompt": "¿Estás seguro de que quieres borrar todos los videos analizados? Esta acción no se puede deshacer.",
+  "clear": "Limpiar",
+  "videoInput": "Entrada de video",
+  "pasteTiktokLink": "Pegar enlace de TikTok...",
+  "getVideo": "Obtener video",
+  "parsingFailed": "Análisis fallido: {error}",
+  "@parsingFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "more": "Más",
+  "settings": "Configuración",
+  "openSettings": "Abrir configuración",
+  "cannotOpenSettings": "No se puede abrir la configuración",
+  "emptyInputRandomDownloadPrompt": "La entrada está vacía, ¿deseas descargar un video aleatorio?",
+  "randomDownload": "Descarga aleatoria",
+  "videoLoadFailed": "Error al cargar el video, por favor intenta más tarde",
+  "videoFilePathNotFound": "Ruta del archivo de video no encontrada",
+  "videoFileNotFound": "Archivo de video no encontrado",
+  "videoInitializationFailed": "Error de inicialización del video: {error}",
+  "@videoInitializationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "saveFailedWithError": "Error al guardar: {error}",
+  "@saveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoSavedToAlbum": "Video guardado en el álbum",
+  "confirmDeleteVideo": "Confirmar eliminación",
+  "confirmDeleteVideoPrompt": "¿Está seguro de que desea eliminar este video?"
+}

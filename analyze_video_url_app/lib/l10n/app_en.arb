@@ -81,7 +81,7 @@
       }
     }
   },
-  "videoLoadingFailed": "Video loading failed, please try again later",
+  "videoLoadFailed": "Video loading failed, please try again later",
   "videoSavedToAlbum": "Video saved to album",
   "saveFailedWithError": "Save failed: {error}",
   "@saveFailedWithError": {
