@@ -50,14 +50,15 @@ class CQVideoUrlAnalyzeTiktok {
       String? expandedUrl = await expandShortenedUrl(shortenedUrl);
       //String? expandedUrl = "https://www.tiktok.com/@vokhangg_/video/7473862728306674951?_t=ZT-8uEtlflgN8Y&_r=1";
       if (expandedUrl == null) {
-        failure("获取短链重定向/扩展后的 videoId 失败");
+        // 获取短链重定向/扩展后的 videoId 失败
+        failure("Failed to get videoId after URL expansion");
         return;
       }
 
       String? videoId =
           expandedUrl.cjnetworkUrlValueForKey("video"); // 输出：123456789
       if (videoId == null || videoId.isEmpty) {
-        failure("无法解析 videoId");
+        failure("Unable to parse videoId"); // 无法解析 videoId
         return;
       }
 
