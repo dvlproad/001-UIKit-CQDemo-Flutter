@@ -2,7 +2,7 @@
  * @Author: dvlproad
  * @Date: 2025-03-31 20:51:29
  * @LastEditors: dvlproad
- * @LastEditTime: 2025-04-18 20:37:26
+ * @LastEditTime: 2025-04-29 08:53:56
  * @Description: 
  */
 import 'package:flutter/material.dart';
@@ -40,12 +40,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     try {
       final absolutePath = await widget.record.getVideoAbsolutePath();
       if (absolutePath == null) {
-        throw Exception('视频文件路径不存在');
+        throw Exception(AppLocalizations.of(context)!.videoFilePathNotFound);
       }
 
       final file = File(absolutePath);
       if (!await file.exists()) {
-        throw Exception('视频文件不存在');
+        throw Exception(AppLocalizations.of(context)!.videoFileNotFound);
       }
 
       _absolutePath = absolutePath; // 保存绝对路径
@@ -58,10 +58,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       // 自动开始播放
       _controller.play();
     } catch (e) {
-      print('视频初始化失败: $e');
+      print(AppLocalizations.of(context)!
+          .videoInitializationFailed(e.toString()));
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('视频加载失败，请稍后重试')),
+          SnackBar(
+              content: Text(AppLocalizations.of(context)!.videoLoadingFailed)),
         );
       }
     }
@@ -80,22 +82,27 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
             onPressed: _absolutePath == null
                 ? null
                 : () async {
-                    // 禁用状态判断
                     try {
                       final result =
                           await ImageGallerySaver.saveFile(_absolutePath!);
                       if (result['isSuccess']) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('视频已保存到相册')),
+                          SnackBar(
+                              content: Text(AppLocalizations.of(context)!
+                                  .videoSavedToAlbum)),
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('保存失败')),
+                          SnackBar(
+                              content: Text(
+                                  AppLocalizations.of(context)!.saveFailed)),
                         );
                       }
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('保存失败: $e')),
+                        SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .saveFailedWithError(e.toString()))),
                       );
                     }
                   },
@@ -179,15 +186,15 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('确认删除'),
-        content: Text('确定要删除这个视频吗？'),
+        title: Text(AppLocalizations.of(context)!.confirmDeleteVideo),
+        content: Text(AppLocalizations.of(context)!.confirmDeleteVideoPrompt),
         actions: [
           TextButton(
-            child: Text('取消'),
+            child: Text(AppLocalizations.of(context)!.cancel),
             onPressed: () => Navigator.pop(context),
           ),
           TextButton(
-            child: Text('删除'),
+            child: Text(AppLocalizations.of(context)!.delete),
             onPressed: () async {
               // 先停止播放并释放资源
               await _controller.pause();

@@ -70,5 +70,30 @@
   "cannotOpenSettings": "无法打开设置",
   "emptyInputRandomDownloadPrompt": "输入框为空，是否随机下载一个视频？",
   "randomDownload": "随机下载",
-  "videoLoadFailed": "视频加载失败，请稍后重试"
-} 
+  "videoLoadFailed": "视频加载失败，请稍后重试",
+  "videoFilePathNotFound": "视频文件路径不存在",
+  "videoFileNotFound": "视频文件不存在",
+  "videoInitializationFailed": "视频初始化失败: {error}",
+  "@videoInitializationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoLoadingFailed": "视频加载失败，请稍后重试",
+  "videoSavedToAlbum": "视频已保存到相册",
+  "saveFailed": "保存失败",
+  "saveFailedWithError": "保存失败: {error}",
+  "@saveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmDeleteVideo": "确认删除",
+  "confirmDeleteVideoPrompt": "确定要删除这个视频吗？",
+  "cancel": "取消",
+  "delete": "删除"
+}

@@ -70,5 +70,24 @@
   "cannotOpenSettings": "Cannot open settings",
   "emptyInputRandomDownloadPrompt": "Input is empty, would you like to download a random video?",
   "randomDownload": "Random Download",
-  "videoLoadFailed": "Video loading failed, please try again later"
-} 
+  "videoFilePathNotFound": "Video file path not found",
+  "videoFileNotFound": "Video file not found",
+  "videoInitializationFailed": "Video initialization failed: {error}",
+  "@videoInitializationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "videoLoadingFailed": "Video loading failed, please try again later",
+  "videoSavedToAlbum": "Video saved to album",
+  "saveFailedWithError": "Save failed: {error}",
+  "@saveFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  }
+}
