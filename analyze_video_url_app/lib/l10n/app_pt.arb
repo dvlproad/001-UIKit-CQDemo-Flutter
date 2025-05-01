@@ -57,13 +57,6 @@
   "pasteTiktokLink": "Cole o link do TikTok...",
   "getVideo": "Obter vídeo",
   "parsingFailed": "Falha na análise",
-  "@parsingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "more": "Mais",
   "settings": "Configurações",
   "openSettings": "Abrir configurações",

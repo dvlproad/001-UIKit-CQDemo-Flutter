@@ -57,13 +57,6 @@
   "pasteTiktokLink": "الصق رابط تيك توك...",
   "getVideo": "الحصول على الفيديو",
   "parsingFailed": "فشل التحليل",
-  "@parsingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "more": "المزيد",
   "settings": "الإعدادات",
   "openSettings": "فتح الإعدادات",

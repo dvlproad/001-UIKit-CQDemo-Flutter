@@ -57,13 +57,6 @@
   "pasteTiktokLink": "粘贴 TikTok 视频链接...",
   "getVideo": "获取视频",
   "parsingFailed": "解析失败",
-  "@parsingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "more": "更多",
   "settings": "设置",
   "openSettings": "打开设置",
