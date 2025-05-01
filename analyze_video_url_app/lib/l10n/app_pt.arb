@@ -56,7 +56,7 @@
   "videoInput": "Entrada de vídeo",
   "pasteTiktokLink": "Cole o link do TikTok...",
   "getVideo": "Obter vídeo",
-  "parsingFailed": "Falha na análise: {error}",
+  "parsingFailed": "Falha na análise",
   "@parsingFailed": {
     "placeholders": {
       "error": {

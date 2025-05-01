@@ -56,7 +56,7 @@
   "videoInput": "解析输入",
   "pasteTiktokLink": "粘贴 TikTok 视频链接...",
   "getVideo": "获取视频",
-  "parsingFailed": "解析失败: {error}",
+  "parsingFailed": "解析失败",
   "@parsingFailed": {
     "placeholders": {
       "error": {

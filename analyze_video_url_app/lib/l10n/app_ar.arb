@@ -56,7 +56,7 @@
   "videoInput": "إدخال الفيديو",
   "pasteTiktokLink": "الصق رابط تيك توك...",
   "getVideo": "الحصول على الفيديو",
-  "parsingFailed": "فشل التحليل: {error}",
+  "parsingFailed": "فشل التحليل",
   "@parsingFailed": {
     "placeholders": {
       "error": {

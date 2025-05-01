@@ -269,11 +269,10 @@ class _VideoInputPageState extends State<VideoInputPage>
 
           debugPrint("errorMessage: $errorMessage");
 
-          String errorMessage2 = "解析失败";
+          String errorMessage1 = AppLocalizations.of(context)!.parsingFailed;
+          String lastErrorMessage = "$errorMessage1: $errorMessage";
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(AppLocalizations.of(context)!
-                    .parsingFailed(errorMessage2))),
+            SnackBar(content: Text(lastErrorMessage)),
           );
         },
       );

@@ -56,7 +56,7 @@
   "videoInput": "Video Input",
   "pasteTiktokLink": "Paste TikTok video link...",
   "getVideo": "Get Video",
-  "parsingFailed": "Parsing failed: {error}",
+  "parsingFailed": "Parsing failed",
   "@parsingFailed": {
     "placeholders": {
       "error": {
