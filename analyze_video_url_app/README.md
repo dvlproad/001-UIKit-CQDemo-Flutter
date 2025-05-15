@@ -166,3 +166,63 @@ typedef NS_ENUM(NSUInteger, CJFileDownloadMethod) {
 
 
 
+
+
+## 打包上传到Google Play
+
+**注意：请妥善保管密钥文件和密码，如果丢失将无法更新应用。**
+
+因密钥文件( android/key.properties 和 android/app/upload-keystore.jks ) 在原目录时候没能正确在SourceTree上追踪，所以暂时备份放到密钥目录下。
+
+上传的时候提示我 You uploaded an APK or Android App Bundle that was signed in debug mode. You need to sign your APk or Android App Bundle in release mode
+
+```
+keytool -importkeystore -srckeystore upload-keystore.jks -destkeystore upload-keystore.jks -deststoretype pkcs12
+```
+
+
+
+这是因为 AAB 包需要使用发布密钥进行签名。让我们来解决这个问题：
+
+1. 首先，需要创建一个发布密钥（如果还没有的话）：
+2. 然后，在 android/key.properties 文件中配置密钥信息：
+3. 修改 android/app/build.gradle 文件以使用发布密钥：
+```gradle
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
+android {
+    // ... 其他配置 ...
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+}
+```
+```
+
+4. 然后重新构建 AAB：
+```bash
+cd /Users/qian/Project/001-UIKit-CQDemo-Flutter/analyze_video_url_app
+flutter clean
+flutter build appbundle --release
+```
+```
+
+这样生成的 AAB 包就会使用发布密钥签名，可以上传到 Google Play Store 了。
+```
+
