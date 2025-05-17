@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:947261366358:android:8040c32bedee60d92c9bf7",
+        "mobilesdk_app_id": "1:947261366358:android:37ffa7029e6a67942c9bf7",
         "android_client_info": {
-          "package_name": "com.downloader.downloader"
+          "package_name": "com.aisolvix.cctk"
         }
       },
       "oauth_client": [],

@@ -50,11 +50,11 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBiGlRYh9d6Ngf6AhL57SaWZ0jdiLfUkNk', // 使用新的值
-    appId: '1:947261366358:android:8040c32bedee60d92c9bf7', // 使用新的值
-    messagingSenderId: '947261366358', // 使用新的值
-    projectId: 'tksaver-afb58', // 使用新的值
-    storageBucket: 'tksaver-afb58.firebasestorage.app', // 使用新的值
+    apiKey: 'AIzaSyBiGlRYh9d6Ngf6AhL57SaWZ0jdiLfUkNk', // 匹配
+    appId: '1:947261366358:android:37ffa7029e6a67942c9bf7', // 需要修改为这个新值
+    messagingSenderId: '947261366358', // 匹配
+    projectId: 'tksaver-afb58',
+    storageBucket: 'tksaver-afb58.firebasestorage.app',
   );
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAN_55vRXcQNprWFTUn-9csrnrTG4ro-9Q',
