@@ -1,4 +1,11 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.aisolvix.cctk">
+    
+    <!-- 添加移除权限的声明 -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    
+    <!-- 其他权限保持不变 -->
     <application
         android:label="Tiksaver"
         android:name="${applicationName}"
